@@ -19,10 +19,12 @@
 
 - En granne med barnvagn och en äldre person med rullator promenerar i olika takt längs huvudgatans trottoarer. Båda tillbehören finns som redigerbara Blender-modeller.
 
+- Två låga gröna raggarbilar med vitt tak kör mjukt vinglande inom körfältet och stannar i kö.
+
 ## Återstående önskemål
 
 - Godstransporter med synlig last och kvittens vid leverans.
-- Raggarbilar som kör lite vingligt och trappor som går att använda.
+- Trappor som går att använda.
 - Förfina fordonsformer, särskilt BMW-fronten, brandbilen, polisbilen, Tvärbanan och sittande förare. Förbättra vatten- och fönsterreflektioner, arkitektur och strandpromenad utifrån bildreferenser.
 - Utöka gång- och trafiksignaler från centrala korsningen till övriga passager. Speltesta framkomlighet, dialog, läsbarhet, ljudnivå och bildfrekvens i hela staden.
 - Följ upp önskemålet om Blender MCP och verifiera faktisk anslutning innan det räknas som klart.

@@ -1471,6 +1471,13 @@ func _build_traffic() -> void:
 	_spawn_traffic("res://vehicles/traffic_bmw_silver.glb", 124.0, 2.35, 1.0, 6.1)
 	_spawn_traffic("res://vehicles/traffic_bmw_blue.glb", 108.0, -2.35, -1.0, 6.8)
 
+	for spawn in [Vector3(68,2.35,1),Vector3(146,-2.35,-1)]:
+		_spawn_traffic("res://vehicles/raggarbil.glb",spawn.x,spawn.y,spawn.z,4.75,.89)
+		var cruiser: Dictionary=traffic_data.back()
+		cruiser.lane_center=spawn.y
+		cruiser.cruise_phase=0.0
+		# Reserve the lateral envelope of the yawed bonnet as well as its tyres.
+		cruiser.width+=float(cruiser.length)*.065
 	_spawn_emergency_traffic(0, -19.0, 2.35, 1.0)
 	_spawn_emergency_traffic(1, 19.0, -2.35, -1.0)
 	_spawn_emergency_traffic(2, 77.0, 2.35, 1.0)
@@ -1637,6 +1644,11 @@ func _update_traffic(delta: float) -> void:
 			_set_rear_lights(item.brake_lens, braking)
 		_roll_wheels(item.wheels, travel)
 		actor.position.x = wrapf(actor.position.x + direction * travel, TRAFFIC_WEST, TRAFFIC_EAST)
+		if item.has("lane_center"):
+			item.cruise_phase=fmod(float(item.cruise_phase)+travel*.23,TAU)
+			var phase: float=item.cruise_phase
+			actor.position.z=float(item.lane_center)+.27*sin(phase)
+			actor.rotation.y=-direction*(PI*.5+atan(.27*.23*cos(phase)))
 		actor.position.y = _surface_height(actor.position.x, actor.position.z)
 
 func _build_pedestrians() -> void:
