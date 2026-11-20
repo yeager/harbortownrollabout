@@ -400,6 +400,9 @@ func _drive(delta: float) -> void:
 	for neighbour in walker_data:
 		var person: Node3D = neighbour.actor
 		obstacles.append(AABB(person.position-Vector3(.28,1,.28),Vector3(.56,3,.56)))
+		if neighbour.has("stretch"):
+			var cart_position := person.position-person.basis.z*.73
+			obstacles.append(AABB(cart_position-Vector3(.48,1,.32),Vector3(.96,3,.64)))
 	for i in parked_cars.size():
 		if parked_cars[i].visible:
 			obstacles.append(_parked_bounds(i))
@@ -1650,8 +1653,24 @@ func _build_pedestrians() -> void:
 	_make_walker("WalkingNeighbour", 31.0, 6.32, -1.0, Color("#9a5836"), Color("#33424a"))
 	_make_walker("ParkVisitor", -18.0, 6.42, 1.0, Color("#d1a33f"), Color("#38474a"))
 
+	_make_walker("Neighbour with pushchair",-26,-6.7,1,Color("#87633f"),Color("#465662"))
+	_equip_walker(preload("res://environment/barnvagn.glb"),.97,Vector2(-43,-16))
+	_make_walker("Neighbour with rollator",22,7.0,-1,Color("#567375"),Color("#51495b"))
+	_equip_walker(preload("res://environment/rullator.glb"),.61,Vector2(12,40))
+	var senior: Node3D=walker_data.back().actor
+	senior.get_node("Hair").material_override=_material(Color("#bcbab3"))
 	_make_walker("CrossingNeighbour",-12,-6.32,1,Color("#bb703d"),Color("#465663"))
 	crossing_pedestrian = walker_data.pop_back().actor
+
+func _equip_walker(scene: PackedScene, pace: float, stretch: Vector2) -> void:
+	var neighbour: Dictionary = walker_data.back()
+	var person: Node3D = neighbour.actor
+	person.add_child(scene.instantiate())
+	neighbour.speed = pace
+	neighbour.stretch = stretch
+	for arm in person.get_meta("arms"):
+		arm.position.y=1.40
+		arm.rotation.x=.63
 
 func _advance_crossing(delta: float) -> void:
 	crossing_wait = maxf(0,crossing_wait-delta)
@@ -1708,6 +1727,7 @@ func _make_walker(label: String, start_x: float, lane_z: float, direction: float
 	hair.mesh = hair_mesh
 	hair.position = Vector3(0, 1.85, 0)
 	hair.material_override = _material(Color("#46372e"), 0.95)
+	hair.name="Hair"
 	person.add_child(hair)
 	for side in [-1,1]:
 		_make_box("Eye",Vector3(.024,.022,.014),Vector3(side*.064,1.745,-.15),Color("#45382e"),false,person)
@@ -1766,9 +1786,20 @@ func _update_pedestrians(delta: float) -> void:
 		var direction: float = item["direction"]
 		var next := person.position
 		next.x = wrapf(next.x + direction * float(item.speed) * delta, -44.0, 44.0)
+		if item.has("stretch"):
+			var stretch: Vector2 = item.stretch
+			if next.x<stretch.x or next.x>stretch.y:
+				next.x=clampf(next.x,stretch.x,stretch.y)
+				item.direction=-direction
+				person.rotation.y=direction*PI*.5
 		var local := ambulance.to_local(next)
 		var blocked := ambulance.visible and absf(local.x) < player_half_size.x+.4 and absf(local.z) < player_half_size.y+.4
 		blocked = blocked or _near_parked_vehicle(next,.4)
+		if item.has("stretch"):
+			var front := next-person.basis.z*.88
+			var relative := ambulance.to_local(front)
+			blocked = blocked or (ambulance.visible and absf(relative.x)<player_half_size.x+.36 and absf(relative.z)<player_half_size.y+.4)
+			blocked = blocked or _near_parked_vehicle(front,.38)
 		if not blocked:
 			person.position = next
 			item.phase += delta * float(item.speed) * 4.0
@@ -1777,7 +1808,7 @@ func _update_pedestrians(delta: float) -> void:
 		for i in range(legs.size()):
 			var swing := sin(float(item.phase) + i * PI) if not blocked else 0.0
 			legs[i].rotation.x = swing * .38
-			arms[i].rotation.x = -swing * .26
+			arms[i].rotation.x = .63 if item.has("stretch") else -swing * .26
 
 func _rig_wheels(model: Node3D) -> Array[Node3D]:
 	var pivots: Array[Node3D] = []
