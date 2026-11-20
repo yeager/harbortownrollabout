@@ -59,3 +59,5 @@ Spelprojektet publiceras i det privata GitHub-repot yeager/axels-emergency-vehic
 - Trafikens sirenton följer både ljudkällans och lyssnarens rörelse. Godot-testet verifierade tonhöjningen när båten och spårvagnen närmar sig, sänkningen när båten backar bort och grundtonen när båda står still.
 
 - Telefonen anger plats och fel vid bärgning, bekräftar lastningen och visar belöningen inför verkstadsresan. Lastning och betalning syns även kort på skärmen.
+
+- Vid återgång från manuellt till automatiskt väder börjar prognosens femminuterstid om. Automatiska årstider utgår från vald årstid och behåller den i en halvtimmes speltid. Nederbörd som passar årstiden fortsätter vid bytet.

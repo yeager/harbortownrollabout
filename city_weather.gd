@@ -3,8 +3,19 @@ extends Node3D
 const SEASONS := ["Season · Automatic", "Spring", "Summer", "Autumn", "Winter"]
 const CONDITIONS := ["Weather · Automatic", "Sun", "Rain", "Snow", "Slush"]
 const PRECIPITATION := [Vector2.ZERO, Vector2.ZERO, Vector2.RIGHT, Vector2.DOWN, Vector2(.65,.55)]
-var season_setting := 0
-var weather_setting := 0
+var season_setting := 0:
+	set(value):
+		if value == season_setting: return
+		season_setting = value
+		season_age = 0
+		if value != 0: season = value
+
+var weather_setting := 0:
+	set(value):
+		if value == weather_setting: return
+		if value == 0: forecast = weather_setting
+		weather_setting = value
+		forecast_age = 0
 var season := 2
 var forecast := 1
 var season_age := 0.0
@@ -45,11 +56,9 @@ func particles(flakes: bool) -> GPUParticles3D:
 	return emitter
 
 func tick(delta: float) -> void:
-	season_age += delta
-	forecast_age += delta
-	if season_setting:
-		season = season_setting
-	elif season_age >= 1800:
+	if season_setting == 0: season_age += delta
+	if weather_setting == 0: forecast_age += delta
+	if season_age >= 1800:
 		season = season%4+1
 		season_age = 0
 	if forecast_age >= 300:
