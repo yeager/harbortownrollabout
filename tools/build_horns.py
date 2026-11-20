@@ -15,6 +15,7 @@ VOICES = {
     "taxi": ((466,), (.47,.30,.17,.06), .023,.38),
     "recovery": ((233,294), (.56,.29,.15), .055,.58),
     "motorboat": ((255, 510), (.77,.18,.05), .045,.64),
+    "tram": ((694, 1731, 2818), (.95,.05), .008,1.05),
     "bicycle": ((990, 2534), (.88,.12), .005,.80),
 }
 for name,(tones,weights,attack,duration) in VOICES.items():
@@ -24,6 +25,9 @@ for name,(tones,weights,attack,duration) in VOICES.items():
         envelope = min(1,t/attack,max(0,(duration-t)/.073))
         if name=="bicycle":
             envelope *= math.exp(-4.8*t)
+        if name=="tram":
+            strike = t if t < .24 else t-.24
+            envelope *= min(1,strike/attack)*math.exp(-5.5*strike)
         value = sum(weight*math.sin(math.tau*hz*(h+1)*t)
                     for hz in tones for h,weight in enumerate(weights))
         frames.extend(struct.pack("<h",round(19000*envelope*value/len(tones))))

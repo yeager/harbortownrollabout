@@ -268,8 +268,8 @@ func _unhandled_key_input(event: InputEvent) -> void:
 				if mode == "complete": _start_game()
 
 func _honk() -> void:
-	if mode != "playing" or paused or (walker.visible and not boating) or tram_mode != 0 or horn.playing: return
-	horn.stream = load("res://audio/horn_%s.wav" % ("motorboat" if boating else HORNS[vehicle_index]))
+	if mode != "playing" or paused or (walker.visible and not boating and tram_mode == 0) or tram_mode == 1 or horn.playing: return
+	horn.stream = load("res://audio/horn_%s.wav" % ("tram" if tram_mode == 2 else "motorboat" if boating else HORNS[vehicle_index]))
 	horn.play()
 
 func _update_patrol(delta: float) -> void:
@@ -2436,7 +2436,7 @@ func _build_overlay() -> void:
 		boating = index==4
 		tram_mode = index-1 if index in [2,3] else 0
 		launch_speed = 0
-		var ear: Node3D = launch if boating else (walker if walker.visible else ambulance)
+		var ear: Node3D = tram.sections[0] if tram_mode > 0 else launch if boating else (walker if walker.visible else ambulance)
 		if listener.get_parent()!=ear:
 			listener.reparent(ear,false)
 			listener.position=Vector3.UP*1.3
@@ -2626,15 +2626,13 @@ func _start_game() -> void:
 	recovery_leg = 0
 	taxi_leg = 0
 	parked_at_target = 0.0
-	if listener.get_parent() != ambulance:
-		listener.reparent(ambulance,false)
-		listener.transform = Transform3D(Basis.IDENTITY,Vector3.UP*1.3)
-		listener.make_current()
+	var ear: Node3D = tram.sections[0] if tram_mode > 0 else launch if boating else ambulance
+	if listener.get_parent() != ear:
+		listener.reparent(ear,false)
+	listener.transform = Transform3D(Basis.IDENTITY,Vector3.UP*(1.0 if boating else 1.3))
+	listener.make_current()
 	walker.visible = false
 	ambulance.visible = true
-	if boating:
-		listener.reparent(launch,false)
-		listener.position = Vector3.UP
 	for i in parked_cars.size():
 		parked_cars[i].visible = i != vehicle_index
 		parked_cars[i].position = Vector3(-45,-.13,23) if i==RECOVERY else Vector3(-47+5*i,-.13,15)
@@ -2778,7 +2776,7 @@ func _toggle_sound() -> void:
 	_refresh_ui()
 
 func _update_siren() -> void:
-	if sound_on and not boating and mode == "playing" and not paused and not walker.visible:
+	if sound_on and not boating and tram_mode == 0 and mode == "playing" and not paused and not walker.visible:
 		if siren_player.stream != siren_streams[vehicle_index]:
 			siren_player.stream = siren_streams[vehicle_index]
 		if vehicle_index < 3:
@@ -2834,7 +2832,8 @@ func _refresh_ui() -> void:
 		control.focus_mode = Control.FOCUS_NONE if show_overlay else Control.FOCUS_ALL
 	camera_button.visible = tram_mode == 0 and not boating and vehicle_index == 3 and not walker.visible and not show_overlay
 	camera_button.text = "Outside view · C" if cockpit_view else "Driver view · C"
-	horn_button.visible = not show_overlay and (boating or not walker.visible) and tram_mode==0
+	horn_button.visible = not show_overlay and (tram_mode==2 or (tram_mode==0 and (boating or not walker.visible)))
+	horn_button.text = "Tram bell · H" if tram_mode==2 else "Horn · H"
 	seat_button.visible = not show_overlay and tram_mode==0 and not boating
 	light_button.visible = tram_mode == 0 and not boating and not walker.visible and vehicle_index < 3
 	siren_button.visible = tram_mode == 0 and not boating and not walker.visible

@@ -431,3 +431,6 @@ msgstr "%s · Avgång om %d s"
 
 msgid "Next stop: %s · %d km/h"
 msgstr "Nästa hållplats: %s · %d km/h"
+
+msgid "Tram bell · H"
+msgstr "Ringklocka · H"
