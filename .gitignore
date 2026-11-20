@@ -7,3 +7,6 @@ Thumbs.db
 
 # Python bytecode from Blender asset generators
 __pycache__/
+
+# Local reference photographs
+.local-memory/

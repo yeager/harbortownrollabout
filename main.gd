@@ -106,6 +106,9 @@ var sound_on := true
 var parked_sound_settings: Array[bool] = [false, false, false, true, true]
 var siren_player: AudioStreamPlayer
 var ui: CanvasLayer
+var play_as_alma := false
+var wallet := 0
+var wallet_label: Label
 var mission_label: Label
 const HELP_DURATION := 0.8
 var arrival_progress := ProgressBar.new()
@@ -513,6 +516,9 @@ func _help_at_target() -> void:
 	if vehicle_index == TAXI:
 		if _at_target() and absf(speed)<.2:
 			taxi_leg += 1
+			if taxi_leg%2==0:
+				wallet+=15
+				_save_preferences()
 			parked_at_target = 0
 			message = "Passenger on board." if taxi_leg%2 else "Thank you for the ride!"
 			message_timer = 3
@@ -522,6 +528,8 @@ func _help_at_target() -> void:
 	if _at_target():
 		parked_at_target = 0.0
 		mission_index += 1
+		wallet+=10
+		_save_preferences()
 		speed = 0.0
 		message = "Mission complete. Well done!"
 		message_timer = 3.0
@@ -1196,6 +1204,13 @@ func _build_lampposts() -> void:
 		add_child(light)
 		street_lights.append(light)
 
+func _apply_player_appearance() -> void:
+	walker.scale = Vector3.ONE*(.88 if play_as_alma else 1.0)
+	walker.get_node("Ponytail").visible=play_as_alma
+	walker.get_node("Jacket").material_override=_material(Color("#a85641") if play_as_alma else Color("#648faa"))
+	for arm in walker.get_meta("arms"):
+		arm.get_child(0).material_override=walker.get_node("Jacket").material_override
+
 func _build_depot() -> void:
 	_make_driving_surface("Motor pool", Vector3(23,.1,11), Vector3(-38,-.18,15), Color("#565c5a"))
 	var sign := Label3D.new()
@@ -1218,6 +1233,17 @@ func _build_depot() -> void:
 		_make_box("Parking stripe", Vector3(.10,.025,7.8), Vector3(body.position.x-2.5,-.116,15), Color("#deddd1"))
 	_make_walker("Player on foot",0,0,1,Color("#648faa"),Color("#30414d"))
 	walker = walker_data.pop_back().actor
+	var ponytail := MeshInstance3D.new()
+	ponytail.name = "Ponytail"
+	var lock := CapsuleMesh.new()
+	lock.radius=.092
+	lock.height=.34
+	ponytail.mesh=lock
+	ponytail.position=Vector3(0,1.65,.17)
+	ponytail.rotation.x=-.23
+	ponytail.material_override=_material(Color("#523b30"))
+	walker.add_child(ponytail)
+	_apply_player_appearance()
 	walker.visible = false
 	entry_marker.name = "AvailableVehicle"
 	entry_marker.billboard = BaseMaterial3D.BILLBOARD_ENABLED
@@ -1628,6 +1654,7 @@ func _make_walker(label: String, start_x: float, lane_z: float, direction: float
 	torso.mesh = torso_mesh
 	torso.position = Vector3(0, 1.13, 0)
 	torso.material_override = _material(shirt, 0.92)
+	torso.name="Jacket"
 	person.add_child(torso)
 	var head := MeshInstance3D.new()
 	var head_mesh := SphereMesh.new()
@@ -1645,6 +1672,9 @@ func _make_walker(label: String, start_x: float, lane_z: float, direction: float
 	hair.position = Vector3(0, 1.85, 0)
 	hair.material_override = _material(Color("#46372e"), 0.95)
 	person.add_child(hair)
+	for side in [-1,1]:
+		_make_box("Eye",Vector3(.024,.022,.014),Vector3(side*.064,1.745,-.15),Color("#45382e"),false,person)
+	_make_box("Collar",Vector3(.26,.073,.23),Vector3(0,1.50,0),shirt.lightened(.22),false,person)
 	for side in [-1.0, 1.0]:
 		var leg_pivot := Node3D.new()
 		leg_pivot.position = Vector3(side * 0.115, 0.77, 0)
@@ -1657,6 +1687,7 @@ func _make_walker(label: String, start_x: float, lane_z: float, direction: float
 		leg.position.y = -0.36
 		leg.material_override = _material(trousers, 0.94)
 		leg_pivot.add_child(leg)
+		_make_box("Shoe",Vector3(.17,.105,.27),Vector3(0,-.695,-.045),Color("#484443"),false,leg_pivot)
 		var arm_pivot := Node3D.new()
 		arm_pivot.position = Vector3(side * 0.22, 1.38, 0)
 		person.add_child(arm_pivot)
@@ -2079,6 +2110,9 @@ func _build_ui() -> void:
 	mission_label.add_theme_font_size_override("font_size", 20)
 	mission_label.add_theme_color_override("font_color", Color("#c5efce"))
 	row.add_child(mission_label)
+	wallet_label=Label.new()
+	wallet_label.accessibility_name="Wallet"
+	row.add_child(wallet_label)
 	light_button = _button("Lights OFF", 140)
 	light_button.pressed.connect(_toggle_lights)
 	row.add_child(light_button)
@@ -2194,7 +2228,22 @@ func _build_overlay() -> void:
 	for name in VEHICLE_NAMES_ALL:
 		vehicle_selector.add_item(name)
 	vehicle_selector.item_selected.connect(_on_vehicle_selected)
-	box.add_child(vehicle_selector)
+	var player_row := HBoxContainer.new()
+	player_row.alignment=BoxContainer.ALIGNMENT_CENTER
+	box.add_child(player_row)
+	var character := OptionButton.new()
+	character.accessibility_name="Character"
+	character.add_item("Axel · 15")
+	character.add_item("Alma · 12")
+	character.select(int(play_as_alma))
+	character.item_selected.connect(func(index: int):
+		play_as_alma=index==1
+		_apply_player_appearance()
+		_save_preferences()
+		_refresh_ui()
+	)
+	player_row.add_child(character)
+	player_row.add_child(vehicle_selector)
 	var activity := OptionButton.new()
 	activity.accessibility_name = "Activity"
 	activity.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
@@ -2479,6 +2528,8 @@ func _load_preferences() -> void:
 	var config := ConfigFile.new()
 	if config.load(SETTINGS_PATH) != OK:
 		return
+	play_as_alma=config.get_value("player","alma",false)==true
+	wallet=maxi(0,int(config.get_value("player","coins",0)))
 	var saved_locale := str(config.get_value("language", "locale", "en"))
 	if saved_locale in TranslationServer.get_loaded_locales():
 		TranslationServer.set_locale(saved_locale)
@@ -2500,6 +2551,8 @@ func _load_preferences() -> void:
 func _save_preferences() -> void:
 	var config := ConfigFile.new()
 	var volume := 0.0 if AudioServer.is_bus_mute(0) else db_to_linear(AudioServer.get_bus_volume_db(0))*100
+	config.set_value("player","alma",play_as_alma)
+	config.set_value("player","coins",wallet)
 	config.set_value("language", "locale", TranslationServer.get_locale())
 	config.set_value("audio","volume",roundi(volume))
 	config.set_value("audio","traffic_sirens",roundi(traffic_siren_volume))
@@ -2551,6 +2604,7 @@ func _update_siren() -> void:
 
 func _refresh_ui() -> void:
 	if not is_instance_valid(mission_label): return
+	wallet_label.text = tr("%d coins") % wallet
 	light_button.text = "Lights ON" if lights_on else "Lights OFF"
 	if vehicle_index >= 3:
 		siren_button.text = "Engine ON" if sound_on else "Engine OFF"
@@ -2612,7 +2666,7 @@ func _refresh_ui() -> void:
 		start_button.text = "Start driving"
 	elif mode == "complete":
 		title_label.text = "All missions complete!"
-		subtitle_label.text = "You helped the whole city. Well done, Axel!\nReady for another drive?"
+		subtitle_label.text = tr("Well done, %s! Ready for another drive?") % ("Alma" if play_as_alma else "Axel")
 		start_button.text = "Drive again"
 	else:
 		title_label.text = "Pause"

@@ -320,3 +320,15 @@ msgstr "Kör motorbåten"
 
 msgid "W / ↑ Throttle · A D / ← → Steer · S / ↓ Slow or reverse · H Horn · P Pause"
 msgstr "W / ↑ Gasa · A D / ← → Styr · S / ↓ Sakta in eller backa · H Tuta · P Paus"
+
+msgid "%d coins"
+msgstr "%d mynt"
+
+msgid "Well done, %s! Ready for another drive?"
+msgstr "Bra jobbat, %s! Vill du köra en runda till?"
+
+msgid "Character"
+msgstr "Spelfigur"
+
+msgid "Wallet"
+msgstr "Plånbok"

@@ -49,3 +49,5 @@ Choose **Drive the motorboat** in the activity menu. The white centre-console bo
 A blue-and-white Swedish police helicopter flies a continuous patrol above the waterfront during play. Its main and shrouded tail rotors turn independently. The editable model is in `source_blender/Polishelikopter.blend`.
 
 Two slow, white pickup-converted A-traktors share the main street. Look for the orange triangular reflector on the back of the cab. Faster traffic following one slows down and gives a short horn greeting.
+
+Choose **Axel · 15** or **Alma · 12** beside the vehicle selector. The choice changes the character you see on foot. Each rescue mission step earns 10 coins and completing a taxi fare earns 15. Both characters share one wallet on this installation.
