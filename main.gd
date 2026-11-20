@@ -79,6 +79,7 @@ var camera: Camera3D
 var navigator := preload("res://street_route.gd").new()
 var route_arrows: Array[Node3D] = []
 var route_timer := 0.0
+var medical_bag := Node3D.new()
 var waiting_medic: Node3D
 var mission_marker: Node3D
 var reverse_lens: StandardMaterial3D
@@ -2124,10 +2125,13 @@ func _build_target_marker() -> void:
 	waiting_medic = walker_data.pop_back().actor
 	waiting_medic.position.y = _surface_height(pickup.x,pickup.z+1.3)
 	waiting_medic.rotation.y = PI/2
-	_make_box("Medical bag",Vector3(.24,.30,.38),Vector3(.34,.53,0),Color("#30605b"),false,waiting_medic)
-	for size in [Vector3(.012,.14,.045),Vector3(.012,.045,.14)]:
-		_make_box("First aid symbol",size,Vector3(.467,.53,0),Color("#eef0df"),false,waiting_medic)
-	_make_box("Bag handle",Vector3(.045,.10,.14),Vector3(.34,.71,0),Color("#253f40"),false,waiting_medic)
+	waiting_medic.add_child(medical_bag)
+	medical_bag.name = "FirstAidKit"
+	_make_box("Medical bag",Vector3(.24,.30,.38),Vector3.ZERO,Color("#30605b"),false,medical_bag)
+	for side in [-1,1]:
+		for size in [Vector3(.012,.14,.045),Vector3(.012,.045,.14)]:
+			_make_box("First aid symbol",size,Vector3(side*.122,0,0),Color("#eef0df"),false,medical_bag)
+	_make_box("Bag handle",Vector3(.045,.10,.14),Vector3(0,.18,0),Color("#253f40"),false,medical_bag)
 	mission_marker = Node3D.new()
 	add_child(mission_marker)
 	var ring := MeshInstance3D.new()
@@ -2221,7 +2225,22 @@ func _update_mission_marker() -> void:
 	_update_route_arrows()
 	passenger.visible = not free_drive and vehicle_index == TAXI and taxi_leg%2==0
 	passenger.position = WALK_TARGETS[_taxi_stop()]
-	waiting_medic.visible = vehicle_index != TAXI and not free_drive and mission_index == 1
+	var rescue := not free_drive and not boating and vehicle_index not in [TAXI, RECOVERY]
+	waiting_medic.visible = rescue and mission_index == 1
+	var carrier: Node3D = waiting_medic
+	var bag_position := Vector3(.34,.53,0)
+	medical_bag.visible = rescue and mission_index >= 1
+	if mission_index == 2:
+		carrier = walker if walker.visible else ambulance
+		bag_position = Vector3(.34,.53,0) if walker.visible else Vector3.ZERO
+		medical_bag.visible = rescue and walker.visible
+	elif mission_index == TARGETS.size():
+		carrier = self
+		var quay := WALK_TARGETS[2]
+		bag_position = Vector3(quay.x+.7,_surface_height(quay.x+.7,quay.z)+.15,quay.z)
+	if medical_bag.get_parent() != carrier:
+		medical_bag.reparent(carrier,false)
+	medical_bag.position = bag_position
 	if free_drive or mission_index >= TARGETS.size():
 		mission_marker.visible = false
 		return
