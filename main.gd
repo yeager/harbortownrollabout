@@ -139,6 +139,10 @@ var tram := preload("res://tram.gd").new()
 var boating := false
 var launch: Node3D
 var launch_speed := 0.0
+var helicopter: Node3D
+var main_rotor: Node3D
+var tail_rotor: Node3D
+var patrol_angle := 0.0
 var tram_mode := 0
 var ferry: Node3D
 var wave_time := 0.0
@@ -175,6 +179,7 @@ func _process(delta: float) -> void:
 	if message_timer > 0.0:
 		message_timer = maxf(0.0, message_timer - delta)
 	if mode == "playing" and not paused:
+		_update_patrol(delta)
 		street_signals.advance(delta)
 		tram.advance(delta, tram_mode == 2, mouse_gas or Input.is_physical_key_pressed(KEY_W) or Input.is_key_pressed(KEY_UP), mouse_brake or Input.is_physical_key_pressed(KEY_S) or Input.is_key_pressed(KEY_DOWN))
 		if boating:
@@ -247,6 +252,17 @@ func _honk() -> void:
 	if mode != "playing" or paused or (walker.visible and not boating) or tram_mode != 0 or horn.playing: return
 	horn.stream = load("res://audio/horn_%s.wav" % ("motorboat" if boating else HORNS[vehicle_index]))
 	horn.play()
+
+func _update_patrol(delta: float) -> void:
+	patrol_angle = fmod(patrol_angle+delta*.115,TAU)
+	var a := patrol_angle
+	helicopter.position = Vector3(54+74*sin(a),36+2*sin(2*a),-16+37*cos(a))
+	var tangent := Vector3(74*cos(a),4*cos(2*a),-37*sin(a))
+	# The Blender nose faces -Y, imported as local +Z.
+	helicopter.look_at(helicopter.position+tangent,Vector3.UP,true)
+	helicopter.rotate_object_local(Vector3.BACK,.095)
+	main_rotor.rotate_y(delta*28)
+	tail_rotor.rotate_x(delta*52)
 
 func _drive_launch(delta: float) -> void:
 	var gas := mouse_gas or Input.is_action_pressed("ui_up") or Input.is_physical_key_pressed(KEY_W)
@@ -578,6 +594,11 @@ func _build_world() -> void:
 	_build_target_marker()
 	_build_camera()
 	add_child(tram)
+	helicopter = preload("res://vehicles/polishelikopter.glb").instantiate()
+	add_child(helicopter)
+	main_rotor = helicopter.find_child("MainRotor",true,false)
+	tail_rotor = helicopter.find_child("TailRotor",true,false)
+	_update_patrol(0)
 	add_child(street_signals)
 
 func _build_road_network() -> void:

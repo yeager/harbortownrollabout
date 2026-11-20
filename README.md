@@ -45,3 +45,5 @@ Press **H** or click **Horn** while driving. The ambulance, police car, fire eng
 ## Motorboat
 
 Choose **Drive the motorboat** in the activity menu. The white centre-console boat starts in the southern canal basin. Use the same steering and pedal controls as a car. Hold the brake to slow down and reverse. The shore and buoy lines bound the boating area. Press **H** for the boat horn or drag with the middle mouse button to look around.
+
+A blue-and-white Swedish police helicopter flies a continuous patrol above the waterfront during play. Its main and shrouded tail rotors turn independently. The editable model is in `source_blender/Polishelikopter.blend`.
