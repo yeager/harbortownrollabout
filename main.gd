@@ -34,6 +34,13 @@ var entrance_lights: Array[SpotLight3D] = []
 var entrance_diffuser: StandardMaterial3D
 var street_lights: Array[SpotLight3D] = []
 var lamp_glass: StandardMaterial3D
+var weather := preload("res://city_weather.gd").new()
+var previous_season := 0
+var greeting_timer := 0.0
+var greeting_number := 0
+var greeting := Label3D.new()
+var orbit_angle := 0.0
+var orbit_height := 0.0
 var time_mode := 0
 var day_phase := 0.0
 var last_night := -1.0
@@ -125,6 +132,7 @@ var walker_data: Array[Dictionary] = []
 
 func _ready() -> void:
 	_load_preferences()
+	add_child(weather)
 	_build_world()
 	_build_ui()
 	_build_brake_effects()
@@ -133,6 +141,22 @@ func _ready() -> void:
 	start_button.grab_focus()
 
 func _process(delta: float) -> void:
+	if mode == "playing" and not paused:
+		weather.tick(delta)
+	if previous_season != weather.season:
+		previous_season = weather.season
+		for finish in foliage_finishes:
+			var tint: Color = finish.albedo_color
+			if not finish.resource_name.begins_with("Spruce"):
+				match weather.season:
+					1: tint = tint.lerp(Color("#9ab959"),.35)
+					3: tint = tint.lerp(Color("#bd742e"),.72)
+					4: tint = tint.lerp(Color("#acb2a8"),.78)
+			foliage_finishes[finish].set_shader_parameter("leaf_color", tint)
+	weather.position = camera.position + Vector3.UP*8
+	road_finish.set_shader_parameter("wet",weather.wet)
+	road_finish.set_shader_parameter("snow_cover",weather.snow)
+	city_env.sky.sky_material.set_shader_parameter("overcast",maxf(weather.intensity.x,weather.intensity.y))
 	_update_daylight(delta)
 	if message_timer > 0.0:
 		message_timer = maxf(0.0, message_timer - delta)
@@ -160,6 +184,9 @@ func _process(delta: float) -> void:
 	_refresh_status()
 
 func _input(event: InputEvent) -> void:
+	if mode == "playing" and not paused and event is InputEventMouseMotion and event.button_mask & MOUSE_BUTTON_MASK_MIDDLE:
+		orbit_angle -= event.relative.x*.007
+		orbit_height = clampf(orbit_height+event.relative.y*.022,-1.8,5)
 	if event is InputEventMouseButton and not event.pressed:
 		if event.button_index == MOUSE_BUTTON_LEFT: mouse_gas = false
 		if event.button_index == MOUSE_BUTTON_RIGHT: mouse_brake = false
@@ -223,7 +250,7 @@ func _drive(delta: float) -> void:
 	if player_brake_lens:
 		_set_rear_lights(player_brake_lens, brake_held)
 	if brake_held:
-		speed = move_toward(speed, 0.0, 18.0 * absf(throttle) * delta)
+		speed = move_toward(speed, 0.0, (18.0 - 2.0*weather.wet - 3.0*weather.snow) * absf(throttle) * delta)
 	elif throttle < 0.0:
 		speed = move_toward(speed, throttle * (1.8 if gentle_driving else 4.0), 3.0 * delta)
 	else:
@@ -1381,6 +1408,15 @@ func _update_traffic(delta: float) -> void:
 		actor.position.y = _surface_height(actor.position.x, actor.position.z)
 
 func _build_pedestrians() -> void:
+	greeting.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+	greeting.pixel_size = .003
+	greeting.font_size = 64
+	greeting.visible = false
+	add_child(greeting)
+	_make_walker("Child",12,6.42,1,Color("#568f86"),Color("#404c59"))
+	walker_data.back().actor.scale = Vector3.ONE*.72
+	_make_walker("Parent",10.9,6.42,1,Color("#876681"),Color("#424850"))
+	walker_data.back().speed = walker_data[-2].speed
 	_make_walker("JoggingNeighbour", -31.0, -6.32, 1.0, Color("#344e63"), Color("#4c514a"))
 	_make_walker("WalkingNeighbour", 31.0, 6.32, -1.0, Color("#9a5836"), Color("#33424a"))
 	_make_walker("ParkVisitor", -18.0, 6.42, 1.0, Color("#d1a33f"), Color("#38474a"))
@@ -1474,8 +1510,25 @@ func _make_walker(label: String, start_x: float, lane_z: float, direction: float
 
 func _update_pedestrians(delta: float) -> void:
 	_advance_crossing(delta)
+	greeting_timer = maxf(0,greeting_timer-delta)
+	greeting.visible = walker.visible and greeting_timer>4.0
 	for item in walker_data:
 		var person: Node3D = item["actor"]
+		var nearby := walker.visible and walker.position.distance_to(person.position)<2.9
+		if nearby and not item.get("greeted",false) and greeting_timer==0:
+			var phrase := tr(["Hello!", "How are you?", "Hi there!"][greeting_number%3])
+			greeting_number += 1
+			greeting.reparent(person,false)
+			greeting.position = Vector3.UP*2.18
+			greeting.text = phrase
+			greeting.visible = true
+			greeting_timer = 7.5
+			item.greeted = true
+			var voices := DisplayServer.tts_get_voices_for_language(TranslationServer.get_locale().left(2))
+			if not voices.is_empty():
+				DisplayServer.tts_speak(phrase,voices[0],65)
+		if walker.position.distance_to(person.position)>8:
+			item.greeted = false
 		var direction: float = item["direction"]
 		var next := person.position
 		next.x = wrapf(next.x + direction * float(item.speed) * delta, -44.0, 44.0)
@@ -1735,12 +1788,12 @@ func _update_camera(delta: float, snap_to_car := false) -> void:
 	if not is_instance_valid(camera) or not is_instance_valid(ambulance): return
 	if tram_mode > 0 and not tram.sections.is_empty():
 		var cab: Node3D = tram.sections[0]
-		camera.position = cab.to_global(Vector3(4.0,4.1,8.0))
+		camera.position = cab.to_global(Vector3(4.0,4.1+orbit_height,8.0).rotated(Vector3.UP,orbit_angle))
 		camera.look_at(cab.to_global(Vector3(0,1.4,-1)))
 		return
 	if walker.visible:
 		var target := walker.position + Vector3.UP*1.2
-		var chase := camera.position.lerp(target+walk_basis.z*5+Vector3.UP*2.7,1-exp(-6*delta))
+		var chase := camera.position.lerp(target+walk_basis.z.rotated(Vector3.UP,orbit_angle)*5+Vector3.UP*(2.7+orbit_height),1-exp(-6*delta))
 		camera.position = _clear_camera_view(target, chase)
 		camera.look_at(target)
 		return
@@ -1749,7 +1802,7 @@ func _update_camera(delta: float, snap_to_car := false) -> void:
 		camera.look_at(ambulance.to_global(Vector3(-.32+steering*.38,1.40,-6.0)))
 		return
 	var forward := -ambulance.global_transform.basis.z
-	var desired := ambulance.global_position - forward * 10.5 + Vector3(0, 6.0, 0)
+	var desired := ambulance.global_position - forward.rotated(Vector3.UP,orbit_angle) * 10.5 + Vector3(0, 6.0+orbit_height, 0)
 	var preview := steering * clampf(1.0 - absf(speed) / 45.0, 0.35, 1.0)
 	if speed < -0.1:
 		preview = 0.0
@@ -2051,7 +2104,21 @@ func _build_overlay() -> void:
 		_update_daylight(0)
 		_save_preferences()
 	)
-	settings.add_child(daylight)
+	var weather_row := HBoxContainer.new()
+	weather_row.alignment = BoxContainer.ALIGNMENT_CENTER
+	settings.add_child(weather_row)
+	weather_row.add_child(daylight)
+	for is_season in [true,false]:
+		var choice := OptionButton.new()
+		for caption in (weather.SEASONS if is_season else weather.CONDITIONS):
+			choice.add_item(caption)
+		choice.select(weather.season_setting if is_season else weather.weather_setting)
+		choice.item_selected.connect(func(index: int):
+			if is_season: weather.season_setting = index
+			else: weather.weather_setting = index
+			_save_preferences()
+		)
+		weather_row.add_child(choice)
 
 func _button(caption: String, width: float) -> Button:
 	var button := Button.new()
@@ -2186,6 +2253,8 @@ func _load_preferences() -> void:
 	var saved_locale := str(config.get_value("language", "locale", "en"))
 	if saved_locale in TranslationServer.get_loaded_locales():
 		TranslationServer.set_locale(saved_locale)
+	weather.season_setting = clampi(int(config.get_value("world","season",0)),0,4)
+	weather.weather_setting = clampi(int(config.get_value("world","weather",0)),0,4)
 	time_mode = clampi(int(config.get_value("world","daylight",0)),0,2)
 	steady_player_lights = config.get_value("driving","steady_lights",false) == true
 	var gentle = config.get_value("driving","gentle",true)
@@ -2205,6 +2274,8 @@ func _save_preferences() -> void:
 	config.set_value("language", "locale", TranslationServer.get_locale())
 	config.set_value("audio","volume",roundi(volume))
 	config.set_value("audio","traffic_sirens",roundi(traffic_siren_volume))
+	config.set_value("world","season",weather.season_setting)
+	config.set_value("world","weather",weather.weather_setting)
 	config.set_value("world","daylight",time_mode)
 	config.set_value("driving","gentle",gentle_driving)
 	config.set_value("traffic","lights",traffic_light_mode)
@@ -2402,6 +2473,8 @@ func _noise_material(dark_color: Color, light_color: Color, frequency: float, st
 	shader_type spatial;
 	uniform vec4 dark_color : source_color;
 	uniform vec4 light_color : source_color;
+	uniform float wet = 0.0;
+	uniform float snow_cover = 0.0;
 	uniform float frequency = 2.0;
 	uniform float strength = 0.1;
 	varying vec3 world_position;
@@ -2417,7 +2490,9 @@ func _noise_material(dark_color: Color, light_color: Color, frequency: float, st
 		float broad = mix(noise(p), .5, smoothstep(.25, 1., footprint));
 		float grain = mix(noise(p * 12.), .5, smoothstep(.25, 1., footprint * 12.));
 		ALBEDO = mix(dark_color.rgb, light_color.rgb, clamp(0.5 + (broad - 0.5) * strength * 3.0 + (grain - 0.5) * strength * 0.4, 0.0, 1.0));
-		ROUGHNESS = 0.92;
+		ALBEDO *= 1.0 - wet*.42;
+		ALBEDO = mix(ALBEDO,vec3(.73,.81,.85),snow_cover*smoothstep(.15,.68,broad));
+		ROUGHNESS = mix(.92,.23,wet);
 	}
 	"""
 	var material := ShaderMaterial.new()

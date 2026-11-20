@@ -25,3 +25,9 @@ Godot loads the playable world from `main.tscn`. Vehicle meshes are in `vehicles
 ## Tvärbanan
 
 Select **Ride the tram** in the activity menu to follow an automatic service around a fictional three-stop canal loop. Select **Drive the tram** to control its speed with W and S or the arrow keys. Steering follows the rails, and the tram stops at each platform for six seconds. The lead car carries a Swedish notice beside a blue door.
+
+## Weather and exploration
+
+Select a season and weather in Settings or leave either on Automatic. Automatic seasons last 30 minutes of active play. The forecast holds for five minutes, then precipitation builds or clears over roughly a minute. Snow accumulates on roads, rain darkens the asphalt and braking takes slightly longer on slippery surfaces. Manual changes take effect more quickly. Daylight includes a visible sun aligned with the light casting the street shadows.
+
+Hold the middle mouse button and drag to orbit the exterior camera. On foot, nearby neighbours greet you in the selected language. Greetings appear above the speaker and use a matching system speech voice when available.

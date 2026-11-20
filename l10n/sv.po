@@ -260,3 +260,42 @@ msgstr "Åk med Tvärbanan"
 
 msgid "Drive the tram"
 msgstr "Kör Tvärbanan"
+
+msgid "Season · Automatic"
+msgstr "Årstid · Automatiskt"
+
+msgid "Spring"
+msgstr "Vår"
+
+msgid "Summer"
+msgstr "Sommar"
+
+msgid "Autumn"
+msgstr "Höst"
+
+msgid "Winter"
+msgstr "Vinter"
+
+msgid "Weather · Automatic"
+msgstr "Väder · Automatiskt"
+
+msgid "Sun"
+msgstr "Sol"
+
+msgid "Rain"
+msgstr "Regn"
+
+msgid "Snow"
+msgstr "Snö"
+
+msgid "Slush"
+msgstr "Slask"
+
+msgid "Hello!"
+msgstr "Hej!"
+
+msgid "How are you?"
+msgstr "Hur mår du?"
+
+msgid "Hi there!"
+msgstr "Hej på dig!"

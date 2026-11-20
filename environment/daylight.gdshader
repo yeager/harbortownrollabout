@@ -4,6 +4,7 @@ shader_type sky;
 uniform sampler2D city_light : source_color, filter_linear, repeat_disable;
 
 uniform sampler2D cloud_density : filter_linear_mipmap, repeat_enable;
+uniform float overcast = 0.0;
 uniform float night = 0.0;
 
 void sky() {
@@ -27,6 +28,12 @@ void sky() {
         // along the horizon. Keep the roofline legible during the transition.
         vec3 night_cloud = mix(vec3(.205,.205,.220),vec3(.135,.155,.192),sqrt(elevation));
         night_sky = mix(night_sky,night_cloud,cover*(.45+.35*light));
+        COLOR = mix(COLOR,vec3(.43,.49,.55)*(.86+.18*density),overcast*.9);
+        if (LIGHT0_ENABLED) {
+            float alignment = max(dot(EYEDIR,LIGHT0_DIRECTION),0.);
+            float glow = .32*pow(alignment,180.) + 4.*smoothstep(.99996,.99999,alignment);
+            COLOR += vec3(1.,.84,.60)*glow*(1.-cover*.76)*(1.-overcast);
+        }
         COLOR = mix(COLOR,night_sky,night);
     }
 }
