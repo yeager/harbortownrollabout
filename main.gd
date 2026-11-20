@@ -118,6 +118,8 @@ var traffic_light_mode := 0
 var steady_player_lights := false
 var emergency_traffic: Array[Dictionary] = []
 var moorings: Array[Dictionary] = []
+var tram := preload("res://tram.gd").new()
+var tram_mode := 0
 var wave_time := 0.0
 var walker_data: Array[Dictionary] = []
 
@@ -135,7 +137,10 @@ func _process(delta: float) -> void:
 	if message_timer > 0.0:
 		message_timer = maxf(0.0, message_timer - delta)
 	if mode == "playing" and not paused:
-		if walker.visible:
+		tram.advance(delta, tram_mode == 2, mouse_gas or Input.is_physical_key_pressed(KEY_W) or Input.is_key_pressed(KEY_UP), mouse_brake or Input.is_physical_key_pressed(KEY_S) or Input.is_key_pressed(KEY_DOWN))
+		if tram_mode > 0:
+			_end_skid()
+		elif walker.visible:
 			_walk(delta)
 		else:
 			_drive(delta)
@@ -461,6 +466,7 @@ func _build_world() -> void:
 	_build_depot()
 	_build_target_marker()
 	_build_camera()
+	add_child(tram)
 
 func _build_road_network() -> void:
 	road_finish = _noise_material(Color("#303538"), Color("#45494a"), 2.3, .22)
@@ -1727,6 +1733,11 @@ func _toggle_camera_view() -> void:
 
 func _update_camera(delta: float, snap_to_car := false) -> void:
 	if not is_instance_valid(camera) or not is_instance_valid(ambulance): return
+	if tram_mode > 0 and not tram.sections.is_empty():
+		var cab: Node3D = tram.sections[0]
+		camera.position = cab.to_global(Vector3(4.0,4.1,8.0))
+		camera.look_at(cab.to_global(Vector3(0,1.4,-1)))
+		return
 	if walker.visible:
 		var target := walker.position + Vector3.UP*1.2
 		var chase := camera.position.lerp(target+walk_basis.z*5+Vector3.UP*2.7,1-exp(-6*delta))
@@ -1919,8 +1930,11 @@ func _build_overlay() -> void:
 	activity.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	activity.add_item("Three missions")
 	activity.add_item("Free exploration")
+	activity.add_item("Ride the tram")
+	activity.add_item("Drive the tram")
 	activity.item_selected.connect(func(index: int):
-		free_drive = index == 1
+		tram_mode = maxi(0,index-1)
+		free_drive = index != 0
 		parked_at_target = 0.0
 		message_timer = 0.0
 		_update_mission_marker()

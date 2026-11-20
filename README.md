@@ -21,3 +21,7 @@ Gentle driving limits speed to 30 km/h and completes an interaction when you sto
 ## Project files
 
 Godot loads the playable world from `main.tscn`. Vehicle meshes are in `vehicles/`, buildings and vegetation in `environment/`, and editable Blender scenes in `source_blender/`. The Python scripts in `tools/` generate models and audio. Swedish translations live in `l10n/`.
+
+## Tvärbanan
+
+Select **Ride the tram** in the activity menu to follow an automatic service around a fictional three-stop canal loop. Select **Drive the tram** to control its speed with W and S or the arrow keys. Steering follows the rails, and the tram stops at each platform for six seconds. The lead car carries a Swedish notice beside a blue door.

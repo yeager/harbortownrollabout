@@ -254,3 +254,9 @@ msgstr "Stillastående"
 
 msgid "Reversing"
 msgstr "Backar"
+
+msgid "Ride the tram"
+msgstr "Åk med Tvärbanan"
+
+msgid "Drive the tram"
+msgstr "Kör Tvärbanan"
