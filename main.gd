@@ -125,6 +125,7 @@ var traffic_light_mode := 0
 var steady_player_lights := false
 var emergency_traffic: Array[Dictionary] = []
 var moorings: Array[Dictionary] = []
+var street_signals := preload("res://street_signals.gd").new()
 var tram := preload("res://tram.gd").new()
 var tram_mode := 0
 var wave_time := 0.0
@@ -161,6 +162,7 @@ func _process(delta: float) -> void:
 	if message_timer > 0.0:
 		message_timer = maxf(0.0, message_timer - delta)
 	if mode == "playing" and not paused:
+		street_signals.advance(delta)
 		tram.advance(delta, tram_mode == 2, mouse_gas or Input.is_physical_key_pressed(KEY_W) or Input.is_key_pressed(KEY_UP), mouse_brake or Input.is_physical_key_pressed(KEY_S) or Input.is_key_pressed(KEY_DOWN))
 		if tram_mode > 0:
 			_end_skid()
@@ -267,6 +269,29 @@ func _drive(delta: float) -> void:
 	var max_yaw_rate := 8.0 / maxf(absf(speed), 1.0)
 	ambulance.rotate_y(-clampf(yaw_rate, -max_yaw_rate, max_yaw_rate) * delta)
 	var forward := -ambulance.global_transform.basis.z
+	var travel_direction := forward * signf(speed)
+	var stopping_distance := street_signals.red_clearance(ambulance.position,travel_direction,player_half_size.y)
+	var people: Array = [crossing_pedestrian]
+	for item in walker_data:
+		people.append(item.actor)
+	for person: Node3D in people:
+		var offset := ambulance.to_local(person.position)
+		if absf(offset.x)<player_half_size.x+.36 and -offset.z*signf(speed)>0:
+			stopping_distance = minf(stopping_distance,maxf(0,absf(offset.z)-player_half_size.y-.65))
+	# Plan the stop before the bumper reaches a person or a stationary queue.
+	for item in traffic_data:
+		var offset := ambulance.to_local(item.actor.position)
+		var rail := ambulance.global_basis.x
+		var side_extent := absf(rail.x)*float(item.length)+absf(rail.z)*float(item.width)
+		if absf(offset.x)>player_half_size.x+side_extent: continue
+		var ahead := -offset.z*signf(speed)
+		if ahead<=0: continue
+		var end_extent := absf(forward.x)*float(item.length)+absf(forward.z)*float(item.width)
+		var leader_speed := maxf(0,travel_direction.x*float(item.direction)*float(item.speed))
+		stopping_distance = minf(stopping_distance,maxf(0,ahead-player_half_size.y-end_extent-.65)+leader_speed*leader_speed/10)
+	if stopping_distance < INF:
+		var limit := sqrt(10.0*maxf(0,stopping_distance))
+		speed = signf(speed)*minf(absf(speed),limit)
 	var step := forward * speed * delta
 	var extent := _player_extent()
 	for item in traffic_data:
@@ -494,6 +519,7 @@ func _build_world() -> void:
 	_build_target_marker()
 	_build_camera()
 	add_child(tram)
+	add_child(street_signals)
 
 func _build_road_network() -> void:
 	road_finish = _noise_material(Color("#303538"), Color("#45494a"), 2.3, .22)
@@ -1361,7 +1387,7 @@ func _update_traffic(delta: float) -> void:
 	for item in traffic_data:
 		var actor: Node3D = item.actor
 		var direction: float = item.direction
-		var clearance := TRAFFIC_EAST - TRAFFIC_WEST
+		var clearance := minf(TRAFFIC_EAST - TRAFFIC_WEST,street_signals.red_clearance(actor.position,Vector3.RIGHT*direction,float(item.length)) + 1.0)
 		for other in traffic_data:
 			var neighbour: Node3D = other.actor
 			if neighbour == actor or absf(neighbour.position.z - actor.position.z) >= float(item.width) + float(other.width):
@@ -1387,7 +1413,7 @@ func _update_traffic(delta: float) -> void:
 			var offset := walker.position - actor.position
 			if offset.x * direction >= 0 and absf(offset.z) < float(item.width)+.45:
 				clearance = minf(clearance, offset.x*direction-float(item.length)-.45)
-		if crossing_wait <= 0.0:
+		if crossing_wait <= 0.0 and (absf(crossing_pedestrian.position.z)<6.31 or street_signals.phase==3):
 			var ahead := (crossing_pedestrian.position.x-actor.position.x)*direction
 			var remaining := (actor.position.z-crossing_pedestrian.position.z)*crossing_direction
 			if ahead >= 0 and remaining >= -float(item.width)-.45:
@@ -1427,7 +1453,7 @@ func _build_pedestrians() -> void:
 func _advance_crossing(delta: float) -> void:
 	crossing_wait = maxf(0,crossing_wait-delta)
 	var step := 0.0
-	if crossing_wait <= 0.0:
+	if crossing_wait <= 0.0 and (absf(crossing_pedestrian.position.z)<6.31 or street_signals.phase==3):
 		step = minf(delta*1.25,absf(6.32*crossing_direction-crossing_pedestrian.position.z))*crossing_direction
 		var next := crossing_pedestrian.position+Vector3.BACK*step
 		var car_offset := ambulance.to_local(next)
