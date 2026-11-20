@@ -136,6 +136,9 @@ var emergency_traffic: Array[Dictionary] = []
 var moorings: Array[Dictionary] = []
 var street_signals := preload("res://street_signals.gd").new()
 var tram := preload("res://tram.gd").new()
+var boating := false
+var launch: Node3D
+var launch_speed := 0.0
 var tram_mode := 0
 var ferry: Node3D
 var wave_time := 0.0
@@ -174,7 +177,9 @@ func _process(delta: float) -> void:
 	if mode == "playing" and not paused:
 		street_signals.advance(delta)
 		tram.advance(delta, tram_mode == 2, mouse_gas or Input.is_physical_key_pressed(KEY_W) or Input.is_key_pressed(KEY_UP), mouse_brake or Input.is_physical_key_pressed(KEY_S) or Input.is_key_pressed(KEY_DOWN))
-		if tram_mode > 0:
+		if boating:
+			_drive_launch(delta)
+		elif tram_mode > 0:
 			_end_skid()
 		elif walker.visible:
 			_walk(delta)
@@ -208,7 +213,7 @@ func _input(event: InputEvent) -> void:
 		if event.button_index == MOUSE_BUTTON_RIGHT: mouse_brake = false
 
 func _unhandled_input(event: InputEvent) -> void:
-	if mode == "playing" and not paused and not walker.visible and event is InputEventMouseButton and event.pressed:
+	if mode == "playing" and not paused and (boating or not walker.visible) and event is InputEventMouseButton and event.pressed:
 		if event.button_index == MOUSE_BUTTON_LEFT: mouse_gas = true
 		if event.button_index == MOUSE_BUTTON_RIGHT: mouse_brake = true
 
@@ -239,9 +244,26 @@ func _unhandled_key_input(event: InputEvent) -> void:
 				if mode == "complete": _start_game()
 
 func _honk() -> void:
-	if mode != "playing" or paused or walker.visible or tram_mode != 0 or horn.playing: return
-	horn.stream = load("res://audio/horn_%s.wav" % HORNS[vehicle_index])
+	if mode != "playing" or paused or (walker.visible and not boating) or tram_mode != 0 or horn.playing: return
+	horn.stream = load("res://audio/horn_%s.wav" % ("motorboat" if boating else HORNS[vehicle_index]))
 	horn.play()
+
+func _drive_launch(delta: float) -> void:
+	var gas := mouse_gas or Input.is_action_pressed("ui_up") or Input.is_physical_key_pressed(KEY_W)
+	var brake := mouse_brake or Input.is_action_pressed("ui_down") or Input.is_physical_key_pressed(KEY_S)
+	var turn := Input.get_axis("ui_left","ui_right")
+	if Input.is_physical_key_pressed(KEY_A): turn=-1
+	if Input.is_physical_key_pressed(KEY_D): turn=1
+	var target := -1.6 if brake else (5.0 if gentle_driving else 9.0) if gas else 0.0
+	launch_speed = move_toward(launch_speed,target,delta*(3.4 if brake else 1.5))
+	launch.rotation.y -= turn*clampf(launch_speed,-1,2)*delta*.53
+	var heading := Vector3.FORWARD.rotated(Vector3.UP,launch.rotation.y)
+	var next := launch.position+heading*launch_speed*delta
+	var bounded := Vector3(clampf(next.x,58,84),-.94+.026*sin(wave_time*1.7),clampf(next.z,9,74))
+	if absf(next.x-bounded.x)+absf(next.z-bounded.z)>.0001: launch_speed=0
+	launch.position=bounded
+	launch.rotation.z=lerpf(launch.rotation.z,-turn*absf(launch_speed)*.012,1-exp(-3*delta))
+	driving_controls.set_controls(turn,gas,brake,launch_speed<-.1)
 
 func _walk_pedal_pressed() -> bool:
 	return Input.is_action_pressed("ui_up") or Input.is_action_pressed("ui_down") or Input.is_key_pressed(KEY_W) or Input.is_key_pressed(KEY_S)
@@ -801,6 +823,15 @@ func _build_quay_lane_markings() -> void:
 	add_child(markings)
 
 func _build_marina() -> void:
+	launch = Node3D.new()
+	add_child(launch)
+	var launch_model := preload("res://vehicles/motorboat.glb").instantiate() as Node3D
+	launch_model.rotation.y = PI
+	launch.add_child(launch_model)
+	launch.position=Vector3(79,-.94,46)
+	for x in [58,65,72,79,84]:
+		for z in [6.8,76.5]:
+			_make_box("Fairway buoy",Vector3(.35,.75,.35),Vector3(x,-.82,z),Color("#bf5e37"))
 	ferry = (load("res://vehicles/lotten.glb") as PackedScene).instantiate()
 	add_child(ferry)
 	for landing_z in [-35.0,-12.0]:
@@ -1229,6 +1260,7 @@ func _on_foot_clear(p: Vector3) -> bool:
 	return true
 
 func _change_seat() -> void:
+	if boating or tram_mode!=0: return
 	if mode != "playing" or paused: return
 	if not walker.visible:
 		if absf(speed)>.2:
@@ -1911,6 +1943,10 @@ func _toggle_camera_view() -> void:
 
 func _update_camera(delta: float, snap_to_car := false) -> void:
 	if not is_instance_valid(camera) or not is_instance_valid(ambulance): return
+	if boating and is_instance_valid(launch):
+		camera.position = launch.to_global(Vector3(1,3.6+orbit_height,7).rotated(Vector3.UP,orbit_angle))
+		camera.look_at(launch.to_global(Vector3(0,.4,-1.7)))
+		return
 	if tram_mode > 0 and not tram.sections.is_empty():
 		var cab: Node3D = tram.sections[0]
 		camera.position = cab.to_global(Vector3(4.0,4.1+orbit_height,8.0).rotated(Vector3.UP,orbit_angle))
@@ -2123,8 +2159,15 @@ func _build_overlay() -> void:
 	activity.add_item("Free exploration")
 	activity.add_item("Ride the tram")
 	activity.add_item("Drive the tram")
+	activity.add_item("Drive the motorboat")
 	activity.item_selected.connect(func(index: int):
-		tram_mode = maxi(0,index-1)
+		boating = index==4
+		tram_mode = index-1 if index in [2,3] else 0
+		launch_speed = 0
+		var ear: Node3D = launch if boating else (walker if walker.visible else ambulance)
+		if listener.get_parent()!=ear:
+			listener.reparent(ear,false)
+			listener.position=Vector3.UP*1.3
 		free_drive = index != 0
 		parked_at_target = 0.0
 		message_timer = 0.0
@@ -2306,12 +2349,15 @@ func _start_game() -> void:
 	mission_index = 0
 	taxi_leg = 0
 	parked_at_target = 0.0
-	if listener.get_parent() == walker:
+	if listener.get_parent() != ambulance:
 		listener.reparent(ambulance,false)
 		listener.transform = Transform3D(Basis.IDENTITY,Vector3.UP*1.3)
 		listener.make_current()
 	walker.visible = false
 	ambulance.visible = true
+	if boating:
+		listener.reparent(launch,false)
+		listener.position = Vector3.UP
 	for i in parked_cars.size():
 		parked_cars[i].visible = i != vehicle_index
 		parked_cars[i].position = Vector3(-47+5*i,-.13,15)
@@ -2449,7 +2495,7 @@ func _toggle_sound() -> void:
 	_refresh_ui()
 
 func _update_siren() -> void:
-	if sound_on and mode == "playing" and not paused and not walker.visible:
+	if sound_on and not boating and mode == "playing" and not paused and not walker.visible:
 		if siren_player.stream != siren_streams[vehicle_index]:
 			siren_player.stream = siren_streams[vehicle_index]
 		if vehicle_index < 3:
@@ -2479,22 +2525,24 @@ func _refresh_ui() -> void:
 	var show_overlay := mode == "menu" or mode == "complete" or paused
 	for control in [light_button, siren_button, pause_button]:
 		control.focus_mode = Control.FOCUS_NONE if show_overlay else Control.FOCUS_ALL
-	camera_button.visible = vehicle_index == 3 and not walker.visible and not show_overlay
+	camera_button.visible = not boating and vehicle_index == 3 and not walker.visible and not show_overlay
 	camera_button.text = "Outside view · C" if cockpit_view else "Driver view · C"
-	horn_button.visible = not show_overlay and not walker.visible and tram_mode==0
-	seat_button.visible = not show_overlay and tram_mode==0
-	light_button.visible = not walker.visible and vehicle_index < 3
-	siren_button.visible = not walker.visible
+	horn_button.visible = not show_overlay and (boating or not walker.visible) and tram_mode==0
+	seat_button.visible = not show_overlay and tram_mode==0 and not boating
+	light_button.visible = not boating and not walker.visible and vehicle_index < 3
+	siren_button.visible = not boating and not walker.visible
 	if walker.visible:
 		_update_entry_button()
 	else:
 		seat_button.disabled = false
 		entry_marker.visible = false
 		seat_button.text = "Get out · F"
-	driving_controls.visible = not show_overlay and not walker.visible
+	driving_controls.visible = not show_overlay and (boating or not walker.visible)
 	var hints := ui.get_node("DrivingHints") as Label
 	hints.visible = driving_controls.visible
-	if free_drive:
+	if boating:
+		hints.text = "W / ↑ Throttle · A D / ← → Steer · S / ↓ Slow or reverse · H Horn · P Pause"
+	elif free_drive:
 		hints.text = "W / ↑ Drive   ·   A D / ← → Steer   ·   S / ↓ Brake or reverse   ·   F Get out   ·   P Pause"
 	else:
 		hints.text = "W / ↑  Drive     A D / ← →  Steer     S / ↓  Brake or reverse\nRelease to slow down   ·   Space to help   ·   P to pause"
@@ -2558,12 +2606,12 @@ func _refresh_status() -> void:
 		status_label.text = "Stand here to help" if gentle_driving else "Press Space to help"
 	elif mode == "playing" and not paused and gentle_driving and _at_target():
 		status_label.text = "Stop here to help." if absf(speed) >= 0.12 else "Helping …"
-	elif walker.visible and not paused:
+	elif walker.visible and not boating and not paused:
 		status_label.text = "Walk with WASD or arrows · F to enter a vehicle"
 	elif paused:
 		status_label.text = "Paused — take your time."
 	else:
-		status_label.text = tr("Speed  %02d km/h") % roundi(absf(speed) * 3.6)
+		status_label.text = tr("Speed  %02d km/h") % roundi(absf(launch_speed if boating else speed) * 3.6)
 
 func _make_driving_surface(label: String, size: Vector3, pos: Vector3, color: Color, collision := false) -> MeshInstance3D:
 	driving_surfaces.append(AABB(pos - size * 0.5, size))

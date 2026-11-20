@@ -41,3 +41,7 @@ The double-ended passenger ferry **Lotten** runs between two landings in the can
 Choose **Taxi** and start the mission activity to pick up a passenger. Follow the green arrows along the streets and over a bridge when needed. Stop at the marker to board or drop off your fare. Gentle driving handles boarding automatically. The next fare appears after drop-off.
 
 Press **H** or click **Horn** while driving. The ambulance, police car, fire engine, BMW and taxi each have their own horn.
+
+## Motorboat
+
+Choose **Drive the motorboat** in the activity menu. The white centre-console boat starts in the southern canal basin. Use the same steering and pedal controls as a car. Hold the brake to slow down and reverse. The shore and buoy lines bound the boating area. Press **H** for the boat horn or drag with the middle mouse button to look around.

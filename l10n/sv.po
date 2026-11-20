@@ -314,3 +314,9 @@ msgstr "Passageraren är ombord."
 
 msgid "Thank you for the ride!"
 msgstr "Tack för skjutsen!"
+
+msgid "Drive the motorboat"
+msgstr "Kör motorbåten"
+
+msgid "W / ↑ Throttle · A D / ← → Steer · S / ↓ Slow or reverse · H Horn · P Pause"
+msgstr "W / ↑ Gasa · A D / ← → Styr · S / ↓ Sakta in eller backa · H Tuta · P Paus"
