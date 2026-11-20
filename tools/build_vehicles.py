@@ -283,6 +283,14 @@ def make_ambulance():
     cabin=bpy.data.objects.new("Förarhytt",mesh)
     bpy.context.collection.objects.link(cabin)
     cabin.parent=root
+    # Raised modules are visible above the box body from the chase camera.
+    for y in (.06, 2.77):
+        for side in (-1, 1):
+            x = .75*side
+            box("Beacon mounting foot", (x,y,2.624), (.40,.21,.075), RUBBER, .024)
+            box("Cobalt polycarbonate casing", (x,y,2.712), (.46,.24,.145), POLICE_BLUE,.045)
+            phase = "FlashBlue" if side < 0 else "FlashRed"
+            box(phase+"_RoofBeacon", (x,y,2.735), (.47,.25,.124), BLUE_LAMP,.040)
     # The module fairing projects over the roof at the front of the box.
     fairing=[]
     for y,w,base,top in ((-1.27,.76,2.164,2.183),(-1.18,.88,2.148,2.29),
