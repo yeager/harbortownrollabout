@@ -2072,6 +2072,14 @@ func _load_vehicle_model() -> void:
 func _find_light_meshes(node: Node) -> void:
 	for child in node.get_children():
 		if child is MeshInstance3D:
+			if "RoofBeacon" in str(child.name):
+				var spill := OmniLight3D.new()
+				spill.name = "Blue roof light"
+				spill.light_color = Color("#3879ff")
+				spill.light_energy = 2.6
+				spill.omni_range = 5.0
+				spill.position = child.get_aabb().get_center() + Vector3.UP*.14
+				child.add_child(spill)
 			if child.name.begins_with("FlashBlue"):
 				blue_light_meshes.append(child)
 				child.visible = false

@@ -51,3 +51,5 @@ Spelprojektet publiceras i det privata GitHub-repot yeager/axels-emergency-vehic
 - BMW:ns två främre vindrutetorkare följer nederbörden. De sveper snabbare vid kraftigare nederbörd och avslutar svepet i parkerat läge när det klarnar.
 
 - Förarvyn renderades i Godot med parkerade och uppfällda torkare. Svepet ökades till cirka 73 grader efter bildkontrollen.
+
+- Spelarambulansens fyra takmoduler lyser nu upp närliggande ytor. Godot-test och bild från följekameran bekräftar ljusen i fast läge och testet kontrollerar båda blinkfaserna.
