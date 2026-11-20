@@ -4,3 +4,6 @@
 # Native editor / operating system files
 .DS_Store
 Thumbs.db
+
+# Python bytecode from Blender asset generators
+__pycache__/

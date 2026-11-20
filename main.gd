@@ -128,6 +128,7 @@ var moorings: Array[Dictionary] = []
 var street_signals := preload("res://street_signals.gd").new()
 var tram := preload("res://tram.gd").new()
 var tram_mode := 0
+var ferry: Node3D
 var wave_time := 0.0
 var walker_data: Array[Dictionary] = []
 
@@ -764,6 +765,13 @@ func _build_quay_lane_markings() -> void:
 	add_child(markings)
 
 func _build_marina() -> void:
+	ferry = (load("res://vehicles/lotten.glb") as PackedScene).instantiate()
+	add_child(ferry)
+	for landing_z in [-35.0,-12.0]:
+		_make_box("Ferry landing",Vector3(2.0,.28,7.5),Vector3(64.9,-.49,landing_z),Color("#847968"))
+		_make_box("Landing gangway",Vector3(9.2,.20,1.6),Vector3(59.5,-.29,landing_z),Color("#9d9280"))
+		for end in [-1,1]:
+			_make_box("Pier pile",Vector3(.24,1.4,.24),Vector3(65.75,-.67,landing_z+end*3.4),Color("#514e41"))
 	_make_box("Flytbrygga",Vector3(1.4,.25,32),Vector3(85.8,-.63,-24),Color("#877962"))
 	var rope := CylinderMesh.new()
 	rope.top_radius = 0.018
@@ -858,6 +866,14 @@ func _build_marina() -> void:
 
 func _update_moorings(delta: float) -> void:
 	wave_time += delta
+	# A double-ended ferry can reverse away from either landing without turning.
+	# Each crossing includes a five-second stop and gentle acceleration.
+	var half_trip := fmod(wave_time,58.0)
+	var crossing := smoothstep(5.0,29.0,fmod(half_trip,29.0))
+	if half_trip >= 29.0:
+		crossing = 1.0-crossing
+	ferry.position = Vector3(68,-.97+.024*sin(wave_time*1.1),lerpf(-35.0,-12.0,crossing))
+	ferry.rotation.z = .006*sin(wave_time*.88)
 	for berth in moorings:
 		var boat: Node3D = berth.boat
 		var buoy: Node3D = berth.buoy
