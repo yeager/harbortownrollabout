@@ -4,6 +4,7 @@ const STATION_NAMES := ["Sjöstads kaj", "Kanalparken", "Brotorget"]
 
 var track := Curve3D.new()
 var sections: Array[Node3D] = []
+var platform_door_leaves: Array[Node3D] = []
 var stops: Array[float] = []
 var next_stop := 1
 var distance := 0.0
@@ -55,15 +56,25 @@ func _ready() -> void:
 		var car := Node3D.new()
 		add_child(car)
 		sections.append(car)
-		world._make_box("Lower sill",Vector3(2.38,.86,4.65),Vector3(0,.76,0),Color("#b8c7cd"),false,car)
-		world._make_box("Panoramic glazing",Vector3(2.32,1.18,4.58),Vector3(0,1.76,0),Color("#172e39"),false,car)
+		# Leave a vestibule between the two saloon modules.
+		for span in [Vector2(-2.325,-.39),Vector2(.65,2.325)]:
+			var depth: float = span.y-span.x
+			var middle: float = (span.x+span.y)*.5
+			world._make_box("Lower sill",Vector3(2.38,.86,depth),Vector3(0,.76,middle),Color("#b8c7cd"),false,car)
+			world._make_box("Panoramic glazing",Vector3(2.32,1.18,depth),Vector3(0,1.76,middle),Color("#172e39"),false,car)
+		world._make_box("Vestibule floor",Vector3(2.38,.10,1.05),Vector3(0,.36,.13),Color("#676c70"),false,car)
 		world._make_box("Roof fascia",Vector3(2.38,.38,4.65),Vector3(0,2.49,0),Color("#e2e4e1"),false,car)
 		for s in [-1,1]:
 			for z in [-.82,.82]:
 				world._make_box("Window mullion",Vector3(.06,1.18,.09),Vector3(s*1.16,1.76,z),Color("#43515a"),false,car)
-			world._make_box("Blue sliding doors",Vector3(.08,2.26,1.03),Vector3(s*1.19,1.5,.13),Color("#147db0"),false,car)
-			for z in [-.12,.38]:
-				world._make_box("Door glass",Vector3(.03,1.1,.38),Vector3(s*1.24,1.75,z),Color("#213744"),false,car)
+			for opening_direction in [-1,1]:
+				var leaf := Node3D.new()
+				car.add_child(leaf)
+				leaf.position = Vector3(s*1.21,1.49,.13+opening_direction*.26)
+				world._make_box("Door panel",Vector3(.08,2.22,.51),Vector3.ZERO,Color("#147db0"),false,leaf)
+				world._make_box("Door glazing",Vector3(.02,1.10,.38),Vector3(s*.048,.26,0),Color("#213744"),false,leaf)
+				if i==0 and s==1:
+					platform_door_leaves.append(leaf)
 		if i==0:
 			world._make_box("Cab nose",Vector3(2.32,.77,.38),Vector3(0,.84,-2.31),Color("#1388bf"),false,car)
 			world._make_box("Door notice",Vector3(.035,.32,1.4),Vector3(1.21,1.04,1.46),Color("#174460"),false,car)
@@ -73,6 +84,10 @@ func _ready() -> void:
 func advance(delta: float, manual: bool, gas: bool, brake: bool) -> void:
 	if dwell>0:
 		dwell=maxf(0,dwell-delta)
+		var opening := smoothstep(0,.85,minf(6-dwell,dwell))
+		for i in platform_door_leaves.size():
+			var direction := -1 if i==0 else 1
+			platform_door_leaves[i].position.z = .13+direction*(.26+.51*opening)
 		return
 	var length := track.get_baked_length()
 	var remaining := fposmod(stops[next_stop]-distance,length)
