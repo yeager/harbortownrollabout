@@ -40,6 +40,8 @@ var previous_season := 0
 var greeting_timer := 0.0
 var greeting_number := 0
 var greeting := Label3D.new()
+var wiper_pivots: Array[Node3D] = []
+var wiper_phase := 0.0
 var cockpit_look := Vector2.ZERO
 var orbit_angle := 0.0
 var orbit_height := 0.0
@@ -178,6 +180,7 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	if mode == "playing" and not paused:
 		weather.tick(delta)
+		_advance_wipers(delta)
 	if previous_season != weather.season:
 		previous_season = weather.season
 		for finish in foliage_finishes:
@@ -1936,7 +1939,19 @@ func _set_rear_lights(lens: StandardMaterial3D, braking: bool) -> void:
 		if braking:
 			centre.emission_energy_multiplier = 2.4
 
+func _advance_wipers(delta: float) -> void:
+	if wiper_pivots.is_empty(): return
+	var precipitation := maxf(weather.intensity.x,weather.intensity.y)
+	if precipitation < .06 and is_zero_approx(wiper_phase): return
+	var next_phase := wiper_phase + delta*lerpf(2.0,5.4,precipitation)
+	wiper_phase = 0.0 if precipitation < .06 and next_phase >= TAU else fmod(next_phase,TAU)
+	var sweep := .46*(1.0-cos(wiper_phase))
+	for pivot in wiper_pivots:
+		pivot.basis = Basis(Vector3(0,.77,.64).normalized(),sweep)
+
 func _load_vehicle_model() -> void:
+	wiper_pivots.clear()
+	wiper_phase = 0.0
 	cockpit_view = false
 	if is_instance_valid(vehicle_model):
 		vehicle_model.queue_free()
@@ -1954,6 +1969,17 @@ func _load_vehicle_model() -> void:
 	reverse_camera = null
 	cabin_wheel = null
 	if vehicle_index == 3:
+		var arms := vehicle_model.find_children("Wiper arm*","MeshInstance3D",true,false)
+		var blades := vehicle_model.find_children("Windscreen wiper blade*","MeshInstance3D",true,false)
+		for i in mini(arms.size(),blades.size()):
+			var arm := arms[i] as MeshInstance3D
+			var bounds := arm.get_aabb()
+			var pivot := Node3D.new()
+			arm.get_parent().add_child(pivot)
+			pivot.global_position = arm.to_global(Vector3(bounds.position.x,bounds.position.y,bounds.end.z))
+			arm.reparent(pivot)
+			blades[i].reparent(pivot)
+			wiper_pivots.append(pivot)
 		var rim := vehicle_model.find_child("Steering wheel rim*",true,false) as MeshInstance3D
 		if rim:
 			cabin_wheel = Node3D.new()
