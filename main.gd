@@ -6,9 +6,9 @@ const TARGET_NAMES := ["Help at the square", "Pick up the medic", "Deliver first
 const ROAD_HALF := 4.8
 const VEHICLE_NAMES := ["Ambulance", "Police car", "Fire engine"]
 const VEHICLE_SCENES := ["res://vehicles/ambulance.glb", "res://vehicles/polisbil.glb", "res://vehicles/brandbil.glb"]
-const VEHICLE_NAMES_ALL := ["Ambulance", "Police car", "Fire engine", "BMW X5 M60i", "Taxi"]
-const VEHICLE_SCENES_ALL := ["res://vehicles/ambulance.glb", "res://vehicles/polisbil.glb", "res://vehicles/brandbil.glb", "res://vehicles/bmw_x5_m60i.glb", "res://vehicles/taxi.glb"]
-const SIREN_SOUNDS := ["res://audio/siren_ambulance.wav", "res://audio/siren_police.wav", "res://audio/siren_fire.wav", "res://audio/bmw_engine.wav", "res://audio/bmw_engine.wav"]
+const VEHICLE_NAMES_ALL := ["Ambulance", "Police car", "Fire engine", "BMW X5 M60i", "Taxi", "Recovery truck"]
+const VEHICLE_SCENES_ALL := ["res://vehicles/ambulance.glb", "res://vehicles/polisbil.glb", "res://vehicles/brandbil.glb", "res://vehicles/bmw_x5_m60i.glb", "res://vehicles/taxi.glb", "res://vehicles/bargare.glb"]
+const SIREN_SOUNDS := ["res://audio/siren_ambulance.wav", "res://audio/siren_police.wav", "res://audio/siren_fire.wav", "res://audio/bmw_engine.wav", "res://audio/bmw_engine.wav", "res://audio/bmw_engine.wav"]
 const BUILDING_SCENES := {"Bageriet":"res://environment/bageri.glb", "Vårdcentralen":"res://environment/vardcentral.glb", "Brandstationen":"res://environment/brandstation.glb", "Biblioteket":"res://environment/bibliotek.glb"}
 const TREE_SCENES := ["res://environment/lovtrad.glb", "res://environment/gran.glb", "res://environment/bredkronigt_lovtrad.glb"]
 
@@ -56,9 +56,16 @@ var crossing_direction := 1.0
 var walk_phase := 0.0
 var entry_marker := Label3D.new()
 const TAXI := 4
-const HORNS := ["ambulance","police","fire","bmw","taxi"]
+const HORNS := ["ambulance","police","fire","bmw","taxi","recovery"]
 var horn := AudioStreamPlayer.new()
 var horn_button: Button
+const RECOVERY := 5
+const SERVICE_STOPS := [Vector3(18,0,2.35), Vector3(34,0,-46), Vector3(126,0,-2.35), Vector3(34,0,-46)]
+const SERVICE_MESSAGES := ["Collect the car with a smoking bonnet.","Take the car to the workshop.","Collect the car with a missing wheel.","Take the car to the workshop."]
+var recovery_leg := 0
+var casualty: Node3D
+var lost_wheel: Node3D
+var bonnet_smoke := CPUParticles3D.new()
 var taxi_leg := 0
 var passenger: Node3D
 var seat_button: Button
@@ -101,9 +108,9 @@ var parked_at_target := 0.0
 var mode := "menu"
 var paused := false
 var lights_on := false
-var parked_light_settings: Array[bool] = [false, false, false, false, false]
+var parked_light_settings: Array[bool] = [false, false, false, false, false, false]
 var sound_on := true
-var parked_sound_settings: Array[bool] = [false, false, false, true, true]
+var parked_sound_settings: Array[bool] = [false, false, false, true, true, true]
 var siren_player: AudioStreamPlayer
 var ui: CanvasLayer
 var play_as_alma := false
@@ -331,7 +338,7 @@ func _drive(delta: float) -> void:
 	for knuckle in front_knuckles:
 		knuckle.rotation.y = -steering * deg_to_rad(33.0)
 	driving_controls.set_controls(steering, throttle > 0, brake_held, throttle < 0 and not brake_held)
-	var wheelbase: float = [3.7, 2.75, 4.1, 2.975, 2.85][vehicle_index]
+	var wheelbase: float = [3.7, 2.75, 4.1, 2.975, 2.85, 4.0][vehicle_index]
 	var yaw_rate := speed * tan(steering * deg_to_rad(33.0)) / wheelbase
 	# Limit lateral acceleration at speed while retaining tight parking turns.
 	var max_yaw_rate := 8.0 / maxf(absf(speed), 1.0)
@@ -386,6 +393,8 @@ func _drive(delta: float) -> void:
 			step = step.limit_length(maxf(0.0, clearance - 0.02))
 			speed = 0.0
 	var obstacles := building_bounds.duplicate()
+	if casualty.visible and casualty.get_parent()==self:
+		obstacles.append(AABB(casualty.position-Vector3(2.1,1,.86),Vector3(4.2,3,1.72)))
 	if is_instance_valid(crossing_pedestrian):
 		obstacles.append(AABB(crossing_pedestrian.position-Vector3(.28,1,.28),Vector3(.56,3,.56)))
 	for neighbour in walker_data:
@@ -498,6 +507,8 @@ func _mission_destination() -> Vector3:
 	var destination := WALK_TARGETS[mission_index] if walker.visible else TARGETS[mission_index]
 	if vehicle_index == TAXI:
 		destination = TARGETS[_taxi_stop()]
+	elif vehicle_index == RECOVERY:
+		destination = SERVICE_STOPS[recovery_leg%4]
 	destination.y = _surface_height(destination.x,destination.z)
 	return destination
 
@@ -505,7 +516,7 @@ func _arrival_radius() -> float:
 	return 2.1 if walker.visible else 5.2
 
 func _at_target() -> bool:
-	if free_drive or (vehicle_index == TAXI and walker.visible) or mission_index >= TARGETS.size(): return false
+	if free_drive or (vehicle_index in [TAXI,RECOVERY] and walker.visible) or mission_index >= TARGETS.size(): return false
 	var actor := walker if walker.visible else ambulance
 	return actor.position.distance_to(_mission_destination()) < _arrival_radius()
 
@@ -520,6 +531,17 @@ func _update_arrival(delta: float) -> void:
 
 func _help_at_target() -> void:
 	if free_drive or mission_index >= TARGETS.size(): return
+	if vehicle_index == RECOVERY:
+		if _at_target() and absf(speed)<.2:
+			recovery_leg+=1
+			parked_at_target=0
+			if recovery_leg%2==0:
+				wallet+=20
+				_save_preferences()
+				phone.receive("Recovery complete. You earned 20 coins.")
+			_update_mission_marker()
+			_refresh_ui()
+		return
 	if vehicle_index == TAXI:
 		if _at_target() and absf(speed)<.2:
 			taxi_leg += 1
@@ -1235,7 +1257,7 @@ func _build_depot() -> void:
 		var model := (load(VEHICLE_SCENES_ALL[i]) as PackedScene).instantiate() as Node3D
 		model.rotation.y = PI
 		body.add_child(model)
-		body.position = Vector3(-47+5*i,-.13,15)
+		body.position = Vector3(-45,-.13,23) if i==RECOVERY else Vector3(-47+5*i,-.13,15)
 		for lamp in model.find_children("Flash*", "MeshInstance3D", true, false):
 			lamp.visible = false
 		parked_cars.append(body)
@@ -1299,6 +1321,7 @@ func _near_parked_vehicle(p: Vector3, margin: float) -> bool:
 	return false
 
 func _on_foot_clear(p: Vector3) -> bool:
+	if is_instance_valid(casualty) and casualty.visible and casualty.get_parent()==self and AABB(casualty.position-Vector3(2.35,1,1.1),Vector3(4.7,3,2.2)).has_point(p): return false
 	if p.x < -60 or p.x > 170 or p.z < -86 or p.z > 65:
 		return false
 	if p.x > 55 and p.x < 87 and absf(p.z)>5.4 and absf(p.z+48)>5.4:
@@ -1967,7 +1990,47 @@ func _update_route_arrows() -> void:
 		gap-=length
 		if used==route_arrows.size(): break
 
+func _sync_recovery() -> void:
+	var active := vehicle_index==RECOVERY and not free_drive
+	var loaded := recovery_leg%2==1
+	var carrier := ambulance if not walker.visible else parked_cars[RECOVERY]
+	if loaded and vehicle_index!=RECOVERY:
+		carrier=parked_cars[RECOVERY]
+	var parent: Node3D = carrier if loaded else self
+	if casualty.get_parent()!=parent: casualty.reparent(parent,false)
+	casualty.visible=active or (loaded and carrier.visible and not free_drive)
+	if loaded:
+		casualty.position=Vector3(0,1.25,1.59)
+		casualty.rotation.y=PI
+	else:
+		var stop:Vector3=SERVICE_STOPS[recovery_leg%4]
+		casualty.position=stop+Vector3(0,0,4.2 if recovery_leg%4==0 else -4.2)
+		casualty.rotation.y=PI/2
+	lost_wheel.visible=recovery_leg%4<2
+	bonnet_smoke.emitting=active and recovery_leg%4==0
+
 func _build_target_marker() -> void:
+	casualty=preload("res://vehicles/traffic_bmw_silver.glb").instantiate()
+	add_child(casualty)
+	casualty.scale=Vector3.ONE*.79
+	lost_wheel=_rig_wheels(casualty)[0]
+	bonnet_smoke.position=Vector3(0,1.27,1.85)
+	bonnet_smoke.amount=32
+	bonnet_smoke.lifetime=1.6
+	bonnet_smoke.direction=Vector3(.25,1,0)
+	bonnet_smoke.gravity=Vector3(0,.6,0)
+	bonnet_smoke.initial_velocity_min=.37
+	bonnet_smoke.initial_velocity_max=.68
+	var puff := SphereMesh.new()
+	puff.radius=.105
+	puff.height=.17
+	puff.radial_segments=8
+	puff.rings=3
+	var haze := _material(Color(.52,.54,.56,.48))
+	haze.transparency=BaseMaterial3D.TRANSPARENCY_ALPHA
+	puff.material=haze
+	bonnet_smoke.mesh=puff
+	casualty.add_child(bonnet_smoke)
 	for i in 24:
 		var arrow := Node3D.new()
 		add_child(arrow)
@@ -2077,6 +2140,7 @@ func _clear_camera_view(anchor: Vector3, desired: Vector3) -> Vector3:
 
 func _update_mission_marker() -> void:
 	if not is_instance_valid(mission_marker): return
+	_sync_recovery()
 	_update_route_arrows()
 	passenger.visible = not free_drive and vehicle_index == TAXI and taxi_leg%2==0
 	passenger.position = WALK_TARGETS[_taxi_stop()]
@@ -2089,7 +2153,7 @@ func _update_mission_marker() -> void:
 	zone.scale = Vector3(_arrival_radius(),.4,_arrival_radius())
 	mission_marker.global_position = _mission_destination() + Vector3(0, 0.05, 0)
 	var marker_label: Label3D = mission_marker.get_node("MissionLabel")
-	marker_label.text = tr(_taxi_instruction() if vehicle_index==TAXI else TARGET_NAMES[mission_index]).to_upper()
+	marker_label.text = tr(SERVICE_MESSAGES[recovery_leg%4] if vehicle_index==RECOVERY else _taxi_instruction() if vehicle_index==TAXI else TARGET_NAMES[mission_index]).to_upper()
 
 func _update_emergency_lights() -> void:
 	var phase := int(light_phase * 2.0) % 2
@@ -2454,11 +2518,12 @@ func _start_game() -> void:
 	phone.messages.clear()
 	phone.unread=0
 	phone.handset.hide()
-	parked_sound_settings.assign([false, false, false, true, true])
+	parked_sound_settings.assign([false, false, false, true, true, true])
 	parked_light_settings.fill(false)
 	mode = "playing"
 	paused = false
 	mission_index = 0
+	recovery_leg = 0
 	taxi_leg = 0
 	parked_at_target = 0.0
 	if listener.get_parent() != ambulance:
@@ -2472,7 +2537,7 @@ func _start_game() -> void:
 		listener.position = Vector3.UP
 	for i in parked_cars.size():
 		parked_cars[i].visible = i != vehicle_index
-		parked_cars[i].position = Vector3(-47+5*i,-.13,15)
+		parked_cars[i].position = Vector3(-45,-.13,23) if i==RECOVERY else Vector3(-47+5*i,-.13,15)
 		parked_cars[i].rotation = Vector3.ZERO
 	ambulance.global_position = _starting_position()
 	ambulance.rotation = Vector3(0, -PI * 0.5, 0)
@@ -2631,7 +2696,9 @@ func _refresh_dispatch() -> void:
 		last_dispatch=""
 		return
 	var dispatch: String
-	if vehicle_index==TAXI:
+	if vehicle_index==RECOVERY:
+		dispatch=SERVICE_MESSAGES[recovery_leg%4]
+	elif vehicle_index==TAXI:
 		var requests := ["Taxi requested at the square.","Please take me to the marina.","Taxi requested at the clinic.","Please take me to the square.","Taxi requested at the marina.","Please take me to the clinic."]
 		dispatch=requests[taxi_leg%requests.size()]
 	else:
@@ -2652,6 +2719,8 @@ func _refresh_ui() -> void:
 	pause_button.text = "Resume" if paused else "Pause"
 	if free_drive:
 		mission_label.text = "Free exploration"
+	elif vehicle_index==RECOVERY:
+		mission_label.text=tr(SERVICE_MESSAGES[recovery_leg%4])
 	elif vehicle_index==TAXI:
 		mission_label.text = tr(_taxi_instruction())
 	elif mission_index < TARGET_NAMES.size():

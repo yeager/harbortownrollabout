@@ -57,3 +57,7 @@ Press **T** or click **Phone** during play to open the four most recent dispatch
 ## Shops
 
 Park along Stationsallén, south of the vehicle depot, and walk through a shop doorway. The café sells cinnamon buns and berry cordial, the kiosk sells ice cream and hot dogs, and the pizzeria and sweet shop sell pizza and pick-and-mix sweets. Select a product to pay with mission coins. The game saves the purchase and remaining balance together.
+
+## Roadside recovery
+
+Select **Recovery truck** and the mission activity. Dispatch sends the location of a car with a smoking bonnet or a missing wheel. Stop at the marker beside the car to load it onto the flatbed. Follow the arrows to the workshop and stop to unload and earn 20 coins. Gentle driving handles loading and unloading automatically. In full-speed mode, press Space while stopped.

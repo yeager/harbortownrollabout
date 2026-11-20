@@ -13,10 +13,11 @@
 
 - Fyra butiker på Stationsalléns södra sida har gångbara entréer. Kanelbulle, saft, glass, korv med bröd, pizza och godis kan köpas för sparade mynt.
 
+- Körbar rödgul flakbärgare med vinschmodell. Hämta en rykande bil eller en bil som tappat ett hjul, kör den på flaket till verkstaden och få 20 mynt.
+
 ## Återstående önskemål
 
 - Godstransporter med synlig last och kvittens vid leverans.
-- Körbar rödgul flakbärgare med vinsch och uppdrag att hämta en bil med lossnat hjul eller rök från motorhuven, lasta den och köra till verkstaden.
 - En särskild polisstation och ett sjukhus. Vårdcentralen är en separat befintlig byggnad.
 - Raggarbilar som kör lite vingligt, barnvagnar, personer med rullator och trappor som går att använda.
 - Förfina fordonsformer, särskilt BMW-fronten, brandbilen, polisbilen, Tvärbanan och sittande förare. Förbättra vatten- och fönsterreflektioner, arkitektur och strandpromenad utifrån bildreferenser.

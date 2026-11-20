@@ -404,3 +404,18 @@ msgstr "Du behöver %d mynt till."
 
 msgid "Bought %s. Thank you!"
 msgstr "Du köpte %s. Tack!"
+
+msgid "Recovery truck"
+msgstr "Bärgningsbil"
+
+msgid "Collect the car with a smoking bonnet."
+msgstr "Hämta bilen som ryker från motorhuven."
+
+msgid "Take the car to the workshop."
+msgstr "Kör bilen till verkstaden."
+
+msgid "Collect the car with a missing wheel."
+msgstr "Hämta bilen som tappat ett hjul."
+
+msgid "Recovery complete. You earned 20 coins."
+msgstr "Bärgningen är klar. Du fick 20 mynt."
