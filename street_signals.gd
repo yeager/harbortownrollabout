@@ -20,11 +20,17 @@ func _ready() -> void:
 		for j in 3:
 			lamps.append(lens(mast,Vector3(0,3.85-.31*j,.25),[Color.RED,Color.ORANGE,Color.LIME_GREEN][j]))
 		heads.append({"lamps":lamps,"east_west":i%2==1})
+	_add_crossing(Vector3(CROSSING_X,0,0),false)
+	for z in [-6.35,6.35]:
+		_add_crossing(Vector3(0,0,z),true)
+	advance(0)
+
+func _add_crossing(center: Vector3, east_west: bool) -> void:
 	for side in [-1,1]:
 		var mast := Node3D.new()
 		add_child(mast)
-		mast.position = Vector3(CROSSING_X-1.55*side,0,5.45*side)
-		mast.rotation.y = PI if side==1 else 0.
+		mast.position = center + Vector3(5.45*side,0,-1.55*side) if east_west else center + Vector3(-1.55*side,0,5.45*side)
+		mast.rotation.y = (-PI/2 if side==1 else PI/2) if east_west else (PI if side==1 else 0.)
 		get_parent()._make_box("Crossing pole",Vector3(.09,2.45,.09),Vector3.UP*1.22,Color("#737d7a"),false,mast)
 		get_parent()._make_box("Pedestrian signal",Vector3(.52,.9,.18),Vector3.UP*2.2,Color("#202927"),false,mast)
 		var signs: Array = []
@@ -39,8 +45,7 @@ func _ready() -> void:
 				limb.rotation.z=segment[2]
 				limb.material_override=get_parent()._material(color,.35,true)
 			signs.append(figure)
-		heads.append({"figures":signs})
-	advance(0)
+		heads.append({"figures":signs,"walk_phase":0 if east_west else 3})
 
 func lens(parent: Node3D, pos: Vector3, color: Color) -> MeshInstance3D:
 	var lamp := MeshInstance3D.new()
@@ -61,8 +66,8 @@ func advance(delta: float) -> void:
 	phase=current
 	for head in heads:
 		if head.has("figures"):
-			head.figures[0].visible=phase!=3
-			head.figures[1].visible=phase==3
+			head.figures[0].visible=phase!=head.walk_phase
+			head.figures[1].visible=phase==head.walk_phase
 		else:
 			var green := 0 if head.east_west else 3
 			for j in 3:

@@ -37,3 +37,5 @@ README.md innehåller engelska spelinstruktioner. Blender-källor finns i source
 Spelprojektet publiceras i det privata GitHub-repot yeager/axels-emergency-vehicles. Kör Gitleaks före push. Kontrollera alltid aktuella scener, källor och körning när en punkt uppdateras.
 
 - Förbandsväskan följer räddningsuppdraget från vårdaren till spelaren och lämnas på kajen efter leverans.
+
+- Båda övergångsställena över tvärgatan i centrum har gångsignaler. Fotgängare väntar vid kanten på rött och går färdigt om signalen växlar under passagen.

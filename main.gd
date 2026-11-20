@@ -1837,6 +1837,10 @@ func _update_pedestrians(delta: float) -> void:
 				person.rotation.y=direction*PI*.5
 		var local := ambulance.to_local(next)
 		var blocked := ambulance.visible and absf(local.x) < player_half_size.x+.4 and absf(local.z) < player_half_size.y+.4
+		# Wait at the kerb on red. People already crossing continue to the pavement.
+		var enters_crossing := absf(person.position.x)>=5.15 and absf(next.x)<5.15
+		if absf(absf(next.z)-6.35)<1.05 and enters_crossing and street_signals.phase!=0:
+			blocked = true
 		blocked = blocked or _near_parked_vehicle(next,.4)
 		if item.has("stretch"):
 			var front := next-person.basis.z*.88
