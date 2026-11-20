@@ -109,6 +109,8 @@ var ui: CanvasLayer
 var play_as_alma := false
 var wallet := 0
 var wallet_label: Label
+var shops := preload("res://shop_street.gd").new()
+var purchases := {}
 var phone := preload("res://mission_phone.gd").new()
 var last_dispatch := ""
 var mission_label: Label
@@ -211,6 +213,7 @@ func _process(delta: float) -> void:
 	if lights_on and not steady_player_lights and mode == "playing" and not paused:
 		light_phase += delta * 3.2
 		_update_emergency_lights()
+	shops.update_customer(walker.visible and not boating and tram_mode==0,walker.position,mode=="playing" and not paused)
 	_update_camera(delta)
 	_refresh_status()
 
@@ -599,6 +602,7 @@ func _build_world() -> void:
 	_build_waterfront()
 	_build_trees()
 	_build_new_blocks()
+	add_child(shops)
 	_build_lampposts()
 	_update_daylight(0)
 	_build_ambulance()
@@ -2032,6 +2036,10 @@ func _update_camera(delta: float, snap_to_car := false) -> void:
 		camera.position = cab.to_global(Vector3(4.0,4.1+orbit_height,8.0).rotated(Vector3.UP,orbit_angle))
 		camera.look_at(cab.to_global(Vector3(0,1.4,-1)))
 		return
+	if walker.visible and shops.inside>=0:
+		camera.position=walker.position+Vector3(0,3.8,-2.7)
+		camera.look_at(walker.position+Vector3(0,.9,1))
+		return
 	if walker.visible:
 		var target := walker.position + Vector3.UP*1.2
 		var chase := camera.position.lerp(target+walk_basis.z.rotated(Vector3.UP,orbit_angle)*5+Vector3.UP*(2.7+orbit_height),1-exp(-6*delta))
@@ -2182,6 +2190,7 @@ func _build_ui() -> void:
 	ui.add_child(help)
 	ui.add_child(driving_controls)
 	driving_controls.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	shops.build_menu(ui)
 	ui.add_child(phone)
 	_build_overlay()
 	siren_player = AudioStreamPlayer.new()
@@ -2540,6 +2549,7 @@ func _load_preferences() -> void:
 	if config.load(SETTINGS_PATH) != OK:
 		return
 	play_as_alma=config.get_value("player","alma",false)==true
+	purchases=config.get_value("player","purchases",{})
 	wallet=maxi(0,int(config.get_value("player","coins",0)))
 	var saved_locale := str(config.get_value("language", "locale", "en"))
 	if saved_locale in TranslationServer.get_loaded_locales():
@@ -2564,6 +2574,7 @@ func _save_preferences() -> void:
 	var volume := 0.0 if AudioServer.is_bus_mute(0) else db_to_linear(AudioServer.get_bus_volume_db(0))*100
 	config.set_value("player","alma",play_as_alma)
 	config.set_value("player","coins",wallet)
+	config.set_value("player","purchases",purchases)
 	config.set_value("language", "locale", TranslationServer.get_locale())
 	config.set_value("audio","volume",roundi(volume))
 	config.set_value("audio","traffic_sirens",roundi(traffic_siren_volume))

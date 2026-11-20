@@ -11,10 +11,11 @@
 - Tvärbanan kan följas som passagerare eller köras på en slinga med tre hållplatser. Dörrskylten säger ”Vi åker inte till Ekerö”.
 - Körbar motorbåt i södra bassängen, färjan Lotten i linjetrafik, polishelikopter på patrull.
 
+- Fyra butiker på Stationsalléns södra sida har gångbara entréer. Kanelbulle, saft, glass, korv med bröd, pizza och godis kan köpas för sparade mynt.
+
 ## Återstående önskemål
 
 - Godstransporter med synlig last och kvittens vid leverans.
-- Gå in i kafé och köpa bullar och saft, kiosk med glass och korv med bröd, pizzeria och godisaffär. Betalning, saldo och återkoppling för köpet.
 - Körbar rödgul flakbärgare med vinsch och uppdrag att hämta en bil med lossnat hjul eller rök från motorhuven, lasta den och köra till verkstaden.
 - En särskild polisstation och ett sjukhus. Vårdcentralen är en separat befintlig byggnad.
 - Raggarbilar som kör lite vingligt, barnvagnar, personer med rullator och trappor som går att använda.

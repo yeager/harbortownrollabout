@@ -53,3 +53,7 @@ Two slow, white pickup-converted A-traktors share the main street. Look for the 
 Choose **Axel · 15** or **Alma · 12** beside the vehicle selector. The choice changes the character you see on foot. Each rescue mission step earns 10 coins and completing a taxi fare earns 15. Both characters share one wallet on this installation.
 
 Press **T** or click **Phone** during play to open the four most recent dispatches. New rescue and taxi assignments appear silently with an unread count. Completed jobs send a payment receipt. Messages follow the selected language.
+
+## Shops
+
+Park along Stationsallén, south of the vehicle depot, and walk through a shop doorway. The café sells cinnamon buns and berry cordial, the kiosk sells ice cream and hot dogs, and the pizzeria and sweet shop sell pizza and pick-and-mix sweets. Select a product to pay with mission coins. The game saves the purchase and remaining balance together.

@@ -371,3 +371,36 @@ msgstr "Passageraren är framme. Du fick 15 mynt."
 
 msgid "Thank you for helping! You earned 10 coins."
 msgstr "Tack för hjälpen! Du fick 10 mynt."
+
+msgid "Café"
+msgstr "Kafé"
+
+msgid "Sweet shop"
+msgstr "Godisaffär"
+
+msgid "Cinnamon bun"
+msgstr "Kanelbulle"
+
+msgid "Berry cordial"
+msgstr "Bärsaft"
+
+msgid "Ice cream"
+msgstr "Glass"
+
+msgid "Hot dog"
+msgstr "Korv med bröd"
+
+msgid "Margherita pizza"
+msgstr "Pizza Margherita"
+
+msgid "Pick and mix"
+msgstr "Lösgodis"
+
+msgid "%s · %d coins"
+msgstr "%s · %d mynt"
+
+msgid "You need %d more coins."
+msgstr "Du behöver %d mynt till."
+
+msgid "Bought %s. Thank you!"
+msgstr "Du köpte %s. Tack!"
