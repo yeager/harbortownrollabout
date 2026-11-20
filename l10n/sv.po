@@ -299,3 +299,18 @@ msgstr "Hur mår du?"
 
 msgid "Hi there!"
 msgstr "Hej på dig!"
+
+msgid "Horn · H"
+msgstr "Tuta · H"
+
+msgid "Pick up your passenger"
+msgstr "Hämta din passagerare"
+
+msgid "Drop off your passenger"
+msgstr "Lämna din passagerare"
+
+msgid "Passenger on board."
+msgstr "Passageraren är ombord."
+
+msgid "Thank you for the ride!"
+msgstr "Tack för skjutsen!"

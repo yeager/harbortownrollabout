@@ -35,3 +35,9 @@ Hold the middle mouse button and drag to orbit the exterior camera. On foot, nea
 The central junction has phased traffic lights and red and green pedestrian figures beside the crossing. Traffic waits for its green phase. The player's vehicle also slows as it approaches a red signal, pedestrians in its path or a queue.
 
 The double-ended passenger ferry **Lotten** runs between two landings in the canal. It pauses at each end before reversing direction. Its editable Blender model is in `source_blender/Lotten.blend`.
+
+## Taxi and horns
+
+Choose **Taxi** and start the mission activity to pick up a passenger. Follow the green arrows along the streets and over a bridge when needed. Stop at the marker to board or drop off your fare. Gentle driving handles boarding automatically. The next fare appears after drop-off.
+
+Press **H** or click **Horn** while driving. The ambulance, police car, fire engine, BMW and taxi each have their own horn.

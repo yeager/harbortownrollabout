@@ -6,9 +6,9 @@ const TARGET_NAMES := ["Help at the square", "Pick up the medic", "Deliver first
 const ROAD_HALF := 4.8
 const VEHICLE_NAMES := ["Ambulance", "Police car", "Fire engine"]
 const VEHICLE_SCENES := ["res://vehicles/ambulance.glb", "res://vehicles/polisbil.glb", "res://vehicles/brandbil.glb"]
-const VEHICLE_NAMES_ALL := ["Ambulance", "Police car", "Fire engine", "BMW X5 M60i"]
-const VEHICLE_SCENES_ALL := ["res://vehicles/ambulance.glb", "res://vehicles/polisbil.glb", "res://vehicles/brandbil.glb", "res://vehicles/bmw_x5_m60i.glb"]
-const SIREN_SOUNDS := ["res://audio/siren_ambulance.wav", "res://audio/siren_police.wav", "res://audio/siren_fire.wav", "res://audio/bmw_engine.wav"]
+const VEHICLE_NAMES_ALL := ["Ambulance", "Police car", "Fire engine", "BMW X5 M60i", "Taxi"]
+const VEHICLE_SCENES_ALL := ["res://vehicles/ambulance.glb", "res://vehicles/polisbil.glb", "res://vehicles/brandbil.glb", "res://vehicles/bmw_x5_m60i.glb", "res://vehicles/taxi.glb"]
+const SIREN_SOUNDS := ["res://audio/siren_ambulance.wav", "res://audio/siren_police.wav", "res://audio/siren_fire.wav", "res://audio/bmw_engine.wav", "res://audio/bmw_engine.wav"]
 const BUILDING_SCENES := {"Bageriet":"res://environment/bageri.glb", "Vårdcentralen":"res://environment/vardcentral.glb", "Brandstationen":"res://environment/brandstation.glb", "Biblioteket":"res://environment/bibliotek.glb"}
 const TREE_SCENES := ["res://environment/lovtrad.glb", "res://environment/gran.glb", "res://environment/bredkronigt_lovtrad.glb"]
 
@@ -55,6 +55,12 @@ var crossing_wait := 4.0
 var crossing_direction := 1.0
 var walk_phase := 0.0
 var entry_marker := Label3D.new()
+const TAXI := 4
+const HORNS := ["ambulance","police","fire","bmw","taxi"]
+var horn := AudioStreamPlayer.new()
+var horn_button: Button
+var taxi_leg := 0
+var passenger: Node3D
 var seat_button: Button
 var vehicle_index := 0
 var vehicle_selector: OptionButton
@@ -62,6 +68,9 @@ var camera_turn := 0.0
 var cockpit_view := false
 var camera_button: Button
 var camera: Camera3D
+var navigator := preload("res://street_route.gd").new()
+var route_arrows: Array[Node3D] = []
+var route_timer := 0.0
 var waiting_medic: Node3D
 var mission_marker: Node3D
 var reverse_lens: StandardMaterial3D
@@ -92,9 +101,9 @@ var parked_at_target := 0.0
 var mode := "menu"
 var paused := false
 var lights_on := false
-var parked_light_settings: Array[bool] = [false, false, false, false]
+var parked_light_settings: Array[bool] = [false, false, false, false, false]
 var sound_on := true
-var parked_sound_settings: Array[bool] = [false, false, false, true]
+var parked_sound_settings: Array[bool] = [false, false, false, true, true]
 var siren_player: AudioStreamPlayer
 var ui: CanvasLayer
 var mission_label: Label
@@ -172,10 +181,14 @@ func _process(delta: float) -> void:
 		else:
 			_drive(delta)
 		_update_arrival(delta)
+		route_timer -= delta
+		if route_timer<=0:
+			_update_route_arrows()
+			route_timer=.3
 		_update_traffic(delta)
 		_update_pedestrians(delta)
 		_update_moorings(delta)
-		if vehicle_index == 3 and siren_player.playing:
+		if vehicle_index >= 3 and siren_player.playing:
 			siren_player.pitch_scale = 0.88 + clampf(absf(speed) / (250.0 / 3.6), 0.0, 1.0) * 0.72
 	else:
 		_end_skid()
@@ -213,6 +226,7 @@ func _notification(what: int) -> void:
 func _unhandled_key_input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed and not event.echo:
 		match event.keycode:
+			KEY_H: _honk()
 			KEY_F: _change_seat()
 			KEY_C: _toggle_camera_view()
 			KEY_ESCAPE, KEY_P:
@@ -223,6 +237,11 @@ func _unhandled_key_input(event: InputEvent) -> void:
 				if mode == "menu": _start_game()
 			KEY_R:
 				if mode == "complete": _start_game()
+
+func _honk() -> void:
+	if mode != "playing" or paused or walker.visible or tram_mode != 0 or horn.playing: return
+	horn.stream = load("res://audio/horn_%s.wav" % HORNS[vehicle_index])
+	horn.play()
 
 func _walk_pedal_pressed() -> bool:
 	return Input.is_action_pressed("ui_up") or Input.is_action_pressed("ui_down") or Input.is_key_pressed(KEY_W) or Input.is_key_pressed(KEY_S)
@@ -264,7 +283,7 @@ func _drive(delta: float) -> void:
 	for knuckle in front_knuckles:
 		knuckle.rotation.y = -steering * deg_to_rad(33.0)
 	driving_controls.set_controls(steering, throttle > 0, brake_held, throttle < 0 and not brake_held)
-	var wheelbase: float = [3.7, 2.75, 4.1, 2.975][vehicle_index]
+	var wheelbase: float = [3.7, 2.75, 4.1, 2.975, 2.85][vehicle_index]
 	var yaw_rate := speed * tan(steering * deg_to_rad(33.0)) / wheelbase
 	# Limit lateral acceleration at speed while retaining tight parking turns.
 	var max_yaw_rate := 8.0 / maxf(absf(speed), 1.0)
@@ -421,8 +440,16 @@ func _draw_skid(previous_pose: Transform3D) -> void:
 	elif tire_player.playing:
 		tire_player.stop()
 
+func _taxi_stop() -> int:
+	return [0,2,1,0,2,1][taxi_leg%6]
+
+func _taxi_instruction() -> String:
+	return "Pick up your passenger" if taxi_leg%2==0 else "Drop off your passenger"
+
 func _mission_destination() -> Vector3:
 	var destination := WALK_TARGETS[mission_index] if walker.visible else TARGETS[mission_index]
+	if vehicle_index == TAXI:
+		destination = TARGETS[_taxi_stop()]
 	destination.y = _surface_height(destination.x,destination.z)
 	return destination
 
@@ -430,7 +457,7 @@ func _arrival_radius() -> float:
 	return 2.1 if walker.visible else 5.2
 
 func _at_target() -> bool:
-	if free_drive or mission_index >= TARGETS.size(): return false
+	if free_drive or (vehicle_index == TAXI and walker.visible) or mission_index >= TARGETS.size(): return false
 	var actor := walker if walker.visible else ambulance
 	return actor.position.distance_to(_mission_destination()) < _arrival_radius()
 
@@ -445,6 +472,15 @@ func _update_arrival(delta: float) -> void:
 
 func _help_at_target() -> void:
 	if free_drive or mission_index >= TARGETS.size(): return
+	if vehicle_index == TAXI:
+		if _at_target() and absf(speed)<.2:
+			taxi_leg += 1
+			parked_at_target = 0
+			message = "Passenger on board." if taxi_leg%2 else "Thank you for the ride!"
+			message_timer = 3
+			_update_mission_marker()
+			_refresh_ui()
+		return
 	if _at_target():
 		parked_at_target = 0.0
 		mission_index += 1
@@ -1116,7 +1152,7 @@ func _build_depot() -> void:
 	sign.billboard = BaseMaterial3D.BILLBOARD_ENABLED
 	sign.pixel_size = .008
 	add_child(sign)
-	for i in 4:
+	for i in VEHICLE_SCENES_ALL.size():
 		var body := Node3D.new()
 		add_child(body)
 		var model := (load(VEHICLE_SCENES_ALL[i]) as PackedScene).instantiate() as Node3D
@@ -1792,7 +1828,41 @@ func _find_light_meshes(node: Node) -> void:
 				child.visible = false
 		_find_light_meshes(child)
 
+func _update_route_arrows() -> void:
+	for arrow in route_arrows: arrow.visible = false
+	if free_drive or mode!="playing" or mission_index>=TARGETS.size(): return
+	var origin := walker.position if walker.visible else ambulance.position
+	var target := _mission_destination()
+	var points := navigator.path(Vector2(origin.x,origin.z),Vector2(target.x,target.z))
+	var gap := 3.5
+	var used := 0
+	for i in range(1,points.size()):
+		var segment := points[i]-points[i-1]
+		var length := segment.length()
+		var direction := segment.normalized()
+		while gap<length and used<route_arrows.size():
+			var point := points[i-1]+direction*gap
+			var arrow := route_arrows[used]
+			arrow.position = Vector3(point.x,_surface_height(point.x,point.y)+.07,point.y)
+			arrow.rotation.y = atan2(-direction.x,-direction.y)
+			arrow.visible=true
+			used+=1
+			gap+=6
+		gap-=length
+		if used==route_arrows.size(): break
+
 func _build_target_marker() -> void:
+	for i in 24:
+		var arrow := Node3D.new()
+		add_child(arrow)
+		for side in [-1,1]:
+			var bar := _make_box("Route chevron",Vector3(.18,.025,.95),Vector3(side*.29,0,0),Color("#65d6a8"),false,arrow)
+			bar.rotation.y=side*.68
+			bar.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+		arrow.visible=false
+		route_arrows.append(arrow)
+	_make_walker("Taxi passenger",0,0,1,Color("#724e74"),Color("#324c57"))
+	passenger = walker_data.pop_back().actor
 	var pickup := WALK_TARGETS[1]
 	_make_walker("Waiting medic",pickup.x,pickup.z+1.3,1,Color("#d5db46"),Color("#275744"))
 	waiting_medic = walker_data.pop_back().actor
@@ -1883,7 +1953,10 @@ func _clear_camera_view(anchor: Vector3, desired: Vector3) -> Vector3:
 
 func _update_mission_marker() -> void:
 	if not is_instance_valid(mission_marker): return
-	waiting_medic.visible = not free_drive and mission_index == 1
+	_update_route_arrows()
+	passenger.visible = not free_drive and vehicle_index == TAXI and taxi_leg%2==0
+	passenger.position = WALK_TARGETS[_taxi_stop()]
+	waiting_medic.visible = vehicle_index != TAXI and not free_drive and mission_index == 1
 	if free_drive or mission_index >= TARGETS.size():
 		mission_marker.visible = false
 		return
@@ -1892,7 +1965,7 @@ func _update_mission_marker() -> void:
 	zone.scale = Vector3(_arrival_radius(),.4,_arrival_radius())
 	mission_marker.global_position = _mission_destination() + Vector3(0, 0.05, 0)
 	var marker_label: Label3D = mission_marker.get_node("MissionLabel")
-	marker_label.text = tr(TARGET_NAMES[mission_index]).to_upper()
+	marker_label.text = tr(_taxi_instruction() if vehicle_index==TAXI else TARGET_NAMES[mission_index]).to_upper()
 
 func _update_emergency_lights() -> void:
 	var phase := int(light_phase * 2.0) % 2
@@ -1962,6 +2035,16 @@ func _build_ui() -> void:
 	arrival_progress.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	arrival_progress.add_theme_stylebox_override("background", _style(Color("#203137"), 3))
 	arrival_progress.add_theme_stylebox_override("fill", _style(Color("#83dda0"), 3))
+	add_child(horn)
+	horn.volume_db = -5
+	horn_button = _button("Horn · H",135)
+	ui.add_child(horn_button)
+	horn_button.set_anchors_and_offsets_preset(Control.PRESET_CENTER_RIGHT)
+	horn_button.offset_left = -220
+	horn_button.offset_right = -22
+	horn_button.offset_top = -82
+	horn_button.offset_bottom = -34
+	horn_button.pressed.connect(_honk)
 	seat_button = _button("Get out · F", 135)
 	ui.add_child(seat_button)
 	seat_button.set_anchors_and_offsets_preset(Control.PRESET_CENTER_RIGHT)
@@ -2216,11 +2299,12 @@ func _starting_position() -> Vector3:
 	return Vector3(best_x, _surface_height(best_x, lane), lane)
 
 func _start_game() -> void:
-	parked_sound_settings.assign([false, false, false, true])
+	parked_sound_settings.assign([false, false, false, true, true])
 	parked_light_settings.fill(false)
 	mode = "playing"
 	paused = false
 	mission_index = 0
+	taxi_leg = 0
 	parked_at_target = 0.0
 	if listener.get_parent() == walker:
 		listener.reparent(ambulance,false)
@@ -2264,6 +2348,7 @@ func _on_vehicle_selected(index: int) -> void:
 	brake_held = false
 	_end_skid()
 	_load_vehicle_model()
+	_update_mission_marker()
 	_refresh_ui()
 
 func _preview_sound() -> void:
@@ -2295,7 +2380,7 @@ func _toggle_pause() -> void:
 		get_viewport().gui_release_focus()
 
 func _toggle_lights() -> void:
-	if vehicle_index == 3 or walker.visible: return
+	if vehicle_index >= 3 or walker.visible: return
 	lights_on = not lights_on
 	_update_emergency_lights()
 	_refresh_ui()
@@ -2367,7 +2452,7 @@ func _update_siren() -> void:
 	if sound_on and mode == "playing" and not paused and not walker.visible:
 		if siren_player.stream != siren_streams[vehicle_index]:
 			siren_player.stream = siren_streams[vehicle_index]
-		if vehicle_index != 3:
+		if vehicle_index < 3:
 			siren_player.pitch_scale = 1.0
 		siren_player.volume_db = -1.0
 		if not siren_player.playing: siren_player.play()
@@ -2378,13 +2463,15 @@ func _update_siren() -> void:
 func _refresh_ui() -> void:
 	if not is_instance_valid(mission_label): return
 	light_button.text = "Lights ON" if lights_on else "Lights OFF"
-	if vehicle_index == 3:
+	if vehicle_index >= 3:
 		siren_button.text = "Engine ON" if sound_on else "Engine OFF"
 	else:
 		siren_button.text = "Siren ON" if sound_on else "Siren OFF"
 	pause_button.text = "Resume" if paused else "Pause"
 	if free_drive:
 		mission_label.text = "Free exploration"
+	elif vehicle_index==TAXI:
+		mission_label.text = tr(_taxi_instruction())
 	elif mission_index < TARGET_NAMES.size():
 		mission_label.text = tr("MISSION %d / %d   ·   %s") % [mission_index + 1, TARGET_NAMES.size(), tr(TARGET_NAMES[mission_index])]
 	else:
@@ -2394,8 +2481,9 @@ func _refresh_ui() -> void:
 		control.focus_mode = Control.FOCUS_NONE if show_overlay else Control.FOCUS_ALL
 	camera_button.visible = vehicle_index == 3 and not walker.visible and not show_overlay
 	camera_button.text = "Outside view · C" if cockpit_view else "Driver view · C"
-	seat_button.visible = not show_overlay
-	light_button.visible = not walker.visible and vehicle_index != 3
+	horn_button.visible = not show_overlay and not walker.visible and tram_mode==0
+	seat_button.visible = not show_overlay and tram_mode==0
+	light_button.visible = not walker.visible and vehicle_index < 3
 	siren_button.visible = not walker.visible
 	if walker.visible:
 		_update_entry_button()
@@ -2417,7 +2505,7 @@ func _refresh_ui() -> void:
 	overlay_panel.visible = show_overlay
 	vehicle_selector.visible = show_overlay and not walker.visible
 	preview_sound_button.visible = mode == "menu"
-	preview_sound_button.text = "Stop preview" if siren_player.playing and mode == "menu" else ("Preview engine" if vehicle_index == 3 else "Preview siren")
+	preview_sound_button.text = "Stop preview" if siren_player.playing and mode == "menu" else ("Preview engine" if vehicle_index >= 3 else "Preview siren")
 	var locale := TranslationServer.get_locale().get_slice("_", 0)
 	var localized_logo := locale in ["en", "sv"]
 	title_label.visible = mode != "menu" or not localized_logo
