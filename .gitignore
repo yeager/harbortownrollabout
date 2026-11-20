@@ -1,0 +1,6 @@
+# Godot editor cache and imported resource cache
+.godot/
+
+# Native editor / operating system files
+.DS_Store
+Thumbs.db

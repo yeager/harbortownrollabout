@@ -1,0 +1,256 @@
+msgid ""
+msgstr ""
+"Language: sv\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+
+msgid "Axel's Emergency Vehicles"
+msgstr "Axels utryckningsfordon"
+
+msgid "Emergency Vehicles"
+msgstr "Utryckningsfordon"
+
+msgid "Help at the square"
+msgstr "Hjälp på torget"
+
+msgid "Pick up the medic"
+msgstr "Hämta sjukvårdaren"
+
+msgid "Deliver first aid to the marina"
+msgstr "Leverera första hjälpen vid småbåtshamnen"
+
+msgid "Ambulance"
+msgstr "Ambulans"
+
+msgid "Police car"
+msgstr "Polisbil"
+
+msgid "Fire engine"
+msgstr "Brandbil"
+
+msgid "Mission complete. Well done!"
+msgstr "Uppdrag klart. Bra jobbat!"
+
+msgid "All missions complete! The city thanks you."
+msgstr "Alla uppdrag klara! Staden tackar dig."
+
+msgid "Cross a bridge to the east side."
+msgstr "Kör över en bro till östra sidan."
+
+msgid "Follow the quay to the green marker by the boats."
+msgstr "Följ kajgatan till den gröna markeringen vid båtarna."
+
+msgid "Follow the green mission marker."
+msgstr "Följ den gröna markeringen till uppdraget."
+
+msgid "MISSION"
+msgstr "UPPDRAG"
+
+msgid "Lights OFF"
+msgstr "Blåljus AV"
+
+msgid "Lights ON"
+msgstr "Blåljus PÅ"
+
+msgid "Siren OFF"
+msgstr "Siren AV"
+
+msgid "Siren ON"
+msgstr "Siren PÅ"
+
+msgid "Engine ON"
+msgstr "Motorljud PÅ"
+
+msgid "Engine OFF"
+msgstr "Motorljud AV"
+
+msgid "Pause"
+msgstr "Paus"
+
+msgid "W / ↑  Drive     A D / ← →  Steer     S / ↓  Brake or reverse\nRelease to slow down   ·   Space to help   ·   P to pause"
+msgstr "W / ↑  Gasa     A D / ← →  Styr     S / ↓  Bromsa eller backa\nSläpp gasen för att sakta ner   ·   Mellanslag för att hjälpa   ·   P för paus"
+
+msgid "Start a gentle drive"
+msgstr "Starta lugn runda"
+
+msgid "Settings"
+msgstr "Inställningar"
+
+msgid "Close settings"
+msgstr "Stäng inställningar"
+
+msgid "Driving mode"
+msgstr "Körläge"
+
+msgid "Gentle driving · up to 30 km/h"
+msgstr "Lugn körning · högst 30 km/h"
+
+msgid "Full speed"
+msgstr "Full fart"
+
+msgid "Preview vehicle sound"
+msgstr "Prova siren / motorljud"
+
+msgid "Game volume"
+msgstr "Spelvolym"
+
+msgid "Emergency lights in traffic"
+msgstr "Blåljus på trafikens utryckningsfordon"
+
+msgid "Traffic lights · Flashing blue"
+msgstr "Trafikens blåljus · Blinkande"
+
+msgid "Traffic lights · Steady blue"
+msgstr "Trafikens blåljus · Fast sken"
+
+msgid "Traffic lights · Blue lights off"
+msgstr "Trafikens blåljus · Av"
+
+msgid "Resume"
+msgstr "Fortsätt"
+
+msgid "MISSION %d / %d   ·   %s"
+msgstr "UPPDRAG %d / %d   ·   %s"
+
+msgid "ALL MISSIONS COMPLETE"
+msgstr "ALLA UPPDRAG KLARA"
+
+msgid "Stop preview"
+msgstr "Stoppa ljudprov"
+
+msgid "Preview engine"
+msgstr "Prova motorljud"
+
+msgid "Preview siren"
+msgstr "Prova siren"
+
+msgid "Choose a vehicle and drive to three missions.\nTake your time. You control the lights and siren."
+msgstr "Välj ett fordon och kör till tre uppdrag.\nIngen tidtagning. Blåljus och siren väljer du själv."
+
+msgid "Start driving"
+msgstr "Börja köra"
+
+msgid "All missions complete!"
+msgstr "Alla uppdrag klara!"
+
+msgid "You helped the whole city. Well done, Axel!\nReady for another drive?"
+msgstr "Du hjälpte hela staden. Bra jobbat, Axel!\nVill du köra en runda till?"
+
+msgid "Drive again"
+msgstr "Kör igen"
+
+msgid "You can change vehicles here and continue your mission."
+msgstr "Du kan byta fordon här och fortsätta på samma uppdrag."
+
+msgid "Continue driving"
+msgstr "Fortsätt köra"
+
+msgid "Stop here to help."
+msgstr "Stanna här för att hjälpa."
+
+msgid "Helping …"
+msgstr "Hjälper till …"
+
+msgid "Paused — take your time."
+msgstr "Pausad — ta den tid du behöver."
+
+msgid "Speed  %02d km/h"
+msgstr "Fart  %02d km/h"
+
+msgid "Gas"
+msgstr "Gas"
+
+msgid "Left"
+msgstr "Vänster"
+
+msgid "Brake"
+msgstr "Broms"
+
+msgid "Right"
+msgstr "Höger"
+
+msgid "Language"
+msgstr "Språk"
+
+msgid "Get out · F"
+msgstr "Kliv ur · F"
+
+msgid "Enter %s"
+msgstr "Kliv in i %s"
+
+msgid "Walk to a vehicle"
+msgstr "Gå till ett fordon"
+
+msgid "Stop first to get out."
+msgstr "Stanna först för att kliva ur."
+
+msgid "Walk with WASD or arrows · F to enter a vehicle"
+msgstr "Gå med WASD eller pilarna · F för att kliva in"
+
+msgid "Time · Day"
+msgstr "Tid · Dag"
+
+msgid "Time · Night"
+msgstr "Tid · Natt"
+
+msgid "Time · Day and night"
+msgstr "Tid · Dag och natt"
+
+msgid "Vehicle depot"
+msgstr "Fordonsdepå"
+
+msgid "Both doors are blocked. Park where there is more room."
+msgstr "Båda dörrarna är blockerade. Parkera där det finns mer plats."
+
+msgid "Activity"
+msgstr "Aktivitet"
+
+msgid "Three missions"
+msgstr "Tre uppdrag"
+
+msgid "Free exploration"
+msgstr "Fri utforskning"
+
+msgid "Explore on foot or by vehicle. Stop at the depot to change vehicles."
+msgstr "Utforska till fots eller med ett fordon. Stanna vid depån för att byta fordon."
+
+msgid "W / ↑ Drive   ·   A D / ← → Steer   ·   S / ↓ Brake or reverse   ·   F Get out   ·   P Pause"
+msgstr "W / ↑ Gasa   ·   A D / ← → Styr   ·   S / ↓ Bromsa eller backa   ·   F Kliv ur   ·   P Paus"
+
+msgid "Continue walking"
+msgstr "Fortsätt gå"
+
+msgid "Walk up to a parked vehicle to get in."
+msgstr "Gå fram till dörren på ett parkerat fordon för att kliva in."
+
+msgid "Stand here to help"
+msgstr "Stå still här för att hjälpa"
+
+msgid "Press Space to help"
+msgstr "Tryck på mellanslag för att hjälpa"
+
+msgid "My vehicle · Flashing"
+msgstr "Mitt fordon · Blinkande"
+
+msgid "My vehicle · Steady"
+msgstr "Mitt fordon · Fast sken"
+
+msgid "Traffic sirens"
+msgstr "Sirener i trafiken"
+
+msgid "Reverse"
+msgstr "Backa"
+
+msgid "Driver view · C"
+msgstr "Förarvy · C"
+
+msgid "Outside view · C"
+msgstr "Utvändig vy · C"
+
+msgid "Forward"
+msgstr "Framåt"
+
+msgid "Stopped"
+msgstr "Stillastående"
+
+msgid "Reversing"
+msgstr "Backar"

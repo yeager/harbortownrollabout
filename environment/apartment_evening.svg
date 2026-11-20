@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
+  <defs>
+    <radialGradient id="room" cx="65%" cy="40%" r="85%">
+      <stop stop-color="#fff"/><stop offset=".62" stop-color="#cdcdcd"/><stop offset="1" stop-color="#858585"/>
+    </radialGradient>
+    <linearGradient id="fold"><stop stop-color="#858585"/><stop offset=".45" stop-color="#bcbcbc"/><stop offset="1" stop-color="#808080"/></linearGradient>
+    <pattern id="linen" width="12" height="256" patternUnits="userSpaceOnUse"><rect width="12" height="256" fill="url(#fold)"/></pattern>
+  </defs>
+  <rect width="256" height="256" fill="url(#room)"/>
+  <path d="M0 0h48l-7 166 5 88H0z M233 0h23v254h-33l7-103z" fill="url(#linen)"/>
+  <g fill="#575757" stroke="#575757" stroke-width="2">
+    <path d="M179 227q-5-26-17-39 14 4 17 22-1-23 6-39 3 18-3 38 11-19 22-20-10 14-22 26v12z"/>
+    <path d="M167 222h29l-4 21h-21z"/>
+  </g>
+  <path d="M0 244h256v12H0z" fill="#626262"/>
+</svg>
