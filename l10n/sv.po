@@ -434,3 +434,15 @@ msgstr "Nästa hållplats: %s · %d km/h"
 
 msgid "Tram bell · H"
 msgstr "Ringklocka · H"
+
+msgid "A car is smoking on the main street. Follow the arrows and stop beside it."
+msgstr "Det ryker från en bil på huvudgatan. Följ pilarna och stanna bredvid bilen."
+
+msgid "A car on the east bank has lost a wheel. Follow the arrows to pick it up."
+msgstr "En bil på östra stranden har tappat ett hjul. Följ pilarna och hämta bilen."
+
+msgid "The car is on your flatbed. Follow the arrows to the workshop for 20 coins."
+msgstr "Bilen står på ditt flak. Följ pilarna till verkstaden så får du 20 mynt."
+
+msgid "Car loaded onto the flatbed."
+msgstr "Bilen är lastad på flaket."

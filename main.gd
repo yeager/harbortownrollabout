@@ -552,6 +552,10 @@ func _help_at_target() -> void:
 				wallet+=20
 				_save_preferences()
 				phone.receive("Recovery complete. You earned 20 coins.")
+				message = "Recovery complete. You earned 20 coins."
+			else:
+				message = "Car loaded onto the flatbed."
+			message_timer = 3.0
 			_update_mission_marker()
 			_refresh_ui()
 		return
@@ -2859,7 +2863,10 @@ func _refresh_dispatch() -> void:
 		return
 	var dispatch: String
 	if vehicle_index==RECOVERY:
-		dispatch=SERVICE_MESSAGES[recovery_leg%4]
+		match recovery_leg%4:
+			0: dispatch="A car is smoking on the main street. Follow the arrows and stop beside it."
+			2: dispatch="A car on the east bank has lost a wheel. Follow the arrows to pick it up."
+			_: dispatch="The car is on your flatbed. Follow the arrows to the workshop for 20 coins."
 	elif vehicle_index==TAXI:
 		var requests := ["Taxi requested at the square.","Please take me to the marina.","Taxi requested at the clinic.","Please take me to the square.","Taxi requested at the marina.","Please take me to the clinic."]
 		dispatch=requests[taxi_leg%requests.size()]
