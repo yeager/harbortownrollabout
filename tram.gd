@@ -1,5 +1,7 @@
 extends Node3D
 
+const STATION_NAMES := ["Sjöstads kaj", "Kanalparken", "Brotorget"]
+
 var track := Curve3D.new()
 var sections: Array[Node3D] = []
 var stops: Array[float] = []
@@ -48,7 +50,7 @@ func _ready() -> void:
 		world._make_box("Shelter roof",Vector3(2.1,.12,5.2),Vector3(3,2.7,0),Color("#475963"),false,station)
 		for z in [-2,2]:
 			world._make_box("Shelter post",Vector3(.1,2.4,.1),Vector3(3.8,1.5,z),Color("#697778"),false,station)
-		sign_at(station,["Sjöstads kaj","Kanalparken","Brotorget"][i],Vector3(2.9,2.35,0),-PI/2,.009)
+		sign_at(station,STATION_NAMES[i],Vector3(2.9,2.35,0),-PI/2,.009)
 	for i in 3:
 		var car := Node3D.new()
 		add_child(car)

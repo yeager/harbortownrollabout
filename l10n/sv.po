@@ -419,3 +419,15 @@ msgstr "Hämta bilen som tappat ett hjul."
 
 msgid "Recovery complete. You earned 20 coins."
 msgstr "Bärgningen är klar. Du fick 20 mynt."
+
+msgid "Passenger ride · P to pause"
+msgstr "Du åker med · P för paus"
+
+msgid "W / ↑ Accelerate · S / ↓ Brake · Automatic station stops"
+msgstr "W / ↑ Gasa · S / ↓ Bromsa · Vagnen stannar själv vid hållplatserna"
+
+msgid "%s · Departure in %d s"
+msgstr "%s · Avgång om %d s"
+
+msgid "Next stop: %s · %d km/h"
+msgstr "Nästa hållplats: %s · %d km/h"

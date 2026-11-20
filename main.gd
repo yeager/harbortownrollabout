@@ -2817,7 +2817,9 @@ func _refresh_ui() -> void:
 	else:
 		siren_button.text = "Siren ON" if sound_on else "Siren OFF"
 	pause_button.text = "Resume" if paused else "Pause"
-	if free_drive:
+	if tram_mode > 0:
+		mission_label.text = "Ride the tram" if tram_mode == 1 else "Drive the tram"
+	elif free_drive:
 		mission_label.text = "Free exploration"
 	elif vehicle_index==RECOVERY:
 		mission_label.text=tr(SERVICE_MESSAGES[recovery_leg%4])
@@ -2830,22 +2832,26 @@ func _refresh_ui() -> void:
 	var show_overlay := mode == "menu" or mode == "complete" or paused
 	for control in [light_button, siren_button, pause_button]:
 		control.focus_mode = Control.FOCUS_NONE if show_overlay else Control.FOCUS_ALL
-	camera_button.visible = not boating and vehicle_index == 3 and not walker.visible and not show_overlay
+	camera_button.visible = tram_mode == 0 and not boating and vehicle_index == 3 and not walker.visible and not show_overlay
 	camera_button.text = "Outside view · C" if cockpit_view else "Driver view · C"
 	horn_button.visible = not show_overlay and (boating or not walker.visible) and tram_mode==0
 	seat_button.visible = not show_overlay and tram_mode==0 and not boating
-	light_button.visible = not boating and not walker.visible and vehicle_index < 3
-	siren_button.visible = not boating and not walker.visible
+	light_button.visible = tram_mode == 0 and not boating and not walker.visible and vehicle_index < 3
+	siren_button.visible = tram_mode == 0 and not boating and not walker.visible
 	if walker.visible:
 		_update_entry_button()
 	else:
 		seat_button.disabled = false
 		entry_marker.visible = false
 		seat_button.text = "Get out · F"
-	driving_controls.visible = not show_overlay and (boating or not walker.visible)
+	driving_controls.visible = tram_mode == 0 and not show_overlay and (boating or not walker.visible)
 	var hints := ui.get_node("DrivingHints") as Label
-	hints.visible = driving_controls.visible
-	if boating:
+	hints.visible = driving_controls.visible or (tram_mode > 0 and not show_overlay)
+	if tram_mode == 1:
+		hints.text = "Passenger ride · P to pause"
+	elif tram_mode == 2:
+		hints.text = "W / ↑ Accelerate · S / ↓ Brake · Automatic station stops"
+	elif boating:
 		hints.text = "W / ↑ Throttle · A D / ← → Steer · S / ↓ Slow or reverse · H Horn · P Pause"
 	elif free_drive:
 		hints.text = "W / ↑ Drive   ·   A D / ← → Steer   ·   S / ↓ Brake or reverse   ·   F Get out   ·   P Pause"
@@ -2905,7 +2911,13 @@ func _refresh_status() -> void:
 			dash_speed.text = reading
 	arrival_progress.visible = mode == "playing" and not paused and not free_drive and parked_at_target > 0.0
 	arrival_progress.value = parked_at_target
-	if message_timer > 0 and message != "":
+	if tram_mode > 0 and mode == "playing" and not paused:
+		if tram.dwell > 0:
+			var station: String = tram.STATION_NAMES[posmod(tram.next_stop-1,tram.stops.size())]
+			status_label.text = tr("%s · Departure in %d s") % [station,ceili(tram.dwell)]
+		else:
+			status_label.text = tr("Next stop: %s · %d km/h") % [tram.STATION_NAMES[tram.next_stop],roundi(tram.velocity*3.6)]
+	elif message_timer > 0 and message != "":
 		status_label.text = message
 	elif mode == "playing" and not paused and walker.visible and _at_target():
 		status_label.text = "Stand here to help" if gentle_driving else "Press Space to help"

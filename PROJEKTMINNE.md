@@ -39,3 +39,5 @@ Spelprojektet publiceras i det privata GitHub-repot yeager/axels-emergency-vehic
 - Förbandsväskan följer räddningsuppdraget från vårdaren till spelaren och lämnas på kajen efter leverans.
 
 - Båda övergångsställena över tvärgatan i centrum har gångsignaler. Fotgängare väntar vid kanten på rött och går färdigt om signalen växlar under passagen.
+
+- I Tvärbanans förar- och passagerarläge visar HUD nästa hållplats, vagnens hastighet och nedräkning vid hållplatsen på valt språk.
