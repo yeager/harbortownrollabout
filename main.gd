@@ -1061,7 +1061,20 @@ func _update_daylight(delta: float) -> void:
 
 func _build_lampposts() -> void:
 	lamp_glass = _material(Color("#ffdfac"), .35, true)
-	for p in [Vector3(92,0,6),Vector3(92,0,-54),Vector3(143,0,-54),Vector3(70,0,5.6),Vector3(70,0,-53.6),Vector3(-35,0,10),Vector3(-12,0,6),Vector3(-5.8,0,-7), Vector3(5.8,0,8), Vector3(18,0,-7), Vector3(40,0,8), Vector3(-37,0,-7)]:
+	var sites: Array[Vector3] = [Vector3(92,0,6),Vector3(92,0,-54),Vector3(143,0,-54),Vector3(70,0,5.6),Vector3(70,0,-53.6),Vector3(-35,0,10),Vector3(-12,0,6),Vector3(-5.8,0,-7), Vector3(5.8,0,8), Vector3(18,0,-7), Vector3(40,0,8), Vector3(-37,0,-7)]
+	for x in [102,162]:
+		for z in [-72,-55,-34,-16,10,28,47,57]:
+			sites.append(Vector3(x+5.4,0,z))
+	for z in [-82,60]:
+		for x in [114,132,150]:
+			sites.append(Vector3(x,0,z+4.1))
+	for x in [-55,48]:
+		for z in [-37,-18,14,29]:
+			sites.append(Vector3(x-4.3,0,z))
+	for x in [-43,-24,-8,13,34]:
+		sites.append(Vector3(x,0,39.3))
+		sites.append(Vector3(x,0,-52.3))
+	for p in sites:
 		_make_box("Lamp post", Vector3(0.16, 4.5, 0.16), p + Vector3(0,2.25,0), Color("#45524e"), false)
 		_make_box("Lamp arm", Vector3(0.85, 0.13, 0.13), p + Vector3(0.34,4.35,0), Color("#45524e"), false)
 		var lens := _make_box("Lamp", Vector3(0.52, 0.15, 0.42), p + Vector3(0.66,4.24,0), Color("#e5d9ad"), false)
