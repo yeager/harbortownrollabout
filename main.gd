@@ -1549,8 +1549,18 @@ func _spawn_emergency_traffic(index: int, x: float, lane: float, direction: floa
 	actor.add_child(siren)
 	emergency_traffic.append({"traffic": traffic_data.back(), "lamps": lamps, "spill": spill, "siren": siren, "phase": index * 0.21})
 
+func _listener_velocity() -> Vector3:
+	if boating:
+		return Vector3.FORWARD.rotated(Vector3.UP,launch.rotation.y)*launch_speed
+	if tram_mode > 0:
+		return -tram.sections[0].global_basis.z * tram.velocity
+	if walker.visible:
+		return walking_velocity
+	return -ambulance.global_basis.z * speed
+
 func _update_traffic_signals(delta: float) -> void:
 	var active := mode == "playing" and not paused
+	var listener_velocity := _listener_velocity()
 	for unit in emergency_traffic:
 		if active:
 			unit.phase = fmod(float(unit.phase) + delta, 1.0)
@@ -1564,9 +1574,9 @@ func _update_traffic_signals(delta: float) -> void:
 			var traffic: Dictionary = unit.traffic
 			var towards_listener := siren.global_position.direction_to(listener.global_position)
 			var source_velocity := Vector3.RIGHT * float(traffic.direction) * float(traffic.speed)
-			var listener_velocity := walking_velocity if walker.visible else -ambulance.global_transform.basis.z * speed
-			var relative_speed := (source_velocity - listener_velocity).dot(towards_listener)
-			siren.pitch_scale = clampf(343.0 / (343.0 - relative_speed), 0.85, 1.15)
+			var received := 343.0 - listener_velocity.dot(towards_listener)
+			var emitted := 343.0 - source_velocity.dot(towards_listener)
+			siren.pitch_scale = clampf(received / emitted, 0.85, 1.15)
 			if not siren.playing:
 				siren.play()
 		elif siren.playing:
