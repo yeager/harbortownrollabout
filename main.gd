@@ -1530,22 +1530,35 @@ func _spawn_emergency_traffic(index: int, x: float, lane: float, direction: floa
 		lamp.material_override = blue
 		lamp.visible = false
 		lamps.append(lamp)
+	# One local light per responding vehicle keeps the night-time spill affordable.
+	var spill := OmniLight3D.new()
+	spill.position.y = [2.8,1.7,3.1][index]
+	spill.light_color = Color("#3879ff")
+	spill.light_energy = 2.6
+	spill.omni_range = 6.0
+	spill.distance_fade_enabled = true
+	spill.distance_fade_begin = 24
+	spill.distance_fade_length = 12
+	spill.visible = false
+	actor.add_child(spill)
 	var siren := AudioStreamPlayer3D.new()
 	siren.stream = load(SIREN_SOUNDS[index])
 	siren.unit_size = 7
 	siren.max_distance = 65
 	siren.volume_db = -6 + linear_to_db(maxf(.001, traffic_siren_volume / 100.0))
 	actor.add_child(siren)
-	emergency_traffic.append({"traffic": traffic_data.back(), "lamps": lamps, "siren": siren, "phase": index * 0.21})
+	emergency_traffic.append({"traffic": traffic_data.back(), "lamps": lamps, "spill": spill, "siren": siren, "phase": index * 0.21})
 
 func _update_traffic_signals(delta: float) -> void:
 	var active := mode == "playing" and not paused
 	for unit in emergency_traffic:
 		if active:
 			unit.phase = fmod(float(unit.phase) + delta, 1.0)
-		var lit := active and (traffic_light_mode == 1 or (traffic_light_mode == 0 and float(unit.phase) < 0.45))
+		var pulse := fmod(float(unit.phase),.5) < .40
+		var lit := active and (traffic_light_mode == 1 or (traffic_light_mode == 0 and pulse))
+		unit.spill.visible = lit
 		for lamp: MeshInstance3D in unit.lamps:
-			lamp.visible = lit
+			lamp.visible = lit and (traffic_light_mode == 1 or lamp.name.begins_with("FlashBlue") == (float(unit.phase) < .5))
 		var siren: AudioStreamPlayer3D = unit.siren
 		if active and traffic_siren_volume > 0 and not AudioServer.is_bus_mute(0):
 			var traffic: Dictionary = unit.traffic

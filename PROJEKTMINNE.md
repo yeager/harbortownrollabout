@@ -53,3 +53,5 @@ Spelprojektet publiceras i det privata GitHub-repot yeager/axels-emergency-vehic
 - Förarvyn renderades i Godot med parkerade och uppfällda torkare. Svepet ökades till cirka 73 grader efter bildkontrollen.
 
 - Spelarambulansens fyra takmoduler lyser nu upp närliggande ytor. Godot-test och bild från följekameran bekräftar ljusen i fast läge och testet kontrollerar båda blinkfaserna.
+
+- De tre utryckningsfordonen i trafiken har blått ljusspill och omväxlande blåljusgrupper. Trafikens inställning för fast eller avstängt blåljus styr även ljusspillet.
