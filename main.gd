@@ -1945,7 +1945,7 @@ func _advance_wipers(delta: float) -> void:
 	if precipitation < .06 and is_zero_approx(wiper_phase): return
 	var next_phase := wiper_phase + delta*lerpf(2.0,5.4,precipitation)
 	wiper_phase = 0.0 if precipitation < .06 and next_phase >= TAU else fmod(next_phase,TAU)
-	var sweep := .46*(1.0-cos(wiper_phase))
+	var sweep := .64*(1.0-cos(wiper_phase))
 	for pivot in wiper_pivots:
 		pivot.basis = Basis(Vector3(0,.77,.64).normalized(),sweep)
 

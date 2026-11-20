@@ -49,3 +49,5 @@ Spelprojektet publiceras i det privata GitHub-repot yeager/axels-emergency-vehic
 - I BMW:ns förarvy går det att se åt sidorna och uppåt/nedåt genom att dra med mittenknappen. Förarvyn centreras när man väljer den på nytt.
 
 - BMW:ns två främre vindrutetorkare följer nederbörden. De sveper snabbare vid kraftigare nederbörd och avslutar svepet i parkerat läge när det klarnar.
+
+- Förarvyn renderades i Godot med parkerade och uppfällda torkare. Svepet ökades till cirka 73 grader efter bildkontrollen.
