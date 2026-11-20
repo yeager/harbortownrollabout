@@ -9,7 +9,7 @@ const VEHICLE_SCENES := ["res://vehicles/ambulance.glb", "res://vehicles/polisbi
 const VEHICLE_NAMES_ALL := ["Ambulance", "Police car", "Fire engine", "BMW X5 M60i", "Taxi", "Recovery truck"]
 const VEHICLE_SCENES_ALL := ["res://vehicles/ambulance.glb", "res://vehicles/polisbil.glb", "res://vehicles/brandbil.glb", "res://vehicles/bmw_x5_m60i.glb", "res://vehicles/taxi.glb", "res://vehicles/bargare.glb"]
 const SIREN_SOUNDS := ["res://audio/siren_ambulance.wav", "res://audio/siren_police.wav", "res://audio/siren_fire.wav", "res://audio/bmw_engine.wav", "res://audio/bmw_engine.wav", "res://audio/bmw_engine.wav"]
-const BUILDING_SCENES := {"Bageriet":"res://environment/bageri.glb", "Vårdcentralen":"res://environment/vardcentral.glb", "Brandstationen":"res://environment/brandstation.glb", "Biblioteket":"res://environment/bibliotek.glb"}
+const BUILDING_SCENES := {"Sjukhuset":"res://environment/sjukhus.glb", "Polisstationen":"res://environment/polisstation.glb", "Bageriet":"res://environment/bageri.glb", "Vårdcentralen":"res://environment/vardcentral.glb", "Brandstationen":"res://environment/brandstation.glb", "Biblioteket":"res://environment/bibliotek.glb"}
 const TREE_SCENES := ["res://environment/lovtrad.glb", "res://environment/gran.glb", "res://environment/bredkronigt_lovtrad.glb"]
 
 var ambulance: Node3D
@@ -1024,6 +1024,8 @@ func _update_moorings(delta: float) -> void:
 
 func _build_city_blocks() -> void:
 	var plots := [
+		[Vector3(-34,0,-15),Vector3(13,6.4,9),Color("#835143"),"Polisstationen"],
+		[Vector3(128,0,-60),Vector3(20,13.3,9),Color("#e1e5df"),"Sjukhuset"],
 		[Vector3(-15, 0, -15), Vector3(13, 8, 11.6), Color("#d5c4a4"), "Bageriet"],
 		[Vector3(16, 0, -15), Vector3(13.8, 11, 13), Color("#bdcfc5"), "Vårdcentralen"],
 		[Vector3(-16, 0, 17), Vector3(16.4, 9, 14), Color("#d8c0b5"), "Brandstationen"],
@@ -1031,6 +1033,8 @@ func _build_city_blocks() -> void:
 	]
 	for plot in plots:
 		_build_building(plot[0], plot[1], plot[2], plot[3])
+	_make_driving_surface("Hospital ambulance apron",Vector3(14,.10,8),Vector3(128,-.12,-52),Color("#818884"))
+	_make_driving_surface("Police forecourt",Vector3(9,.10,6.5),Vector3(-34,-.12,-7.75),Color("#a6a29a"))
 	# Låg kantsten och planteringar runt torget.
 	_make_driving_surface("Square paving", Vector3(14, 0.24, 13), Vector3(30, -0.09, 16), Color("#cbbf9f"), true)
 	for p in [Vector3(25, 0, 12), Vector3(35, 0, 12), Vector3(25, 0, 20), Vector3(35, 0, 20)]:
@@ -1045,8 +1049,8 @@ func _build_building(center: Vector3, size: Vector3, _color: Color, sign_text: S
 	var model := packed.instantiate() as Node3D
 	model.name = sign_text.replace(" ", "_")
 	model.position = Vector3(center.x, 0.0, center.z)
-	# The Blender models face local -Z; north-side storefronts face south into the street.
-	if center.z < 0.0:
+	# Blender -Y (the signed entrance facade) imports as Godot +Z.
+	if center.z > 0.0:
 		model.rotation.y = PI
 	add_child(model)
 

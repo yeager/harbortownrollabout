@@ -15,10 +15,11 @@
 
 - Körbar rödgul flakbärgare med vinschmodell. Hämta en rykande bil eller en bil som tappat ett hjul, kör den på flaket till verkstaden och få 20 mynt.
 
+- Polisstation vid huvudgatan och sjukhus med akutentré öster om norra bron. Brandstationens portar och övriga samhällsbyggnaders entréer vetter mot gatan.
+
 ## Återstående önskemål
 
 - Godstransporter med synlig last och kvittens vid leverans.
-- En särskild polisstation och ett sjukhus. Vårdcentralen är en separat befintlig byggnad.
 - Raggarbilar som kör lite vingligt, barnvagnar, personer med rullator och trappor som går att använda.
 - Förfina fordonsformer, särskilt BMW-fronten, brandbilen, polisbilen, Tvärbanan och sittande förare. Förbättra vatten- och fönsterreflektioner, arkitektur och strandpromenad utifrån bildreferenser.
 - Utöka gång- och trafiksignaler från centrala korsningen till övriga passager. Speltesta framkomlighet, dialog, läsbarhet, ljudnivå och bildfrekvens i hela staden.
