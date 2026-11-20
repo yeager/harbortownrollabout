@@ -45,3 +45,5 @@ Spelprojektet publiceras i det privata GitHub-repot yeager/axels-emergency-vehic
 - Främre vagnens dubbeldörr öppnas mot den korta plattformen vid varje stopp. Dörrbladen glider igen före avgång i både passagerar- och förarläge.
 
 - Tvärbanans förare kan ringa en dubbel klang med H eller skärmknappen. Lyssnaren följer främre vagnen i båda spårvagnslägena.
+
+- I BMW:ns förarvy går det att se åt sidorna och uppåt/nedåt genom att dra med mittenknappen. Förarvyn centreras när man väljer den på nytt.

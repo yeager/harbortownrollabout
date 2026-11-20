@@ -40,6 +40,7 @@ var previous_season := 0
 var greeting_timer := 0.0
 var greeting_number := 0
 var greeting := Label3D.new()
+var cockpit_look := Vector2.ZERO
 var orbit_angle := 0.0
 var orbit_height := 0.0
 var time_mode := 0
@@ -228,6 +229,10 @@ func _process(delta: float) -> void:
 
 func _input(event: InputEvent) -> void:
 	if mode == "playing" and not paused and event is InputEventMouseMotion and event.button_mask & MOUSE_BUTTON_MASK_MIDDLE:
+		if cockpit_view and not boating and tram_mode==0:
+			cockpit_look.x = clampf(cockpit_look.x-event.relative.x*.007,-1.4,1.4)
+			cockpit_look.y = clampf(cockpit_look.y-event.relative.y*.006,-.45,.52)
+			return
 		orbit_angle -= event.relative.x*.007
 		orbit_height = clampf(orbit_height+event.relative.y*.022,-1.8,5)
 	if event is InputEventMouseButton and not event.pressed:
@@ -2167,7 +2172,8 @@ func _build_camera() -> void:
 	_update_camera(0.0, true)
 
 func _toggle_camera_view() -> void:
-	if vehicle_index != 3 or walker.visible or paused or mode != "playing": return
+	if vehicle_index != 3 or boating or tram_mode!=0 or walker.visible or paused or mode != "playing": return
+	cockpit_look = Vector2.ZERO
 	cockpit_view = not cockpit_view
 	_update_camera(0,true)
 	_refresh_ui()
@@ -2196,7 +2202,8 @@ func _update_camera(delta: float, snap_to_car := false) -> void:
 		return
 	if cockpit_view and vehicle_index == 3:
 		camera.global_position = ambulance.to_global(Vector3(-.32,1.56,-.10))
-		camera.look_at(ambulance.to_global(Vector3(-.32+steering*.38,1.40,-6.0)))
+		var gaze := Vector3(steering*.38,-.16,-5.9).rotated(Vector3.RIGHT,cockpit_look.y).rotated(Vector3.UP,cockpit_look.x)
+		camera.look_at(camera.global_position + ambulance.global_basis*gaze)
 		return
 	var forward := -ambulance.global_transform.basis.z
 	var desired := ambulance.global_position - forward.rotated(Vector3.UP,orbit_angle) * 10.5 + Vector3(0, 6.0+orbit_height, 0)

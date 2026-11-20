@@ -30,7 +30,7 @@ Select **Ride the tram** in the activity menu to follow an automatic service aro
 
 Select a season and weather in Settings or leave either on Automatic. Automatic seasons last 30 minutes of active play. The forecast holds for five minutes, then precipitation builds or clears over roughly a minute. Snow accumulates on roads, rain darkens the asphalt and braking takes slightly longer on slippery surfaces. Manual changes take effect more quickly. Daylight includes a visible sun aligned with the light casting the street shadows.
 
-Hold the middle mouse button and drag to orbit the exterior camera. On foot, nearby neighbours greet you in the selected language. Greetings appear above the speaker and use a matching system speech voice when available.
+Hold the middle mouse button and drag to orbit the exterior camera or look around from the BMW driver’s seat. Returning to the driver’s seat with **C** centres the view. On foot, nearby neighbours greet you in the selected language. Greetings appear above the speaker and use a matching system speech voice when available.
 
 The central junction has phased traffic lights and red and green pedestrian figures beside the crossing. Traffic waits for its green phase. The player's vehicle also slows as it approaches a red signal, pedestrians in its path or a queue.
 
