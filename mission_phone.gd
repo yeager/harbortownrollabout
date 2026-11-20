@@ -1,0 +1,47 @@
+extends VBoxContainer
+
+var open_button := Button.new()
+var handset := PanelContainer.new()
+var messages: Array[String] = []
+var inbox := Label.new()
+var unread := 0
+
+func _ready() -> void:
+	set_anchors_and_offsets_preset(Control.PRESET_TOP_LEFT)
+	position=Vector2(22,106)
+	custom_minimum_size.x=200
+	open_button.custom_minimum_size.y=44
+	open_button.pressed.connect(toggle)
+	add_child(open_button)
+	var finish := StyleBoxFlat.new()
+	finish.bg_color=Color("#152b33")
+	finish.set_corner_radius_all(16)
+	for side in [SIDE_TOP,SIDE_BOTTOM,SIDE_LEFT,SIDE_RIGHT]:
+		finish.set_content_margin(side,16)
+	handset.add_theme_stylebox_override("panel",finish)
+	add_child(handset)
+	inbox.custom_minimum_size.x=280
+	inbox.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
+	inbox.add_theme_font_size_override("font_size",18)
+	handset.add_child(inbox)
+	handset.hide()
+	refresh()
+
+func receive(body: String) -> void:
+	messages.push_front(body)
+	if messages.size()>4: messages.pop_back()
+	if not handset.visible: unread+=1
+	refresh()
+
+func toggle() -> void:
+	handset.visible=not handset.visible
+	if handset.visible: unread=0
+	refresh()
+
+func refresh() -> void:
+	open_button.text=tr("Phone · T")
+	if unread>0: open_button.text+="  (%d)" % unread
+	var lines:=PackedStringArray()
+	for body in messages:
+		lines.append(tr(body))
+	inbox.text="\n\n".join(lines) if not lines.is_empty() else tr("No messages yet.")

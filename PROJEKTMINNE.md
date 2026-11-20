@@ -6,13 +6,14 @@
 - Ambulans, polisbil, brandbil, svart BMW X5 M60i och taxi. Fordonsbyte till fots, muspedaler, rattindikator, horn, sirener och bromsspår. BMW har även förarvy.
 - Sjöstadsinspirerat vägnät med kanaler, broar, småbåtar, kajhus, parkering vid depån, bibliotek, bageri, vårdcentral och brandstation.
 - Trafik, cyklister, utryckningar, långsamma A-traktorer, hälsande fotgängare, signaler vid centrala korsningen, dag/natt och gatlampor. Manuellt/automatiskt väder och årstider.
+- Telefonen (T) tar emot uppdrag och kvitton på engelska eller svenska och visar de fyra senaste meddelandena under spelomgången.
 - Tre uppdragssteg, vägvisande pilar och återkommande taxikörningar. 10 mynt per räddningssteg och 15 per avslutad taxiresa.
 - Tvärbanan kan följas som passagerare eller köras på en slinga med tre hållplatser. Dörrskylten säger ”Vi åker inte till Ekerö”.
 - Körbar motorbåt i södra bassängen, färjan Lotten i linjetrafik, polishelikopter på patrull.
 
 ## Återstående önskemål
 
-- Telefon med inkommande uppdrag, godstransporter med synlig last och kvittens vid leverans.
+- Godstransporter med synlig last och kvittens vid leverans.
 - Gå in i kafé och köpa bullar och saft, kiosk med glass och korv med bröd, pizzeria och godisaffär. Betalning, saldo och återkoppling för köpet.
 - Körbar rödgul flakbärgare med vinsch och uppdrag att hämta en bil med lossnat hjul eller rök från motorhuven, lasta den och köra till verkstaden.
 - En särskild polisstation och ett sjukhus. Vårdcentralen är en separat befintlig byggnad.

@@ -51,3 +51,5 @@ A blue-and-white Swedish police helicopter flies a continuous patrol above the w
 Two slow, white pickup-converted A-traktors share the main street. Look for the orange triangular reflector on the back of the cab. Faster traffic following one slows down and gives a short horn greeting.
 
 Choose **Axel · 15** or **Alma · 12** beside the vehicle selector. The choice changes the character you see on foot. Each rescue mission step earns 10 coins and completing a taxi fare earns 15. Both characters share one wallet on this installation.
+
+Press **T** or click **Phone** during play to open the four most recent dispatches. New rescue and taxi assignments appear silently with an unread count. Completed jobs send a payment receipt. Messages follow the selected language.

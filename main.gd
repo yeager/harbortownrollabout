@@ -109,6 +109,8 @@ var ui: CanvasLayer
 var play_as_alma := false
 var wallet := 0
 var wallet_label: Label
+var phone := preload("res://mission_phone.gd").new()
+var last_dispatch := ""
 var mission_label: Label
 const HELP_DURATION := 0.8
 var arrival_progress := ProgressBar.new()
@@ -239,6 +241,8 @@ func _notification(what: int) -> void:
 func _unhandled_key_input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed and not event.echo:
 		match event.keycode:
+			KEY_T:
+				if phone.visible: phone.toggle()
 			KEY_H: _honk()
 			KEY_F: _change_seat()
 			KEY_C: _toggle_camera_view()
@@ -517,6 +521,7 @@ func _help_at_target() -> void:
 		if _at_target() and absf(speed)<.2:
 			taxi_leg += 1
 			if taxi_leg%2==0:
+				phone.receive("Fare complete. You earned 15 coins.")
 				wallet+=15
 				_save_preferences()
 			parked_at_target = 0
@@ -528,6 +533,7 @@ func _help_at_target() -> void:
 	if _at_target():
 		parked_at_target = 0.0
 		mission_index += 1
+		phone.receive("Thank you for helping! You earned 10 coins.")
 		wallet+=10
 		_save_preferences()
 		speed = 0.0
@@ -2176,6 +2182,7 @@ func _build_ui() -> void:
 	ui.add_child(help)
 	ui.add_child(driving_controls)
 	driving_controls.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	ui.add_child(phone)
 	_build_overlay()
 	siren_player = AudioStreamPlayer.new()
 	siren_player.volume_db = -11
@@ -2434,6 +2441,10 @@ func _starting_position() -> Vector3:
 	return Vector3(best_x, _surface_height(best_x, lane), lane)
 
 func _start_game() -> void:
+	last_dispatch=""
+	phone.messages.clear()
+	phone.unread=0
+	phone.handset.hide()
 	parked_sound_settings.assign([false, false, false, true, true])
 	parked_light_settings.fill(false)
 	mode = "playing"
@@ -2602,8 +2613,25 @@ func _update_siren() -> void:
 		if mode != "menu" or not siren_player.playing:
 			siren_player.stop()
 
+func _refresh_dispatch() -> void:
+	phone.visible = mode=="playing" and not paused
+	phone.refresh()
+	if free_drive or mode!="playing" or mission_index>=TARGETS.size():
+		last_dispatch=""
+		return
+	var dispatch: String
+	if vehicle_index==TAXI:
+		var requests := ["Taxi requested at the square.","Please take me to the marina.","Taxi requested at the clinic.","Please take me to the square.","Taxi requested at the marina.","Please take me to the clinic."]
+		dispatch=requests[taxi_leg%requests.size()]
+	else:
+		dispatch=["A neighbour needs help at the square.","A medic is waiting at the clinic. Please pick them up.","Please bring the first-aid supplies to the marina."][mission_index]
+	if dispatch!=last_dispatch:
+		last_dispatch=dispatch
+		phone.receive(dispatch)
+
 func _refresh_ui() -> void:
 	if not is_instance_valid(mission_label): return
+	_refresh_dispatch()
 	wallet_label.text = tr("%d coins") % wallet
 	light_button.text = "Lights ON" if lights_on else "Lights OFF"
 	if vehicle_index >= 3:

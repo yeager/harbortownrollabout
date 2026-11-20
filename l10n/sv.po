@@ -332,3 +332,42 @@ msgstr "Spelfigur"
 
 msgid "Wallet"
 msgstr "Plånbok"
+
+msgid "Phone · T"
+msgstr "Telefon · T"
+
+msgid "No messages yet."
+msgstr "Inga meddelanden än."
+
+msgid "Taxi requested at the square."
+msgstr "En passagerare väntar på taxi vid torget."
+
+msgid "Please take me to the marina."
+msgstr "Kan du köra mig till småbåtshamnen?"
+
+msgid "Taxi requested at the clinic."
+msgstr "En passagerare väntar på taxi vid vårdcentralen."
+
+msgid "Please take me to the square."
+msgstr "Kan du köra mig till torget?"
+
+msgid "Taxi requested at the marina."
+msgstr "En passagerare väntar på taxi vid småbåtshamnen."
+
+msgid "Please take me to the clinic."
+msgstr "Kan du köra mig till vårdcentralen?"
+
+msgid "A neighbour needs help at the square."
+msgstr "En granne behöver hjälp vid torget."
+
+msgid "A medic is waiting at the clinic. Please pick them up."
+msgstr "En sjukvårdare väntar vid vårdcentralen. Kan du hämta henne?"
+
+msgid "Please bring the first-aid supplies to the marina."
+msgstr "Kan du lämna förbandsmaterialet vid småbåtshamnen?"
+
+msgid "Fare complete. You earned 15 coins."
+msgstr "Passageraren är framme. Du fick 15 mynt."
+
+msgid "Thank you for helping! You earned 10 coins."
+msgstr "Tack för hjälpen! Du fick 10 mynt."
