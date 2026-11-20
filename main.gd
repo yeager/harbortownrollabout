@@ -1392,6 +1392,8 @@ const TRAFFIC_WEST := -47.0
 const TRAFFIC_EAST := 162.0
 
 func _build_traffic() -> void:
+	_spawn_traffic("res://vehicles/a_traktor.glb", 51, 2.35, 1, 3.2, 1)
+	_spawn_traffic("res://vehicles/a_traktor.glb", 95, -2.35, -1, 3.5, 1)
 	# Two-way, steady traffic on both sides of the main street.
 	_spawn_traffic("res://vehicles/traffic_bmw_blue.glb", -40.0, 2.35, 1.0, 6.4)
 	_spawn_traffic("res://vehicles/traffic_bmw_silver.glb", 5.0, 2.35, 1.0, 6.4)
@@ -1483,7 +1485,17 @@ func _spawn_traffic(scene_path: String, x: float, lane_z: float, direction: floa
 			finish.emission_energy_multiplier = 3.0*maxf(last_night,0.0)
 			lens.material_override = finish
 			bicycle_lenses.append(finish)
-	traffic_data.append({"actor": actor, "direction": direction, "cruise": speed_value, "wheels": _rig_wheels(model), "brake_lens": _brake_lens(model),
+	var traffic_horn := AudioStreamPlayer3D.new()
+	var voice := "bicycle" if scene_path.ends_with("cyklist.glb") else "bmw"
+	var emergency_index := VEHICLE_SCENES.find(scene_path)
+	if emergency_index >= 0:
+		voice = HORNS[emergency_index]
+	traffic_horn.stream = load("res://audio/horn_%s.wav" % voice)
+	traffic_horn.volume_db = -9
+	traffic_horn.unit_size = 5
+	traffic_horn.max_distance = 45
+	actor.add_child(traffic_horn)
+	traffic_data.append({"tractor":scene_path.ends_with("a_traktor.glb"), "horn":traffic_horn, "greeted":false, "actor": actor, "direction": direction, "cruise": speed_value, "wheels": _rig_wheels(model), "brake_lens": _brake_lens(model),
 		"speed": speed_value, "length": half_size.y,
 		"width": half_size.x})
 	return actor
@@ -1506,12 +1518,16 @@ func _update_traffic(delta: float) -> void:
 		var actor: Node3D = item.actor
 		var direction: float = item.direction
 		var clearance := minf(TRAFFIC_EAST - TRAFFIC_WEST,street_signals.red_clearance(actor.position,Vector3.RIGHT*direction,float(item.length)) + 1.0)
+		var tractor_ahead := false
 		for other in traffic_data:
 			var neighbour: Node3D = other.actor
 			if neighbour == actor or absf(neighbour.position.z - actor.position.z) >= float(item.width) + float(other.width):
 				continue
 			var ahead := fposmod((neighbour.position.x - actor.position.x) * direction, TRAFFIC_EAST - TRAFFIC_WEST)
-			clearance = minf(clearance, ahead - float(item.length) - float(other.length))
+			var gap := ahead - float(item.length) - float(other.length)
+			if gap<clearance:
+				clearance = gap
+				tractor_ahead = other.tractor and other.direction==direction
 		var player_offset := ambulance.position - actor.position
 		if absf(player_offset.z) < player_size.y + float(item.width):
 			var ahead := player_offset.x * direction
@@ -1536,6 +1552,12 @@ func _update_traffic(delta: float) -> void:
 			var remaining := (actor.position.z-crossing_pedestrian.position.z)*crossing_direction
 			if ahead >= 0 and remaining >= -float(item.width)-.45:
 				clearance = minf(clearance,ahead-float(item.length)-1.2)
+		if tractor_ahead and clearance<8 and not item.tractor and item.speed>1:
+			if not item.greeted:
+				item.horn.play()
+				item.greeted = true
+		elif clearance>15:
+			item.greeted = false
 		var free_space := maxf(0.0, clearance - 1.0)
 		var target := minf(float(item.cruise), free_space * 0.95)
 		if free_space < 0.1:
