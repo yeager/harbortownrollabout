@@ -15,6 +15,7 @@ const TREE_SCENES := ["res://environment/lovtrad.glb", "res://environment/gran.g
 var ambulance: Node3D
 var trunks := PackedVector3Array() # Centre X, trunk radius, centre Z.
 var building_bounds: Array[AABB] = []
+var pier_surfaces: Array[AABB] = []
 var driving_surfaces: Array[AABB] = []
 var reverse_feed: SubViewport
 var reverse_camera: Camera3D
@@ -886,6 +887,16 @@ func _build_quay_lane_markings() -> void:
 	markings.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	add_child(markings)
 
+func _pier_section(label: String, size: Vector3, center: Vector3, color: Color) -> void:
+	_make_box(label,size,center,color)
+	pier_surfaces.append(AABB(center-size*.5,size))
+
+func _pier_height(x: float,z: float) -> float:
+	for section in pier_surfaces:
+		if x >= section.position.x and x <= section.end.x and z >= section.position.z and z <= section.end.z:
+			return section.end.y
+	return NAN
+
 func _build_marina() -> void:
 	launch = Node3D.new()
 	add_child(launch)
@@ -899,10 +910,28 @@ func _build_marina() -> void:
 	ferry = (load("res://vehicles/lotten.glb") as PackedScene).instantiate()
 	add_child(ferry)
 	for landing_z in [-35.0,-12.0]:
-		_make_box("Ferry landing",Vector3(2.0,.28,7.5),Vector3(64.9,-.49,landing_z),Color("#847968"))
-		_make_box("Landing gangway",Vector3(9.2,.20,1.6),Vector3(59.5,-.29,landing_z),Color("#9d9280"))
+		_pier_section("Ferry landing",Vector3(2.0,.20,7.5),Vector3(64.9,-.76,landing_z),Color("#847968"))
+		for tread in 4:
+			var height := -.18-.12*tread
+			_pier_section("Granite tread",Vector3(.46,.22,2),Vector3(55.02+.45*tread,height-.11,landing_z),Color("#b2a897"))
+		_pier_section("Timber gangway",Vector3(7.46,.17,2),Vector3(60.31,-.745,landing_z),Color("#9d8469"))
 		for end in [-1,1]:
 			_make_box("Pier pile",Vector3(.24,1.4,.24),Vector3(65.75,-.67,landing_z+end*3.4),Color("#514e41"))
+	# Boardwalk joins both ferry approaches along the sheltered bank.
+	_pier_section("Waterside boardwalk",Vector3(2.0,.18,21.1),Vector3(58.0,-.75,-23.5),Color("#ab9071"))
+	for i in range(46):
+		_make_box("Plank joint",Vector3(2.0,.006,.011),Vector3(58,-.657,-33.86+i*.454),Color("#736552"))
+	for i in range(8):
+		var post_z := -33.8+i*2.94
+		_make_box("Timber bollard",Vector3(.14,1.70,.14),Vector3(59.08,-.53,post_z),Color("#6b5948"))
+		if i<7:
+			for segment in 6:
+				var a := segment/6.
+				var b := (segment+1)/6.
+				var start := Vector3(59.08,.22-.60*a*(1-a),post_z+2.94*a)
+				var end := Vector3(59.08,.22-.60*b*(1-b),post_z+2.94*b)
+				var rope_span := _make_box("Hemp rope",Vector3(.032,.032,start.distance_to(end)),(start+end)*.5,Color("#c9b38e"))
+				rope_span.look_at(end)
 	_make_box("Flytbrygga",Vector3(1.4,.25,32),Vector3(85.8,-.63,-24),Color("#877962"))
 	var rope := CylinderMesh.new()
 	rope.top_radius = 0.018
@@ -1331,7 +1360,7 @@ func _on_foot_clear(p: Vector3) -> bool:
 	if is_instance_valid(casualty) and casualty.visible and casualty.get_parent()==self and AABB(casualty.position-Vector3(2.35,1,1.1),Vector3(4.7,3,2.2)).has_point(p): return false
 	if p.x < -60 or p.x > 170 or p.z < -86 or p.z > 65:
 		return false
-	if p.x > 55 and p.x < 87 and absf(p.z)>5.4 and absf(p.z+48)>5.4:
+	if p.x > 55 and p.x < 87 and absf(p.z)>5.4 and absf(p.z+48)>5.4 and is_nan(_pier_height(p.x,p.z)):
 		return false
 	for wall in building_bounds:
 		if wall.grow(.25).has_point(p+Vector3.UP):
@@ -1418,7 +1447,8 @@ func _walk(delta: float) -> void:
 	var next := walker.position
 	for step in [Vector3(motion.x,0,0),Vector3(0,0,motion.z)]:
 		if _on_foot_clear(next+step): next += step
-	next.y = _surface_height(next.x,next.z)
+	var pier_y := _pier_height(next.x,next.z)
+	next.y = _surface_height(next.x,next.z) if is_nan(pier_y) else pier_y
 	var travel := next-walker.position
 	if travel.length_squared()>.000001:
 		walker.rotation.y = atan2(-travel.x,-travel.z)

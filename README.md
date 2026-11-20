@@ -67,3 +67,5 @@ The police station stands on the north side of the western main street. Cross th
 Along the main street, a neighbour pushes a green pram near the police station and an older pedestrian walks with a four-wheel rollator near the square. They turn around at the ends of their pavement stretches.
 
 Two sea-green 1960s-style cruisers with ivory roofs drive along the main street. They weave gently within their lanes and stop behind other vehicles.
+
+Between the two bridges, leave your vehicle on the western bank and take the steps down to the timber boardwalk. Follow the rope railing between Lotten’s two landings and take the other staircase back up to the street.

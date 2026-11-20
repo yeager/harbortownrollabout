@@ -21,10 +21,11 @@
 
 - Två låga gröna raggarbilar med vitt tak kör mjukt vinglande inom körfältet och stannar i kö.
 
+- Gångbar träbrygga med pollare och rep mellan Lottens två angöringar. Fyra trappsteg kopplar varje ände till västra kajen.
+
 ## Återstående önskemål
 
 - Godstransporter med synlig last och kvittens vid leverans.
-- Trappor som går att använda.
 - Förfina fordonsformer, särskilt BMW-fronten, brandbilen, polisbilen, Tvärbanan och sittande förare. Förbättra vatten- och fönsterreflektioner, arkitektur och strandpromenad utifrån bildreferenser.
 - Utöka gång- och trafiksignaler från centrala korsningen till övriga passager. Speltesta framkomlighet, dialog, läsbarhet, ljudnivå och bildfrekvens i hela staden.
 - Följ upp önskemålet om Blender MCP och verifiera faktisk anslutning innan det räknas som klart.
