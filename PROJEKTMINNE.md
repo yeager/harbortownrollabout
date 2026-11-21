@@ -268,3 +268,4 @@ Brandbilens inspektion i småbåtshamnen har en orange livboj på stativ intill 
 Två personer ur brandskyddsgruppen möter spelaren vid vårdcentralen under brandbilens första uppdrag. Testat gångmålet, mötet och övergången till inspektionen vid kajen i Godot 4.
 Aktuellt uppdrag ligger överst i telefonen även efter att SMS-historiken fyllts. Verifierade fordonsbyte, svensk rubrik och fri körning i Godot 4.
 Kioskens tangentbordsmarkering flyttas till nästa ätbara mellanmål när sista portionen är uppäten, därefter till första köpknappen. Verifierat med två Enter-tryck genom Godots viewport och kontroll av lagersaldo och mynt.
+Paketuppdragen har två synliga kartonger på torget. Efter hämtning visas respektive kartong på vårdcentralens eller småbåtshamnens avlämningsplats när leveransen är klar. Verifierade alla fyra tillstånd i Godot 4.

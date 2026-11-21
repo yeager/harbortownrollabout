@@ -108,6 +108,7 @@ var loose_wheel: Node3D
 var lost_wheel: Node3D
 var bonnet_smoke := CPUParticles3D.new()
 var taxi_leg := 0
+var delivery_parcels: Array[Node3D] = []
 var clinic_fire_team: Array[Node3D] = []
 var bus_companions: Array[Node3D] = []
 var arriving_passenger: Node3D
@@ -2943,6 +2944,14 @@ func _build_target_marker() -> void:
 	for shirt in [Color("#668d9c"),Color("#b37056")]:
 		_make_walker("Bus passenger",0,0,1,shirt,Color("#343c48"))
 		bus_companions.append(walker_data.pop_back().actor)
+	for i in 2:
+		var parcel := Node3D.new()
+		parcel.name = "Delivery parcel %d" % (i+1)
+		add_child(parcel)
+		_make_box("Carton",Vector3(.46,.31,.33),Vector3.UP*.155,Color("#b48355"),false,parcel)
+		_make_box("Packing tape",Vector3(.065,.012,.335),Vector3.UP*.31,Color("#dfbc86"),false,parcel)
+		_make_box("Address label",Vector3(.12,.008,.085),Vector3(.13,.313,.02),Color("#f3efdf"),false,parcel)
+		delivery_parcels.append(parcel)
 	var square := WALK_TARGETS[0]
 	var hydrant := preload("res://environment/fire_hydrant.tscn").instantiate() as Node3D
 	hydrant.position = Vector3(square.x-.85,_foot_height(square.x-.85,square.z),square.z)
@@ -3109,6 +3118,15 @@ func _update_mission_marker() -> void:
 			companion.position.y = _foot_height(companion.position.x,companion.position.z)
 	for member in clinic_fire_team:
 		member.visible = not free_drive and vehicle_index == 2 and mission_index == 0
+	var delivering := vehicle_index in [3,6,7,8,9] and not free_drive
+	for i in delivery_parcels.size():
+		var parcel := delivery_parcels[i]
+		var delivered := mission_index >= i+2
+		parcel.visible = delivering and (mission_index == 0 or delivered)
+		if parcel.visible:
+			var stop := WALK_TARGETS[i+1] if delivered else WALK_TARGETS[0]
+			parcel.position = stop + Vector3(.45+i*.51,0,.68)
+			parcel.position.y = _foot_height(parcel.position.x,parcel.position.z)
 	var rescue := not free_drive and not boating and vehicle_index == 0
 	square_neighbour.visible = rescue and mission_index <= 1
 	square_neighbour.get_meta("arms")[1].rotation.z = 2.35 if mission_index == 0 else 0.0
