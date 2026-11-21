@@ -13,6 +13,7 @@ var panel := VBoxContainer.new()
 var first_product: Button
 var receipt: Label
 var snack_buttons := {}
+var balance: Label
 var basket: Label
 
 func storefront_x(index: int) -> float:
@@ -174,6 +175,8 @@ func rebuild_menu() -> void:
 	var title:=Label.new()
 	title.text=tr(SHOPS[inside])
 	panel.add_child(title)
+	balance = Label.new()
+	panel.add_child(balance)
 	var keyboard_hint := Label.new()
 	keyboard_hint.text = "Tab to choose · Enter to buy" if MENUS[inside].size()>1 else "Enter to buy"
 	if inside == 1:
@@ -226,6 +229,7 @@ func eat_snack(product: String) -> void:
 		first_product.grab_focus()
 
 func refresh_basket() -> void:
+	balance.text = tr("Wallet") + " · " + (tr("%d coins") % get_parent().wallet)
 	var lines := PackedStringArray()
 	var purchases: Dictionary = get_parent().purchases
 	for product in snack_buttons:
