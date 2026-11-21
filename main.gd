@@ -2083,8 +2083,23 @@ func _make_walker(label: String, start_x: float, lane_z: float, direction: float
 	hair.material_override = _material(Color("#46372e"), 0.95)
 	hair.name="Hair"
 	person.add_child(hair)
+	var nose := MeshInstance3D.new()
+	nose.name = "Nose"
+	nose.mesh = head_mesh
+	nose.material_override = head.material_override
+	nose.scale = Vector3(.19,.24,.22)
+	nose.position = Vector3(0,1.712,-.16)
+	person.add_child(nose)
 	for side in [-1,1]:
-		_make_box("Eye",Vector3(.024,.022,.014),Vector3(side*.064,1.745,-.15),Color("#45382e"),false,person)
+		var ear := MeshInstance3D.new()
+		ear.name = "Ear"
+		ear.mesh = head_mesh
+		ear.material_override = head.material_override
+		ear.position = Vector3(side*.16,1.72,.008)
+		ear.scale = Vector3(.18,.28,.17)
+		person.add_child(ear)
+	for side in [-1,1]:
+		_make_box("Eye",Vector3(.024,.022,.014),Vector3(side*.064,1.745,-.158),Color("#45382e"),false,person)
 	_make_box("Collar",Vector3(.26,.073,.23),Vector3(0,1.50,0),shirt.lightened(.22),false,person)
 	for side in [-1.0, 1.0]:
 		var leg_pivot := Node3D.new()

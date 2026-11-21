@@ -193,3 +193,4 @@ Spelprojektet publiceras i det privata GitHub-repot yeager/axels-emergency-vehic
 - BMW X5 har en sittande förare som följer spelarvalet. Testat med Alma i Godot vid byte mellan följkamera och förarvy. Placeringen återstår att granska visuellt.
 - BMW-förarens händer följer rattkransen. Båda figurernas handpositioner kontrollerades i Godot vid neutralläge och fullt rattutslag i båda riktningarna.
 - Axel och Alma har böjda armbågar i BMW:n. Båda poserna granskades i renderade närbilder med karossen dold. Handpositionerna testades även med fullt rattutslag.
+- Förarens profil och fotgängarnas ansikten har modellerad näsa och öron. Både Axel och Alma kontrollerades i renderade bilder genom BMW:ns sidoruta med karossen synlig.
