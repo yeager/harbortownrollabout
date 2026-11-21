@@ -5,6 +5,7 @@ var handset := PanelContainer.new()
 var messages: Array[String] = []
 var inbox := Label.new()
 var unread := 0
+var current_job := ""
 
 const SOCIAL := ["Have you done your homework? — Mum", "A duck just beat me to the ferry. — Grandpa", "I saved you a bun. It only has one tiny bite missing! — Mum"]
 var social_index := 0
@@ -64,6 +65,9 @@ func refresh() -> void:
 	open_button.text=tr("Phone · T")
 	if unread>0: open_button.text+="  (%d)" % unread
 	var lines:=PackedStringArray()
+	if not current_job.is_empty():
+		lines.append(tr("Current job") + "\n" + tr(current_job))
 	for body in messages:
-		lines.append(tr(body))
+		if body != current_job:
+			lines.append(tr(body))
 	inbox.text="\n\n".join(lines) if not lines.is_empty() else tr("No messages yet.")

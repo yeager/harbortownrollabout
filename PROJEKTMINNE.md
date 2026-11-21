@@ -266,3 +266,4 @@ Fordonsstyrda uppdrag, separat framsteg vid byte, familje-SMS och ätknappar fö
 Brandbilens kontroll vid torget har en modellerad brandpost. Testat framkomlighet, kollision och slutförd inspektion till fots i Godot 4.
 Brandbilens inspektion i småbåtshamnen har en orange livboj på stativ intill gångmålet. Testat kollision, framkomlighet och övergång till nästa uppdrag i Godot 4.
 Två personer ur brandskyddsgruppen möter spelaren vid vårdcentralen under brandbilens första uppdrag. Testat gångmålet, mötet och övergången till inspektionen vid kajen i Godot 4.
+Aktuellt uppdrag ligger överst i telefonen även efter att SMS-historiken fyllts. Verifierade fordonsbyte, svensk rubrik och fri körning i Godot 4.

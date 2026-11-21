@@ -686,3 +686,6 @@ msgstr "Ät korv med bröd"
 
 msgid "%s feels extra happy!"
 msgstr "%s är extra glad!"
+
+msgid "Current job"
+msgstr "Aktuellt uppdrag"

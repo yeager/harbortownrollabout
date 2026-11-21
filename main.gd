@@ -3748,6 +3748,8 @@ func _refresh_dispatch() -> void:
 	phone.refresh()
 	if free_drive or mode!="playing" or mission_index>=TARGETS.size():
 		last_dispatch=""
+		phone.current_job=""
+		phone.refresh()
 		return
 	var dispatch: String
 	if vehicle_index==RECOVERY:
@@ -3766,6 +3768,7 @@ func _refresh_dispatch() -> void:
 			dispatch=["A neighbour needs help at the square.","A medic is waiting at the clinic. Please pick them up.","Please bring the first-aid supplies to the marina."][mission_index]
 	if dispatch!=last_dispatch:
 		last_dispatch=dispatch
+		phone.current_job=dispatch
 		phone.receive(dispatch)
 
 func _refresh_ui() -> void:
