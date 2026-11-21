@@ -347,3 +347,4 @@ Den första inlämnade bilen står kvar på verkstaden även medan nästa bil li
 - Bakvingens spännvidd minskad med 11 %, vingprofilens djup med 24 % och höjden ovanför infästningen med 21 %. Mindre rutöppningar, infällda framlyktor med separata projektorer, tätningar och transparenta linser. Kontrollerat från två renderingsvinklar och med körtest.
 Porschens båda projektorlinser lyser med halvljuset på natten. Växlingen mellan dag och natt är testad i Godot 4.6.3.
 Manuella väderbyten följer nu samma långsamma förlopp som automatiska. Godot-testet tests/weather_transition.gd kontrollerar moln före snö och att snöfallet fortsätter vid byte till automatik.
+Automatiken kan ge slask under vår och höst. Testet för väderövergångar kontrollerar även att slask ger både väta och snö på marken.

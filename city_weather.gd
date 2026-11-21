@@ -88,7 +88,11 @@ func tick(delta: float) -> void:
 		season_age = 0
 	if forecast_age >= 300:
 		forecast_age = 0
-		var choices := [1,2] if season != 4 else [1,3,4]
+		var choices := [1, 2, 4] # Spring and autumn can bring sleet.
+		if season == 2:
+			choices = [1, 2]
+		elif season == 4:
+			choices = [1, 3, 4]
 		choices.erase(forecast)
 		forecast = choices.pick_random()
 	# Keep the inherited manual forecast until the next seasonal forecast is due.

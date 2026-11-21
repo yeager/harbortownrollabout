@@ -25,5 +25,12 @@ func check_transition() -> void:
 		printerr("Automatic weather lost the ongoing snowfall")
 		quit(1)
 		return
+	weather.weather_setting = 4
+	for second in range(160):
+		weather.tick(1.0)
+	if not Vector2(weather.wet, weather.snow).is_equal_approx(Vector2(.65, .55)):
+		printerr("Slush should leave both moisture and snow on the ground")
+		quit(1)
+		return
 	print("Manual snowfall builds gradually and continues in automatic mode.")
 	quit()
