@@ -942,8 +942,9 @@ func _build_waterfront() -> void:
 		ALBEDO = mix(ALBEDO,vec3(.62,.74,.74),clamp(foam*(.55+.22*chop+.17*fine),0.,1.));
 		// Intersect the reflected sightline with the two saloon window bands.
 		vec3 eye = CAMERA_POSITION_WORLD;
-		vec3 ray = normalize(vec3(p.x-eye.x,eye.y+.99,p.y-eye.z));
-		ray.xz += slope*.9;
+		vec3 incoming = normalize(vec3(p.x,-.99,p.y)-eye);
+		vec3 wave_normal = normalize(vec3(slope.x,1.,slope.y));
+		vec3 ray = reflect(incoming,wave_normal);
 		float side = sign(eye.x-ferry_center.x);
 		float face = ferry_center.x+side*1.86;
 		float t = (face-p.x)/(abs(ray.x)>.001 ? ray.x : .001);
@@ -952,8 +953,10 @@ func _build_waterfront() -> void:
 		float pane = smoothstep(.03,.13,abs(fract((hit.y+4.1)/.82+.5)-.5));
 		float reflection = float(t>0.)*band*(1.-smoothstep(4.,4.24,abs(hit.y)))*pane;
 		EMISSION = dusk*(vec3(.034,.058,.084)*(.75+.25*chop)+vec3(.66,.42,.21)*reflection*(.25+.75*smoothstep(-.5,.8,chop+fine*.38)));
-		ROUGHNESS = .31+.10*rain;
-		METALLIC = .12;
+		// Clear wave faces catch sharp highlights. Rain and aerated wake scatter them.
+		ROUGHNESS = mix(.19+.16*rain,.65,clamp(foam,0.,1.));
+		METALLIC = 0.;
+		SPECULAR = .255;
 	}
 	"""
 	water_finish.shader = water
