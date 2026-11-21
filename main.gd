@@ -3760,7 +3760,7 @@ func _refresh_ui() -> void:
 		start_button.text = "Continue walking" if walker.visible else "Continue driving"
 	if show_overlay and mode != "complete":
 		if boating:
-			subtitle_label.text = "Explore the canal. Steer with A and D or the arrow keys."
+			subtitle_label.text = "Steer with A and D or the arrow keys. Hold the left mouse button for throttle. Hold the right to slow down, then reverse."
 			start_button.text = "Start boating" if mode=="menu" else "Continue boating"
 		elif tram_mode > 0:
 			subtitle_label.text = "The tram drives itself and stops at each platform." if tram_mode==1 else "Control the speed. The tram follows the rails and stops at each platform."

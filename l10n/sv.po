@@ -456,8 +456,8 @@ msgstr "%s × %d"
 msgid "Waiting for a green light"
 msgstr "Väntar på grönt ljus"
 
-msgid "Explore the canal. Steer with A and D or the arrow keys."
-msgstr "Utforska kanalen. Styr med A och D eller piltangenterna."
+msgid "Steer with A and D or the arrow keys. Hold the left mouse button for throttle. Hold the right to slow down, then reverse."
+msgstr "Styr med A och D eller piltangenterna. Håll vänster musknapp för att gasa. Håll höger för att sakta in och sedan backa."
 
 msgid "Start boating"
 msgstr "Starta båtturen"
