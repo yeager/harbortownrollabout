@@ -488,3 +488,9 @@ msgstr "Du behöver ett mynt till."
 
 msgid "Complete a mission to earn coins."
 msgstr "Gör klart ett uppdrag för att tjäna mynt."
+
+msgid "Tab to choose · Enter to buy"
+msgstr "Tabb för att välja · Enter för att köpa"
+
+msgid "Enter to buy"
+msgstr "Enter för att köpa"

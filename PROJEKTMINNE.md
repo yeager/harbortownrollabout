@@ -157,3 +157,5 @@ Spelprojektet publiceras i det privata GitHub-repot yeager/axels-emergency-vehic
 - När pengarna inte räcker visar butiken beloppet som saknas och hur spelaren tjänar mynt. Svenska besked och köp med exakt pris provades i kaféet.
 
 - Vid inträde i en butik får första varan tangentbordsfokus. Ett köp av en kanelbulle med Enter verifierades med Godots inmatningssystem.
+
+- Butiksmenyn visar hur man väljer vara med Tabb och köper med Enter. I kiosken provades ett köp av korv med bröd med dessa två tangenter.

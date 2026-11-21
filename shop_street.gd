@@ -170,6 +170,10 @@ func rebuild_menu() -> void:
 	var title:=Label.new()
 	title.text=tr(SHOPS[inside])
 	panel.add_child(title)
+	var keyboard_hint := Label.new()
+	keyboard_hint.text = "Tab to choose · Enter to buy" if MENUS[inside].size()>1 else "Enter to buy"
+	keyboard_hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	panel.add_child(keyboard_hint)
 	for i in MENUS[inside].size():
 		var button:=Button.new()
 		button.custom_minimum_size.y=44

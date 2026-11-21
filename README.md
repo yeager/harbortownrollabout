@@ -56,7 +56,7 @@ Press **T** or click **Phone** during play to open the four most recent dispatch
 
 ## Shops
 
-Park along Stationsallén, south of the vehicle depot, and walk through a shop doorway. The café sells cinnamon buns and berry cordial, the kiosk sells ice cream and hot dogs, and the pizzeria and sweet shop sell pizza and pick-and-mix sweets. Select a product to pay with mission coins. The game saves the purchase and remaining balance together.
+Park along Stationsallén, south of the vehicle depot, and walk through a shop doorway. The café sells cinnamon buns and berry cordial, the kiosk sells ice cream and hot dogs, and the pizzeria and sweet shop sell pizza and pick-and-mix sweets. The first product is focused when you enter. Press Tab to choose another product and Enter to buy it with mission coins. The game saves the purchase and remaining balance together.
 
 ## Roadside recovery
 
