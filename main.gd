@@ -611,6 +611,8 @@ func _draw_skid(previous_pose: Transform3D) -> void:
 	# Tyres compress snow into wider grey tracks and expose darker slush when wet.
 	var track_color := Color("#1b1b1c").lerp(Color("#83949b").lerp(Color("#47575c"), weather.wet), weather.snow)
 	var track_width := lerpf(.19,.245,weather.snow)
+	if vehicle_index == SNOWMOBILE:
+		track_width = .40
 	for wheel in rear_tire_contacts.size():
 		var offset := rear_tire_contacts[wheel]
 		if starting:
@@ -630,7 +632,7 @@ func _draw_skid(previous_pose: Transform3D) -> void:
 		skid_cursor = (skid_cursor + 1) % SKID_CAPACITY
 		skid_marks.visible_instance_count = mini(SKID_CAPACITY, skid_marks.visible_instance_count + 1)
 		skid_anchors[wheel] = endpoint
-	if not AudioServer.is_bus_mute(0):
+	if vehicle_index != SNOWMOBILE and not AudioServer.is_bus_mute(0):
 		tire_player.pitch_scale = 0.78 + clampf(speed / (250.0 / 3.6), 0, 1) * 0.45
 		tire_player.volume_db = lerpf(-20.0, -8.0, clampf(speed / 22.0, 0, 1)) - 5.0*weather.snow
 		if not tire_player.playing:
@@ -2704,6 +2706,7 @@ func _load_vehicle_model() -> void:
 	rear_tire_contacts.clear()
 	front_knuckles.clear()
 	if vehicle_index == SNOWMOBILE:
+		rear_tire_contacts.append(Vector3(0, 0, 1.14))
 		for joint in vehicle_model.find_children("SkiPivot*", "Node3D", true, false):
 			front_knuckles.append(joint)
 		cabin_wheel = vehicle_model.find_child("HandlebarPivot", true, false)
