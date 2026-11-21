@@ -171,6 +171,7 @@ var moorings: Array[Dictionary] = []
 var street_signals := preload("res://street_signals.gd").new()
 var tram := preload("res://tram.gd").new()
 var boating := false
+var road_driver: Node3D
 var skipper: Node3D
 var launch: Node3D
 var navigation_lenses: Array[StandardMaterial3D] = []
@@ -1437,12 +1438,15 @@ func _build_lampposts() -> void:
 
 func _apply_player_appearance() -> void:
 	var jacket := _material(Color("#a85641") if play_as_alma else Color("#648faa"))
-	for figure: Node3D in [walker,skipper]:
+	for figure: Node3D in [walker,skipper,road_driver]:
 		figure.scale = Vector3.ONE*(.88 if play_as_alma else 1.0)
 		figure.get_node("Ponytail").visible = play_as_alma
 		figure.get_node("Jacket").material_override = jacket
 		for arm in figure.get_meta("arms"):
 			arm.get_child(0).material_override = jacket
+	# Keep the hips on the cushion as the selected driver's height changes.
+	road_driver.scale *= .78
+	road_driver.position = Vector3(-.32, .88 - .87 * road_driver.scale.y, -.04)
 
 func _build_depot() -> void:
 	_make_driving_surface("Motor pool", Vector3(25,.1,11), Vector3(-37,-.18,15), Color("#565c5a"))
@@ -1502,6 +1506,16 @@ func _build_depot() -> void:
 	ponytail.rotation.x=-.23
 	ponytail.material_override=_material(Color("#523b30"))
 	walker.add_child(ponytail)
+	_make_walker("BMW driver",0,0,1,Color("#648faa"),Color("#30414d"))
+	road_driver = walker_data.pop_back().actor
+	road_driver.reparent(ambulance,false)
+	road_driver.rotation = Vector3.ZERO
+	road_driver.add_child(ponytail.duplicate())
+	for leg in road_driver.get_meta("legs"):
+		leg.rotation.x = 1.35
+	for arm in road_driver.get_meta("arms"):
+		arm.rotation.x = 1.13
+	road_driver.hide()
 	_make_walker("Helmsperson",0,0,1,Color("#648faa"),Color("#30414d"))
 	skipper = walker_data.pop_back().actor
 	skipper.reparent(launch,false)
@@ -3150,6 +3164,8 @@ func _refresh_dispatch() -> void:
 		phone.receive(dispatch)
 
 func _refresh_ui() -> void:
+	if road_driver:
+		road_driver.visible = vehicle_index == 3 and mode == "playing" and not walker.visible and not boating and tram_mode == 0 and not cockpit_view
 	if skipper: skipper.visible = boating and mode == "playing"
 	if not is_instance_valid(mission_label): return
 	var mission_activity := "Taxi fares" if vehicle_index == TAXI else "Roadside recovery" if vehicle_index == RECOVERY else "Three missions"
