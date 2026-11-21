@@ -53,7 +53,7 @@ func update(season: int, intensity: Vector2) -> void:
 	if intensity.y >= .16 or season == 4:
 		next = Outfit.WINTER
 	if intensity.x >= .22:
-		next = Outfit.SLUSH if intensity.y >= .16 else Outfit.RAIN
+		next = Outfit.SLUSH if next == Outfit.WINTER else Outfit.RAIN
 	elif next == Outfit.LIGHT and season in [1,3]:
 		next = Outfit.SCARF
 	if current == next:

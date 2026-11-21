@@ -348,3 +348,4 @@ Den första inlämnade bilen står kvar på verkstaden även medan nästa bil li
 Porschens båda projektorlinser lyser med halvljuset på natten. Växlingen mellan dag och natt är testad i Godot 4.6.3.
 Manuella väderbyten följer nu samma långsamma förlopp som automatiska. Godot-testet tests/weather_transition.gd kontrollerar moln före snö och att snöfallet fortsätter vid byte till automatik.
 Automatiken kan ge slask under vår och höst. Testet för väderövergångar kontrollerar även att slask ger både väta och snö på marken.
+Vid vinterregn behåller personerna halsduken när regnhatten kommer på. Plaggens synlighet kontrollerad i Godot för vinter- och sommarregn.
