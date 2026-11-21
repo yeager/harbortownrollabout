@@ -722,3 +722,9 @@ msgstr "Jag hittade din försvunna strumpa. Nallen hade den som mössa. – Mamm
 
 msgid "Close phone · T"
 msgstr "Stäng telefonen · T"
+
+msgid "The pupil is on board."
+msgstr "Eleven sitter i taxin."
+
+msgid "Thanks! I can see my school!"
+msgstr "Tack! Jag ser min skola!"

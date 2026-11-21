@@ -839,6 +839,11 @@ func _help_at_target() -> void:
 				_save_preferences()
 			parked_at_target = 0
 			message = "Passenger on board." if taxi_leg%2 else "Thank you for the ride!"
+			if _school_fare(taxi_leg-1):
+				if taxi_leg%2:
+					message = "The pupil is on board."
+				elif _taxi_stop(taxi_leg-1) == SCHOOL:
+					message = "Thanks! I can see my school!"
 			message_timer = 3
 			_update_mission_marker()
 			_refresh_ui()

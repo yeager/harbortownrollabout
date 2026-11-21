@@ -289,3 +289,4 @@ Escape stänger en öppen telefon och låter körningen fortsätta. Testade äve
 Fordonsradion pausar vid avstigning och fortsätter på samma ställe vid instigning. Testade båda sätesbyten och avstängning med radioåtgärden i Godot.
 Tvärbanans hållplatsbromsning räknar med rörelsen under varje bildruta. Verifierade alla stationer i förar- och passagerarläge vid 30, 60 och 120 simuleringssteg per sekund.
 Skolans taxiplats har en gul dubbelsidig TAXI-skylt vid uppdragets trottoarkant. Kontrollerade placering och båda läsriktningarna i Godot.
+Skolskjutsen bekräftar att eleven sitter i taxin och eleven tackar vid skolan. Testade svensk text, hämtning och avlämning och exakt en utbetalning om 15 mynt.
