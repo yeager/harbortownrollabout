@@ -159,6 +159,7 @@ var tram := preload("res://tram.gd").new()
 var boating := false
 var skipper: Node3D
 var launch: Node3D
+var navigation_lenses: Array[StandardMaterial3D] = []
 var outboard: Node3D
 var launch_speed := 0.0
 var helicopter: Node3D
@@ -973,6 +974,18 @@ func _build_marina() -> void:
 	var launch_model := preload("res://vehicles/motorboat.glb").instantiate() as Node3D
 	launch_model.rotation.y = PI
 	launch.add_child(launch_model)
+	for side in [-1,1]:
+		var tint := Color("#dc3936") if side<0 else Color("#359e64")
+		var mount := Vector3(side*.94,.64,-.7)
+		_make_box("Sidelight housing",Vector3(.09,.10,.19),mount,Color("#2c3439"),false,launch)
+		var lens := _make_box("Sidelight lens",Vector3(.038,.065,.12),
+			mount+Vector3(side*.044,.014,-.024),tint,false,launch)
+		var finish := StandardMaterial3D.new()
+		finish.albedo_color = tint.darkened(.34)
+		finish.emission_enabled = true
+		finish.emission = tint
+		lens.material_override = finish
+		navigation_lenses.append(finish)
 	outboard = launch_model.find_child("Outboard swivel",true,false)
 	launch.position=Vector3(79,-.94,46)
 	for x in [58,65,72,79,84]:
@@ -1285,6 +1298,8 @@ func _update_daylight(delta: float) -> void:
 	var night := 1.0 if time_mode == 1 else (smoothstep(-.4,.4,-cos(day_phase*TAU)) if time_mode == 2 else 0.0)
 	if absf(night-last_night)<.006: return
 	last_night = night
+	for lens in navigation_lenses:
+		lens.emission_energy_multiplier = night*3.2
 	water_finish.set_shader_parameter("dusk",night)
 	if saloon_glazing:
 		saloon_glazing.emission_energy_multiplier = night*.85
