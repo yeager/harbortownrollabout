@@ -129,8 +129,13 @@ func advance(distance: float, delta: float, pushing: bool) -> void:
 		foot += Vector2(-ankle_offset.z, ankle_offset.y)
 		shoe_angles.append(shoe_angle)
 		if ground_height.is_valid():
-			var point := actor.to_global(Vector3(hip_centres[i], 0, -foot.x))
-			var elevation := (float(ground_height.call(point.x, point.z)) - actor.global_position.y) / actor.scale.y
+			# A shoe can straddle two treads. Check both ends of the pitched sole.
+			var elevation := -INF
+			for sole_z: float in [.075, -.155]:
+				var sole := Vector3(0, -SOLE_HEIGHT, sole_z).rotated(Vector3.RIGHT, shoe_angle)
+				var point := actor.to_global(Vector3(hip_centres[i], 0, -foot.x - .025 + sole.z))
+				var ground := (float(ground_height.call(point.x, point.z)) - actor.global_position.y) / actor.scale.y
+				elevation = maxf(elevation, ground - (SOLE_HEIGHT + ankle_offset.y + sole.y))
 			foot.y += clampf(elevation, -0.22, 0.22)
 		feet.append(foot)
 		hip_y = minf(hip_y, SOLE_HEIGHT + foot.y + sqrt(maxf(0.0, (THIGH + SHIN) ** 2 - foot.x ** 2 - lateral_shift ** 2)) - 0.002)

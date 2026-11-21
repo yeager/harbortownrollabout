@@ -51,5 +51,17 @@ func check_gait() -> void:
 			printerr("Player did not settle into a balanced standing pose")
 			quit(1)
 			return
+		var terrain: Callable = gait.ground_height
+		gait.ground_height = func(x: float, z: float) -> float:
+			var local := player.to_local(Vector3(x, player.global_position.y, z))
+			return player.global_position.y + (.12 if local.z < -.10 else 0.0)
+		game._animate_steps(player, 0.0, 1.0 / 60.0)
+		for shoe: Node3D in gait.shoes:
+			var toe := shoe.to_global(Vector3(0, -gait.SOLE_HEIGHT, -.155))
+			if absf(toe.y - player.global_position.y - .12) > .002:
+				printerr("Toe did not rest on the higher tread")
+				quit(1)
+				return
+		gait.ground_height = terrain
 	print("Axel and Alma transfer weight, maintain lateral foot placement and settle at rest.")
 	quit()
