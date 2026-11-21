@@ -57,6 +57,17 @@ func _on_visibility_changed() -> void:
 		history_scroll.scroll_vertical = 0
 		refresh()
 
+func _unhandled_key_input(event: InputEvent) -> void:
+	if not handset.is_visible_in_tree() or not event is InputEventKey or not event.pressed: return
+	var bar := history_scroll.get_v_scroll_bar()
+	match event.keycode:
+		KEY_PAGEUP: history_scroll.scroll_vertical -= int(bar.page)
+		KEY_PAGEDOWN: history_scroll.scroll_vertical += int(bar.page)
+		KEY_HOME: history_scroll.scroll_vertical = 0
+		KEY_END: history_scroll.scroll_vertical = int(bar.max_value)
+		_: return
+	get_viewport().set_input_as_handled()
+
 func receive(body: String) -> void:
 	messages.push_front(body)
 	if messages.size()>4: messages.pop_back()

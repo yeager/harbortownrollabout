@@ -108,3 +108,4 @@ You can also hold the left mouse button directly on either on-screen pedal. Rele
 Police patrols, fire safety checks, ambulance calls, taxi fares, towing and bus routes depend on your vehicle. Personal cars deliver parcels and the snowmobile delivers blankets. Switching vehicles during a session preserves your place in each vehicle's jobs. The phone also receives occasional family texts during play.
 
 At the kiosk, buy an ice cream or a hot dog, then choose the matching **Eat** button. Axel or Alma consumes one snack and feels extra happy for 25 seconds of play.
+With the phone open, use Page Up or Page Down to read your messages. Home returns to the current job and End jumps to the oldest visible message.

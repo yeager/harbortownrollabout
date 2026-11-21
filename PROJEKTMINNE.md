@@ -271,3 +271,4 @@ Kioskens tangentbordsmarkering flyttas till nästa ätbara mellanmål när sista
 Paketuppdragen har två synliga kartonger på torget. Efter hämtning visas respektive kartong på vårdcentralens eller småbåtshamnens avlämningsplats när leveransen är klar. Verifierade alla fyra tillstånd i Godot 4.
 Två hoprullade filtar syns vid snöskoterns hämtplats, på skotern under leverans och hos mottagarna efter avlämning. Hela uppdragsföljden verifierad i Godot 4.
 Telefonens SMS-lista går att rulla och öppnas högst upp. Verifierade separat med svensk text i Godot 4 och 640×360-fönster.
+Telefonen stöder Page Up, Page Down, Home och End när inkorgen är öppen. Testade tangentbordshändelser i en separat telefonvy med svensk text i Godot 4.
