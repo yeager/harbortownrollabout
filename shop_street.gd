@@ -10,6 +10,7 @@ var awnings: Array[Node3D] = []
 var inside := -1
 var panel := VBoxContainer.new()
 var receipt: Label
+var basket: Label
 
 func storefront_x(index: int) -> float:
 	return -39.0+index*9.4
@@ -88,6 +89,20 @@ func rebuild_menu() -> void:
 	receipt=Label.new()
 	receipt.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
 	panel.add_child(receipt)
+	basket = Label.new()
+	basket.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	panel.add_child(basket)
+	refresh_basket()
+
+func refresh_basket() -> void:
+	var lines := PackedStringArray()
+	var purchases: Dictionary = get_parent().purchases
+	for menu in MENUS:
+		for product in menu:
+			var count := int(purchases.get(product,0))
+			if count > 0: lines.append(tr("%s × %d") % [tr(product),count])
+	basket.text = tr("Your purchases") + "\n" + "\n".join(lines)
+	basket.visible = not lines.is_empty()
 
 func purchase(shop: int, item: int) -> void:
 	var game=get_parent()
@@ -99,6 +114,7 @@ func purchase(shop: int, item: int) -> void:
 	var product:String=MENUS[shop][item]
 	game.wallet-=cost
 	game.purchases[product]=int(game.purchases.get(product,0))+1
+	refresh_basket()
 	game._save_preferences()
 	game._refresh_ui()
 	receipt.text=tr("Bought %s. Thank you!") % tr(product)

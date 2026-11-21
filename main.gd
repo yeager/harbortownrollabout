@@ -249,6 +249,7 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_TRANSLATION_CHANGED and is_node_ready():
+		if shops.inside >= 0: shops.rebuild_menu()
 		_update_mission_marker()
 		_refresh_ui()
 		driving_controls.queue_redraw()

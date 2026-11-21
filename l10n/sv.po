@@ -446,3 +446,9 @@ msgstr "Bilen står på ditt flak. Följ pilarna till verkstaden så får du 20 
 
 msgid "Car loaded onto the flatbed."
 msgstr "Bilen är lastad på flaket."
+
+msgid "Your purchases"
+msgstr "Dina köp"
+
+msgid "%s × %d"
+msgstr "%s × %d"
