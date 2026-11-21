@@ -9,6 +9,8 @@ var history_scroll := ScrollContainer.new()
 var unread := 0
 var current_job := ""
 
+const HISTORY_LIMIT := 32
+
 const SOCIAL := [
 	"Have you done your homework? — Mum",
 	"A duck just beat me to the ferry. — Grandpa",
@@ -83,7 +85,7 @@ func _unhandled_key_input(event: InputEvent) -> void:
 
 func receive(body: String) -> void:
 	messages.push_front(body)
-	if messages.size()>4: messages.pop_back()
+	if messages.size() > HISTORY_LIMIT: messages.pop_back()
 	if not handset.is_visible_in_tree(): unread=mini(unread+1,messages.size())
 	refresh()
 

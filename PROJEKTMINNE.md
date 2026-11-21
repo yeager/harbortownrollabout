@@ -6,7 +6,7 @@
 - Ambulans, polisbil, brandbil, svart BMW X5 M60i och taxi. Fordonsbyte till fots, muspedaler, rattindikator, horn, sirener och bromsspår. BMW har även förarvy.
 - Sjöstadsinspirerat vägnät med kanaler, broar, småbåtar, kajhus, parkering vid depån, bibliotek, bageri, vårdcentral och brandstation.
 - Trafik, cyklister, utryckningar, långsamma A-traktorer, hälsande fotgängare, signaler vid centrala korsningen, dag/natt och gatlampor. Manuellt/automatiskt väder och årstider.
-- Telefonen (T) tar emot uppdrag och kvitton på engelska eller svenska och visar de fyra senaste meddelandena under spelomgången.
+- Telefonen (T) tar emot uppdrag och kvitton på engelska eller svenska och visar de 32 senaste meddelandena under spelomgången.
 - Tre uppdragssteg, vägvisande pilar och återkommande taxikörningar. 10 mynt per räddningssteg och 15 per avslutad taxiresa.
 - Tvärbanan kan följas som passagerare eller köras på en slinga med tre hållplatser. Dörrskylten säger ”Vi åker inte till Ekerö”.
 - Körbar motorbåt i södra bassängen, färjan Lotten i linjetrafik, polishelikopter på patrull.
@@ -354,3 +354,4 @@ Partikelsystemen avger enbart den nederbörd som faktiskt faller. Testat i Godot
 Nederbörden placeras efter kamerans förflyttning i samma bildruta. Testat med Lotten och Tvärbanan i Godot 4.6.3.
 Spelets paus fryser även fallande regn och snö. Godot-test verifierade båda partikelsystemens hastighet vid paus och återupptagning under slask.
 Verifierade fordonsradion vid byte från bil till Lotten. Musiken pausade till fots och fortsatte från samma ställe ombord.
+Utökade SMS-historiken från fyra till 32 meddelanden per spelomgång. Verifierade läsning av ett familje-SMS efter 31 kvitton, olästräknaren och att äldsta meddelandet försvinner först vid nästa leverans.

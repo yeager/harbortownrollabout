@@ -59,7 +59,7 @@ Two slow, white pickup-converted A-traktors share the main street. Look for the 
 
 Choose **Axel · 15** or **Alma · 12** beside the vehicle selector. The choice changes the character you see on foot. Each rescue mission step earns 10 coins and completing a taxi fare earns 15. Both characters share one wallet on this installation.
 
-Press **T** or click **Phone** to read your current assignment above the recent message history. The inbox holds up to four messages, including dispatches, family texts and payment receipts. Press **Escape** to close it and return to play. Changing the language also translates messages you have already received.
+Press **T** or click **Phone** to read your current assignment above the recent message history. The inbox holds up to 32 messages, including dispatches, family texts and payment receipts. Press **Escape** to close it and return to play. Changing the language also translates messages you have already received.
 
 ## Shops
 
