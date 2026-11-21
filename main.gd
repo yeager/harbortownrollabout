@@ -140,6 +140,7 @@ var skid_marks := MultiMesh.new()
 var skid_cursor := 0
 var snow_marks := MultiMesh.new()
 var snow_cursor := 0
+var asphalt_track_finish := StandardMaterial3D.new()
 var snow_track_finish := StandardMaterial3D.new()
 var rear_tire_contacts := PackedVector3Array()
 var skid_anchors := PackedVector3Array()
@@ -252,6 +253,7 @@ func _process(delta: float) -> void:
 	for surface in [road_finish,sidewalk_finish,soil_finish,quay_finish]:
 		surface.set_shader_parameter("wet",weather.wet)
 		surface.set_shader_parameter("snow_cover",weather.snow)
+	asphalt_track_finish.albedo_color.a = 1.0 - smoothstep(.05,.7,weather.snow)
 	snow_track_finish.albedo_color.a = smoothstep(.01,.25,weather.snow)
 	if weather.snow <= .01 and snow_marks.visible_instance_count > 0:
 		snow_marks.visible_instance_count = 0
@@ -598,13 +600,13 @@ func _drive(delta: float) -> void:
 		_end_skid()
 
 func _build_brake_effects() -> void:
-	var rubber := StandardMaterial3D.new()
-	rubber.vertex_color_use_as_albedo = true
-	rubber.vertex_color_is_srgb = true
-	rubber.roughness = 1.0
+	asphalt_track_finish.vertex_color_use_as_albedo = true
+	asphalt_track_finish.vertex_color_is_srgb = true
+	asphalt_track_finish.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	asphalt_track_finish.roughness = 1.0
 	var strip := PlaneMesh.new()
 	strip.size = Vector2.ONE
-	strip.material = rubber
+	strip.material = asphalt_track_finish
 	snow_track_finish.vertex_color_use_as_albedo = true
 	snow_track_finish.vertex_color_is_srgb = true
 	snow_track_finish.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
