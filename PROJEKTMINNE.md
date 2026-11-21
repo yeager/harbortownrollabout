@@ -307,3 +307,4 @@ Svensk hållplatsinformation verifierad i förar- och passagerarläge genom hela
 Den första inlämnade bilen står kvar på verkstaden även medan nästa bil ligger på bärgarens flak. Verifierade båda bärgningarna och två utbetalningar om 20 mynt.
 - Slask kombinerar halsduk, regnhatt och regnkrage. Plaggens synlighet vid slask, snö, regn och uppehåll kontrollerades i Godot 4.6.3.
 - Automatiskt väder behåller den manuella prognosen i fem spelminuter även vid ovanligt årstidsväder. Testat med sommarsnö och gradvis upptining i Godot 4.6.3.
+- Regnstrimmor följer fallriktningen och sexkantiga snöflingor varierar i storlek. Partiklarnas livslängd täcker även hög följkamera. Vädertest kört utan grafik i Godot 4.6.3, visuell kontroll återstår.

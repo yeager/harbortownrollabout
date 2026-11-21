@@ -49,16 +49,33 @@ func particles(flakes: bool) -> GPUParticles3D:
 	motion.initial_velocity_min = 1.7 if flakes else 12.0
 	motion.initial_velocity_max = 2.4 if flakes else 14.0
 	emitter.process_material = motion
-	var drop := BoxMesh.new()
-	drop.size = Vector3(.045,.035,.04) if flakes else Vector3(.014,.20,.012)
+	var drop: PrimitiveMesh
+	if flakes:
+		var crystal := CylinderMesh.new()
+		crystal.radial_segments = 6
+		crystal.rings = 0
+		crystal.top_radius = .025
+		crystal.bottom_radius = .025
+		crystal.height = .007
+		drop = crystal
+		motion.particle_flag_rotate_y = true
+		motion.angular_velocity_min = -70
+		motion.angular_velocity_max = 70
+		motion.scale_min = .55
+		motion.scale_max = 1.35
+	else:
+		var streak := BoxMesh.new()
+		streak.size = Vector3(.014,.20,.012)
+		drop = streak
+		motion.particle_flag_align_y = true
 	var finish := StandardMaterial3D.new()
 	finish.albedo_color = Color("#e7edf1") if flakes else Color("#a2b7c2")
 	drop.material = finish
 	emitter.draw_pass_1 = drop
 	emitter.amount = 1200
 	emitter.amount_ratio = 0
-	emitter.lifetime = 8 if flakes else 1.4
-	emitter.visibility_aabb = AABB(Vector3(-24,-24,-24),Vector3(48,29,48))
+	emitter.lifetime = 14 if flakes else 2.0
+	emitter.visibility_aabb = AABB(Vector3(-26,-36,-26),Vector3(52,40,52))
 	emitter.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	add_child(emitter)
 	return emitter
