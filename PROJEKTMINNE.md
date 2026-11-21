@@ -333,3 +333,4 @@ Den första inlämnade bilen står kvar på verkstaden även medan nästa bil li
 - Testet tests/water_exit.gd kontrollerar att spelaren kan stiga ur och i bilen på båda sidor av båda broarna och stannar ombord på motorbåten ute i kanalen.
 - Lotten visar en personlig nedräkning när avstigning är vald. Svensk status vid val och ånger samt avstigning vid nästa brygga testade i Godot.
 - Uppdragspilar döljs vid påstigning på Lotten och visas från den nya bryggan vid avstigning. Testat med aktivt uppdrag i Godot.
+- Vid båda färjebryggorna börjar gångvägvisningen på landgångens brädor och leder via kajtrappan till gatan. Första pilens läge och höjd kontrollerade i Godot.

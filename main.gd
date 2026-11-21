@@ -3055,7 +3055,15 @@ func _update_route_arrows() -> void:
 	if free_drive or ferry_passenger or mode!="playing" or mission_index>=TARGETS.size(): return
 	var origin := walker.position if walker.visible else ambulance.position
 	var target := _mission_destination()
-	var points := navigator.path(Vector2(origin.x,origin.z),Vector2(target.x,target.z))
+	var start := Vector2(origin.x, origin.z)
+	var points := PackedVector2Array()
+	if walker.visible and not is_nan(_pier_height(start.x, start.y)):
+		var landing_z: float = FERRY_LANDINGS[0] if start.y < (FERRY_LANDINGS[0]+FERRY_LANDINGS[1])*.5 else FERRY_LANDINGS[1]
+		points.append(start)
+		points.append(Vector2(start.x, landing_z))
+		start = Vector2(48, landing_z)
+		points.append(start)
+	points.append_array(navigator.path(start, Vector2(target.x, target.z)))
 	var gap := 3.5
 	var used := 0
 	for i in range(1,points.size()):
@@ -3065,7 +3073,8 @@ func _update_route_arrows() -> void:
 		while gap<length and used<route_arrows.size():
 			var point := points[i-1]+direction*gap
 			var arrow := route_arrows[used]
-			arrow.position = Vector3(point.x,_surface_height(point.x,point.y)+.07,point.y)
+			var height := _foot_height(point.x,point.y) if walker.visible else _surface_height(point.x,point.y)
+			arrow.position = Vector3(point.x,height+.07,point.y)
 			arrow.rotation.y = atan2(-direction.x,-direction.y)
 			arrow.visible=true
 			used+=1
