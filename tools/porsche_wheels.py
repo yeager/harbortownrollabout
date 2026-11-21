@@ -20,7 +20,7 @@ def build_wheels(front_y, rear_y, front_track, rear_track, front_radius=.345,
     """Create separate tire, rim, rotor and caliper meshes for the Godot rig."""
     rubber = _material("GT road rubber", (.017, .020, .023), .02, .76)
     rotor = _material("Carbon ceramic brake rotor", (.21, .22, .22), .65, .45)
-    alloy = _material("Satin titanium forged alloy", (.37, .40, .43), .88, .26)
+    alloy = _material("Carmine red forged alloy", (.58, .012, .023), .56, .25)
     shadow = _material("Wheel recess graphite", (.027, .032, .037), .68, .41)
     gold = _material("Ceramic brake ochre", (.94, .46, .018), .35, .30)
     for y, track, radius, width in [(front_y, front_track, front_radius, front_width),
@@ -81,20 +81,19 @@ def build_wheels(front_y, rear_y, front_track, rear_track, front_radius=.345,
             vertices, faces = [], []
             for i in range(10):
                 angle = math.tau*i/10
-                for fork in (-1,1):
-                    # A dished spoke splits into two slender arms at the rim.
-                    outline = [(.19,0,.078,.64), (.56,.022,.041,.72),
-                               (.74,fork*.063,.033,.82), (.957,fork*.105,.027,.91)]
-                    base = len(vertices)
-                    for r, twist, spread, depth in outline:
-                        for dx, lateral in [(0,-spread),(0,spread),(-.022,spread),(-.022,-spread)]:
-                            a = angle+twist+lateral
-                            vertices.append((half*depth+dx, rim*r*math.cos(a), rim*r*math.sin(a)))
-                    for row in range(3):
-                        for j in range(4):
-                            k = (j+1)%4
-                            faces.append((base+4*row+j,base+4*row+k,base+4*row+4+k,base+4*row+4+j))
-            mesh("Alloy wheel GT split spokes", vertices, [f[::-1] for f in faces], alloy)
+                # Ten open, tapered spokes leave the ceramic rotor visible.
+                outline = [(.19,0,.18,.64), (.42,.018,.095,.72),
+                           (.73,.041,.059,.82), (.957,.052,.044,.91)]
+                base = len(vertices)
+                for r, twist, spread, depth in outline:
+                    for dx, lateral in [(0,-spread),(0,spread),(-.022,spread),(-.022,-spread)]:
+                        a = angle+twist+lateral
+                        vertices.append((half*depth+dx, rim*r*math.cos(a), rim*r*math.sin(a)))
+                for row in range(3):
+                    for j in range(4):
+                        k = (j+1)%4
+                        faces.append((base+4*row+j,base+4*row+k,base+4*row+4+k,base+4*row+4+j))
+            mesh("Alloy wheel GT ten spokes", vertices, [f[::-1] for f in faces], alloy)
             lathe("Wheel hub GT centre lock", [(half*.46,.001),(half*.46,rim*.24),
                   (half*.72,rim*.225),(half*.81,rim*.15),(half*.81,.001)], shadow, 12)
             lathe("Centre cap GT metal lip", [(half*.795,rim*.154),(half*.825,rim*.154),

@@ -89,7 +89,7 @@ The vehicle selector and depot include a red BMW M3 E30, orange Volvo 240, green
 
 The Porsche 911 GT3 RS has a separate sport tune. Select it at the depot to drive the wide-body coupe with its recessed front intakes, sculpted bonnet outlets, swan-neck rear wing and twin centre exhausts. Its acceleration under full throttle and its top speed are both three times those of the ordinary taxi in the same mode. It reaches 90 km/h in gentle driving or about 238 km/h in full-speed mode.
 
-![Silver Porsche 911 GT3 RS game model, front three-quarter view](docs/porsche-911-gt3-rs.png)
+![White Porsche 911 GT3 RS game model with red wheels, side view](docs/porsche-911-gt3-rs.png)
 
 Press **J** or click **Radio** in a vehicle to play the original instrumental loop on Sjöstad Radio. It also works aboard the motorboat and tram. The radio pauses when you leave the vehicle and resumes at the same point when you get back in.
 

@@ -100,7 +100,16 @@ def upper(y,u):
     crown = profile(BODY,y,2)
     shoulder = profile(BODY,y,3)
     v = abs(u)
-    return (width*u,y,crown+(shoulder-crown)*exp(-((v-.78)/.24)**2)-.055*v**9)
+    x = width*u
+    z = crown+(shoulder-crown)*exp(-((v-.78)/.24)**2)-.055*v**9
+    # Steepen the falling nose of each headlamp pod on the outboard wing.
+    z -= .070*exp(-((abs(x)-.67)/.19)**2-((y+2.08)/.17)**2)
+    return (x,y,z)
+
+def lamp_radius(x,y):
+    t = (y+1.925)/.212
+    return sqrt(((abs(x)-.694-.062*t)/.139)**2+t*t)
+
 
 
 def arch_edge(y):
@@ -136,7 +145,11 @@ def body_shell():
         top = upper(y,1)[2]
         # The cut arches curl in around the tyre. The underside retreats
         # behind the wheel wells, leaving a true opening in the side profile.
-        row = [upper(y,i/20) for i in range(-20,21)]
+        row = []
+        for i in range(-40,41):
+            x,_,z = upper(y,i/40)
+            recess = .050*max(0,1-lamp_radius(x,y)**4)
+            row.append((x,y,z-recess))
         for s in [1,-1]:
             side=[side_surface(y,top+(edge+.012-top)*k/9,s) for k in range(1,10)]
             side.extend([(s*(width-.037),y,edge-.006),(s*.63,y,edge-.022),(s*.59,y,.20)])
@@ -183,8 +196,8 @@ def canopy(y,u):
 
 
 def build_canopy():
-    stations=sorted(set([-.88+2.51*i/96 for i in range(97)]+[-.818,-.29,.49,.57,.72,1.42]))
-    sections=[-1,-.977,-.76,-.735,-.72,-.69,-.655,-.49,-.25,0,.25,.49,.655,.69,.72,.735,.76,.977,1]
+    stations=sorted(set([-.88+2.51*i/96 for i in range(97)]+[-.77,-.32,.49,.57,.78,1.32]))
+    sections=[-1,-.977,-.94,-.79,-.76,-.735,-.72,-.69,-.655,-.49,-.25,0,.25,.49,.655,.69,.72,.735,.76,.79,.94,.977,1]
     roof=grid("Coupé roof and individually framed glazing",[[canopy(y,u) for u in sections] for y in stations],paint)
     for mat in [glass,carbon,rubber]:
         roof.data.materials.append(mat)
@@ -193,14 +206,14 @@ def build_canopy():
         y=(stations[row]+stations[row+1])*.5
         u=abs((sections[col]+sections[col+1])*.5)
         if u < .69:
-            if -.818<y<-.29 or .72<y<1.42:
+            if -.77<y<-.32 or .78<y<1.32:
                 polygon.material_index=1
-            elif -.29<=y<=.72 and u<.655:
+            elif -.32<=y<=.78 and u<.655:
                 polygon.material_index=2
-        elif .76<u<.977 and -.70<y<1.0:
+        elif .79<u<.94 and -.66<y<.92:
             polygon.material_index=3 if .49<y<.57 else 1
     for s in [-1,1]:
-        tube("Glazing lower reveal",[canopy(y,s*.979) for y in stations if -.70<y<1.0],.008,rubber)
+        tube("Glazing lower reveal",[canopy(y,s*.94) for y in stations if -.66<y<.92],.008,rubber)
         oval("Bucket seat back",(s*.356,.33,.637),(.246,.118,.287),leather,-.16)
         oval("Seat head restraint",(s*.356,.37,.87),(.122,.094,.135),leather)
         oval("Seat cushion",(s*.356,.10,.44),(.227,.31,.085),leather)
@@ -241,6 +254,12 @@ def rear_aero():
             ("Swan neck wing upright",[(1.63,.79),(1.76,1.12),(1.85,1.29),(2.00,1.28),
                                        (2.02,1.24),(1.89,1.24),(1.87,1.10),(1.84,.80)],.49)]:
             grid(name,[[(s*(half+dx),y,z) for y,z in points] for dx in [-.016,.016]],carbon,True)
+    # Reduce span, chord and height together, retaining contact at the deck.
+    for component in bpy.context.scene.objects:
+        if component.name.startswith(("Carbon rear wing blade","Wing endplate","Swan neck wing upright")):
+            for vertex in component.data.vertices:
+                x,y,z = vertex.co
+                vertex.co = (.89*x,1.82+.76*(y-1.82),.79+.79*(z-.79))
     for i in range(-4,5):
         x=i*.087
         cube("Engine cover cooling blade",(x,1.74,.80),(.033,.245,.031),rubber,.01)
@@ -342,6 +361,7 @@ def badge(value,location,rotation,size,mat):
     bpy.context.collection.objects.link(o)
     o.location=location
     o.rotation_euler=rotation
+    return o
 
 
 def front_depth(x):
@@ -409,33 +429,47 @@ def front_intakes(boundary):
 def details(front_boundary):
     for s in [-1,1]:
         # Each optical layer follows the actual compound curve of the fender.
-        cx,cy = s*.717,-1.795
-        def lens_point(a,radius,lift):
-            x = cx + s*.156*radius*cos(a)
-            y = cy + .240*radius*sin(a) + .032*radius*cos(a)
-            return x,y,upper(y,x/profile(BODY,y,1))[2]+lift
-        for name,radii,heights,finish in [
-                ("Oval headlamp seal",[.005,.85,1.04],[.008,.012,.006],rubber),
-                ("Headlamp chrome bezel",[.90,.958,1],[.021,.021,.012],alloy),
-                ("Smoked oval lamp cover",[.005,.42,.77,.914],[.041,.039,.029,.019],glass_dark)]:
-            rows=[[lens_point(tau*i/64,r,lift) for i in range(65)] for r,lift in zip(radii,heights)]
-            grid(name,rows,finish)
-        for offset_x,offset_y,radius,name,finish in [
-                (0,-.044,.061,"Projector reflector",alloy),
-                (0,-.044,.043,"Headlight lens projector",lamp),
-                (-.064,.085,.015,"Daytime running light",lamp),
-                (.064,.085,.015,"Daytime running light",lamp),
-                (-.059,-.105,.013,"Daytime running light",lamp),
-                (.059,-.105,.013,"Daytime running light",lamp)]:
-            x=cx+offset_x
-            y=cy+offset_y
-            h=upper(y,x/profile(BODY,y,1))[2]
-            oval(name,(x,y,h+.045), (radius,radius*1.14,.009),finish,.35)
+        cx,cy = s*.694,-1.925
+        def optics(u,v,lift):
+            x = cx+s*(.139*u+.062*v)
+            y = cy+.212*v
+            # Same curved nose mapping as the body skin.
+            py = y+max(0,1-(y+2.28)/.69)**2*(front_depth(x)+2.28)
+            return x,py,upper(y,x/profile(BODY,y,1))[2]+lift
+        def lens_ring(u,v,ru,rv,lift):
+            return [optics(u+ru*cos(tau*i/64),v+rv*sin(tau*i/64),lift) for i in range(65)]
+        grid("Recessed headlight gasket",[lens_ring(0,0,r,r,h) for r,h in
+             [(1.04,.002),(1.0,.004),(.91,-.014),(.64,-.027),(.001,-.027)]],rubber)
+        for u,v,size in [(-.22,-.18,.36),(.26,.28,.28)]:
+            grid("Elliptical projector reflector",[lens_ring(u,v,r,r*.68,h) for r,h in
+                 [(size,.000),(size*.83,-.012),(size*.31,-.016)]],alloy)
+            grid("Headlight lens projector" if u<0 else "Auxiliary projector",
+                 [lens_ring(u,v,r,r*.68,h) for r,h in [(size*.70,-.006),(.001,.001)]],glass_dark)
+        for u,v in [(-.62,-.25),(.28,-.66),(-.32,.62),(.65,.22)]:
+            grid("Daytime LED element",[lens_ring(u,v,.105,.048,-.001),lens_ring(u,v,.001,.001,.001)],lamp)
+        optical_glass = bpy.data.materials.get("Clear headlight glazing")
+        if optical_glass is None:
+            optical_glass = material("Clear headlight glazing",(.63,.77,.85),.09,.12)
+            optical_glass.node_tree.nodes.get("Principled BSDF").inputs["Alpha"].default_value=.21
+            optical_glass.surface_render_method="DITHERED"
+        grid("Flush lens glazing",[lens_ring(0,0,r,r,h) for r,h in
+             [(.987,.003),(.82,.007),(.49,.012),(.001,.014)]],optical_glass)
         for j in range(4):
             y=-1.20+j*.074
             hood_patch("Front wing louvre",[(s*.783,y),(s*.918,y+.018),(s*.917,y+.051),(s*.788,y+.042)],carbon,.012)
-        for name,y0,y1,z,h in [("Side sill",-.74,.82,.218,.08),("RS rocker stripe",-.76,.805,.315,.043)]:
-            cube(name,(s*.92,(y0+y1)/2,z),(.052,y1-y0,h),carbon if name=="Side sill" else red_paint,.017)
+        cube("Carbon rocker sill",(s*.92,.04,.218),(.052,1.56,.08),carbon,.017)
+        stripe = []
+        for i in range(41):
+            y = -.74+1.53*i/40
+            stripe.append([(x+s*.004,y,z) for x,_,z in
+                           (side_surface(y,h,s) for h in [.325,.432])])
+        grid("Carmine sill graphic",stripe,red_paint)
+        # Broad carbon blade turns air off the back edge of the front tyre.
+        blade = [(-.811,.246),(-.809,.527),(-.771,.598),(-.700,.591),
+                 (-.644,.251),(-.657,.220)]
+        grid("Front arch trailing deflector",
+             [[(s*(profile(BODY,y,1)+d),y,h) for y,h in blade]
+              for d in [-.008,.021]],carbon,True)
         cube("Flush door handle",(s*.931,.327,.714),(.034,.134,.029),alloy,.013)
         seam=[(-.58,.729),(-.60,.678),(-.61,.577),(-.61,.422),(-.58,.344),(-.50,.287),
               (-.26,.281),(.05,.281),(.27,.285),(.395,.303),(.482,.362),(.509,.452),(.515,.62),(.503,.742)]
@@ -446,6 +480,7 @@ def details(front_boundary):
         inlet=[(.535,.651),(.536,.621),(.589,.533),(.720,.403),(.747,.401),
                (.758,.426),(.731,.556),(.699,.644),(.650,.679),(.581,.682),(.545,.671)]
         cy,cz=.651,.531
+        inlet = [(2*cy-y,z) for y,z in reversed(inlet)]
         rows=[]
         for scale,height in [(1.12,.005),(1.0,.020),(.91,.009),(.77,.007)]:
             ring=[]
@@ -470,7 +505,17 @@ def details(front_boundary):
                 y=axle+r*cos(a)
                 arc.append((s*(profile(BODY,y,1)*.996),y,h+r*sin(a)+.008))
             tube("Wheel arch edge",arc,.012,paint)
-        badge("GT3 RS",(s*.932,.065,.345),(pi/2,0,s*pi/2),.1,red_paint)
+        # Conform the italic lettering to the door pressing on each side.
+        lettering = badge("GT3 RS",(0,0,0),(0,0,0),.19,paint)
+        lettering.data.shear = .32
+        bpy.context.view_layer.objects.active = lettering
+        bpy.ops.object.select_all(action="DESELECT")
+        lettering.select_set(True)
+        bpy.ops.object.convert(target="MESH")
+        for vertex in lettering.data.vertices:
+            u,v,_ = vertex.co
+            y,z = s*u*1.68+.012,.379+v*.83
+            vertex.co = (side_surface(y,z,s)[0]+s*.010,y,z)
     # Cambered carbon shelf with a rolled leading edge. At the corners it
     # sweeps aft and curls upwards into the return ahead of the wheel arch.
     splitter = []
@@ -528,7 +573,7 @@ def details(front_boundary):
 def run():
     global paint,carbon,glass,rubber,glass_dark,alloy,lamp,red,plate,leather,red_paint,gold
     bpy.ops.wm.read_factory_settings(use_empty=True)
-    paint=material("GT silver pearl",(.74,.76,.78),.49,.22)
+    paint=material("GT white gloss",(.91,.90,.88),.19,.21)
     carbon=material("Graphite aero composite",(.022,.026,.029),.33,.30)
     glass=material("Solar green laminated glazing",(.028,.041,.047),.19,.16)
     glass.diffuse_color=(.028,.041,.047,.55)
