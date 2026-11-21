@@ -91,3 +91,5 @@ Spelprojektet publiceras i det privata GitHub-repot yeager/axels-emergency-vehic
 - Motorbåtens röda babordslanterna och gröna styrbordslanterna följer dygnsljuset. Båda sidor kontrollerades i renderade nattbilder och släckningen verifierades i dagsläge.
 
 - Båtföraren har en orange flytväst med ryggstycke, två framstycken, reflexdetaljer och spänne. Västen följer figurens storlek och kontrollerades från båda sidor i Godot.
+
+- Start- och pausmenyn visar instruktioner för vald båttur eller spårvagnsroll. Bilväljaren och bilens ljudprov visas endast i vägaktiviteterna. Aktivitetsskiften och båtturens pausknapp är testade i Godot.

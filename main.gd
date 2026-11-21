@@ -2636,6 +2636,7 @@ func _build_overlay() -> void:
 	activity.add_item("Drive the motorboat")
 	activity.item_selected.connect(func(index: int):
 		boating = index==4
+		if mode == "menu" and index >= 2: siren_player.stop()
 		tram_mode = index-1 if index in [2,3] else 0
 		launch_speed = 0
 		var ear: Node3D = tram.sections[0] if tram_mode > 0 else launch if boating else (walker if walker.visible else ambulance)
@@ -3024,6 +3025,8 @@ func _refresh_ui() -> void:
 	pause_button.text = "Resume" if paused else "Pause"
 	if tram_mode > 0:
 		mission_label.text = "Ride the tram" if tram_mode == 1 else "Drive the tram"
+	elif boating:
+		mission_label.text = "Drive the motorboat"
 	elif free_drive:
 		mission_label.text = "Free exploration"
 	elif vehicle_index==RECOVERY:
@@ -3068,8 +3071,8 @@ func _refresh_ui() -> void:
 		mouse_brake = false
 	overlay.visible = show_overlay
 	overlay_panel.visible = show_overlay
-	vehicle_selector.visible = show_overlay and not walker.visible
-	preview_sound_button.visible = mode == "menu"
+	vehicle_selector.visible = show_overlay and not walker.visible and not boating and tram_mode == 0
+	preview_sound_button.visible = mode == "menu" and not boating and tram_mode == 0
 	preview_sound_button.text = "Stop preview" if siren_player.playing and mode == "menu" else ("Preview engine" if vehicle_index >= 3 else "Preview siren")
 	var locale := TranslationServer.get_locale().get_slice("_", 0)
 	var localized_logo := locale in ["en", "sv"]
@@ -3096,6 +3099,14 @@ func _refresh_ui() -> void:
 		if walker.visible:
 			subtitle_label.text = "Walk up to a parked vehicle to get in."
 		start_button.text = "Continue walking" if walker.visible else "Continue driving"
+	if show_overlay and mode != "complete":
+		if boating:
+			subtitle_label.text = "Explore the canal. Steer with A and D or the arrow keys."
+			start_button.text = "Start boating" if mode=="menu" else "Continue boating"
+		elif tram_mode > 0:
+			subtitle_label.text = "The tram drives itself and stops at each platform." if tram_mode==1 else "Control the speed. The tram follows the rails and stops at each platform."
+			start_button.text = "Ride the tram" if tram_mode==1 else "Drive the tram"
+			if paused: start_button.text = "Resume"
 	_refresh_status()
 
 func _refresh_status() -> void:

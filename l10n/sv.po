@@ -455,3 +455,18 @@ msgstr "%s × %d"
 
 msgid "Waiting for a green light"
 msgstr "Väntar på grönt ljus"
+
+msgid "Explore the canal. Steer with A and D or the arrow keys."
+msgstr "Utforska kanalen. Styr med A och D eller piltangenterna."
+
+msgid "Start boating"
+msgstr "Starta båtturen"
+
+msgid "Continue boating"
+msgstr "Fortsätt båtturen"
+
+msgid "The tram drives itself and stops at each platform."
+msgstr "Spårvagnen kör själv och stannar vid varje hållplats."
+
+msgid "Control the speed. The tram follows the rails and stops at each platform."
+msgstr "Du styr farten. Spårvagnen följer rälsen och stannar vid varje hållplats."
