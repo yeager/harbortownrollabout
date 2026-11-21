@@ -257,3 +257,4 @@ Vägvisaren från depån till kafé och gatukök är lokaliserad. Kontrollerade 
 Snöskoterns två skidor lämnar 12 cm breda fåror i snö. Spårens positioner hämtas från skidornas leder. Testade växling mellan snö och barmark under spårbildning i Godot.
 Spår som bildats i snötäcket bleknar vid tö och tas bort när snön smält. Bromsspår från barmark ligger kvar. Verifierade mellansteg och noll snö i Godot.
 Äldre bromsspår på asfalt döljs gradvis av snötäcket och framträder efter tö. Verifierade materialens synlighet och bevarade spår i Godot.
+Startskriptet söker Godot 4 och prioriterar uttryckligt GODOT_BIN, även för specialbyggda motorer. Testade mot simulerade 3.x-, 4.x- och specialbyggen.
