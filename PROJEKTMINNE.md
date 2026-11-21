@@ -293,3 +293,4 @@ Skolskjutsen bekräftar att eleven sitter i taxin och eleven tackar vid skolan. 
 Körhjälpens skolskjuts verifierad i Godot 4.6.3: en rullande taxi hämtar ingen elev, en avbruten väntan börjar om och ett fullständigt stopp vid både hämtning och avlämning ger 15 mynt exakt en gång utan knapptryckning.
 Butiksmenyn behåller tangentbordsfokus vid språkbyte. Testade att glassknappen förblir vald och två ägda glassar visas på både svenska och engelska.
 Butikerna visar plånbokens saldo i köpmenyn. Testade saldot före och efter ett glassköp samt när mynten inte räckte till korv.
+Sammanhängande sparfilstest i Godot 4.6.3: skolskjuts gav 15 mynt, glassen kostade fyra och fanns i kiosken efter omladdning av huvudscenen. Eleven kunde äta den sparade glassen; nästa omladdning behöll saldot och visade noll glassar.
