@@ -155,3 +155,5 @@ Spelprojektet publiceras i det privata GitHub-repot yeager/axels-emergency-vehic
 - Pizzerian visar en margherita på träbräda vid disken, med gräddad kant, tomatsås och mozzarella.
 
 - När pengarna inte räcker visar butiken beloppet som saknas och hur spelaren tjänar mynt. Svenska besked och köp med exakt pris provades i kaféet.
+
+- Vid inträde i en butik får första varan tangentbordsfokus. Ett köp av en kanelbulle med Enter verifierades med Godots inmatningssystem.

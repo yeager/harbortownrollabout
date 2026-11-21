@@ -10,6 +10,7 @@ var awnings: Array[Node3D] = []
 var inside := -1
 var shop_card := PanelContainer.new()
 var panel := VBoxContainer.new()
+var first_product: Button
 var receipt: Label
 var basket: Label
 
@@ -151,6 +152,7 @@ func update_customer(foot: bool, pos: Vector3, active: bool) -> void:
 			if absf(pos.x-storefront_x(i))<4 and pos.z>FRONT_Z and pos.z<49.4:
 				index=i
 				break
+	var entering := index!=inside or not shop_card.visible
 	if index!=inside:
 		if inside>=0: awnings[inside].show()
 		inside=index
@@ -158,6 +160,8 @@ func update_customer(foot: bool, pos: Vector3, active: bool) -> void:
 			awnings[inside].hide()
 			rebuild_menu()
 	shop_card.visible=inside>=0 and active
+	if entering and shop_card.visible:
+		first_product.grab_focus()
 
 func rebuild_menu() -> void:
 	for child in panel.get_children():
@@ -172,6 +176,7 @@ func rebuild_menu() -> void:
 		button.text=tr("%s · %d coins") % [tr(MENUS[inside][i]),PRICES[inside][i]]
 		button.pressed.connect(purchase.bind(inside,i))
 		panel.add_child(button)
+		if i==0: first_product=button
 	receipt=Label.new()
 	receipt.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
 	panel.add_child(receipt)
