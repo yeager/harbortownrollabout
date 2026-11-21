@@ -2648,20 +2648,23 @@ func _clear_camera_view(anchor: Vector3, desired: Vector3) -> Vector3:
 			desired = anchor.move_toward(contact, maxf(0.04, anchor.distance_to(contact) - 0.08))
 	return desired
 
+func _place_taxi_passenger(person: Node3D, stop: int) -> void:
+	var pavement := WALK_TARGETS[stop]
+	pavement.y = _foot_height(pavement.x, pavement.z)
+	person.position = pavement
+	var curb := TARGETS[stop]
+	person.look_at(Vector3(curb.x, pavement.y, curb.z))
+
 func _update_mission_marker() -> void:
 	if not is_instance_valid(mission_marker): return
 	_sync_recovery()
 	_update_route_arrows()
 	passenger.visible = not free_drive and vehicle_index == TAXI and taxi_leg%2==0
 	if passenger.visible:
-		var stop := _taxi_stop()
-		passenger.position = WALK_TARGETS[stop]
-		passenger.position.y = _foot_height(passenger.position.x, passenger.position.z)
-		var curb := TARGETS[stop]
-		passenger.look_at(Vector3(curb.x, passenger.position.y, curb.z))
+		_place_taxi_passenger(passenger, _taxi_stop())
 	arriving_passenger.visible = passenger.visible and taxi_leg >= 2
 	if arriving_passenger.visible:
-		arriving_passenger.position = WALK_TARGETS[_taxi_stop(taxi_leg-1)]
+		_place_taxi_passenger(arriving_passenger, _taxi_stop(taxi_leg-1))
 	var rescue := not free_drive and not boating and vehicle_index not in [TAXI, RECOVERY]
 	square_neighbour.visible = rescue and mission_index <= 1
 	square_neighbour.get_meta("arms")[1].rotation.z = 2.35 if mission_index == 0 else 0.0
