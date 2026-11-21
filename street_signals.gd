@@ -4,6 +4,7 @@ extends Node3D
 var elapsed := 0.0
 var heads: Array[Dictionary] = []
 var phase := -1
+const SHOP_CROSSING := Vector3(-39,0,35)
 const CROSSING_X := -12.0
 
 func _ready() -> void:
@@ -14,16 +15,28 @@ func _ready() -> void:
 		mast.position = mast.basis*Vector3(5.4,0,6)
 		if i==3:
 			mast.position.x=-14.7
-		get_parent()._make_box("Signal mast",Vector3(.12,3.7,.12),Vector3.UP*1.85,Color("#777e78"),false,mast)
-		get_parent()._make_box("Signal head",Vector3(.44,1.04,.26),Vector3(0,3.54,.1),Color("#242d2b"),false,mast)
-		var lamps: Array = []
-		for j in 3:
-			lamps.append(lens(mast,Vector3(0,3.85-.31*j,.25),[Color.RED,Color.ORANGE,Color.LIME_GREEN][j]))
-		heads.append({"lamps":lamps,"east_west":i%2==1})
+		_vehicle_head(mast,i%2==1)
+	_add_crossing(SHOP_CROSSING,false)
+	for direction in [-1,1]:
+		var mast := Node3D.new()
+		add_child(mast)
+		mast.position = SHOP_CROSSING + Vector3(-3*direction,0,4.1*direction)
+		mast.rotation.y = -direction*PI/2
+		_vehicle_head(mast,true)
+		get_parent()._make_box("Shop crossing stop line",Vector3(.21,.016,3.25),
+			SHOP_CROSSING+Vector3(-3*direction,-.028,1.85*direction),Color("#eee9d9"),false,self)
 	_add_crossing(Vector3(CROSSING_X,0,0),false)
 	for z in [-6.35,6.35]:
 		_add_crossing(Vector3(0,0,z),true)
 	advance(0)
+
+func _vehicle_head(mast: Node3D, east_west: bool) -> void:
+	get_parent()._make_box("Signal mast",Vector3(.12,3.7,.12),Vector3.UP*1.85,Color("#777e78"),false,mast)
+	get_parent()._make_box("Signal head",Vector3(.44,1.04,.26),Vector3(0,3.54,.1),Color("#242d2b"),false,mast)
+	var lamps: Array = []
+	for j in 3:
+		lamps.append(lens(mast,Vector3(0,3.85-.31*j,.25),[Color.RED,Color.ORANGE,Color.LIME_GREEN][j]))
+	heads.append({"lamps":lamps,"east_west":east_west})
 
 func _add_crossing(center: Vector3, east_west: bool) -> void:
 	for side in [-1,1]:
@@ -81,6 +94,9 @@ func red_clearance(pos: Vector3, heading: Vector3, half_length: float) -> float:
 	var along := pos.x if east_west else pos.z
 	var across := pos.z if east_west else pos.x
 	var direction := signf(heading.x if east_west else heading.z)
+	if east_west and absf(across-SHOP_CROSSING.z)<=3.7:
+		var shop_gap := (SHOP_CROSSING.x-along)*direction-3-half_length
+		return shop_gap if shop_gap>=-.05 else INF
 	if absf(across)>4.85: return INF
 	var gap := -along*direction - (15 if east_west and direction>0 else 8) - half_length
 	return gap if gap>=-.05 else INF
