@@ -37,6 +37,8 @@ Hold **V** and move the mouse for continuous camera control. Release **V** to us
 
 The central junction has phased traffic lights and red and green pedestrian figures beside the crossing. Traffic waits for its green phase. The player's vehicle also slows as it approaches a red signal, pedestrians in its path or a queue.
 
+Land vehicles slow down at the quay edge in both directions. The two road bridges let you drive between the banks.
+
 The double-ended passenger ferry **Lotten** runs between two landings in the canal. It pauses at each end before reversing direction. Its editable Blender model is in `source_blender/Lotten.blend`.
 
 ## Taxi and horns

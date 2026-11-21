@@ -1096,6 +1096,12 @@ func _build_waterfront() -> void:
 		float band = smoothstep(1.42,1.57,hit.x)*(1.-smoothstep(2.15,2.32,hit.x));
 		float pane = smoothstep(.03,.13,abs(fract((hit.y+4.1)/.82+.5)-.5));
 		float reflection = float(t>0.)*band*(1.-smoothstep(4.,4.24,abs(hit.y)))*pane;
+		// The white broadside reflects daylight beneath the darker window band.
+		float bow_taper = smoothstep(4.4,6.4,abs(hit.y));
+		float hull = float(t>0.)*(1.-smoothstep(6.0,6.4,abs(hit.y)))
+			*smoothstep(.0,.20,hit.x)*(1.-smoothstep(1.35-.75*bow_taper,1.49-.75*bow_taper,hit.x));
+		float grazing = pow(1.-clamp(dot(-incoming,wave_normal),0.,1.),2.);
+		ALBEDO = mix(ALBEDO,vec3(.52,.60,.59),hull*grazing*(1.-dusk)*.60);
 		EMISSION = dusk*(vec3(.034,.058,.084)*(.75+.25*chop)+vec3(.66,.42,.21)*reflection*(.25+.75*smoothstep(-.5,.8,chop+fine*.38)));
 		// Clear wave faces catch sharp highlights. Rain and aerated wake scatter them.
 		ROUGHNESS = mix(.19+.16*rain,.65,clamp(foam,0.,1.));
