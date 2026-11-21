@@ -296,7 +296,6 @@ func _process(delta: float) -> void:
 					3: tint = tint.lerp(Color("#bd742e"),.72)
 					4: tint = tint.lerp(Color("#acb2a8"),.78)
 			foliage_finishes[finish].set_shader_parameter("leaf_color", tint)
-	weather.position = camera.position + Vector3.UP*8
 	for surface in [road_finish,marking_finish,sidewalk_finish,soil_finish,quay_finish]:
 		surface.set_shader_parameter("wet",weather.wet)
 		surface.set_shader_parameter("snow_cover",weather.snow)
@@ -346,6 +345,7 @@ func _process(delta: float) -> void:
 	shops.update_customer(walker.visible and not ferry_passenger and not boating and tram_mode==0,walker.position,mode=="playing" and not paused)
 	weather.visible = shops.inside < 0
 	_update_camera(delta)
+	weather.position = camera.position + Vector3.UP*8
 	_refresh_status()
 
 func _input(event: InputEvent) -> void:
