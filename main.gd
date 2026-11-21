@@ -2129,7 +2129,7 @@ func _change_seat() -> void:
 		ferry_passenger = false
 		walker.position = landing
 		walk_basis = Basis(Vector3.UP, PI*.5)
-		walker.basis = walk_basis
+		walker.rotation.y = walk_basis.get_euler().y
 		listener.global_basis = walk_basis
 		_update_camera(0,true)
 		_refresh_ui()

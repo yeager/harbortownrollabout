@@ -323,3 +323,4 @@ Den första inlämnade bilen står kvar på verkstaden även medan nästa bil li
 - Båda trapporna till färjan markeras med dubbelsidiga LOTTEN-skyltar på land. Kontrollerat skyltens läsbarhet från gatan i Compatibility.
 - Ombord kan spelaren välja nästa brygga i förväg och ångra valet. Testat avbruten avstigning och automatisk avstigning på gångbar brygga i Godot.
 - Med telefonen öppen påverkar F inte färjans avstigning eller fordonsbyte. Testat F med öppet och stängt SMS-fönster ombord i Godot.
+- Åtgärdat att Alma fick Axels längd när hon gick av Lotten. Ett test som mätte skalan även på bryggan misslyckades före ändringen och passerade efteråt.
