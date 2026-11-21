@@ -39,6 +39,7 @@ var traffic_headlights: Array[SpotLight3D] = []
 var quay_finish := ShaderMaterial.new()
 var soil_finish: ShaderMaterial
 var sidewalk_finish: ShaderMaterial
+var marking_finish: ShaderMaterial
 var road_finish: ShaderMaterial
 var apartment_lights: Array[StandardMaterial3D] = []
 var city_env: Environment
@@ -288,7 +289,7 @@ func _process(delta: float) -> void:
 					4: tint = tint.lerp(Color("#acb2a8"),.78)
 			foliage_finishes[finish].set_shader_parameter("leaf_color", tint)
 	weather.position = camera.position + Vector3.UP*8
-	for surface in [road_finish,sidewalk_finish,soil_finish,quay_finish]:
+	for surface in [road_finish,marking_finish,sidewalk_finish,soil_finish,quay_finish]:
 		surface.set_shader_parameter("wet",weather.wet)
 		surface.set_shader_parameter("snow_cover",weather.snow)
 	asphalt_track_finish.albedo_color.a = 1.0 - smoothstep(.05,.7,weather.snow)
@@ -939,6 +940,7 @@ func _build_world() -> void:
 	add_child(street_signals)
 
 func _build_road_network() -> void:
+	marking_finish = _noise_material(Color("#d9d7ca"), Color("#eee9d9"), 2.3, .12)
 	road_finish = _noise_material(Color("#303538"), Color("#45494a"), 2.3, .22)
 	var main_road := _make_driving_surface("Main street", Vector3(100, 0.12, 9.6), Vector3(0, -0.08, 0), Color("#3e484a"), true)
 	main_road.material_override = road_finish
@@ -962,14 +964,14 @@ func _build_road_network() -> void:
 			_make_box("Kerb", direction.abs() * length + edge.abs() * 0.22 + Vector3.UP * 0.18,
 				middle + edge * side * 4.95, Color("#ddd6ba"), true)
 			_make_box("Cycle lane border", direction.abs() * length + edge.abs() * 0.07 + Vector3.UP * 0.025,
-				middle + edge * side * 3.85 + Vector3.UP * 0.015, Color("#e0dfda"))
+				middle + edge * side * 3.85 + Vector3.UP * 0.015, Color("#e0dfda")).material_override = marking_finish
 		for distance in range(12, int(end_distance) - 1, 7):
 			_make_box("Road marking", direction.abs() * 2.8 + edge.abs() * 0.12 + Vector3.UP * 0.025,
-				direction * distance, Color("#e0dfda"))
+				direction * distance, Color("#e0dfda")).material_override = marking_finish
 	# Crossings align with the pedestrians' east-west route.
 	for z in [-6.35, 6.35]:
 		for x in range(-4, 5):
-			_make_box("Crosswalk", Vector3(0.50, 0.025, 2.1), Vector3(x, 0.016, z), Color("#eee9d9"))
+			_make_box("Crosswalk", Vector3(0.50, 0.025, 2.1), Vector3(x, 0.016, z), Color("#eee9d9")).material_override = marking_finish
 
 func _build_west_district() -> void:
 	var junction_x := PackedInt32Array([-510,-420,-330,-240,-150,-55])
@@ -998,7 +1000,7 @@ func _build_west_district() -> void:
 				strokes.append(Transform3D(Basis(Vector3.UP,PI/2),Vector3(junction_x[i],-.009,z)))
 	var stripe := BoxMesh.new()
 	stripe.size = Vector3(2.8,.006,.12)
-	stripe.material = _material(Color("#e0dfda"))
+	stripe.material = marking_finish
 	var markings := MultiMeshInstance3D.new()
 	markings.name = "WestLaneMarkings"
 	markings.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
@@ -1686,7 +1688,7 @@ func _build_new_blocks() -> void:
 	add_child(workshop_name)
 	for crossing in [Vector3(-12,0,0),Vector3(91,0,0),Vector3(91,0,-48),Vector3(143,0,-48)]:
 		for stripe in range(-4,5):
-			_make_box("Zebra crossing",Vector3(2.4,.014,.52),crossing+Vector3(0,_surface_height(crossing.x,crossing.z)+.014,stripe),Color("#eee9d9"))
+			_make_box("Zebra crossing",Vector3(2.4,.014,.52),crossing+Vector3(0,_surface_height(crossing.x,crossing.z)+.014,stripe),Color("#eee9d9")).material_override = marking_finish
 
 func _update_daylight(delta: float) -> void:
 	if time_mode == 2:
@@ -1879,14 +1881,14 @@ func _build_depot() -> void:
 		parked_sizes.append(Vector2(maxf(-bounds.position.x,bounds.end.x),maxf(-bounds.position.z,bounds.end.z)))
 		if i == BUS:
 			for side in [-1,1]:
-				_make_box("Bus bay stripe",Vector3(.10,.025,11.6),body.position+Vector3(side*2.3,.064,0),Color("#deddd1"))
+				_make_box("Bus bay stripe",Vector3(.10,.025,11.6),body.position+Vector3(side*2.3,.064,0),Color("#deddd1")).material_override = marking_finish
 		elif i == RECOVERY:
 			for side in [-1,1]:
-				_make_box("Recovery bay stripe",Vector3(.1,.025,9.3),body.position+Vector3(side*2.5,.014,.45),Color("#deddd1"))
+				_make_box("Recovery bay stripe",Vector3(.1,.025,9.3),body.position+Vector3(side*2.5,.014,.45),Color("#deddd1")).material_override = marking_finish
 		else:
-			_make_box("Parking stripe", Vector3(.10,.025,7.8), Vector3(body.position.x-2.5,-.066 if i>=6 else -.116,body.position.z), Color("#deddd1"))
+			_make_box("Parking stripe", Vector3(.10,.025,7.8), Vector3(body.position.x-2.5,-.066 if i>=6 else -.116,body.position.z), Color("#deddd1")).material_override = marking_finish
 			if i==TAXI:
-				_make_box("Parking stripe",Vector3(.10,.025,7.8),Vector3(body.position.x+2.5,-.116,15),Color("#deddd1"))
+				_make_box("Parking stripe",Vector3(.10,.025,7.8),Vector3(body.position.x+2.5,-.116,15),Color("#deddd1")).material_override = marking_finish
 	_make_walker("Player on foot",0,0,1,Color("#648faa"),Color("#30414d"))
 	walker = walker_data.pop_back().actor
 	var ponytail := MeshInstance3D.new()

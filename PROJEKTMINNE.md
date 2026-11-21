@@ -309,3 +309,4 @@ Den första inlämnade bilen står kvar på verkstaden även medan nästa bil li
 - Automatiskt väder behåller den manuella prognosen i fem spelminuter även vid ovanligt årstidsväder. Testat med sommarsnö och gradvis upptining i Godot 4.6.3.
 - Regnstrimmor följer fallriktningen och sexkantiga snöflingor varierar i storlek. Partiklarnas livslängd täcker även hög följkamera. Vädertest kört utan grafik i Godot 4.6.3, visuell kontroll återstår.
 - Visuell kontroll från ambulansens följkamera i Compatibility visade mörka fläckar även vid fullt snötäcke. Snön täcker nu vägbanan successivt och har matt yta vid full täckning. Jämfört före och efter i samma vy.
+- Snö och väta påverkar nu även målade körfält, cykelbanekanter, övergångsställen och parkeringsrutor. Kontrollerat fullt snötäcke från följkameran i Godot Compatibility.
