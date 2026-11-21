@@ -16,9 +16,9 @@ func _mission_stop() -> int:
 const ROAD_HALF := 4.8
 const VEHICLE_NAMES := ["Ambulance", "Police car", "Fire engine"]
 const VEHICLE_SCENES := ["res://vehicles/ambulance.glb", "res://vehicles/polisbil.glb", "res://vehicles/brandbil.glb"]
-const VEHICLE_NAMES_ALL := ["Ambulance", "Police car", "Fire engine", "BMW X5 M60i", "Taxi", "Recovery truck", "BMW M3 E30", "Volvo 240", "Saab 96", "Tesla Model S", "City bus", "Snowmobile", "Volvo XC60 Police"]
-const VEHICLE_SCENES_ALL := ["res://vehicles/ambulance.glb", "res://vehicles/polisbil.glb", "res://vehicles/brandbil.glb", "res://vehicles/bmw_x5_m60i.glb", "res://vehicles/taxi.glb", "res://vehicles/bargare.glb", "res://vehicles/m3_e30.glb", "res://vehicles/volvo240.glb", "res://vehicles/saab96.glb", "res://vehicles/model_s.glb", "res://vehicles/city_bus.glb", "res://vehicles/snowmobile.glb", "res://vehicles/volvo_xc60_polis.glb"]
-const SIREN_SOUNDS := ["res://audio/siren_ambulance.wav", "res://audio/siren_police.wav", "res://audio/siren_fire.wav", "res://audio/bmw_engine.wav", "res://audio/bmw_engine.wav", "res://audio/bmw_engine.wav", "res://audio/bmw_engine.wav", "res://audio/bmw_engine.wav", "res://audio/bmw_engine.wav", "res://audio/electric_drive.wav", "res://audio/bmw_engine.wav", "res://audio/sled_engine.wav", "res://audio/siren_police.wav"]
+const VEHICLE_NAMES_ALL := ["Ambulance", "Police car", "Fire engine", "BMW X5 M60i", "Taxi", "Recovery truck", "BMW M3 E30", "Volvo 240", "Saab 96", "Tesla Model S", "City bus", "Snowmobile"]
+const VEHICLE_SCENES_ALL := ["res://vehicles/ambulance.glb", "res://vehicles/polisbil.glb", "res://vehicles/brandbil.glb", "res://vehicles/bmw_x5_m60i.glb", "res://vehicles/taxi.glb", "res://vehicles/bargare.glb", "res://vehicles/m3_e30.glb", "res://vehicles/volvo240.glb", "res://vehicles/saab96.glb", "res://vehicles/model_s.glb", "res://vehicles/city_bus.glb", "res://vehicles/snowmobile.glb"]
+const SIREN_SOUNDS := ["res://audio/siren_ambulance.wav", "res://audio/siren_police.wav", "res://audio/siren_fire.wav", "res://audio/bmw_engine.wav", "res://audio/bmw_engine.wav", "res://audio/bmw_engine.wav", "res://audio/bmw_engine.wav", "res://audio/bmw_engine.wav", "res://audio/bmw_engine.wav", "res://audio/electric_drive.wav", "res://audio/bmw_engine.wav", "res://audio/sled_engine.wav"]
 const BUILDING_SCENES := {"Sjukhuset":"res://environment/sjukhus.glb", "Polisstationen":"res://environment/polisstation.glb", "Bageriet":"res://environment/bageri.glb", "Vårdcentralen":"res://environment/vardcentral.glb", "Brandstationen":"res://environment/brandstation.glb", "Biblioteket":"res://environment/bibliotek.glb"}
 const TREE_SCENES := ["res://environment/lovtrad.glb", "res://environment/gran.glb", "res://environment/bredkronigt_lovtrad.glb"]
 
@@ -76,7 +76,6 @@ var walk_phase := 0.0
 var entry_marker := Label3D.new()
 const BUS := 10
 const SNOWMOBILE := 11
-const XC60_POLICE := 12
 const SCHOOL := 3
 const SCHOOL_CURB := Vector3(136,0,3)
 const SCHOOL_GATE := Vector3(136,0,7)
@@ -88,7 +87,7 @@ var bus_board: Label3D
 const BUS_STOP_NAMES := ["TORGET","VÅRDCENTRALEN","SMÅBÅTSHAMNEN","SJÖSTADSSKOLAN","VÄSTRA TORGET","VÄSTERÄNGEN"]
 var bus_leg := 0
 const TAXI := 4
-const HORNS := ["ambulance","police","fire","bmw","taxi","recovery", "m3_e30", "volvo240", "saab96", "model_s", "city_bus","snowmobile", "police"]
+const HORNS := ["ambulance","police","fire","bmw","taxi","recovery", "m3_e30", "volvo240", "saab96", "model_s", "city_bus","snowmobile"]
 var horn := AudioStreamPlayer.new()
 var radio_button: Button
 var radio := AudioStreamPlayer.new()
@@ -182,9 +181,9 @@ var parked_at_target := 0.0
 var mode := "menu"
 var paused := false
 var lights_on := false
-var parked_light_settings: Array[bool] = [false, false, false, false, false, false, false, false, false, false, false, false, false]
+var parked_light_settings: Array[bool] = [false, false, false, false, false, false, false, false, false, false, false, false]
 var sound_on := true
-var parked_sound_settings: Array[bool] = [false, false, false, true, true, true, true, true, true, true, true, true, true]
+var parked_sound_settings: Array[bool] = [false, false, false, true, true, true, true, true, true, true, true, true]
 var siren_player: AudioStreamPlayer
 var ui: CanvasLayer
 var jacket_palette := -1
@@ -321,7 +320,7 @@ func _process(delta: float) -> void:
 		_update_traffic(delta)
 		_update_pedestrians(delta)
 		_update_moorings(delta)
-		if (vehicle_index >= 3 and vehicle_index != XC60_POLICE) and siren_player.playing:
+		if vehicle_index >= 3 and siren_player.playing:
 			var pitch_speed := 32.0 if vehicle_index == SNOWMOBILE else 250.0 / 3.6
 			siren_player.pitch_scale = 0.88 + clampf(absf(speed) / pitch_speed, 0.0, 1.0) * 0.72
 	else:
@@ -471,12 +470,9 @@ func _drive(delta: float) -> void:
 	if Input.is_key_pressed(KEY_D): steer_input = 1.0
 	var max_speed := 250.0 / 3.6 if vehicle_index == 3 else 11.0
 	var acceleration := lerpf(8.0, 2.3, clampf(speed / max_speed, 0.0, 1.0)) if vehicle_index == 3 else 7.2
-	if vehicle_index >= 6 and vehicle_index <= SNOWMOBILE:
+	if vehicle_index >= 6:
 		max_speed = [53.0, 10.0, 8.5, 64.0, 12.0, 16.0][vehicle_index-6]
 		acceleration = [7.8, 2.2, 1.8, 10.0, 2.6, 5.2][vehicle_index-6]
-	elif vehicle_index == XC60_POLICE:
-		max_speed = 250.0 / 3.6
-		acceleration = lerpf(8.0, 2.5, clampf(speed / max_speed, 0.0, 1.0))
 	if not gentle_driving:
 		max_speed *= 2.0
 	if gentle_driving:
@@ -502,7 +498,7 @@ func _drive(delta: float) -> void:
 	for knuckle in front_knuckles:
 		knuckle.rotation.y = -steering * deg_to_rad(33.0)
 	driving_controls.set_controls(steering, throttle > 0, brake_held, throttle < 0 and not brake_held)
-	var wheelbase: float = [3.7, 2.75, 4.1, 2.975, 2.85, 4.0, 2.56, 2.64, 2.46, 2.96, 6.06, 1.65, 2.865][vehicle_index]
+	var wheelbase: float = [3.7, 2.75, 4.1, 2.975, 2.85, 4.0, 2.56, 2.64, 2.46, 2.96, 6.06, 1.65][vehicle_index]
 	var yaw_rate := speed * tan(steering * deg_to_rad(33.0)) / wheelbase
 	# Limit lateral acceleration at speed while retaining tight parking turns.
 	var max_yaw_rate := 8.0 / maxf(absf(speed), 1.0)
@@ -1787,7 +1783,6 @@ func _depot_position(i: int) -> Vector3:
 	if i == BUS: return Vector3(-34,-.13,25.4)
 	if i == SNOWMOBILE: return Vector3(-41,-.13,23)
 	if i == RECOVERY: return Vector3(-45,-.13,25)
-	if i == XC60_POLICE: return Vector3(-14-(i-6)*5,-.13,38)
 	if i >= 6: return Vector3(-14-(i-6)*5,-.13,28)
 	return Vector3(-47+5*i,-.13,15)
 
@@ -3791,7 +3786,7 @@ func _update_siren() -> void:
 	if sound_on and not boating and tram_mode == 0 and mode == "playing" and not paused and not walker.visible:
 		if siren_player.stream != siren_streams[vehicle_index]:
 			siren_player.stream = siren_streams[vehicle_index]
-		if vehicle_index < 3 or vehicle_index == XC60_POLICE:
+		if vehicle_index < 3:
 			siren_player.pitch_scale = 1.0
 		siren_player.volume_db = -1.0
 		if not siren_player.playing: siren_player.play()
