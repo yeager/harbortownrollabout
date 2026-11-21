@@ -71,6 +71,8 @@ const SCHOOL_GATE := Vector3(136,0,7)
 const TAXI_STOPS := [0,2, 0,SCHOOL, 1,0, SCHOOL,1, 2,1]
 const BUS_STOPS := [0,SCHOOL,2,1]
 const BUS_MESSAGES := ["Collect passengers at the square.", "Drop off passengers at the school.", "Collect passengers at the marina.", "Drop off passengers at the clinic."]
+var bus_board: Label3D
+const BUS_STOP_NAMES := ["TORGET","VÅRDCENTRALEN","SMÅBÅTSHAMNEN","SJÖSTADSSKOLAN"]
 var bus_leg := 0
 const TAXI := 4
 const HORNS := ["ambulance","police","fire","bmw","taxi","recovery", "m3_e30", "volvo240", "saab96", "model_s", "city_bus"]
@@ -2392,13 +2394,14 @@ func _load_vehicle_model() -> void:
 	red_light_meshes.clear()
 	var packed: PackedScene = load(VEHICLE_SCENES_ALL[vehicle_index])
 	vehicle_model = packed.instantiate() as Node3D
+	bus_board = null
 	if vehicle_index == BUS:
-		var display_board := Label3D.new()
-		display_board.text="502  SJÖSTADEN"
-		display_board.pixel_size=.0032
-		display_board.modulate=Color("#ffbb47")
-		display_board.position=Vector3(0,2.68,5.28)
-		vehicle_model.add_child(display_board)
+		bus_board = Label3D.new()
+		bus_board.pixel_size=.0026
+		bus_board.modulate=Color("#ffbb47")
+		bus_board.position=Vector3(0,2.68,5.28)
+		vehicle_model.add_child(bus_board)
+		_update_bus_board()
 	vehicle_model.name = VEHICLE_NAMES_ALL[vehicle_index] + "_BlenderModel"
 	vehicle_model.rotation.y = PI
 	ambulance.add_child(vehicle_model)
@@ -2766,7 +2769,12 @@ func _place_taxi_passenger(person: Node3D, stop: int) -> void:
 	var curb := _stop_curb(stop)
 	person.look_at(Vector3(curb.x, pavement.y, curb.z))
 
+func _update_bus_board() -> void:
+	if is_instance_valid(bus_board):
+		bus_board.text = "SJÖSTADEN" if free_drive else "502  " + BUS_STOP_NAMES[BUS_STOPS[bus_leg % BUS_STOPS.size()]]
+
 func _update_mission_marker() -> void:
+	_update_bus_board()
 	if not is_instance_valid(mission_marker): return
 	_sync_recovery()
 	_update_route_arrows()

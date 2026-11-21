@@ -211,3 +211,4 @@ Spelprojektet publiceras i det privata GitHub-repot yeager/axels-emergency-vehic
 - Sjöstadsskolan med putsfasad och koppartak modellerades i Blender. Skoltaxi hämtar och lämnar elever och busslinje 502 trafikerar fyra hållplatser. Båda uppdragsserierna samt utbetalning testades i Godot.
 - BMW M3 E30, Volvo 240, Saab 96, Tesla Model S och stadsbuss finns i fordonsval och depå. Egna Blenderkällor, tutor och lågmält eldrivljud ingår. Fordonsradio med egen instrumental slinga startas med J.
 - Compatibility, Mobile och Forward+ renderade buss och skola på datorns Radeon. play.sh kan starta alla tre och välja AMD FSR 2.2 i Forward+. Ingen mätning av bildfrekvens eller verifiering på annan hårdvara ännu.
+- Linje 502 visar nästa hållplats på bussens frontskylt. Verifierat över fyra stopp, ett nytt varv och fri körning.
