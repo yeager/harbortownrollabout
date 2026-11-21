@@ -496,4 +496,4 @@ msgid "Enter to buy"
 msgstr "Enter för att köpa"
 
 msgid "F · Enter %s"
-msgstr "F · Kliv in i %s"
+msgstr "%s · Tryck F för att kliva in"
