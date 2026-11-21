@@ -138,6 +138,9 @@ var brake_held := false
 var tire_player := AudioStreamPlayer.new()
 var skid_marks := MultiMesh.new()
 var skid_cursor := 0
+var snow_marks := MultiMesh.new()
+var snow_cursor := 0
+var snow_track_finish := StandardMaterial3D.new()
 var rear_tire_contacts := PackedVector3Array()
 var skid_anchors := PackedVector3Array()
 const SKID_CAPACITY := 2048
@@ -249,6 +252,10 @@ func _process(delta: float) -> void:
 	for surface in [road_finish,sidewalk_finish,soil_finish,quay_finish]:
 		surface.set_shader_parameter("wet",weather.wet)
 		surface.set_shader_parameter("snow_cover",weather.snow)
+	snow_track_finish.albedo_color.a = smoothstep(.01,.25,weather.snow)
+	if weather.snow <= .01 and snow_marks.visible_instance_count > 0:
+		snow_marks.visible_instance_count = 0
+		snow_cursor = 0
 	water_finish.set_shader_parameter("rain",weather.intensity.x)
 	city_env.sky.sky_material.set_shader_parameter("overcast",maxf(weather.intensity.x,weather.intensity.y))
 	_update_daylight(delta)
@@ -598,15 +605,21 @@ func _build_brake_effects() -> void:
 	var strip := PlaneMesh.new()
 	strip.size = Vector2.ONE
 	strip.material = rubber
-	skid_marks.transform_format = MultiMesh.TRANSFORM_3D
-	skid_marks.use_colors = true
-	skid_marks.mesh = strip
-	skid_marks.instance_count = SKID_CAPACITY
-	skid_marks.visible_instance_count = 0
-	var trails := MultiMeshInstance3D.new()
-	trails.multimesh = skid_marks
-	trails.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
-	add_child(trails)
+	snow_track_finish.vertex_color_use_as_albedo = true
+	snow_track_finish.vertex_color_is_srgb = true
+	snow_track_finish.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	for marks: MultiMesh in [skid_marks, snow_marks]:
+		marks.transform_format = MultiMesh.TRANSFORM_3D
+		marks.use_colors = true
+		marks.mesh = strip
+		marks.instance_count = SKID_CAPACITY
+		marks.visible_instance_count = 0
+		var trails := MultiMeshInstance3D.new()
+		trails.multimesh = marks
+		if marks == snow_marks:
+			trails.material_override = snow_track_finish
+		trails.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+		add_child(trails)
 	var scrub := preload("res://audio/tire_scrub.wav").duplicate() as AudioStreamWAV
 	scrub.loop_mode = AudioStreamWAV.LOOP_FORWARD
 	scrub.loop_end = scrub.data.size() / 2
@@ -630,6 +643,9 @@ func _draw_skid(previous_pose: Transform3D) -> void:
 	# Tyres compress snow into wider grey tracks and expose darker slush when wet.
 	var track_color := Color("#1b1b1c").lerp(Color("#83949b").lerp(Color("#47575c"), weather.wet), weather.snow)
 	var track_width := lerpf(.19,.245,weather.snow)
+	var on_snow := weather.snow >= .25
+	var marks := snow_marks if on_snow else skid_marks
+	var cursor := snow_cursor if on_snow else skid_cursor
 	for wheel in contacts.size():
 		if vehicle_index == SNOWMOBILE:
 			track_width = .40 if wheel == 0 else .12
@@ -646,11 +662,15 @@ func _draw_skid(previous_pose: Transform3D) -> void:
 		center.y = _surface_height(center.x, center.z) + 0.009
 		var direction := segment / length
 		var axes := Basis(Vector3.UP.cross(direction) * track_width, Vector3.UP, direction * (length + 0.015))
-		skid_marks.set_instance_transform(skid_cursor, Transform3D(axes, center))
-		skid_marks.set_instance_color(skid_cursor, track_color)
-		skid_cursor = (skid_cursor + 1) % SKID_CAPACITY
-		skid_marks.visible_instance_count = mini(SKID_CAPACITY, skid_marks.visible_instance_count + 1)
+		marks.set_instance_transform(cursor, Transform3D(axes, center))
+		marks.set_instance_color(cursor, track_color)
+		cursor = (cursor + 1) % SKID_CAPACITY
+		marks.visible_instance_count = mini(SKID_CAPACITY, marks.visible_instance_count + 1)
 		skid_anchors[wheel] = endpoint
+	if on_snow:
+		snow_cursor = cursor
+	else:
+		skid_cursor = cursor
 	if vehicle_index != SNOWMOBILE and not AudioServer.is_bus_mute(0):
 		tire_player.pitch_scale = 0.78 + clampf(speed / (250.0 / 3.6), 0, 1) * 0.45
 		tire_player.volume_db = lerpf(-20.0, -8.0, clampf(speed / 22.0, 0, 1)) - 5.0*weather.snow

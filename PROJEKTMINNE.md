@@ -255,3 +255,4 @@ Körhjälpen bromsar inför parkerade fordon längs färdriktningen med samma fo
 Depåbussen stod delvis i Stationsalléns körfält. Flyttade den 2,6 meter in på depån och förlängde och markerade bussrutan. Verifierade mjukt stopp vid rött och passage på grönt med alla parkerade fordon på plats.
 Vägvisaren från depån till kafé och gatukök är lokaliserad. Kontrollerade båda depåskyltarnas texter i Godot genom att växla engelska–svenska–engelska.
 Snöskoterns två skidor lämnar 12 cm breda fåror i snö. Spårens positioner hämtas från skidornas leder. Testade växling mellan snö och barmark under spårbildning i Godot.
+Spår som bildats i snötäcket bleknar vid tö och tas bort när snön smält. Bromsspår från barmark ligger kvar. Verifierade mellansteg och noll snö i Godot.
