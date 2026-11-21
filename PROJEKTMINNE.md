@@ -274,3 +274,4 @@ Telefonens SMS-lista går att rulla och öppnas högst upp. Verifierade separat 
 Telefonen stöder Page Up, Page Down, Home och End när inkorgen är öppen. Testade tangentbordshändelser i en separat telefonvy med svensk text i Godot 4.
 Ren import av publicerade origin/main b283268 i separat projektmapp: huvudscen och depå startade i Godot 4.6.3 Compatibility. Svensk SMS-rullning genom huvudscenen, paket- och filtleveranser samt tangentbordsstyrt kioskbesök passerade med grafik i 640×360 och isolerade sparfiler. Inga skript- eller motorfel i testloggarna.
 Fordonsvalets aktivitetsmeny visar uppdragstyp före start. Svenska rubriker för ambulans, polis, brandbil, paket och filtleveranser verifierade i Godot 4.
+Spelarens mun får uppåtvända mungipor efter glass eller korv. Verifierade aktivering på gång- och förarmodell samt återgång när glädjetiden löpt ut i Godot 4.

@@ -1854,6 +1854,22 @@ func _build_depot() -> void:
 	road_driver.reparent(ambulance,false)
 	road_driver.rotation = Vector3.ZERO
 	road_driver.add_child(ponytail.duplicate())
+	for avatar in [walker, road_driver]:
+		var lip: MeshInstance3D = avatar.get_meta("lip")
+		var smile := Node3D.new()
+		smile.name = "Smile"
+		avatar.add_child(smile)
+		smile.position = lip.position
+		for side in [-1,1]:
+			var corner := MeshInstance3D.new()
+			corner.mesh = lip.mesh
+			corner.material_override = lip.material_override
+			corner.scale = Vector3(.105,.025,.035)
+			corner.position = Vector3(side*.03,.006,.004)
+			corner.rotation.z = side*.43
+			corner.rotation.y = -side*.24
+			smile.add_child(corner)
+		smile.hide()
 	var riding_legs := Node3D.new()
 	riding_legs.name = "RidingLegs"
 	road_driver.add_child(riding_legs)
@@ -2472,6 +2488,7 @@ func _make_walker(label: String, start_x: float, lane_z: float, direction: float
 	lip.position = Vector3(0,1.646,-.145)
 	lip.material_override = _material(Color("#955f50"))
 	person.add_child(lip)
+	person.set_meta("lip",lip)
 	for side in [-1.0, 1.0]:
 		var leg_pivot := Node3D.new()
 		leg_pivot.position = Vector3(side * 0.115, 0.77, 0)
@@ -3824,6 +3841,8 @@ func _refresh_dispatch() -> void:
 
 func _refresh_ui() -> void:
 	if road_driver:
+		for avatar in [walker, road_driver]:
+			avatar.get_node("Smile").visible = happy_seconds > 0
 		road_driver.position = Vector3(0,.82-.77*road_driver.scale.y,.18) if vehicle_index==SNOWMOBILE else Vector3(-.32,.88-.87*road_driver.scale.y,-.04)
 		road_driver.get_node("RidingLegs").visible = vehicle_index == SNOWMOBILE
 		for leg in road_driver.get_meta("legs"):
