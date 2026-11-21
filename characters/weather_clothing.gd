@@ -29,8 +29,8 @@ func _init() -> void:
 		Vector3(.174,.091,.109), Vector3(.193,.049,.063), Vector3(.199,.003,.003)
 	], false, .028)
 	rain_collar = _sew([
-		Vector3(-.203,.112,.103), Vector3(-.195,.102,.096),
-		Vector3(-.152,.095,.093), Vector3(-.151,.087,.084)
+		Vector3(-.212,.133,.121), Vector3(-.198,.130,.117),
+		Vector3(-.143,.109,.107), Vector3(-.141,.103,.099)
 	], false, -.019)
 
 func add_person(torso: MeshInstance3D, shirt: Color) -> void:
@@ -72,6 +72,7 @@ func _fabric(colour: Color, roughness: float) -> StandardMaterial3D:
 	var key := Vector2i(colour.to_rgba32(), roundi(roughness*100))
 	if not fabrics.has(key):
 		var finish := StandardMaterial3D.new()
+		finish.cull_mode = BaseMaterial3D.CULL_DISABLED
 		finish.albedo_color = colour
 		finish.roughness = roughness
 		fabrics[key] = finish
