@@ -76,7 +76,11 @@ func tick(delta: float) -> void:
 		forecast = 2
 	var target: Vector2 = PRECIPITATION[weather_setting if weather_setting else forecast]
 	intensity = intensity.move_toward(target,delta/(75.0 if weather_setting==0 else 8.0))
-	wet = move_toward(wet,intensity.x,delta/35)
+	var previous_snow := snow
 	snow = move_toward(snow,intensity.y,delta/55)
+	var meltwater := maxf(0.0,previous_snow-snow)
+	# Melt first wets exposed pavement, which then dries more slowly than rain accumulates.
+	var moisture_time := 35.0 if intensity.x > wet else 95.0
+	wet = minf(1.0,move_toward(wet,intensity.x,delta/moisture_time)+meltwater)
 	rain_particles.amount_ratio = intensity.x
 	snow_particles.amount_ratio = intensity.y
