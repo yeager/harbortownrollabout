@@ -1716,6 +1716,7 @@ func _fit_driver_sleeve(sleeve: MeshInstance3D, start: Vector3, end: Vector3) ->
 	sleeve.scale.y = (segment.length() + .045) / .65
 
 func _depot_position(i: int) -> Vector3:
+	if i == BUS: return Vector3(-34,-.13,25.4)
 	if i == SNOWMOBILE: return Vector3(-41,-.13,23)
 	if i == RECOVERY: return Vector3(-45,-.13,25)
 	if i >= 6: return Vector3(-14-(i-6)*5,-.13,28)
@@ -1725,6 +1726,7 @@ func _build_depot() -> void:
 	_make_driving_surface("Motor pool", Vector3(25,.1,11), Vector3(-37,-.18,15), Color("#565c5a"))
 	_make_driving_surface("Recovery apron",Vector3(8.4,.10,9.8),Vector3(-45,-.18,25.4),Color("#565c5a"))
 	_make_driving_surface("Visitor parking",Vector3(25,.10,9),Vector3(-24,-.12,28),Color("#565c5a"))
+	_make_driving_surface("Bus bay extension",Vector3(5,.10,4.6),Vector3(-34,-.12,21.2),Color("#565c5a"))
 	# A continuous pedestrian route from the parking bays to Stationsallén.
 	for span in [Vector2(20.5,31.3),Vector2(38.7,42.5)]:
 		_make_driving_surface("Depot footpath",Vector3(2.3,.08,span.y-span.x),
@@ -1761,7 +1763,10 @@ func _build_depot() -> void:
 		var bounds := _model_bounds(body,model)
 		parked_footprints.append(Rect2(bounds.position.x,bounds.position.z,bounds.size.x,bounds.size.z))
 		parked_sizes.append(Vector2(maxf(-bounds.position.x,bounds.end.x),maxf(-bounds.position.z,bounds.end.z)))
-		if i == RECOVERY:
+		if i == BUS:
+			for side in [-1,1]:
+				_make_box("Bus bay stripe",Vector3(.10,.025,11.6),body.position+Vector3(side*2.3,.064,0),Color("#deddd1"))
+		elif i == RECOVERY:
 			for side in [-1,1]:
 				_make_box("Recovery bay stripe",Vector3(.1,.025,9.3),body.position+Vector3(side*2.5,.014,.45),Color("#deddd1"))
 		else:
