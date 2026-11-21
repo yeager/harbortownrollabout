@@ -244,6 +244,8 @@ def rear_aero():
     for i in range(-4,5):
         x=i*.087
         cube("Engine cover cooling blade",(x,1.74,.80),(.033,.245,.031),rubber,.01)
+    reversing = material("Reverse lamp clear lens",(.65,.70,.71),.2,.22)
+    reflector_finish = material("Red passive reflector",(.42,.008,.006),.22,.23)
     shell = bpy.data.objects["Wide body with raised front wings and open arches"]
     for vert in shell.data.vertices:
         x,y,z = vert.co
@@ -307,7 +309,15 @@ def rear_aero():
             u = x/.939
             y = 2.375-.115*u**2-.179*u**8
             reflector.append((s*x,y+.023,.381+.013*u*u))
-        tube("Rear corner reflector",reflector,.011,red)
+        tube("Rear corner reflector",reflector,.011,reflector_finish)
+        reverse_strip = []
+        for j in range(10):
+            x = .66+.012*j
+            u = x/.939
+            aft = 2.375-.115*u**2-.179*u**8
+            top = .700+.018*u**2-.045*u**8
+            reverse_strip.append((s*x,aft+.030,top-.104))
+        tube("Reverse lamp strip",reverse_strip,.007,reversing)
         # Extraction blades behind the rear tyre follow the flared quarter.
         for j in range(2):
             y0 = 1.79+j*.13

@@ -46,6 +46,21 @@ func check_porsche() -> void:
 	game.mouse_brake = true
 	for frame in 360:
 		game._drive(1.0 / 60.0)
+	if not game.reverse_lens or game.reverse_lens.emission_energy_multiplier != 0 or game.player_brake_lens.emission_energy_multiplier < 2:
+		printerr("Expected red brake lights and unlit reversing lights at a braked stop")
+		quit(1)
+		return
+	game.mouse_brake = false
+	game._drive(1.0 / 60.0)
+	Input.action_press("ui_down")
+	game._drive(1.0 / 60.0)
+	Input.action_release("ui_down")
+	if game.speed >= 0 or game.reverse_lens.emission_energy_multiplier < 1:
+		printerr("Expected white reversing lights while backing up")
+		quit(1)
+		return
+	game.mouse_brake = true
+	game._drive(1.0 / 60.0)
 	game._change_seat()
 	if not game.walker.visible or not game.parked_cars[porsche].visible:
 		printerr("Could not park and leave the GT3 RS")
