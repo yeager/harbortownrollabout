@@ -210,6 +210,7 @@ func _process(delta: float) -> void:
 	for surface in [road_finish,sidewalk_finish,soil_finish,quay_finish]:
 		surface.set_shader_parameter("wet",weather.wet)
 		surface.set_shader_parameter("snow_cover",weather.snow)
+	water_finish.set_shader_parameter("rain",weather.intensity.x)
 	city_env.sky.sky_material.set_shader_parameter("overcast",maxf(weather.intensity.x,weather.intensity.y))
 	_update_daylight(delta)
 	if message_timer > 0.0:
@@ -751,6 +752,7 @@ func _build_waterfront() -> void:
 	var water := Shader.new()
 	water.code = """
 	shader_type spatial;
+	uniform float rain = 0.0;
 	uniform vec3 ferry_center;
 	uniform vec2 stern;
 	uniform vec2 wake_heading;
@@ -765,6 +767,15 @@ func _build_waterfront() -> void:
 		float fine = sin(dot(p,vec2(8.3,3.9)) + chop*1.1 + TIME*2.0);
 		float detail = 1.0 - smoothstep(.05,.35,length(fwidth(p)));
 		vec2 slope = vec2(.024,.013)*swell + vec2(.040,-.022)*chop + detail*vec2(.026,.013)*fine;
+		if (rain > .001 && detail > .001) {
+			vec2 cell = floor(p*2.);
+			float seed = fract(sin(dot(cell,vec2(37.1,91.7)))*4317.);
+			vec2 radial = fract(p*2.)-.5+(vec2(seed,fract(seed*31.7))-.5)*.18;
+			float radius = length(radial);
+			float age = fract(TIME*1.4+seed);
+			float crest = (radius-age*.38)*48.;
+			slope += radial/max(radius,.001)*crest*exp(-crest*crest)*(1.-age)*rain*detail*.32;
+		}
 		NORMAL_MAP = normalize(vec3(slope,1.0))*.5+.5;
 		ALBEDO = mix(vec3(.027,.062,.078),vec3(.051,.093,.117),.5+.5*chop);
 		vec2 trail = p-stern;
@@ -786,7 +797,7 @@ func _build_waterfront() -> void:
 		float pane = smoothstep(.03,.13,abs(fract((hit.y+4.1)/.82+.5)-.5));
 		float reflection = float(t>0.)*band*(1.-smoothstep(4.,4.24,abs(hit.y)))*pane;
 		EMISSION = dusk*(vec3(.034,.058,.084)*(.75+.25*chop)+vec3(.66,.42,.21)*reflection*(.25+.75*smoothstep(-.5,.8,chop+fine*.38)));
-		ROUGHNESS = .31;
+		ROUGHNESS = .31+.10*rain;
 		METALLIC = .12;
 	}
 	"""

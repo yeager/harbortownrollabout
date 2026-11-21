@@ -137,3 +137,5 @@ Spelprojektet publiceras i det privata GitHub-repot yeager/axels-emergency-vehic
 - Mark på båda kanalstränderna samt trottoarerna vid huvudgatorna följer nu samma successiva snötäcke och väta som körbanan. Materialvärdena kontrollerades vid fyra snönivåer i Godot.
 
 - Vädret påverkar även stenläggningen vid kajhusen och strandpromenaden. Våt granit mörknar och blir blankare, medan snö samlas först tydligare i fogarna.
+
+- Regndroppar skapar expanderande ringar i kanalens ytreflexer. Effekten följer den flytande nederbörden och tonas ned på avstånd. Kontroll i Godot omfattade regn, slask, snö och uppehåll.
