@@ -258,3 +258,4 @@ Snöskoterns två skidor lämnar 12 cm breda fåror i snö. Spårens positioner 
 Spår som bildats i snötäcket bleknar vid tö och tas bort när snön smält. Bromsspår från barmark ligger kvar. Verifierade mellansteg och noll snö i Godot.
 Äldre bromsspår på asfalt döljs gradvis av snötäcket och framträder efter tö. Verifierade materialens synlighet och bevarade spår i Godot.
 Startskriptet söker Godot 4 och prioriterar uttryckligt GODOT_BIN, även för specialbyggda motorer. Testade mot simulerade 3.x-, 4.x- och specialbyggen.
+Verifierade val av snöskoter, styrning, gas, broms och avstigning i huvudscenen med Godot 4.7.dev NGX. Lade till och provade svensk text för DLSS-inställningen i samma motor. Testet kördes headless.

@@ -626,3 +626,9 @@ msgstr "Släpp av passagerare vid Västerängen."
 
 msgid "↑  Café · Snack kiosk"
 msgstr "↑  Kafé · Gatukök"
+
+msgid "Forward+ · NVIDIA DLSS (experimental; RTX required)"
+msgstr "Forward+ · NVIDIA DLSS (experimentellt, kräver RTX)"
+
+msgid "DLSS is experimental. It needs the NGX-enabled engine and a supported NVIDIA RTX GPU/driver; otherwise it continues without DLSS. Restart to apply."
+msgstr "DLSS är experimentellt och kräver en spelmotor med NGX samt ett kompatibelt NVIDIA RTX-kort med rätt drivrutin. Om stödet saknas körs spelet utan DLSS. Starta om spelet för att använda ändringen."
