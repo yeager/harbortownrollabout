@@ -249,3 +249,4 @@ Framvagnen på snöskotern har modellerade spiralfjädrar med fjädersäten och 
 Snöskotern lämnar ett centrerat, 40 cm brett bromsspår från drivbandet vid hård bromsning. Bilarnas däckskrik används bara för hjulfordon. Kontrollerat spårinstans och ljud i Godot.
 När snö täcker marken lämnar skoterns drivband spår även under vanlig körning. Testade gaspådrag på barmark och snö i Godot.
 Åtgärdat bromsljuset på skotern. Lampan hade en materialtyp som spelet inte kände igen. Verifierade starkare ljus vid broms och återgång när bromsen släpps. Bakpartiet har även lamphus och lyftbåge.
+Bromsljus fungerar nu även för klassikerna, Teslan, bussen, bärgaren, raggarbilen och A-traktorn. Testat ljusstyrka på alla tolv valbara fordon och två trafikmodeller samt att LGF-reflexen är separat.

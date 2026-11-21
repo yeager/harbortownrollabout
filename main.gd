@@ -2541,6 +2541,8 @@ func _brake_lens(model: Node3D, reversing := false) -> StandardMaterial3D:
 			if not original:
 				continue
 			var matches := original.resource_name.begins_with("Tail lamp")
+			if original.resource_name.begins_with("Emergency red lens"):
+				matches = part.name.begins_with("Ruby tail lens") or part.name.begins_with("Rear lamp") or part.name.begins_with("Tail lamp")
 			if reversing:
 				matches = part.name.begins_with("Kombinationslykta") and original.resource_name.begins_with("Glass reflection")
 			if matches:
