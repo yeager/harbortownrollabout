@@ -165,6 +165,8 @@ func update_customer(foot: bool, pos: Vector3, active: bool) -> void:
 		first_product.grab_focus()
 
 func rebuild_menu() -> void:
+	var focused := get_viewport().gui_get_focus_owner()
+	var focus_index := focused.get_index() if focused and focused.get_parent() == panel else -1
 	snack_buttons.clear()
 	for child in panel.get_children():
 		panel.remove_child(child)
@@ -200,6 +202,10 @@ func rebuild_menu() -> void:
 			panel.add_child(eat)
 			snack_buttons[product] = eat
 	refresh_basket()
+	if focus_index >= 0 and focus_index < panel.get_child_count():
+		var replacement := panel.get_child(focus_index) as Button
+		if replacement and replacement.is_visible_in_tree():
+			replacement.grab_focus()
 
 func eat_snack(product: String) -> void:
 	var game = get_parent()

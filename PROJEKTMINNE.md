@@ -291,3 +291,4 @@ Tvärbanans hållplatsbromsning räknar med rörelsen under varje bildruta. Veri
 Skolans taxiplats har en gul dubbelsidig TAXI-skylt vid uppdragets trottoarkant. Kontrollerade placering och båda läsriktningarna i Godot.
 Skolskjutsen bekräftar att eleven sitter i taxin och eleven tackar vid skolan. Testade svensk text, hämtning och avlämning och exakt en utbetalning om 15 mynt.
 Körhjälpens skolskjuts verifierad i Godot 4.6.3: en rullande taxi hämtar ingen elev, en avbruten väntan börjar om och ett fullständigt stopp vid både hämtning och avlämning ger 15 mynt exakt en gång utan knapptryckning.
+Butiksmenyn behåller tangentbordsfokus vid språkbyte. Testade att glassknappen förblir vald och två ägda glassar visas på både svenska och engelska.
