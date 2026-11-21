@@ -476,3 +476,9 @@ msgstr "Taxikörningar"
 
 msgid "Roadside recovery"
 msgstr "Bärgningsuppdrag"
+
+msgid "Pick up a passenger at the square and drive them to the marina."
+msgstr "Hämta en passagerare på torget och kör till småbåtshamnen."
+
+msgid "Collect the car with a smoking bonnet and take it to the workshop."
+msgstr "Hämta bilen som ryker från motorhuven och kör den till verkstaden."

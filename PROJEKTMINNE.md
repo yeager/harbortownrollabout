@@ -115,3 +115,5 @@ Spelprojektet publiceras i det privata GitHub-repot yeager/axels-emergency-vehic
 - Uppdragstelefonens räknare följer de fyra sparade meddelandena och nollställs när inkorgen blir synlig efter paus. Testat i Godot.
 
 - Aktivitetsmenyn visar Taxikörningar eller Bärgningsuppdrag när respektive fordon väljs. Svenska texterna testades genom att växla mellan taxi, bärgningsbil och ambulans.
+
+- Startmenyn beskriver första resan för taxi och bärgningsbil. De svenska beskrivningarna kontrollerades vid fordonsbyte i Godot.

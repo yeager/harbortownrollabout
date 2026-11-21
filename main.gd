@@ -3106,6 +3106,10 @@ func _refresh_ui() -> void:
 		subtitle_label.text = "Choose a vehicle and drive to three missions.\nTake your time. You control the lights and siren."
 		if free_drive:
 			subtitle_label.text = "Explore on foot or by vehicle. Stop at the depot to change vehicles."
+		elif vehicle_index == TAXI:
+			subtitle_label.text = "Pick up a passenger at the square and drive them to the marina."
+		elif vehicle_index == RECOVERY:
+			subtitle_label.text = "Collect the car with a smoking bonnet and take it to the workshop."
 		start_button.text = "Start driving"
 	elif mode == "complete":
 		title_label.text = "All missions complete!"
