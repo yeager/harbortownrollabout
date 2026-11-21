@@ -202,3 +202,4 @@ Spelprojektet publiceras i det privata GitHub-repot yeager/axels-emergency-vehic
 - Vid taxikörning och bärgning visar markeringen vägen tillbaka till det parkerade uppdragsfordonet till fots. Återinträde och byte till båt eller Tvärbana verifierades i Godot.
 - Till fots visar returmarkören dörren som användes vid urstigning. Testat i Godot med blockerad högerdörr på taxi och bärgare, inklusive återinträde på vänster sida.
 - Trafiken börjar bromsa när spelaren är på väg in i körfältet inom 1,4 sekunder. Stillastående och rörelse bort från körfältet jämfördes med rörelse mot körfältet i Godot.
+- Bilar tutar på en långsam A-traktor endast om den begränsar avståndet framåt. Test i båda riktningarna med en fotgängare emellan och därefter fem sekunders följekörning gav minst 4,3 meters lucka.

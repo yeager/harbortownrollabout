@@ -1942,7 +1942,7 @@ func _update_traffic(delta: float) -> void:
 		var actor: Node3D = item.actor
 		var direction: float = item.direction
 		var clearance := minf(TRAFFIC_EAST - TRAFFIC_WEST,street_signals.red_clearance(actor.position,Vector3.RIGHT*direction,float(item.length)) + 1.0)
-		var tractor_ahead := false
+		var tractor_gap := INF
 		for other in traffic_data:
 			var neighbour: Node3D = other.actor
 			if neighbour == actor or absf(neighbour.position.z - actor.position.z) >= float(item.width) + float(other.width):
@@ -1951,7 +1951,7 @@ func _update_traffic(delta: float) -> void:
 			var gap := ahead - float(item.length) - float(other.length)
 			if gap<clearance:
 				clearance = gap
-				tractor_ahead = other.tractor and other.direction==direction
+				tractor_gap = gap if other.tractor and other.direction==direction else INF
 		if casualty.visible and casualty.get_parent()==self:
 			var offset := casualty.position-actor.position
 			var gap := offset.x*direction-float(item.length)-2.1
@@ -1988,11 +1988,11 @@ func _update_traffic(delta: float) -> void:
 			var remaining := (actor.position.z-crossing_pedestrian.position.z)*crossing_direction
 			if ahead >= 0 and remaining >= -float(item.width)-.45:
 				clearance = minf(clearance,ahead-float(item.length)-1.2)
-		if tractor_ahead and clearance<8 and not item.tractor and item.speed>1:
+		if tractor_gap <= clearance and tractor_gap<8 and not item.tractor and item.speed>1:
 			if not item.greeted:
 				item.horn.play()
 				item.greeted = true
-		elif clearance>15:
+		elif tractor_gap>15:
 			item.greeted = false
 		var free_space := maxf(0.0, clearance - 1.0)
 		var target := minf(float(item.cruise)*weather_pace, free_space * .95*weather_pace)
