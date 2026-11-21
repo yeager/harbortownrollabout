@@ -3033,7 +3033,8 @@ func _button(caption: String, width: float) -> Button:
 	button.text = caption
 	button.custom_minimum_size = Vector2(width, 48)
 	button.add_theme_font_size_override("font_size", 17)
-	button.add_theme_color_override("font_color", Color("#172b32"))
+	for state in ["font_color", "font_focus_color", "font_hover_color", "font_pressed_color", "font_hover_pressed_color"]:
+		button.add_theme_color_override(state, Color("#172b32"))
 	button.add_theme_stylebox_override("normal", _style(Color("#d9e8dc"), 12))
 	button.add_theme_stylebox_override("hover", _style(Color("#f3f5e9"), 12))
 	button.add_theme_stylebox_override("pressed", _style(Color("#a8cfb1"), 12))

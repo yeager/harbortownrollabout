@@ -207,3 +207,4 @@ Spelprojektet publiceras i det privata GitHub-repot yeager/axels-emergency-vehic
 - Paus avbryter tutor, däckljud och uppläst hälsning samt tystar trafiksirener direkt. Paus och återgång med samtidiga fordonsljud testades i Godot.
 - Paus fryser återstående lästid för tillfälliga meddelanden. Taxins bekräftelse vid upphämtning testades med 60 sekunders simulerad paus och återupptagen nedräkning.
 - Pausmenyn visar den aktuella uppdragstexten från telefonen. Sex uppdragssteg verifierades på svenska och engelska, utan dubbla telefonmeddelanden.
+- Förbättrad textkontrast på ljusa knappar vid tangentbordsfokus, muspekare och tryck. Rendering vid 800 × 500 verifierade fokuserad fortsättknapp och två synliga rader för bärgningsuppdraget på svenska och engelska.
