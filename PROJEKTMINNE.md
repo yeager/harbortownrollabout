@@ -143,3 +143,5 @@ Spelprojektet publiceras i det privata GitHub-repot yeager/axels-emergency-vehic
 - Regn och snö dämpar direkt solljus och skuggornas kontrast i takt med molntäcket. Testat vid tre nederbördsnivåer med fast dagläge.
 
 - Himlens reflektionskarta dämpar starka högdagrar och får en svalare ton i mulet väder. Godot startades med den ändrade himmelsshadern utan kompileringsfel.
+
+- Sparat manuellt väder gäller redan när en ny spelsession öppnas, inklusive väglag och nederbörd. Testat med sparat snöväder följt av gradvis töväder efter byte till sol.

@@ -29,6 +29,12 @@ var snow_particles: GPUParticles3D
 func _ready() -> void:
 	rain_particles = particles(false)
 	snow_particles = particles(true)
+	# Start a new session in the chosen conditions. Later changes still ease in.
+	intensity = PRECIPITATION[weather_setting if weather_setting else forecast]
+	wet = intensity.x
+	snow = intensity.y
+	rain_particles.amount_ratio = wet
+	snow_particles.amount_ratio = snow
 
 func particles(flakes: bool) -> GPUParticles3D:
 	var emitter := GPUParticles3D.new()
