@@ -1602,7 +1602,7 @@ func _change_seat() -> void:
 		old_car.visible = true
 		var door := ambulance.position
 		for side in [1,-1]:
-			var candidate: Vector3 = ambulance.position + ambulance.basis.x * (player_half_size.x+.65)*side
+			var candidate := ambulance.to_global(Vector3(side*(player_half_size.x+.65),0,-parked_sizes[vehicle_index].y*.27))
 			if _on_foot_clear(candidate):
 				door = candidate
 				break

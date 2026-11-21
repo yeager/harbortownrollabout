@@ -177,3 +177,5 @@ Spelprojektet publiceras i det privata GitHub-repot yeager/axels-emergency-vehic
 - Depån har en separat asfalterad ruta för bärgaren och en avslutande linje vid taxiplatsen. Godot-testet kontrollerade att hela bärgarens fotavtryck ryms på asfalten efter spelstart.
 
 - Dörrmarkören visar fordonets namn och F för att kliva in. Svensk uppmaning och byte från promenad till bärgare verifierades i Godot.
+
+- Vid urstigning hamnar spelaren längs samma dörrlinje som används vid instigning. Testat att bärgaren kräver stopp och att spelaren direkt kan nå samma dörr igen.
