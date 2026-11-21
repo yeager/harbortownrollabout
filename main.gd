@@ -910,7 +910,7 @@ func _build_waterfront() -> void:
 	uniform float rain = 0.0;
 	uniform vec3 ferry_center;
 	uniform float ferry_motion;
-	uniform vec2 stern;
+	uniform vec2 wake_origin;
 	uniform vec2 wake_heading;
 	uniform float wake_strength;
 	uniform float dusk;
@@ -934,7 +934,7 @@ func _build_waterfront() -> void:
 		}
 		NORMAL_MAP = normalize(vec3(slope,1.0))*.5+.5;
 		ALBEDO = mix(vec3(.027,.062,.078),vec3(.051,.093,.117),.5+.5*chop);
-		vec2 trail = p-stern;
+		vec2 trail = p-wake_origin;
 		float aft = -dot(trail,wake_heading);
 		float across = abs(dot(trail,vec2(-wake_heading.y,wake_heading.x)));
 		float edge = across-.43-max(aft,0.)*.23+.12*chop;
@@ -1315,9 +1315,11 @@ func _build_marina() -> void:
 func _update_moorings(delta: float) -> void:
 	wave_time += delta
 	var heading := Vector2(-sin(launch.rotation.y),-cos(launch.rotation.y))
-	var stern := Vector2(launch.position.x,launch.position.z)-heading*1.95
-	water_finish.set_shader_parameter("stern",stern)
-	water_finish.set_shader_parameter("wake_heading",heading*signf(launch_speed))
+	var course := heading*signf(launch_speed)
+	var trailing_end := 2.50 if launch_speed < 0 else 2.12
+	var wake_origin := Vector2(launch.position.x,launch.position.z)-course*trailing_end
+	water_finish.set_shader_parameter("wake_origin",wake_origin)
+	water_finish.set_shader_parameter("wake_heading",course)
 	water_finish.set_shader_parameter("wake_strength",clampf(absf(launch_speed)/6.0,0,1) if boating else 0.0)
 	# A double-ended ferry can reverse away from either landing without turning.
 	# Each crossing includes a five-second stop and gentle acceleration.
