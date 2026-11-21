@@ -2,6 +2,8 @@ extends Node3D
 
 const STATION_NAMES := ["Sjöstads kaj", "Kanalparken", "Brotorget"]
 
+const SERVICE_BRAKE := 1.8
+
 var track := Curve3D.new()
 var sections: Array[Node3D] = []
 var platform_door_leaves: Array[Node3D] = []
@@ -127,9 +129,13 @@ func advance(delta: float, manual: bool, gas: bool, brake: bool) -> void:
 	var target := 7.0
 	if manual:
 		target = 0 if brake else (7 if gas else velocity)
-	velocity = move_toward(velocity,minf(target,sqrt(3.6*remaining)),delta*(3 if brake else 1.8))
-	var step := velocity*delta
-	if remaining<=step+.015:
+	# Reserve the distance travelled this frame as well as the braking distance afterwards.
+	var initial := velocity
+	var half_change := SERVICE_BRAKE * delta * .5
+	var approach_speed := sqrt(maxf(0,half_change*half_change + SERVICE_BRAKE*(2*remaining-initial*delta))) - half_change
+	velocity = move_toward(initial,clampf(approach_speed,0,target),delta*(3.0 if brake else SERVICE_BRAKE))
+	var step := (initial + velocity) * .5 * delta
+	if remaining <= step + .0001:
 		distance=stops[next_stop]
 		next_stop=(next_stop+1)%stops.size()
 		next_stop_display.text = STATION_NAMES[next_stop]

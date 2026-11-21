@@ -287,3 +287,4 @@ Huvudkorsningens fyra tillfarter har målade stopplinjer i färdriktningens hög
 Två nya familje-SMS om morfars spegelbild på Tvärbanan och nallens strumpmössa. Testade leverans och språkbyte i inkorgen med aktuellt uppdrag överst.
 Escape stänger en öppen telefon och låter körningen fortsätta. Testade även svensk stängknapp och att nästa Escape pausar spelet.
 Fordonsradion pausar vid avstigning och fortsätter på samma ställe vid instigning. Testade båda sätesbyten och avstängning med radioåtgärden i Godot.
+Tvärbanans hållplatsbromsning räknar med rörelsen under varje bildruta. Verifierade alla stationer i förar- och passagerarläge vid 30, 60 och 120 simuleringssteg per sekund.
