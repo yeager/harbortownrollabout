@@ -1436,6 +1436,23 @@ func _build_depot() -> void:
 	skipper.rotation = Vector3.ZERO
 	skipper.position = Vector3(-.21,-.16,.56)
 	skipper.add_child(ponytail.duplicate())
+	var vest_finish := _material(Color("#f07724"),.91)
+	for side in [-1,0,1]:
+		var pad := MeshInstance3D.new()
+		var padding := CapsuleMesh.new()
+		padding.radius = .16
+		padding.height = .54
+		pad.mesh = padding
+		pad.name = "Flotation padding"
+		pad.position = Vector3(side*.128,1.26,.12 if side==0 else -.13)
+		pad.scale = Vector3(1.55 if side==0 else .84,1,.83)
+		pad.material_override = vest_finish
+		skipper.add_child(pad)
+		var patch := _make_box("Reflective tape",Vector3(.09,.084,.018),
+			Vector3(side*.128,1.39,.237 if side==0 else -.25),Color("#d7dbcf"),false,skipper)
+		patch.rotation.z = side*.12
+	_make_box("Vest buckle",Vector3(.075,.052,.032),Vector3(0,1.17,-.231),Color("#374046"),false,skipper)
+
 	for leg in skipper.get_meta("legs"):
 		leg.rotation.x = .86
 	for arm in skipper.get_meta("arms"):
