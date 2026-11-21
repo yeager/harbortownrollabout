@@ -452,3 +452,6 @@ msgstr "Dina köp"
 
 msgid "%s × %d"
 msgstr "%s × %d"
+
+msgid "Waiting for a green light"
+msgstr "Väntar på grönt ljus"

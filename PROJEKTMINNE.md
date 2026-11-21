@@ -73,3 +73,5 @@ Spelprojektet publiceras i det privata GitHub-repot yeager/axels-emergency-vehic
 - Övergångsstället mellan depån och butikerna på Stationsallén har gångsignaler, trafikljus och stopplinjer i båda körriktningarna. Bilens bromshjälp följer signalen.
 
 - Bromshjälpen tar hänsyn till rörelsen under nästa bildruta och tänder bromsljusen när den begränsar farten. Vid test på Stationsallén bromsade bilen från 8 m/s till stillastående före linjen och körde vidare med bibehållen gas vid grönt.
+
+- När bilen stannar vid signalens stopplinje visas ”Väntar på grönt ljus”. Texten ligger kvar om spelaren släpper gasen och försvinner när signalen ger fri passage.

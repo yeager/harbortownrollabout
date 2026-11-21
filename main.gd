@@ -98,6 +98,7 @@ var release_walk_keys := false
 var mouse_gas := false
 var mouse_brake := false
 var gentle_driving := true
+var waiting_for_signal := false
 var brake_held := false
 var tire_player := AudioStreamPlayer.new()
 var skid_marks := MultiMesh.new()
@@ -354,7 +355,8 @@ func _drive(delta: float) -> void:
 	ambulance.rotate_y(-clampf(yaw_rate, -max_yaw_rate, max_yaw_rate) * delta)
 	var forward := -ambulance.global_transform.basis.z
 	var travel_direction := forward * signf(speed)
-	var stopping_distance := street_signals.red_clearance(ambulance.position,travel_direction,player_half_size.y)
+	var signal_gap := street_signals.red_clearance(ambulance.position,forward if is_zero_approx(speed) else travel_direction,player_half_size.y)
+	var stopping_distance := signal_gap
 	var people: Array = [crossing_pedestrian]
 	for item in walker_data:
 		people.append(item.actor)
@@ -380,6 +382,7 @@ func _drive(delta: float) -> void:
 		var limit := sqrt(frame_brake*frame_brake + 10.0*maxf(0,stopping_distance-.04))-frame_brake
 		assisted_braking = absf(speed)>limit
 		speed = signf(speed)*minf(absf(speed),limit)
+	waiting_for_signal = signal_gap <= .35 and signal_gap == stopping_distance and absf(speed) < .25
 	if player_brake_lens:
 		_set_rear_lights(player_brake_lens, brake_held or assisted_braking)
 	var step := forward * speed * delta
@@ -2710,6 +2713,7 @@ func _starting_position() -> Vector3:
 	return Vector3(best_x, _surface_height(best_x, lane), lane)
 
 func _start_game() -> void:
+	waiting_for_signal = false
 	last_dispatch=""
 	phone.messages.clear()
 	phone.unread=0
@@ -3021,6 +3025,8 @@ func _refresh_status() -> void:
 		status_label.text = "Stand here to help" if gentle_driving else "Press Space to help"
 	elif mode == "playing" and not paused and gentle_driving and _at_target():
 		status_label.text = "Stop here to help." if absf(speed) >= 0.12 else "Helping …"
+	elif waiting_for_signal and mode=="playing" and not paused and not walker.visible and not boating:
+		status_label.text = "Waiting for a green light"
 	elif walker.visible and not boating and not paused:
 		status_label.text = "Walk with WASD or arrows · F to enter a vehicle"
 	elif paused:
