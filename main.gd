@@ -1683,7 +1683,7 @@ func _update_entry_button() -> void:
 		var car := parked_cars[nearest]
 		var side := signf(car.to_local(walker.position).x)
 		entry_marker.global_position = car.to_global(Vector3(side * parked_sizes[nearest].x, 2.05, -parked_sizes[nearest].y * .27))
-		entry_marker.text = tr(VEHICLE_NAMES_ALL[nearest])
+		entry_marker.text = tr("F · Enter %s") % tr(VEHICLE_NAMES_ALL[nearest])
 	seat_button.disabled = nearest < 0
 	seat_button.text = tr("Enter %s") % tr(VEHICLE_NAMES_ALL[nearest]) if nearest >= 0 else tr("Walk to a vehicle")
 

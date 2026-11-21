@@ -175,3 +175,5 @@ Spelprojektet publiceras i det privata GitHub-repot yeager/axels-emergency-vehic
 - Parkerade fordons kollisionsytor utgår från modellens faktiska ytterkanter. Till fots provades frigången framför och bakom bärgaren i tre olika riktningar.
 
 - Depån har en separat asfalterad ruta för bärgaren och en avslutande linje vid taxiplatsen. Godot-testet kontrollerade att hela bärgarens fotavtryck ryms på asfalten efter spelstart.
+
+- Dörrmarkören visar fordonets namn och F för att kliva in. Svensk uppmaning och byte från promenad till bärgare verifierades i Godot.
