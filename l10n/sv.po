@@ -402,8 +402,8 @@ msgstr "%s · %d mynt"
 msgid "You need %d more coins."
 msgstr "Du behöver %d mynt till."
 
-msgid "Bought %s. Thank you!"
-msgstr "Du köpte %s. Tack!"
+msgid "%s · Paid %d coins. Thank you!"
+msgstr "%s · Du betalade %d mynt. Tack!"
 
 msgid "Recovery truck"
 msgstr "Bärgningsbil"

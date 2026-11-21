@@ -163,3 +163,5 @@ Spelprojektet publiceras i det privata GitHub-repot yeager/axels-emergency-vehic
 - Kiosktestets intermittenta avslutsvarning identifierades i Godots verbose-logg som ambulansens AudioStreamWAV och dess uppspelare. Fem upprepningar med 250 ms mellan frigjord scen och testprocessens avslut genomförde köpet utan resursvarning. Normal spelavslutning är inte undersökt i detta test.
 
 - Tre separata grafiska Godot-processer under X11 fick fönsterhanterarens normala stängningsmeddelande medan ambulanssirenen spelade. Alla tre avslutades med kod 0 utan resursvarning i den utförliga loggen.
+
+- Butikskvittot visar vara och betalt belopp på svenska och engelska. Svenskt kvitto för en kanelbulle kontrollerades mot tre dragna mynt.

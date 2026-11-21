@@ -214,4 +214,4 @@ func purchase(shop: int, item: int) -> void:
 	refresh_basket()
 	game._save_preferences()
 	game._refresh_ui()
-	receipt.text=tr("Bought %s. Thank you!") % tr(product)
+	receipt.text=tr("%s · Paid %d coins. Thank you!") % [tr(product),cost]
