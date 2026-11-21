@@ -369,6 +369,7 @@ func _can_capture_camera() -> bool:
 	return mode == "playing" and not paused and not phone.handset.is_visible_in_tree() and not shops.shop_card.is_visible_in_tree()
 
 func _unhandled_input(event: InputEvent) -> void:
+	if phone.handset.is_visible_in_tree(): return
 	if mode == "playing" and not paused and (tram_mode == 2 or (tram_mode == 0 and (boating or not walker.visible))) and event is InputEventMouseButton and event.pressed:
 		if event.button_index == MOUSE_BUTTON_LEFT:
 			brake_pedal_held = driving_controls.over_brake_pedal(driving_controls.get_global_transform_with_canvas().affine_inverse() * event.position)
@@ -3393,6 +3394,13 @@ func _build_ui() -> void:
 	shops.build_menu(ui)
 	ui.add_child(phone)
 	radio_button = _button("Radio off · J",180)
+	phone.handset.visibility_changed.connect(func():
+		if phone.handset.is_visible_in_tree():
+			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+			mouse_gas = false
+			mouse_brake = false
+			brake_pedal_held = false
+	)
 	phone.add_child(radio_button)
 	radio_button.pressed.connect(_toggle_radio)
 	radio.stream = preload("res://audio/sjostad_radio.wav")
