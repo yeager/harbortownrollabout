@@ -235,3 +235,4 @@ Buss 502 hämtar nu även vid Västra torget och lämnar vid Västerängen. Godo
 Nattvy jämförd i Compatibility, Mobile och Forward+ på AMD. Natthimlens färger färgrymdskonverteras nu av Godot så Vulkan-lägena inte visar en ljus skymningshimmel vid midnatt.
 I automatiskt dygnsläge vandrar ljusriktningen genom dagen, med lägre och varmare ljus vid gryning och skymning. Riktning, skugginställning och kontinuitet över dygnsskarven testade i Godot.
 Kanalens vattenmaterial sprider ljus i regn och skum, med skarpare solblänk på lugnt vatten. Färjans fönsterspegling använder vågens reflekterade siktlinje. Kanalvy renderad med alla tre renderarna.
+Lotten drar ett V-format kölvatten bakom den aktiva aktern. Styrkan följer överfartens hastighet och går till noll vid kaj. Båda riktningarna testade och överfarten granskad i Forward+.

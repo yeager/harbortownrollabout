@@ -909,6 +909,7 @@ func _build_waterfront() -> void:
 	shader_type spatial;
 	uniform float rain = 0.0;
 	uniform vec3 ferry_center;
+	uniform float ferry_motion;
 	uniform vec2 stern;
 	uniform vec2 wake_heading;
 	uniform float wake_strength;
@@ -939,6 +940,11 @@ func _build_waterfront() -> void:
 		float edge = across-.43-max(aft,0.)*.23+.12*chop;
 		float crests = exp(-edge*edge*7.) + .48*exp(-across*across*2.);
 		float foam = wake_strength*smoothstep(-.3,.5,aft)*(1.-smoothstep(1.,3.+8.*wake_strength,aft))*crests;
+		float ferry_aft = (ferry_center.z-p.y)*sign(ferry_motion)-6.4;
+		float ferry_edge = abs(p.x-ferry_center.x)-1.1-max(ferry_aft,0.)*.24+.13*chop;
+		float ferry_foam = abs(ferry_motion)*smoothstep(-.25,.4,ferry_aft)
+			*(1.-smoothstep(1.,9.,ferry_aft))*exp(-ferry_edge*ferry_edge*3.);
+		foam = max(foam,ferry_foam);
 		ALBEDO = mix(ALBEDO,vec3(.62,.74,.74),clamp(foam*(.55+.22*chop+.17*fine),0.,1.));
 		// Intersect the reflected sightline with the two saloon window bands.
 		vec3 eye = CAMERA_POSITION_WORLD;
@@ -1316,7 +1322,11 @@ func _update_moorings(delta: float) -> void:
 	# A double-ended ferry can reverse away from either landing without turning.
 	# Each crossing includes a five-second stop and gentle acceleration.
 	var half_trip := fmod(wave_time,58.0)
-	var crossing := smoothstep(5.0,29.0,fmod(half_trip,29.0))
+	var progress := clampf((fmod(half_trip,29.0)-5.0)/24.0,0,1)
+	var crossing := smoothstep(0,1,progress)
+	# Normalized speed of the smoothstep crossing, signed toward the current landing.
+	var motion := 4.0*progress*(1.0-progress)
+	water_finish.set_shader_parameter("ferry_motion",-motion if half_trip >= 29.0 else motion)
 	if half_trip >= 29.0:
 		crossing = 1.0-crossing
 	ferry.position = Vector3(68,-.97+.024*sin(wave_time*1.1),lerpf(-35.0,-12.0,crossing))
