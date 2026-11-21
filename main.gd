@@ -67,6 +67,8 @@ const RECOVERY := 5
 const SERVICE_STOPS := [Vector3(18,0,2.35), Vector3(34,0,-46), Vector3(126,0,-2.35), Vector3(34,0,-46)]
 const SERVICE_MESSAGES := ["Collect the car with a smoking bonnet.","Take the car to the workshop.","Collect the car with a missing wheel.","Take the car to the workshop."]
 var recovery_leg := 0
+const WORKSHOP_CAR_BOUNDS := AABB(Vector3(27.9,-1,-40.86),Vector3(4.2,3,1.72))
+var workshop_car: Node3D
 var casualty: Node3D
 var warning_triangle := Node3D.new()
 var loose_wheel: Node3D
@@ -441,6 +443,7 @@ func _drive(delta: float) -> void:
 			step = step.limit_length(maxf(0.0, clearance - 0.02))
 			speed = 0.0
 	var obstacles := building_bounds.duplicate()
+	if workshop_car.visible: obstacles.append(WORKSHOP_CAR_BOUNDS)
 	if casualty.visible and casualty.get_parent()==self:
 		obstacles.append(AABB(casualty.position-Vector3(2.1,1,.86),Vector3(4.2,3,1.72)))
 	for person in [crossing_pedestrian,passenger,arriving_passenger,waiting_medic]:
@@ -1536,6 +1539,7 @@ func _near_parked_vehicle(p: Vector3, margin: float) -> bool:
 	return false
 
 func _on_foot_clear(p: Vector3) -> bool:
+	if is_instance_valid(workshop_car) and workshop_car.visible and WORKSHOP_CAR_BOUNDS.grow(.2).has_point(p): return false
 	if is_instance_valid(casualty) and casualty.visible and casualty.get_parent()==self and AABB(casualty.position-Vector3(2.35,1,1.1),Vector3(4.7,3,2.2)).has_point(p): return false
 	if p.x < -60 or p.x > 170 or p.z < -86 or p.z > 65:
 		return false
@@ -2315,6 +2319,7 @@ func _update_route_arrows() -> void:
 func _sync_recovery() -> void:
 	var active := vehicle_index==RECOVERY and not free_drive
 	var loaded := recovery_leg%2==1
+	workshop_car.visible=recovery_leg>=2 and not loaded
 	var carrier := ambulance if not walker.visible else parked_cars[RECOVERY]
 	if loaded and vehicle_index!=RECOVERY:
 		carrier=parked_cars[RECOVERY]
@@ -2334,7 +2339,14 @@ func _sync_recovery() -> void:
 	bonnet_smoke.emitting=active and recovery_leg%4==0
 
 func _build_target_marker() -> void:
-	casualty=preload("res://vehicles/traffic_bmw_silver.glb").instantiate()
+	var roadside_model := preload("res://vehicles/traffic_bmw_silver.glb")
+	workshop_car=roadside_model.instantiate()
+	add_child(workshop_car)
+	workshop_car.position=Vector3(30,0,-40)
+	workshop_car.scale=Vector3.ONE*.79
+	workshop_car.rotation.y=PI/2
+	workshop_car.hide()
+	casualty=roadside_model.instantiate()
 	add_child(casualty)
 	casualty.scale=Vector3.ONE*.79
 	casualty.add_child(warning_triangle)
