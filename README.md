@@ -28,6 +28,9 @@ Godot loads the playable world from `main.tscn`. Vehicle meshes are in `vehicles
 ## Tvärbanan
 
 Select **Ride the tram** in the activity menu to follow an automatic service around a fictional three-stop canal loop. Select **Drive the tram** to control its speed with W and S or the arrow keys. Steering follows the rails, and the tram stops at each platform for six seconds. The lead car carries a Swedish notice beside a blue door.
+Passengers look out from the middle carriage. Hold the middle mouse button and drag to look around. The amber display above the aisle shows the next stop.
+
+![Passenger view inside the tram](docs/tram-interior.png)
 
 ## Weather and exploration
 

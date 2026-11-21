@@ -253,6 +253,7 @@ var helicopter: Node3D
 var main_rotor: Node3D
 var tail_rotor: Node3D
 var patrol_angle := 0.0
+var passenger_look := Vector2.ZERO
 var tram_mode := 0
 var water_finish := ShaderMaterial.new()
 var saloon_glazing: StandardMaterial3D
@@ -349,7 +350,7 @@ func _process(delta: float) -> void:
 		light_phase += delta * 3.2
 		_update_emergency_lights()
 	shops.update_customer(walker.visible and not ferry_passenger and not boating and tram_mode==0,walker.position,mode=="playing" and not paused)
-	weather.visible = shops.inside < 0
+	weather.visible = shops.inside < 0 and tram_mode != 1
 	_update_camera(delta)
 	weather.position = camera.position + Vector3.UP*8
 	_refresh_status()
@@ -361,6 +362,10 @@ func _input(event: InputEvent) -> void:
 		elif _can_capture_camera():
 			Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	if event is InputEventMouseMotion and _can_capture_camera() and (Input.mouse_mode == Input.MOUSE_MODE_CAPTURED or event.button_mask & MOUSE_BUTTON_MASK_MIDDLE):
+		if tram_mode == 1:
+			passenger_look.x = wrapf(passenger_look.x - event.relative.x * .007, -PI, PI)
+			passenger_look.y = clampf(passenger_look.y - event.relative.y * .006, -1.1, 1.1)
+			return
 		if cockpit_view and not walker.visible and not boating and tram_mode==0:
 			cockpit_look.x = clampf(cockpit_look.x-event.relative.x*.007,-1.4,1.4)
 			cockpit_look.y = clampf(cockpit_look.y-event.relative.y*.006,-.45,.52)
@@ -3312,6 +3317,14 @@ func _update_camera(delta: float, snap_to_car := false) -> void:
 	if boating and is_instance_valid(launch):
 		camera.position = launch.to_global(Vector3(1,3.6+orbit_height,7).rotated(Vector3.UP,orbit_angle))
 		camera.look_at(launch.to_global(Vector3(0,.4,-1.7)))
+		return
+	if tram_mode == 1 and tram.sections.size() > 1:
+		var saloon: Node3D = tram.sections[1]
+		var eye := Vector3(-.18, 1.75, 1.8)
+		var gaze := eye.direction_to(Vector3(0, 1.55, -2.2))
+		gaze = gaze.rotated(Vector3.RIGHT, passenger_look.y).rotated(Vector3.UP, passenger_look.x)
+		camera.global_position = saloon.to_global(eye)
+		camera.look_at(saloon.to_global(eye + gaze), saloon.global_basis.y)
 		return
 	if tram_mode > 0 and not tram.sections.is_empty():
 		var cab: Node3D = tram.sections[0]

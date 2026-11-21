@@ -9,6 +9,7 @@ var sections: Array[Node3D] = []
 var gangways: Array[MeshInstance3D] = []
 var bellows_finish := StandardMaterial3D.new()
 var platform_door_leaves: Array[Node3D] = []
+var interior_displays: Array[Label3D] = []
 var next_stop_display: Label3D
 var stops: Array[float] = []
 var next_stop := 1
@@ -104,6 +105,10 @@ func _ready() -> void:
 		var car := Node3D.new()
 		add_child(car)
 		sections.append(car)
+		var display := sign_at(car, STATION_NAMES[next_stop], Vector3(0,2.145,-2.085), 0, .0019)
+		display.modulate = Color("#ffbd58")
+		display.outline_size = 0
+		interior_displays.append(display)
 		car.add_child(preload("res://vehicles/tram_saloon.glb").instantiate())
 		for s in [-1,1]:
 			for opening_direction in [-1,1]:
@@ -111,7 +116,9 @@ func _ready() -> void:
 				car.add_child(leaf)
 				leaf.position = Vector3(s*1.21,1.49,.13+opening_direction*.26)
 				world._make_box("Door panel",Vector3(.08,2.22,.51),Vector3.ZERO,Color("#147db0"),false,leaf)
+				world._make_box("Interior door lining", Vector3(.008,2.21,.50), Vector3(-s*.043,0,0), Color("#dbd1b4"),false,leaf)
 				_door_window(s, opening_direction, leaf)
+				_door_window(-s, opening_direction, leaf)
 				if i==0 and s==1:
 					platform_door_leaves.append(leaf)
 		if i==1:
@@ -176,6 +183,8 @@ func advance(delta: float, manual: bool, gas: bool, brake: bool) -> void:
 		distance=stops[next_stop]
 		next_stop=(next_stop+1)%stops.size()
 		next_stop_display.text = STATION_NAMES[next_stop]
+		for display in interior_displays:
+			display.text = next_stop_display.text
 		velocity=0
 		dwell=6
 	else:
