@@ -334,3 +334,4 @@ Den första inlämnade bilen står kvar på verkstaden även medan nästa bil li
 - Lotten visar en personlig nedräkning när avstigning är vald. Svensk status vid val och ånger samt avstigning vid nästa brygga testade i Godot.
 - Uppdragspilar döljs vid påstigning på Lotten och visas från den nya bryggan vid avstigning. Testat med aktivt uppdrag i Godot.
 - Vid båda färjebryggorna börjar gångvägvisningen på landgångens brädor och leder via kajtrappan till gatan. Första pilens läge och höjd kontrollerade i Godot.
+- Vid fordonsbyte i depån nollställs tiden för pågående hjälp och tillfällig statustext. Verifierat telefonuppdrag och återställda tider för taxi, buss och bärgningsbil i Godot.

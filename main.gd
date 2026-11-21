@@ -166,6 +166,9 @@ var mission_index := 0
 var vehicle_progress := {}
 
 func _change_mission_vehicle(next: int) -> void:
+	if next != vehicle_index:
+		parked_at_target = 0.0
+		message_timer = 0.0
 	vehicle_progress[vehicle_index] = mission_index
 	vehicle_index = next
 	mission_index = vehicle_progress.get(next, 0)
