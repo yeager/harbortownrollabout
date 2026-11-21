@@ -68,6 +68,7 @@ const SERVICE_STOPS := [Vector3(18,0,2.35), Vector3(34,0,-46), Vector3(126,0,-2.
 const SERVICE_MESSAGES := ["Collect the car with a smoking bonnet.","Take the car to the workshop.","Collect the car with a missing wheel.","Take the car to the workshop."]
 var recovery_leg := 0
 var casualty: Node3D
+var loose_wheel: Node3D
 var lost_wheel: Node3D
 var bonnet_smoke := CPUParticles3D.new()
 var taxi_leg := 0
@@ -2295,6 +2296,7 @@ func _sync_recovery() -> void:
 		casualty.position=stop+Vector3(0,0,4.2 if recovery_leg%4==0 else -4.2)
 		casualty.rotation.y=PI/2
 	lost_wheel.visible=recovery_leg%4<2
+	loose_wheel.visible=active and recovery_leg%4==2
 	bonnet_smoke.emitting=active and recovery_leg%4==0
 
 func _build_target_marker() -> void:
@@ -2302,6 +2304,12 @@ func _build_target_marker() -> void:
 	add_child(casualty)
 	casualty.scale=Vector3.ONE*.79
 	lost_wheel=_rig_wheels(casualty)[0]
+	loose_wheel=lost_wheel.duplicate()
+	casualty.add_child(loose_wheel)
+	var hub := casualty.to_local(lost_wheel.global_position)
+	loose_wheel.position=Vector3(signf(hub.x)*(absf(hub.x)+1.05),.15,hub.z+.35)
+	loose_wheel.rotation.z=PI*.5
+	loose_wheel.hide()
 	bonnet_smoke.position=Vector3(0,1.27,1.85)
 	bonnet_smoke.amount=32
 	bonnet_smoke.lifetime=1.6

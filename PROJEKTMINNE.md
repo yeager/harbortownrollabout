@@ -105,3 +105,5 @@ Spelprojektet publiceras i det privata GitHub-repot yeager/axels-emergency-vehic
 - Alla tre spårvagnshållplatser har dubbelsidiga namnskyltar under taket, bänk och markerad plattformskant.
 
 - Tvärbanans status visar avstånd i meter längs rälsen till nästa hållplats tillsammans med namn och fart, på svenska och engelska.
+
+- Vid bärgningen på östra kajen ligger det lossnade hjulet bredvid bilen tills den hämtas. Alla fyra uppdragssteg provades i Godot.
