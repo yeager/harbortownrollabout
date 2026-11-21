@@ -207,7 +207,11 @@ func _process(delta: float) -> void:
 	if mode == "playing" and not paused:
 		_update_patrol(delta)
 		street_signals.advance(delta)
-		tram.advance(delta, tram_mode == 2, mouse_gas or Input.is_physical_key_pressed(KEY_W) or Input.is_key_pressed(KEY_UP), mouse_brake or Input.is_physical_key_pressed(KEY_S) or Input.is_key_pressed(KEY_DOWN))
+		var tram_gas := mouse_gas or Input.is_physical_key_pressed(KEY_W) or Input.is_key_pressed(KEY_UP)
+		var tram_brake := mouse_brake or Input.is_physical_key_pressed(KEY_S) or Input.is_key_pressed(KEY_DOWN)
+		tram.advance(delta, tram_mode == 2, tram_gas, tram_brake)
+		if tram_mode == 2:
+			driving_controls.set_controls(0,tram_gas and not tram_brake,tram_brake)
 		if boating:
 			_drive_launch(delta)
 		elif tram_mode > 0:
@@ -249,7 +253,7 @@ func _input(event: InputEvent) -> void:
 		if event.button_index == MOUSE_BUTTON_RIGHT: mouse_brake = false
 
 func _unhandled_input(event: InputEvent) -> void:
-	if mode == "playing" and not paused and (boating or not walker.visible) and event is InputEventMouseButton and event.pressed:
+	if mode == "playing" and not paused and (tram_mode == 2 or (tram_mode == 0 and (boating or not walker.visible))) and event is InputEventMouseButton and event.pressed:
 		if event.button_index == MOUSE_BUTTON_LEFT: mouse_gas = true
 		if event.button_index == MOUSE_BUTTON_RIGHT: mouse_brake = true
 
@@ -3057,7 +3061,8 @@ func _refresh_ui() -> void:
 		seat_button.disabled = false
 		entry_marker.visible = false
 		seat_button.text = "Get out · F"
-	driving_controls.visible = tram_mode == 0 and not show_overlay and (boating or not walker.visible)
+	driving_controls.show_wheel = tram_mode == 0
+	driving_controls.visible = not show_overlay and (tram_mode == 2 or (tram_mode == 0 and (boating or not walker.visible)))
 	var hints := ui.get_node("DrivingHints") as Label
 	hints.visible = driving_controls.visible or (tram_mode > 0 and not show_overlay)
 	if tram_mode == 1:

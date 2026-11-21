@@ -1,5 +1,10 @@
 extends Control
 
+var show_wheel := true:
+	set(value):
+		if value != show_wheel:
+			show_wheel = value
+			queue_redraw()
 var steering := 0.0
 var gas := false
 var brake := false
@@ -16,15 +21,16 @@ func set_controls(turn: float, accelerating: bool, braking: bool, reversing := f
 		queue_redraw()
 
 func _draw() -> void:
-	var center := Vector2(76,size.y-80)
-	draw_circle(center,53,backing,true,-1,true)
-	draw_set_transform(center,steering*1.2)
-	draw_arc(Vector2.ZERO,39,0,TAU,64,ink,6,true)
-	for angle in [-0.18, PI+0.18, PI/2]:
-		draw_line(Vector2.ZERO,Vector2.from_angle(angle)*37,ink,5,true)
-	draw_circle(Vector2.ZERO,10,ink,true,-1,true)
-	draw_line(Vector2(0,-42),Vector2(0,-34),Color("#42dcb1"),5,true)
-	draw_set_transform(Vector2.ZERO)
+	if show_wheel:
+		var center := Vector2(76,size.y-80)
+		draw_circle(center,53,backing,true,-1,true)
+		draw_set_transform(center,steering*1.2)
+		draw_arc(Vector2.ZERO,39,0,TAU,64,ink,6,true)
+		for angle in [-0.18, PI+0.18, PI/2]:
+			draw_line(Vector2.ZERO,Vector2.from_angle(angle)*37,ink,5,true)
+		draw_circle(Vector2.ZERO,10,ink,true,-1,true)
+		draw_line(Vector2(0,-42),Vector2(0,-34),Color("#42dcb1"),5,true)
+		draw_set_transform(Vector2.ZERO)
 	var base := Vector2(size.x-216,size.y-132)
 	draw_style_box(_panel,Rect2(base,Vector2(196,106)))
 	_draw_pedal(base+Vector2(48,39),true,gas,tr("Gas"),tr("Left"))
