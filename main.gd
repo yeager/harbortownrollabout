@@ -108,6 +108,7 @@ var loose_wheel: Node3D
 var lost_wheel: Node3D
 var bonnet_smoke := CPUParticles3D.new()
 var taxi_leg := 0
+var clinic_fire_team: Array[Node3D] = []
 var bus_companions: Array[Node3D] = []
 var arriving_passenger: Node3D
 var passenger: Node3D
@@ -507,6 +508,7 @@ func _drive(delta: float) -> void:
 	var stopping_distance := signal_gap
 	var people: Array = [crossing_pedestrian,passenger,arriving_passenger,waiting_medic,marina_recipient,square_neighbour]
 	people.append_array(bus_companions)
+	people.append_array(clinic_fire_team)
 	for item in walker_data:
 		people.append(item.actor)
 	for person: Node3D in people:
@@ -575,7 +577,7 @@ func _drive(delta: float) -> void:
 	if workshop_car.visible: obstacles.append(WORKSHOP_CAR_BOUNDS)
 	if casualty.visible and casualty.get_parent()==self:
 		obstacles.append(AABB(casualty.position-Vector3(2.1,1,.86),Vector3(4.2,3,1.72)))
-	for person in [crossing_pedestrian,passenger,arriving_passenger,waiting_medic,marina_recipient,square_neighbour] + bus_companions:
+	for person in [crossing_pedestrian,passenger,arriving_passenger,waiting_medic,marina_recipient,square_neighbour] + bus_companions + clinic_fire_team:
 		if not person.visible: continue
 		obstacles.append(AABB(person.position-Vector3(.28,1,.28),Vector3(.56,3,.56)))
 	for neighbour in walker_data:
@@ -2296,7 +2298,7 @@ func _update_traffic(delta: float) -> void:
 			var offset := bounds.get_center()-actor.position
 			if absf(offset.z)<float(item.width)+bounds.size.z*.5 and offset.x*direction >= 0:
 				clearance = minf(clearance,offset.x*direction-bounds.size.x*.5-float(item.length))
-		for person: Node3D in [walker,passenger,arriving_passenger,waiting_medic,marina_recipient,square_neighbour] + bus_companions:
+		for person: Node3D in [walker,passenger,arriving_passenger,waiting_medic,marina_recipient,square_neighbour] + bus_companions + clinic_fire_team:
 			if not person.visible: continue
 			var offset := person.position - actor.position
 			var lane_margin := float(item.width) + .45
@@ -2531,7 +2533,7 @@ func _update_pedestrians(delta: float) -> void:
 	_advance_crossing(delta)
 	greeting_timer = maxf(0,greeting_timer-delta)
 	greeting.visible = walker.visible and greeting_timer>4.0
-	for person: Node3D in [square_neighbour, waiting_medic, marina_recipient, passenger, arriving_passenger] + bus_companions:
+	for person: Node3D in [square_neighbour, waiting_medic, marina_recipient, passenger, arriving_passenger] + bus_companions + clinic_fire_team:
 		if is_instance_valid(person):
 			_greet_nearby_player(person)
 	for item in walker_data:
@@ -2959,6 +2961,13 @@ func _build_target_marker() -> void:
 	marina_recipient = walker_data.pop_back().actor
 	marina_recipient.position.y = _foot_height(marina_recipient.position.x,quay.z)
 	var pickup := WALK_TARGETS[1]
+	for side in [-1, 1]:
+		var spot := pickup + Vector3(.65,0,side*1.15)
+		_make_walker("Fire safety team",spot.x,spot.z,side,Color("#e59637"),Color("#28394a"))
+		var member: Node3D = walker_data.pop_back().actor
+		member.position.y = _foot_height(spot.x,spot.z)
+		member.look_at(Vector3(pickup.x,member.position.y,pickup.z))
+		clinic_fire_team.append(member)
 	_make_walker("Waiting medic",pickup.x,pickup.z+1.3,1,Color("#d5db46"),Color("#275744"))
 	waiting_medic = walker_data.pop_back().actor
 	waiting_medic.position.y = _surface_height(pickup.x,pickup.z+1.3)
@@ -3098,6 +3107,8 @@ func _update_mission_marker() -> void:
 			companion.transform = leader.transform
 			companion.translate_object_local(Vector3(-1.1 if i==0 else 1.1,0,0))
 			companion.position.y = _foot_height(companion.position.x,companion.position.z)
+	for member in clinic_fire_team:
+		member.visible = not free_drive and vehicle_index == 2 and mission_index == 0
 	var rescue := not free_drive and not boating and vehicle_index == 0
 	square_neighbour.visible = rescue and mission_index <= 1
 	square_neighbour.get_meta("arms")[1].rotation.z = 2.35 if mission_index == 0 else 0.0

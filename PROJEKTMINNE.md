@@ -265,3 +265,4 @@ Profilering av depåfordonen i Godot 4.6.3 Compatibility, 960×540: fyra körnin
 Fordonsstyrda uppdrag, separat framsteg vid byte, familje-SMS och ätknappar för glass och korv i kiosken. Testade tilldelning, byte tillbaka, läx-SMS, båda mellanmålen, saldo och glad-indikator i Godot 4 med isolerad sparfil.
 Brandbilens kontroll vid torget har en modellerad brandpost. Testat framkomlighet, kollision och slutförd inspektion till fots i Godot 4.
 Brandbilens inspektion i småbåtshamnen har en orange livboj på stativ intill gångmålet. Testat kollision, framkomlighet och övergång till nästa uppdrag i Godot 4.
+Två personer ur brandskyddsgruppen möter spelaren vid vårdcentralen under brandbilens första uppdrag. Testat gångmålet, mötet och övergången till inspektionen vid kajen i Godot 4.
