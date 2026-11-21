@@ -1003,6 +1003,10 @@ func _pier_height(x: float,z: float) -> float:
 			return section.end.y
 	return NAN
 
+func _foot_height(x: float,z: float) -> float:
+	var deck := _pier_height(x,z)
+	return _surface_height(x,z) if is_nan(deck) else deck
+
 func _build_marina() -> void:
 	launch = Node3D.new()
 	add_child(launch)
@@ -1611,7 +1615,7 @@ func _change_seat() -> void:
 			message_timer = 3
 			old_car.visible = false
 			return
-		walker.position = Vector3(door.x,_surface_height(door.x,door.z),door.z)
+		walker.position = Vector3(door.x,_foot_height(door.x,door.z),door.z)
 		walk_basis = ambulance.basis
 		walker.rotation.y = ambulance.rotation.y
 		walker.visible = true
@@ -1661,8 +1665,7 @@ func _walk(delta: float) -> void:
 	var next := walker.position
 	for step in [Vector3(motion.x,0,0),Vector3(0,0,motion.z)]:
 		if _on_foot_clear(next+step): next += step
-	var pier_y := _pier_height(next.x,next.z)
-	next.y = _surface_height(next.x,next.z) if is_nan(pier_y) else pier_y
+	next.y = _foot_height(next.x,next.z)
 	var travel := next-walker.position
 	if travel.length_squared()>.000001:
 		walker.rotation.y = atan2(-travel.x,-travel.z)

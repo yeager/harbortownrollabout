@@ -179,3 +179,5 @@ Spelprojektet publiceras i det privata GitHub-repot yeager/axels-emergency-vehic
 - Dörrmarkören visar fordonets namn och F för att kliva in. Svensk uppmaning och byte från promenad till bärgare verifierades i Godot.
 
 - Vid urstigning hamnar spelaren längs samma dörrlinje som används vid instigning. Testat att bärgaren kräver stopp och att spelaren direkt kan nå samma dörr igen.
+
+- Urstigning vid färjelägets trappa använder trappstegets höjd direkt. Verifierat med en parkerad ambulans vid västra kajen.
