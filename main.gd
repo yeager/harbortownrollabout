@@ -379,12 +379,17 @@ func _drive_launch(delta: float) -> void:
 	var turn := Input.get_axis("ui_left","ui_right")
 	if Input.is_physical_key_pressed(KEY_A): turn=-1
 	if Input.is_physical_key_pressed(KEY_D): turn=1
-	var target := -1.6 if brake else (5.0 if gentle_driving else 9.0) if gas else 0.0
+	var reverse_requested := brake and not gas
+	var target := 0.0
+	if reverse_requested:
+		target = -1.6
+	elif gas and not brake:
+		target = 5.0 if gentle_driving else 9.0
 	launch_speed = move_toward(launch_speed,target,delta*(3.4 if brake else 1.5))
 	var steering_flow := clampf(launch_speed,-1,2)
 	if gas and not brake and launch_speed >= 0.0:
 		steering_flow = maxf(.8,steering_flow)
-	elif brake and launch_speed <= 0.0:
+	elif reverse_requested and launch_speed <= 0.0:
 		steering_flow = minf(-.8,steering_flow)
 	outboard.rotation.y = lerp_angle(outboard.rotation.y,-turn*.52,1-exp(-8*delta))
 	launch.rotation.y -= turn*steering_flow*delta*.53
@@ -404,7 +409,7 @@ func _drive_launch(delta: float) -> void:
 	if absf(next.x-bounded.x)+absf(next.z-bounded.z)>.0001: launch_speed=0
 	launch.position=bounded
 	launch.rotation.z=lerpf(launch.rotation.z,-turn*absf(launch_speed)*.012,1-exp(-3*delta))
-	driving_controls.set_controls(turn,gas,brake,launch_speed<-.1)
+	driving_controls.set_controls(turn,gas and not brake,brake,launch_speed<-.1)
 
 func _walk_pedal_pressed() -> bool:
 	return Input.is_action_pressed("ui_up") or Input.is_action_pressed("ui_down") or Input.is_key_pressed(KEY_W) or Input.is_key_pressed(KEY_S)

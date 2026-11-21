@@ -242,3 +242,4 @@ En ny båttur startar vid motorbåtens ursprungliga förtöjningsplats med noll 
 Båtturens startmeny förklarar nu hur vänster och höger musknapp fungerar vid körning. Svenskt språkval och båtinstruktionernas översättning kontrollerade i Godot.
 Skärmpedalerna kan användas med vänster musknapp. Verifierat gas, broms och släpp utanför pedalen via Godots viewport.
 Paus återställer även den klickbara skärmbromsen. Provade att pausa med pedalen nedtryckt, fortsätta och gasa på nytt.
+Motorbåten stannar om båda pedalerna hålls nere. Provkört framåt, bakåt och från stillastående, inklusive att släppa gasen för att backa.
