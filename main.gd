@@ -385,10 +385,11 @@ func _drive(delta: float) -> void:
 	var travel_direction := forward * signf(speed)
 	var signal_gap := street_signals.red_clearance(ambulance.position,forward if is_zero_approx(speed) else travel_direction,player_half_size.y)
 	var stopping_distance := signal_gap
-	var people: Array = [crossing_pedestrian]
+	var people: Array = [crossing_pedestrian,passenger,arriving_passenger,waiting_medic]
 	for item in walker_data:
 		people.append(item.actor)
 	for person: Node3D in people:
+		if not person.visible: continue
 		var offset := ambulance.to_local(person.position)
 		if absf(offset.x)<player_half_size.x+.36 and -offset.z*signf(speed)>0:
 			stopping_distance = minf(stopping_distance,maxf(0,absf(offset.z)-player_half_size.y-.65))
@@ -441,8 +442,9 @@ func _drive(delta: float) -> void:
 	var obstacles := building_bounds.duplicate()
 	if casualty.visible and casualty.get_parent()==self:
 		obstacles.append(AABB(casualty.position-Vector3(2.1,1,.86),Vector3(4.2,3,1.72)))
-	if is_instance_valid(crossing_pedestrian):
-		obstacles.append(AABB(crossing_pedestrian.position-Vector3(.28,1,.28),Vector3(.56,3,.56)))
+	for person in [crossing_pedestrian,passenger,arriving_passenger,waiting_medic]:
+		if not person.visible: continue
+		obstacles.append(AABB(person.position-Vector3(.28,1,.28),Vector3(.56,3,.56)))
 	for neighbour in walker_data:
 		var person: Node3D = neighbour.actor
 		obstacles.append(AABB(person.position-Vector3(.28,1,.28),Vector3(.56,3,.56)))
@@ -1823,8 +1825,9 @@ func _update_traffic(delta: float) -> void:
 			var offset := bounds.get_center()-actor.position
 			if absf(offset.z)<float(item.width)+bounds.size.z*.5 and offset.x*direction >= 0:
 				clearance = minf(clearance,offset.x*direction-bounds.size.x*.5-float(item.length))
-		if walker.visible:
-			var offset := walker.position - actor.position
+		for person: Node3D in [walker,passenger,arriving_passenger,waiting_medic]:
+			if not person.visible: continue
+			var offset := person.position - actor.position
 			if offset.x * direction >= 0 and absf(offset.z) < float(item.width)+.45:
 				clearance = minf(clearance, offset.x*direction-float(item.length)-.45)
 		if crossing_wait <= 0.0 and (absf(crossing_pedestrian.position.z)<6.31 or street_signals.phase==3):
