@@ -221,3 +221,4 @@ Renderad närbild i Compatibility visade en glipa under huvudet. Hals, hår, ög
 Snöskoter från Blender med band, skidor, fjädring och synlig förare. Provkörd i Godot med gas, broms och avstigning. Parkbänken har fyra ben. Axel har formade ärmar, byxben, händer och skor.
 Snöskotern har nu en egen syntetiserad motorloop med hastighetsstyrd tonhöjd. Uppspelning och fordonsval verifierades i Godot.
 Snöskoterns båda skidor och styre följer nu styrutslaget. Förarens handpositioner följer handtagen. Testat med styrinmatning i Godot.
+Skoterns terrängfart följer snötäcket. Provkört på västra fältet med barmark, halvt och fullt snötäcke i båda körlägena.

@@ -554,7 +554,8 @@ func _drive(delta: float) -> void:
 		speed = 0.0
 	pos.y = _surface_height(pos.x, pos.z)
 	if pos.y < -0.15:
-		speed = clampf(speed, -3.0, 6.0)
+		var terrain_limit := lerpf(6.0, max_speed, weather.snow) if vehicle_index == SNOWMOBILE else 6.0
+		speed = clampf(speed, -3.0, terrain_limit)
 	_roll_wheels(player_wheels, (pos - previous_pose.origin).dot(forward))
 	ambulance.global_position = pos
 	if reverse_lens:

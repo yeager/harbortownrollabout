@@ -99,3 +99,4 @@ Run one of the following from the project directory with Godot 4.6 installed. Se
 
 In full-speed driving mode, road vehicles can reach twice their former top speed. Gentle driving retains its 30 km/h limit. The western district adds connected street loops, bringing the playable boundary to 690 × 151 metres.
 The snowmobile is available in the vehicle selector and at the depot. It uses the same driving and braking controls as the cars.
+Off-road, the snowmobile can go faster as snow accumulates. Gentle driving still caps it at 30 km/h.
