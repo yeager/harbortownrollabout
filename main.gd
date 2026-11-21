@@ -2219,10 +2219,11 @@ func _make_walker(label: String, start_x: float, lane_z: float, direction: float
 	person.add_child(head)
 	var hair := MeshInstance3D.new()
 	var hair_mesh := SphereMesh.new()
-	hair_mesh.radius = 0.175
-	hair_mesh.height = 0.18
+	hair_mesh.radius = 0.153
+	hair_mesh.height = 0.16
 	hair.mesh = hair_mesh
-	hair.position = Vector3(0, 1.85, 0)
+	hair.position = Vector3(0, 1.832, .012)
+	hair.rotation.z = -.065
 	hair.material_override = _material(Color("#46372e"), 0.95)
 	hair.name="Hair"
 	person.add_child(hair)
@@ -2241,9 +2242,25 @@ func _make_walker(label: String, start_x: float, lane_z: float, direction: float
 		ear.position = Vector3(side*.16,1.72,.008)
 		ear.scale = Vector3(.18,.28,.17)
 		person.add_child(ear)
+	var neck := MeshInstance3D.new()
+	neck.mesh = head_mesh
+	neck.scale = Vector3(.47,.68,.49)
+	neck.position.y = 1.51
+	neck.material_override = head.material_override
+	person.add_child(neck)
 	for side in [-1,1]:
-		_make_box("Eye",Vector3(.024,.022,.014),Vector3(side*.064,1.745,-.158),Color("#45382e"),false,person)
-	_make_box("Collar",Vector3(.26,.073,.23),Vector3(0,1.50,0),shirt.lightened(.22),false,person)
+		var eye := MeshInstance3D.new()
+		eye.mesh = head_mesh
+		eye.scale = Vector3(.093,.051,.047)
+		eye.position = Vector3(side*.057,1.745,-.14)
+		eye.material_override = _material(Color("#45382e"))
+		person.add_child(eye)
+	var lip := MeshInstance3D.new()
+	lip.mesh = head_mesh
+	lip.scale = Vector3(.16,.028,.042)
+	lip.position = Vector3(0,1.646,-.145)
+	lip.material_override = _material(Color("#955f50"))
+	person.add_child(lip)
 	for side in [-1.0, 1.0]:
 		var leg_pivot := Node3D.new()
 		leg_pivot.position = Vector3(side * 0.115, 0.77, 0)

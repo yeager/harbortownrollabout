@@ -217,3 +217,4 @@ Spelprojektet publiceras i det privata GitHub-repot yeager/axels-emergency-vehic
 Inställningar finns i en separat dialog med flikar. Renderaren väljs under Grafik och aktiveras vid nästa start. Verifierat byte från Compatibility till Forward+ med FSR2 på AMD.
 
 Västra stadsdelen ansluter till vägnätet i tre korsningar. Spelgränsen är nu 690 × 151 m. Axel och Alma använder Blender-modellerade ansikten och jackor. Bänken med färgprover byter jackfärg och bryggvärden har en särskild replik. Fullfart har dubbel toppfart för vägfordon, lugn körning behåller 30 km/h.
+Renderad närbild i Compatibility visade en glipa under huvudet. Hals, hår, ögon och mun justerades och kontrollerades i en ny spelrendering.
