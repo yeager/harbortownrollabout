@@ -171,6 +171,7 @@ var moorings: Array[Dictionary] = []
 var street_signals := preload("res://street_signals.gd").new()
 var tram := preload("res://tram.gd").new()
 var boating := false
+var grip_radius := 0.0
 var road_driver: Node3D
 var skipper: Node3D
 var launch: Node3D
@@ -388,6 +389,7 @@ func _drive(delta: float) -> void:
 	steering = move_toward(steering, steer_input, (2.0 if gentle_driving else 3.4) * delta)
 	if cabin_wheel:
 		cabin_wheel.basis = cabin_wheel_rest_basis * Basis(cabin_wheel_axis,-steering*1.2)
+		_pose_driver_arms()
 	for knuckle in front_knuckles:
 		knuckle.rotation.y = -steering * deg_to_rad(33.0)
 	driving_controls.set_controls(steering, throttle > 0, brake_held, throttle < 0 and not brake_held)
@@ -1448,6 +1450,20 @@ func _apply_player_appearance() -> void:
 	road_driver.scale *= .78
 	road_driver.position = Vector3(-.32, .88 - .87 * road_driver.scale.y, -.04)
 
+func _pose_driver_arms() -> void:
+	if not road_driver.visible:
+		return
+	var arms: Array = road_driver.get_meta("arms")
+	for index in arms.size():
+		var shoulder: Node3D = arms[index]
+		var grip := cabin_wheel.to_global(Vector3.RIGHT * grip_radius * (-1 if index == 0 else 1))
+		var reach := road_driver.to_local(grip) - shoulder.position
+		shoulder.quaternion = Quaternion(Vector3.DOWN, reach.normalized())
+		var sleeve := shoulder.get_child(0) as MeshInstance3D
+		sleeve.position.y = -reach.length() * .47
+		sleeve.scale.y = reach.length() / .65
+		shoulder.get_node("Hand").position.y = -reach.length()
+
 func _build_depot() -> void:
 	_make_driving_surface("Motor pool", Vector3(25,.1,11), Vector3(-37,-.18,15), Color("#565c5a"))
 	_make_driving_surface("Recovery apron",Vector3(8.4,.10,9.8),Vector3(-45,-.18,25.4),Color("#565c5a"))
@@ -1514,7 +1530,14 @@ func _build_depot() -> void:
 	for leg in road_driver.get_meta("legs"):
 		leg.rotation.x = 1.35
 	for arm in road_driver.get_meta("arms"):
-		arm.rotation.x = 1.13
+		var hand := MeshInstance3D.new()
+		hand.name = "Hand"
+		var palm := SphereMesh.new()
+		palm.radius = .067
+		palm.height = .15
+		hand.mesh = palm
+		hand.material_override = _material(Color("#c58e6d"),.94)
+		arm.add_child(hand)
 	road_driver.hide()
 	_make_walker("Helmsperson",0,0,1,Color("#648faa"),Color("#30414d"))
 	skipper = walker_data.pop_back().actor
@@ -2258,6 +2281,7 @@ func _load_vehicle_model() -> void:
 			# Fit the rim's tilt in the vehicle's vertical/longitudinal plane.
 			# The exported mesh already includes the X5's dimensional corrections.
 			var rim_to_pivot := cabin_wheel.global_transform.affine_inverse() * rim.global_transform
+			grip_radius = 0.0
 			var yy := 0.0
 			var yz := 0.0
 			var zz := 0.0
@@ -2265,9 +2289,11 @@ func _load_vehicle_model() -> void:
 				var points: PackedVector3Array = rim.mesh.surface_get_arrays(surface_index)[Mesh.ARRAY_VERTEX]
 				for vertex in points:
 					var point := rim_to_pivot * vertex
+					grip_radius = maxf(grip_radius, absf(point.x))
 					yy += point.y * point.y
 					yz += point.y * point.z
 					zz += point.z * point.z
+			grip_radius *= .9
 			var tilt := 0.5 * atan2(2.0 * yz, yy - zz)
 			cabin_wheel_axis = Vector3(0,-sin(tilt),cos(tilt))
 			for part in vehicle_model.find_children("*steering spoke*", "MeshInstance3D",true,false) + vehicle_model.find_children("Steering wheel*", "MeshInstance3D",true,false):

@@ -191,3 +191,4 @@ Spelprojektet publiceras i det privata GitHub-repot yeager/axels-emergency-vehic
 - Grannen i turkos jacka står vid första hjälpmålet på torget med handen höjd och sänker armen efter hjälpen. Båda tillstånden verifierades genom räddningsuppdraget.
 - Även uppdragspersoner kan nu hälsa när Axel eller Alma kommer fram till fots. Godot startkontrollerades utan grafik.
 - BMW X5 har en sittande förare som följer spelarvalet. Testat med Alma i Godot vid byte mellan följkamera och förarvy. Placeringen återstår att granska visuellt.
+- BMW-förarens händer följer rattkransen. Båda figurernas handpositioner kontrollerades i Godot vid neutralläge och fullt rattutslag i båda riktningarna.
