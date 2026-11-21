@@ -1,0 +1,182 @@
+"""Portrait geometry in Blender coordinates. Positive Y faces the viewer."""
+import bpy
+from math import asin, cos, exp, pi, sin, sqrt, tau
+
+def build_portrait(root):
+    portrait = bpy.data.collections.new("Portrait details")
+    bpy.context.scene.collection.children.link(portrait)
+
+    def mesh(name, vertices, faces, material=None):
+        data = bpy.data.meshes.new(name)
+        data.from_pydata(vertices, [], faces)
+        data.update()
+        obj = bpy.data.objects.new(name, data)
+        portrait.objects.link(obj)
+        for poly in data.polygons:
+            poly.use_smooth = True
+        if material:
+            data.materials.append(material)
+        return obj
+
+    def material(name, rgb):
+        mat = bpy.data.materials.new(name)
+        mat.diffuse_color = (*rgb, 1)
+        mat.use_nodes = True
+        shader = mat.node_tree.nodes.get('Principled BSDF')
+        shader.inputs['Base Color'].default_value = (*rgb, 1)
+        shader.inputs['Roughness'].default_value = .65
+        return mat
+
+    def obj_export(obj):
+        bpy.ops.object.select_all(action='DESELECT')
+        obj.select_set(True)
+        bpy.ops.wm.obj_export(filepath=str(root/'characters'/(obj.name+'.obj')),
+                              export_selected_objects=True, export_materials=False)
+
+    # Horizontal sections through chin, mandible, cheeks, temples and crown.
+    rings = [(-.143,.016,.045,.056),(-.136,.043,.067,.036),(-.120,.063,.086,.018),
+             (-.096,.081,.102,.002),(-.058,.092,.110,-.001),(-.022,.101,.116,-.001),
+             (.018,.105,.122,-.004),(.057,.105,.125,-.008),(.094,.101,.120,-.010),
+             (.120,.090,.109,-.013),(.141,.064,.084,-.015),(.155,.031,.042,-.016),(.159,.002,.003,-.016)]
+
+    def section(z):
+        for lower, upper in zip(rings, rings[1:]):
+            if z <= upper[0]:
+                t = max(0, (z-lower[0])/(upper[0]-lower[0]))
+                return tuple(a+(b-a)*t for a,b in zip(lower[1:],upper[1:]))
+        return rings[-1][1:]
+
+    def displacement(x,z):
+        def bump(cx, cz, wx, wz):
+            return exp(-((abs(x)-cx)/wx)**2 - ((z-cz)/wz)**2)
+        return (.011*bump(.058,-.018,.025,.029) - .012*bump(.043,.014,.024,.014)
+                +.009*bump(.043,.034,.030,.012) + .022*bump(0,.006,.012,.043)
+                +.035*bump(0,-.028,.015,.012) + .015*bump(.015,-.032,.009,.008)
+                +.008*bump(0,-.065,.036,.019) + .008*bump(0,-.108,.029,.016))
+
+    def surface(x,z):
+        w,d,c = section(z)
+        f = sqrt(max(0,1-(x/w)**2))
+        return c+d*f+displacement(x,z)*f**3
+
+    def shell(name, rows, cols, vertex):
+        verts=[vertex(j/rows,tau*i/cols) for j in range(rows+1) for i in range(cols)]
+        faces=[]
+        for j in range(rows):
+            for i in range(cols):
+                a=j*cols+i
+                b=j*cols+(i+1)%cols
+                faces.append((a,b,b+cols,a+cols))
+        faces += [tuple(reversed(range(cols))),tuple(range(rows*cols,(rows+1)*cols))]
+        return mesh(name,verts,faces)
+
+    def face_point(t,a):
+        z=rings[0][0]+t*(rings[-1][0]-rings[0][0])
+        w,d,c=section(z)
+        x=w*cos(a)
+        return (x,c+d*sin(a)+displacement(x,z)*max(0,sin(a))**3,z)
+
+    head=shell('Face',64,96,face_point)
+    obj_export(head)
+
+    def hair_point(t,a, long_cut=False):
+        # The side part sweeps across the forehead and the nape follows the skull.
+        front=max(0,sin(a))
+        hairline=-.047+.105*front**.9+.013*cos(a)*front+.003*sin(7*a)
+        z=hairline+(.159-hairline)*t
+        fall=(1-t)**2*(1-front**4) if long_cut else 0
+        w,d,c=section(z)
+        strand=(.009+.0018*cos(29*a+3*t)+.001*cos(52*a-4*t))*(1-.45*t)
+        return ((w+strand+.009*fall)*cos(a)-.003*t,c+(d+strand+.008*fall)*sin(a),z+.010*t-.094*fall)
+    hair=shell('Hair',23,120,hair_point)
+    obj_export(hair)
+    bob=shell('Bob',23,120,lambda t,a: hair_point(t,a,True))
+    obj_export(bob)
+
+    sclera=material('Warm ivory',(.47,.43,.38))
+    iris=material('Hazel',(.105,.085,.046))
+    pupil=material('Pupil',(.015,.012,.011))
+    brow=material('Brows',(.074,.043,.030))
+    lip=material('Lips',(.40,.155,.116))
+    crease=material('Lip seam',(.155,.056,.046))
+
+    def patch(name,side,center,halfwidth,upper,lower,lift,mat,tilt=0):
+        verts=[]
+        n=26
+        for k in range(n+1):
+            u=-1+2*k/n
+            x=side*(center[0]+halfwidth*u)
+            arch=max(0,1-u*u)**.72
+            for q in range(5):
+                v=q/4
+                z=center[1]+tilt*u+arch*(v*(upper+lower)-lower)
+                verts.append((x,surface(x,z)+lift+.0018*arch*sin(pi*v),z))
+        faces=[(i*5+j,(i+1)*5+j,(i+1)*5+j+1,i*5+j+1) for i in range(n) for j in range(4)]
+        if side==1: faces=[f[::-1] for f in faces]
+        return mesh(name,verts,faces,mat)
+
+    lash=material('Lid rim',(.13,.075,.051))
+    for s in (-1,1):
+        # A tapered rim follows the upper boundary of the almond-shaped eye.
+        verts=[]
+        for i in range(27):
+            u=-1+i/13
+            arch=max(0,1-u*u)**.72
+            x=s*(.042+.018*u)
+            z=.013+.0056*arch+.0012*u
+            for dz in (0,.0016*arch):
+                verts.append((x,surface(x,z+dz)+.003,z+dz))
+        quads=[(2*i,2*i+2,2*i+3,2*i+1) for i in range(26)]
+        mesh('Lash line',verts,[q[::-1] for q in quads] if s==1 else quads,lash)
+
+        patch('Eye',s,(.042,.013),.018,.0056,.0040,.0018,sclera,.0012)
+        patch('Iris',s,(.042,.0136),.0071,.0044,.0039,.0042,iris)
+        patch('Pupil',s,(.042,.0138),.0025,.0031,.0029,.0064,pupil)
+        patch('Catchlight',s,(.0405,.016),.0010,.001,.001,.0083,sclera)
+        patch('Eyebrow',s,(.045,.038),.023,.0038,.0026,.0027,brow,-.003)
+        patch('Nostril',s,(.011,-.035),.0035,.0013,.0014,.0014,crease,.0008)
+    patch('Upper lip',1,(0,-.065),.027,.005,.001,.0021,lip)
+    patch('Lower lip',1,(0,-.0665),.026,.001,.005,.0022,lip)
+    patch('Mouth',1,(0,-.0657),.026,.0009,.0009,.0046,crease)
+    bpy.ops.object.select_all(action='DESELECT')
+    for obj in portrait.objects:
+        obj.select_set(obj not in (head,hair,bob))
+    bpy.context.view_layer.objects.active = next(obj for obj in portrait.objects if obj.select_get())
+    bpy.ops.object.join()
+    bpy.context.object.name = 'Facial features'
+    bpy.ops.export_scene.gltf(filepath=str(root/'characters'/'Portrait.glb'),
+                              export_format='GLB',use_selection=True)
+
+    # A folded standing collar opens at the throat. The zip and pull follow the
+    # front profile, so the player's recolourable jacket remains visible.
+    trim=material('Collar lining',(.081,.092,.104))
+    tape=material('Zipper tape',(.105,.119,.120))
+    metal=material('Brushed zip',(.33,.35,.34))
+    before=set(portrait.objects)
+    verts=[]
+    segments=60
+    for i in range(segments+1):
+        angle=pi*.5+.24+(tau-.48)*i/segments
+        fold=sin(pi*i/segments)**.5
+        for w,d,z in [(.105,.094,.310),(.086,.080,.350),(.078,.070,.348),(.080,.076,.312)]:
+            verts.append((w*cos(angle),d*sin(angle),z+.022*fold))
+    quads=[]
+    for i in range(segments):
+        for j in range(4):
+            k=(j+1)%4
+            quads.append((4*i+j,4*(i+1)+j,4*(i+1)+k,4*i+k))
+    mesh('Collar',verts,quads,trim)
+    path=[(-.335,.130),(-.30,.132),(-.18,.129),(.03,.142),(.16,.141),(.20,.135),(.25,.118),(.29,.107),(.319,.092)]
+    for width,offset,mat in [(.006,.002,tape),(.0016,.003,metal)]:
+        verts=[(x,y+offset,z) for z,y in path for x in (-width,width)]
+        quads=[(2*i,2*i+2,2*i+3,2*i+1) for i in range(len(path)-1)]
+        mesh('Front closure',verts,quads,mat)
+    mesh('Pull tab',[(-.004,.111,.295),(.004,.111,.295),(.004,.121,.266),(-.004,.121,.266)],[(0,1,2,3)],metal)
+    bpy.ops.object.select_all(action='DESELECT')
+    for obj in set(portrait.objects)-before:
+        obj.select_set(True)
+        bpy.context.view_layer.objects.active=obj
+    bpy.ops.object.join()
+    bpy.context.object.name='Jacket trim'
+    bpy.ops.export_scene.gltf(filepath=str(root/'characters'/'JacketTrim.glb'),
+                              export_format='GLB',use_selection=True)

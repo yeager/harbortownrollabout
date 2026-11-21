@@ -710,3 +710,6 @@ msgstr "Paketleveranser"
 
 msgid "Blanket deliveries"
 msgstr "Filtleveranser"
+
+msgid "Hold V and move the mouse to look around"
+msgstr "Håll V och rör musen för att se dig omkring"

@@ -72,7 +72,6 @@ var walk_basis := Basis.IDENTITY
 var crossing_pedestrian: Node3D
 var crossing_wait := 4.0
 var crossing_direction := 1.0
-var walk_phase := 0.0
 var entry_marker := Label3D.new()
 const BUS := 10
 const SNOWMOBILE := 11
@@ -186,6 +185,7 @@ var sound_on := true
 var parked_sound_settings: Array[bool] = [false, false, false, true, true, true, true, true, true, true, true, true]
 var siren_player: AudioStreamPlayer
 var ui: CanvasLayer
+var wardrobe := preload("res://characters/weather_clothing.gd").new()
 var jacket_palette := -1
 var at_colour_bench := false
 const BENCH_COLOURS := [Color("#905bb9"), Color("#f1ab38"), Color("#399d83")]
@@ -262,6 +262,8 @@ func _ready() -> void:
 	start_button.grab_focus()
 
 func _process(delta: float) -> void:
+	if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED and not _can_capture_camera():
+		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	if mode == "playing" and not paused:
 		if happy_seconds > 0:
 			happy_seconds = maxf(0, happy_seconds-delta)
@@ -272,6 +274,7 @@ func _process(delta: float) -> void:
 		if warning_triangle.is_visible_in_tree():
 			hazard_phase = fmod(hazard_phase + delta, 1.0)
 			_update_hazard_lights()
+	wardrobe.update(weather.season, weather.intensity)
 	if previous_season != weather.season:
 		previous_season = weather.season
 		for finish in foliage_finishes:
@@ -335,18 +338,33 @@ func _process(delta: float) -> void:
 	_refresh_status()
 
 func _input(event: InputEvent) -> void:
-	if mode == "playing" and not paused and event is InputEventMouseMotion and event.button_mask & MOUSE_BUTTON_MASK_MIDDLE:
-		if cockpit_view and not boating and tram_mode==0:
+	if event is InputEventKey and event.physical_keycode == KEY_V and not event.echo:
+		if not event.pressed:
+			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+		elif _can_capture_camera():
+			Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	if mode == "playing" and not paused and event is InputEventMouseMotion and (Input.mouse_mode == Input.MOUSE_MODE_CAPTURED or event.button_mask & MOUSE_BUTTON_MASK_MIDDLE):
+		if cockpit_view and not walker.visible and not boating and tram_mode==0:
 			cockpit_look.x = clampf(cockpit_look.x-event.relative.x*.007,-1.4,1.4)
 			cockpit_look.y = clampf(cockpit_look.y-event.relative.y*.006,-.45,.52)
 			return
 		orbit_angle -= event.relative.x*.007
 		orbit_height = clampf(orbit_height+event.relative.y*.022,-1.8,5)
+	if event is InputEventMouseButton and event.pressed and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
+		if tram_mode == 2 or (tram_mode == 0 and (boating or not walker.visible)):
+			if event.button_index == MOUSE_BUTTON_LEFT:
+				mouse_gas = true
+			elif event.button_index == MOUSE_BUTTON_RIGHT:
+				mouse_brake = true
+		get_viewport().set_input_as_handled()
 	if event is InputEventMouseButton and not event.pressed:
 		if event.button_index == MOUSE_BUTTON_LEFT:
 			mouse_gas = false
 			brake_pedal_held = false
 		if event.button_index == MOUSE_BUTTON_RIGHT: mouse_brake = false
+
+func _can_capture_camera() -> bool:
+	return mode == "playing" and not paused and not phone.handset.is_visible_in_tree() and not shops.shop_card.is_visible_in_tree()
 
 func _unhandled_input(event: InputEvent) -> void:
 	if mode == "playing" and not paused and (tram_mode == 2 or (tram_mode == 0 and (boating or not walker.visible))) and event is InputEventMouseButton and event.pressed:
@@ -362,6 +380,7 @@ func _notification(what: int) -> void:
 		_refresh_ui()
 		driving_controls.queue_redraw()
 	if what == NOTIFICATION_APPLICATION_FOCUS_OUT:
+		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 		mouse_gas = false
 		mouse_brake = false
 		brake_pedal_held = false
@@ -1842,11 +1861,11 @@ func _build_depot() -> void:
 	var ponytail := MeshInstance3D.new()
 	ponytail.name = "Ponytail"
 	var lock := CapsuleMesh.new()
-	lock.radius=.092
-	lock.height=.34
+	lock.radius=.042
+	lock.height=.191
 	ponytail.mesh=lock
-	ponytail.position=Vector3(0,1.65,.17)
-	ponytail.rotation.x=-.23
+	ponytail.position=Vector3(0,1.63,.131)
+	ponytail.rotation.x=-.24
 	ponytail.material_override=_material(Color("#523b30"))
 	walker.add_child(ponytail)
 	_make_walker("BMW driver",0,0,1,Color("#648faa"),Color("#30414d"))
@@ -1864,8 +1883,8 @@ func _build_depot() -> void:
 			var corner := MeshInstance3D.new()
 			corner.mesh = lip.mesh
 			corner.material_override = lip.material_override
-			corner.scale = Vector3(.105,.025,.035)
-			corner.position = Vector3(side*.03,.006,.004)
+			corner.scale = Vector3(.050,.011,.020)
+			corner.position = Vector3(side*.024,.003,.003)
 			corner.rotation.z = side*.43
 			corner.rotation.y = -side*.24
 			smile.add_child(corner)
@@ -2073,14 +2092,18 @@ func _change_seat() -> void:
 func _walk(delta: float) -> void:
 	var keys := Input.get_vector("ui_left","ui_right","ui_up","ui_down")
 	keys += Vector2(int(Input.is_key_pressed(KEY_D))-int(Input.is_key_pressed(KEY_A)),int(Input.is_key_pressed(KEY_S))-int(Input.is_key_pressed(KEY_W)))
-	var motion := walk_basis * Vector3(keys.x,0,keys.y).limit_length(1) * 3.4 * delta
+	var desired := walk_basis * Vector3(keys.x,0,keys.y).limit_length(1) * 3.4
+	desired.y = 0
+	var horizontal := Vector3(walking_velocity.x,0,walking_velocity.z)
+	var acceleration := 14.0 if keys.is_zero_approx() else 9.0
+	var motion := horizontal.move_toward(desired, acceleration * delta) * delta
 	var next := walker.position
 	for step in [Vector3(motion.x,0,0),Vector3(0,0,motion.z)]:
 		if _on_foot_clear(next+step): next += step
 	next.y = _foot_height(next.x,next.z)
 	var travel := next-walker.position
 	if travel.length_squared()>.000001:
-		walker.rotation.y = atan2(-travel.x,-travel.z)
+		walker.rotation.y = rotate_toward(walker.rotation.y, atan2(-travel.x,-travel.z), 9.0 * delta)
 	walker.position = next
 	var near_bench := Vector2(next.x-30,next.z-20).length() < 1.2
 	if near_bench and not at_colour_bench:
@@ -2089,11 +2112,7 @@ func _walk(delta: float) -> void:
 	at_colour_bench = near_bench
 	walking_velocity = travel / maxf(delta,.00001)
 	listener.global_basis = walk_basis
-	walk_phase += travel.length()*4.0
-	for i in 2:
-		var swing := sin(walk_phase+i*PI)*.38 if travel.length_squared()>.000001 else 0.0
-		walker.get_meta("legs")[i].rotation.x = swing
-		walker.get_meta("arms")[i].rotation.x = -swing
+	_animate_steps(walker, Vector2(travel.x,travel.z).length(), delta)
 	_update_entry_button()
 
 func _update_entry_button() -> void:
@@ -2415,14 +2434,20 @@ func _advance_crossing(delta: float) -> void:
 				step = 0.0
 				break
 		crossing_pedestrian.position.z += step
-		crossing_pedestrian.rotation.y = PI if crossing_direction>0 else 0.0
 		if absf(crossing_pedestrian.position.z-6.32*crossing_direction)<.01:
 			crossing_direction *= -1
 			crossing_wait = 12.0
-	for i in 2:
-		var swing := sin(crossing_pedestrian.position.z*4+i*PI)*.38 if step!=0 else 0.0
-		crossing_pedestrian.get_meta("legs")[i].rotation.x = swing
-		crossing_pedestrian.get_meta("arms")[i].rotation.x = -swing
+	crossing_pedestrian.rotation.y = rotate_toward(crossing_pedestrian.rotation.y, PI if crossing_direction>0 else 0.0, delta*4.8)
+	crossing_pedestrian.position.y = _foot_height(crossing_pedestrian.position.x, crossing_pedestrian.position.z)
+	_animate_steps(crossing_pedestrian, absf(step), delta)
+
+func _animate_steps(person: Node3D, distance: float, delta: float, pushing := false, phase := 0.0) -> void:
+	const Gait := preload("res://characters/walking_gait.gd")
+	var gait: Gait = person.get_meta("gait") if person.has_meta("gait") else null
+	if gait == null:
+		gait = Gait.new(person, phase, _foot_height if person == walker else Callable())
+		person.set_meta("gait", gait)
+	gait.advance(distance / person.scale.y, delta, pushing)
 
 func _make_walker(label: String, start_x: float, lane_z: float, direction: float, shirt: Color, trousers: Color) -> void:
 	var person := Node3D.new()
@@ -2436,59 +2461,57 @@ func _make_walker(label: String, start_x: float, lane_z: float, direction: float
 	torso.material_override = _material(shirt, 0.92)
 	torso.name="Jacket"
 	person.add_child(torso)
+	wardrobe.add_person(torso, shirt)
+	torso.add_child(preload("res://characters/JacketTrim.glb").instantiate())
+	# Portrait meshes share a local origin at the centre of the face.
+	var head_origin := Vector3(0, 1.635, -.003)
+	var is_avatar := label in ["Player on foot", "Helmsperson", "BMW driver"]
+	var complexion: Array[Color] = [Color("#c58e6d"), Color("#a87355"), Color("#d8a888"), Color("#885f4b")]
+	var hair_colours: Array[Color] = [Color("#48362e"), Color("#342b29"), Color("#876c4e"), Color("#644536")]
+	var variant := 0 if is_avatar else posmod(label.hash(), complexion.size())
+	var skin := _material(complexion[variant], .84)
 	var head := MeshInstance3D.new()
-	var head_mesh := SphereMesh.new()
-	head_mesh.radius = 0.17
-	head_mesh.height = 0.34
 	head.mesh = preload("res://characters/Face.obj")
-	head.position = Vector3(0, 1.72, 0)
-	head.material_override = _material(Color("#c58e6d"), 0.94)
+	head.position = head_origin
+	head.material_override = skin
 	person.add_child(head)
+	var features := preload("res://characters/Portrait.glb").instantiate() as Node3D
+	features.position = head_origin
+	person.add_child(features)
 	var hair := MeshInstance3D.new()
-	var hair_mesh := SphereMesh.new()
-	hair_mesh.radius = 0.153
-	hair_mesh.height = 0.16
-	hair.mesh = hair_mesh
-	hair.position = Vector3(0, 1.832, .012)
-	hair.rotation.z = -.065
-	hair.material_override = _material(Color("#46372e"), 0.95)
-	hair.name="Hair"
+	hair.name = "Hair"
+	hair.mesh = preload("res://characters/Bob.obj") if variant == 1 else preload("res://characters/Hair.obj")
+	hair.position = head_origin
+	hair.material_override = _material(hair_colours[variant], .85)
 	person.add_child(hair)
-	var nose := MeshInstance3D.new()
-	nose.name = "Nose"
-	nose.mesh = head_mesh
-	nose.material_override = head.material_override
-	nose.scale = Vector3(.19,.24,.22)
-	nose.position = Vector3(0,1.712,-.16)
-	person.add_child(nose)
-	for side in [-1,1]:
+	var head_mesh := SphereMesh.new()
+	head_mesh.radius = .17
+	head_mesh.height = .34
+	for side in [-1, 1]:
 		var ear := MeshInstance3D.new()
-		ear.name = "Ear"
 		ear.mesh = head_mesh
-		ear.material_override = head.material_override
-		ear.position = Vector3(side*.16,1.72,.008)
-		ear.scale = Vector3(.18,.28,.17)
+		ear.scale = Vector3(.076, .165, .099)
+		ear.rotation.x = -.15
+		ear.position = head_origin + Vector3(side * .103, -.007, .010)
+		ear.material_override = skin
 		person.add_child(ear)
 	var neck := MeshInstance3D.new()
-	neck.mesh = head_mesh
-	neck.scale = Vector3(.47,.68,.49)
-	neck.position.y = 1.51
-	neck.material_override = head.material_override
+	var neck_mesh := CylinderMesh.new()
+	neck_mesh.top_radius = .049
+	neck_mesh.bottom_radius = .065
+	neck_mesh.height = .113
+	neck.mesh = neck_mesh
+	neck.position = head_origin + Vector3(0, -.146, .014)
+	neck.material_override = skin
 	person.add_child(neck)
-	for side in [-1,1]:
-		var eye := MeshInstance3D.new()
-		eye.mesh = head_mesh
-		eye.scale = Vector3(.093,.051,.047)
-		eye.position = Vector3(side*.057,1.745,-.14)
-		eye.material_override = _material(Color("#45382e"))
-		person.add_child(eye)
+	# The portrait includes neutral lips. This anchor locates the animated smile.
 	var lip := MeshInstance3D.new()
 	lip.mesh = head_mesh
-	lip.scale = Vector3(.16,.028,.042)
-	lip.position = Vector3(0,1.646,-.145)
-	lip.material_override = _material(Color("#955f50"))
+	lip.position = head_origin + Vector3(0, -.065, -.115)
+	lip.material_override = _material(Color("#995f51"))
+	lip.hide()
 	person.add_child(lip)
-	person.set_meta("lip",lip)
+	person.set_meta("lip", lip)
 	for side in [-1.0, 1.0]:
 		var leg_pivot := Node3D.new()
 		leg_pivot.position = Vector3(side * 0.115, 0.77, 0)
@@ -2504,7 +2527,7 @@ func _make_walker(label: String, start_x: float, lane_z: float, direction: float
 		shoe.material_override = _material(Color("#484443"),.84)
 		leg_pivot.add_child(shoe)
 		var arm_pivot := Node3D.new()
-		arm_pivot.position = Vector3(side * 0.22, 1.38, 0)
+		arm_pivot.position = Vector3(side * (.22 if label == "BMW driver" else .188), 1.38, 0)
 		person.add_child(arm_pivot)
 		var arm := MeshInstance3D.new()
 		var arm_mesh := CapsuleMesh.new()
@@ -2559,14 +2582,16 @@ func _update_pedestrians(delta: float) -> void:
 		var person: Node3D = item["actor"]
 		_greet_nearby_player(person)
 		var direction: float = item["direction"]
+		var heading := -direction * PI * .5
+		person.rotation.y = rotate_toward(person.rotation.y, heading, delta * 4.8)
+		var alignment := maxf(0.0, cos(person.rotation.y - heading))
 		var next := person.position
-		next.x += direction * float(item.speed) * delta
+		next.x += direction * float(item.speed) * delta * alignment
 		if item.has("stretch"):
 			var stretch: Vector2 = item.stretch
 			if next.x<stretch.x or next.x>stretch.y:
 				next.x=clampf(next.x,stretch.x,stretch.y)
 				item.direction=-direction
-				person.rotation.y=direction*PI*.5
 		else:
 			next.x = wrapf(next.x,-44.0,44.0)
 		var local := ambulance.to_local(next)
@@ -2581,15 +2606,12 @@ func _update_pedestrians(delta: float) -> void:
 			var relative := ambulance.to_local(front)
 			blocked = blocked or (ambulance.visible and absf(relative.x)<player_half_size.x+.36 and absf(relative.z)<player_half_size.y+.4)
 			blocked = blocked or _near_parked_vehicle(front,.38)
+		var distance := 0.0
 		if not blocked:
+			distance = minf(absf(next.x-person.position.x), float(item.speed)*delta)
+			next.y = _foot_height(next.x,next.z)
 			person.position = next
-			item.phase += delta * float(item.speed) * 4.0
-		var legs: Array = person.get_meta("legs")
-		var arms: Array = person.get_meta("arms")
-		for i in range(legs.size()):
-			var swing := sin(float(item.phase) + i * PI) if not blocked else 0.0
-			legs[i].rotation.x = swing * .38
-			arms[i].rotation.x = .63 if item.get("pushing",false) else -swing * .26
+		_animate_steps(person, distance, delta, item.get("pushing",false), float(item.phase)/TAU)
 
 func _rig_wheels(model: Node3D) -> Array[Node3D]:
 	var pivots: Array[Node3D] = []
@@ -3073,8 +3095,10 @@ func _update_camera(delta: float, snap_to_car := false) -> void:
 		camera.look_at(cab.to_global(Vector3(0,1.4,-1)))
 		return
 	if walker.visible and shops.inside>=0:
-		camera.position=walker.position+Vector3(0,3.8,-2.7)
-		camera.look_at(walker.position+Vector3(0,.9,1))
+		var focus := walker.position + Vector3(0,.9,1)
+		var offset := Vector3(0,2.9+orbit_height,-3.7).rotated(Vector3.UP,orbit_angle)
+		camera.position = _clear_camera_view(focus, focus+offset)
+		camera.look_at(focus)
 		return
 	if walker.visible:
 		var target := walker.position + Vector3.UP*1.2
@@ -3908,7 +3932,7 @@ func _refresh_ui() -> void:
 	driving_controls.show_wheel = tram_mode == 0
 	driving_controls.visible = not show_overlay and (tram_mode == 2 or (tram_mode == 0 and (boating or not walker.visible)))
 	var hints := ui.get_node("DrivingHints") as Label
-	hints.visible = driving_controls.visible or (tram_mode > 0 and not show_overlay)
+	hints.visible = not show_overlay and not shops.shop_card.is_visible_in_tree()
 	if tram_mode == 1:
 		hints.text = "Passenger ride · P to pause"
 	elif tram_mode == 2:
@@ -3919,6 +3943,8 @@ func _refresh_ui() -> void:
 		hints.text = "W / ↑ Drive   ·   A D / ← → Steer   ·   S / ↓ Brake or reverse   ·   F Get out   ·   P Pause"
 	else:
 		hints.text = "W / ↑  Drive     A D / ← →  Steer     S / ↓  Brake or reverse\nRelease to slow down   ·   Space to help   ·   P to pause"
+	var camera_hint := tr("Hold V and move the mouse to look around")
+	hints.text = camera_hint if walker.visible and tram_mode == 0 and not boating else tr(hints.text) + "   ·   " + camera_hint
 	if show_overlay:
 		mouse_gas = false
 		mouse_brake = false

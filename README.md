@@ -30,7 +30,7 @@ Select **Ride the tram** in the activity menu to follow an automatic service aro
 
 Select a season and weather in Settings or leave either on Automatic. Automatic seasons last 30 minutes of active play. The forecast holds for five minutes, then precipitation builds or clears over roughly a minute. Snow accumulates on roads, rain darkens the asphalt and braking takes slightly longer on slippery surfaces. Manual changes take effect more quickly. Daylight includes a visible sun aligned with the light casting the street shadows.
 
-Hold the middle mouse button and drag to orbit the exterior camera or look around from the BMW driver’s seat. Returning to the driver’s seat with **C** centres the view. On foot, nearby neighbours greet you in the selected language. Greetings appear above the speaker and use a matching system speech voice when available.
+Hold **V** and move the mouse for continuous camera control. Release **V** to use the pointer again. You can also hold the middle mouse button and drag to orbit the exterior camera or look around from the BMW driver’s seat. Returning to the driver’s seat with **C** centres the view. On foot, nearby neighbours greet you in the selected language. Greetings appear above the speaker and use a matching system speech voice when available.
 
 The central junction has phased traffic lights and red and green pedestrian figures beside the crossing. Traffic waits for its green phase. The player's vehicle also slows as it approaches a red signal, pedestrians in its path or a queue.
 
@@ -63,6 +63,8 @@ Park along Stationsallén, south of the vehicle depot, and walk through a shop d
 Select **Recovery truck** and the mission activity. Dispatch sends the location of a car with a smoking bonnet or a missing wheel. Look for the warning triangle and amber hazard lights. The hazards follow the traffic light effects setting and switch off when the car is loaded. Stop at the marker beside the car to load it onto the flatbed. Follow the arrows to the workshop and stop to unload and earn 20 coins. Gentle driving handles loading and unloading automatically. In full-speed mode, press Space while stopped.
 
 The police station stands on the north side of the western main street. Cross the northern bridge to find Sjöstads Sjukhus and its covered emergency entrance. The hospital and neighbourhood clinic are distinct buildings.
+
+People wear scarves in spring and autumn, knit caps and scarves in winter or snow, and brimmed hats and storm collars in rain. Their steps follow their speed, and the player places each foot on the waterfront stairs.
 
 Along the main street, a neighbour pushes a green pram near the police station and an older pedestrian walks with a four-wheel rollator near the square. They turn around at the ends of their pavement stretches.
 
