@@ -767,3 +767,6 @@ msgstr "Småbåtshamnen har fått det sista paketet. Du fick 10 mynt."
 
 msgid "Stepping ashore in %d s"
 msgstr "Du går i land om %d s"
+
+msgid "School is over! To the clinic, please."
+msgstr "Skoldagen är slut! Till vårdcentralen, tack."

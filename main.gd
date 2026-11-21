@@ -861,7 +861,7 @@ func _help_at_target() -> void:
 			message = "Passenger on board." if taxi_leg%2 else "Thank you for the ride!"
 			if _school_fare(taxi_leg-1):
 				if taxi_leg%2:
-					message = "The pupil is on board."
+					message = "School is over! To the clinic, please." if _taxi_stop(taxi_leg-1) == SCHOOL else "The pupil is on board."
 				elif _taxi_stop(taxi_leg-1) == SCHOOL:
 					message = "Thanks! I can see my school!"
 			message_timer = 3
