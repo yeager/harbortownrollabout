@@ -689,3 +689,6 @@ msgstr "%s är extra glad!"
 
 msgid "Current job"
 msgstr "Aktuellt uppdrag"
+
+msgid "Tab to choose · Enter to buy or eat"
+msgstr "Tabb för att välja · Enter för att köpa eller äta"

@@ -267,3 +267,4 @@ Brandbilens kontroll vid torget har en modellerad brandpost. Testat framkomlighe
 Brandbilens inspektion i småbåtshamnen har en orange livboj på stativ intill gångmålet. Testat kollision, framkomlighet och övergång till nästa uppdrag i Godot 4.
 Två personer ur brandskyddsgruppen möter spelaren vid vårdcentralen under brandbilens första uppdrag. Testat gångmålet, mötet och övergången till inspektionen vid kajen i Godot 4.
 Aktuellt uppdrag ligger överst i telefonen även efter att SMS-historiken fyllts. Verifierade fordonsbyte, svensk rubrik och fri körning i Godot 4.
+Kioskens tangentbordsmarkering flyttas till nästa ätbara mellanmål när sista portionen är uppäten, därefter till första köpknappen. Verifierat med två Enter-tryck genom Godots viewport och kontroll av lagersaldo och mynt.

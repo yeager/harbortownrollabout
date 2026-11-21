@@ -174,6 +174,8 @@ func rebuild_menu() -> void:
 	panel.add_child(title)
 	var keyboard_hint := Label.new()
 	keyboard_hint.text = "Tab to choose · Enter to buy" if MENUS[inside].size()>1 else "Enter to buy"
+	if inside == 1:
+		keyboard_hint.text = "Tab to choose · Enter to buy or eat"
 	keyboard_hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	panel.add_child(keyboard_hint)
 	for i in MENUS[inside].size():
@@ -203,12 +205,19 @@ func eat_snack(product: String) -> void:
 	var game = get_parent()
 	if inside != 1 or not shop_card.is_visible_in_tree() or not game.walker.visible or game.paused: return
 	if not product in MENUS[1] or int(game.purchases.get(product, 0)) <= 0: return
+	var restore_focus: bool = snack_buttons[product].has_focus() and game.purchases[product] == 1
 	game.purchases[product] -= 1
 	game._save_preferences()
 	game.happy_seconds = 25
 	game._refresh_ui()
 	receipt.text = tr("%s feels extra happy!") % ("Alma" if game.play_as_alma else "Axel")
 	refresh_basket()
+	if restore_focus:
+		for eat: Button in snack_buttons.values():
+			if eat.visible:
+				eat.grab_focus()
+				return
+		first_product.grab_focus()
 
 func refresh_basket() -> void:
 	var lines := PackedStringArray()
