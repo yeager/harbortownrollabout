@@ -749,3 +749,9 @@ msgstr "Du kan gå i land vid båda bryggorna."
 
 msgid "Next landing in %d s"
 msgstr "Framme vid bryggan om %d s"
+
+msgid "Get off at next landing · F"
+msgstr "Gå av vid nästa brygga · F"
+
+msgid "Stay on board · F"
+msgstr "Stanna ombord · F"

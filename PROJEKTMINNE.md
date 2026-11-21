@@ -321,3 +321,4 @@ Den första inlämnade bilen står kvar på verkstaden även medan nästa bil li
 - Passagerare på Lotten ser återstående sekunder till bryggan följt av avstigningsknappen. Svensk nedräkning kontrollerad visuellt ombord i Godot 4.6.3.
 - Vid båda bryggorna visas väntetiden för just den bryggan. Testat på svenska vid avgång, vid motsatta bryggan och en sekund före ankomst; ombordstigning aktiverades vid ankomst.
 - Båda trapporna till färjan markeras med dubbelsidiga LOTTEN-skyltar på land. Kontrollerat skyltens läsbarhet från gatan i Compatibility.
+- Ombord kan spelaren välja nästa brygga i förväg och ångra valet. Testat avbruten avstigning och automatisk avstigning på gångbar brygga i Godot.

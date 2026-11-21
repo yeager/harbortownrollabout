@@ -247,6 +247,7 @@ var water_finish := ShaderMaterial.new()
 var saloon_glazing: StandardMaterial3D
 const FERRY_LANDINGS := [-35.0, -12.0]
 var ferry_passenger := false
+var ferry_exit_requested := false
 var ferry: Node3D
 var wave_time := 0.0
 var walker_data: Array[Dictionary] = []
@@ -1494,6 +1495,8 @@ func _update_moorings(delta: float) -> void:
 	ferry.rotation.z = .006*sin(wave_time*.88)
 	if ferry_passenger:
 		walker.position = ferry.to_global(Vector3(-.55,.66,5.1))
+		if ferry_exit_requested and _ferry_stop() >= 0:
+			_change_seat()
 		_update_entry_button()
 	for berth in moorings:
 		var boat: Node3D = berth.boat
@@ -2115,7 +2118,10 @@ func _change_seat() -> void:
 	if mode != "playing" or paused: return
 	var stop := _ferry_stop()
 	if ferry_passenger:
-		if stop < 0: return
+		if stop < 0:
+			ferry_exit_requested = not ferry_exit_requested
+			_update_entry_button()
+			return
 		var z: float = FERRY_LANDINGS[stop]
 		var landing := Vector3(64.9,_foot_height(64.9,z),z)
 		if not _on_foot_clear(landing): return
@@ -2130,6 +2136,7 @@ func _change_seat() -> void:
 		return
 	if walker.visible and stop >= 0 and _near_ferry_landing() == stop:
 		ferry_passenger = true
+		ferry_exit_requested = false
 		walking_velocity = Vector3.ZERO
 		walker.rotation.y = -PI*.5
 		_update_moorings(0)
@@ -2236,9 +2243,12 @@ func _update_entry_button() -> void:
 	if ferry_passenger or landing >= 0:
 		var stop := _ferry_stop()
 		entry_marker.visible = false
-		seat_button.disabled = stop < 0 or (not ferry_passenger and stop != landing)
+		seat_button.disabled = not ferry_passenger and stop != landing
 		if ferry_passenger:
-			seat_button.text = "Step ashore · F" if stop >= 0 else "On board Lotten"
+			if stop >= 0:
+				seat_button.text = "Step ashore · F"
+			else:
+				seat_button.text = "Stay on board · F" if ferry_exit_requested else "Get off at next landing · F"
 		else:
 			if stop == landing:
 				seat_button.text = "Board Lotten · F"
