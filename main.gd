@@ -2051,12 +2051,22 @@ func _near_parked_vehicle(p: Vector3, margin: float) -> bool:
 				return true
 	return false
 
+func _feet_supported(p: Vector3) -> bool:
+	# Sample the corners of the walking footprint across connected deck surfaces.
+	for dx in [-.18, .18]:
+		for dz in [-.18, .18]:
+			var x := p.x + float(dx)
+			var z := p.z + float(dz)
+			if x > 55 and x < 87 and absf(z)>5.4 and absf(z+48)>5.4 and is_nan(_pier_height(x,z)):
+				return false
+	return true
+
 func _on_foot_clear(p: Vector3) -> bool:
 	if is_instance_valid(workshop_car) and workshop_car.visible and WORKSHOP_CAR_BOUNDS.grow(.2).has_point(p): return false
 	if is_instance_valid(casualty) and casualty.visible and casualty.get_parent()==self and AABB(casualty.position-Vector3(2.35,1,1.1),Vector3(4.7,3,2.2)).has_point(p): return false
 	if p.x < -520 or p.x > 170 or p.z < -86 or p.z > 65:
 		return false
-	if p.x > 55 and p.x < 87 and absf(p.z)>5.4 and absf(p.z+48)>5.4 and is_nan(_pier_height(p.x,p.z)):
+	if not _feet_supported(p):
 		return false
 	for wall in building_bounds:
 		if wall.grow(.25).has_point(p+Vector3.UP):
@@ -2148,7 +2158,11 @@ func _walk(delta: float) -> void:
 	var motion := horizontal.move_toward(desired, acceleration * delta) * delta
 	var next := walker.position
 	for step in [Vector3(motion.x,0,0),Vector3(0,0,motion.z)]:
-		if _on_foot_clear(next+step): next += step
+		var pieces := maxi(1, ceili(step.length()/.16))
+		var stride: Vector3 = step / pieces
+		for piece in pieces:
+			if not _on_foot_clear(next+stride): break
+			next += stride
 	next.y = _foot_height(next.x,next.z)
 	var travel := next-walker.position
 	if travel.length_squared()>.000001:
