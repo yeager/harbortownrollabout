@@ -296,3 +296,4 @@ Butikerna visar plånbokens saldo i köpmenyn. Testade saldot före och efter et
 Sammanhängande sparfilstest i Godot 4.6.3: skolskjuts gav 15 mynt, glassen kostade fyra och fanns i kiosken efter omladdning av huvudscenen. Eleven kunde äta den sparade glassen; nästa omladdning behöll saldot och visade noll glassar.
 Bussens bakre destinationsskylt visar linje och nästa hållplats även från följekamerans sida. Verifierade sex uppdragssteg och fri körning i Godot.
 Textstorleken på bussens destinationsskyltar anpassas till hållplatsnamnet. Kontrollerade textbredden för samtliga sex namn och samma storlek fram och bak.
+Verifierade sex hållplatser med bussens körhjälp: rullande buss betjänade ingen hållplats, tre avlämningar gav totalt 45 mynt och nästa mål och skylt återgick till torget.
