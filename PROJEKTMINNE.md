@@ -247,3 +247,4 @@ Snöskoterns drivband har nu en öppen boggi med dubbla hjul, medar och bandkamm
 Snöskoterns skidspetsar har nu lyftbyglar som följer skidornas styrutslag. Styrning, gas, broms och avstigning testade i Godot.
 Framvagnen på snöskotern har modellerade spiralfjädrar med fjädersäten och separata stötdämpare. Båda fjädrarna finns i exporten och körtestet i Godot gick igenom.
 Snöskotern lämnar ett centrerat, 40 cm brett bromsspår från drivbandet vid hård bromsning. Bilarnas däckskrik används bara för hjulfordon. Kontrollerat spårinstans och ljud i Godot.
+När snö täcker marken lämnar skoterns drivband spår även under vanlig körning. Testade gaspådrag på barmark och snö i Godot.

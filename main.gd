@@ -573,7 +573,9 @@ func _drive(delta: float) -> void:
 	ambulance.global_position = pos
 	if reverse_lens:
 		reverse_lens.emission_energy_multiplier = 2.0 if speed < -0.01 else 0.0
-	if brake_held and throttle < -0.7 and previous_speed > (2.0 if not skid_anchors.is_empty() else 7.0) and pos.y > -0.15 and previous_pose.origin.distance_squared_to(pos) > 0.000001:
+	var hard_braking := brake_held and throttle < -0.7 and previous_speed > (2.0 if not skid_anchors.is_empty() else 7.0)
+	var snow_trail := vehicle_index == SNOWMOBILE and weather.snow >= .25
+	if (snow_trail or (hard_braking and pos.y > -.15)) and previous_pose.origin.distance_squared_to(pos) > .000001:
 		_draw_skid(previous_pose)
 	else:
 		_end_skid()
