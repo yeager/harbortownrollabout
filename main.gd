@@ -633,7 +633,7 @@ func _help_at_target() -> void:
 	if _at_target() and (walker.visible or absf(speed)<.12):
 		parked_at_target = 0.0
 		mission_index += 1
-		phone.receive("Thank you for helping! You earned 10 coins.")
+		phone.receive("First-aid supplies delivered to the marina. You earned 10 coins." if mission_index==TARGETS.size() else "Thank you for helping! You earned 10 coins.")
 		wallet+=10
 		_save_preferences()
 		speed = 0.0
@@ -3216,7 +3216,7 @@ func _refresh_ui() -> void:
 		start_button.text = "Start driving"
 	elif mode == "complete":
 		title_label.text = "All missions complete!"
-		subtitle_label.text = tr("Well done, %s! Ready for another drive?") % ("Alma" if play_as_alma else "Axel")
+		subtitle_label.text = tr("Well done, %s!") % ("Alma" if play_as_alma else "Axel") + "\n" + tr("First-aid supplies delivered to the marina. You earned 10 coins.")
 		start_button.text = "Drive again"
 	else:
 		title_label.text = "Pause"

@@ -497,3 +497,9 @@ msgstr "Enter för att köpa"
 
 msgid "F · Enter %s"
 msgstr "%s · Tryck F för att kliva in"
+
+msgid "Well done, %s!"
+msgstr "Bra gjort, %s!"
+
+msgid "First-aid supplies delivered to the marina. You earned 10 coins."
+msgstr "Förbandsmaterialet är framme i småbåtshamnen. Du fick 10 mynt."

@@ -181,3 +181,5 @@ Spelprojektet publiceras i det privata GitHub-repot yeager/axels-emergency-vehic
 - Vid urstigning hamnar spelaren längs samma dörrlinje som används vid instigning. Testat att bärgaren kräver stopp och att spelaren direkt kan nå samma dörr igen.
 
 - Urstigning vid färjelägets trappa använder trappstegets höjd direkt. Verifierat med en parkerad ambulans vid västra kajen.
+
+- Förbandsleveransen kvitteras med plats och ersättning både i telefonen och på slutskärmen. Tre genomförda steg verifierades med Alma och svenska texter.
