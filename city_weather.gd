@@ -56,7 +56,7 @@ func particles(flakes: bool) -> GPUParticles3D:
 		crystal.rings = 0
 		crystal.top_radius = .025
 		crystal.bottom_radius = .025
-		crystal.height = .007
+		crystal.height = .022
 		drop = crystal
 		motion.particle_flag_rotate_y = true
 		motion.angular_velocity_min = -70
