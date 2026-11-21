@@ -358,3 +358,4 @@ Utökade SMS-historiken från fyra till 32 meddelanden per spelomgång. Verifier
 Familjen skickar nu sju olika SMS, däribland morfars hälsning från Lotten och mammas kanelbulle. Alla sju levererades via telefonens timer och visades på båda språken efter språkbyte i Godot.
 SMS visas i en mobil på 248 × 350 med rullbar historik. Verifierat visuellt i Godot på svenska. Axel och Alma har egna ansiktsformer och porträtt även som förare. Gången har viktöverföring, böjda armbågar och häl-till-tå-steg. Båda testades i Godot 4.6.3.
 Gångriggen mäter marken vid häl och tå. Testade Axel och Alma med tån på ett 12 cm högt teststeg och hälen över lägre mark.
+Lokala Godot 4.7.dev.custom_build.f8d44ac6b: samtliga sju tests/*.gd godkända utan rapporterade motor- eller skriptfel i headless-läge (buss, Lotten, gång, Porsche, taxi, vatten och väder).
