@@ -61,3 +61,5 @@ Spelprojektet publiceras i det privata GitHub-repot yeager/axels-emergency-vehic
 - Telefonen anger plats och fel vid bärgning, bekräftar lastningen och visar belöningen inför verkstadsresan. Lastning och betalning syns även kort på skärmen.
 
 - Vid återgång från manuellt till automatiskt väder börjar prognosens femminuterstid om. Automatiska årstider utgår från vald årstid och behåller den i en halvtimmes speltid. Nederbörd som passar årstiden fortsätter vid bytet.
+
+- Hård bromsning i snö lämnar bredare grå spår och dämpat däckljud. Slask ger mörkare spår än torr snö. Varje spårsegment behåller färgen från väglaget när det skapades.

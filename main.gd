@@ -458,12 +458,14 @@ func _drive(delta: float) -> void:
 
 func _build_brake_effects() -> void:
 	var rubber := StandardMaterial3D.new()
-	rubber.albedo_color = Color(0.105, 0.105, 0.11)
+	rubber.vertex_color_use_as_albedo = true
+	rubber.vertex_color_is_srgb = true
 	rubber.roughness = 1.0
 	var strip := PlaneMesh.new()
 	strip.size = Vector2.ONE
 	strip.material = rubber
 	skid_marks.transform_format = MultiMesh.TRANSFORM_3D
+	skid_marks.use_colors = true
 	skid_marks.mesh = strip
 	skid_marks.instance_count = SKID_CAPACITY
 	skid_marks.visible_instance_count = 0
@@ -484,6 +486,9 @@ func _end_skid() -> void:
 
 func _draw_skid(previous_pose: Transform3D) -> void:
 	var starting := skid_anchors.is_empty()
+	# Tyres compress snow into wider grey tracks and expose darker slush when wet.
+	var track_color := Color("#1b1b1c").lerp(Color("#83949b").lerp(Color("#47575c"), weather.wet), weather.snow)
+	var track_width := lerpf(.19,.245,weather.snow)
 	for wheel in rear_tire_contacts.size():
 		var offset := rear_tire_contacts[wheel]
 		if starting:
@@ -497,14 +502,15 @@ func _draw_skid(previous_pose: Transform3D) -> void:
 		var center := (endpoint + start) * 0.5
 		center.y = _surface_height(center.x, center.z) + 0.009
 		var direction := segment / length
-		var axes := Basis(Vector3.UP.cross(direction) * 0.19, Vector3.UP, direction * (length + 0.015))
+		var axes := Basis(Vector3.UP.cross(direction) * track_width, Vector3.UP, direction * (length + 0.015))
 		skid_marks.set_instance_transform(skid_cursor, Transform3D(axes, center))
+		skid_marks.set_instance_color(skid_cursor, track_color)
 		skid_cursor = (skid_cursor + 1) % SKID_CAPACITY
 		skid_marks.visible_instance_count = mini(SKID_CAPACITY, skid_marks.visible_instance_count + 1)
 		skid_anchors[wheel] = endpoint
 	if not AudioServer.is_bus_mute(0):
 		tire_player.pitch_scale = 0.78 + clampf(speed / (250.0 / 3.6), 0, 1) * 0.45
-		tire_player.volume_db = lerpf(-20.0, -8.0, clampf(speed / 22.0, 0, 1))
+		tire_player.volume_db = lerpf(-20.0, -8.0, clampf(speed / 22.0, 0, 1)) - 5.0*weather.snow
 		if not tire_player.playing:
 			tire_player.play()
 	elif tire_player.playing:
