@@ -301,3 +301,4 @@ Ren import från publicerad 1c76c53: åtta scenariotester i Godot 4.6.3 godkänd
 Grafisk kontroll av publicerad spelkod i Godot 4.6.3 vid 960×600: Compatibility, Mobile och Forward+ renderade bussuppdraget. På Compatibility-bilden gick hela 502 SJÖSTADSSKOLAN att läsa från följekameran.
 Öppen telefon frigör muspedalerna så att klick under SMS-läsning inte gasar eller bromsar. Verifierat med vänster och höger musknapp före, under och efter telefonvyn i Godot.
 Mittenknappsdrag håller nu kameran stilla när telefonen eller butikens köpmeny är öppen. Testade att drag åter vrider kameran efter båda vyerna i Godot 4.6.3.
+Telefonens aktuella uppdrag har en fast plats ovanför den rullbara SMS-historiken. Testat position vid rullning, svensk rubrik, olästa meddelanden och historik utan uppdrag.

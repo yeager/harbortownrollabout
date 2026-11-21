@@ -3,6 +3,7 @@ extends VBoxContainer
 var open_button := Button.new()
 var handset := PanelContainer.new()
 var messages: Array[String] = []
+var job_heading := Label.new()
 var inbox := Label.new()
 var history_scroll := ScrollContainer.new()
 var unread := 0
@@ -50,7 +51,13 @@ func _ready() -> void:
 	history_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	history_scroll.custom_minimum_size = Vector2(302, 172)
 	history_scroll.follow_focus = true
-	handset.add_child(history_scroll)
+	var content := VBoxContainer.new()
+	handset.add_child(content)
+	job_heading.custom_minimum_size.x = 280
+	job_heading.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	job_heading.add_theme_font_size_override("font_size",18)
+	content.add_child(job_heading)
+	content.add_child(history_scroll)
 	inbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	history_scroll.add_child(inbox)
 	handset.hide()
@@ -89,9 +96,10 @@ func refresh() -> void:
 	open_button.text=tr("Close phone · T") if handset.visible else tr("Phone · T")
 	if unread>0: open_button.text+="  (%d)" % unread
 	var lines:=PackedStringArray()
-	if not current_job.is_empty():
-		lines.append(tr("Current job") + "\n" + tr(current_job))
+	job_heading.visible = not current_job.is_empty()
+	job_heading.text = tr("Current job") + "\n" + tr(current_job) if job_heading.visible else ""
 	for body in messages:
 		if body != current_job:
 			lines.append(tr(body))
+	history_scroll.visible = not lines.is_empty() or current_job.is_empty()
 	inbox.text="\n\n".join(lines) if not lines.is_empty() else tr("No messages yet.")
