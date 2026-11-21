@@ -2605,13 +2605,10 @@ func _update_pedestrians(delta: float) -> void:
 		var alignment := maxf(0.0, cos(person.rotation.y - heading))
 		var next := person.position
 		next.x += direction * float(item.speed) * delta * alignment
-		if item.has("stretch"):
-			var stretch: Vector2 = item.stretch
-			if next.x<stretch.x or next.x>stretch.y:
-				next.x=clampf(next.x,stretch.x,stretch.y)
-				item.direction=-direction
-		else:
-			next.x = wrapf(next.x,-44.0,44.0)
+		var stretch: Vector2 = item.get("stretch", Vector2(-44,44))
+		if next.x < stretch.x or next.x > stretch.y:
+			next.x = clampf(next.x,stretch.x,stretch.y)
+			item.direction = -direction
 		var local := ambulance.to_local(next)
 		var blocked := ambulance.visible and absf(local.x) < player_half_size.x+.4 and absf(local.z) < player_half_size.y+.4
 		# Wait at the kerb on red. People already crossing continue to the pavement.

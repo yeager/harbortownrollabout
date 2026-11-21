@@ -280,3 +280,4 @@ Vid start får alla 25 personer sina väderkläder redan när scenen byggs. Test
 Tvärbanans främre vagn visar nästa hållplats på en bärnstensfärgad sidoskylt vid dörren. Testade alla tre skyltbyten under både automatisk och manuell körning i Godot 4.6.3.
 Fyra signalreglerade övergångsställen har riktad nattbelysning. Godot 4.6.3 verifierade dags- och nattlägen samt att varje ljuskägla når övergångsställets mitt.
 Barnvagnens och rullatorns åtta hjul rullar efter verklig förflyttning och respektive hjulradie. Däck, fälg, nav och ventil följer samma axel. Verifierat i Godot 4.6.3.
+Fotgängarna på huvudgatans trottoar vänder och går tillbaka vid gatans båda ändar. Verifierade sammanhängande rörelse genom båda vändningarna i Godot 4.6.3.
