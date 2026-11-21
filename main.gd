@@ -1297,6 +1297,23 @@ func _build_new_blocks() -> void:
 		for bar in [-1,0,1]:
 			_make_box("Steel mullion",Vector3(.08,2.9,.21),bay+Vector3.RIGHT*bar*.91,Color("#84908b"))
 		_make_box("Steel transom",Vector3(3.65,.08,.21),bay,Color("#84908b"))
+	# The recovery route approaches the workshop from the north.
+	for x in [-4.0,4.0]:
+		var door := p+Vector3(x,1.78,-5.08)
+		_make_box("Workshop roller shutter",Vector3(5.8,3.55,.16),door,Color("#708588"))
+		for row in range(-4,5):
+			_make_box("Shutter seam",Vector3(5.72,.035,.04),door+Vector3(0,row*.35,-.10),Color("#52676a"))
+		for pane in [-1,0,1]:
+			_make_box("Shutter window",Vector3(1.1,.43,.05),door+Vector3(pane*1.48,.69,-.13),Color("#263f49"))
+	_make_box("Workshop fascia",Vector3(14.8,.92,.18),p+Vector3(0,4.57,-5.12),Color("#244750"))
+	var workshop_name := Label3D.new()
+	workshop_name.text="SJÖSTADENS BILVERKSTAD"
+	workshop_name.pixel_size=.012
+	workshop_name.font_size=48
+	workshop_name.outline_size=0
+	workshop_name.position=p+Vector3(0,4.57,-5.23)
+	workshop_name.rotation.y=PI
+	add_child(workshop_name)
 	for crossing in [Vector3(-12,0,0),Vector3(91,0,0),Vector3(91,0,-48),Vector3(143,0,-48)]:
 		for stripe in range(-4,5):
 			_make_box("Zebra crossing",Vector3(2.4,.014,.52),crossing+Vector3(0,_surface_height(crossing.x,crossing.z)+.014,stripe),Color("#eee9d9"))

@@ -125,3 +125,5 @@ Spelprojektet publiceras i det privata GitHub-repot yeager/axels-emergency-vehic
 - Trafiken räknar den havererade bilens längd och bredd vid inbromsning. I ett körfältstest i Godot stannade bilen bakom hindret och fortsatte när körfältet blev fritt.
 
 - En rödorange varningstriangel med självlysande reflexram står vid båda haverierna och plockas bort när bilen lastas. Synligheten kontrollerades genom alla fyra bärgningssteg.
+
+- Verkstadens fasad mot bärgningsmålet har två sektionsportar med fönster och en skylt med namnet Sjöstadens bilverkstad.
