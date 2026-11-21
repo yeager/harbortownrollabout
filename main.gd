@@ -401,7 +401,8 @@ func _unhandled_key_input(event: InputEvent) -> void:
 				if phone.visible: phone.toggle()
 			KEY_H: _honk()
 			KEY_J: _toggle_radio()
-			KEY_F: _change_seat()
+			KEY_F:
+				if not phone.handset.is_visible_in_tree(): _change_seat()
 			KEY_C: _toggle_camera_view()
 			KEY_ESCAPE, KEY_P:
 				if event.keycode == KEY_ESCAPE and phone.handset.is_visible_in_tree():
