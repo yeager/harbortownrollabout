@@ -359,3 +359,4 @@ Familjen skickar nu sju olika SMS, däribland morfars hälsning från Lotten och
 SMS visas i en mobil på 248 × 350 med rullbar historik. Verifierat visuellt i Godot på svenska. Axel och Alma har egna ansiktsformer och porträtt även som förare. Gången har viktöverföring, böjda armbågar och häl-till-tå-steg. Båda testades i Godot 4.6.3.
 Gångriggen mäter marken vid häl och tå. Testade Axel och Alma med tån på ett 12 cm högt teststeg och hälen över lägre mark.
 Lokala Godot 4.7.dev.custom_build.f8d44ac6b: samtliga sju tests/*.gd godkända utan rapporterade motor- eller skriptfel i headless-läge (buss, Lotten, gång, Porsche, taxi, vatten och väder).
+XC60 har ny kaross, T-formade lyktor och frilagd blåljusramp. Tvärbanan har nya vagnskorgar, rörliga bälgar och två hytter. Bilar kan stöta i annan trafik och parkerade bilar. Bumpertestet kontrollerar kontakt och återstuds.

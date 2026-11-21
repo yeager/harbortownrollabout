@@ -9,16 +9,16 @@ const DELIVERY_TASKS := ["Collect parcels at the square", "Deliver a parcel to t
 const SLED_TASKS := ["Collect warm blankets at the square", "Bring blankets to the clinic", "Bring blankets to the marina"]
 func _mission_stop() -> int:
 	match vehicle_index:
-		1: return [2, 0, 1][mission_index]
+		1, XC60_POLICE: return [2, 0, 1][mission_index]
 		2: return [1, 2, 0][mission_index]
 		_: return mission_index
 
 const ROAD_HALF := 4.8
 const VEHICLE_NAMES := ["Ambulance", "Police car", "Fire engine"]
 const VEHICLE_SCENES := ["res://vehicles/ambulance.glb", "res://vehicles/polisbil.glb", "res://vehicles/brandbil.glb"]
-const VEHICLE_NAMES_ALL := ["Ambulance", "Police car", "Fire engine", "BMW X5 M60i", "Taxi", "Recovery truck", "BMW M3 E30", "Volvo 240", "Saab 96", "Tesla Model S", "City bus", "Snowmobile", "Porsche 911 GT3 RS"]
-const VEHICLE_SCENES_ALL := ["res://vehicles/ambulance.glb", "res://vehicles/polisbil.glb", "res://vehicles/brandbil.glb", "res://vehicles/bmw_x5_m60i.glb", "res://vehicles/taxi.glb", "res://vehicles/bargare.glb", "res://vehicles/m3_e30.glb", "res://vehicles/volvo240.glb", "res://vehicles/saab96.glb", "res://vehicles/model_s.glb", "res://vehicles/city_bus.glb", "res://vehicles/snowmobile.glb", "res://vehicles/porsche_gt3_rs.glb"]
-const SIREN_SOUNDS := ["res://audio/siren_ambulance.wav", "res://audio/siren_police.wav", "res://audio/siren_fire.wav", "res://audio/bmw_engine.wav", "res://audio/bmw_engine.wav", "res://audio/bmw_engine.wav", "res://audio/bmw_engine.wav", "res://audio/bmw_engine.wav", "res://audio/bmw_engine.wav", "res://audio/electric_drive.wav", "res://audio/bmw_engine.wav", "res://audio/sled_engine.wav", "res://audio/porsche_engine.wav"]
+const VEHICLE_NAMES_ALL := ["Ambulance", "Police car", "Fire engine", "BMW X5 M60i", "Taxi", "Recovery truck", "BMW M3 E30", "Volvo 240", "Saab 96", "Tesla Model S", "City bus", "Snowmobile", "Volvo XC60 Police", "Porsche 911 GT3 RS"]
+const VEHICLE_SCENES_ALL := ["res://vehicles/ambulance.glb", "res://vehicles/polisbil.glb", "res://vehicles/brandbil.glb", "res://vehicles/bmw_x5_m60i.glb", "res://vehicles/taxi.glb", "res://vehicles/bargare.glb", "res://vehicles/m3_e30.glb", "res://vehicles/volvo240.glb", "res://vehicles/saab96.glb", "res://vehicles/model_s.glb", "res://vehicles/city_bus.glb", "res://vehicles/snowmobile.glb", "res://vehicles/volvo_xc60_polis.glb", "res://vehicles/porsche_gt3_rs.glb"]
+const SIREN_SOUNDS := ["res://audio/siren_ambulance.wav", "res://audio/siren_police.wav", "res://audio/siren_fire.wav", "res://audio/bmw_engine.wav", "res://audio/bmw_engine.wav", "res://audio/bmw_engine.wav", "res://audio/bmw_engine.wav", "res://audio/bmw_engine.wav", "res://audio/bmw_engine.wav", "res://audio/electric_drive.wav", "res://audio/bmw_engine.wav", "res://audio/sled_engine.wav", "res://audio/siren_police.wav", "res://audio/porsche_engine.wav"]
 const BUILDING_SCENES := {"Sjukhuset":"res://environment/sjukhus.glb", "Polisstationen":"res://environment/polisstation.glb", "Bageriet":"res://environment/bageri.glb", "Vårdcentralen":"res://environment/vardcentral.glb", "Brandstationen":"res://environment/brandstation.glb", "Biblioteket":"res://environment/bibliotek.glb"}
 const TREE_SCENES := ["res://environment/lovtrad.glb", "res://environment/gran.glb", "res://environment/bredkronigt_lovtrad.glb"]
 
@@ -77,7 +77,8 @@ var crossing_direction := 1.0
 var entry_marker := Label3D.new()
 const BUS := 10
 const SNOWMOBILE := 11
-const PORSCHE := 12
+const PORSCHE := 13
+const XC60_POLICE := 12
 const SCHOOL := 3
 const SCHOOL_CURB := Vector3(136,0,3)
 const SCHOOL_GATE := Vector3(136,0,7)
@@ -90,7 +91,7 @@ var bus_board: Label3D
 const BUS_STOP_NAMES := ["TORGET","VÅRDCENTRALEN","SMÅBÅTSHAMNEN","SJÖSTADSSKOLAN","VÄSTRA TORGET","VÄSTERÄNGEN"]
 var bus_leg := 0
 const TAXI := 4
-const HORNS := ["ambulance","police","fire","bmw","taxi","recovery", "m3_e30", "volvo240", "saab96", "model_s", "city_bus","snowmobile", "porsche"]
+const HORNS := ["ambulance","police","fire","bmw","taxi","recovery", "m3_e30", "volvo240", "saab96", "model_s", "city_bus","snowmobile", "police", "porsche"]
 var horn := AudioStreamPlayer.new()
 var radio_button: Button
 var radio := AudioStreamPlayer.new()
@@ -178,7 +179,7 @@ func _change_mission_vehicle(next: int) -> void:
 func _vehicle_tasks() -> Array:
 	match vehicle_index:
 		0: return TARGET_NAMES
-		1: return PATROL_TASKS
+		1, XC60_POLICE: return PATROL_TASKS
 		2: return FIRE_TASKS
 		SNOWMOBILE: return SLED_TASKS
 		_: return DELIVERY_TASKS
@@ -192,9 +193,9 @@ var paused := false:
 			weather.rain_particles.speed_scale = 0.0 if value else 1.0
 			weather.snow_particles.speed_scale = weather.rain_particles.speed_scale
 var lights_on := false
-var parked_light_settings: Array[bool] = [false, false, false, false, false, false, false, false, false, false, false, false, false]
+var parked_light_settings: Array[bool] = [false, false, false, false, false, false, false, false, false, false, false, false, false, false]
 var sound_on := true
-var parked_sound_settings: Array[bool] = [false, false, false, true, true, true, true, true, true, true, true, true, true]
+var parked_sound_settings: Array[bool] = [false, false, false, true, true, true, true, true, true, true, true, true, true, true]
 var siren_player: AudioStreamPlayer
 var ui: CanvasLayer
 var wardrobe := preload("res://characters/weather_clothing.gd").new()
@@ -338,7 +339,7 @@ func _process(delta: float) -> void:
 		_update_traffic(delta)
 		_update_pedestrians(delta)
 		_update_moorings(delta)
-		if vehicle_index >= 3 and siren_player.playing:
+		if vehicle_index >= 3 and vehicle_index != XC60_POLICE and siren_player.playing:
 			var pitch_speed := 32.0 if vehicle_index == SNOWMOBILE else 250.0 / 3.6
 			siren_player.pitch_scale = 0.88 + clampf(absf(speed) / pitch_speed, 0.0, 1.0) * 0.72
 	else:
@@ -514,8 +515,8 @@ func _drive(delta: float) -> void:
 	if mouse_brake or brake_pedal_held: throttle = -1.0
 	if Input.is_key_pressed(KEY_A): steer_input = -1.0
 	if Input.is_key_pressed(KEY_D): steer_input = 1.0
-	var max_speed := 250.0 / 3.6 if vehicle_index == 3 else 11.0
-	var acceleration := lerpf(8.0, 2.3, clampf(speed / max_speed, 0.0, 1.0)) if vehicle_index == 3 else 7.2
+	var max_speed := 250.0 / 3.6 if vehicle_index in [3, XC60_POLICE] else 11.0
+	var acceleration := lerpf(8.0, 2.3, clampf(speed / max_speed, 0.0, 1.0)) if vehicle_index in [3, XC60_POLICE] else 7.2
 	if vehicle_index >= 6 and vehicle_index <= SNOWMOBILE:
 		max_speed = [53.0, 10.0, 8.5, 64.0, 12.0, 16.0][vehicle_index-6]
 		acceleration = [7.8, 2.2, 1.8, 10.0, 2.6, 5.2][vehicle_index-6]
@@ -548,7 +549,7 @@ func _drive(delta: float) -> void:
 	for knuckle in front_knuckles:
 		knuckle.rotation.y = -steering * deg_to_rad(33.0)
 	driving_controls.set_controls(steering, throttle > 0, brake_held, throttle < 0 and not brake_held)
-	var wheelbase: float = [3.7, 2.75, 4.1, 2.975, 2.85, 4.0, 2.56, 2.64, 2.46, 2.96, 6.06, 1.65, 2.457][vehicle_index]
+	var wheelbase: float = [3.7, 2.75, 4.1, 2.975, 2.85, 4.0, 2.56, 2.64, 2.46, 2.96, 6.06, 1.65, 2.865, 2.457][vehicle_index]
 	var yaw_rate := speed * tan(steering * deg_to_rad(33.0)) / wheelbase
 	# Limit lateral acceleration at speed while retaining tight parking turns.
 	var max_yaw_rate := 8.0 / maxf(absf(speed), 1.0)
@@ -575,28 +576,8 @@ func _drive(delta: float) -> void:
 		var offset := ambulance.to_local(person.position)
 		if absf(offset.x)<player_half_size.x+.36 and -offset.z*signf(speed)>0:
 			stopping_distance = minf(stopping_distance,maxf(0,absf(offset.z)-leading_reach-.65))
-	# Plan the stop before the bumper reaches a person or a stationary queue.
-	for item in traffic_data:
-		var offset := ambulance.to_local(item.actor.position)
-		var rail := ambulance.global_basis.x
-		var side_extent := absf(rail.x)*float(item.length)+absf(rail.z)*float(item.width)
-		if absf(offset.x)>player_half_size.x+side_extent: continue
-		var ahead := -offset.z*signf(speed)
-		if ahead<=0: continue
-		var end_extent := absf(forward.x)*float(item.length)+absf(forward.z)*float(item.width)
-		var leader_speed := maxf(0,travel_direction.x*float(item.direction)*float(item.speed))
-		stopping_distance = minf(stopping_distance,maxf(0,ahead-leading_reach-end_extent-.65)+leader_speed*leader_speed/10)
-	# Use the same swept footprint as collision detection to approach parked vehicles.
 	var margin := Vector3(extent.x, 0, extent.y)
 	var lookahead := ambulance.position + travel_direction * (1.0 + speed*speed/10.0 + absf(speed)*delta)
-	for i in parked_cars.size():
-		if not parked_cars[i].visible: continue
-		var bounds := _parked_bounds(i)
-		var wall := AABB(bounds.position - margin, bounds.size + 2 * margin)
-		if wall.has_point(ambulance.position): continue
-		var hit = wall.intersects_segment(ambulance.position, lookahead)
-		if hit != null:
-			stopping_distance = minf(stopping_distance, ambulance.position.distance_to(hit))
 	# Stop with the bumper on dry ground, including when approaching in reverse.
 	for span in OPEN_WATER:
 		var water := AABB(Vector3(55 - extent.x, -10, span.x - extent.y),
@@ -630,7 +611,7 @@ func _drive(delta: float) -> void:
 		var contact = footprint.intersects_segment(offset, offset + step)
 		if contact != null:
 			step = step.limit_length(maxf(0.0, offset.distance_to(contact) - 0.02))
-			speed = 0.0
+			speed = -signf(speed) * minf(absf(speed) * .12, 1.4)
 	# In vehicle space the sweep is straight along Z. A round trunk also
 	# clears the bumper corners when passing diagonally beside a tree.
 	var travel_sign := signf(step.dot(forward))
@@ -1898,7 +1879,8 @@ func _depot_position(i: int) -> Vector3:
 	if i == BUS: return Vector3(-34,-.13,25.4)
 	if i == SNOWMOBILE: return Vector3(-41,-.13,23)
 	if i == RECOVERY: return Vector3(-45,-.13,25)
-	if i >= 6: return Vector3(-14-(i-6)*5,-.13,28)
+	if i >= 6 and i <= SNOWMOBILE: return Vector3(-14-(i-6)*5,-.13,28)
+	if i == XC60_POLICE: return Vector3(-44,-.13,33)
 	return Vector3(-47+5*i,-.13,15)
 
 func _build_depot() -> void:
@@ -2335,6 +2317,7 @@ func _build_traffic() -> void:
 	_spawn_emergency_traffic(0, -19.0, 2.35, 1.0)
 	_spawn_emergency_traffic(1, 19.0, -2.35, -1.0)
 	_spawn_emergency_traffic(2, 77.0, 2.35, 1.0)
+	_spawn_emergency_traffic(3, -68.0, -2.35, -1.0)
 
 func _spawn_emergency_traffic(index: int, x: float, lane: float, direction: float) -> void:
 	var actor := _spawn_traffic(VEHICLE_SCENES_ALL[index], x, lane, direction, 9.0, 1.0)
@@ -2347,7 +2330,7 @@ func _spawn_emergency_traffic(index: int, x: float, lane: float, direction: floa
 		lamps.append(lamp)
 	# One local light per responding vehicle keeps the night-time spill affordable.
 	var spill := OmniLight3D.new()
-	spill.position.y = [2.8,1.7,3.1][index]
+	spill.position.y = [2.8,1.7,3.1,2.38][index]
 	spill.light_color = Color("#3879ff")
 	spill.light_energy = 2.6
 	spill.omni_range = 6.0
@@ -2440,6 +2423,8 @@ func _spawn_traffic(scene_path: String, x: float, lane_z: float, direction: floa
 	var emergency_index := VEHICLE_SCENES.find(scene_path)
 	if emergency_index >= 0:
 		voice = HORNS[emergency_index]
+	elif scene_path == VEHICLE_SCENES_ALL[XC60_POLICE]:
+		voice = "police"
 	traffic_horn.stream = load("res://audio/horn_%s.wav" % voice)
 	traffic_horn.volume_db = -9
 	traffic_horn.unit_size = 5
@@ -3420,7 +3405,7 @@ func _update_mission_marker() -> void:
 			companion.position.y = _foot_height(companion.position.x,companion.position.z)
 	for member in clinic_fire_team:
 		member.visible = not free_drive and vehicle_index == 2 and mission_index == 0
-	var delivering := vehicle_index in [3,6,7,8,9, PORSCHE] and not free_drive
+	var delivering := vehicle_index in [3,6,7,8,9,PORSCHE] and not free_drive
 	for i in delivery_parcels.size():
 		var parcel := delivery_parcels[i]
 		var delivered := mission_index >= i+2
@@ -3646,7 +3631,7 @@ func _build_overlay() -> void:
 	vehicle_selector.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	vehicle_selector.add_theme_font_size_override("font_size", 19)
 	for name in VEHICLE_NAMES_ALL:
-		vehicle_selector.add_item(name)
+		vehicle_selector.add_item(tr(name))
 	vehicle_selector.item_selected.connect(_on_vehicle_selected)
 	var player_row := HBoxContainer.new()
 	player_row.alignment=BoxContainer.ALIGNMENT_CENTER
@@ -3911,7 +3896,7 @@ func _start_game() -> void:
 	phone.messages.clear()
 	phone.unread=0
 	phone.handset.hide()
-	parked_sound_settings.assign([false, false, false, true, true, true, true, true, true, true, true, true, true])
+	parked_sound_settings.assign([false, false, false, true, true, true, true, true, true, true, true, true, true, true])
 	parked_light_settings.fill(false)
 	mode = "playing"
 	paused = false
@@ -4004,7 +3989,7 @@ func _toggle_pause() -> void:
 		get_viewport().gui_release_focus()
 
 func _toggle_lights() -> void:
-	if vehicle_index >= 3 or walker.visible: return
+	if (vehicle_index >= 3 and vehicle_index != XC60_POLICE) or walker.visible: return
 	lights_on = not lights_on
 	_update_emergency_lights()
 	_refresh_ui()
@@ -4084,7 +4069,7 @@ func _update_siren() -> void:
 	if sound_on and not boating and tram_mode == 0 and mode == "playing" and not paused and not walker.visible:
 		if siren_player.stream != siren_streams[vehicle_index]:
 			siren_player.stream = siren_streams[vehicle_index]
-		if vehicle_index < 3:
+		if vehicle_index < 3 or vehicle_index == XC60_POLICE:
 			siren_player.pitch_scale = 1.0
 		siren_player.volume_db = -1.0
 		if not siren_player.playing: siren_player.play()
@@ -4130,7 +4115,7 @@ func _refresh_ui() -> void:
 		road_driver.get_node("RidingLegs").visible = vehicle_index == SNOWMOBILE
 		for leg in road_driver.get_meta("legs"):
 			leg.visible = vehicle_index != SNOWMOBILE
-		road_driver.visible = vehicle_index in [3,PORSCHE,SNOWMOBILE] and mode == "playing" and not walker.visible and not boating and tram_mode == 0 and not cockpit_view
+		road_driver.visible = vehicle_index in [3,PORSCHE,SNOWMOBILE,XC60_POLICE] and mode == "playing" and not walker.visible and not boating and tram_mode == 0 and not cockpit_view
 	if skipper: skipper.visible = boating and mode == "playing"
 	if not is_instance_valid(mission_label): return
 	var mission_activity := "Parcel deliveries"
@@ -4151,7 +4136,7 @@ func _refresh_ui() -> void:
 	if happy_seconds > 0:
 		wallet_label.text += "   ☺ " + tr("%s feels extra happy!") % ("Alma" if play_as_alma else "Axel")
 	light_button.text = "Lights ON" if lights_on else "Lights OFF"
-	if vehicle_index >= 3:
+	if vehicle_index >= 3 and vehicle_index != XC60_POLICE:
 		siren_button.text = "Engine ON" if sound_on else "Engine OFF"
 	else:
 		siren_button.text = "Siren ON" if sound_on else "Siren OFF"
@@ -4182,7 +4167,7 @@ func _refresh_ui() -> void:
 	horn_button.visible = not show_overlay and (tram_mode==2 or (tram_mode==0 and (boating or not walker.visible)))
 	horn_button.text = "Tram bell · H" if tram_mode==2 else "Horn · H"
 	seat_button.visible = not show_overlay and tram_mode==0 and not boating
-	light_button.visible = tram_mode == 0 and not boating and not walker.visible and vehicle_index < 3
+	light_button.visible = tram_mode == 0 and not boating and not walker.visible and (vehicle_index < 3 or vehicle_index == XC60_POLICE)
 	siren_button.visible = tram_mode == 0 and not boating and not walker.visible
 	if walker.visible:
 		_update_entry_button()
@@ -4214,7 +4199,7 @@ func _refresh_ui() -> void:
 	overlay_panel.visible = show_overlay
 	vehicle_selector.visible = show_overlay and not walker.visible and not boating and tram_mode == 0
 	preview_sound_button.visible = mode == "menu" and not boating and tram_mode == 0
-	preview_sound_button.text = "Stop preview" if siren_player.playing and mode == "menu" else ("Preview engine" if vehicle_index >= 3 else "Preview siren")
+	preview_sound_button.text = "Stop preview" if siren_player.playing and mode == "menu" else ("Preview engine" if vehicle_index >= 3 and vehicle_index != XC60_POLICE else "Preview siren")
 	var locale := TranslationServer.get_locale().get_slice("_", 0)
 	var localized_logo := locale in ["en", "sv"]
 	title_label.visible = mode != "menu" or not localized_logo

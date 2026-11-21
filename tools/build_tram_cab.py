@@ -6,6 +6,7 @@ import sys
 import bpy
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+from mathutils import Vector
 from build_vehicles import clear_scene, material, cube, export_vehicle, SOURCE_DIR
 
 clear_scene()
@@ -43,6 +44,24 @@ for side in [-1,1]:
     cube("Lamp bezel",(side*.78,2.63,1.04),(.28,.09,.14),seal,.045,root)
     cube("Headlight lens",(side*.78,2.69,1.04),(.19,.055,.072),lamp,.026,root)
 cube("Destination display",(0,2.48,2.32),(1.40,.08,.21),seal,.04,root)
+def screen_point(x, z):
+    # Match the screen's curved face so blades sit directly against the glass.
+    blend = min(1.0, max(0.0, (z-1.20)/(2.22-1.20)))
+    tip = 2.72-.26*blend
+    width = 1.15-.06*blend
+    return Vector((x,2.29+(tip-2.29)*math.sqrt(1-(x/width)**2)+.013,z))
+
+def wiper_bar(label, start, end, width):
+    offset = end-start
+    bar = cube(label,(start+end)*.5,(width,.020,offset.length),seal,.006,root)
+    bar.rotation_euler = offset.to_track_quat("Z","Y").to_euler()
+
+for side in (-1,1):
+    hinge = screen_point(side*.76,1.20)
+    joint = screen_point(side*.36,1.54)
+    wiper_bar("Wiper arm",hinge,joint,.022)
+    wiper_bar("Wiper blade",screen_point(side*.63,1.39),screen_point(side*.10,1.70),.036)
+    cube("Waist marker lamp",(side*.99,2.56,1.04),(.075,.080,.068),lamp,.025,root)
 export_vehicle(root,"tram_cab.glb")
 bpy.context.preferences.filepaths.save_version=0
 bpy.ops.wm.save_as_mainfile(filepath=str(Path(SOURCE_DIR)/"TramCab.blend"))

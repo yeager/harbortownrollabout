@@ -6,6 +6,8 @@ const SERVICE_BRAKE := 1.8
 
 var track := Curve3D.new()
 var sections: Array[Node3D] = []
+var gangways: Array[MeshInstance3D] = []
+var bellows_finish := StandardMaterial3D.new()
 var platform_door_leaves: Array[Node3D] = []
 var next_stop_display: Label3D
 var stops: Array[float] = []
@@ -28,6 +30,35 @@ func sign_at(parent: Node3D, words: String, at: Vector3, angle: float, scale_fac
 	label.outline_size = 4
 	parent.add_child(label)
 	return label
+
+func _door_window(side: int, direction: int, leaf: Node3D) -> void:
+	# The two leaves form a split oval when the doors meet.
+	var vertices := PackedVector3Array()
+	var centre := Vector3(side*.048,.28,-direction*.225)
+	for point in 16:
+		var a := PI*point/16.0
+		var b := PI*(point+1)/16.0
+		vertices.append(centre)
+		vertices.append(centre+Vector3(0,.64*cos(a),direction*.405*sin(a)))
+		vertices.append(centre+Vector3(0,.64*cos(b),direction*.405*sin(b)))
+	var arrays := []
+	arrays.resize(Mesh.ARRAY_MAX)
+	arrays[Mesh.ARRAY_VERTEX] = vertices
+	var normals := PackedVector3Array()
+	normals.resize(vertices.size())
+	normals.fill(Vector3.RIGHT*side)
+	arrays[Mesh.ARRAY_NORMAL] = normals
+	var mesh := ArrayMesh.new()
+	mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
+	var window := MeshInstance3D.new()
+	window.mesh = mesh
+	var tint := StandardMaterial3D.new()
+	tint.albedo_color = Color("#29404a")
+	tint.roughness = .21
+	tint.metallic = .24
+	tint.cull_mode = BaseMaterial3D.CULL_DISABLED
+	window.material_override = tint
+	leaf.add_child(window)
 
 func _ready() -> void:
 	var world := get_parent()
@@ -73,23 +104,14 @@ func _ready() -> void:
 		var car := Node3D.new()
 		add_child(car)
 		sections.append(car)
-		# Leave a vestibule between the two saloon modules.
-		for span in [Vector2(-2.325,-.39),Vector2(.65,2.325)]:
-			var depth: float = span.y-span.x
-			var middle: float = (span.x+span.y)*.5
-			world._make_box("Lower sill",Vector3(2.38,.86,depth),Vector3(0,.76,middle),Color("#b8c7cd"),false,car)
-			world._make_box("Panoramic glazing",Vector3(2.32,1.18,depth),Vector3(0,1.76,middle),Color("#172e39"),false,car)
-		world._make_box("Vestibule floor",Vector3(2.38,.10,1.05),Vector3(0,.36,.13),Color("#676c70"),false,car)
-		world._make_box("Roof fascia",Vector3(2.38,.38,4.65),Vector3(0,2.49,0),Color("#e2e4e1"),false,car)
+		car.add_child(preload("res://vehicles/tram_saloon.glb").instantiate())
 		for s in [-1,1]:
-			for z in [-.82,.82]:
-				world._make_box("Window mullion",Vector3(.06,1.18,.09),Vector3(s*1.16,1.76,z),Color("#43515a"),false,car)
 			for opening_direction in [-1,1]:
 				var leaf := Node3D.new()
 				car.add_child(leaf)
 				leaf.position = Vector3(s*1.21,1.49,.13+opening_direction*.26)
 				world._make_box("Door panel",Vector3(.08,2.22,.51),Vector3.ZERO,Color("#147db0"),false,leaf)
-				world._make_box("Door glazing",Vector3(.02,1.10,.38),Vector3(s*.048,.26,0),Color("#213744"),false,leaf)
+				_door_window(s, opening_direction, leaf)
 				if i==0 and s==1:
 					platform_door_leaves.append(leaf)
 		if i==1:
@@ -102,8 +124,13 @@ func _ready() -> void:
 				beam(heel,elbow,.065,.083,steel,car)
 				beam(elbow,crown,.048,.065,steel,car)
 			world._make_box("Contact shoe",Vector3(1.22,.065,.13),Vector3(0,4.16,0),steel,false,car)
+		if i in [0, 2]:
+			var cab := preload("res://vehicles/tram_cab.glb").instantiate() as Node3D
+			var end := -1 if i == 0 else 1
+			cab.rotation.y = 0 if i == 0 else PI
+			car.add_child(cab)
+			world._make_box("Cab bulkhead", Vector3(2.23,2.26,.15), Vector3(0,1.49,end*2.25), Color("#374b58"),false,car)
 		if i==0:
-			car.add_child(preload("res://vehicles/tram_cab.glb").instantiate())
 			sign_at(car,"Sjöstaden",Vector3(0,2.32,-2.528),PI,.0036)
 			world._make_box("Next stop display",Vector3(.04,.32,1.74),Vector3(1.20,2.48,-1.32),Color("#192426"),false,car)
 			next_stop_display = sign_at(car,STATION_NAMES[next_stop],Vector3(1.23,2.48,-1.32),PI/2,.0044)
@@ -111,6 +138,14 @@ func _ready() -> void:
 			next_stop_display.outline_size = 0
 			world._make_box("Door notice",Vector3(.035,.32,1.4),Vector3(1.21,1.04,1.46),Color("#174460"),false,car)
 			sign_at(car,"Vi åker inte till Ekerö",Vector3(1.24,1.04,1.46),PI/2,.003)
+	bellows_finish.albedo_color = Color("#41494b")
+	bellows_finish.cull_mode = BaseMaterial3D.CULL_DISABLED
+	for joint in sections.size()-1:
+		var gangway := MeshInstance3D.new()
+		gangway.mesh = ImmediateMesh.new()
+		gangway.material_override = bellows_finish
+		add_child(gangway)
+		gangways.append(gangway)
 	place_sections()
 
 func distance_to_next_stop() -> float:
@@ -135,6 +170,8 @@ func advance(delta: float, manual: bool, gas: bool, brake: bool) -> void:
 	var approach_speed := sqrt(maxf(0,half_change*half_change + SERVICE_BRAKE*(2*remaining-initial*delta))) - half_change
 	velocity = move_toward(initial,clampf(approach_speed,0,target),delta*(3.0 if brake else SERVICE_BRAKE))
 	var step := (initial + velocity) * .5 * delta
+	if step <= 0.0 and remaining > .0001:
+		return
 	if remaining <= step + .0001:
 		distance=stops[next_stop]
 		next_stop=(next_stop+1)%stops.size()
@@ -151,3 +188,33 @@ func place_sections() -> void:
 		var p := fposmod(distance-4.83*i,length)
 		sections[i].position=track.sample_baked(p)
 		sections[i].look_at(track.sample_baked(fposmod(p+.2,length)))
+	for i in gangways.size():
+		_shape_gangway(gangways[i].mesh, sections[i].transform, sections[i+1].transform)
+
+func _shape_gangway(mesh: ImmediateMesh, leading: Transform3D, trailing: Transform3D) -> void:
+	# Each fold spans matching points on the two moving saloon end frames.
+	var contour := PackedVector2Array([
+		Vector2(-1.05,.43), Vector2(1.05,.43), Vector2(1.14,.59), Vector2(1.14,2.40),
+		Vector2(1.01,2.59), Vector2(-1.01,2.59), Vector2(-1.14,2.40), Vector2(-1.14,.59)
+	])
+	mesh.clear_surfaces()
+	mesh.surface_begin(Mesh.PRIMITIVE_TRIANGLES)
+	var previous := PackedVector3Array()
+	for ridge in 9:
+		var ring := PackedVector3Array()
+		for point in contour:
+			var inset := 1.0 if ridge % 2 == 0 else .93
+			var x := point.x*inset
+			var y := 1.5+(point.y-1.5)*inset
+			var start := leading * Vector3(x,y,2.19)
+			var end := trailing * Vector3(x,y,-2.19)
+			ring.append(start.lerp(end,float(ridge)/8.0))
+		if ridge > 0:
+			for k in contour.size():
+				var j := (k+1)%contour.size()
+				var normal := (previous[j]-previous[k]).cross(ring[k]-previous[k]).normalized()
+				for vertex in [previous[k],ring[k],previous[j],previous[j],ring[k],ring[j]]:
+					mesh.surface_set_normal(normal)
+					mesh.surface_add_vertex(vertex)
+		previous = ring
+	mesh.surface_end()

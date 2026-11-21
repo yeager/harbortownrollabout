@@ -681,6 +681,213 @@ def make_police():
     rear.rotation_euler=(math.pi/2,0,math.pi)
     return root
 
+def make_volvo_xc60_police():
+    """Create a Swedish-marked Volvo XC60 patrol SUV, inspired by the supplied refs."""
+    root = bpy.data.objects.new("Volvo XC60 | Svensk polis patrullbil", None)
+    bpy.context.collection.objects.link(root)
+    root.empty_display_type = "CUBE"
+    white = material("XC60 police pearl white", (.91, .92, .89), .22, .25)
+    glass = material("XC60 deep smoked glass", (.020, .039, .047), .42, .15)
+    black = material("XC60 grille and trim", (.018, .024, .029), .38, .23)
+    chrome = material("XC60 brushed brightwork", (.63, .69, .70), .82, .22)
+    blue = material("Swedish police cobalt", (.018, .19, .64), .12, .31)
+    yellow = material("Swedish police fluorescent yellow", (.91, .91, .018), .08, .35, .12)
+    red_lens = material("XC60 rear LED", (.74, .024, .018), .06, .2, .3)
+    amber = material("XC60 indicators", (.96, .31, .018), .05, .2, .35)
+    led = material("XC60 Thor LED", (.83, .91, 1.0), .04, .16, .55)
+    emblem = material("Volvo emblem blue", (.03, .20, .42), .25, .22)
+
+    # Rear is +Y, nose is -Y. The ring silhouette gives the taller, shorter
+    # proportions of an XC60 instead of the broader, longer donor X5.
+    rings = [
+        (-2.37,.82,.50,1.15,1.30), (-2.32,.91,.49,1.20,1.35),
+        (-2.20,.98,.47,1.27,1.42), (-1.92,1.02,.46,1.34,1.48),
+        (-1.48,1.04,.46,1.39,1.52), (-.70,1.045,.46,1.41,1.53),
+        (.48,1.04,.47,1.40,1.52), (1.48,1.01,.49,1.37,1.49),
+        (2.10,.99,.50,1.42,1.55), (2.34,.95,.54,1.44,1.57),
+        (2.40,.87,.58,1.39,1.50),
+    ]
+    body = mesh_from_rings("XC60 sculpted body shell", rings, white, root, .018)
+    sub = body.modifiers.new("Pressed XC60 body curvature", "SUBSURF")
+    sub.levels = 2
+    bpy.context.view_layer.objects.active = body
+    bpy.ops.object.modifier_apply(modifier=sub.name)
+
+    # The cabin tapers as it rises. Longitudinal sections define the glass and the
+    # painted roof in one closed shell, so neither can float above the belt line.
+    cabin_rows = [
+        (1.40, .947, -1.27, 2.22), (1.48, .940, -1.24, 2.20),
+        (1.53, .928, -1.20, 2.18), (1.69, .881, -1.04, 2.12),
+        (1.89, .817, -.78, 2.00), (1.991, .774, -.63, 1.89),
+        (2.022, .752, -.59, 1.84), (2.049, .698, -.50, 1.725),
+    ]
+    def cabin_outline(row):
+        z,w,fore,aft = row
+        return [(w*x, y, z+rise) for x,y,rise in [
+            (-1,fore+.145,0),(-.92,fore+.025,.014),(-.65,fore-.045,.03),
+            (0,fore-.085,.039),(.65,fore-.045,.03),(.92,fore+.025,.014),
+            (1,fore+.145,0),(1,aft-.13,0),(.88,aft-.014,.016),
+            (0,aft+.022,.026),(-.88,aft-.014,.016),(-1,aft-.13,0)]]
+    cabin = profile_loft("XC60 glazed cabin and pearl roof",
+                         [cabin_outline(row) for row in cabin_rows], white, root)
+    cabin.data.materials.append(glass)
+    # Fit rubber seals and thin painted A-pillars around the windshield.
+    for poly in cabin.data.polygons:
+        row, col = divmod(poly.index,12)
+        if 2 <= row <= 4 and col in (0,1,2,3,4,6,8,9,11):
+            poly.material_index = 1
+
+    def side_surface(side, u, row_index, offset=.009):
+        z,w,fore,aft = cabin_rows[row_index]
+        return (side*(w+offset), fore+.145 + u*(aft-.13-fore-.145), z)
+
+    def strip(name, rings, finish):
+        return profile_loft(name, rings, finish, root)
+
+    for side in [-1,1]:
+        # Door frames divide the side glass into three distinct openings.
+        for title, u, half, finish in [("B pillar",.47,.022,black),
+                ("Quarter glass divider",.79,.010,black),("Rear roof pillar",.96,.047,white)]:
+            rings = []
+            for k in range(2,6):
+                rings.append([side_surface(side,u+du,k,dx) for du,dx in
+                              [(-half,.003),(half,.003),(half,.012),(-half,.012)]])
+            strip("XC60 " + title, rings, finish)
+        for k in [2,5]:
+            rings=[]
+            for u in [0,.25,.5,.75,1]:
+                x,y,z=side_surface(side,u,k)
+                rings.append([(x,y,z-.008),(x+side*.009,y,z-.006),
+                              (x+side*.009,y,z+.006),(x,y,z+.008)])
+            strip("XC60 bright window surround",rings,chrome)
+        for y in [-.51,.81]:
+            cube("Recessed door release",(side*1.006,y,1.282),(.045,.158,.035),white,.016,root)
+        # High-mounted rear lamps hug the D pillars before turning across the hatch.
+        rings=[]
+        for k in range(1,7):
+            z,w,fore,aft = cabin_rows[k]
+            rings.append([(side*(w*.94+dx),aft-.055+dy,z)
+                          for dx,dy in [(-.04,-.04),(.036,-.07),(.044,-.025),(-.015,.033)]])
+        strip("XC60 pillar LED blade", rings, red_lens)
+        cube("XC60 hatch LED return",(side*.70,2.39,1.39),(.40,.06,.07),red_lens,.03,root)
+
+    # Cut openings in the painted shell to expose the tire and its dark wheel well.
+    for axle in [-1.48, 1.48]:
+        bpy.ops.mesh.primitive_cylinder_add(vertices=64,radius=.517,depth=2.8,
+            location=(0,axle,.49),rotation=(0,math.pi/2,0))
+        cutter=bpy.context.object
+        cut=body.modifiers.new("Wheel opening","BOOLEAN")
+        cut.operation="DIFFERENCE"
+        cut.object=cutter
+        bpy.context.view_layer.objects.active=body
+        bpy.ops.object.modifier_apply(modifier=cut.name)
+        bpy.data.objects.remove(cutter,do_unlink=True)
+
+    # Wheels: tall road tyres, turned alloy faces and dark wheel arch liners.
+    for y in (-1.48,1.48):
+        for side in (-1,1):
+            center=(side*1.00,y,.49)
+            cylinder("Performance tire XC60",center,.43,.20,RUBBER,True,48,root)
+            cylinder("Diamond cut rim XC60",(side*1.105,y,.49),.318,.035,chrome,True,48,root)
+            cylinder("Anthracite wheel barrel XC60",(side*1.128,y,.49),.241,.018,black,True,48,root)
+            cylinder("Wheel hub Volvo",(side*1.142,y,.49),.083,.03,chrome,True,32,root)
+            for i in range(10):
+                a=math.tau*i/10
+                spoke=cube("Five double spokes XC60",
+                    (side*1.145,y+.163*math.sin(a),.49+.163*math.cos(a)),
+                    (.026,.065,.225),chrome,.012,root)
+                spoke.rotation_euler.x=-a
+            arch=[]
+            for i in range(33):
+                a=.04+(math.pi-.08)*i/32
+                arch.append([(side*d,y+r*math.cos(a),.49+r*math.sin(a))
+                             for d,r in ((1.025,.472),(1.080,.486),(1.105,.511),
+                                         (1.10,.535),(1.075,.548),(1.025,.520))])
+            profile_loft("XC60 black wheel arch moulding",arch,black,root)
+
+    # A formed nose panel supports the grille and swept lamp clusters across the full width.
+    face_sections = []
+    for x in [-.96,-.90,-.76,-.53,-.40,0,.40,.53,.76,.90,.96]:
+        t=abs(x)/.96
+        y=-2.43+.19*t**2
+        high=1.27+.025*t-.05*t**6
+        face_sections.append([(x,y+.16,.76),(x,y,.79),(x,y,high-.052),
+                              (x,y+.06,high),(x,y+.27,high+.05)])
+    strip("XC60 pressed front mask",face_sections,white)
+    # Grille inset with a silver vertical mesh and Volvo diagonal slash/emblem.
+    cube("XC60 vertical grille shadow",(0,-2.405,1.00),(.78,.045,.41),black,.09,root)
+    for x in [i*.052 for i in range(-6,7)]:
+        cube("XC60 grille vertical vane",(x,-2.442,1.00),(.014,.018,.32),chrome,.006,root)
+    for z in (.84,.91,1.09,1.16):
+        cube("XC60 grille crossbar",(0,-2.447,z),(.72,.02,.014),black,.004,root)
+    cube("Volvo ironmark diagonal",(0,-2.46,1.00),(.72,.035,.045),chrome,.018,root).rotation_euler.y=-.47
+    cylinder("Volvo blue grille roundel",(0,-2.482,1.01),.095,.025,chrome,False,40,root).rotation_euler.x = math.pi/2
+    cylinder("Volvo roundel inlay",(0,-2.50,1.01),.072,.019,emblem,False,40,root).rotation_euler.x = math.pi/2
+    # Sculpted bumper, black lower intake, corner air curtains and skid trim.
+    cube("XC60 painted bumper fascia",(0,-2.386,.72),(1.88,.22,.31),white,.12,root)
+    cube("XC60 lower air intake",(0,-2.514,.665),(1.17,.035,.17),black,.055,root)
+    for x in (-.64,.64):
+        cube("XC60 side air curtain",(x,-2.49,.73),(.21,.05,.28),black,.065,root)
+        for z in (.67,.74,.81):
+            cube("Air curtain vane",(x,-2.524,z),(.13,.016,.014),chrome,.005,root)
+        cube("XC60 corner fog LED",(x,-2.532,.565),(.14,.025,.045),led,.02,root)
+    cube("XC60 front skid insert",(0,-2.49,.525),(1.06,.07,.045),chrome,.017,root)
+
+    # Hammer of Thor light bars are segmented, slim, and sweep towards the grille.
+    for side in (-1,1):
+        for name, xs, z0, z1, finish, depth in [
+            ("XC60 swept projector housing",[.43,.50,.66,.82,.94],1.116,1.25,glass,.041),
+            ("XC60 hammer daytime light",[.46,.60,.72,.83,.92],1.178,1.195,led,.050),
+            ("XC60 hammer light return",[.62,.652],1.133,1.19,led,.051),
+            ("XC60 corner indicator",[.90,.935],1.166,1.197,amber,.051)]:
+            sections=[]
+            for x in xs:
+                t=x/.96
+                y=-2.43+.19*t*t-depth
+                rise=.023*t
+                sections.append([(side*x,y+.018,z0+rise),(side*x,y,z0+rise),
+                                 (side*x,y,z1+rise),(side*x,y+.018,z1+rise)])
+            strip(name,sections,finish)
+        cube("XC60 rear vertical tail lamp",(side*.866,2.382,1.12),(.085,.035,.69),red_lens,.034,root)
+        cube("XC60 lower tail lamp",(side*.91,2.395,.91),(.052,.034,.30),red_lens,.02,root)
+        cube("XC60 side mirror stem",(side*.948,-.92,1.56),(.24,.15,.077),black,.035,root)
+        cube("XC60 side mirror cap",(side*1.085,-.92,1.606),(.207,.208,.142),white,.05,root)
+        cube("XC60 mirror indicator",(side*1.187,-.932,1.59),(.014,.13,.016),amber,.01,root)
+        cube("XC60 police light blue lens",(side*1.06,-1.05,1.05),(.018,.13,.065),BLUE_LAMP,.02,root)
+        cube("XC60 police light yellow lens",(side*1.065,-.88,1.05),(.018,.15,.065),yellow,.02,root)
+        # Blue and fluorescent checker belt follows each door over the white body.
+        for col in range(6):
+            y=-.96+col*.38
+            for row in range(2):
+                finish=blue if (col+row)%2==0 else yellow
+                cube("XC60 reflective door battenburg",(side*1.044,y,.83+.14*row),
+                     (.020,.377,.139),finish,.005,root)
+        text_obj("Swedish Police door marking","POLIS",(side*1.058,-.35,1.185),.23,blue,-side,root)
+        text_obj("Swedish police unit number","31-5130",(side*1.06,-1.0,1.36),.075,blue,-side,root)
+
+    # Mount a single lightbar above the roof on two rubber feet.
+    for x in [-.39,.39]:
+        cube("XC60 lightbar foot",(x,-.25,2.095),(.13,.20,.07),black,.018,root)
+    cube("XC60 roof lightbar lower rail",(0,-.25,2.137),(1.18,.24,.045),black,.02,root)
+    for i in range(12):
+        x=(i-5.5)*.097
+        name = "FlashBlue_Left" if x<0 else "FlashRed_Right"
+        cube(name,(x,-.25,2.191),(.093,.218,.077),BLUE_LAMP,.023,root)
+    for side in (-1,1):
+        cube("XC60 blue grille strobe",(side*.27,-2.47,.87),(.075,.022,.045),BLUE_LAMP,.02,root)
+    # Rear trim, plate, roof rails and bumpers complete the SUV silhouette.
+    cube("XC60 rear bumper",(0,2.39,.68),(1.91,.23,.28),white,.105,root)
+    cube("XC60 rear valance",(0,2.522,.56),(1.30,.05,.075),black,.025,root)
+    cube("XC60 registration plate",(0,2.427,1.03),(.52,.022,.13),black,.012,root)
+    text_obj("XC60 rear police label","POLIS",(.21,2.45,1.18),.14,blue,0,root).rotation_euler = (math.pi/2,0,math.pi)
+    for side in (-1,1):
+        rail=[]
+        for y in (-.51,.94,1.62):
+            rail.append([(side*x,y,z) for x,z in ((.68,2.035),(.69,2.077),(.72,2.086),(.74,2.045))])
+        profile_loft("XC60 roof rail",rail,chrome,root)
+    cube("XC60 side sill trim",(0,.05,.54),(1.92,2.74,.075),black,.035,root)
+    return root
+
 def make_fire_engine():
     root = bpy.data.objects.new("Fire engine | Swedish Rescue Pumper", None)
     bpy.context.collection.objects.link(root)
