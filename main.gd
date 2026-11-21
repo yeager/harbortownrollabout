@@ -852,8 +852,16 @@ func _build_west_district() -> void:
 				sidewalk.material_override = sidewalk_finish
 			for x in range(junction_x[i-1]+9,junction_x[i]-7,8):
 				strokes.append(Transform3D(Basis.IDENTITY,Vector3(x,-.009,z)))
-	for i in junction_x.size()-1:
+	for i in junction_x.size():
 		for j in range(1,junction_z.size()):
+			var block_depth := junction_z[j] - junction_z[j-1]
+			var middle_z := (junction_z[j] + junction_z[j-1]) * .5
+			for side in [-1,1]:
+				if i == junction_x.size()-1 and side == 1: continue
+				# End at the inside edge of the adjoining pavement to keep the corner flush.
+				var sidewalk := _make_driving_surface("West side street pavement", Vector3(2.8,.12,block_depth-15.2), Vector3(junction_x[i]+side*6.2,.005,middle_z), Color.WHITE)
+				sidewalk.material_override = sidewalk_finish
+			if i == junction_x.size()-1: continue
 			for z in range(junction_z[j-1]+9,junction_z[j]-7,8):
 				strokes.append(Transform3D(Basis(Vector3.UP,PI/2),Vector3(junction_x[i],-.009,z)))
 	var stripe := BoxMesh.new()
