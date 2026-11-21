@@ -3367,8 +3367,14 @@ func _update_mission_marker() -> void:
 	for i in delivery_parcels.size():
 		var parcel := delivery_parcels[i]
 		var delivered := mission_index >= i+2
-		parcel.visible = delivering and (mission_index == 0 or delivered)
-		if parcel.visible:
+		var carried := delivering and walker.visible and mission_index == i+1
+		var holder: Node3D = walker if carried else self
+		if parcel.get_parent() != holder:
+			parcel.reparent(holder,false)
+		parcel.visible = delivering and (mission_index == 0 or delivered or carried)
+		if carried:
+			parcel.position = Vector3(.20,.82,-.32)
+		elif parcel.visible:
 			var stop := WALK_TARGETS[i+1] if delivered else WALK_TARGETS[0]
 			parcel.position = stop + Vector3(.45+i*.51,0,.68)
 			parcel.position.y = _foot_height(parcel.position.x,parcel.position.z)
