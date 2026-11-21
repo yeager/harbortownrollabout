@@ -337,3 +337,4 @@ Den första inlämnade bilen står kvar på verkstaden även medan nästa bil li
 - Vid fordonsbyte i depån nollställs tiden för pågående hjälp och tillfällig statustext. Verifierat telefonuppdrag och återställda tider för taxi, buss och bärgningsbil i Godot.
 - Regressionstestet tests/taxi_dispatch.gd hämtar en taxipassagerare, byter till buss och tillbaka, verifierar destination, en enda betalning och nästa skolskjuts.
 - Eleven som hämtas vid skolan berättar i text att nästa stopp är vårdcentralen. Både lämning och hämtning testade på svenska.
+- tests/bus_route.gd provar linje 502 genom sex hållplatsbesök med automatisk hjälp, båda destinationsskyltarna, tre biljettintäkter och återgång till Torget.
