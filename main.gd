@@ -495,7 +495,7 @@ func _drive(delta: float) -> void:
 		speed = signf(speed)*minf(absf(speed),limit)
 	waiting_for_signal = signal_gap <= .35 and signal_gap == stopping_distance and absf(speed) < .25
 	if player_brake_lens:
-		_set_rear_lights(player_brake_lens, brake_held or assisted_braking)
+		_set_rear_lights(player_brake_lens, brake_held or assisted_braking or waiting_for_signal)
 	var step := forward * speed * delta
 	var extent := _player_extent()
 	for item in traffic_data:

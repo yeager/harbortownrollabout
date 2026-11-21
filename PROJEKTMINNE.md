@@ -250,3 +250,4 @@ Snöskotern lämnar ett centrerat, 40 cm brett bromsspår från drivbandet vid h
 När snö täcker marken lämnar skoterns drivband spår även under vanlig körning. Testade gaspådrag på barmark och snö i Godot.
 Åtgärdat bromsljuset på skotern. Lampan hade en materialtyp som spelet inte kände igen. Verifierade starkare ljus vid broms och återgång när bromsen släpps. Bakpartiet har även lamphus och lyftbåge.
 Bromsljus fungerar nu även för klassikerna, Teslan, bussen, bärgaren, raggarbilen och A-traktorn. Testat ljusstyrka på alla tolv valbara fordon och två trafikmodeller samt att LGF-reflexen är separat.
+Spelarfordonets bromsljus lyser under automatisk väntan vid rött även efter släppt gas. Testat rött till grönt i Godot med fri körbana.
