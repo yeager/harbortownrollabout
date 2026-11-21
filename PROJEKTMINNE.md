@@ -317,3 +317,4 @@ Den första inlämnade bilen står kvar på verkstaden även medan nästa bil li
 - Lotten fick omformat skrov, relingar, landgångar, styrhytt och transparent salong med fjorton sittplatser samt skrovspegling i dagsljus. Slutlig GLB importerad och kontrollerad i kanalens ordinarie Godot-scen. Backning och sväng vid kajen också testade.
 - Spelarens fötter behöver stöd på kajen, trottoaren på bron eller bryggan. Även långa gångsteg delas upp så att de inte kan hoppa över vatten. Verifierat båda landgångarna, strandpromenaden och gång mot kajkanten.
 - Modellen har nu Lottens höga flaggstänger, övre reling, svarta fendrar, gula grindar, livbojar och vattenlinje från de nya referenserna. Slutlig spelvy kontrollerad i Godot.
+- Lotten tar passagerare från båda bryggorna. Påstigning och avstigning med F eller skärmknappen när färjan ligger inne. Styrning och steg ut över vattnet är spärrade under färd. Godot-test av tur och retur med kajskyddet och den nya modellen godkänt.

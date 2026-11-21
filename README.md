@@ -39,7 +39,7 @@ The central junction has phased traffic lights and red and green pedestrian figu
 
 Land vehicles slow down at the quay edge in both directions. The two road bridges let you drive between the banks.
 
-The double-ended passenger ferry **Lotten** runs between two landings in the canal. It pauses at each end before reversing direction. Its editable Blender model is in `source_blender/Lotten.blend`.
+The double-ended passenger ferry **Lotten** runs between two landings in the canal. Walk onto either landing and press **F** or select **Board Lotten** when the ferry is alongside. The ferry follows its own route. Look around with the mouse during the crossing and press **F** to step ashore during a stop. Its editable Blender model is in `source_blender/Lotten.blend`.
 
 ## Taxi and horns
 

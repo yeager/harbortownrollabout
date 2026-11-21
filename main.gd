@@ -245,6 +245,8 @@ var patrol_angle := 0.0
 var tram_mode := 0
 var water_finish := ShaderMaterial.new()
 var saloon_glazing: StandardMaterial3D
+const FERRY_LANDINGS := [-35.0, -12.0]
+var ferry_passenger := false
 var ferry: Node3D
 var wave_time := 0.0
 var walker_data: Array[Dictionary] = []
@@ -312,7 +314,7 @@ func _process(delta: float) -> void:
 			driving_controls.set_controls(0,tram_gas and not tram_brake,tram_brake)
 		if boating:
 			_drive_launch(delta)
-		elif tram_mode > 0:
+		elif tram_mode > 0 or ferry_passenger:
 			_end_skid()
 		elif walker.visible:
 			_walk(delta)
@@ -800,7 +802,7 @@ func _arrival_radius() -> float:
 	return 2.1 if walker.visible else 5.2
 
 func _at_target() -> bool:
-	if free_drive or boating or tram_mode != 0 or (vehicle_index in [TAXI,RECOVERY,BUS] and walker.visible) or mission_index >= TARGETS.size(): return false
+	if free_drive or boating or ferry_passenger or tram_mode != 0 or (vehicle_index in [TAXI,RECOVERY,BUS] and walker.visible) or mission_index >= TARGETS.size(): return false
 	var actor := walker if walker.visible else ambulance
 	return actor.position.distance_to(_mission_destination()) < _arrival_radius()
 
@@ -1341,7 +1343,7 @@ func _build_marina() -> void:
 	saloon_glazing.emission_enabled = true
 	saloon_glazing.emission = Color("#ffcc8c")
 	windows.material_override = saloon_glazing
-	for landing_z in [-35.0,-12.0]:
+	for landing_z in FERRY_LANDINGS:
 		_pier_section("Ferry landing",Vector3(2.0,.20,7.5),Vector3(64.9,-.76,landing_z),Color("#847968"))
 		for tread in 4:
 			var height := -.18-.12*tread
@@ -1478,6 +1480,9 @@ func _update_moorings(delta: float) -> void:
 	ferry.position = Vector3(68,-.97+.024*sin(wave_time*1.1),lerpf(-35.0,-12.0,crossing))
 	water_finish.set_shader_parameter("ferry_center",ferry.position)
 	ferry.rotation.z = .006*sin(wave_time*.88)
+	if ferry_passenger:
+		walker.position = ferry.to_global(Vector3(-.55,.66,5.1))
+		_update_entry_button()
 	for berth in moorings:
 		var boat: Node3D = berth.boat
 		var buoy: Node3D = berth.buoy
@@ -2081,9 +2086,45 @@ func _on_foot_clear(p: Vector3) -> bool:
 			return false
 	return true
 
+func _ferry_stop() -> int:
+	var cycle := fmod(wave_time,58)
+	if fmod(cycle,29) >= 5:
+		return -1
+	return 0 if cycle < 29 else 1
+
+func _near_ferry_landing() -> int:
+	for i in FERRY_LANDINGS.size():
+		if absf(walker.position.x-64.9) <= 1.0 and absf(walker.position.z-FERRY_LANDINGS[i]) <= 3.5:
+			return i
+	return -1
+
 func _change_seat() -> void:
 	if boating or tram_mode!=0: return
 	if mode != "playing" or paused: return
+	var stop := _ferry_stop()
+	if ferry_passenger:
+		if stop < 0: return
+		var z: float = FERRY_LANDINGS[stop]
+		var landing := Vector3(64.9,_foot_height(64.9,z),z)
+		if not _on_foot_clear(landing): return
+		ferry_passenger = false
+		walker.position = landing
+		walk_basis = Basis(Vector3.UP, PI*.5)
+		walker.basis = walk_basis
+		listener.global_basis = walk_basis
+		_update_camera(0,true)
+		_refresh_ui()
+		get_viewport().gui_release_focus()
+		return
+	if walker.visible and stop >= 0 and _near_ferry_landing() == stop:
+		ferry_passenger = true
+		walking_velocity = Vector3.ZERO
+		walker.rotation.y = -PI*.5
+		_update_moorings(0)
+		_animate_steps(walker,0,.1)
+		_refresh_ui()
+		get_viewport().gui_release_focus()
+		return
 	if not walker.visible:
 		if absf(speed)>.2:
 			message = "Stop first to get out."
@@ -2179,6 +2220,16 @@ func _walk(delta: float) -> void:
 	_update_entry_button()
 
 func _update_entry_button() -> void:
+	var landing := _near_ferry_landing()
+	if ferry_passenger or landing >= 0:
+		var stop := _ferry_stop()
+		entry_marker.visible = false
+		seat_button.disabled = stop < 0 or (not ferry_passenger and stop != landing)
+		if ferry_passenger:
+			seat_button.text = "Step ashore · F" if stop >= 0 else "On board Lotten"
+		else:
+			seat_button.text = "Board Lotten · F" if stop == landing else "Wait for Lotten"
+		return
 	var nearest := _nearest_car()
 	entry_marker.visible = nearest >= 0 and mode == "playing" and not paused
 	if entry_marker.visible:
@@ -3179,6 +3230,11 @@ func _toggle_camera_view() -> void:
 
 func _update_camera(delta: float, snap_to_car := false) -> void:
 	if not is_instance_valid(camera) or not is_instance_valid(ambulance): return
+	if ferry_passenger:
+		var focus := walker.position + Vector3.UP*.95
+		camera.position = focus + Vector3(5,3.3+orbit_height,7).rotated(Vector3.UP,orbit_angle)
+		camera.look_at(focus)
+		return
 	if boating and is_instance_valid(launch):
 		camera.position = launch.to_global(Vector3(1,3.6+orbit_height,7).rotated(Vector3.UP,orbit_angle))
 		camera.look_at(launch.to_global(Vector3(0,.4,-1.7)))
@@ -3748,6 +3804,7 @@ func _starting_position() -> Vector3:
 	return Vector3(best_x, _surface_height(best_x, lane), lane)
 
 func _start_game() -> void:
+	ferry_passenger = false
 	if boating:
 		launch.transform = Transform3D(Basis.IDENTITY, LAUNCH_BERTH)
 		launch_speed = 0.0
@@ -4002,7 +4059,9 @@ func _refresh_ui() -> void:
 	else:
 		siren_button.text = "Siren ON" if sound_on else "Siren OFF"
 	pause_button.text = "Resume" if paused else "Pause"
-	if tram_mode > 0:
+	if ferry_passenger:
+		mission_label.text = "On board Lotten"
+	elif tram_mode > 0:
 		mission_label.text = "Ride the tram" if tram_mode == 1 else "Drive the tram"
 	elif boating:
 		mission_label.text = "Drive the motorboat"
@@ -4095,7 +4154,10 @@ func _refresh_ui() -> void:
 			subtitle_label.text = tr(last_dispatch)
 		start_button.text = "Continue walking" if walker.visible else "Continue driving"
 	if show_overlay and mode != "complete":
-		if boating:
+		if ferry_passenger:
+			subtitle_label.text = "You can step ashore at either landing."
+			start_button.text = "Resume"
+		elif boating:
 			subtitle_label.text = "Steer with A and D or the arrow keys. Hold the left mouse button for throttle. Hold the right to slow down, then reverse."
 			start_button.text = "Start boating" if mode=="menu" else "Continue boating"
 		elif tram_mode > 0:
@@ -4125,6 +4187,8 @@ func _refresh_status() -> void:
 	arrival_progress.value = parked_at_target
 	if paused:
 		status_label.text = "Paused — take your time."
+	elif ferry_passenger:
+		status_label.text = "Step ashore · F" if _ferry_stop() >= 0 else "You can step ashore at either landing."
 	elif tram_mode > 0 and mode == "playing":
 		if tram.dwell > 0:
 			var station: String = tram.STATION_NAMES[posmod(tram.next_stop-1,tram.stops.size())]

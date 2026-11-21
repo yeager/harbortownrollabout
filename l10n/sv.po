@@ -731,3 +731,18 @@ msgstr "Tack! Jag ser min skola!"
 
 msgid "1 coin"
 msgstr "1 mynt"
+
+msgid "Board Lotten · F"
+msgstr "Gå ombord på Lotten · F"
+
+msgid "Step ashore · F"
+msgstr "Gå i land · F"
+
+msgid "On board Lotten"
+msgstr "Ombord på Lotten"
+
+msgid "Wait for Lotten"
+msgstr "Vänta på Lotten"
+
+msgid "You can step ashore at either landing."
+msgstr "Du kan gå i land vid båda bryggorna."
