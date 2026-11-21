@@ -74,6 +74,9 @@ var recovery_leg := 0
 const WORKSHOP_CAR_BOUNDS := AABB(Vector3(27.9,-1,-40.86),Vector3(4.2,3,1.72))
 var workshop_car: Node3D
 var casualty: Node3D
+var hazard_lenses: Array[MeshInstance3D] = []
+var hazard_amber: StandardMaterial3D
+var hazard_phase := 0.0
 var warning_triangle := Node3D.new()
 var loose_wheel: Node3D
 var lost_wheel: Node3D
@@ -203,6 +206,9 @@ func _process(delta: float) -> void:
 	if mode == "playing" and not paused:
 		weather.tick(delta)
 		_advance_wipers(delta)
+		if warning_triangle.is_visible_in_tree():
+			hazard_phase = fmod(hazard_phase + delta, 1.0)
+			_update_hazard_lights()
 	if previous_season != weather.season:
 		previous_season = weather.season
 		for finish in foliage_finishes:
@@ -2440,6 +2446,11 @@ func _update_route_arrows() -> void:
 		gap-=length
 		if used==route_arrows.size(): break
 
+func _update_hazard_lights() -> void:
+	var lit := warning_triangle.is_visible_in_tree() and (traffic_light_mode == 1 or (traffic_light_mode == 0 and hazard_phase < .5))
+	for lens in hazard_lenses:
+		lens.material_override = hazard_amber if lit else null
+
 func _sync_recovery() -> void:
 	var active := vehicle_index==RECOVERY and not free_drive
 	var loaded := recovery_leg%2==1
@@ -2460,6 +2471,7 @@ func _sync_recovery() -> void:
 	lost_wheel.visible=recovery_leg%4<2
 	loose_wheel.visible=active and recovery_leg%4==2
 	warning_triangle.visible=active and not loaded
+	_update_hazard_lights()
 	bonnet_smoke.emitting=active and recovery_leg%4==0
 
 func _build_target_marker() -> void:
@@ -2473,6 +2485,10 @@ func _build_target_marker() -> void:
 	casualty=roadside_model.instantiate()
 	add_child(casualty)
 	casualty.scale=Vector3.ONE*.79
+	hazard_amber = _material(Color("#ffad26"),.24,true)
+	for pattern in ["Daytime LED chevron*", "Upper ruby light guide*"]:
+		for lens in casualty.find_children(pattern,"MeshInstance3D",true,false):
+			hazard_lenses.append(lens)
 	casualty.add_child(warning_triangle)
 	warning_triangle.position=Vector3(0,0,-3.75)
 	_make_box("Triangle foot",Vector3(.68,.06,.34),Vector3(0,.035,0),Color("#33393b"),false,warning_triangle)
