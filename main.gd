@@ -185,7 +185,12 @@ func _vehicle_tasks() -> Array:
 
 var parked_at_target := 0.0
 var mode := "menu"
-var paused := false
+var paused := false:
+	set(value):
+		paused = value
+		if weather.is_node_ready():
+			weather.rain_particles.speed_scale = 0.0 if value else 1.0
+			weather.snow_particles.speed_scale = weather.rain_particles.speed_scale
 var lights_on := false
 var parked_light_settings: Array[bool] = [false, false, false, false, false, false, false, false, false, false, false, false, false]
 var sound_on := true
