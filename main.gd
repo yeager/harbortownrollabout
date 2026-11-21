@@ -2760,7 +2760,7 @@ func _load_vehicle_model() -> void:
 	rear_bus_board = null
 	if vehicle_index == BUS:
 		bus_board = Label3D.new()
-		bus_board.pixel_size=.0026
+		bus_board.outline_size = 0
 		bus_board.modulate=Color("#ffbb47")
 		bus_board.position=Vector3(0,2.68,5.28)
 		vehicle_model.add_child(bus_board)
@@ -3200,6 +3200,11 @@ func _place_taxi_passenger(person: Node3D, stop: int) -> void:
 func _update_bus_board() -> void:
 	if is_instance_valid(bus_board):
 		bus_board.text = "SJÖSTADEN" if free_drive else "502  " + BUS_STOP_NAMES[BUS_STOPS[bus_leg % BUS_STOPS.size()]]
+		var font := ThemeDB.fallback_font
+		var pixels := font.get_string_size(bus_board.text,HORIZONTAL_ALIGNMENT_LEFT,-1,bus_board.font_size)
+		# Leave a margin inside the narrower of the two destination panels.
+		bus_board.pixel_size = minf(1.62/pixels.x,.25/pixels.y)
+		rear_bus_board.pixel_size = bus_board.pixel_size
 		rear_bus_board.text = bus_board.text
 
 func _update_mission_marker() -> void:

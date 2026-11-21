@@ -295,3 +295,4 @@ Butiksmenyn behåller tangentbordsfokus vid språkbyte. Testade att glassknappen
 Butikerna visar plånbokens saldo i köpmenyn. Testade saldot före och efter ett glassköp samt när mynten inte räckte till korv.
 Sammanhängande sparfilstest i Godot 4.6.3: skolskjuts gav 15 mynt, glassen kostade fyra och fanns i kiosken efter omladdning av huvudscenen. Eleven kunde äta den sparade glassen; nästa omladdning behöll saldot och visade noll glassar.
 Bussens bakre destinationsskylt visar linje och nästa hållplats även från följekamerans sida. Verifierade sex uppdragssteg och fri körning i Godot.
+Textstorleken på bussens destinationsskyltar anpassas till hållplatsnamnet. Kontrollerade textbredden för samtliga sex namn och samma storlek fram och bak.
