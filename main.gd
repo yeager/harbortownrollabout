@@ -158,6 +158,7 @@ var street_signals := preload("res://street_signals.gd").new()
 var tram := preload("res://tram.gd").new()
 var boating := false
 var launch: Node3D
+var outboard: Node3D
 var launch_speed := 0.0
 var helicopter: Node3D
 var main_rotor: Node3D
@@ -308,6 +309,7 @@ func _drive_launch(delta: float) -> void:
 		steering_flow = maxf(.8,steering_flow)
 	elif brake and launch_speed <= 0.0:
 		steering_flow = minf(-.8,steering_flow)
+	outboard.rotation.y = lerp_angle(outboard.rotation.y,-turn*.52,1-exp(-8*delta))
 	launch.rotation.y -= turn*steering_flow*delta*.53
 	var heading := Vector3.FORWARD.rotated(Vector3.UP,launch.rotation.y)
 	var course := heading*signf(launch_speed)
@@ -970,6 +972,7 @@ func _build_marina() -> void:
 	var launch_model := preload("res://vehicles/motorboat.glb").instantiate() as Node3D
 	launch_model.rotation.y = PI
 	launch.add_child(launch_model)
+	outboard = launch_model.find_child("Outboard swivel",true,false)
 	launch.position=Vector3(79,-.94,46)
 	for x in [58,65,72,79,84]:
 		for z in [6.8,76.5]:

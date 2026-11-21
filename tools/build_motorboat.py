@@ -61,9 +61,17 @@ for y in [.61,1.68]:
     box("Bench cushion",(0,y,.54),(1.4,.49,.15),seat,.07)
     box("Backrest",(0,y+.23,.74),(1.42,.13,.43),white,.07)
     box("Bench locker",(0,y,.34),(1.29,.40,.28),white)
-box("Outboard cowling",(0,2.28,.59),(.49,.58,.61),white,.14)
-box("Gearcase",(0,2.31,.02),(.14,.23,.68),steel)
-tube("Propeller hub",(0,2.31,-.24),(0,2.52,-.24),.068,rubber)
+pivot = bpy.data.objects.new("Outboard swivel", None)
+bpy.context.collection.objects.link(pivot)
+pivot.parent = root
+pivot.location = (0,2.13,.30)
+parts = []
+parts.append(box("Outboard cowling",(0,2.28,.59),(.49,.58,.61),white,.14))
+parts.append(box("Gearcase",(0,2.31,.02),(.14,.23,.68),steel))
+parts.append(tube("Propeller hub",(0,2.31,-.24),(0,2.52,-.24),.068,rubber))
+for part in parts:
+    part.parent = pivot
+    part.location -= pivot.location
 export_vehicle(root,"motorboat.glb")
 bpy.context.preferences.filepaths.save_version=0
 bpy.ops.wm.save_as_mainfile(filepath=str(Path(SOURCE_DIR)/"Motorboat.blend"))
