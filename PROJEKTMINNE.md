@@ -305,3 +305,4 @@ Telefonens aktuella uppdrag har en fast plats ovanför den rullbara SMS-historik
 Vid bussuppdragen väntar två resenärer tillsammans och lika många syns efter avstigning. Testade gruppernas antal och position vid de sex hållplatserna.
 Svensk hållplatsinformation verifierad i förar- och passagerarläge genom hela Tvärbanans slinga. Under varje uppehåll visades rätt station och sex respektive fyra sekunder kvar; vid avgång växlade statusraden till nästa hållplats.
 Den första inlämnade bilen står kvar på verkstaden även medan nästa bil ligger på bärgarens flak. Verifierade båda bärgningarna och två utbetalningar om 20 mynt.
+- Slask kombinerar halsduk, regnhatt och regnkrage. Plaggens synlighet vid slask, snö, regn och uppehåll kontrollerades i Godot 4.6.3.

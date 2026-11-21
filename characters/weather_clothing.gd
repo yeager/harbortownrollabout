@@ -1,7 +1,7 @@
 extends RefCounted
 ## Outdoor layers follow each figure's jacket, including on a moving boat or in a cab.
 
-enum Outfit { LIGHT, SCARF, RAIN, WINTER }
+enum Outfit { LIGHT, SCARF, RAIN, WINTER, SLUSH }
 
 var current := -1
 var garments: Array[Node3D] = []
@@ -52,8 +52,8 @@ func update(season: int, intensity: Vector2) -> void:
 	var next := Outfit.LIGHT
 	if intensity.y >= .16 or season == 4:
 		next = Outfit.WINTER
-	if intensity.x >= .22 and intensity.y < .16:
-		next = Outfit.RAIN
+	if intensity.x >= .22:
+		next = Outfit.SLUSH if intensity.y >= .16 else Outfit.RAIN
 	elif next == Outfit.LIGHT and season in [1,3]:
 		next = Outfit.SCARF
 	if current == next:
@@ -63,10 +63,10 @@ func update(season: int, intensity: Vector2) -> void:
 		_dress(layers, current)
 
 func _dress(layers: Node3D, outfit: int) -> void:
-	layers.get_node("Scarf").visible = outfit in [Outfit.SCARF, Outfit.WINTER]
+	layers.get_node("Scarf").visible = outfit in [Outfit.SCARF, Outfit.WINTER, Outfit.SLUSH]
 	layers.get_node("Knit cap").visible = outfit == Outfit.WINTER
-	layers.get_node("Rain hat").visible = outfit == Outfit.RAIN
-	layers.get_node("Storm collar").visible = outfit == Outfit.RAIN
+	layers.get_node("Rain hat").visible = outfit in [Outfit.RAIN, Outfit.SLUSH]
+	layers.get_node("Storm collar").visible = outfit in [Outfit.RAIN, Outfit.SLUSH]
 
 func _fabric(colour: Color, roughness: float) -> StandardMaterial3D:
 	var key := Vector2i(colour.to_rgba32(), roundi(roughness*100))
