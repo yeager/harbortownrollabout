@@ -423,7 +423,7 @@ func _toggle_radio() -> void:
 	_sync_radio()
 
 func _sync_radio() -> void:
-	radio_button.visible = mode=="playing" and not paused and (not walker.visible or boating or tram_mode>0)
+	radio_button.visible = mode=="playing" and not paused and (not walker.visible or boating or tram_mode>0 or ferry_passenger)
 	radio_button.text = "Radio on · J" if radio_enabled else "Radio off · J"
 	if not radio_enabled:
 		radio.stop()
