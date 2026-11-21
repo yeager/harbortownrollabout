@@ -1301,6 +1301,23 @@ func _apply_player_appearance() -> void:
 
 func _build_depot() -> void:
 	_make_driving_surface("Motor pool", Vector3(23,.1,11), Vector3(-38,-.18,15), Color("#565c5a"))
+	# A continuous pedestrian route from the parking bays to Stationsallén.
+	for span in [Vector2(20.5,31.3),Vector2(38.7,42.5)]:
+		_make_driving_surface("Depot footpath",Vector3(2.3,.08,span.y-span.x),
+			Vector3(-39,-.09,(span.x+span.y)*.5),Color("#afa99b"))
+	_make_driving_surface("Shop pavement",Vector3(37,.08,2.5),Vector3(-24.9,-.09,41.25),Color("#afa99b"))
+	for i in 8:
+		_make_box("Stationsallén crossing",Vector3(2.25,.014,.48),Vector3(-39,-.028,31.85+i*.90),Color("#edece1"))
+	var waypost := Vector3(-37.65,0,21.2)
+	_make_box("Footpath signpost",Vector3(.085,1.9,.085),waypost+Vector3.UP*.9,Color("#758384"))
+	_make_box("Shop direction sign",Vector3(2.0,.49,.08),waypost+Vector3.UP*1.68,Color("#20554c"))
+	var directions := Label3D.new()
+	directions.text = "↑  Café · Kiosk"
+	directions.position = waypost+Vector3(0,1.68,-.047)
+	directions.rotation.y = PI
+	directions.font_size = 42
+	directions.pixel_size = .0048
+	add_child(directions)
 	var sign := Label3D.new()
 	sign.text = "Vehicle depot"
 	sign.position = Vector3(-37,3.2,18.8)
