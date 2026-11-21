@@ -89,11 +89,18 @@ func _ready() -> void:
 		add_child(station)
 		station.position = track.sample_baked(offset)
 		station.look_at(track.sample_baked(offset+.2))
-		world._make_box("Platform",Vector3(2.6,.55,8),Vector3(2.8,.05,0),Color("#c4bbaa"),false,station)
+		# Follow the curve so each door opens alongside a platform edge.
+		for segment in range(-12, 4):
+			var start := track.sample_baked(fposmod(offset + segment, length))
+			var end := track.sample_baked(fposmod(offset + segment + 1, length))
+			var outward := (end - start).normalized().cross(Vector3.UP)
+			var platform := outward * 2.8 + Vector3.UP * .05
+			beam(start + platform, end + platform, 2.6, .55, Color("#c4bbaa"))
+			var marking := outward * 1.69 + Vector3.UP * .332
+			beam(start + marking, end + marking, .14, .012, Color("#f3da85"))
 		world._make_box("Shelter roof",Vector3(2.1,.12,5.2),Vector3(3,2.7,0),Color("#475963"),false,station)
 		for z in [-2,2]:
 			world._make_box("Shelter post",Vector3(.1,2.4,.1),Vector3(3.8,1.5,z),Color("#697778"),false,station)
-		world._make_box("Platform edge marking",Vector3(.14,.012,7.9),Vector3(1.69,.332,0),Color("#f3da85"),false,station)
 		world._make_box("Bench seat",Vector3(.43,.085,2.5),Vector3(3.53,.80,0),Color("#a87547"),false,station)
 		world._make_box("Bench back",Vector3(.07,.29,2.5),Vector3(3.72,1.06,0),Color("#a87547"),false,station)
 		for z in [-.9,.9]:
@@ -119,7 +126,7 @@ func _ready() -> void:
 				world._make_box("Interior door lining", Vector3(.008,2.21,.50), Vector3(-s*.043,0,0), Color("#dbd1b4"),false,leaf)
 				_door_window(s, opening_direction, leaf)
 				_door_window(-s, opening_direction, leaf)
-				if i==0 and s==1:
+				if s==1:
 					platform_door_leaves.append(leaf)
 		if i==1:
 			var steel := Color("#384448")
@@ -163,7 +170,7 @@ func advance(delta: float, manual: bool, gas: bool, brake: bool) -> void:
 		dwell=maxf(0,dwell-delta)
 		var opening := smoothstep(0,.85,minf(6-dwell,dwell))
 		for i in platform_door_leaves.size():
-			var direction := -1 if i==0 else 1
+			var direction := -1 if i%2==0 else 1
 			platform_door_leaves[i].position.z = .13+direction*(.26+.51*opening)
 		return
 	var length := track.get_baked_length()
