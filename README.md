@@ -93,7 +93,7 @@ The Porsche 911 GT3 RS has a separate sport tune. Select it at the depot to driv
 
 ![White Porsche 911 GT3 RS game model with red wheels, side view](docs/porsche-911-gt3-rs.png)
 
-Press **J** or click **Radio** in a vehicle to play the original instrumental loop on Sjöstad Radio. It also works aboard the motorboat and tram. The radio pauses when you leave the vehicle and resumes at the same point when you get back in.
+Press **J** or click **Radio** in a vehicle to play the original instrumental loop on Sjöstad Radio. It also works aboard the motorboat, the tram and the Lotten ferry. The radio pauses when you leave the vehicle and resumes at the same point when you get back in.
 
 ## Graphics settings
 

@@ -353,3 +353,4 @@ Granskade regn och snö i en separat renderad Compatibility-scen. Snöflingornas
 Partikelsystemen avger enbart den nederbörd som faktiskt faller. Testat i Godot att båda avger partiklar vid slask och stängs av efter uppklarning.
 Nederbörden placeras efter kamerans förflyttning i samma bildruta. Testat med Lotten och Tvärbanan i Godot 4.6.3.
 Spelets paus fryser även fallande regn och snö. Godot-test verifierade båda partikelsystemens hastighet vid paus och återupptagning under slask.
+Verifierade fordonsradion vid byte från bil till Lotten. Musiken pausade till fots och fortsatte från samma ställe ombord.
