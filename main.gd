@@ -1810,6 +1810,11 @@ func _update_traffic(delta: float) -> void:
 			if gap<clearance:
 				clearance = gap
 				tractor_ahead = other.tractor and other.direction==direction
+		if casualty.visible and casualty.get_parent()==self:
+			var offset := casualty.position-actor.position
+			var gap := offset.x*direction-float(item.length)-2.1
+			if offset.x*direction>=0 and absf(offset.z)<float(item.width)+.86:
+				clearance=minf(clearance,gap)
 		var player_offset := ambulance.position - actor.position
 		if absf(player_offset.z) < player_size.y + float(item.width):
 			var ahead := player_offset.x * direction

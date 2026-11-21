@@ -121,3 +121,5 @@ Spelprojektet publiceras i det privata GitHub-repot yeager/axels-emergency-vehic
 - Avlämnade taxipassagerare syns på trottoaren vid resmålet fram till nästa hämtning. Tre hela taxiresor testades med rätt avlämningsplats och 15 mynt per resa.
 
 - Spelarens bil och AI-trafiken tar hänsyn till synliga taxipassagerare och väntande sjukvårdare. Godot-test visade att en trafikbil stannade för en passagerare i körfältet och körde vidare när vägen blev fri.
+
+- Trafiken räknar den havererade bilens längd och bredd vid inbromsning. I ett körfältstest i Godot stannade bilen bakom hindret och fortsatte när körfältet blev fritt.
