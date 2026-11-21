@@ -418,10 +418,15 @@ func _toggle_radio() -> void:
 func _sync_radio() -> void:
 	radio_button.visible = mode=="playing" and not paused and (not walker.visible or boating or tram_mode>0)
 	radio_button.text = "Radio on · J" if radio_enabled else "Radio off · J"
-	if radio_enabled and radio_button.visible:
-		if not radio.playing: radio.play()
-	else:
+	if not radio_enabled:
 		radio.stop()
+	elif radio_button.visible:
+		if radio.stream_paused:
+			radio.stream_paused = false
+		elif not radio.playing:
+			radio.play()
+	elif radio.playing:
+		radio.stream_paused = true
 
 func _honk() -> void:
 	if mode != "playing" or paused or (walker.visible and not boating and tram_mode == 0) or tram_mode == 1 or horn.playing: return
