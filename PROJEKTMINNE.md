@@ -208,3 +208,6 @@ Spelprojektet publiceras i det privata GitHub-repot yeager/axels-emergency-vehic
 - Paus fryser återstående lästid för tillfälliga meddelanden. Taxins bekräftelse vid upphämtning testades med 60 sekunders simulerad paus och återupptagen nedräkning.
 - Pausmenyn visar den aktuella uppdragstexten från telefonen. Sex uppdragssteg verifierades på svenska och engelska, utan dubbla telefonmeddelanden.
 - Förbättrad textkontrast på ljusa knappar vid tangentbordsfokus, muspekare och tryck. Rendering vid 800 × 500 verifierade fokuserad fortsättknapp och två synliga rader för bärgningsuppdraget på svenska och engelska.
+- Sjöstadsskolan med putsfasad och koppartak modellerades i Blender. Skoltaxi hämtar och lämnar elever och busslinje 502 trafikerar fyra hållplatser. Båda uppdragsserierna samt utbetalning testades i Godot.
+- BMW M3 E30, Volvo 240, Saab 96, Tesla Model S och stadsbuss finns i fordonsval och depå. Egna Blenderkällor, tutor och lågmält eldrivljud ingår. Fordonsradio med egen instrumental slinga startas med J.
+- Compatibility, Mobile och Forward+ renderade buss och skola på datorns Radeon. play.sh kan starta alla tre och välja AMD FSR 2.2 i Forward+. Ingen mätning av bildfrekvens eller verifiering på annan hårdvara ännu.

@@ -545,3 +545,51 @@ msgstr "Gå tillbaka till din taxi"
 
 msgid "Return to your recovery truck"
 msgstr "Gå tillbaka till din bärgningsbil"
+
+msgid "Radio on · J"
+msgstr "Radio på · J"
+
+msgid "Radio off · J"
+msgstr "Radio av · J"
+
+msgid "City bus"
+msgstr "Stadsbuss"
+
+msgid "Bus route 502"
+msgstr "Busslinje 502"
+
+msgid "Collect passengers at the square."
+msgstr "Hämta passagerare vid torget."
+
+msgid "Drop off passengers at the school."
+msgstr "Släpp av passagerare vid skolan."
+
+msgid "Collect passengers at the marina."
+msgstr "Hämta passagerare vid småbåtshamnen."
+
+msgid "Drop off passengers at the clinic."
+msgstr "Släpp av passagerare vid vårdcentralen."
+
+msgid "Passengers on board."
+msgstr "Passagerarna är ombord."
+
+msgid "Bus journey complete. You earned 15 coins."
+msgstr "Bussresan är klar. Du fick 15 mynt."
+
+msgid "A pupil is waiting at the square."
+msgstr "En elev väntar på torget."
+
+msgid "Please take me to school."
+msgstr "Kör mig till skolan, tack."
+
+msgid "A pupil is waiting at school."
+msgstr "En elev väntar vid skolan."
+
+msgid "Pick up the pupil"
+msgstr "Hämta eleven"
+
+msgid "Drop off the pupil"
+msgstr "Lämna eleven"
+
+msgid "Return to your bus"
+msgstr "Gå tillbaka till din buss"

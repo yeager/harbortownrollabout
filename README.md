@@ -71,3 +71,24 @@ Two sea-green 1960s-style cruisers with ivory roofs drive along the main street.
 Between the two bridges, leave your vehicle on the western bank and take the steps down to the timber boardwalk. Follow the rope railing between Lotten’s two landings and take the other staircase back up to the street.
 
 During the rescue route, the medic hands over a green first-aid bag. It travels inside the vehicle, appears in the player's hand on foot and stays on the quay after delivery.
+
+## School trips, buses and passenger cars
+
+Choose **City bus** and start **Bus route 502** to pick up passengers at the square and drop them off at Sjöstadsskolan. The next service runs from the marina to the clinic. Stop at the marker to serve each stop in gentle mode, or press Space while stationary in manual mode. Each completed journey pays 15 coins.
+
+The taxi rotation also includes a pupil travelling from the square to school and a pupil waiting outside school for a ride to the clinic. Follow the arrows and read the next request on the phone.
+
+The vehicle selector and depot include a red BMW M3 E30, orange Volvo 240, green Saab 96 and white Tesla Model S. Full-speed mode gives the Volvo and Saab relaxed acceleration. The Tesla has a quiet electric motor sound and accelerates quickly. Gentle mode limits every vehicle to 30 km/h.
+
+Press **J** or click **Radio** in a vehicle to play the original instrumental loop on Sjöstad Radio. It also works aboard the motorboat and tram. Playback stops while paused or on foot.
+
+## Linux renderer selection
+
+Run one of the following from the project directory with Godot 4.6 installed. Set `GODOT_BIN` to select a specific Godot executable.
+
+| Command | Graphics |
+| --- | --- |
+| `./play.sh compatibility` | Compatibility / OpenGL, the project default |
+| `./play.sh mobile` | Mobile / Vulkan on supported Linux systems |
+| `./play.sh forward+` | Forward+ at native resolution |
+| `./play.sh fsr2` | Forward+ with AMD FSR 2.2 at 75% internal resolution per axis |
