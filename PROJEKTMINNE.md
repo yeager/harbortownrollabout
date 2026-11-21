@@ -350,3 +350,4 @@ Manuella väderbyten följer nu samma långsamma förlopp som automatiska. Godot
 Automatiken kan ge slask under vår och höst. Testet för väderövergångar kontrollerar även att slask ger både väta och snö på marken.
 Vid vinterregn behåller personerna halsduken när regnhatten kommer på. Plaggens synlighet kontrollerad i Godot för vinter- och sommarregn.
 Granskade regn och snö i en separat renderad Compatibility-scen. Snöflingornas tjocklek ökades så att närliggande flingor syns även från sidan.
+Partikelsystemen avger enbart den nederbörd som faktiskt faller. Testat i Godot att båda avger partiklar vid slask och stängs av efter uppklarning.

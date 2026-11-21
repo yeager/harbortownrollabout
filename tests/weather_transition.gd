@@ -32,5 +32,16 @@ func check_transition() -> void:
 		printerr("Slush should leave both moisture and snow on the ground")
 		quit(1)
 		return
+	if not weather.rain_particles.emitting or not weather.snow_particles.emitting:
+		printerr("Slush needs both particle emitters")
+		quit(1)
+		return
+	weather.weather_setting = 1
+	for second in range(150):
+		weather.tick(1.0)
+	if weather.rain_particles.emitting or weather.snow_particles.emitting:
+		printerr("Clear weather should stop both particle emitters")
+		quit(1)
+		return
 	print("Manual snowfall builds gradually and continues in automatic mode.")
 	quit()

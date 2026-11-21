@@ -35,8 +35,7 @@ func _ready() -> void:
 	cloud_cover = maxf(intensity.x,intensity.y)
 	wet = intensity.x
 	snow = intensity.y
-	rain_particles.amount_ratio = wet
-	snow_particles.amount_ratio = snow
+	_update_emitters()
 
 func particles(flakes: bool) -> GPUParticles3D:
 	var emitter := GPUParticles3D.new()
@@ -109,5 +108,10 @@ func tick(delta: float) -> void:
 	# Melt first wets exposed pavement, which then dries more slowly than rain accumulates.
 	var moisture_time := 35.0 if intensity.x > wet else 95.0
 	wet = minf(1.0,move_toward(wet,intensity.x,delta/moisture_time)+meltwater)
+	_update_emitters()
+
+func _update_emitters() -> void:
+	rain_particles.emitting = intensity.x > 0
+	snow_particles.emitting = intensity.y > 0
 	rain_particles.amount_ratio = intensity.x
 	snow_particles.amount_ratio = intensity.y
