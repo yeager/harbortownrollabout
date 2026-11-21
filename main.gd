@@ -398,7 +398,11 @@ func _unhandled_key_input(event: InputEvent) -> void:
 			KEY_F: _change_seat()
 			KEY_C: _toggle_camera_view()
 			KEY_ESCAPE, KEY_P:
-				if mode == "playing": _toggle_pause()
+				if event.keycode == KEY_ESCAPE and phone.handset.is_visible_in_tree():
+					phone.toggle()
+					get_viewport().set_input_as_handled()
+				elif mode == "playing":
+					_toggle_pause()
 			KEY_SPACE:
 				if mode == "playing" and not paused: _help_at_target()
 			KEY_ENTER:

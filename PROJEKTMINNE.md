@@ -285,3 +285,4 @@ Dagsljuset dämpas före automatisk nederbörd och återvänder gradvis efteråt
 Himlens molnighet följer samma väderövergång som solljuset. Testat himmelsmaterialet före snöfallet och under uppklarningen i huvudscenen.
 Huvudkorsningens fyra tillfarter har målade stopplinjer i färdriktningens högra körfält. Verifierade markeringarnas läge mot rödljusbromsningen i Godot 4.6.3.
 Två nya familje-SMS om morfars spegelbild på Tvärbanan och nallens strumpmössa. Testade leverans och språkbyte i inkorgen med aktuellt uppdrag överst.
+Escape stänger en öppen telefon och låter körningen fortsätta. Testade även svensk stängknapp och att nästa Escape pausar spelet.

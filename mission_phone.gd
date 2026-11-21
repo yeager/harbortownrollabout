@@ -86,7 +86,7 @@ func toggle() -> void:
 	refresh()
 
 func refresh() -> void:
-	open_button.text=tr("Phone · T")
+	open_button.text=tr("Close phone · T") if handset.visible else tr("Phone · T")
 	if unread>0: open_button.text+="  (%d)" % unread
 	var lines:=PackedStringArray()
 	if not current_job.is_empty():

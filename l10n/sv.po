@@ -719,3 +719,6 @@ msgstr "Jag hälsade på någon på Tvärbanan. Det var min spegelbild. – Morf
 
 msgid "Your missing sock turned up. The teddy bear was wearing it as a hat. — Mum"
 msgstr "Jag hittade din försvunna strumpa. Nallen hade den som mössa. – Mamma"
+
+msgid "Close phone · T"
+msgstr "Stäng telefonen · T"
