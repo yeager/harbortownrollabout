@@ -791,3 +791,24 @@ msgstr "W / ↑ Gasa · S / ↓ Bromsa · A / D Styr · U Fäll ihop"
 
 msgid "Electric scooter · %d km/h"
 msgstr "Elsparkcykel · %d km/h"
+
+msgid "Ice cream van"
+msgstr "Glassbil"
+
+msgid "Serve ice cream at the square"
+msgstr "Sälj glass på torget"
+
+msgid "Serve ice cream outside the school"
+msgstr "Sälj glass vid skolan"
+
+msgid "Serve ice cream at the marina"
+msgstr "Sälj glass vid småbåtshamnen"
+
+msgid "Ice cream served! You earned 10 coins."
+msgstr "Glassen är serverad! Du fick 10 mynt."
+
+msgid "Return to your ice cream van"
+msgstr "Gå tillbaka till glassbilen"
+
+msgid "Ice cream chime · H"
+msgstr "Spela glassmelodin · H"

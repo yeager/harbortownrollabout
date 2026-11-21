@@ -16,9 +16,9 @@ func _mission_stop() -> int:
 const ROAD_HALF := 4.8
 const VEHICLE_NAMES := ["Ambulance", "Police car", "Fire engine"]
 const VEHICLE_SCENES := ["res://vehicles/ambulance.glb", "res://vehicles/polisbil.glb", "res://vehicles/brandbil.glb"]
-const VEHICLE_NAMES_ALL := ["Ambulance", "Police car", "Fire engine", "BMW X5 M60i", "Taxi", "Recovery truck", "BMW M3 E30", "Volvo 240", "Saab 96", "Tesla Model S", "City bus", "Snowmobile", "Volvo XC60 Police", "Porsche 911 GT3 RS"]
-const VEHICLE_SCENES_ALL := ["res://vehicles/ambulance.glb", "res://vehicles/polisbil.glb", "res://vehicles/brandbil.glb", "res://vehicles/bmw_x5_m60i.glb", "res://vehicles/taxi.glb", "res://vehicles/bargare.glb", "res://vehicles/m3_e30.glb", "res://vehicles/volvo240.glb", "res://vehicles/saab96.glb", "res://vehicles/model_s.glb", "res://vehicles/city_bus.glb", "res://vehicles/snowmobile.glb", "res://vehicles/volvo_xc60_polis.glb", "res://vehicles/porsche_gt3_rs.glb"]
-const SIREN_SOUNDS := ["res://audio/siren_ambulance.wav", "res://audio/siren_police.wav", "res://audio/siren_fire.wav", "res://audio/bmw_engine.wav", "res://audio/bmw_engine.wav", "res://audio/bmw_engine.wav", "res://audio/bmw_engine.wav", "res://audio/bmw_engine.wav", "res://audio/bmw_engine.wav", "res://audio/electric_drive.wav", "res://audio/bmw_engine.wav", "res://audio/sled_engine.wav", "res://audio/siren_police.wav", "res://audio/porsche_engine.wav"]
+const VEHICLE_NAMES_ALL := ["Ambulance", "Police car", "Fire engine", "BMW X5 M60i", "Taxi", "Recovery truck", "BMW M3 E30", "Volvo 240", "Saab 96", "Tesla Model S", "City bus", "Snowmobile", "Volvo XC60 Police", "Porsche 911 GT3 RS", "Ice cream van"]
+const VEHICLE_SCENES_ALL := ["res://vehicles/ambulance.glb", "res://vehicles/polisbil.glb", "res://vehicles/brandbil.glb", "res://vehicles/bmw_x5_m60i.glb", "res://vehicles/taxi.glb", "res://vehicles/bargare.glb", "res://vehicles/m3_e30.glb", "res://vehicles/volvo240.glb", "res://vehicles/saab96.glb", "res://vehicles/model_s.glb", "res://vehicles/city_bus.glb", "res://vehicles/snowmobile.glb", "res://vehicles/volvo_xc60_polis.glb", "res://vehicles/porsche_gt3_rs.glb", "res://vehicles/ice_cream_van.glb"]
+const SIREN_SOUNDS := ["res://audio/siren_ambulance.wav", "res://audio/siren_police.wav", "res://audio/siren_fire.wav", "res://audio/bmw_engine.wav", "res://audio/bmw_engine.wav", "res://audio/bmw_engine.wav", "res://audio/bmw_engine.wav", "res://audio/bmw_engine.wav", "res://audio/bmw_engine.wav", "res://audio/electric_drive.wav", "res://audio/bmw_engine.wav", "res://audio/sled_engine.wav", "res://audio/siren_police.wav", "res://audio/porsche_engine.wav", "res://audio/bmw_engine.wav"]
 const BUILDING_SCENES := {"Sjukhuset":"res://environment/sjukhus.glb", "Polisstationen":"res://environment/polisstation.glb", "Bageriet":"res://environment/bageri.glb", "Vårdcentralen":"res://environment/vardcentral.glb", "Brandstationen":"res://environment/brandstation.glb", "Biblioteket":"res://environment/bibliotek.glb"}
 const TREE_SCENES := ["res://environment/lovtrad.glb", "res://environment/gran.glb", "res://environment/bredkronigt_lovtrad.glb"]
 
@@ -80,6 +80,8 @@ var entry_marker := Label3D.new()
 const BUS := 10
 const SNOWMOBILE := 11
 const PORSCHE := 13
+const ICE_CREAM := 14
+const ICE_STOPS := [0, SCHOOL, 2]
 const XC60_POLICE := 12
 const SCHOOL := 3
 const SCHOOL_CURB := Vector3(136,0,3)
@@ -93,7 +95,7 @@ var bus_board: Label3D
 const BUS_STOP_NAMES := ["TORGET","VÅRDCENTRALEN","SMÅBÅTSHAMNEN","SJÖSTADSSKOLAN","VÄSTRA TORGET","VÄSTERÄNGEN"]
 var bus_leg := 0
 const TAXI := 4
-const HORNS := ["ambulance","police","fire","bmw","taxi","recovery", "m3_e30", "volvo240", "saab96", "model_s", "city_bus","snowmobile", "police", "porsche"]
+const HORNS := ["ambulance","police","fire","bmw","taxi","recovery", "m3_e30", "volvo240", "saab96", "model_s", "city_bus","snowmobile", "police", "porsche", "icecream"]
 var horn := AudioStreamPlayer.new()
 var radio_button: Button
 var radio := AudioStreamPlayer.new()
@@ -184,6 +186,7 @@ func _vehicle_tasks() -> Array:
 		1, XC60_POLICE: return PATROL_TASKS
 		2: return FIRE_TASKS
 		SNOWMOBILE: return SLED_TASKS
+		ICE_CREAM: return ["Serve ice cream at the square", "Serve ice cream outside the school", "Serve ice cream at the marina"]
 		_: return DELIVERY_TASKS
 
 var parked_at_target := 0.0
@@ -195,9 +198,9 @@ var paused := false:
 			weather.rain_particles.speed_scale = 0.0 if value else 1.0
 			weather.snow_particles.speed_scale = weather.rain_particles.speed_scale
 var lights_on := false
-var parked_light_settings: Array[bool] = [false, false, false, false, false, false, false, false, false, false, false, false, false, false]
+var parked_light_settings: Array[bool] = [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false]
 var sound_on := true
-var parked_sound_settings: Array[bool] = [false, false, false, true, true, true, true, true, true, true, true, true, true, true]
+var parked_sound_settings: Array[bool] = [false, false, false, true, true, true, true, true, true, true, true, true, true, true, true]
 var siren_player: AudioStreamPlayer
 var ui: CanvasLayer
 var wardrobe := preload("res://characters/weather_clothing.gd").new()
@@ -557,7 +560,7 @@ func _drive(delta: float) -> void:
 	for knuckle in front_knuckles:
 		knuckle.rotation.y = -steering * deg_to_rad(33.0)
 	driving_controls.set_controls(steering, throttle > 0, brake_held, throttle < 0 and not brake_held)
-	var wheelbase: float = [3.7, 2.75, 4.1, 2.975, 2.85, 4.0, 2.56, 2.64, 2.46, 2.96, 6.06, 1.65, 2.865, 2.457][vehicle_index]
+	var wheelbase: float = [3.7, 2.75, 4.1, 2.975, 2.85, 4.0, 2.56, 2.64, 2.46, 2.96, 6.06, 1.65, 2.865, 2.457, 3.81][vehicle_index]
 	var yaw_rate := speed * tan(steering * deg_to_rad(33.0)) / wheelbase
 	# Limit lateral acceleration at speed while retaining tight parking turns.
 	var max_yaw_rate := 8.0 / maxf(absf(speed), 1.0)
@@ -785,7 +788,7 @@ func _taxi_instruction() -> String:
 	return "Pick up your passenger" if taxi_leg%2==0 else "Drop off your passenger"
 
 func _needs_mission_vehicle() -> bool:
-	return walker.visible and vehicle_index in [TAXI, RECOVERY, BUS]
+	return walker.visible and vehicle_index in [TAXI, RECOVERY, BUS, ICE_CREAM]
 
 func _mission_destination() -> Vector3:
 	if _needs_mission_vehicle():
@@ -796,6 +799,8 @@ func _mission_destination() -> Vector3:
 	var destination := WALK_TARGETS[stop] if walker.visible else TARGETS[stop]
 	if vehicle_index == TAXI:
 		destination = _stop_curb(_taxi_stop())
+	elif vehicle_index == ICE_CREAM:
+		destination = _stop_curb(ICE_STOPS[mission_index])
 	elif vehicle_index == BUS:
 		destination = _stop_curb(BUS_STOPS[bus_leg%BUS_STOPS.size()])
 	elif vehicle_index == RECOVERY:
@@ -807,7 +812,7 @@ func _arrival_radius() -> float:
 	return 2.1 if walker.visible else 5.2
 
 func _at_target() -> bool:
-	if scooter.visible or free_drive or boating or ferry_passenger or tram_mode != 0 or (vehicle_index in [TAXI,RECOVERY,BUS] and walker.visible) or mission_index >= TARGETS.size(): return false
+	if scooter.visible or free_drive or boating or ferry_passenger or tram_mode != 0 or (vehicle_index in [TAXI,RECOVERY,BUS,ICE_CREAM] and walker.visible) or mission_index >= TARGETS.size(): return false
 	var actor := walker if walker.visible else ambulance
 	return actor.position.distance_to(_mission_destination()) < _arrival_radius()
 
@@ -874,6 +879,9 @@ func _help_at_target() -> void:
 		var receipt := "Thank you for helping! You earned 10 coins."
 		if vehicle_index == 0 and mission_index == TARGETS.size():
 			receipt = "First-aid supplies delivered to the marina. You earned 10 coins."
+		elif vehicle_index == ICE_CREAM:
+			_honk()
+			receipt = "Ice cream served! You earned 10 coins."
 		elif _vehicle_tasks() == DELIVERY_TASKS:
 			receipt = ["Two parcels collected at the square. You earned 10 coins.", "The clinic received its parcel. You earned 10 coins.", "The marina received the last parcel. You earned 10 coins."][mission_index-1]
 		phone.receive(receipt)
@@ -1883,6 +1891,7 @@ func _fit_driver_sleeve(sleeve: MeshInstance3D, start: Vector3, end: Vector3) ->
 	sleeve.scale.y = (segment.length() + .045) / .65
 
 func _depot_position(i: int) -> Vector3:
+	if i == ICE_CREAM: return Vector3(-52,-.13,15)
 	if i == PORSCHE: return Vector3(-9,-.07,28)
 	if i == BUS: return Vector3(-34,-.13,25.4)
 	if i == SNOWMOBILE: return Vector3(-41,-.13,23)
@@ -1892,6 +1901,7 @@ func _depot_position(i: int) -> Vector3:
 	return Vector3(-47+5*i,-.13,15)
 
 func _build_depot() -> void:
+	_make_driving_surface("Ice cream van bay", Vector3(5,.1,9), Vector3(-52,-.18,15), Color("#565c5a"))
 	_make_driving_surface("Motor pool", Vector3(25,.1,11), Vector3(-37,-.18,15), Color("#565c5a"))
 	_make_driving_surface("Recovery apron",Vector3(8.4,.10,9.8),Vector3(-45,-.18,25.4),Color("#565c5a"))
 	_make_driving_surface("Visitor parking",Vector3(30,.10,9),Vector3(-21.5,-.12,28),Color("#565c5a"))
@@ -3448,6 +3458,9 @@ func _update_mission_marker() -> void:
 		arriving_passenger.visible = bus_leg>=2 and passenger.visible
 		if passenger.visible: _place_taxi_passenger(passenger,BUS_STOPS[bus_leg%BUS_STOPS.size()])
 		if arriving_passenger.visible: _place_taxi_passenger(arriving_passenger,BUS_STOPS[(bus_leg-1)%BUS_STOPS.size()])
+	if vehicle_index == ICE_CREAM and not free_drive and mission_index < ICE_STOPS.size():
+		passenger.visible = true
+		_place_taxi_passenger(passenger, ICE_STOPS[mission_index])
 	passenger.scale = Vector3.ONE*(.72 if vehicle_index==TAXI and _school_fare(taxi_leg) else 1.0)
 	arriving_passenger.scale = Vector3.ONE*(.72 if vehicle_index==TAXI and taxi_leg>=2 and _school_fare(taxi_leg-1) else 1.0)
 	for i in bus_companions.size():
@@ -3516,7 +3529,7 @@ func _update_mission_marker() -> void:
 	mission_marker.global_position = _mission_destination() + Vector3(0, 0.05, 0)
 	var marker_label: Label3D = mission_marker.get_node("MissionLabel")
 	if _needs_mission_vehicle():
-		marker_label.text = tr("Return to your taxi" if vehicle_index == TAXI else "Return to your bus" if vehicle_index==BUS else "Return to your recovery truck").to_upper()
+		marker_label.text = tr("Return to your taxi" if vehicle_index == TAXI else "Return to your bus" if vehicle_index==BUS else "Return to your ice cream van" if vehicle_index == ICE_CREAM else "Return to your recovery truck").to_upper()
 		return
 	marker_label.text = tr(BUS_MESSAGES[bus_leg%BUS_STOPS.size()] if vehicle_index==BUS else SERVICE_MESSAGES[recovery_leg%4] if vehicle_index==RECOVERY else _taxi_instruction() if vehicle_index==TAXI else _vehicle_tasks()[_mission_stop()]).to_upper()
 
@@ -3952,7 +3965,7 @@ func _start_game() -> void:
 	phone.messages.clear()
 	phone.unread=0
 	phone.handset.hide()
-	parked_sound_settings.assign([false, false, false, true, true, true, true, true, true, true, true, true, true, true])
+	parked_sound_settings.assign([false, false, false, true, true, true, true, true, true, true, true, true, true, true, true])
 	parked_light_settings.fill(false)
 	mode = "playing"
 	paused = false
@@ -4221,7 +4234,7 @@ func _refresh_ui() -> void:
 	camera_button.visible = tram_mode == 0 and not boating and vehicle_index == 3 and not walker.visible and not show_overlay
 	camera_button.text = "Outside view · C" if cockpit_view else "Driver view · C"
 	horn_button.visible = not show_overlay and (tram_mode==2 or (tram_mode==0 and (boating or not walker.visible)))
-	horn_button.text = "Tram bell · H" if tram_mode==2 else "Horn · H"
+	horn_button.text = "Tram bell · H" if tram_mode==2 else tr("Ice cream chime · H") if vehicle_index == ICE_CREAM and not boating else "Horn · H"
 	seat_button.visible = not show_overlay and tram_mode==0 and not boating
 	light_button.visible = tram_mode == 0 and not boating and not walker.visible and (vehicle_index < 3 or vehicle_index == XC60_POLICE)
 	siren_button.visible = tram_mode == 0 and not boating and not walker.visible
