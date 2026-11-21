@@ -3142,7 +3142,7 @@ func _refresh_status() -> void:
 			var station: String = tram.STATION_NAMES[posmod(tram.next_stop-1,tram.stops.size())]
 			status_label.text = tr("%s · Departure in %d s") % [station,ceili(tram.dwell)]
 		else:
-			status_label.text = tr("Next stop: %s · %d km/h") % [tram.STATION_NAMES[tram.next_stop],roundi(tram.velocity*3.6)]
+			status_label.text = tr("Next stop: %s · %d m · %d km/h") % [tram.STATION_NAMES[tram.next_stop],ceili(tram.distance_to_next_stop()),roundi(tram.velocity*3.6)]
 	elif message_timer > 0 and message != "":
 		status_label.text = message
 	elif mode == "playing" and not paused and walker.visible and _at_target():

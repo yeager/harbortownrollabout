@@ -103,3 +103,5 @@ Spelprojektet publiceras i det privata GitHub-repot yeager/axels-emergency-vehic
 - Tvärbanan har kontaktledning och stolpar längs slingan samt strömavtagare på mittvagnen. Taket granskades i Godot och ett körtest passerade fyra stationsstopp med dörröppning och stängning.
 
 - Alla tre spårvagnshållplatser har dubbelsidiga namnskyltar under taket, bänk och markerad plattformskant.
+
+- Tvärbanans status visar avstånd i meter längs rälsen till nästa hållplats tillsammans med namn och fart, på svenska och engelska.

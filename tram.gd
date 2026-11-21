@@ -105,6 +105,9 @@ func _ready() -> void:
 			sign_at(car,"Vi åker inte till Ekerö",Vector3(1.24,1.04,1.46),PI/2,.003)
 	place_sections()
 
+func distance_to_next_stop() -> float:
+	return fposmod(stops[next_stop]-distance,track.get_baked_length())
+
 func advance(delta: float, manual: bool, gas: bool, brake: bool) -> void:
 	if dwell>0:
 		dwell=maxf(0,dwell-delta)
@@ -114,7 +117,7 @@ func advance(delta: float, manual: bool, gas: bool, brake: bool) -> void:
 			platform_door_leaves[i].position.z = .13+direction*(.26+.51*opening)
 		return
 	var length := track.get_baked_length()
-	var remaining := fposmod(stops[next_stop]-distance,length)
+	var remaining := distance_to_next_stop()
 	var target := 7.0
 	if manual:
 		target = 0 if brake else (7 if gas else velocity)

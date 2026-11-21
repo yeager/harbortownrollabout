@@ -429,8 +429,8 @@ msgstr "W / ↑ Gasa · S / ↓ Bromsa · Vagnen stannar själv vid hållplatser
 msgid "%s · Departure in %d s"
 msgstr "%s · Avgång om %d s"
 
-msgid "Next stop: %s · %d km/h"
-msgstr "Nästa hållplats: %s · %d km/h"
+msgid "Next stop: %s · %d m · %d km/h"
+msgstr "Nästa hållplats: %s · %d m · %d km/h"
 
 msgid "Tram bell · H"
 msgstr "Ringklocka · H"
