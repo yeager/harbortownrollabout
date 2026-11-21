@@ -57,7 +57,14 @@ func _ready() -> void:
 		world._make_box("Shelter roof",Vector3(2.1,.12,5.2),Vector3(3,2.7,0),Color("#475963"),false,station)
 		for z in [-2,2]:
 			world._make_box("Shelter post",Vector3(.1,2.4,.1),Vector3(3.8,1.5,z),Color("#697778"),false,station)
-		sign_at(station,STATION_NAMES[i],Vector3(2.9,2.35,0),-PI/2,.009)
+		world._make_box("Platform edge marking",Vector3(.14,.012,7.9),Vector3(1.69,.332,0),Color("#f3da85"),false,station)
+		world._make_box("Bench seat",Vector3(.43,.085,2.5),Vector3(3.53,.80,0),Color("#a87547"),false,station)
+		world._make_box("Bench back",Vector3(.07,.29,2.5),Vector3(3.72,1.06,0),Color("#a87547"),false,station)
+		for z in [-.9,.9]:
+			world._make_box("Bench leg",Vector3(.25,.44,.08),Vector3(3.53,.55,z),Color("#49565c"),false,station)
+		world._make_box("Station name board",Vector3(.08,.43,3.8),Vector3(2.15,2.45,0),Color("#16496a"),false,station)
+		for side in [-1,1]:
+			sign_at(station,STATION_NAMES[i],Vector3(2.15+side*.045,2.45,0),side*PI/2,.0068)
 	for i in 3:
 		var car := Node3D.new()
 		add_child(car)

@@ -101,3 +101,5 @@ Spelprojektet publiceras i det privata GitHub-repot yeager/axels-emergency-vehic
 - Tvärbanans främre hytt har en separat Blendermodell med rundad blå nos, lutande vindruta, strålkastare och destinationsskylt. Fronten granskades i en renderad trekvartsvy vid hållplatsen.
 
 - Tvärbanan har kontaktledning och stolpar längs slingan samt strömavtagare på mittvagnen. Taket granskades i Godot och ett körtest passerade fyra stationsstopp med dörröppning och stängning.
+
+- Alla tre spårvagnshållplatser har dubbelsidiga namnskyltar under taket, bänk och markerad plattformskant.
