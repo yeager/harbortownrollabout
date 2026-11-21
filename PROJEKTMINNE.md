@@ -187,3 +187,5 @@ Spelprojektet publiceras i det privata GitHub-repot yeager/axels-emergency-vehic
 - Språkbyte på slutskärmen verifierades svenska–engelska–svenska genom språkvalets signal i Godot. Leveranskvittot översattes direkt, Almas namn behölls och belöningen betalades endast en gång.
 
 - En hamnvärd i orange jacka väntar vid småbåtshamnen under förbandsleveransen och håller väskan efter överlämningen. Detta och kvittot provades genom alla tre uppdragsstegen.
+
+- Grannen i turkos jacka står vid första hjälpmålet på torget med handen höjd och sänker armen efter hjälpen. Båda tillstånden verifierades genom räddningsuppdraget.
