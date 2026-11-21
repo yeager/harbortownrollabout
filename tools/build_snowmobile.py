@@ -1,7 +1,7 @@
 """Blue trail snowmobile, with an articulated-looking front suspension."""
 import sys
 from pathlib import Path
-from math import atan2
+from math import atan2, cos, sin, pi
 import bpy
 from mathutils import Vector
 sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -32,11 +32,39 @@ def attach(part, joint):
     part.parent = joint
     part.location -= joint.location
 
-shell("Rubber drive belt", [(-.35,.19,.16,.32,.36),(-.12,.20,.035,.39,.43),(1.12,.20,.035,.39,.43),(1.4,.19,.15,.35,.39)], RUBBER)
-for i in range(20):
-    cube("Track lug", (0,-.1+i*.065,.044), (.45,.026,.065), DARK,.007,root)
-for y in [0,.37,.76,1.13]:
-    cylinder("Bogie hub",(0,y,.23),.12,.42,METAL,True,24,root)
+# Sweep the rubber belt around the two end wheels, leaving the bogie visible.
+track = []
+for center_y, start_angle in [(1.14,-pi/2),(-.10,pi/2)]:
+    for i in range(17):
+        angle = start_angle + pi*i/16
+        track.append((center_y, angle))
+vertices, faces = [], []
+for center_y, angle in track:
+    for x, radius in [(-.20,.20),(.20,.20),(.20,.17),(-.20,.17)]:
+        vertices.append((x, center_y+radius*cos(angle), .23+radius*sin(angle)))
+for i in range(len(track)):
+    j = (i+1) % len(track)
+    for k in range(4):
+        n = (k+1) % 4
+        faces.append((4*i+k,4*j+k,4*j+n,4*i+n))
+belt_mesh = bpy.data.meshes.new("Track cross section")
+belt_mesh.from_pydata(vertices, [], faces)
+belt = bpy.data.objects.new("Endless rubber track", belt_mesh)
+bpy.context.collection.objects.link(belt)
+belt.parent = root
+belt_mesh.materials.append(RUBBER)
+for i in range(19):
+    for z in [.026,.434]:
+        cube("Track cleat",(0,-.10+i*1.24/18,z),(.45,.036,.045),DARK,.007,root)
+for center_y,angle in track[::3]:
+    cleat = cube("Return cleat",(0,center_y+.213*cos(angle),.23+.213*sin(angle)),(.45,.034,.045),DARK,.007,root)
+    cleat.rotation_euler.x = angle-pi/2
+for side in [-1,1]:
+    beam("Slide rail",(side*.125,-.16,.17),(side*.125,1.16,.17),.035,METAL)
+    for y in [-.10,.31,.73,1.14]:
+        cylinder("Bogie tyre",(side*.146,y,.23),.163,.073,RUBBER,True,32,root)
+        cylinder("Wheel face",(side*.187,y,.23),.112,.016,DARK,True,32,root)
+        cylinder("Axle cap",(side*.199,y,.23),.037,.018,METAL,True,20,root)
 shell("Tunnel and fairing",[(-1.2,.12,.43,.54,.60),(-.90,.35,.29,.64,.78),(-.45,.46,.30,.89,1.05),(-.12,.38,.32,.83,.93),(.32,.33,.42,.62,.68),(1.43,.27,.48,.56,.60)],blue)
 shell("Graphite bonnet",[(-1.22,.10,.51,.58,.61),(-.88,.31,.58,.72,.80),(-.44,.37,.74,.94,1.07),(-.20,.29,.77,.96,1.08)], DARK)
 shell("Saddle",[(-.17,.17,.66,.76,.82),(.04,.21,.61,.83,.88),(.60,.23,.57,.74,.82),(.92,.17,.56,.65,.72)],RUBBER)
