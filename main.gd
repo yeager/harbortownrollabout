@@ -1853,6 +1853,10 @@ func _apply_player_appearance() -> void:
 	for figure: Node3D in [walker,skipper,road_driver]:
 		figure.scale = Vector3.ONE*(.88 if play_as_alma else 1.0)
 		figure.get_node("Ponytail").visible = play_as_alma
+		figure.get_node("Face").mesh = preload("res://characters/AlmaFace.obj") if play_as_alma else preload("res://characters/Face.obj")
+		figure.get_node("AxelPortrait").visible = not play_as_alma
+		figure.get_node("AlmaPortrait").visible = play_as_alma
+		figure.get_node("Hair").mesh = preload("res://characters/Bob.obj") if play_as_alma else preload("res://characters/Hair.obj")
 		figure.get_node("Jacket").material_override = jacket
 		for arm in figure.get_meta("arms"):
 			arm.get_child(0).material_override = jacket
@@ -2668,12 +2672,20 @@ func _make_walker(label: String, start_x: float, lane_z: float, direction: float
 	var skin := _material(complexion[variant], .84)
 	var head := MeshInstance3D.new()
 	head.mesh = preload("res://characters/Face.obj")
+	head.name = "Face"
 	head.position = head_origin
 	head.material_override = skin
 	person.add_child(head)
 	var features := preload("res://characters/Portrait.glb").instantiate() as Node3D
 	features.position = head_origin
 	person.add_child(features)
+	if is_avatar:
+		features.name = "AxelPortrait"
+		var alma_features := preload("res://characters/AlmaPortrait.glb").instantiate() as Node3D
+		alma_features.name = "AlmaPortrait"
+		alma_features.position = head_origin
+		alma_features.hide()
+		person.add_child(alma_features)
 	var hair := MeshInstance3D.new()
 	hair.name = "Hair"
 	hair.mesh = preload("res://characters/Bob.obj") if variant == 1 else preload("res://characters/Hair.obj")

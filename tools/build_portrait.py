@@ -1,9 +1,9 @@
 """Portrait geometry in Blender coordinates. Positive Y faces the viewer."""
 import bpy
-from math import asin, cos, exp, pi, sin, sqrt, tau
+from math import cos, exp, pi, sin, sqrt, tau
 
-def build_portrait(root):
-    portrait = bpy.data.collections.new("Portrait details")
+def build_portrait(root, alma=False):
+    portrait = bpy.data.collections.new("Alma portrait" if alma else "Portrait details")
     bpy.context.scene.collection.children.link(portrait)
 
     def mesh(name, vertices, faces, material=None):
@@ -39,6 +39,13 @@ def build_portrait(root):
              (.018,.105,.122,-.004),(.057,.105,.125,-.008),(.094,.101,.120,-.010),
              (.120,.090,.109,-.013),(.141,.064,.084,-.015),(.155,.031,.042,-.016),(.159,.002,.003,-.016)]
 
+    if alma:
+        # Fuller cheeks and a shorter, softer jaw within the shared neck and hair fit.
+        rings = [(z + .007 * max(0, -z/.143)**2,
+                  w * (1 + .052 * exp(-((z+.045)/.035)**2)
+                         - .065 * exp(-((z+.105)/.022)**2)), d, c)
+                 for z, w, d, c in rings]
+
     def section(z):
         for lower, upper in zip(rings, rings[1:]):
             if z <= upper[0]:
@@ -51,8 +58,9 @@ def build_portrait(root):
             return exp(-((abs(x)-cx)/wx)**2 - ((z-cz)/wz)**2)
         return (.011*bump(.058,-.018,.025,.029) - .012*bump(.043,.014,.024,.014)
                 +.009*bump(.043,.034,.030,.012) + .022*bump(0,.006,.012,.043)
-                +.035*bump(0,-.028,.015,.012) + .015*bump(.015,-.032,.009,.008)
-                +.008*bump(0,-.065,.036,.019) + .008*bump(0,-.108,.029,.016))
+                +(.027 if alma else .035)*bump(0,-.028,.015,.012) + .015*bump(.015,-.032,.009,.008)
+                +.003*bump(.006,-.049,.0038,.009) - .002*bump(0,-.051,.003,.008)
+                -.003*bump(0,-.083,.023,.006) + .008*bump(0,-.065,.036,.019) + .008*bump(0,-.108,.029,.016))
 
     def surface(x,z):
         w,d,c = section(z)
@@ -76,22 +84,31 @@ def build_portrait(root):
         x=w*cos(a)
         return (x,c+d*sin(a)+displacement(x,z)*max(0,sin(a))**3,z)
 
-    head=shell('Face',64,96,face_point)
+    head=shell('AlmaFace' if alma else 'Face',80,96,face_point)
     obj_export(head)
 
     def hair_point(t,a, long_cut=False):
         # The side part sweeps across the forehead and the nape follows the skull.
         front=max(0,sin(a))
-        hairline=-.047+.105*front**.9+.013*cos(a)*front+.003*sin(7*a)
+        part = cos(a) * front
+        hairline = -.047 + .116*front**.9 + .014*part + .003*sin(7*a)
+        if not long_cut:
+            hairline += .007*sin(9*a+.7)*front + .003*sin(16*a)*front
         z=hairline+(.159-hairline)*t
-        fall=(1-t)**2*(1-front**4) if long_cut else 0
+        fall=(1-t)**2*(1-front**1.5) if long_cut else 0
         w,d,c=section(z)
-        strand=(.009+.0018*cos(29*a+3*t)+.001*cos(52*a-4*t))*(1-.45*t)
+        # Sweep locks around the side part and vary their width towards the crown.
+        flow = a + .21*sin(pi*t) + .08*t*cos(a) + .022*sin(4*a)
+        strand = (.008 + .003*cos(13*flow+1.2*t) + .0017*cos(31*flow)
+                  + .001*cos(52*flow-2*t))*(1-.45*t)
+        strand += .007*(1-t)*max(0, -part)
         return ((w+strand+.009*fall)*cos(a)-.003*t,c+(d+strand+.008*fall)*sin(a),z+.010*t-.094*fall)
-    hair=shell('Hair',23,120,hair_point)
-    obj_export(hair)
-    bob=shell('Bob',23,120,lambda t,a: hair_point(t,a,True))
-    obj_export(bob)
+    hair = bob = None
+    if not alma:
+        hair=shell('Hair',23,120,hair_point)
+        obj_export(hair)
+        bob=shell('Bob',23,120,lambda t,a: hair_point(t,a,True))
+        obj_export(bob)
 
     sclera=material('Warm ivory',(.47,.43,.38))
     iris=material('Hazel',(.105,.085,.046))
@@ -135,17 +152,33 @@ def build_portrait(root):
         patch('Catchlight',s,(.0405,.016),.0010,.001,.001,.0083,sclera)
         patch('Eyebrow',s,(.045,.038),.023,.0038,.0026,.0027,brow,-.003)
         patch('Nostril',s,(.011,-.035),.0035,.0013,.0014,.0014,crease,.0008)
-    patch('Upper lip',1,(0,-.065),.027,.005,.001,.0021,lip)
-    patch('Lower lip',1,(0,-.0665),.026,.001,.005,.0022,lip)
-    patch('Mouth',1,(0,-.0657),.026,.0009,.0009,.0046,crease)
+    # Two peaks of the cupid's bow above a softly curved mouth opening.
+    for upper in (False, True):
+        verts = []
+        for i in range(33):
+            u = (i-16)/16
+            x = .026*u
+            arch = max(0, 1-u*u)**.7
+            seam = -.0655 + .0017*u*u
+            height = (.0033 + .0029*exp(-((abs(u)-.25)/.18)**2)) if upper else -.0058
+            for j in range(5):
+                t = j/4
+                z = seam + (.0007 if upper else -.0007) * arch + height*arch*t
+                verts.append((x, surface(x,z) + arch*(.0024+.0026*sin(pi*t)), z))
+        quads = [(i*5+j,i*5+j+1,(i+1)*5+j+1,(i+1)*5+j) for i in range(32) for j in range(4)]
+        mesh('Upper lip' if upper else 'Lower lip', verts, quads if upper else [q[::-1] for q in quads], lip)
+    patch('Mouth',1,(0,-.0655),.025,.0006,.00065,.0026,crease)
     bpy.ops.object.select_all(action='DESELECT')
     for obj in portrait.objects:
         obj.select_set(obj not in (head,hair,bob))
     bpy.context.view_layer.objects.active = next(obj for obj in portrait.objects if obj.select_get())
     bpy.ops.object.join()
     bpy.context.object.name = 'Facial features'
-    bpy.ops.export_scene.gltf(filepath=str(root/'characters'/'Portrait.glb'),
+    bpy.ops.export_scene.gltf(filepath=str(root/'characters'/('AlmaPortrait.glb' if alma else 'Portrait.glb')),
                               export_format='GLB',use_selection=True)
+
+    if alma:
+        return
 
     # A folded standing collar opens at the throat. The zip and pull follow the
     # front profile, so the player's recolourable jacket remains visible.

@@ -356,3 +356,4 @@ Spelets paus fryser även fallande regn och snö. Godot-test verifierade båda p
 Verifierade fordonsradion vid byte från bil till Lotten. Musiken pausade till fots och fortsatte från samma ställe ombord.
 Utökade SMS-historiken från fyra till 32 meddelanden per spelomgång. Verifierade läsning av ett familje-SMS efter 31 kvitton, olästräknaren och att äldsta meddelandet försvinner först vid nästa leverans.
 Familjen skickar nu sju olika SMS, däribland morfars hälsning från Lotten och mammas kanelbulle. Alla sju levererades via telefonens timer och visades på båda språken efter språkbyte i Godot.
+SMS visas i en mobil på 248 × 350 med rullbar historik. Verifierat visuellt i Godot på svenska. Axel och Alma har egna ansiktsformer och porträtt även som förare. Gången har viktöverföring, böjda armbågar och häl-till-tå-steg. Båda testades i Godot 4.6.3.

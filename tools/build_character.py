@@ -47,6 +47,8 @@ sculpt("Trainer", [(-.054,.069,.129,.035),(-.049,.079,.141,.035),
                   (.006,.074,.136,.035),(.018,.071,.123,.026),
                   (.042,.065,.095,.002),(.065,.056,.069,-.012)])
 import runpy
-runpy.run_path(str(root / 'tools' / 'build_portrait.py'))['build_portrait'](root)
+build_portrait = runpy.run_path(str(root / 'tools' / 'build_portrait.py'))['build_portrait']
+build_portrait(root)
+build_portrait(root, alma=True)
 bpy.context.preferences.filepaths.save_version = 0
 bpy.ops.wm.save_as_mainfile(filepath=str(root / 'source_blender' / 'Characters.blend'))
