@@ -21,6 +21,32 @@ def beam(name, start, end, radius, finish):
     part.rotation_euler = direction.to_track_quat('Z','Y').to_euler()
     return part
 
+def coilover(top, bottom):
+    top, bottom = Vector(top), Vector(bottom)
+    axis = bottom - top
+    beam("Damper rod", top, bottom, .021, METAL)
+    beam("Damper body", top, top + axis*.63, .034, DARK)
+    u = axis.normalized().cross(Vector((0,1,0))).normalized()
+    v = axis.normalized().cross(u)
+    path = bpy.data.curves.new("Suspension spring", 'CURVE')
+    path.dimensions = '3D'
+    path.bevel_depth = .009
+    path.bevel_resolution = 2
+    path.use_fill_caps = True
+    spline = path.splines.new('POLY')
+    spline.points.add(96)
+    for i, point in enumerate(spline.points):
+        t = i/96
+        angle = 12*pi*t
+        offset = .049*(u*cos(angle) + v*sin(angle))
+        point.co = (*(top + axis*(.12+.76*t) + offset),1)
+    spring = bpy.data.objects.new("Coil spring", path)
+    bpy.context.collection.objects.link(spring)
+    spring.parent = root
+    path.materials.append(METAL)
+    for t in [.10,.88]:
+        beam("Spring seat",top + axis*t,top + axis*(t+.025),.061,DARK)
+
 def pivot(name, location):
     node = bpy.data.objects.new(name, None)
     bpy.context.collection.objects.link(node)
@@ -86,7 +112,7 @@ for side in [-1,1]:
     beam("Steering spindle",(x,-.82,.08),(x,-.75,.46),.035,METAL)
     for y in [-.95,-.45]:
         beam("Wishbone",(side*.21,y,.38),(x,-.75,.23),.022,blue)
-    beam("Shock",(side*.27,-.60,.67),(x,-.75,.24),.031,METAL)
+    coilover((side*.27,-.60,.67),(x,-.75,.24))
     beam("Headlight strip",(side*.045,-.72,.92),(side*.27,-.64,.92),.035,HEADLAMP)
     attach(beam("Grip",(side*.23,-.36,1.18),(side*.36,-.33,1.18),.028,RUBBER), bars)
 attach(beam("Handlebar",(-.3,-.36,1.18),(.3,-.36,1.18),.019,METAL), bars)
