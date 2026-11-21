@@ -539,3 +539,9 @@ msgstr "Tryck på mellanslag för att hämta passageraren."
 
 msgid "Press Space to let your passenger out."
 msgstr "Tryck på mellanslag för att släppa av passageraren."
+
+msgid "Return to your taxi"
+msgstr "Gå tillbaka till din taxi"
+
+msgid "Return to your recovery truck"
+msgstr "Gå tillbaka till din bärgningsbil"

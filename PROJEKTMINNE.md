@@ -199,3 +199,4 @@ Spelprojektet publiceras i det privata GitHub-repot yeager/axels-emergency-vehic
 - Taxins stopp visar när passageraren ska hämtas eller släppas av, med svensk och engelsk text. Tre taxiresor testades genom sex stopp, med automatisk och manuell hjälp och totalt 45 intjänade mynt.
 - Väntande taxipassagerare står vända mot taxins stoppunkt och håller upp handen. Riktning och gest testades på torget, vid kliniken och vid småbåtshamnen.
 - Avsläppta passagerare placeras på gångytans uppmätta höjd och vänder sig mot taxins stoppunkt. Samtliga tre avlämningar verifierades i Godot.
+- Vid taxikörning och bärgning visar markeringen vägen tillbaka till det parkerade uppdragsfordonet till fots. Återinträde och byte till båt eller Tvärbana verifierades i Godot.

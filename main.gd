@@ -585,7 +585,12 @@ func _taxi_stop(leg: int = taxi_leg) -> int:
 func _taxi_instruction() -> String:
 	return "Pick up your passenger" if taxi_leg%2==0 else "Drop off your passenger"
 
+func _needs_mission_vehicle() -> bool:
+	return walker.visible and vehicle_index in [TAXI, RECOVERY]
+
 func _mission_destination() -> Vector3:
+	if _needs_mission_vehicle():
+		return parked_cars[vehicle_index].position
 	var destination := WALK_TARGETS[mission_index] if walker.visible else TARGETS[mission_index]
 	if vehicle_index == TAXI:
 		destination = TARGETS[_taxi_stop()]
@@ -2690,6 +2695,9 @@ func _update_mission_marker() -> void:
 	zone.scale = Vector3(_arrival_radius(),.4,_arrival_radius())
 	mission_marker.global_position = _mission_destination() + Vector3(0, 0.05, 0)
 	var marker_label: Label3D = mission_marker.get_node("MissionLabel")
+	if _needs_mission_vehicle():
+		marker_label.text = tr("Return to your taxi" if vehicle_index == TAXI else "Return to your recovery truck").to_upper()
+		return
 	marker_label.text = tr(SERVICE_MESSAGES[recovery_leg%4] if vehicle_index==RECOVERY else _taxi_instruction() if vehicle_index==TAXI else TARGET_NAMES[mission_index]).to_upper()
 
 func _update_emergency_lights() -> void:
