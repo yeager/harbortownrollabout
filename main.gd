@@ -303,8 +303,23 @@ func _drive_launch(delta: float) -> void:
 	if Input.is_physical_key_pressed(KEY_D): turn=1
 	var target := -1.6 if brake else (5.0 if gentle_driving else 9.0) if gas else 0.0
 	launch_speed = move_toward(launch_speed,target,delta*(3.4 if brake else 1.5))
-	launch.rotation.y -= turn*clampf(launch_speed,-1,2)*delta*.53
+	var steering_flow := clampf(launch_speed,-1,2)
+	if gas and not brake and launch_speed >= 0.0:
+		steering_flow = maxf(.8,steering_flow)
+	elif brake and launch_speed <= 0.0:
+		steering_flow = minf(-.8,steering_flow)
+	launch.rotation.y -= turn*steering_flow*delta*.53
 	var heading := Vector3.FORWARD.rotated(Vector3.UP,launch.rotation.y)
+	var course := heading*signf(launch_speed)
+	var clearance := INF
+	if absf(course.x)>.0001:
+		clearance = ((84.0 if course.x>0 else 58.0)-launch.position.x)/course.x
+	if absf(course.z)>.0001:
+		clearance = minf(clearance,((74.0 if course.z>0 else 9.0)-launch.position.z)/course.z)
+	if clearance < INF:
+		var frame_brake := 3.4*delta
+		var safe_speed := sqrt(frame_brake*frame_brake+6.8*maxf(clearance,0))-frame_brake
+		launch_speed = signf(launch_speed)*minf(absf(launch_speed),safe_speed)
 	var next := launch.position+heading*launch_speed*delta
 	var bounded := Vector3(clampf(next.x,58,84),-.94+.026*sin(wave_time*1.7),clampf(next.z,9,74))
 	if absf(next.x-bounded.x)+absf(next.z-bounded.z)>.0001: launch_speed=0
