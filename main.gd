@@ -3384,6 +3384,14 @@ func _refresh_status() -> void:
 				status_label.text = "Loading the car …" if loading else "Unloading the car …"
 			else:
 				status_label.text = "Press Space to load the car." if loading else "Press Space to unload the car."
+		elif vehicle_index == TAXI:
+			var pickup := taxi_leg % 2 == 0
+			if absf(speed) >= .12:
+				status_label.text = "Stop for your passenger." if pickup else "Stop to let your passenger out."
+			elif gentle_driving:
+				status_label.text = "Your passenger is getting in …" if pickup else "Your passenger is getting out …"
+			else:
+				status_label.text = "Press Space to pick up your passenger." if pickup else "Press Space to let your passenger out."
 		elif absf(speed) >= .12:
 			status_label.text = "Stop here to help."
 		else:

@@ -196,3 +196,4 @@ Spelprojektet publiceras i det privata GitHub-repot yeager/axels-emergency-vehic
 - Förarens profil och fotgängarnas ansikten har modellerad näsa och öron. Både Axel och Alma kontrollerades i renderade bilder genom BMW:ns sidoruta med karossen synlig.
 - Havererade bilar visar gula varningsblinkers fram och bak. Båda hämtplatserna, transport på flaket och tre ljuslägen verifierades i Godot.
 - Bärgaren visar separata instruktioner för att stanna, lasta och lasta av. Svenska texter testades vid alla fyra uppdragsstegen med automatisk och manuell lastning.
+- Taxins stopp visar när passageraren ska hämtas eller släppas av, med svensk och engelsk text. Tre taxiresor testades genom sex stopp, med automatisk och manuell hjälp och totalt 45 intjänade mynt.

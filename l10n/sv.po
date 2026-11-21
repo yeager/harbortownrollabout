@@ -521,3 +521,21 @@ msgstr "Tryck på mellanslag för att lasta bilen."
 
 msgid "Press Space to unload the car."
 msgstr "Tryck på mellanslag för att lasta av bilen."
+
+msgid "Stop for your passenger."
+msgstr "Stanna för att hämta passageraren."
+
+msgid "Stop to let your passenger out."
+msgstr "Stanna för att släppa av passageraren."
+
+msgid "Your passenger is getting in …"
+msgstr "Passageraren kliver in …"
+
+msgid "Your passenger is getting out …"
+msgstr "Passageraren kliver ur …"
+
+msgid "Press Space to pick up your passenger."
+msgstr "Tryck på mellanslag för att hämta passageraren."
+
+msgid "Press Space to let your passenger out."
+msgstr "Tryck på mellanslag för att släppa av passageraren."
