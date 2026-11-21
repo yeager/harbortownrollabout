@@ -746,3 +746,6 @@ msgstr "Vänta på Lotten"
 
 msgid "You can step ashore at either landing."
 msgstr "Du kan gå i land vid båda bryggorna."
+
+msgid "Next landing in %d s"
+msgstr "Framme vid bryggan om %d s"
