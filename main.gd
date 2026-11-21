@@ -51,6 +51,7 @@ var orbit_height := 0.0
 var time_mode := 0
 var day_phase := 0.0
 var last_night := -1.0
+var parked_door_offset := Vector3.ZERO
 var walker: Node3D
 var parked_cars: Array[Node3D] = []
 var parked_footprints: Array[Rect2] = []
@@ -590,7 +591,9 @@ func _needs_mission_vehicle() -> bool:
 
 func _mission_destination() -> Vector3:
 	if _needs_mission_vehicle():
-		return parked_cars[vehicle_index].position
+		var door := parked_cars[vehicle_index].to_global(parked_door_offset)
+		door.y = _foot_height(door.x, door.z)
+		return door
 	var destination := WALK_TARGETS[mission_index] if walker.visible else TARGETS[mission_index]
 	if vehicle_index == TAXI:
 		destination = TARGETS[_taxi_stop()]
@@ -1684,6 +1687,7 @@ func _change_seat() -> void:
 			message_timer = 3
 			old_car.visible = false
 			return
+		parked_door_offset = old_car.to_local(door)
 		walker.position = Vector3(door.x,_foot_height(door.x,door.z),door.z)
 		walk_basis = ambulance.basis
 		walker.rotation.y = ambulance.rotation.y
