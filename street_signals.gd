@@ -6,6 +6,8 @@ var heads: Array[Dictionary] = []
 var phase := -1
 const SHOP_CROSSING := Vector3(-39,0,35)
 const CROSSING_X := -12.0
+const WEST_STOP_DISTANCE := 15.0
+const JUNCTION_STOP_DISTANCE := 8.0
 
 func _ready() -> void:
 	for i in 4:
@@ -16,6 +18,13 @@ func _ready() -> void:
 		if i==3:
 			mast.position.x=-14.7
 		_vehicle_head(mast,i%2==1)
+	for approach in [Vector3.RIGHT,Vector3.LEFT,Vector3.BACK,Vector3.FORWARD]:
+		var forward: Vector3 = approach
+		var setback := WEST_STOP_DISTANCE if forward == Vector3.RIGHT else JUNCTION_STOP_DISTANCE
+		var center := -forward*setback + forward.cross(Vector3.UP)*1.85
+		center.y = get_parent()._surface_height(center.x,center.z)+.016
+		var size := Vector3(.22,.018,3.3) if forward.x != 0 else Vector3(3.3,.018,.22)
+		get_parent()._make_box("Junction stop line",size,center,Color("#eee9d9"),false,self)
 	_add_crossing(SHOP_CROSSING,false)
 	for direction in [-1,1]:
 		var mast := Node3D.new()
@@ -120,5 +129,5 @@ func red_clearance(pos: Vector3, heading: Vector3, half_length: float) -> float:
 		var shop_gap := (SHOP_CROSSING.x-along)*direction-3-half_length
 		return shop_gap if shop_gap>=-.05 else INF
 	if absf(across)>4.85: return INF
-	var gap := -along*direction - (15 if east_west and direction>0 else 8) - half_length
+	var gap := -along*direction - (WEST_STOP_DISTANCE if east_west and direction>0 else JUNCTION_STOP_DISTANCE) - half_length
 	return gap if gap>=-.05 else INF

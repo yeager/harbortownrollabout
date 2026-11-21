@@ -283,3 +283,4 @@ Barnvagnens och rullatorns åtta hjul rullar efter verklig förflyttning och res
 Fotgängarna på huvudgatans trottoar vänder och går tillbaka vid gatans båda ändar. Verifierade sammanhängande rörelse genom båda vändningarna i Godot 4.6.3.
 Dagsljuset dämpas före automatisk nederbörd och återvänder gradvis efteråt. Verifierade övergången sol–snö–sol i Godot 4.6.3.
 Himlens molnighet följer samma väderövergång som solljuset. Testat himmelsmaterialet före snöfallet och under uppklarningen i huvudscenen.
+Huvudkorsningens fyra tillfarter har målade stopplinjer i färdriktningens högra körfält. Verifierade markeringarnas läge mot rödljusbromsningen i Godot 4.6.3.
