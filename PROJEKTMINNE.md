@@ -147,3 +147,5 @@ Spelprojektet publiceras i det privata GitHub-repot yeager/axels-emergency-vehic
 - Sparat manuellt väder gäller redan när en ny spelsession öppnas, inklusive väglag och nederbörd. Testat med sparat snöväder följt av gradvis töväder efter byte till sol.
 
 - När snön smälter blir marken blöt av smältvatten. I Godot provades övergången snö–sol tills snön var borta och vägbanan sedan torkade.
+
+- Nederbördspartiklarna döljs i butiksvyn och syns igen utanför. Entré och utgång provades vid samtliga fyra butiker.

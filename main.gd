@@ -248,6 +248,7 @@ func _process(delta: float) -> void:
 		light_phase += delta * 3.2
 		_update_emergency_lights()
 	shops.update_customer(walker.visible and not boating and tram_mode==0,walker.position,mode=="playing" and not paused)
+	weather.visible = shops.inside < 0
 	_update_camera(delta)
 	_refresh_status()
 
