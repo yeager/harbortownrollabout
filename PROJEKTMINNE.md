@@ -185,3 +185,5 @@ Spelprojektet publiceras i det privata GitHub-repot yeager/axels-emergency-vehic
 - Förbandsleveransen kvitteras med plats och ersättning både i telefonen och på slutskärmen. Tre genomförda steg verifierades med Alma och svenska texter.
 
 - Språkbyte på slutskärmen verifierades svenska–engelska–svenska genom språkvalets signal i Godot. Leveranskvittot översattes direkt, Almas namn behölls och belöningen betalades endast en gång.
+
+- En hamnvärd i orange jacka väntar vid småbåtshamnen under förbandsleveransen och håller väskan efter överlämningen. Detta och kvittot provades genom alla tre uppdragsstegen.

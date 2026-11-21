@@ -93,6 +93,7 @@ var navigator := preload("res://street_route.gd").new()
 var route_arrows: Array[Node3D] = []
 var route_timer := 0.0
 var medical_bag := Node3D.new()
+var marina_recipient: Node3D
 var waiting_medic: Node3D
 var mission_marker: Node3D
 var reverse_lens: StandardMaterial3D
@@ -398,7 +399,7 @@ func _drive(delta: float) -> void:
 	var leading_reach := rear_reach if speed<0 else front_reach
 	var signal_gap := street_signals.red_clearance(ambulance.position,forward if is_zero_approx(speed) else travel_direction,leading_reach)
 	var stopping_distance := signal_gap
-	var people: Array = [crossing_pedestrian,passenger,arriving_passenger,waiting_medic]
+	var people: Array = [crossing_pedestrian,passenger,arriving_passenger,waiting_medic,marina_recipient]
 	for item in walker_data:
 		people.append(item.actor)
 	for person: Node3D in people:
@@ -456,7 +457,7 @@ func _drive(delta: float) -> void:
 	if workshop_car.visible: obstacles.append(WORKSHOP_CAR_BOUNDS)
 	if casualty.visible and casualty.get_parent()==self:
 		obstacles.append(AABB(casualty.position-Vector3(2.1,1,.86),Vector3(4.2,3,1.72)))
-	for person in [crossing_pedestrian,passenger,arriving_passenger,waiting_medic]:
+	for person in [crossing_pedestrian,passenger,arriving_passenger,waiting_medic,marina_recipient]:
 		if not person.visible: continue
 		obstacles.append(AABB(person.position-Vector3(.28,1,.28),Vector3(.56,3,.56)))
 	for neighbour in walker_data:
@@ -1899,7 +1900,7 @@ func _update_traffic(delta: float) -> void:
 			var offset := bounds.get_center()-actor.position
 			if absf(offset.z)<float(item.width)+bounds.size.z*.5 and offset.x*direction >= 0:
 				clearance = minf(clearance,offset.x*direction-bounds.size.x*.5-float(item.length))
-		for person: Node3D in [walker,passenger,arriving_passenger,waiting_medic]:
+		for person: Node3D in [walker,passenger,arriving_passenger,waiting_medic,marina_recipient]:
 			if not person.visible: continue
 			var offset := person.position - actor.position
 			if offset.x * direction >= 0 and absf(offset.z) < float(item.width)+.45:
@@ -2439,6 +2440,10 @@ func _build_target_marker() -> void:
 	passenger = walker_data.pop_back().actor
 	_make_walker("Arrived taxi passenger",0,0,1,Color("#724e74"),Color("#324c57"))
 	arriving_passenger = walker_data.pop_back().actor
+	var quay := WALK_TARGETS[2]
+	_make_walker("Marina attendant",quay.x+.8,quay.z,1,Color("#e18a39"),Color("#314755"))
+	marina_recipient = walker_data.pop_back().actor
+	marina_recipient.position.y = _foot_height(marina_recipient.position.x,quay.z)
 	var pickup := WALK_TARGETS[1]
 	_make_walker("Waiting medic",pickup.x,pickup.z+1.3,1,Color("#d5db46"),Color("#275744"))
 	waiting_medic = walker_data.pop_back().actor
@@ -2551,6 +2556,7 @@ func _update_mission_marker() -> void:
 		arriving_passenger.position = WALK_TARGETS[_taxi_stop(taxi_leg-1)]
 	var rescue := not free_drive and not boating and vehicle_index not in [TAXI, RECOVERY]
 	waiting_medic.visible = rescue and mission_index == 1
+	marina_recipient.visible = rescue and mission_index >= 2
 	var carrier: Node3D = waiting_medic
 	var bag_position := Vector3(.34,.53,0)
 	medical_bag.visible = rescue and mission_index >= 1
@@ -2559,9 +2565,7 @@ func _update_mission_marker() -> void:
 		bag_position = Vector3(.34,.53,0) if walker.visible else Vector3.ZERO
 		medical_bag.visible = rescue and walker.visible
 	elif mission_index == TARGETS.size():
-		carrier = self
-		var quay := WALK_TARGETS[2]
-		bag_position = Vector3(quay.x+.7,_surface_height(quay.x+.7,quay.z)+.15,quay.z)
+		carrier = marina_recipient
 	if medical_bag.get_parent() != carrier:
 		medical_bag.reparent(carrier,false)
 	medical_bag.position = bag_position
