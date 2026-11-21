@@ -4231,7 +4231,11 @@ func _refresh_status() -> void:
 	if paused:
 		status_label.text = "Paused — take your time."
 	elif ferry_passenger:
-		status_label.text = tr("Step ashore · F") if _ferry_stop() >= 0 else tr("Next landing in %d s") % ceili(29.0-fmod(wave_time,29.0))
+		if _ferry_stop() >= 0:
+			status_label.text = tr("Step ashore · F")
+		else:
+			var remaining := ceili(29.0-fmod(wave_time,29.0))
+			status_label.text = tr("Stepping ashore in %d s") % remaining if ferry_exit_requested else tr("Next landing in %d s") % remaining
 	elif tram_mode > 0 and mode == "playing":
 		if tram.dwell > 0:
 			var station: String = tram.STATION_NAMES[posmod(tram.next_stop-1,tram.stops.size())]

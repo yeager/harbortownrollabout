@@ -331,3 +331,4 @@ Den första inlämnade bilen står kvar på verkstaden även medan nästa bil li
 - Paketet följer överkroppens gångrörelse och båda armarna hålls framåt under leveransen. Armställning och överlämning kontrollerade i Godot.
 - Närbilden visade att händerna försvann in i kartongen. Justerad armvinkel och ny kontroll från sidan visar den närmaste handen mot kartongens utsida.
 - Testet tests/water_exit.gd kontrollerar att spelaren kan stiga ur och i bilen på båda sidor av båda broarna och stannar ombord på motorbåten ute i kanalen.
+- Lotten visar en personlig nedräkning när avstigning är vald. Svensk status vid val och ånger samt avstigning vid nästa brygga testade i Godot.

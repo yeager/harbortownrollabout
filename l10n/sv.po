@@ -764,3 +764,6 @@ msgstr "Vårdcentralen har fått sitt paket. Du fick 10 mynt."
 
 msgid "The marina received the last parcel. You earned 10 coins."
 msgstr "Småbåtshamnen har fått det sista paketet. Du fick 10 mynt."
+
+msgid "Stepping ashore in %d s"
+msgstr "Du går i land om %d s"
