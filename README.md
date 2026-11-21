@@ -88,7 +88,7 @@ Open **Settings → Graphics** to choose Compatibility, Mobile, Forward+, or For
 
 ### Linux launch options
 
-Run one of the following from the project directory with Godot 4.6 installed. Set `GODOT_BIN` to select a specific Godot executable.
+Run one of the following from the project directory with Godot 4.6 installed. The launcher checks `godot4`, then `godot`, then the locally installed Godot 4.6.3 binary. Set `GODOT_BIN` to the path of a specific Godot 4 executable, including a custom build.
 
 | Command | Graphics |
 | --- | --- |
@@ -96,6 +96,8 @@ Run one of the following from the project directory with Godot 4.6 installed. Se
 | `./play.sh mobile` | Mobile / Vulkan on supported Linux systems |
 | `./play.sh forward+` | Forward+ at native resolution |
 | `./play.sh fsr2` | Forward+ with AMD FSR 2.2 at 75% internal resolution per axis |
+
+The main scene passed a four-frame startup check with each renderer on Linux using Godot 4.6.3 and AMD Radeon Renoir graphics. Compatibility used OpenGL, while Mobile and Forward+ used Vulkan. This check covers startup only.
 
 In full-speed driving mode, road vehicles can reach twice their former top speed. Gentle driving retains its 30 km/h limit. The western district adds connected street loops, bringing the playable boundary to 690 × 151 metres.
 The snowmobile is available in the vehicle selector and at the depot. It uses the same driving and braking controls as the cars.

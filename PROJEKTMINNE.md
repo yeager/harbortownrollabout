@@ -259,3 +259,4 @@ Spår som bildats i snötäcket bleknar vid tö och tas bort när snön smält. 
 Äldre bromsspår på asfalt döljs gradvis av snötäcket och framträder efter tö. Verifierade materialens synlighet och bevarade spår i Godot.
 Startskriptet söker Godot 4 och prioriterar uttryckligt GODOT_BIN, även för specialbyggda motorer. Testade mot simulerade 3.x-, 4.x- och specialbyggen.
 Verifierade val av snöskoter, styrning, gas, broms och avstigning i huvudscenen med Godot 4.7.dev NGX. Lade till och provade svensk text för DLSS-inställningen i samma motor. Testet kördes headless.
+Startade huvudscenen med riktig grafik i Godot 4.6.3 på AMD Renoir och kontrollerade fyra bildrutor per renderer. Alla tre avslutades normalt.
