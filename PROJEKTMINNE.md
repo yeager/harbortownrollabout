@@ -228,3 +228,4 @@ Skoterföraren sitter nu grensle med böjda knän. Modellen har fotbrädor med g
 Västra stadsdelens huvudgator och tvärgator har streckade mittlinjer. Alla 185 markeringar kontrollerade över vägbanan och utanför korsningarna i Godot.
 Västra stadsdelen har 75 gatlyktor längs huvudgatorna och tvärgatorna. Verifierat i Godot att alla tänds på natten och släcks på dagen.
 De tre västra huvudgatorna har 2,8 meter bred gångbana på båda sidor. Framkomlighet verifierad längs sex stråk och över mellanliggande tvärgator.
+Fem grannar promenerar i västra kvarteren. Verifierade hälsning vid möte och vändning på trottoaren vid kvarterets slut i Godot.
