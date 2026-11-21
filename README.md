@@ -96,3 +96,5 @@ Run one of the following from the project directory with Godot 4.6 installed. Se
 | `./play.sh mobile` | Mobile / Vulkan on supported Linux systems |
 | `./play.sh forward+` | Forward+ at native resolution |
 | `./play.sh fsr2` | Forward+ with AMD FSR 2.2 at 75% internal resolution per axis |
+
+In full-speed driving mode, road vehicles can reach twice their former top speed. Gentle driving retains its 30 km/h limit. The western district adds connected street loops, bringing the playable boundary to 690 × 151 metres.

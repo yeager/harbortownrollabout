@@ -151,6 +151,9 @@ var sound_on := true
 var parked_sound_settings: Array[bool] = [false, false, false, true, true, true, true, true, true, true, true]
 var siren_player: AudioStreamPlayer
 var ui: CanvasLayer
+var jacket_palette := -1
+var at_colour_bench := false
+const BENCH_COLOURS := [Color("#905bb9"), Color("#f1ab38"), Color("#399d83")]
 var play_as_alma := false
 var wallet := 0
 var wallet_label: Label
@@ -413,6 +416,8 @@ func _drive(delta: float) -> void:
 	if vehicle_index >= 6:
 		max_speed = [53.0, 10.0, 8.5, 64.0, 12.0][vehicle_index-6]
 		acceleration = [7.8, 2.2, 1.8, 10.0, 2.6][vehicle_index-6]
+	if not gentle_driving:
+		max_speed *= 2.0
 	if gentle_driving:
 		max_speed = 30.0 / 3.6
 		acceleration = 6.0 if is_zero_approx(throttle) else minf(acceleration, 2.8)
@@ -540,7 +545,7 @@ func _drive(delta: float) -> void:
 			speed = 0.0
 	var destination := ambulance.position + step
 	var pos := destination
-	pos.x = clampf(pos.x, -60.0 + extent.x, 170.0 - extent.x)
+	pos.x = clampf(pos.x, -520.0 + extent.x, 170.0 - extent.x)
 	pos.z = clampf(pos.z, -86.0 + extent.y, 65.0 - extent.y)
 	if not pos.is_equal_approx(destination):
 		speed = 0.0
@@ -776,6 +781,7 @@ func _build_world() -> void:
 	ground.material_override = soil_finish
 	_build_road_network()
 	_build_city_blocks()
+	_build_west_district()
 	_build_waterfront()
 	_build_trees()
 	_build_new_blocks()
@@ -828,6 +834,23 @@ func _build_road_network() -> void:
 	for z in [-6.35, 6.35]:
 		for x in range(-4, 5):
 			_make_box("Crosswalk", Vector3(0.50, 0.025, 2.1), Vector3(x, 0.016, z), Color("#eee9d9"))
+
+func _build_west_district() -> void:
+	_make_driving_surface("West district ground", Vector3(460,.3,151), Vector3(-290,-.35,-10.5), Color.WHITE).material_override = soil_finish
+	for z in [-48,0,35]:
+		_make_driving_surface("West avenue", Vector3(455,.12,9.6), Vector3(-282.5,-.08,z), Color.WHITE).material_override = road_finish
+	for x in [-510,-420,-330,-240,-150]:
+		_make_driving_surface("Connecting street", Vector3(9.6,.12,92.6), Vector3(x,-.075,-6.5), Color.WHITE).material_override = road_finish
+		for z in [-24,17]:
+			for offset in [20,62]:
+				var center := Vector3(x+offset,0,z)
+				var buildings := [preload("res://environment/bageri.glb"), preload("res://environment/bibliotek.glb"), preload("res://environment/vardcentral.glb")]
+				var home := buildings[posmod(x / 90 + offset + z, buildings.size())].instantiate() as Node3D
+				home.position = center
+				home.rotation.y = PI if z > 0 else 0.0
+				add_child(home)
+				building_bounds.append(home.global_transform * _model_bounds(home,home))
+				_make_tree(center+Vector3(11,0,5),1.0)
 
 func _build_waterfront() -> void:
 	var asphalt := Color("#414648")
@@ -1313,6 +1336,8 @@ func _build_city_blocks() -> void:
 		_make_box("Planter", Vector3(1.3, 0.35, 1.3), p + Vector3(0, 0.15, 0), Color("#697f58"), true)
 		_make_tree(p, 0.9, "", 0.325)
 	_make_box("Bench seat", Vector3(2.0, 0.18, 0.45), Vector3(30, 0.6, 21.7), Color("#80664c"), true)
+	for i in 3:
+		_make_box("Paint swatch",Vector3(.18,.015,.23),Vector3(29.75+.22*i,.70,21.7),BENCH_COLOURS[i])
 	_make_box("Bench back", Vector3(2.0, 0.7, 0.16), Vector3(30, 0.95, 21.9), Color("#80664c"), true)
 
 func _build_building(center: Vector3, size: Vector3, _color: Color, sign_text: String) -> void:
@@ -1540,7 +1565,9 @@ func _build_lampposts() -> void:
 		street_lights.append(light)
 
 func _apply_player_appearance() -> void:
-	var jacket := _material(Color("#a85641") if play_as_alma else Color("#648faa"))
+	var colour := Color("#a85641") if play_as_alma else Color("#648faa")
+	if jacket_palette >= 0: colour = BENCH_COLOURS[jacket_palette]
+	var jacket := _material(colour)
 	for figure: Node3D in [walker,skipper,road_driver]:
 		figure.scale = Vector3.ONE*(.88 if play_as_alma else 1.0)
 		figure.get_node("Ponytail").visible = play_as_alma
@@ -1741,7 +1768,7 @@ func _near_parked_vehicle(p: Vector3, margin: float) -> bool:
 func _on_foot_clear(p: Vector3) -> bool:
 	if is_instance_valid(workshop_car) and workshop_car.visible and WORKSHOP_CAR_BOUNDS.grow(.2).has_point(p): return false
 	if is_instance_valid(casualty) and casualty.visible and casualty.get_parent()==self and AABB(casualty.position-Vector3(2.35,1,1.1),Vector3(4.7,3,2.2)).has_point(p): return false
-	if p.x < -60 or p.x > 170 or p.z < -86 or p.z > 65:
+	if p.x < -520 or p.x > 170 or p.z < -86 or p.z > 65:
 		return false
 	if p.x > 55 and p.x < 87 and absf(p.z)>5.4 and absf(p.z+48)>5.4 and is_nan(_pier_height(p.x,p.z)):
 		return false
@@ -1836,6 +1863,11 @@ func _walk(delta: float) -> void:
 	if travel.length_squared()>.000001:
 		walker.rotation.y = atan2(-travel.x,-travel.z)
 	walker.position = next
+	var near_bench := Vector2(next.x-30,next.z-20).length() < 1.2
+	if near_bench and not at_colour_bench:
+		jacket_palette = (jacket_palette + 1) % BENCH_COLOURS.size()
+		_apply_player_appearance()
+	at_colour_bench = near_bench
 	walking_velocity = travel / maxf(delta,.00001)
 	listener.global_basis = walk_basis
 	walk_phase += travel.length()*4.0
@@ -2172,10 +2204,7 @@ func _make_walker(label: String, start_x: float, lane_z: float, direction: float
 	person.rotation.y = -direction * PI * 0.5
 	add_child(person)
 	var torso := MeshInstance3D.new()
-	var torso_mesh := CapsuleMesh.new()
-	torso_mesh.radius = 0.23
-	torso_mesh.height = 0.82
-	torso.mesh = torso_mesh
+	torso.mesh = preload("res://characters/Jacket.obj")
 	torso.position = Vector3(0, 1.13, 0)
 	torso.material_override = _material(shirt, 0.92)
 	torso.name="Jacket"
@@ -2184,7 +2213,7 @@ func _make_walker(label: String, start_x: float, lane_z: float, direction: float
 	var head_mesh := SphereMesh.new()
 	head_mesh.radius = 0.17
 	head_mesh.height = 0.34
-	head.mesh = head_mesh
+	head.mesh = preload("res://characters/Face.obj")
 	head.position = Vector3(0, 1.72, 0)
 	head.material_override = _material(Color("#c58e6d"), 0.94)
 	person.add_child(head)
@@ -2249,6 +2278,8 @@ func _greet_nearby_player(person: Node3D) -> void:
 	var nearby := person.is_visible_in_tree() and walker.visible and walker.position.distance_to(person.position)<2.9
 	if nearby and not person.get_meta("greeted",false) and greeting_timer==0:
 		var phrase := tr(["Hello!", "How are you?", "Hi there!"][greeting_number%3])
+		if person.name == "Marina attendant" and jacket_palette >= 0:
+			phrase = tr("The ducks voted. They love your jacket!")
 		greeting_number += 1
 		greeting.reparent(person,false)
 		greeting.position = Vector3.UP*2.18
