@@ -3149,6 +3149,14 @@ func _overlay_action() -> void:
 func _toggle_pause() -> void:
 	if mode != "playing": return
 	paused = not paused
+	if paused:
+		horn.stop()
+		_end_skid()
+		for item in traffic_data:
+			item.horn.stop()
+		if DisplayServer.tts_is_speaking():
+			DisplayServer.tts_stop()
+	_update_traffic_signals(0)
 	_update_siren()
 	_refresh_ui()
 	if paused:

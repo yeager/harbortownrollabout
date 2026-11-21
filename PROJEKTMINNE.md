@@ -204,3 +204,4 @@ Spelprojektet publiceras i det privata GitHub-repot yeager/axels-emergency-vehic
 - Trafiken börjar bromsa när spelaren är på väg in i körfältet inom 1,4 sekunder. Stillastående och rörelse bort från körfältet jämfördes med rörelse mot körfältet i Godot.
 - Bilar tutar på en långsam A-traktor endast om den begränsar avståndet framåt. Test i båda riktningarna med en fotgängare emellan och därefter fem sekunders följekörning gav minst 4,3 meters lucka.
 - Raggarbil och A-traktor har egna syntetiserade tutor. Cyklisternas ringklocka och de två nya ljudens koppling till trafikfordonen verifierades i Godot.
+- Paus avbryter tutor, däckljud och uppläst hälsning samt tystar trafiksirener direkt. Paus och återgång med samtidiga fordonsljud testades i Godot.
