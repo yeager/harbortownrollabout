@@ -569,7 +569,7 @@ func _arrival_radius() -> float:
 	return 2.1 if walker.visible else 5.2
 
 func _at_target() -> bool:
-	if free_drive or (vehicle_index in [TAXI,RECOVERY] and walker.visible) or mission_index >= TARGETS.size(): return false
+	if free_drive or boating or tram_mode != 0 or (vehicle_index in [TAXI,RECOVERY] and walker.visible) or mission_index >= TARGETS.size(): return false
 	var actor := walker if walker.visible else ambulance
 	return actor.position.distance_to(_mission_destination()) < _arrival_radius()
 
