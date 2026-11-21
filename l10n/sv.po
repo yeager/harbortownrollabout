@@ -617,3 +617,9 @@ msgstr "Änderna har röstat. De älskar din jacka!"
 
 msgid "Snowmobile"
 msgstr "Snöskoter"
+
+msgid "Collect passengers at Västra torget."
+msgstr "Hämta passagerare vid Västra torget."
+
+msgid "Drop off passengers at Västerängen."
+msgstr "Släpp av passagerare vid Västerängen."

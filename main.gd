@@ -70,10 +70,11 @@ const SCHOOL := 3
 const SCHOOL_CURB := Vector3(136,0,3)
 const SCHOOL_GATE := Vector3(136,0,7)
 const TAXI_STOPS := [0,2, 0,SCHOOL, 1,0, SCHOOL,1, 2,1]
-const BUS_STOPS := [0,SCHOOL,2,1]
-const BUS_MESSAGES := ["Collect passengers at the square.", "Drop off passengers at the school.", "Collect passengers at the marina.", "Drop off passengers at the clinic."]
+const WEST_STOPS := [Vector3(-205,0,2.8),Vector3(-460,0,-45.2)]
+const BUS_STOPS := [0,SCHOOL,2,1,4,5]
+const BUS_MESSAGES := ["Collect passengers at the square.", "Drop off passengers at the school.", "Collect passengers at the marina.", "Drop off passengers at the clinic.", "Collect passengers at Västra torget.", "Drop off passengers at Västerängen."]
 var bus_board: Label3D
-const BUS_STOP_NAMES := ["TORGET","VÅRDCENTRALEN","SMÅBÅTSHAMNEN","SJÖSTADSSKOLAN"]
+const BUS_STOP_NAMES := ["TORGET","VÅRDCENTRALEN","SMÅBÅTSHAMNEN","SJÖSTADSSKOLAN","VÄSTRA TORGET","VÄSTERÄNGEN"]
 var bus_leg := 0
 const TAXI := 4
 const HORNS := ["ambulance","police","fire","bmw","taxi","recovery", "m3_e30", "volvo240", "saab96", "model_s", "city_bus","snowmobile"]
@@ -628,7 +629,12 @@ func _draw_skid(previous_pose: Transform3D) -> void:
 func _taxi_stop(leg: int = taxi_leg) -> int:
 	return TAXI_STOPS[leg % TAXI_STOPS.size()]
 
+func _stop_pavement(stop: int) -> Vector3:
+	if stop >= 4: return WEST_STOPS[stop-4] + Vector3.BACK*3.9
+	return SCHOOL_GATE if stop == SCHOOL else WALK_TARGETS[stop]
+
 func _stop_curb(stop: int) -> Vector3:
+	if stop >= 4: return WEST_STOPS[stop-4]
 	return SCHOOL_CURB if stop == SCHOOL else TARGETS[stop]
 
 func _school_fare(leg: int) -> bool:
@@ -652,7 +658,7 @@ func _mission_destination() -> Vector3:
 	if vehicle_index == TAXI:
 		destination = _stop_curb(_taxi_stop())
 	elif vehicle_index == BUS:
-		destination = _stop_curb(BUS_STOPS[bus_leg%4])
+		destination = _stop_curb(BUS_STOPS[bus_leg%BUS_STOPS.size()])
 	elif vehicle_index == RECOVERY:
 		destination = SERVICE_STOPS[recovery_leg%4]
 	destination.y = _surface_height(destination.x,destination.z)
@@ -1346,11 +1352,11 @@ func _build_city_blocks() -> void:
 	school_name.pixel_size = .006
 	school.add_child(school_name)
 	for stop in BUS_STOPS:
-		var gate: Vector3 = SCHOOL_GATE if stop==SCHOOL else WALK_TARGETS[stop]
+		var gate: Vector3 = _stop_pavement(stop)
 		var post := _make_box("Bus stop",Vector3(.08,2.65,.08),gate+Vector3(.9,1.32,0),Color("#52636c"))
 		var plate := _make_box("Bus stop flag",Vector3(1.55,.72,.06),Vector3(0,1.15,0),Color("#263c51"),false,post)
 		# Each face points along the street so the name reads correctly on approach.
-		plate.rotation.y = PI*.5 if stop in [0,SCHOOL] else 0.0
+		plate.rotation.y = PI*.5 if stop in [0,SCHOOL,4,5] else 0.0
 		for side in [-1,1]:
 			var route := Label3D.new()
 			route.name = "StopNameFront" if side==1 else "StopNameBack"
@@ -2928,7 +2934,7 @@ func _clear_camera_view(anchor: Vector3, desired: Vector3) -> Vector3:
 	return desired
 
 func _place_taxi_passenger(person: Node3D, stop: int) -> void:
-	var pavement: Vector3 = SCHOOL_GATE if stop==SCHOOL else WALK_TARGETS[stop]
+	var pavement: Vector3 = _stop_pavement(stop)
 	pavement.y = _foot_height(pavement.x, pavement.z)
 	person.position = pavement
 	var curb := _stop_curb(stop)
@@ -2952,8 +2958,8 @@ func _update_mission_marker() -> void:
 	if vehicle_index == BUS and not free_drive:
 		passenger.visible = bus_leg%2==0
 		arriving_passenger.visible = bus_leg>=2 and passenger.visible
-		if passenger.visible: _place_taxi_passenger(passenger,BUS_STOPS[bus_leg%4])
-		if arriving_passenger.visible: _place_taxi_passenger(arriving_passenger,BUS_STOPS[(bus_leg-1)%4])
+		if passenger.visible: _place_taxi_passenger(passenger,BUS_STOPS[bus_leg%BUS_STOPS.size()])
+		if arriving_passenger.visible: _place_taxi_passenger(arriving_passenger,BUS_STOPS[(bus_leg-1)%BUS_STOPS.size()])
 	for i in bus_companions.size():
 		var companion := bus_companions[i]
 		companion.visible = vehicle_index==BUS and not free_drive and (passenger.visible or arriving_passenger.visible)
@@ -2994,7 +3000,7 @@ func _update_mission_marker() -> void:
 	if _needs_mission_vehicle():
 		marker_label.text = tr("Return to your taxi" if vehicle_index == TAXI else "Return to your bus" if vehicle_index==BUS else "Return to your recovery truck").to_upper()
 		return
-	marker_label.text = tr(BUS_MESSAGES[bus_leg%4] if vehicle_index==BUS else SERVICE_MESSAGES[recovery_leg%4] if vehicle_index==RECOVERY else _taxi_instruction() if vehicle_index==TAXI else TARGET_NAMES[mission_index]).to_upper()
+	marker_label.text = tr(BUS_MESSAGES[bus_leg%BUS_STOPS.size()] if vehicle_index==BUS else SERVICE_MESSAGES[recovery_leg%4] if vehicle_index==RECOVERY else _taxi_instruction() if vehicle_index==TAXI else TARGET_NAMES[mission_index]).to_upper()
 
 func _update_emergency_lights() -> void:
 	var phase := int(light_phase * 2.0) % 2
@@ -3606,7 +3612,7 @@ func _refresh_dispatch() -> void:
 			2: dispatch="A car on the east bank has lost a wheel. Follow the arrows to pick it up."
 			_: dispatch="The car is on your flatbed. Follow the arrows to the workshop for 20 coins."
 	elif vehicle_index==BUS:
-		dispatch=BUS_MESSAGES[bus_leg%4]
+		dispatch=BUS_MESSAGES[bus_leg%BUS_STOPS.size()]
 	elif vehicle_index==TAXI:
 		var requests := ["Taxi requested at the square.","Please take me to the marina.","A pupil is waiting at the square.","Please take me to school.","Taxi requested at the clinic.","Please take me to the square.","A pupil is waiting at school.","Please take me to the clinic.","Taxi requested at the marina.","Please take me to the clinic."]
 		dispatch=requests[taxi_leg%requests.size()]
@@ -3646,7 +3652,7 @@ func _refresh_ui() -> void:
 	elif vehicle_index==RECOVERY:
 		mission_label.text=tr(SERVICE_MESSAGES[recovery_leg%4])
 	elif vehicle_index==BUS:
-		mission_label.text = tr(BUS_MESSAGES[bus_leg%4])
+		mission_label.text = tr(BUS_MESSAGES[bus_leg%BUS_STOPS.size()])
 	elif vehicle_index==TAXI:
 		mission_label.text = tr(_taxi_instruction())
 	elif mission_index < TARGET_NAMES.size():
@@ -3704,7 +3710,7 @@ func _refresh_ui() -> void:
 		if free_drive:
 			subtitle_label.text = "Explore on foot or by vehicle. Stop at the depot to change vehicles."
 		elif vehicle_index == BUS:
-			subtitle_label.text = BUS_MESSAGES[bus_leg%4]
+			subtitle_label.text = BUS_MESSAGES[bus_leg%BUS_STOPS.size()]
 		elif vehicle_index == TAXI:
 			subtitle_label.text = "Pick up a passenger at the square and drive them to the marina."
 		elif vehicle_index == RECOVERY:
