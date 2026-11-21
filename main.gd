@@ -53,6 +53,7 @@ var day_phase := 0.0
 var last_night := -1.0
 var walker: Node3D
 var parked_cars: Array[Node3D] = []
+var parked_footprints: Array[Rect2] = []
 var parked_sizes: Array[Vector2] = []
 var listener := AudioListener3D.new()
 var walking_velocity := Vector3.ZERO
@@ -1472,7 +1473,9 @@ func _build_depot() -> void:
 		for lamp in model.find_children("Flash*", "MeshInstance3D", true, false):
 			lamp.visible = false
 		parked_cars.append(body)
-		parked_sizes.append(_vehicle_half_size(body, model))
+		var bounds := _model_bounds(body,model)
+		parked_footprints.append(Rect2(bounds.position.x,bounds.position.z,bounds.size.x,bounds.size.z))
+		parked_sizes.append(Vector2(maxf(-bounds.position.x,bounds.end.x),maxf(-bounds.position.z,bounds.end.z)))
 		_make_box("Parking stripe", Vector3(.10,.025,7.8), Vector3(body.position.x-2.5,-.116,15), Color("#deddd1"))
 	_make_walker("Player on foot",0,0,1,Color("#648faa"),Color("#30414d"))
 	walker = walker_data.pop_back().actor
@@ -1526,8 +1529,8 @@ func _build_depot() -> void:
 
 
 func _parked_bounds(i: int) -> AABB:
-	var size := parked_sizes[i]
-	return parked_cars[i].transform * AABB(Vector3(-size.x,-1,-size.y),Vector3(size.x*2,4,size.y*2))
+	var area := parked_footprints[i]
+	return parked_cars[i].transform * AABB(Vector3(area.position.x,-1,area.position.y),Vector3(area.size.x,4,area.size.y))
 
 func _nearest_car() -> int:
 	var best_distance := 2.1
@@ -1555,7 +1558,7 @@ func _near_parked_vehicle(p: Vector3, margin: float) -> bool:
 	for i in parked_cars.size():
 		if parked_cars[i].visible:
 			var local := parked_cars[i].to_local(p)
-			if absf(local.x)<parked_sizes[i].x+margin and absf(local.z)<parked_sizes[i].y+margin:
+			if parked_footprints[i].grow(margin).has_point(Vector2(local.x,local.z)):
 				return true
 	return false
 
@@ -1830,11 +1833,15 @@ func _spawn_traffic(scene_path: String, x: float, lane_z: float, direction: floa
 		"width": half_size.x})
 	return actor
 
-func _vehicle_half_size(actor: Node3D, model: Node3D) -> Vector2:
+func _model_bounds(actor: Node3D, model: Node3D) -> AABB:
 	var bounds := AABB()
 	var world_to_actor := actor.global_transform.affine_inverse()
 	for part: MeshInstance3D in model.find_children("*", "MeshInstance3D", true, false):
 		bounds = bounds.merge((world_to_actor * part.global_transform) * part.get_aabb())
+	return bounds
+
+func _vehicle_half_size(actor: Node3D, model: Node3D) -> Vector2:
+	var bounds := _model_bounds(actor,model)
 	if actor == ambulance:
 		front_reach = -bounds.position.z
 		rear_reach = bounds.end.z

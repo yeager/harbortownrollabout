@@ -171,3 +171,5 @@ Spelprojektet publiceras i det privata GitHub-repot yeager/axels-emergency-vehic
 - Bromshjälp för personer, framförvarande trafik och rödljus använder bilens uppmätta längd framåt respektive bakåt. Bärgarens nya hjulstöd ingår i bakmåttet även när den parkeras.
 
 - Trädkollisioner använder främre stötfångarens mått vid körning framåt och bakre utrustningens mått vid backning. Test med bärgaren stannade med mindre än en centimeters frigång åt båda håll.
+
+- Parkerade fordons kollisionsytor utgår från modellens faktiska ytterkanter. Till fots provades frigången framför och bakom bärgaren i tre olika riktningar.
