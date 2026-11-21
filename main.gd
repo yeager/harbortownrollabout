@@ -345,7 +345,7 @@ func _input(event: InputEvent) -> void:
 			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 		elif _can_capture_camera():
 			Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
-	if mode == "playing" and not paused and event is InputEventMouseMotion and (Input.mouse_mode == Input.MOUSE_MODE_CAPTURED or event.button_mask & MOUSE_BUTTON_MASK_MIDDLE):
+	if event is InputEventMouseMotion and _can_capture_camera() and (Input.mouse_mode == Input.MOUSE_MODE_CAPTURED or event.button_mask & MOUSE_BUTTON_MASK_MIDDLE):
 		if cockpit_view and not walker.visible and not boating and tram_mode==0:
 			cockpit_look.x = clampf(cockpit_look.x-event.relative.x*.007,-1.4,1.4)
 			cockpit_look.y = clampf(cockpit_look.y-event.relative.y*.006,-.45,.52)

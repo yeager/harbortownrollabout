@@ -300,3 +300,4 @@ Verifierade sex hållplatser med bussens körhjälp: rullande buss betjänade in
 Ren import från publicerad 1c76c53: åtta scenariotester i Godot 4.6.3 godkända för muskamera, stopplinjer, Tvärbanans bromsning, skolskjuts och kiosksparande, bussrunda, vinterväder, telefon och radio. Varje scenario använde en separat sparmapp.
 Grafisk kontroll av publicerad spelkod i Godot 4.6.3 vid 960×600: Compatibility, Mobile och Forward+ renderade bussuppdraget. På Compatibility-bilden gick hela 502 SJÖSTADSSKOLAN att läsa från följekameran.
 Öppen telefon frigör muspedalerna så att klick under SMS-läsning inte gasar eller bromsar. Verifierat med vänster och höger musknapp före, under och efter telefonvyn i Godot.
+Mittenknappsdrag håller nu kameran stilla när telefonen eller butikens köpmeny är öppen. Testade att drag åter vrider kameran efter båda vyerna i Godot 4.6.3.
