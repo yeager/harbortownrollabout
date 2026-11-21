@@ -254,6 +254,7 @@ func _ready() -> void:
 		get_viewport().msaa_3d=Viewport.MSAA_DISABLED
 	_load_preferences()
 	add_child(weather)
+	wardrobe.update(weather.season, weather.intensity)
 	_build_world()
 	_build_ui()
 	_build_brake_effects()

@@ -276,3 +276,4 @@ Ren import av publicerade origin/main b283268 i separat projektmapp: huvudscen o
 Fordonsvalets aktivitetsmeny visar uppdragstyp före start. Svenska rubriker för ambulans, polis, brandbil, paket och filtleveranser verifierade i Godot 4.
 Spelarens mun får uppåtvända mungipor efter glass eller korv. Verifierade aktivering på gång- och förarmodell samt återgång när glädjetiden löpt ut i Godot 4.
 Musstyrning med V och fri pekare när knappen släpps. Axel, Alma och fotgängarna har nya ansiktsdrag, kläddetaljer och steg med böjda knän. Testat gång i kajtrapporna med båda spelpersonerna. Väderkläder följer årstiden och aktuell nederbörd för gående och sittande personer.
+Vid start får alla 25 personer sina väderkläder redan när scenen byggs. Testat med fyra sparade väderval i Godot 4.6.3 före första processbildrutan.
