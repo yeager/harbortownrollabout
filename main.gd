@@ -164,6 +164,7 @@ var main_rotor: Node3D
 var tail_rotor: Node3D
 var patrol_angle := 0.0
 var tram_mode := 0
+var water_finish := ShaderMaterial.new()
 var saloon_glazing: StandardMaterial3D
 var ferry: Node3D
 var wave_time := 0.0
@@ -713,6 +714,8 @@ func _build_waterfront() -> void:
 	var water := Shader.new()
 	water.code = """
 	shader_type spatial;
+	uniform vec3 ferry_center;
+	uniform float dusk;
 	varying vec2 surface;
 	void vertex(){ surface=(MODEL_MATRIX*vec4(VERTEX,1.)).xz; }
 	void fragment(){
@@ -724,11 +727,22 @@ func _build_waterfront() -> void:
 		vec2 slope = vec2(.024,.013)*swell + vec2(.040,-.022)*chop + detail*vec2(.026,.013)*fine;
 		NORMAL_MAP = normalize(vec3(slope,1.0))*.5+.5;
 		ALBEDO = mix(vec3(.027,.062,.078),vec3(.051,.093,.117),.5+.5*chop);
+		// Intersect the reflected sightline with the two saloon window bands.
+		vec3 eye = CAMERA_POSITION_WORLD;
+		vec3 ray = normalize(vec3(p.x-eye.x,eye.y+.99,p.y-eye.z));
+		ray.xz += slope*.9;
+		float side = sign(eye.x-ferry_center.x);
+		float face = ferry_center.x+side*1.86;
+		float t = (face-p.x)/(abs(ray.x)>.001 ? ray.x : .001);
+		vec2 hit = vec2(-.99+ray.y*t-ferry_center.y,p.y+ray.z*t-ferry_center.z);
+		float band = smoothstep(1.42,1.57,hit.x)*(1.-smoothstep(2.15,2.32,hit.x));
+		float pane = smoothstep(.03,.13,abs(fract((hit.y+4.1)/.82+.5)-.5));
+		float reflection = float(t>0.)*band*(1.-smoothstep(4.,4.24,abs(hit.y)))*pane;
+		EMISSION = dusk*(vec3(.034,.058,.084)*(.75+.25*chop)+vec3(.66,.42,.21)*reflection*(.25+.75*smoothstep(-.5,.8,chop+fine*.38)));
 		ROUGHNESS = .31;
 		METALLIC = .12;
 	}
 	"""
-	var water_finish := ShaderMaterial.new()
 	water_finish.shader = water
 	canal.material_override = water_finish
 	for bank in [55.0,87.0]:
@@ -1066,6 +1080,7 @@ func _update_moorings(delta: float) -> void:
 	if half_trip >= 29.0:
 		crossing = 1.0-crossing
 	ferry.position = Vector3(68,-.97+.024*sin(wave_time*1.1),lerpf(-35.0,-12.0,crossing))
+	water_finish.set_shader_parameter("ferry_center",ferry.position)
 	ferry.rotation.z = .006*sin(wave_time*.88)
 	for berth in moorings:
 		var boat: Node3D = berth.boat
@@ -1236,6 +1251,7 @@ func _update_daylight(delta: float) -> void:
 	var night := 1.0 if time_mode == 1 else (smoothstep(-.4,.4,-cos(day_phase*TAU)) if time_mode == 2 else 0.0)
 	if absf(night-last_night)<.006: return
 	last_night = night
+	water_finish.set_shader_parameter("dusk",night)
 	if saloon_glazing:
 		saloon_glazing.emission_energy_multiplier = night*.85
 	if player_brake_lens:
