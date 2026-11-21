@@ -251,3 +251,4 @@ När snö täcker marken lämnar skoterns drivband spår även under vanlig kör
 Åtgärdat bromsljuset på skotern. Lampan hade en materialtyp som spelet inte kände igen. Verifierade starkare ljus vid broms och återgång när bromsen släpps. Bakpartiet har även lamphus och lyftbåge.
 Bromsljus fungerar nu även för klassikerna, Teslan, bussen, bärgaren, raggarbilen och A-traktorn. Testat ljusstyrka på alla tolv valbara fordon och två trafikmodeller samt att LGF-reflexen är separat.
 Spelarfordonets bromsljus lyser under automatisk väntan vid rött även efter släppt gas. Testat rött till grönt i Godot med fri körbana.
+Körhjälpen bromsar inför parkerade fordon längs färdriktningen med samma fordonsmått som kollisionskontrollen. Vid butikens övergångsställe minskade största farttappet från 5,80 till 0,083 m/s per steg vid 60 Hz. Provade även fri passage vid grönt.

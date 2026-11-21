@@ -486,6 +486,18 @@ func _drive(delta: float) -> void:
 		var end_extent := absf(forward.x)*float(item.length)+absf(forward.z)*float(item.width)
 		var leader_speed := maxf(0,travel_direction.x*float(item.direction)*float(item.speed))
 		stopping_distance = minf(stopping_distance,maxf(0,ahead-leading_reach-end_extent-.65)+leader_speed*leader_speed/10)
+	# Use the same swept footprint as collision detection to approach parked vehicles.
+	var extent := _player_extent()
+	var margin := Vector3(extent.x, 0, extent.y)
+	var lookahead := ambulance.position + travel_direction * (1.0 + speed*speed/10.0 + absf(speed)*delta)
+	for i in parked_cars.size():
+		if not parked_cars[i].visible: continue
+		var bounds := _parked_bounds(i)
+		var wall := AABB(bounds.position - margin, bounds.size + 2 * margin)
+		if wall.has_point(ambulance.position): continue
+		var hit = wall.intersects_segment(ambulance.position, lookahead)
+		if hit != null:
+			stopping_distance = minf(stopping_distance, ambulance.position.distance_to(hit))
 	var assisted_braking := false
 	if stopping_distance < INF:
 		# Reserve the current frame's travel before applying the stopping curve.
@@ -497,7 +509,6 @@ func _drive(delta: float) -> void:
 	if player_brake_lens:
 		_set_rear_lights(player_brake_lens, brake_held or assisted_braking or waiting_for_signal)
 	var step := forward * speed * delta
-	var extent := _player_extent()
 	for item in traffic_data:
 		var obstacle: Node3D = item.actor
 		var offset := ambulance.position - obstacle.position
@@ -537,7 +548,6 @@ func _drive(delta: float) -> void:
 	for i in parked_cars.size():
 		if parked_cars[i].visible:
 			obstacles.append(_parked_bounds(i))
-	var margin := Vector3(extent.x, 0, extent.y)
 	for building in obstacles:
 		var wall := AABB(building.position - margin, building.size + 2 * margin)
 		if wall.has_point(ambulance.position):
