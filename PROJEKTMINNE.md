@@ -226,3 +226,4 @@ Snöskoterns nattljus utgår från de två Blender-modellerade lyktglasen. Båda
 Nattljuset provrenderades i Godot Compatibility på västra huvudgatan med samma kamera och lyktorna tända respektive släckta. Båda ljuskäglorna tillsammans belyser asfalten framför skidorna.
 Skoterföraren sitter nu grensle med böjda knän. Modellen har fotbrädor med grepp på båda sidor. Kontrollerat från sidan i Godot och provkört efter omimport.
 Västra stadsdelens huvudgator och tvärgator har streckade mittlinjer. Alla 185 markeringar kontrollerade över vägbanan och utanför korsningarna i Godot.
+Västra stadsdelen har 75 gatlyktor längs huvudgatorna och tvärgatorna. Verifierat i Godot att alla tänds på natten och släcks på dagen.

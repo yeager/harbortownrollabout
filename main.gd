@@ -1579,6 +1579,13 @@ func _build_lampposts() -> void:
 	for x in [-43,-24,-8,13,34]:
 		sites.append(Vector3(x,0,39.3))
 		sites.append(Vector3(x,0,-52.3))
+	for block_x in [-510,-420,-330,-240,-150]:
+		for avenue_z in [-48,0,35]:
+			for offset in [10,34,57,80]:
+				var verge := 5.65 if offset in [10,57] else -5.65
+				sites.append(Vector3(block_x+offset,0,avenue_z+verge))
+		for side_street_z in [-34,-14,17]:
+			sites.append(Vector3(block_x-5.65,0,side_street_z))
 	for p in sites:
 		_make_box("Lamp post", Vector3(0.16, 4.5, 0.16), p + Vector3(0,2.25,0), Color("#45524e"), false)
 		_make_box("Lamp arm", Vector3(0.85, 0.13, 0.13), p + Vector3(0.34,4.35,0), Color("#45524e"), false)
