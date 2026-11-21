@@ -75,6 +75,7 @@ var taxi_leg := 0
 var passenger: Node3D
 var seat_button: Button
 var vehicle_index := 0
+var activity := OptionButton.new()
 var vehicle_selector: OptionButton
 var camera_turn := 0.0
 var cockpit_view := false
@@ -2640,7 +2641,6 @@ func _build_overlay() -> void:
 	)
 	player_row.add_child(character)
 	player_row.add_child(vehicle_selector)
-	var activity := OptionButton.new()
 	activity.accessibility_name = "Activity"
 	activity.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	activity.add_item("Three missions")
@@ -3031,6 +3031,9 @@ func _refresh_dispatch() -> void:
 func _refresh_ui() -> void:
 	if skipper: skipper.visible = boating and mode == "playing"
 	if not is_instance_valid(mission_label): return
+	var mission_activity := "Taxi fares" if vehicle_index == TAXI else "Roadside recovery" if vehicle_index == RECOVERY else "Three missions"
+	if activity.item_count > 0 and activity.get_item_text(0) != mission_activity:
+		activity.set_item_text(0,mission_activity)
 	_refresh_dispatch()
 	wallet_label.text = tr("%d coins") % wallet
 	light_button.text = "Lights ON" if lights_on else "Lights OFF"

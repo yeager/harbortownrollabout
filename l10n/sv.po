@@ -470,3 +470,9 @@ msgstr "Spårvagnen kör själv och stannar vid varje hållplats."
 
 msgid "Control the speed. The tram follows the rails and stops at each platform."
 msgstr "Du styr farten. Spårvagnen följer rälsen och stannar vid varje hållplats."
+
+msgid "Taxi fares"
+msgstr "Taxikörningar"
+
+msgid "Roadside recovery"
+msgstr "Bärgningsuppdrag"
