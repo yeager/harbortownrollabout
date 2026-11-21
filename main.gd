@@ -1479,6 +1479,20 @@ func _build_city_blocks() -> void:
 	school.position = Vector3(136,-.12,17)
 	building_bounds.append(AABB(Vector3(125,-1,13.2),Vector3(22,10,7.6)))
 	_make_driving_surface("School courtyard",Vector3(22,.12,9),Vector3(136,-.09,9),Color("#aaa198"))
+	# Mark the shared school pickup point from the approaching driver's side.
+	var pickup_post := _make_box("School pickup post",Vector3(.08,1.95,.08),SCHOOL_CURB+Vector3(-3, .97,2.1),Color("#626d72"))
+	var taxi_sign := _make_box("School taxi sign",Vector3(.06,.42,1.02),Vector3.UP*.82,Color("#eac451"),false,pickup_post)
+	for side in [-1,1]:
+		var lettering := Label3D.new()
+		lettering.text = "TAXI"
+		lettering.font_size = 50
+		lettering.pixel_size = .0046
+		lettering.outline_size = 0
+		lettering.modulate = Color("#22282a")
+		lettering.double_sided = false
+		lettering.rotation.y = side*PI/2
+		lettering.position.x = side*.035
+		taxi_sign.add_child(lettering)
 	var school_name := Label3D.new()
 	school_name.text = "SJÖSTADSSKOLAN"
 	school_name.rotation.y = PI
