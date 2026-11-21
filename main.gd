@@ -3376,7 +3376,15 @@ func _refresh_status() -> void:
 	elif mode == "playing" and not paused and walker.visible and _at_target():
 		status_label.text = "Stand here to help" if gentle_driving else "Press Space to help"
 	elif mode == "playing" and not paused and _at_target():
-		if absf(speed) >= .12:
+		if vehicle_index == RECOVERY:
+			var loading := recovery_leg % 2 == 0
+			if absf(speed) >= .12:
+				status_label.text = "Stop here to load the car." if loading else "Stop here to unload the car."
+			elif gentle_driving:
+				status_label.text = "Loading the car …" if loading else "Unloading the car …"
+			else:
+				status_label.text = "Press Space to load the car." if loading else "Press Space to unload the car."
+		elif absf(speed) >= .12:
 			status_label.text = "Stop here to help."
 		else:
 			status_label.text = "Helping …" if gentle_driving else "Press Space to help"

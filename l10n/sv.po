@@ -503,3 +503,21 @@ msgstr "Bra gjort, %s!"
 
 msgid "First-aid supplies delivered to the marina. You earned 10 coins."
 msgstr "Förbandsmaterialet är framme i småbåtshamnen. Du fick 10 mynt."
+
+msgid "Stop here to load the car."
+msgstr "Stanna här för att lasta bilen."
+
+msgid "Stop here to unload the car."
+msgstr "Stanna här för att lasta av bilen."
+
+msgid "Loading the car …"
+msgstr "Lastar bilen …"
+
+msgid "Unloading the car …"
+msgstr "Lastar av bilen …"
+
+msgid "Press Space to load the car."
+msgstr "Tryck på mellanslag för att lasta bilen."
+
+msgid "Press Space to unload the car."
+msgstr "Tryck på mellanslag för att lasta av bilen."
