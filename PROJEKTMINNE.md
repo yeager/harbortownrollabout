@@ -240,3 +240,4 @@ Motorbåtens svall utgår från aktern vid framfart och från fören vid backnin
 Motorbåtens inbromsning mot östra kajgränsen verifierad i Godot med gasen nedtryckt från 9 m/s vid 30, 60 och 120 uppdateringar per sekund. Farten nådde noll vid gränsen och båten kunde backa loss vid alla tre frekvenser.
 En ny båttur startar vid motorbåtens ursprungliga förtöjningsplats med noll fart och rak utombordare. Verifierat genom att köra en tur och starta en ny i samma spelinstans.
 Båtturens startmeny förklarar nu hur vänster och höger musknapp fungerar vid körning. Svenskt språkval och båtinstruktionernas översättning kontrollerade i Godot.
+Skärmpedalerna kan användas med vänster musknapp. Verifierat gas, broms och släpp utanför pedalen via Godots viewport.

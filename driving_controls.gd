@@ -20,6 +20,10 @@ func set_controls(turn: float, accelerating: bool, braking: bool, reversing := f
 		reverse = reversing
 		queue_redraw()
 
+func over_brake_pedal(point: Vector2) -> bool:
+	var base := Vector2(size.x-216,size.y-132)
+	return Rect2(base+Vector2(98,0),Vector2(98,106)).has_point(point)
+
 func _draw() -> void:
 	if show_wheel:
 		var center := Vector2(76,size.y-80)

@@ -101,3 +101,4 @@ In full-speed driving mode, road vehicles can reach twice their former top speed
 The snowmobile is available in the vehicle selector and at the depot. It uses the same driving and braking controls as the cars.
 Off-road, the snowmobile can go faster as snow accumulates. Gentle driving still caps it at 30 km/h.
 Bus route 502 serves six stops, including a passenger pickup at Västra torget and a drop-off at Västerängen.
+You can also hold the left mouse button directly on either on-screen pedal. Release it anywhere to let the pedal up.

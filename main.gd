@@ -131,6 +131,7 @@ var driving_controls := preload("res://driving_controls.gd").new()
 var release_walk_keys := false
 var mouse_gas := false
 var mouse_brake := false
+var brake_pedal_held := false
 var gentle_driving := true
 var waiting_for_signal := false
 var brake_held := false
@@ -257,7 +258,7 @@ func _process(delta: float) -> void:
 		_update_patrol(delta)
 		street_signals.advance(delta)
 		var tram_gas := mouse_gas or Input.is_physical_key_pressed(KEY_W) or Input.is_key_pressed(KEY_UP)
-		var tram_brake := mouse_brake or Input.is_physical_key_pressed(KEY_S) or Input.is_key_pressed(KEY_DOWN)
+		var tram_brake := mouse_brake or brake_pedal_held or Input.is_physical_key_pressed(KEY_S) or Input.is_key_pressed(KEY_DOWN)
 		tram.advance(delta, tram_mode == 2, tram_gas, tram_brake)
 		if tram_mode == 2:
 			driving_controls.set_controls(0,tram_gas and not tram_brake,tram_brake)
@@ -300,12 +301,16 @@ func _input(event: InputEvent) -> void:
 		orbit_angle -= event.relative.x*.007
 		orbit_height = clampf(orbit_height+event.relative.y*.022,-1.8,5)
 	if event is InputEventMouseButton and not event.pressed:
-		if event.button_index == MOUSE_BUTTON_LEFT: mouse_gas = false
+		if event.button_index == MOUSE_BUTTON_LEFT:
+			mouse_gas = false
+			brake_pedal_held = false
 		if event.button_index == MOUSE_BUTTON_RIGHT: mouse_brake = false
 
 func _unhandled_input(event: InputEvent) -> void:
 	if mode == "playing" and not paused and (tram_mode == 2 or (tram_mode == 0 and (boating or not walker.visible))) and event is InputEventMouseButton and event.pressed:
-		if event.button_index == MOUSE_BUTTON_LEFT: mouse_gas = true
+		if event.button_index == MOUSE_BUTTON_LEFT:
+			brake_pedal_held = driving_controls.over_brake_pedal(driving_controls.get_global_transform_with_canvas().affine_inverse() * event.position)
+			mouse_gas = not brake_pedal_held
 		if event.button_index == MOUSE_BUTTON_RIGHT: mouse_brake = true
 
 func _notification(what: int) -> void:
@@ -317,6 +322,7 @@ func _notification(what: int) -> void:
 	if what == NOTIFICATION_APPLICATION_FOCUS_OUT:
 		mouse_gas = false
 		mouse_brake = false
+		brake_pedal_held = false
 		if mode == "playing" and not paused:
 			_toggle_pause()
 
@@ -369,7 +375,7 @@ func _update_patrol(delta: float) -> void:
 
 func _drive_launch(delta: float) -> void:
 	var gas := mouse_gas or Input.is_action_pressed("ui_up") or Input.is_physical_key_pressed(KEY_W)
-	var brake := mouse_brake or Input.is_action_pressed("ui_down") or Input.is_physical_key_pressed(KEY_S)
+	var brake := mouse_brake or brake_pedal_held or Input.is_action_pressed("ui_down") or Input.is_physical_key_pressed(KEY_S)
 	var turn := Input.get_axis("ui_left","ui_right")
 	if Input.is_physical_key_pressed(KEY_A): turn=-1
 	if Input.is_physical_key_pressed(KEY_D): turn=1
@@ -412,7 +418,7 @@ func _drive(delta: float) -> void:
 		release_walk_keys = _walk_pedal_pressed()
 		throttle = 0.0
 	if mouse_gas: throttle = 1.0
-	if mouse_brake: throttle = -1.0
+	if mouse_brake or brake_pedal_held: throttle = -1.0
 	if Input.is_key_pressed(KEY_A): steer_input = -1.0
 	if Input.is_key_pressed(KEY_D): steer_input = 1.0
 	var max_speed := 250.0 / 3.6 if vehicle_index == 3 else 11.0
@@ -425,7 +431,7 @@ func _drive(delta: float) -> void:
 	if gentle_driving:
 		max_speed = 30.0 / 3.6
 		acceleration = 6.0 if is_zero_approx(throttle) else minf(acceleration, 2.8)
-	if mouse_brake or (throttle < 0.0 and speed > 0.0):
+	if mouse_brake or brake_pedal_held or (throttle < 0.0 and speed > 0.0):
 		brake_held = true
 	elif throttle >= 0.0:
 		brake_held = false
@@ -1931,6 +1937,7 @@ func _change_seat() -> void:
 		steering = 0
 		mouse_gas = false
 		mouse_brake = false
+		brake_pedal_held = false
 		_end_skid()
 		parked_sound_settings[vehicle_index] = sound_on
 		parked_light_settings[vehicle_index] = lights_on
