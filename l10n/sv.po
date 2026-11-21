@@ -614,3 +614,6 @@ msgstr "Grafikinställningarna kunde inte sparas."
 
 msgid "The ducks voted. They love your jacket!"
 msgstr "Änderna har röstat. De älskar din jacka!"
+
+msgid "Snowmobile"
+msgstr "Snöskoter"

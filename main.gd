@@ -6,9 +6,9 @@ const TARGET_NAMES := ["Help at the square", "Pick up the medic", "Deliver first
 const ROAD_HALF := 4.8
 const VEHICLE_NAMES := ["Ambulance", "Police car", "Fire engine"]
 const VEHICLE_SCENES := ["res://vehicles/ambulance.glb", "res://vehicles/polisbil.glb", "res://vehicles/brandbil.glb"]
-const VEHICLE_NAMES_ALL := ["Ambulance", "Police car", "Fire engine", "BMW X5 M60i", "Taxi", "Recovery truck", "BMW M3 E30", "Volvo 240", "Saab 96", "Tesla Model S", "City bus"]
-const VEHICLE_SCENES_ALL := ["res://vehicles/ambulance.glb", "res://vehicles/polisbil.glb", "res://vehicles/brandbil.glb", "res://vehicles/bmw_x5_m60i.glb", "res://vehicles/taxi.glb", "res://vehicles/bargare.glb", "res://vehicles/m3_e30.glb", "res://vehicles/volvo240.glb", "res://vehicles/saab96.glb", "res://vehicles/model_s.glb", "res://vehicles/city_bus.glb"]
-const SIREN_SOUNDS := ["res://audio/siren_ambulance.wav", "res://audio/siren_police.wav", "res://audio/siren_fire.wav", "res://audio/bmw_engine.wav", "res://audio/bmw_engine.wav", "res://audio/bmw_engine.wav", "res://audio/bmw_engine.wav", "res://audio/bmw_engine.wav", "res://audio/bmw_engine.wav", "res://audio/electric_drive.wav", "res://audio/bmw_engine.wav"]
+const VEHICLE_NAMES_ALL := ["Ambulance", "Police car", "Fire engine", "BMW X5 M60i", "Taxi", "Recovery truck", "BMW M3 E30", "Volvo 240", "Saab 96", "Tesla Model S", "City bus", "Snowmobile"]
+const VEHICLE_SCENES_ALL := ["res://vehicles/ambulance.glb", "res://vehicles/polisbil.glb", "res://vehicles/brandbil.glb", "res://vehicles/bmw_x5_m60i.glb", "res://vehicles/taxi.glb", "res://vehicles/bargare.glb", "res://vehicles/m3_e30.glb", "res://vehicles/volvo240.glb", "res://vehicles/saab96.glb", "res://vehicles/model_s.glb", "res://vehicles/city_bus.glb", "res://vehicles/snowmobile.glb"]
+const SIREN_SOUNDS := ["res://audio/siren_ambulance.wav", "res://audio/siren_police.wav", "res://audio/siren_fire.wav", "res://audio/bmw_engine.wav", "res://audio/bmw_engine.wav", "res://audio/bmw_engine.wav", "res://audio/bmw_engine.wav", "res://audio/bmw_engine.wav", "res://audio/bmw_engine.wav", "res://audio/electric_drive.wav", "res://audio/bmw_engine.wav", "res://audio/bmw_engine.wav"]
 const BUILDING_SCENES := {"Sjukhuset":"res://environment/sjukhus.glb", "Polisstationen":"res://environment/polisstation.glb", "Bageriet":"res://environment/bageri.glb", "Vårdcentralen":"res://environment/vardcentral.glb", "Brandstationen":"res://environment/brandstation.glb", "Biblioteket":"res://environment/bibliotek.glb"}
 const TREE_SCENES := ["res://environment/lovtrad.glb", "res://environment/gran.glb", "res://environment/bredkronigt_lovtrad.glb"]
 
@@ -65,6 +65,7 @@ var crossing_direction := 1.0
 var walk_phase := 0.0
 var entry_marker := Label3D.new()
 const BUS := 10
+const SNOWMOBILE := 11
 const SCHOOL := 3
 const SCHOOL_CURB := Vector3(136,0,3)
 const SCHOOL_GATE := Vector3(136,0,7)
@@ -75,7 +76,7 @@ var bus_board: Label3D
 const BUS_STOP_NAMES := ["TORGET","VÅRDCENTRALEN","SMÅBÅTSHAMNEN","SJÖSTADSSKOLAN"]
 var bus_leg := 0
 const TAXI := 4
-const HORNS := ["ambulance","police","fire","bmw","taxi","recovery", "m3_e30", "volvo240", "saab96", "model_s", "city_bus"]
+const HORNS := ["ambulance","police","fire","bmw","taxi","recovery", "m3_e30", "volvo240", "saab96", "model_s", "city_bus","snowmobile"]
 var horn := AudioStreamPlayer.new()
 var radio_button: Button
 var radio := AudioStreamPlayer.new()
@@ -146,9 +147,9 @@ var parked_at_target := 0.0
 var mode := "menu"
 var paused := false
 var lights_on := false
-var parked_light_settings: Array[bool] = [false, false, false, false, false, false, false, false, false, false, false]
+var parked_light_settings: Array[bool] = [false, false, false, false, false, false, false, false, false, false, false, false]
 var sound_on := true
-var parked_sound_settings: Array[bool] = [false, false, false, true, true, true, true, true, true, true, true]
+var parked_sound_settings: Array[bool] = [false, false, false, true, true, true, true, true, true, true, true, true]
 var siren_player: AudioStreamPlayer
 var ui: CanvasLayer
 var jacket_palette := -1
@@ -414,8 +415,8 @@ func _drive(delta: float) -> void:
 	var max_speed := 250.0 / 3.6 if vehicle_index == 3 else 11.0
 	var acceleration := lerpf(8.0, 2.3, clampf(speed / max_speed, 0.0, 1.0)) if vehicle_index == 3 else 7.2
 	if vehicle_index >= 6:
-		max_speed = [53.0, 10.0, 8.5, 64.0, 12.0][vehicle_index-6]
-		acceleration = [7.8, 2.2, 1.8, 10.0, 2.6][vehicle_index-6]
+		max_speed = [53.0, 10.0, 8.5, 64.0, 12.0, 16.0][vehicle_index-6]
+		acceleration = [7.8, 2.2, 1.8, 10.0, 2.6, 5.2][vehicle_index-6]
 	if not gentle_driving:
 		max_speed *= 2.0
 	if gentle_driving:
@@ -440,7 +441,7 @@ func _drive(delta: float) -> void:
 	for knuckle in front_knuckles:
 		knuckle.rotation.y = -steering * deg_to_rad(33.0)
 	driving_controls.set_controls(steering, throttle > 0, brake_held, throttle < 0 and not brake_held)
-	var wheelbase: float = [3.7, 2.75, 4.1, 2.975, 2.85, 4.0, 2.56, 2.64, 2.46, 2.96, 6.06][vehicle_index]
+	var wheelbase: float = [3.7, 2.75, 4.1, 2.975, 2.85, 4.0, 2.56, 2.64, 2.46, 2.96, 6.06, 1.65][vehicle_index]
 	var yaw_rate := speed * tan(steering * deg_to_rad(33.0)) / wheelbase
 	# Limit lateral acceleration at speed while retaining tight parking turns.
 	var max_yaw_rate := 8.0 / maxf(absf(speed), 1.0)
@@ -1335,6 +1336,10 @@ func _build_city_blocks() -> void:
 	for p in [Vector3(25, 0, 12), Vector3(35, 0, 12), Vector3(25, 0, 20), Vector3(35, 0, 20)]:
 		_make_box("Planter", Vector3(1.3, 0.35, 1.3), p + Vector3(0, 0.15, 0), Color("#697f58"), true)
 		_make_tree(p, 0.9, "", 0.325)
+	for x in [29.25,30.75]:
+		for z in [21.54,21.86]:
+			_make_box("Bench leg",Vector3(.075,.51,.075),Vector3(x,.28,z),Color("#434e4b"))
+		_make_box("Seat support",Vector3(.10,.07,.46),Vector3(x,.51,21.7),Color("#434e4b"))
 	_make_box("Bench seat", Vector3(2.0, 0.18, 0.45), Vector3(30, 0.6, 21.7), Color("#80664c"), true)
 	for i in 3:
 		_make_box("Paint swatch",Vector3(.18,.015,.23),Vector3(29.75+.22*i,.70,21.7),BENCH_COLOURS[i])
@@ -1586,7 +1591,7 @@ func _pose_driver_arms() -> void:
 	var arms: Array = road_driver.get_meta("arms")
 	for index in arms.size():
 		var shoulder: Node3D = arms[index]
-		var grip := cabin_wheel.to_global(Vector3.RIGHT * grip_radius * (-1 if index == 0 else 1))
+		var grip := ambulance.to_global(Vector3((-.29 if index == 0 else .29),1.18,-.35)) if vehicle_index == SNOWMOBILE else cabin_wheel.to_global(Vector3.RIGHT * grip_radius * (-1 if index == 0 else 1))
 		var reach := road_driver.to_local(grip) - shoulder.position
 		# Bend the elbow down and slightly out, keeping the wrist on the rim.
 		var axis := reach.normalized()
@@ -1608,6 +1613,7 @@ func _fit_driver_sleeve(sleeve: MeshInstance3D, start: Vector3, end: Vector3) ->
 	sleeve.scale.y = (segment.length() + .045) / .65
 
 func _depot_position(i: int) -> Vector3:
+	if i == SNOWMOBILE: return Vector3(-41,-.13,23)
 	if i == RECOVERY: return Vector3(-45,-.13,25)
 	if i >= 6: return Vector3(-14-(i-6)*5,-.13,28)
 	return Vector3(-47+5*i,-.13,15)
@@ -2266,14 +2272,15 @@ func _make_walker(label: String, start_x: float, lane_z: float, direction: float
 		leg_pivot.position = Vector3(side * 0.115, 0.77, 0)
 		person.add_child(leg_pivot)
 		var leg := MeshInstance3D.new()
-		var leg_mesh := CapsuleMesh.new()
-		leg_mesh.radius = 0.095
-		leg_mesh.height = 0.78
-		leg.mesh = leg_mesh
+		leg.mesh = preload("res://characters/Trouser.obj")
 		leg.position.y = -0.36
 		leg.material_override = _material(trousers, 0.94)
 		leg_pivot.add_child(leg)
-		_make_box("Shoe",Vector3(.17,.105,.27),Vector3(0,-.695,-.045),Color("#484443"),false,leg_pivot)
+		var shoe := MeshInstance3D.new()
+		shoe.mesh = preload("res://characters/Trainer.obj")
+		shoe.position = Vector3(0,-.695,-.025)
+		shoe.material_override = _material(Color("#484443"),.84)
+		leg_pivot.add_child(shoe)
 		var arm_pivot := Node3D.new()
 		arm_pivot.position = Vector3(side * 0.22, 1.38, 0)
 		person.add_child(arm_pivot)
@@ -2281,10 +2288,17 @@ func _make_walker(label: String, start_x: float, lane_z: float, direction: float
 		var arm_mesh := CapsuleMesh.new()
 		arm_mesh.radius = 0.075
 		arm_mesh.height = 0.65
-		arm.mesh = arm_mesh
-		arm.position.y = -0.29
+		arm.mesh = arm_mesh if label == "BMW driver" else preload("res://characters/Sleeve.obj")
+		arm.position.y = -.29 if label == "BMW driver" else -.20
 		arm.material_override = _material(shirt, 0.9)
 		arm_pivot.add_child(arm)
+		if label != "BMW driver":
+			var palm := MeshInstance3D.new()
+			palm.mesh = head_mesh
+			palm.scale = Vector3(.22,.47,.29)
+			palm.position = Vector3(0,-.49,-.025)
+			palm.material_override = head.material_override
+			arm_pivot.add_child(palm)
 		if not person.has_meta("legs"): person.set_meta("legs", [])
 		if not person.has_meta("arms"): person.set_meta("arms", [])
 		person.get_meta("legs").append(leg_pivot)
@@ -3301,7 +3315,7 @@ func _start_game() -> void:
 	phone.messages.clear()
 	phone.unread=0
 	phone.handset.hide()
-	parked_sound_settings.assign([false, false, false, true, true, true, true, true, true, true, true])
+	parked_sound_settings.assign([false, false, false, true, true, true, true, true, true, true, true, true])
 	parked_light_settings.fill(false)
 	mode = "playing"
 	paused = false
@@ -3506,7 +3520,8 @@ func _refresh_dispatch() -> void:
 
 func _refresh_ui() -> void:
 	if road_driver:
-		road_driver.visible = vehicle_index == 3 and mode == "playing" and not walker.visible and not boating and tram_mode == 0 and not cockpit_view
+		road_driver.position = Vector3(0,.82-.77*road_driver.scale.y,.18) if vehicle_index==SNOWMOBILE else Vector3(-.32,.88-.87*road_driver.scale.y,-.04)
+		road_driver.visible = vehicle_index in [3,SNOWMOBILE] and mode == "playing" and not walker.visible and not boating and tram_mode == 0 and not cockpit_view
 	if skipper: skipper.visible = boating and mode == "playing"
 	if not is_instance_valid(mission_label): return
 	var mission_activity := "Bus route 502" if vehicle_index==BUS else "Taxi fares" if vehicle_index == TAXI else "Roadside recovery" if vehicle_index == RECOVERY else "Three missions"
