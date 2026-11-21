@@ -227,7 +227,7 @@ func _process(delta: float) -> void:
 	water_finish.set_shader_parameter("rain",weather.intensity.x)
 	city_env.sky.sky_material.set_shader_parameter("overcast",maxf(weather.intensity.x,weather.intensity.y))
 	_update_daylight(delta)
-	if message_timer > 0.0:
+	if not paused and message_timer > 0.0:
 		message_timer = maxf(0.0, message_timer - delta)
 	if mode == "playing" and not paused:
 		_update_patrol(delta)
@@ -3400,7 +3400,9 @@ func _refresh_status() -> void:
 			dash_speed.text = reading
 	arrival_progress.visible = mode == "playing" and not paused and not free_drive and parked_at_target > 0.0
 	arrival_progress.value = parked_at_target
-	if tram_mode > 0 and mode == "playing" and not paused:
+	if paused:
+		status_label.text = "Paused — take your time."
+	elif tram_mode > 0 and mode == "playing":
 		if tram.dwell > 0:
 			var station: String = tram.STATION_NAMES[posmod(tram.next_stop-1,tram.stops.size())]
 			status_label.text = tr("%s · Departure in %d s") % [station,ceili(tram.dwell)]
@@ -3435,8 +3437,6 @@ func _refresh_status() -> void:
 		status_label.text = "Waiting for a green light"
 	elif walker.visible and not boating and not paused:
 		status_label.text = "Walk with WASD or arrows · F to enter a vehicle"
-	elif paused:
-		status_label.text = "Paused — take your time."
 	else:
 		status_label.text = tr("Speed  %02d km/h") % roundi(absf(launch_speed if boating else speed) * 3.6)
 
