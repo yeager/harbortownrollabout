@@ -1344,6 +1344,18 @@ func _build_marina() -> void:
 	saloon_glazing.emission = Color("#ffcc8c")
 	windows.material_override = saloon_glazing
 	for landing_z in FERRY_LANDINGS:
+		var sign_base := Vector3(54.55,0,landing_z+1.35)
+		_make_box("Landing signpost",Vector3(.07,2.35,.07),sign_base+Vector3.UP*.98,Color("#646e70"))
+		_make_box("Ferry stop sign",Vector3(.09,.58,1.48),sign_base+Vector3.UP*2.05,Color("#12385b"))
+		for side in [-1,1]:
+			var sign_text := Label3D.new()
+			sign_text.text = "LOTTEN"
+			sign_text.font_size = 48
+			sign_text.pixel_size = .007
+			sign_text.outline_size = 0
+			sign_text.position = sign_base+Vector3(side*.051,2.05,0)
+			sign_text.rotation.y = side*PI*.5
+			add_child(sign_text)
 		_pier_section("Ferry landing",Vector3(2.0,.20,7.5),Vector3(64.9,-.76,landing_z),Color("#847968"))
 		for tread in 4:
 			var height := -.18-.12*tread
