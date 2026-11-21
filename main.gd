@@ -157,6 +157,7 @@ var moorings: Array[Dictionary] = []
 var street_signals := preload("res://street_signals.gd").new()
 var tram := preload("res://tram.gd").new()
 var boating := false
+var skipper: Node3D
 var launch: Node3D
 var outboard: Node3D
 var launch_speed := 0.0
@@ -1357,11 +1358,13 @@ func _build_lampposts() -> void:
 		street_lights.append(light)
 
 func _apply_player_appearance() -> void:
-	walker.scale = Vector3.ONE*(.88 if play_as_alma else 1.0)
-	walker.get_node("Ponytail").visible=play_as_alma
-	walker.get_node("Jacket").material_override=_material(Color("#a85641") if play_as_alma else Color("#648faa"))
-	for arm in walker.get_meta("arms"):
-		arm.get_child(0).material_override=walker.get_node("Jacket").material_override
+	var jacket := _material(Color("#a85641") if play_as_alma else Color("#648faa"))
+	for figure: Node3D in [walker,skipper]:
+		figure.scale = Vector3.ONE*(.88 if play_as_alma else 1.0)
+		figure.get_node("Ponytail").visible = play_as_alma
+		figure.get_node("Jacket").material_override = jacket
+		for arm in figure.get_meta("arms"):
+			arm.get_child(0).material_override = jacket
 
 func _build_depot() -> void:
 	_make_driving_surface("Motor pool", Vector3(23,.1,11), Vector3(-38,-.18,15), Color("#565c5a"))
@@ -1412,6 +1415,17 @@ func _build_depot() -> void:
 	ponytail.rotation.x=-.23
 	ponytail.material_override=_material(Color("#523b30"))
 	walker.add_child(ponytail)
+	_make_walker("Helmsperson",0,0,1,Color("#648faa"),Color("#30414d"))
+	skipper = walker_data.pop_back().actor
+	skipper.reparent(launch,false)
+	skipper.rotation = Vector3.ZERO
+	skipper.position = Vector3(-.21,-.16,.56)
+	skipper.add_child(ponytail.duplicate())
+	for leg in skipper.get_meta("legs"):
+		leg.rotation.x = .86
+	for arm in skipper.get_meta("arms"):
+		arm.rotation.x = 1.16
+	skipper.hide()
 	_apply_player_appearance()
 	walker.visible = false
 	entry_marker.name = "AvailableVehicle"
@@ -2966,6 +2980,7 @@ func _refresh_dispatch() -> void:
 		phone.receive(dispatch)
 
 func _refresh_ui() -> void:
+	if skipper: skipper.visible = boating and mode == "playing"
 	if not is_instance_valid(mission_label): return
 	_refresh_dispatch()
 	wallet_label.text = tr("%d coins") % wallet

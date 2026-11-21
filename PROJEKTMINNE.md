@@ -85,3 +85,5 @@ Spelprojektet publiceras i det privata GitHub-repot yeager/axels-emergency-vehic
 - Motorbåten saktar in mjukt mot farområdets gräns. Med gas och roder kan spelaren svänga tillbaka även från stillastående. Infart och återstart vid norra bojlinjen är testade i Godot.
 
 - Motorbåtens utombordare har ett styrfäste i Blendermodellen. Motorkåpa, växelhus och propellernav svänger tillsammans i Godot och centreras när styrningen släpps.
+
+- Motorbåten har nu en sittande förare bakom styrpulpeten som följer spelarvalet Axel eller Alma. Alma kontrollerades i renderad Godot-vy under båtkörning.
