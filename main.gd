@@ -1990,9 +1990,11 @@ func _update_pedestrians(delta: float) -> void:
 			greeting.visible = true
 			greeting_timer = 7.5
 			item.greeted = true
-			var voices := DisplayServer.tts_get_voices_for_language(TranslationServer.get_locale().left(2))
-			if not voices.is_empty():
-				DisplayServer.tts_speak(phrase,voices[0],65)
+			if not AudioServer.is_bus_mute(0):
+				var voices := DisplayServer.tts_get_voices_for_language(TranslationServer.get_locale().left(2))
+				if not voices.is_empty():
+					var level := roundi(65 * db_to_linear(AudioServer.get_bus_volume_db(0)))
+					DisplayServer.tts_speak(phrase,voices[0],clampi(level,0,100))
 		if walker.position.distance_to(person.position)>8:
 			item.greeted = false
 		var direction: float = item["direction"]
@@ -2971,6 +2973,8 @@ func _set_game_volume(percent: float) -> void:
 
 func _apply_game_volume(percent: float) -> void:
 	AudioServer.set_bus_mute(0, percent <= 0)
+	if percent <= 0 and DisplayServer.tts_is_speaking():
+		DisplayServer.tts_stop()
 	if percent > 0:
 		AudioServer.set_bus_volume_db(0, linear_to_db(percent / 100.0))
 
