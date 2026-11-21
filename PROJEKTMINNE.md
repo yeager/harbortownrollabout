@@ -313,3 +313,4 @@ Den första inlämnade bilen står kvar på verkstaden även medan nästa bil li
 - Samma vintervy med ambulansen och helt snötäcke kontrollerades visuellt i Mobile och Forward+ på Radeon Renoir med Vulkan i Godot 4.6.3. Uppdragspilar, ratt och pedaler syns även där. Detta kontrollerar scenens utseende på den här datorn.
 - Gas och broms har varsin fast färg och form även i viloläge. En tryckt pedal sänks och får en ljus ram. Viloläget kontrollerat visuellt i följkameran.
 - Båtens backpedal visar höger musknapp vid backning och släpps visuellt när båten glider bakåt. Båda tillstånden verifierade i Godot 4.6.3.
+- Landfordon bromsar inför båda kajkanterna med karossens mått och kan inte vrida ut hörnen över vattenytan. Kontrollerat med ambulansen mot båda stränderna samt fri passage på båda broarna i Godot 4.6.3.

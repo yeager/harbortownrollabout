@@ -534,7 +534,14 @@ func _drive(delta: float) -> void:
 	var yaw_rate := speed * tan(steering * deg_to_rad(33.0)) / wheelbase
 	# Limit lateral acceleration at speed while retaining tight parking turns.
 	var max_yaw_rate := 8.0 / maxf(absf(speed), 1.0)
+	var previous_extent := _player_extent()
 	ambulance.rotate_y(-clampf(yaw_rate, -max_yaw_rate, max_yaw_rate) * delta)
+	var extent := _player_extent()
+	for span in OPEN_WATER:
+		if _shore_overlap(span, ambulance.position, extent) > _shore_overlap(span, ambulance.position, previous_extent):
+			ambulance.basis = previous_pose.basis
+			extent = previous_extent
+			break
 	var forward := -ambulance.global_transform.basis.z
 	var travel_direction := forward * signf(speed)
 	var leading_reach := rear_reach if speed<0 else front_reach
@@ -562,7 +569,6 @@ func _drive(delta: float) -> void:
 		var leader_speed := maxf(0,travel_direction.x*float(item.direction)*float(item.speed))
 		stopping_distance = minf(stopping_distance,maxf(0,ahead-leading_reach-end_extent-.65)+leader_speed*leader_speed/10)
 	# Use the same swept footprint as collision detection to approach parked vehicles.
-	var extent := _player_extent()
 	var margin := Vector3(extent.x, 0, extent.y)
 	var lookahead := ambulance.position + travel_direction * (1.0 + speed*speed/10.0 + absf(speed)*delta)
 	for i in parked_cars.size():
@@ -573,6 +579,18 @@ func _drive(delta: float) -> void:
 		var hit = wall.intersects_segment(ambulance.position, lookahead)
 		if hit != null:
 			stopping_distance = minf(stopping_distance, ambulance.position.distance_to(hit))
+	# Stop with the bumper on dry ground, including when approaching in reverse.
+	for span in OPEN_WATER:
+		var water := AABB(Vector3(55 - extent.x, -10, span.x - extent.y),
+			Vector3(32 + 2*extent.x, 20, span.y - span.x + 2*extent.y))
+		if water.has_point(ambulance.position):
+			var depth := _shore_overlap(span, ambulance.position, extent)
+			if _shore_overlap(span, ambulance.position + travel_direction*.01, extent) >= depth:
+				stopping_distance = 0
+		else:
+			var hit = water.intersects_segment(ambulance.position, lookahead)
+			if hit != null:
+				stopping_distance = minf(stopping_distance, ambulance.position.distance_to(hit))
 	var assisted_braking := false
 	if stopping_distance < INF:
 		# Reserve the current frame's travel before applying the stopping curve.
@@ -635,14 +653,6 @@ func _drive(delta: float) -> void:
 		var contact = wall.intersects_segment(ambulance.position, ambulance.position + step)
 		if contact != null:
 			step = step.limit_length(maxf(0.0, ambulance.position.distance_to(contact) - 0.02))
-			speed = 0.0
-	# Sweep the car footprint against the three open-water spans between bridges.
-	for banks in [Vector2(-90,-52.9), Vector2(-43.1,-4.9), Vector2(4.9,82)]:
-		var water := AABB(Vector3(55.0 - extent.x, -2, banks.x - extent.y),
-			Vector3(32.0 + 2 * extent.x, 4, banks.y - banks.x + 2 * extent.y))
-		var hit = water.intersects_segment(ambulance.position, ambulance.position + step)
-		if hit != null and not water.has_point(ambulance.position):
-			step = step.limit_length(maxf(0, ambulance.position.distance_to(hit) - 0.02))
 			speed = 0.0
 	var destination := ambulance.position + step
 	var pos := destination
@@ -2325,6 +2335,13 @@ func _vehicle_half_size(actor: Node3D, model: Node3D) -> Vector2:
 		front_reach = -bounds.position.z
 		rear_reach = bounds.end.z
 	return Vector2(maxf(-bounds.position.x, bounds.end.x), maxf(-bounds.position.z, bounds.end.z))
+
+const OPEN_WATER := [Vector2(-93,-52.9), Vector2(-43.1,-4.9), Vector2(4.9,81)]
+
+func _shore_overlap(span: Vector2, point: Vector3, extent: Vector2) -> float:
+	var across := minf(point.x - 55 + extent.x, 87 - point.x + extent.x)
+	var along := minf(point.z - span.x + extent.y, span.y - point.z + extent.y)
+	return maxf(0, minf(across, along))
 
 func _player_extent() -> Vector2:
 	var heading := ambulance.transform.basis.z.abs()
