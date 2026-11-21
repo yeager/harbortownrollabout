@@ -4193,8 +4193,10 @@ func _noise_material(dark_color: Color, light_color: Color, frequency: float, st
 		float grain = mix(noise(p * 12.), .5, smoothstep(.25, 1., footprint * 12.));
 		ALBEDO = mix(dark_color.rgb, light_color.rgb, clamp(0.5 + (broad - 0.5) * strength * 3.0 + (grain - 0.5) * strength * 0.4, 0.0, 1.0));
 		ALBEDO *= 1.0 - wet*.42;
-		ALBEDO = mix(ALBEDO,vec3(.73,.81,.85),snow_cover*smoothstep(.15,.68,broad));
-		ROUGHNESS = mix(.92,.23,wet);
+		float coverage = smoothstep(.12, .92, snow_cover + (broad - .5) * .65);
+		coverage *= smoothstep(0., .22, snow_cover);
+		ALBEDO = mix(ALBEDO,vec3(.73,.81,.85) * (.90 + .10 * grain),coverage);
+		ROUGHNESS = mix(mix(.92,.23,wet),.94,coverage);
 	}
 	"""
 	var material := ShaderMaterial.new()

@@ -308,3 +308,4 @@ Den första inlämnade bilen står kvar på verkstaden även medan nästa bil li
 - Slask kombinerar halsduk, regnhatt och regnkrage. Plaggens synlighet vid slask, snö, regn och uppehåll kontrollerades i Godot 4.6.3.
 - Automatiskt väder behåller den manuella prognosen i fem spelminuter även vid ovanligt årstidsväder. Testat med sommarsnö och gradvis upptining i Godot 4.6.3.
 - Regnstrimmor följer fallriktningen och sexkantiga snöflingor varierar i storlek. Partiklarnas livslängd täcker även hög följkamera. Vädertest kört utan grafik i Godot 4.6.3, visuell kontroll återstår.
+- Visuell kontroll från ambulansens följkamera i Compatibility visade mörka fläckar även vid fullt snötäcke. Snön täcker nu vägbanan successivt och har matt yta vid full täckning. Jämfört före och efter i samma vy.
