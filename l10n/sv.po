@@ -728,3 +728,6 @@ msgstr "Eleven sitter i taxin."
 
 msgid "Thanks! I can see my school!"
 msgstr "Tack! Jag ser min skola!"
+
+msgid "1 coin"
+msgstr "1 mynt"

@@ -229,7 +229,8 @@ func eat_snack(product: String) -> void:
 		first_product.grab_focus()
 
 func refresh_basket() -> void:
-	balance.text = tr("Wallet") + " · " + (tr("%d coins") % get_parent().wallet)
+	var coins: int = get_parent().wallet
+	balance.text = tr("Wallet") + " · " + (tr("1 coin") if coins == 1 else tr("%d coins") % coins)
 	var lines := PackedStringArray()
 	var purchases: Dictionary = get_parent().purchases
 	for product in snack_buttons:
