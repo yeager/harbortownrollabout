@@ -312,3 +312,4 @@ Den första inlämnade bilen står kvar på verkstaden även medan nästa bil li
 - Snö och väta påverkar nu även målade körfält, cykelbanekanter, övergångsställen och parkeringsrutor. Kontrollerat fullt snötäcke från följkameran i Godot Compatibility.
 - Samma vintervy med ambulansen och helt snötäcke kontrollerades visuellt i Mobile och Forward+ på Radeon Renoir med Vulkan i Godot 4.6.3. Uppdragspilar, ratt och pedaler syns även där. Detta kontrollerar scenens utseende på den här datorn.
 - Gas och broms har varsin fast färg och form även i viloläge. En tryckt pedal sänks och får en ljus ram. Viloläget kontrollerat visuellt i följkameran.
+- Båtens backpedal visar höger musknapp vid backning och släpps visuellt när båten glider bakåt. Båda tillstånden verifierade i Godot 4.6.3.

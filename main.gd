@@ -483,7 +483,7 @@ func _drive_launch(delta: float) -> void:
 	if absf(next.x-bounded.x)+absf(next.z-bounded.z)>.0001: launch_speed=0
 	launch.position=bounded
 	launch.rotation.z=lerpf(launch.rotation.z,-turn*absf(launch_speed)*.012,1-exp(-3*delta))
-	driving_controls.set_controls(turn,gas and not brake,brake,launch_speed<-.1)
+	driving_controls.set_controls(turn,gas and not brake,brake,reverse_requested and launch_speed<-.1)
 
 func _walk_pedal_pressed() -> bool:
 	return Input.is_action_pressed("ui_up") or Input.is_action_pressed("ui_down") or Input.is_key_pressed(KEY_W) or Input.is_key_pressed(KEY_S)

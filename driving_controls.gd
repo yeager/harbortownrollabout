@@ -38,7 +38,7 @@ func _draw() -> void:
 	var base := Vector2(size.x-216,size.y-132)
 	draw_style_box(_panel,Rect2(base,Vector2(196,106)))
 	_draw_pedal(base+Vector2(48,39),true,gas,tr("Gas"),tr("Left"))
-	_draw_pedal(base+Vector2(148,39),false,brake or reverse,tr("Reverse") if reverse else tr("Brake"),"S / ↓" if reverse else tr("Right"))
+	_draw_pedal(base+Vector2(148,39),false,brake or reverse,tr("Reverse") if reverse else tr("Brake"),"S / ↓" if reverse and not brake else tr("Right"))
 
 var _panel := StyleBoxFlat.new()
 
@@ -62,7 +62,7 @@ func _draw_pedal(center: Vector2, narrow: bool, pressed: bool, label: String, bu
 	draw_string(ThemeDB.fallback_font,center+Vector2(-46,38),label,HORIZONTAL_ALIGNMENT_CENTER,92,17,ink)
 	draw_string(ThemeDB.fallback_font,center+Vector2(-11,57),button,HORIZONTAL_ALIGNMENT_LEFT,58,13,ink)
 
-	if reverse and not narrow:
+	if reverse and not brake and not narrow:
 		return
 	var mouse := center + Vector2(-24,52)
 	draw_arc(mouse,8,0,TAU,32,ink,1.5,true)
