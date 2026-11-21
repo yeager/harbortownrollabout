@@ -3228,11 +3228,9 @@ func _update_mission_marker() -> void:
 	arriving_passenger.scale = Vector3.ONE*(.72 if vehicle_index==TAXI and taxi_leg>=2 and _school_fare(taxi_leg-1) else 1.0)
 	for i in bus_companions.size():
 		var companion := bus_companions[i]
-		companion.visible = vehicle_index==BUS and not free_drive and (passenger.visible or arriving_passenger.visible)
+		var leader := passenger if i==0 else arriving_passenger
+		companion.visible = vehicle_index==BUS and not free_drive and leader.visible
 		if companion.visible:
-			var leader := passenger if passenger.visible and not arriving_passenger.visible else arriving_passenger
-			# At the next pickup, split the group between the two stops.
-			if passenger.visible and i==0: leader=passenger
 			companion.transform = leader.transform
 			companion.translate_object_local(Vector3(-1.1 if i==0 else 1.1,0,0))
 			companion.position.y = _foot_height(companion.position.x,companion.position.z)

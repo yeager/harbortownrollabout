@@ -302,3 +302,4 @@ Grafisk kontroll av publicerad spelkod i Godot 4.6.3 vid 960×600: Compatibility
 Öppen telefon frigör muspedalerna så att klick under SMS-läsning inte gasar eller bromsar. Verifierat med vänster och höger musknapp före, under och efter telefonvyn i Godot.
 Mittenknappsdrag håller nu kameran stilla när telefonen eller butikens köpmeny är öppen. Testade att drag åter vrider kameran efter båda vyerna i Godot 4.6.3.
 Telefonens aktuella uppdrag har en fast plats ovanför den rullbara SMS-historiken. Testat position vid rullning, svensk rubrik, olästa meddelanden och historik utan uppdrag.
+Vid bussuppdragen väntar två resenärer tillsammans och lika många syns efter avstigning. Testade gruppernas antal och position vid de sex hållplatserna.
