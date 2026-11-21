@@ -2535,6 +2535,7 @@ func _build_target_marker() -> void:
 		route_arrows.append(arrow)
 	_make_walker("Taxi passenger",0,0,1,Color("#724e74"),Color("#324c57"))
 	passenger = walker_data.pop_back().actor
+	passenger.get_meta("arms")[1].rotation.z = 2.4
 	_make_walker("Arrived taxi passenger",0,0,1,Color("#724e74"),Color("#324c57"))
 	arriving_passenger = walker_data.pop_back().actor
 	var square := WALK_TARGETS[0]
@@ -2652,7 +2653,12 @@ func _update_mission_marker() -> void:
 	_sync_recovery()
 	_update_route_arrows()
 	passenger.visible = not free_drive and vehicle_index == TAXI and taxi_leg%2==0
-	passenger.position = WALK_TARGETS[_taxi_stop()]
+	if passenger.visible:
+		var stop := _taxi_stop()
+		passenger.position = WALK_TARGETS[stop]
+		passenger.position.y = _foot_height(passenger.position.x, passenger.position.z)
+		var curb := TARGETS[stop]
+		passenger.look_at(Vector3(curb.x, passenger.position.y, curb.z))
 	arriving_passenger.visible = passenger.visible and taxi_leg >= 2
 	if arriving_passenger.visible:
 		arriving_passenger.position = WALK_TARGETS[_taxi_stop(taxi_leg-1)]
