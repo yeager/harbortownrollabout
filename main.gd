@@ -1446,6 +1446,8 @@ func _apply_player_appearance() -> void:
 		figure.get_node("Jacket").material_override = jacket
 		for arm in figure.get_meta("arms"):
 			arm.get_child(0).material_override = jacket
+			if figure == road_driver:
+				arm.get_node("Forearm").material_override = jacket
 	# Keep the hips on the cushion as the selected driver's height changes.
 	road_driver.scale *= .78
 	road_driver.position = Vector3(-.32, .88 - .87 * road_driver.scale.y, -.04)
@@ -1458,11 +1460,24 @@ func _pose_driver_arms() -> void:
 		var shoulder: Node3D = arms[index]
 		var grip := cabin_wheel.to_global(Vector3.RIGHT * grip_radius * (-1 if index == 0 else 1))
 		var reach := road_driver.to_local(grip) - shoulder.position
-		shoulder.quaternion = Quaternion(Vector3.DOWN, reach.normalized())
-		var sleeve := shoulder.get_child(0) as MeshInstance3D
-		sleeve.position.y = -reach.length() * .47
-		sleeve.scale.y = reach.length() / .65
-		shoulder.get_node("Hand").position.y = -reach.length()
+		# Bend the elbow down and slightly out, keeping the wrist on the rim.
+		var axis := reach.normalized()
+		var outward := Vector3(-.25 if index == 0 else .25,-1,0)
+		var bend := outward.slide(axis).normalized()
+		var half_reach := reach.length() * .5
+		var offset := sqrt(maxf(0.0, .37 * .37 - half_reach * half_reach))
+		var elbow := reach * .5 + bend * offset
+		var upper := shoulder.get_child(0) as MeshInstance3D
+		var lower := shoulder.get_node("Forearm") as MeshInstance3D
+		_fit_driver_sleeve(upper, Vector3.ZERO, elbow)
+		_fit_driver_sleeve(lower, elbow, reach)
+		shoulder.get_node("Hand").position = reach
+
+func _fit_driver_sleeve(sleeve: MeshInstance3D, start: Vector3, end: Vector3) -> void:
+	var segment := end - start
+	sleeve.position = (start + end) * .5
+	sleeve.quaternion = Quaternion(Vector3.DOWN, segment.normalized())
+	sleeve.scale.y = (segment.length() + .045) / .65
 
 func _build_depot() -> void:
 	_make_driving_surface("Motor pool", Vector3(25,.1,11), Vector3(-37,-.18,15), Color("#565c5a"))
@@ -1530,6 +1545,10 @@ func _build_depot() -> void:
 	for leg in road_driver.get_meta("legs"):
 		leg.rotation.x = 1.35
 	for arm in road_driver.get_meta("arms"):
+		var forearm := arm.get_child(0).duplicate() as MeshInstance3D
+		forearm.name = "Forearm"
+		forearm.scale = Vector3(.82,1,.82)
+		arm.add_child(forearm)
 		var hand := MeshInstance3D.new()
 		hand.name = "Hand"
 		var palm := SphereMesh.new()
