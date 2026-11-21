@@ -619,14 +619,21 @@ func _end_skid() -> void:
 		tire_player.stop()
 
 func _draw_skid(previous_pose: Transform3D) -> void:
-	var starting := skid_anchors.is_empty()
+	var contacts := rear_tire_contacts
+	if vehicle_index == SNOWMOBILE and weather.snow >= .25:
+		contacts = rear_tire_contacts.duplicate()
+		for ski in front_knuckles:
+			contacts.append(ambulance.to_local(ski.global_position))
+	var starting := skid_anchors.size() != contacts.size()
+	if starting:
+		skid_anchors.clear()
 	# Tyres compress snow into wider grey tracks and expose darker slush when wet.
 	var track_color := Color("#1b1b1c").lerp(Color("#83949b").lerp(Color("#47575c"), weather.wet), weather.snow)
 	var track_width := lerpf(.19,.245,weather.snow)
-	if vehicle_index == SNOWMOBILE:
-		track_width = .40
-	for wheel in rear_tire_contacts.size():
-		var offset := rear_tire_contacts[wheel]
+	for wheel in contacts.size():
+		if vehicle_index == SNOWMOBILE:
+			track_width = .40 if wheel == 0 else .12
+		var offset := contacts[wheel]
 		if starting:
 			skid_anchors.append(previous_pose * offset)
 		var endpoint := ambulance.global_transform * offset

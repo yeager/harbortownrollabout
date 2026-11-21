@@ -254,3 +254,4 @@ Spelarfordonets bromsljus lyser under automatisk väntan vid rött även efter s
 Körhjälpen bromsar inför parkerade fordon längs färdriktningen med samma fordonsmått som kollisionskontrollen. Vid butikens övergångsställe minskade största farttappet från 5,80 till 0,083 m/s per steg vid 60 Hz. Provade även fri passage vid grönt.
 Depåbussen stod delvis i Stationsalléns körfält. Flyttade den 2,6 meter in på depån och förlängde och markerade bussrutan. Verifierade mjukt stopp vid rött och passage på grönt med alla parkerade fordon på plats.
 Vägvisaren från depån till kafé och gatukök är lokaliserad. Kontrollerade båda depåskyltarnas texter i Godot genom att växla engelska–svenska–engelska.
+Snöskoterns två skidor lämnar 12 cm breda fåror i snö. Spårens positioner hämtas från skidornas leder. Testade växling mellan snö och barmark under spårbildning i Godot.
