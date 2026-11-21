@@ -1685,8 +1685,32 @@ func _build_depot() -> void:
 	road_driver.reparent(ambulance,false)
 	road_driver.rotation = Vector3.ZERO
 	road_driver.add_child(ponytail.duplicate())
-	for leg in road_driver.get_meta("legs"):
+	var riding_legs := Node3D.new()
+	riding_legs.name = "RidingLegs"
+	road_driver.add_child(riding_legs)
+	for leg: Node3D in road_driver.get_meta("legs"):
 		leg.rotation.x = 1.35
+		var side := signf(leg.position.x)
+		var hip := leg.position
+		var knee := Vector3(side*.46,.55,-.30)
+		var ankle := Vector3(side*.48,.18,-.19)
+		var trouser_material: Material = leg.get_child(0).material_override
+		for endpoints in [[hip,knee,.105],[knee,ankle,.083]]:
+			var start: Vector3 = endpoints[0]
+			var end: Vector3 = endpoints[1]
+			var segment := MeshInstance3D.new()
+			var cloth := CapsuleMesh.new()
+			cloth.radius = endpoints[2]
+			cloth.height = start.distance_to(end) + cloth.radius
+			segment.mesh = cloth
+			segment.material_override = trouser_material
+			segment.position = (start+end)*.5
+			segment.quaternion = Quaternion(Vector3.DOWN,(end-start).normalized())
+			riding_legs.add_child(segment)
+		var boot := leg.get_child(1).duplicate() as MeshInstance3D
+		boot.position = ankle + Vector3(0,-.045,-.05)
+		riding_legs.add_child(boot)
+	riding_legs.hide()
 	for arm in road_driver.get_meta("arms"):
 		var forearm := arm.get_child(0).duplicate() as MeshInstance3D
 		forearm.name = "Forearm"
@@ -3540,6 +3564,9 @@ func _refresh_dispatch() -> void:
 func _refresh_ui() -> void:
 	if road_driver:
 		road_driver.position = Vector3(0,.82-.77*road_driver.scale.y,.18) if vehicle_index==SNOWMOBILE else Vector3(-.32,.88-.87*road_driver.scale.y,-.04)
+		road_driver.get_node("RidingLegs").visible = vehicle_index == SNOWMOBILE
+		for leg in road_driver.get_meta("legs"):
+			leg.visible = vehicle_index != SNOWMOBILE
 		road_driver.visible = vehicle_index in [3,SNOWMOBILE] and mode == "playing" and not walker.visible and not boating and tram_mode == 0 and not cockpit_view
 	if skipper: skipper.visible = boating and mode == "playing"
 	if not is_instance_valid(mission_label): return

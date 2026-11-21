@@ -42,6 +42,9 @@ shell("Graphite bonnet",[(-1.22,.10,.51,.58,.61),(-.88,.31,.58,.72,.80),(-.44,.3
 shell("Saddle",[(-.17,.17,.66,.76,.82),(.04,.21,.61,.83,.88),(.60,.23,.57,.74,.82),(.92,.17,.56,.65,.72)],RUBBER)
 bars = pivot("HandlebarPivot", (0,-.36,1.18))
 for side in [-1,1]:
+    cube("Footboard", (side*.37,.28,.32), (.20,.90,.045), DARK,.015,root)
+    for step in range(7):
+        cube("Foot grip", (side*.37,-.07+step*.11,.35), (.18,.019,.017), METAL,.004,root)
     x = side*.51
     ski = pivot("SkiPivotLeft" if side < 0 else "SkiPivotRight", (x,-.82,.08))
     for y,z,y2,z2 in [(-1.57,.20,-1.45,.085),(-1.45,.085,-1.28,.055),(-1.28,.055,-.51,.055),(-.51,.055,-.43,.09)]:
