@@ -225,3 +225,4 @@ Skoterns terrängfart följer snötäcket. Provkört på västra fältet med bar
 Snöskoterns nattljus utgår från de två Blender-modellerade lyktglasen. Båda ljuskällornas positioner verifierades i Godot.
 Nattljuset provrenderades i Godot Compatibility på västra huvudgatan med samma kamera och lyktorna tända respektive släckta. Båda ljuskäglorna tillsammans belyser asfalten framför skidorna.
 Skoterföraren sitter nu grensle med böjda knän. Modellen har fotbrädor med grepp på båda sidor. Kontrollerat från sidan i Godot och provkört efter omimport.
+Västra stadsdelens huvudgator och tvärgator har streckade mittlinjer. Alla 185 markeringar kontrollerade över vägbanan och utanför korsningarna i Godot.

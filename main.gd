@@ -840,10 +840,35 @@ func _build_road_network() -> void:
 			_make_box("Crosswalk", Vector3(0.50, 0.025, 2.1), Vector3(x, 0.016, z), Color("#eee9d9"))
 
 func _build_west_district() -> void:
+	var junction_x := PackedInt32Array([-510,-420,-330,-240,-150,-55])
+	var junction_z := PackedInt32Array([-48,0,35])
+	var strokes: Array[Transform3D] = []
+	for z in junction_z:
+		for i in range(1,junction_x.size()):
+			for x in range(junction_x[i-1]+9,junction_x[i]-7,8):
+				strokes.append(Transform3D(Basis.IDENTITY,Vector3(x,-.009,z)))
+	for i in junction_x.size()-1:
+		for j in range(1,junction_z.size()):
+			for z in range(junction_z[j-1]+9,junction_z[j]-7,8):
+				strokes.append(Transform3D(Basis(Vector3.UP,PI/2),Vector3(junction_x[i],-.009,z)))
+	var stripe := BoxMesh.new()
+	stripe.size = Vector3(2.8,.006,.12)
+	stripe.material = _material(Color("#e0dfda"))
+	var markings := MultiMeshInstance3D.new()
+	markings.name = "WestLaneMarkings"
+	markings.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	markings.multimesh = MultiMesh.new()
+	markings.multimesh.transform_format = MultiMesh.TRANSFORM_3D
+	markings.multimesh.mesh = stripe
+	markings.multimesh.instance_count = strokes.size()
+	for i in strokes.size():
+		markings.multimesh.set_instance_transform(i,strokes[i])
+	add_child(markings)
 	_make_driving_surface("West district ground", Vector3(460,.3,151), Vector3(-290,-.35,-10.5), Color.WHITE).material_override = soil_finish
-	for z in [-48,0,35]:
+	for z in junction_z:
 		_make_driving_surface("West avenue", Vector3(455,.12,9.6), Vector3(-282.5,-.08,z), Color.WHITE).material_override = road_finish
-	for x in [-510,-420,-330,-240,-150]:
+	for i in junction_x.size()-1:
+		var x := junction_x[i]
 		_make_driving_surface("Connecting street", Vector3(9.6,.12,92.6), Vector3(x,-.075,-6.5), Color.WHITE).material_override = road_finish
 		for z in [-24,17]:
 			for offset in [20,62]:
