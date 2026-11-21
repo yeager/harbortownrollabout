@@ -141,3 +141,5 @@ Spelprojektet publiceras i det privata GitHub-repot yeager/axels-emergency-vehic
 - Regndroppar skapar expanderande ringar i kanalens ytreflexer. Effekten följer den flytande nederbörden och tonas ned på avstånd. Kontroll i Godot omfattade regn, slask, snö och uppehåll.
 
 - Regn och snö dämpar direkt solljus och skuggornas kontrast i takt med molntäcket. Testat vid tre nederbördsnivåer med fast dagläge.
+
+- Himlens reflektionskarta dämpar starka högdagrar och får en svalare ton i mulet väder. Godot startades med den ändrade himmelsshadern utan kompileringsfel.

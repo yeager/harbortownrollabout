@@ -10,7 +10,11 @@ uniform float night = 0.0;
 void sky() {
     vec3 panorama = texture(city_light, SKY_COORDS).rgb;
     if (AT_CUBEMAP_PASS) {
-        COLOR = panorama * mix(1.0,0.07,night);
+        // Preserve the skyline in glass and paint as diffuse cloud light
+        // replaces the bright, warm highlights of the clear panorama.
+        float luminance = dot(panorama, vec3(.2126, .7152, .0722));
+        vec3 cloudy_reflection = vec3(.83, .91, 1.) * luminance / (1. + .65 * luminance);
+        COLOR = mix(panorama, cloudy_reflection, overcast) * mix(1.0, .07, night);
     } else {
         float elevation = max(EYEDIR.y, 0.0);
         COLOR = mix(vec3(0.66, 0.76, 0.84), vec3(0.17, 0.37, 0.62),
