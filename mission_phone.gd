@@ -25,12 +25,18 @@ func _ready() -> void:
 	inbox.add_theme_font_size_override("font_size",18)
 	handset.add_child(inbox)
 	handset.hide()
+	handset.visibility_changed.connect(_on_visibility_changed)
 	refresh()
+
+func _on_visibility_changed() -> void:
+	if handset.is_visible_in_tree():
+		unread=0
+		refresh()
 
 func receive(body: String) -> void:
 	messages.push_front(body)
 	if messages.size()>4: messages.pop_back()
-	if not handset.visible: unread+=1
+	if not handset.is_visible_in_tree(): unread=mini(unread+1,messages.size())
 	refresh()
 
 func toggle() -> void:
