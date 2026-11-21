@@ -222,3 +222,4 @@ Snöskoter från Blender med band, skidor, fjädring och synlig förare. Provkö
 Snöskotern har nu en egen syntetiserad motorloop med hastighetsstyrd tonhöjd. Uppspelning och fordonsval verifierades i Godot.
 Snöskoterns båda skidor och styre följer nu styrutslaget. Förarens handpositioner följer handtagen. Testat med styrinmatning i Godot.
 Skoterns terrängfart följer snötäcket. Provkört på västra fältet med barmark, halvt och fullt snötäcke i båda körlägena.
+Snöskoterns nattljus utgår från de två Blender-modellerade lyktglasen. Båda ljuskällornas positioner verifierades i Godot.

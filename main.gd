@@ -2559,9 +2559,17 @@ func _load_vehicle_model() -> void:
 	for beam in headlights:
 		beam.queue_free()
 	headlights.clear()
-	for side in [-1,1]:
+	var beam_origins: Array[Vector3] = []
+	if vehicle_index == SNOWMOBILE:
+		for lens: MeshInstance3D in vehicle_model.find_children("Headlight strip*", "MeshInstance3D", true, false):
+			var center := ambulance.to_local(lens.to_global(lens.get_aabb().get_center()))
+			beam_origins.append(center + Vector3.FORWARD * .035)
+	if beam_origins.is_empty():
+		for side in [-1,1]:
+			beam_origins.append(Vector3(side*player_half_size.x*.72,.87,-front_reach-.03))
+	for origin in beam_origins:
 		var beam := SpotLight3D.new()
-		beam.position = Vector3(side*player_half_size.x*.72,.87,-front_reach-.03)
+		beam.position = origin
 		beam.rotation.x = deg_to_rad(-7.0)
 		beam.spot_range = 28
 		beam.spot_angle = 26
