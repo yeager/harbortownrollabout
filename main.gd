@@ -926,8 +926,10 @@ func _make_quay_entrance(base: Vector3) -> void:
 	_make_box("Sparkplåt",Vector3(.13,.18,1.45),base+Vector3(-.11,.09,0),aluminium)
 	_make_box("Draghandtag",Vector3(.06,.52,.04),base+Vector3(-.20,1.12,.55),Color("#bbc2be"))
 	_make_box("Porttak",Vector3(.94,.10,2.02),base+Vector3(-.47,2.37,0),aluminium)
-	var lamp_position := base + Vector3(-.55,2.30,0)
-	var diffuser := _make_box("Portbelysning",Vector3(.12,.035,.65),lamp_position,Color.WHITE)
+	_add_entry_light(base + Vector3(-.55,2.30,0),Vector3(.12,.035,.65),3.8)
+
+func _add_entry_light(lamp_position: Vector3, lens_size: Vector3, reach: float) -> void:
+	var diffuser := _make_box("Portbelysning",lens_size,lamp_position,Color.WHITE)
 	if entrance_diffuser == null:
 		entrance_diffuser = _material(Color("#ffe3b7"),.45,true)
 	diffuser.material_override = entrance_diffuser
@@ -935,7 +937,7 @@ func _make_quay_entrance(base: Vector3) -> void:
 	light.position = lamp_position - Vector3.UP*.035
 	light.rotation_degrees.x = -90
 	light.light_color = Color("#ffddaf")
-	light.spot_range = 3.8
+	light.spot_range = reach
 	light.spot_angle = 55
 	add_child(light)
 	entrance_lights.append(light)
@@ -1299,6 +1301,9 @@ func _build_new_blocks() -> void:
 		_make_box("Steel transom",Vector3(3.65,.08,.21),bay,Color("#84908b"))
 	# The recovery route approaches the workshop from the north.
 	for x in [-4.0,4.0]:
+		var lamp_mount := p+Vector3(x,3.94,-5.43)
+		_make_box("Workshop door lamp",Vector3(1.32,.12,.64),lamp_mount,Color("#34424b"))
+		_add_entry_light(lamp_mount+Vector3(0,-.08,-.14),Vector3(1.12,.05,.22),6.0)
 		var door := p+Vector3(x,1.78,-5.08)
 		_make_box("Workshop roller shutter",Vector3(5.8,3.55,.16),door,Color("#708588"))
 		for row in range(-4,5):

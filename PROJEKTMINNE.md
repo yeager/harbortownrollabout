@@ -127,3 +127,5 @@ Spelprojektet publiceras i det privata GitHub-repot yeager/axels-emergency-vehic
 - En rödorange varningstriangel med självlysande reflexram står vid båda haverierna och plockas bort när bilen lastas. Synligheten kontrollerades genom alla fyra bärgningssteg.
 
 - Verkstadens fasad mot bärgningsmålet har två sektionsportar med fönster och en skylt med namnet Sjöstadens bilverkstad.
+
+- Verkstadens två garageportar har varmvita nedåtriktade armaturer som följer skymningen. I Godot kontrollerades båda lampornas ljusstyrka och synlighet vid natt och dag.
