@@ -82,7 +82,11 @@ The vehicle selector and depot include a red BMW M3 E30, orange Volvo 240, green
 
 Press **J** or click **Radio** in a vehicle to play the original instrumental loop on Sjöstad Radio. It also works aboard the motorboat and tram. Playback stops while paused or on foot.
 
-## Linux renderer selection
+## Graphics settings
+
+Open **Settings → Graphics** to choose Compatibility, Mobile, Forward+, or Forward+ with FSR 2.2. Restart the game to apply the selection. Running `./play.sh` uses your saved setting.
+
+### Linux launch options
 
 Run one of the following from the project directory with Godot 4.6 installed. Set `GODOT_BIN` to select a specific Godot executable.
 

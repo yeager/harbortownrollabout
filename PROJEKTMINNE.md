@@ -213,3 +213,5 @@ Spelprojektet publiceras i det privata GitHub-repot yeager/axels-emergency-vehic
 - Compatibility, Mobile och Forward+ renderade buss och skola på datorns Radeon. play.sh kan starta alla tre och välja AMD FSR 2.2 i Forward+. Ingen mätning av bildfrekvens eller verifiering på annan hårdvara ännu.
 - Linje 502 visar nästa hållplats på bussens frontskylt. Verifierat över fyra stopp, ett nytt varv och fri körning.
 - Alla fyra hållplatsstolpar visar linjenummer och hållplatsnamn på två motsatta skyltfronter, riktade längs respektive gata. Kontrollerat i Godot.
+
+Inställningar finns i en separat dialog med flikar. Renderaren väljs under Grafik och aktiveras vid nästa start. Verifierat byte från Compatibility till Forward+ med FSR2 på AMD.

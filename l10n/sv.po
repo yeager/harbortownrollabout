@@ -593,3 +593,21 @@ msgstr "Lämna eleven"
 
 msgid "Return to your bus"
 msgstr "Gå tillbaka till din buss"
+
+msgid "Graphics"
+msgstr "Grafik"
+
+msgid "Sound"
+msgstr "Ljud"
+
+msgid "Driving"
+msgstr "Körning"
+
+msgid "World"
+msgstr "Värld"
+
+msgid "Renderer changes apply next time you start the game."
+msgstr "Renderarvalet gäller nästa gång du startar spelet."
+
+msgid "Could not save graphics settings."
+msgstr "Grafikinställningarna kunde inte sparas."

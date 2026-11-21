@@ -3039,19 +3039,61 @@ func _build_overlay() -> void:
 	box.add_child(start_button)
 	var settings_toggle := _button("Settings", 220)
 	settings_toggle.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
-	settings_toggle.toggle_mode = true
 	box.add_child(settings_toggle)
-	var settings := VBoxContainer.new()
-	settings.visible = false
-	settings.add_theme_constant_override("separation", 8)
-	box.add_child(settings)
-	settings_toggle.toggled.connect(func(expanded: bool):
-		settings.visible = expanded
-		settings_toggle.text = "Close settings" if expanded else "Settings"
+	var dialog := AcceptDialog.new()
+	dialog.name = "GameSettings"
+	dialog.title = tr("Settings")
+	dialog.ok_button_text = tr("Close settings")
+	dialog.exclusive = true
+	dialog.transient = true
+	add_child(dialog)
+	var tabs := TabContainer.new()
+	dialog.add_child(tabs)
+	var pages: Array[VBoxContainer] = []
+	for title in ["Graphics", "Sound", "Driving", "World", "Language"]:
+		var page := VBoxContainer.new()
+		page.alignment = BoxContainer.ALIGNMENT_CENTER
+		page.add_theme_constant_override("separation",12)
+		tabs.add_child(page)
+		tabs.set_tab_title(page.get_index(),title)
+		pages.append(page)
+	var renderer := OptionButton.new()
+	renderer.name = "RendererChoice"
+	renderer.accessibility_name = "Renderer"
+	var methods := ["gl_compatibility","mobile","forward_plus","fsr2"]
+	for caption in ["Compatibility (OpenGL)", "Mobile", "Forward+", "Forward+ · AMD FSR 2.2"]:
+		renderer.add_item(caption)
+	var graphics := ConfigFile.new()
+	graphics.load("user://graphics.cfg")
+	var selected := str(graphics.get_value("rendering","renderer/rendering_method", RenderingServer.get_current_rendering_method()))
+	if selected=="forward_plus" and (graphics.get_value("rendering","scaling_3d/mode",0)==2 or "--fsr2" in OS.get_cmdline_user_args()):
+		selected="fsr2"
+	renderer.select(maxi(0,methods.find(selected)))
+	var renderer_note := Label.new()
+	renderer_note.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	renderer_note.text = "Renderer changes apply next time you start the game."
+	pages[0].add_child(renderer)
+	pages[0].add_child(renderer_note)
+	renderer.item_selected.connect(func(index: int):
+		var fsr := index==3
+		graphics.set_value("rendering","renderer/rendering_method","forward_plus" if fsr else methods[index])
+		graphics.set_value("rendering","scaling_3d/mode",2 if fsr else 0)
+		graphics.set_value("rendering","scaling_3d/scale",.75 if fsr else 1.0)
+		graphics.set_value("rendering","anti_aliasing/quality/msaa_3d",0 if fsr else 2)
+		if graphics.save("user://graphics.cfg")!=OK:
+			renderer_note.text = "Could not save graphics settings."
+	)
+	settings_toggle.pressed.connect(func():
+		dialog.title = tr("Settings")
+		dialog.ok_button_text = tr("Close settings")
+		dialog.popup_centered(Vector2i(640,280))
+	)
+	dialog.visibility_changed.connect(func():
+		if not dialog.visible: settings_toggle.grab_focus()
 	)
 	var language_row := HBoxContainer.new()
 	language_row.alignment = BoxContainer.ALIGNMENT_CENTER
-	settings.add_child(language_row)
+	pages[4].add_child(language_row)
 	var language_label := Label.new()
 	language_label.text = "Language"
 	language_row.add_child(language_label)
@@ -3067,6 +3109,8 @@ func _build_overlay() -> void:
 	language.select(maxi(0, locales.find(TranslationServer.get_locale())))
 	language.item_selected.connect(func(index: int):
 		TranslationServer.set_locale(locales[index])
+		dialog.title=tr("Settings")
+		dialog.ok_button_text=tr("Close settings")
 		_save_preferences()
 	)
 	language_row.add_child(language)
@@ -3078,11 +3122,11 @@ func _build_overlay() -> void:
 	handling.add_item("Full speed")
 	handling.select(0 if gentle_driving else 1)
 	handling.item_selected.connect(_set_handling)
-	settings.add_child(handling)
+	pages[2].add_child(handling)
 	preview_sound_button = _button("Preview vehicle sound", 300)
 	preview_sound_button.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	preview_sound_button.pressed.connect(_preview_sound)
-	settings.add_child(preview_sound_button)
+	pages[1].add_child(preview_sound_button)
 	var volume_row := HBoxContainer.new()
 	volume_row.alignment = BoxContainer.ALIGNMENT_CENTER
 	var volume_label := Label.new()
@@ -3113,7 +3157,7 @@ func _build_overlay() -> void:
 		_save_preferences()
 	)
 	volume_row.add_child(traffic_volume)
-	settings.add_child(volume_row)
+	pages[1].add_child(volume_row)
 	var traffic_lights := OptionButton.new()
 	traffic_lights.name = "Trafikljusval"
 	traffic_lights.accessibility_name = "Emergency lights in traffic"
@@ -3124,7 +3168,7 @@ func _build_overlay() -> void:
 	traffic_lights.item_selected.connect(_set_traffic_light_mode)
 	var beacon_row := HBoxContainer.new()
 	beacon_row.alignment = BoxContainer.ALIGNMENT_CENTER
-	settings.add_child(beacon_row)
+	pages[0].add_child(beacon_row)
 	beacon_row.add_child(traffic_lights)
 	var own_beacon := OptionButton.new()
 	own_beacon.add_item("My vehicle · Flashing")
@@ -3148,7 +3192,7 @@ func _build_overlay() -> void:
 	)
 	var weather_row := HBoxContainer.new()
 	weather_row.alignment = BoxContainer.ALIGNMENT_CENTER
-	settings.add_child(weather_row)
+	pages[3].add_child(weather_row)
 	weather_row.add_child(daylight)
 	for is_season in [true,false]:
 		var choice := OptionButton.new()
