@@ -51,6 +51,40 @@ func _ready() -> void:
 				var tint:=Color.from_hsv(fmod(.08*i+.105*jar,1),.52,.86)
 				part("Display tin",Vector3(x-2.5+.7*jar,shelf+.19,49.08),Vector3(.32,.3,.26),tint)
 
+		if i == 0:
+			_display_cinnamon_buns(Vector3(x-1.3,1.09,47.55))
+
+func _display_cinnamon_buns(center: Vector3) -> void:
+	part("Bakery tray",center,Vector3(1.35,.035,.76),Color("#605859"))
+	var dough := SphereMesh.new()
+	dough.radius=.155
+	dough.height=.14
+	dough.radial_segments=24
+	dough.rings=10
+	dough.material=get_parent()._material(Color("#c98040"),.78)
+	var swirl := SurfaceTool.new()
+	swirl.begin(Mesh.PRIMITIVE_TRIANGLE_STRIP)
+	swirl.set_material(get_parent()._material(Color("#744023"),.86))
+	for step in 49:
+		var t := step/48.0
+		var angle := t*TAU*2.25
+		for edge in [-.007,.007]:
+			var r := .014+.122*t+float(edge)
+			var height := .07*sqrt(1.0-pow(r/.155,2))+.002
+			swirl.set_normal(Vector3.UP)
+			swirl.add_vertex(Vector3(r*cos(angle),height,r*sin(angle)))
+	var filling := swirl.commit()
+	for row in 2:
+		for column in 3:
+			var bun := MeshInstance3D.new()
+			bun.mesh=dough
+			bun.position=center+Vector3((column-1)*.39,.072,(row-.5)*.34)
+			bun.rotation.y=(row*3+column)*1.17
+			add_child(bun)
+			var spiral := MeshInstance3D.new()
+			spiral.mesh=filling
+			bun.add_child(spiral)
+
 func build_menu(ui: CanvasLayer) -> void:
 	ui.add_child(shop_card)
 	shop_card.set_anchors_and_offsets_preset(Control.PRESET_RIGHT_WIDE)

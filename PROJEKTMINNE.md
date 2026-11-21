@@ -149,3 +149,5 @@ Spelprojektet publiceras i det privata GitHub-repot yeager/axels-emergency-vehic
 - När snön smälter blir marken blöt av smältvatten. I Godot provades övergången snö–sol tills snön var borta och vägbanan sedan torkade.
 
 - Nederbördspartiklarna döljs i butiksvyn och syns igen utanför. Entré och utgång provades vid samtliga fyra butiker.
+
+- Kafé Bullen har en plåt med sex modellerade kanelbullar på disken. Varje bulle har en kanelspiral som följer den välvda ytan.
