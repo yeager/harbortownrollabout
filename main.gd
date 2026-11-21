@@ -68,6 +68,7 @@ const SERVICE_STOPS := [Vector3(18,0,2.35), Vector3(34,0,-46), Vector3(126,0,-2.
 const SERVICE_MESSAGES := ["Collect the car with a smoking bonnet.","Take the car to the workshop.","Collect the car with a missing wheel.","Take the car to the workshop."]
 var recovery_leg := 0
 var casualty: Node3D
+var warning_triangle := Node3D.new()
 var loose_wheel: Node3D
 var lost_wheel: Node3D
 var bonnet_smoke := CPUParticles3D.new()
@@ -2307,12 +2308,24 @@ func _sync_recovery() -> void:
 		casualty.rotation.y=PI/2
 	lost_wheel.visible=recovery_leg%4<2
 	loose_wheel.visible=active and recovery_leg%4==2
+	warning_triangle.visible=active and not loaded
 	bonnet_smoke.emitting=active and recovery_leg%4==0
 
 func _build_target_marker() -> void:
 	casualty=preload("res://vehicles/traffic_bmw_silver.glb").instantiate()
 	add_child(casualty)
 	casualty.scale=Vector3.ONE*.79
+	casualty.add_child(warning_triangle)
+	warning_triangle.position=Vector3(0,0,-3.75)
+	_make_box("Triangle foot",Vector3(.68,.06,.34),Vector3(0,.035,0),Color("#33393b"),false,warning_triangle)
+	var corners := [Vector3(-.34,.10,0),Vector3(.34,.10,0),Vector3(0,.69,0)]
+	var reflector := _material(Color("#ff542f"),.35,true)
+	for i in corners.size():
+		var a: Vector3 = corners[i]
+		var b: Vector3 = corners[(i+1)%3]
+		var strip := _make_box("Warning reflector",Vector3(a.distance_to(b),.074,.045),(a+b)*.5,Color.WHITE,false,warning_triangle)
+		strip.rotation.z=atan2(b.y-a.y,b.x-a.x)
+		strip.material_override=reflector
 	lost_wheel=_rig_wheels(casualty)[0]
 	loose_wheel=lost_wheel.duplicate()
 	casualty.add_child(loose_wheel)
