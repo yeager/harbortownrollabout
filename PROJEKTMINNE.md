@@ -319,3 +319,4 @@ Den första inlämnade bilen står kvar på verkstaden även medan nästa bil li
 - Modellen har nu Lottens höga flaggstänger, övre reling, svarta fendrar, gula grindar, livbojar och vattenlinje från de nya referenserna. Slutlig spelvy kontrollerad i Godot.
 - Lotten tar passagerare från båda bryggorna. Påstigning och avstigning med F eller skärmknappen när färjan ligger inne. Styrning och steg ut över vattnet är spärrade under färd. Godot-test av tur och retur med kajskyddet och den nya modellen godkänt.
 - Passagerare på Lotten ser återstående sekunder till bryggan följt av avstigningsknappen. Svensk nedräkning kontrollerad visuellt ombord i Godot 4.6.3.
+- Vid båda bryggorna visas väntetiden för just den bryggan. Testat på svenska vid avgång, vid motsatta bryggan och en sekund före ankomst; ombordstigning aktiverades vid ankomst.

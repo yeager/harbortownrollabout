@@ -2228,7 +2228,11 @@ func _update_entry_button() -> void:
 		if ferry_passenger:
 			seat_button.text = "Step ashore · F" if stop >= 0 else "On board Lotten"
 		else:
-			seat_button.text = "Board Lotten · F" if stop == landing else "Wait for Lotten"
+			if stop == landing:
+				seat_button.text = "Board Lotten · F"
+			else:
+				var wait_seconds := ceili(fposmod(29.0*landing-wave_time,58.0))
+				seat_button.text = tr("Lotten in %d s") % wait_seconds
 		return
 	var nearest := _nearest_car()
 	entry_marker.visible = nearest >= 0 and mode == "playing" and not paused
