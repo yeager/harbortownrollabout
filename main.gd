@@ -72,6 +72,7 @@ var loose_wheel: Node3D
 var lost_wheel: Node3D
 var bonnet_smoke := CPUParticles3D.new()
 var taxi_leg := 0
+var arriving_passenger: Node3D
 var passenger: Node3D
 var seat_button: Button
 var vehicle_index := 0
@@ -551,8 +552,8 @@ func _draw_skid(previous_pose: Transform3D) -> void:
 	elif tire_player.playing:
 		tire_player.stop()
 
-func _taxi_stop() -> int:
-	return [0,2,1,0,2,1][taxi_leg%6]
+func _taxi_stop(leg: int = taxi_leg) -> int:
+	return [0,2,1,0,2,1][leg%6]
 
 func _taxi_instruction() -> String:
 	return "Pick up your passenger" if taxi_leg%2==0 else "Drop off your passenger"
@@ -2339,6 +2340,8 @@ func _build_target_marker() -> void:
 		route_arrows.append(arrow)
 	_make_walker("Taxi passenger",0,0,1,Color("#724e74"),Color("#324c57"))
 	passenger = walker_data.pop_back().actor
+	_make_walker("Arrived taxi passenger",0,0,1,Color("#724e74"),Color("#324c57"))
+	arriving_passenger = walker_data.pop_back().actor
 	var pickup := WALK_TARGETS[1]
 	_make_walker("Waiting medic",pickup.x,pickup.z+1.3,1,Color("#d5db46"),Color("#275744"))
 	waiting_medic = walker_data.pop_back().actor
@@ -2446,6 +2449,9 @@ func _update_mission_marker() -> void:
 	_update_route_arrows()
 	passenger.visible = not free_drive and vehicle_index == TAXI and taxi_leg%2==0
 	passenger.position = WALK_TARGETS[_taxi_stop()]
+	arriving_passenger.visible = passenger.visible and taxi_leg >= 2
+	if arriving_passenger.visible:
+		arriving_passenger.position = WALK_TARGETS[_taxi_stop(taxi_leg-1)]
 	var rescue := not free_drive and not boating and vehicle_index not in [TAXI, RECOVERY]
 	waiting_medic.visible = rescue and mission_index == 1
 	var carrier: Node3D = waiting_medic

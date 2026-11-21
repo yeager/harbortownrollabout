@@ -117,3 +117,5 @@ Spelprojektet publiceras i det privata GitHub-repot yeager/axels-emergency-vehic
 - Aktivitetsmenyn visar Taxikörningar eller Bärgningsuppdrag när respektive fordon väljs. Svenska texterna testades genom att växla mellan taxi, bärgningsbil och ambulans.
 
 - Startmenyn beskriver första resan för taxi och bärgningsbil. De svenska beskrivningarna kontrollerades vid fordonsbyte i Godot.
+
+- Avlämnade taxipassagerare syns på trottoaren vid resmålet fram till nästa hämtning. Tre hela taxiresor testades med rätt avlämningsplats och 15 mynt per resa.
