@@ -159,3 +159,5 @@ Spelprojektet publiceras i det privata GitHub-repot yeager/axels-emergency-vehic
 - Vid inträde i en butik får första varan tangentbordsfokus. Ett köp av en kanelbulle med Enter verifierades med Godots inmatningssystem.
 
 - Butiksmenyn visar hur man väljer vara med Tabb och köper med Enter. I kiosken provades ett köp av korv med bröd med dessa två tangenter.
+
+- Kiosktestets intermittenta avslutsvarning identifierades i Godots verbose-logg som ambulansens AudioStreamWAV och dess uppspelare. Fem upprepningar med 250 ms mellan frigjord scen och testprocessens avslut genomförde köpet utan resursvarning. Normal spelavslutning är inte undersökt i detta test.
