@@ -52,7 +52,10 @@ func _draw_pedal(center: Vector2, narrow: bool, pressed: bool, label: String, bu
 	var w := 21.0 if narrow else 40.0
 	var h := 40.0 if narrow else 27.0
 	var foot := center + Vector2.DOWN * (4 if pressed else 0)
-	draw_rect(Rect2(foot-Vector2(w,h)/2,Vector2(w,h)),accent if pressed else ink)
+	var pedal := Rect2(foot-Vector2(w,h)/2,Vector2(w,h))
+	draw_rect(pedal, accent)
+	if pressed:
+		draw_rect(pedal.grow(3), ink, false, 2)
 	for groove in [-1,0,1]:
 		var p := foot + Vector2(0,groove*h*.23)
 		draw_line(p-Vector2(w*.33,0),p+Vector2(w*.33,0),backing,2,true)
