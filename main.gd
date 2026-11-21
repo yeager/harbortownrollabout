@@ -164,6 +164,7 @@ var main_rotor: Node3D
 var tail_rotor: Node3D
 var patrol_angle := 0.0
 var tram_mode := 0
+var saloon_glazing: StandardMaterial3D
 var ferry: Node3D
 var wave_time := 0.0
 var walker_data: Array[Dictionary] = []
@@ -936,6 +937,11 @@ func _build_marina() -> void:
 			_make_box("Fairway buoy",Vector3(.35,.75,.35),Vector3(x,-.82,z),Color("#bf5e37"))
 	ferry = (load("res://vehicles/lotten.glb") as PackedScene).instantiate()
 	add_child(ferry)
+	var windows := ferry.find_child("Continuous tinted glazing*",true,false) as MeshInstance3D
+	saloon_glazing = windows.get_active_material(0).duplicate() as StandardMaterial3D
+	saloon_glazing.emission_enabled = true
+	saloon_glazing.emission = Color("#ffcc8c")
+	windows.material_override = saloon_glazing
 	for landing_z in [-35.0,-12.0]:
 		_pier_section("Ferry landing",Vector3(2.0,.20,7.5),Vector3(64.9,-.76,landing_z),Color("#847968"))
 		for tread in 4:
@@ -1230,6 +1236,8 @@ func _update_daylight(delta: float) -> void:
 	var night := 1.0 if time_mode == 1 else (smoothstep(-.4,.4,-cos(day_phase*TAU)) if time_mode == 2 else 0.0)
 	if absf(night-last_night)<.006: return
 	last_night = night
+	if saloon_glazing:
+		saloon_glazing.emission_energy_multiplier = night*.85
 	if player_brake_lens:
 		_set_rear_lights(player_brake_lens, player_brake_lens.emission_energy_multiplier >= 2.399)
 	for item in traffic_data:
