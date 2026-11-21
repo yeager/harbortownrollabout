@@ -79,6 +79,10 @@ for side in [-1,1]:
         part=cube("Upturned runner",(x,(y+y2)/2,(z+z2)/2),(.17,((y2-y)**2+(z2-z)**2)**.5+.02,.046),blue,.018,root)
         part.rotation_euler.x=atan2(z2-z,y2-y)
         attach(part, ski)
+    # The grab loop arches back from the raised tip and turns with the runner.
+    loop_points = [(-1.55,.18),(-1.48,.25),(-1.39,.28),(-1.31,.24),(-1.18,.08)]
+    for (y,z),(next_y,next_z) in zip(loop_points,loop_points[1:]):
+        attach(beam("Ski grab loop",(x,y,z),(x,next_y,next_z),.016,METAL), ski)
     beam("Steering spindle",(x,-.82,.08),(x,-.75,.46),.035,METAL)
     for y in [-.95,-.45]:
         beam("Wishbone",(side*.21,y,.38),(x,-.75,.23),.022,blue)

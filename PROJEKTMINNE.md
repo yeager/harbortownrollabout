@@ -244,3 +244,4 @@ Skärmpedalerna kan användas med vänster musknapp. Verifierat gas, broms och s
 Paus återställer även den klickbara skärmbromsen. Provade att pausa med pedalen nedtryckt, fortsätta och gasa på nytt.
 Motorbåten stannar om båda pedalerna hålls nere. Provkört framåt, bakåt och från stillastående, inklusive att släppa gasen för att backa.
 Snöskoterns drivband har nu en öppen boggi med dubbla hjul, medar och bandkammar. Blender-modellen är exporterad och provad i Godot.
+Snöskoterns skidspetsar har nu lyftbyglar som följer skidornas styrutslag. Styrning, gas, broms och avstigning testade i Godot.
