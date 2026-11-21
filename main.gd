@@ -34,6 +34,7 @@ var dash_direction: Label3D
 var dash_speed: Label3D
 var vehicle_model: Node3D
 var headlights: Array[SpotLight3D] = []
+var projector_finish: StandardMaterial3D
 var bicycle_lenses: Array[StandardMaterial3D] = []
 var traffic_headlights: Array[SpotLight3D] = []
 var quay_finish := ShaderMaterial.new()
@@ -1791,6 +1792,8 @@ func _update_daylight(delta: float) -> void:
 	for beam in traffic_headlights:
 		beam.visible = night>.05
 		beam.light_energy = 2.8*night
+	if projector_finish:
+		projector_finish.emission_energy_multiplier = 3.0*night
 	for beam in headlights:
 		beam.visible = night>.05
 		beam.light_energy = 4.5*night
@@ -3000,10 +3003,18 @@ func _load_vehicle_model() -> void:
 	for beam in headlights:
 		beam.queue_free()
 	headlights.clear()
+	projector_finish = null
 	var beam_origins: Array[Vector3] = []
 	if vehicle_index in [SNOWMOBILE, PORSCHE]:
 		var lens_pattern := "Headlight lens*" if vehicle_index == PORSCHE else "Headlight strip*"
 		for lens: MeshInstance3D in vehicle_model.find_children(lens_pattern, "MeshInstance3D", true, false):
+			if vehicle_index == PORSCHE:
+				if not projector_finish:
+					projector_finish = lens.get_active_material(0).duplicate() as StandardMaterial3D
+					projector_finish.emission_enabled = true
+					projector_finish.emission = Color("#fff0d9")
+					projector_finish.emission_energy_multiplier = 3.0*maxf(last_night,0)
+				lens.set_surface_override_material(0,projector_finish)
 			var center := ambulance.to_local(lens.to_global(lens.get_aabb().get_center()))
 			beam_origins.append(center + Vector3.FORWARD * .035)
 	if beam_origins.is_empty():

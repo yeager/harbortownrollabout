@@ -345,3 +345,4 @@ Den första inlämnade bilen står kvar på verkstaden även medan nästa bil li
 - Porschens främre kolfibersplitter har en välvd profil och rundad framkant som följer stötfångaren under alla tre luftintag. Kontrollerad i Blender-rendering och med körtest i Godot.
 - Porschens sidoprofil följer de nya bildreferenserna med vit lack, röda tioekrade fälgar, bred GT3 RS-dekor, kolfiberblad bakom framhjulen och omformat luftintag framför bakhjulen.
 - Bakvingens spännvidd minskad med 11 %, vingprofilens djup med 24 % och höjden ovanför infästningen med 21 %. Mindre rutöppningar, infällda framlyktor med separata projektorer, tätningar och transparenta linser. Kontrollerat från två renderingsvinklar och med körtest.
+Porschens båda projektorlinser lyser med halvljuset på natten. Växlingen mellan dag och natt är testad i Godot 4.6.3.

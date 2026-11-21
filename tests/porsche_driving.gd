@@ -42,6 +42,23 @@ func check_porsche() -> void:
 		printerr("Porsche wheel or brake-light rig missing")
 		quit(1)
 		return
+	for time in [1, 0]:
+		game.time_mode = time
+		game._update_daylight(0)
+		var lenses = game.vehicle_model.find_children("Headlight lens*", "MeshInstance3D", true, false)
+		if lenses.size() != 2 or game.headlights.size() != 2:
+			printerr("Expected two projector headlights")
+			quit(1)
+			return
+		for i in lenses.size():
+			var lens = lenses[i]
+			var beam = game.headlights[i]
+			var origin = lens.to_global(lens.get_aabb().get_center())
+			var night: bool = time == 1
+			if beam.global_position.distance_to(origin) > .05 or beam.visible != night or (lens.get_active_material(0).emission_energy_multiplier > 0) != night:
+				printerr("Headlight lens and beam did not match the selected time of day")
+				quit(1)
+				return
 	game.mouse_gas = false
 	game.mouse_brake = true
 	for frame in 360:
