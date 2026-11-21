@@ -1902,7 +1902,7 @@ func _spawn_traffic(scene_path: String, x: float, lane_z: float, direction: floa
 			lens.material_override = finish
 			bicycle_lenses.append(finish)
 	var traffic_horn := AudioStreamPlayer3D.new()
-	var voice := "bicycle" if scene_path.ends_with("cyklist.glb") else "bmw"
+	var voice: String = {"cyklist": "bicycle", "a_traktor": "a_traktor", "raggarbil": "raggarbil"}.get(scene_path.get_file().get_basename(), "bmw")
 	var emergency_index := VEHICLE_SCENES.find(scene_path)
 	if emergency_index >= 0:
 		voice = HORNS[emergency_index]
