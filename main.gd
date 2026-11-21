@@ -335,8 +335,6 @@ func _drive(delta: float) -> void:
 		brake_held = false
 	var previous_speed := speed
 	var previous_pose := ambulance.global_transform
-	if player_brake_lens:
-		_set_rear_lights(player_brake_lens, brake_held)
 	if brake_held:
 		speed = move_toward(speed, 0.0, (18.0 - 2.0*weather.wet - 3.0*weather.snow) * absf(throttle) * delta)
 	elif throttle < 0.0:
@@ -375,9 +373,15 @@ func _drive(delta: float) -> void:
 		var end_extent := absf(forward.x)*float(item.length)+absf(forward.z)*float(item.width)
 		var leader_speed := maxf(0,travel_direction.x*float(item.direction)*float(item.speed))
 		stopping_distance = minf(stopping_distance,maxf(0,ahead-player_half_size.y-end_extent-.65)+leader_speed*leader_speed/10)
+	var assisted_braking := false
 	if stopping_distance < INF:
-		var limit := sqrt(10.0*maxf(0,stopping_distance))
+		# Reserve the current frame's travel before applying the stopping curve.
+		var frame_brake := 5.0*delta
+		var limit := sqrt(frame_brake*frame_brake + 10.0*maxf(0,stopping_distance-.04))-frame_brake
+		assisted_braking = absf(speed)>limit
 		speed = signf(speed)*minf(absf(speed),limit)
+	if player_brake_lens:
+		_set_rear_lights(player_brake_lens, brake_held or assisted_braking)
 	var step := forward * speed * delta
 	var extent := _player_extent()
 	for item in traffic_data:
@@ -1223,8 +1227,6 @@ func _update_daylight(delta: float) -> void:
 	var night := 1.0 if time_mode == 1 else (smoothstep(-.4,.4,-cos(day_phase*TAU)) if time_mode == 2 else 0.0)
 	if absf(night-last_night)<.006: return
 	last_night = night
-	if player_brake_lens:
-		_set_rear_lights(player_brake_lens, brake_held)
 	for item in traffic_data:
 		if item.brake_lens:
 			_set_rear_lights(item.brake_lens, item.brake_lens.emission_energy_multiplier >= 2.4 - .001)
