@@ -173,3 +173,5 @@ Spelprojektet publiceras i det privata GitHub-repot yeager/axels-emergency-vehic
 - Trädkollisioner använder främre stötfångarens mått vid körning framåt och bakre utrustningens mått vid backning. Test med bärgaren stannade med mindre än en centimeters frigång åt båda håll.
 
 - Parkerade fordons kollisionsytor utgår från modellens faktiska ytterkanter. Till fots provades frigången framför och bakom bärgaren i tre olika riktningar.
+
+- Depån har en separat asfalterad ruta för bärgaren och en avslutande linje vid taxiplatsen. Godot-testet kontrollerade att hela bärgarens fotavtryck ryms på asfalten efter spelstart.

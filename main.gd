@@ -1439,7 +1439,8 @@ func _apply_player_appearance() -> void:
 			arm.get_child(0).material_override = jacket
 
 func _build_depot() -> void:
-	_make_driving_surface("Motor pool", Vector3(23,.1,11), Vector3(-38,-.18,15), Color("#565c5a"))
+	_make_driving_surface("Motor pool", Vector3(25,.1,11), Vector3(-37,-.18,15), Color("#565c5a"))
+	_make_driving_surface("Recovery apron",Vector3(8.4,.10,9.8),Vector3(-45,-.18,25.4),Color("#565c5a"))
 	# A continuous pedestrian route from the parking bays to Stationsallén.
 	for span in [Vector2(20.5,31.3),Vector2(38.7,42.5)]:
 		_make_driving_surface("Depot footpath",Vector3(2.3,.08,span.y-span.x),
@@ -1469,14 +1470,20 @@ func _build_depot() -> void:
 		var model := (load(VEHICLE_SCENES_ALL[i]) as PackedScene).instantiate() as Node3D
 		model.rotation.y = PI
 		body.add_child(model)
-		body.position = Vector3(-45,-.13,23) if i==RECOVERY else Vector3(-47+5*i,-.13,15)
+		body.position = Vector3(-45,-.13,25) if i==RECOVERY else Vector3(-47+5*i,-.13,15)
 		for lamp in model.find_children("Flash*", "MeshInstance3D", true, false):
 			lamp.visible = false
 		parked_cars.append(body)
 		var bounds := _model_bounds(body,model)
 		parked_footprints.append(Rect2(bounds.position.x,bounds.position.z,bounds.size.x,bounds.size.z))
 		parked_sizes.append(Vector2(maxf(-bounds.position.x,bounds.end.x),maxf(-bounds.position.z,bounds.end.z)))
-		_make_box("Parking stripe", Vector3(.10,.025,7.8), Vector3(body.position.x-2.5,-.116,15), Color("#deddd1"))
+		if i == RECOVERY:
+			for side in [-1,1]:
+				_make_box("Recovery bay stripe",Vector3(.1,.025,9.3),body.position+Vector3(side*2.5,.014,.45),Color("#deddd1"))
+		else:
+			_make_box("Parking stripe", Vector3(.10,.025,7.8), Vector3(body.position.x-2.5,-.116,15), Color("#deddd1"))
+			if i==TAXI:
+				_make_box("Parking stripe",Vector3(.10,.025,7.8),Vector3(body.position.x+2.5,-.116,15),Color("#deddd1"))
 	_make_walker("Player on foot",0,0,1,Color("#648faa"),Color("#30414d"))
 	walker = walker_data.pop_back().actor
 	var ponytail := MeshInstance3D.new()
@@ -2946,7 +2953,7 @@ func _start_game() -> void:
 	ambulance.visible = true
 	for i in parked_cars.size():
 		parked_cars[i].visible = i != vehicle_index
-		parked_cars[i].position = Vector3(-45,-.13,23) if i==RECOVERY else Vector3(-47+5*i,-.13,15)
+		parked_cars[i].position = Vector3(-45,-.13,25) if i==RECOVERY else Vector3(-47+5*i,-.13,15)
 		parked_cars[i].rotation = Vector3.ZERO
 	ambulance.global_position = _starting_position()
 	ambulance.rotation = Vector3(0, -PI * 0.5, 0)
