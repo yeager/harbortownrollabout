@@ -437,7 +437,8 @@ func _drive(delta: float) -> void:
 		speed = move_toward(speed, throttle * max_speed, acceleration * delta)
 	steering = move_toward(steering, steer_input, (2.0 if gentle_driving else 3.4) * delta)
 	if cabin_wheel:
-		cabin_wheel.basis = cabin_wheel_rest_basis * Basis(cabin_wheel_axis,-steering*1.2)
+		var angle := deg_to_rad(33.0) if vehicle_index == SNOWMOBILE else 1.2
+		cabin_wheel.basis = cabin_wheel_rest_basis * Basis(cabin_wheel_axis,-steering*angle)
 		_pose_driver_arms()
 	for knuckle in front_knuckles:
 		knuckle.rotation.y = -steering * deg_to_rad(33.0)
@@ -1592,7 +1593,7 @@ func _pose_driver_arms() -> void:
 	var arms: Array = road_driver.get_meta("arms")
 	for index in arms.size():
 		var shoulder: Node3D = arms[index]
-		var grip := ambulance.to_global(Vector3((-.29 if index == 0 else .29),1.18,-.35)) if vehicle_index == SNOWMOBILE else cabin_wheel.to_global(Vector3.RIGHT * grip_radius * (-1 if index == 0 else 1))
+		var grip := cabin_wheel.to_global(Vector3.RIGHT * grip_radius * (-1 if index == 0 else 1))
 		var reach := road_driver.to_local(grip) - shoulder.position
 		# Bend the elbow down and slightly out, keeping the wrist on the rim.
 		var axis := reach.normalized()
@@ -2572,6 +2573,14 @@ func _load_vehicle_model() -> void:
 	_end_skid()
 	rear_tire_contacts.clear()
 	front_knuckles.clear()
+	if vehicle_index == SNOWMOBILE:
+		for joint in vehicle_model.find_children("SkiPivot*", "Node3D", true, false):
+			front_knuckles.append(joint)
+		cabin_wheel = vehicle_model.find_child("HandlebarPivot", true, false)
+		cabin_wheel_rest_basis = cabin_wheel.basis
+		cabin_wheel_axis = Vector3.UP
+		# The imported model faces the opposite direction to the driver root.
+		grip_radius = -.29
 	for pivot in player_wheels:
 		var hub := ambulance.to_local(pivot.global_position)
 		if hub.z < 0.0:
