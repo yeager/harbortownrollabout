@@ -231,3 +231,4 @@ De tre västra huvudgatorna har 2,8 meter bred gångbana på båda sidor. Framko
 Fem grannar promenerar i västra kvarteren. Verifierade hälsning vid möte och vändning på trottoaren vid kvarterets slut i Godot.
 Gångbanorna längs de västra tvärgatorna ansluter i nivå runt alla tio kvarter. Gånghöjd och framkomlighet kontrollerade runt varje kvarter i Godot.
 Buss 502 hämtar nu även vid Västra torget och lämnar vid Västerängen. Godot-test genom alla sex hållplatsutbyten med destinationsskylt, belöning och återgång till torget.
+Även medresenärerna vid busshållplatserna hälsar. Storlek och avstånd i gruppen återställs före placering vid byte från skoltaxi till buss. Testat vid västra hämtning och lämning.

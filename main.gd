@@ -2416,7 +2416,7 @@ func _update_pedestrians(delta: float) -> void:
 	_advance_crossing(delta)
 	greeting_timer = maxf(0,greeting_timer-delta)
 	greeting.visible = walker.visible and greeting_timer>4.0
-	for person: Node3D in [square_neighbour, waiting_medic, marina_recipient, passenger, arriving_passenger]:
+	for person: Node3D in [square_neighbour, waiting_medic, marina_recipient, passenger, arriving_passenger] + bus_companions:
 		if is_instance_valid(person):
 			_greet_nearby_player(person)
 	for item in walker_data:
@@ -2960,6 +2960,8 @@ func _update_mission_marker() -> void:
 		arriving_passenger.visible = bus_leg>=2 and passenger.visible
 		if passenger.visible: _place_taxi_passenger(passenger,BUS_STOPS[bus_leg%BUS_STOPS.size()])
 		if arriving_passenger.visible: _place_taxi_passenger(arriving_passenger,BUS_STOPS[(bus_leg-1)%BUS_STOPS.size()])
+	passenger.scale = Vector3.ONE*(.72 if vehicle_index==TAXI and _school_fare(taxi_leg) else 1.0)
+	arriving_passenger.scale = Vector3.ONE*(.72 if vehicle_index==TAXI and taxi_leg>=2 and _school_fare(taxi_leg-1) else 1.0)
 	for i in bus_companions.size():
 		var companion := bus_companions[i]
 		companion.visible = vehicle_index==BUS and not free_drive and (passenger.visible or arriving_passenger.visible)
@@ -2970,8 +2972,6 @@ func _update_mission_marker() -> void:
 			companion.transform = leader.transform
 			companion.translate_object_local(Vector3(-1.1 if i==0 else 1.1,0,0))
 			companion.position.y = _foot_height(companion.position.x,companion.position.z)
-	passenger.scale = Vector3.ONE*(.72 if vehicle_index==TAXI and _school_fare(taxi_leg) else 1.0)
-	arriving_passenger.scale = Vector3.ONE*(.72 if vehicle_index==TAXI and taxi_leg>=2 and _school_fare(taxi_leg-1) else 1.0)
 	var rescue := not free_drive and not boating and vehicle_index not in [TAXI, RECOVERY, BUS]
 	square_neighbour.visible = rescue and mission_index <= 1
 	square_neighbour.get_meta("arms")[1].rotation.z = 2.35 if mission_index == 0 else 0.0
