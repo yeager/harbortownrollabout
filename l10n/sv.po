@@ -713,3 +713,9 @@ msgstr "Filtleveranser"
 
 msgid "Hold V and move the mouse to look around"
 msgstr "Håll V och rör musen för att se dig omkring"
+
+msgid "I said hello to someone on the tram. It was my reflection. — Grandpa"
+msgstr "Jag hälsade på någon på Tvärbanan. Det var min spegelbild. – Morfar"
+
+msgid "Your missing sock turned up. The teddy bear was wearing it as a hat. — Mum"
+msgstr "Jag hittade din försvunna strumpa. Nallen hade den som mössa. – Mamma"

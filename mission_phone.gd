@@ -8,7 +8,13 @@ var history_scroll := ScrollContainer.new()
 var unread := 0
 var current_job := ""
 
-const SOCIAL := ["Have you done your homework? — Mum", "A duck just beat me to the ferry. — Grandpa", "I saved you a bun. It only has one tiny bite missing! — Mum"]
+const SOCIAL := [
+	"Have you done your homework? — Mum",
+	"A duck just beat me to the ferry. — Grandpa",
+	"I saved you a bun. It only has one tiny bite missing! — Mum",
+	"I said hello to someone on the tram. It was my reflection. — Grandpa",
+	"Your missing sock turned up. The teddy bear was wearing it as a hat. — Mum",
+]
 var social_index := 0
 var social_wait := 75.0
 
