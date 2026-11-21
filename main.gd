@@ -82,6 +82,7 @@ const TAXI_STOPS := [0,2, 0,SCHOOL, 1,0, SCHOOL,1, 2,1]
 const WEST_STOPS := [Vector3(-205,0,2.8),Vector3(-460,0,-45.2)]
 const BUS_STOPS := [0,SCHOOL,2,1,4,5]
 const BUS_MESSAGES := ["Collect passengers at the square.", "Drop off passengers at the school.", "Collect passengers at the marina.", "Drop off passengers at the clinic.", "Collect passengers at Västra torget.", "Drop off passengers at Västerängen."]
+var rear_bus_board: Label3D
 var bus_board: Label3D
 const BUS_STOP_NAMES := ["TORGET","VÅRDCENTRALEN","SMÅBÅTSHAMNEN","SJÖSTADSSKOLAN","VÄSTRA TORGET","VÄSTERÄNGEN"]
 var bus_leg := 0
@@ -2756,12 +2757,19 @@ func _load_vehicle_model() -> void:
 	var packed: PackedScene = load(VEHICLE_SCENES_ALL[vehicle_index])
 	vehicle_model = packed.instantiate() as Node3D
 	bus_board = null
+	rear_bus_board = null
 	if vehicle_index == BUS:
 		bus_board = Label3D.new()
 		bus_board.pixel_size=.0026
 		bus_board.modulate=Color("#ffbb47")
 		bus_board.position=Vector3(0,2.68,5.28)
 		vehicle_model.add_child(bus_board)
+		var rear_panel := _make_box("Rear destination panel",Vector3(1.88,.34,.08),Vector3(0,2.68,-5.22),Color("#182126"),false,vehicle_model)
+		rear_bus_board = bus_board.duplicate() as Label3D
+		rear_bus_board.name = "RearDestination"
+		rear_bus_board.position = Vector3(0,0,-.046)
+		rear_bus_board.rotation.y = PI
+		rear_panel.add_child(rear_bus_board)
 		_update_bus_board()
 	vehicle_model.name = VEHICLE_NAMES_ALL[vehicle_index] + "_BlenderModel"
 	vehicle_model.rotation.y = PI
@@ -3192,6 +3200,7 @@ func _place_taxi_passenger(person: Node3D, stop: int) -> void:
 func _update_bus_board() -> void:
 	if is_instance_valid(bus_board):
 		bus_board.text = "SJÖSTADEN" if free_drive else "502  " + BUS_STOP_NAMES[BUS_STOPS[bus_leg % BUS_STOPS.size()]]
+		rear_bus_board.text = bus_board.text
 
 func _update_mission_marker() -> void:
 	_update_bus_board()
