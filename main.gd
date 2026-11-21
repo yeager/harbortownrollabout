@@ -2470,9 +2470,9 @@ func _update_traffic(delta: float) -> void:
 				continue
 			var ahead := fposmod((neighbour.position.x - actor.position.x) * direction, TRAFFIC_EAST - TRAFFIC_WEST)
 			var gap := ahead - float(item.length) - float(other.length)
-			if gap<clearance:
-				clearance = gap
-				tractor_gap = gap if other.tractor and other.direction==direction else INF
+			if other.tractor and other.direction == direction:
+				tractor_gap = minf(tractor_gap, gap)
+			clearance = minf(clearance, gap)
 		if casualty.visible and casualty.get_parent()==self:
 			var offset := casualty.position-actor.position
 			var gap := offset.x*direction-float(item.length)-2.1
