@@ -65,3 +65,5 @@ Spelprojektet publiceras i det privata GitHub-repot yeager/axels-emergency-vehic
 - Hård bromsning i snö lämnar bredare grå spår och dämpat däckljud. Slask ger mörkare spår än torr snö. Varje spårsegment behåller färgen från väglaget när det skapades.
 
 - I butikerna visar ”Dina köp” hur många exemplar av varje vara som har köpts. Listan delas mellan butikerna och läser från de lokalt sparade köpen.
+
+- Butiksmenyn har mörk bakgrund och rullning för längre inköpslistor. I ett spelfönster på 800 × 480 verifierades båda kioskknapparnas placering och ett köp med samtliga sex varor i listan.

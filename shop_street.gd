@@ -8,6 +8,7 @@ const COLORS := ["#a86343","#427868","#b65f51","#927198"]
 const FRONT_Z := 42.5
 var awnings: Array[Node3D] = []
 var inside := -1
+var shop_card := PanelContainer.new()
 var panel := VBoxContainer.new()
 var receipt: Label
 var basket: Label
@@ -51,12 +52,25 @@ func _ready() -> void:
 				part("Display tin",Vector3(x-2.5+.7*jar,shelf+.19,49.08),Vector3(.32,.3,.26),tint)
 
 func build_menu(ui: CanvasLayer) -> void:
-	ui.add_child(panel)
-	panel.set_anchors_and_offsets_preset(Control.PRESET_CENTER_RIGHT)
-	panel.offset_left=-280
-	panel.offset_right=-22
-	panel.offset_top=68
-	panel.hide()
+	ui.add_child(shop_card)
+	shop_card.set_anchors_and_offsets_preset(Control.PRESET_RIGHT_WIDE)
+	shop_card.offset_left = -302
+	shop_card.offset_right = -22
+	shop_card.offset_top = 108
+	shop_card.offset_bottom = -155
+	var finish := StyleBoxFlat.new()
+	finish.bg_color = Color("#20343bf5")
+	finish.set_corner_radius_all(14)
+	for side in [SIDE_LEFT,SIDE_TOP,SIDE_RIGHT,SIDE_BOTTOM]:
+		finish.set_content_margin(side,14)
+	shop_card.add_theme_stylebox_override("panel",finish)
+	var scroll := ScrollContainer.new()
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	scroll.follow_focus = true
+	shop_card.add_child(scroll)
+	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	scroll.add_child(panel)
+	shop_card.hide()
 
 func update_customer(foot: bool, pos: Vector3, active: bool) -> void:
 	var index:=-1
@@ -71,7 +85,7 @@ func update_customer(foot: bool, pos: Vector3, active: bool) -> void:
 		if inside>=0:
 			awnings[inside].hide()
 			rebuild_menu()
-	panel.visible=inside>=0 and active
+	shop_card.visible=inside>=0 and active
 
 func rebuild_menu() -> void:
 	for child in panel.get_children():
@@ -106,7 +120,7 @@ func refresh_basket() -> void:
 
 func purchase(shop: int, item: int) -> void:
 	var game=get_parent()
-	if shop!=inside or not panel.visible or not game.walker.visible or game.paused: return
+	if shop!=inside or not shop_card.is_visible_in_tree() or not game.walker.visible or game.paused: return
 	var cost:int=PRICES[shop][item]
 	if game.wallet<cost:
 		receipt.text=tr("You need %d more coins.") % (cost-game.wallet)
