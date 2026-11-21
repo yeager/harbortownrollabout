@@ -79,3 +79,5 @@ Spelprojektet publiceras i det privata GitHub-repot yeager/axels-emergency-vehic
 - Färjan Lottens salongsfönster får varmt sken när staden mörknar. Nattläget granskades i en renderad Godot-bild från kajen och dagsläget kontrollerades utan fönstersken.
 
 - Kanalvattnet speglar Lottens upplysta sidofönster i skymning och natt. Vågorna bryter upp skenet utifrån kamerans och färjans position. Nattvyn från kajen är visuellt kontrollerad i Godot.
+
+- Motorbåtens kölvatten utgår från aktern och ändrar längd och ljushet med farten. Riktningen växlar vid backning. Framåtkörning kontrollerades i renderad Godot-vy och parametrarna testades vid stopp, backning och framfart.

@@ -715,6 +715,9 @@ func _build_waterfront() -> void:
 	water.code = """
 	shader_type spatial;
 	uniform vec3 ferry_center;
+	uniform vec2 stern;
+	uniform vec2 wake_heading;
+	uniform float wake_strength;
 	uniform float dusk;
 	varying vec2 surface;
 	void vertex(){ surface=(MODEL_MATRIX*vec4(VERTEX,1.)).xz; }
@@ -727,6 +730,13 @@ func _build_waterfront() -> void:
 		vec2 slope = vec2(.024,.013)*swell + vec2(.040,-.022)*chop + detail*vec2(.026,.013)*fine;
 		NORMAL_MAP = normalize(vec3(slope,1.0))*.5+.5;
 		ALBEDO = mix(vec3(.027,.062,.078),vec3(.051,.093,.117),.5+.5*chop);
+		vec2 trail = p-stern;
+		float aft = -dot(trail,wake_heading);
+		float across = abs(dot(trail,vec2(-wake_heading.y,wake_heading.x)));
+		float edge = across-.43-max(aft,0.)*.23+.12*chop;
+		float crests = exp(-edge*edge*7.) + .48*exp(-across*across*2.);
+		float foam = wake_strength*smoothstep(-.3,.5,aft)*(1.-smoothstep(1.,3.+8.*wake_strength,aft))*crests;
+		ALBEDO = mix(ALBEDO,vec3(.62,.74,.74),clamp(foam*(.55+.22*chop+.17*fine),0.,1.));
 		// Intersect the reflected sightline with the two saloon window bands.
 		vec3 eye = CAMERA_POSITION_WORLD;
 		vec3 ray = normalize(vec3(p.x-eye.x,eye.y+.99,p.y-eye.z));
@@ -1073,6 +1083,11 @@ func _build_marina() -> void:
 
 func _update_moorings(delta: float) -> void:
 	wave_time += delta
+	var heading := Vector2(-sin(launch.rotation.y),-cos(launch.rotation.y))
+	var stern := Vector2(launch.position.x,launch.position.z)-heading*1.95
+	water_finish.set_shader_parameter("stern",stern)
+	water_finish.set_shader_parameter("wake_heading",heading*signf(launch_speed))
+	water_finish.set_shader_parameter("wake_strength",clampf(absf(launch_speed)/6.0,0,1) if boating else 0.0)
 	# A double-ended ferry can reverse away from either landing without turning.
 	# Each crossing includes a five-second stop and gentle acceleration.
 	var half_trip := fmod(wave_time,58.0)
