@@ -632,3 +632,57 @@ msgstr "Forward+ · NVIDIA DLSS (experimentellt, kräver RTX)"
 
 msgid "DLSS is experimental. It needs the NGX-enabled engine and a supported NVIDIA RTX GPU/driver; otherwise it continues without DLSS. Restart to apply."
 msgstr "DLSS är experimentellt och kräver en spelmotor med NGX samt ett kompatibelt NVIDIA RTX-kort med rätt drivrutin. Om stödet saknas körs spelet utan DLSS. Starta om spelet för att använda ändringen."
+
+msgid "Check the crossing at the square"
+msgstr "Se till övergångsstället vid torget"
+
+msgid "Check the clinic entrance"
+msgstr "Se till entrén vid vårdcentralen"
+
+msgid "Patrol the marina"
+msgstr "Patrullera småbåtshamnen"
+
+msgid "Check the hydrant at the square"
+msgstr "Kontrollera brandposten vid torget"
+
+msgid "Meet the fire safety team at the clinic"
+msgstr "Träffa brandskyddsgruppen vid vårdcentralen"
+
+msgid "Check the rescue equipment at the marina"
+msgstr "Kontrollera livräddningsutrustningen vid småbåtshamnen"
+
+msgid "Collect parcels at the square"
+msgstr "Hämta paket vid torget"
+
+msgid "Deliver a parcel to the clinic"
+msgstr "Lämna ett paket vid vårdcentralen"
+
+msgid "Deliver the last parcel to the marina"
+msgstr "Lämna sista paketet vid småbåtshamnen"
+
+msgid "Collect warm blankets at the square"
+msgstr "Hämta varma filtar vid torget"
+
+msgid "Bring blankets to the clinic"
+msgstr "Lämna filtar vid vårdcentralen"
+
+msgid "Bring blankets to the marina"
+msgstr "Lämna filtar vid småbåtshamnen"
+
+msgid "Have you done your homework? — Mum"
+msgstr "Har du gjort dina läxor? – Mamma"
+
+msgid "A duck just beat me to the ferry. — Grandpa"
+msgstr "En anka hann före mig till färjan. – Morfar"
+
+msgid "I saved you a bun. It only has one tiny bite missing! — Mum"
+msgstr "Jag sparade en bulle åt dig. Det fattas bara en liten tugga! – Mamma"
+
+msgid "Eat ice cream"
+msgstr "Ät glass"
+
+msgid "Eat hot dog"
+msgstr "Ät korv med bröd"
+
+msgid "%s feels extra happy!"
+msgstr "%s är extra glad!"

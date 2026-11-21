@@ -3,6 +3,16 @@ extends Node3D
 const TARGETS: Array[Vector3] = [Vector3(30, 0, 3), Vector3(0, 0, -25), Vector3(99.65, 0, -24)]
 const WALK_TARGETS: Array[Vector3] = [Vector3(30,0,12), Vector3(6.35,0,-25), Vector3(90,0,-24)]
 const TARGET_NAMES := ["Help at the square", "Pick up the medic", "Deliver first aid to the marina"]
+const PATROL_TASKS := ["Check the crossing at the square", "Check the clinic entrance", "Patrol the marina"]
+const FIRE_TASKS := ["Check the hydrant at the square", "Meet the fire safety team at the clinic", "Check the rescue equipment at the marina"]
+const DELIVERY_TASKS := ["Collect parcels at the square", "Deliver a parcel to the clinic", "Deliver the last parcel to the marina"]
+const SLED_TASKS := ["Collect warm blankets at the square", "Bring blankets to the clinic", "Bring blankets to the marina"]
+func _mission_stop() -> int:
+	match vehicle_index:
+		1: return [2, 0, 1][mission_index]
+		2: return [1, 2, 0][mission_index]
+		_: return mission_index
+
 const ROAD_HALF := 4.8
 const VEHICLE_NAMES := ["Ambulance", "Police car", "Fire engine"]
 const VEHICLE_SCENES := ["res://vehicles/ambulance.glb", "res://vehicles/polisbil.glb", "res://vehicles/brandbil.glb"]
@@ -149,6 +159,21 @@ var speed := 0.0
 var steering := 0.0
 var free_drive := false
 var mission_index := 0
+var vehicle_progress := {}
+
+func _change_mission_vehicle(next: int) -> void:
+	vehicle_progress[vehicle_index] = mission_index
+	vehicle_index = next
+	mission_index = vehicle_progress.get(next, 0)
+
+func _vehicle_tasks() -> Array:
+	match vehicle_index:
+		0: return TARGET_NAMES
+		1: return PATROL_TASKS
+		2: return FIRE_TASKS
+		SNOWMOBILE: return SLED_TASKS
+		_: return DELIVERY_TASKS
+
 var parked_at_target := 0.0
 var mode := "menu"
 var paused := false
@@ -166,6 +191,7 @@ var wallet := 0
 var wallet_label: Label
 var shops := preload("res://shop_street.gd").new()
 var purchases := {}
+var happy_seconds := 0.0
 var phone := preload("res://mission_phone.gd").new()
 var last_dispatch := ""
 var mission_label: Label
@@ -234,6 +260,10 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	if mode == "playing" and not paused:
+		if happy_seconds > 0:
+			happy_seconds = maxf(0, happy_seconds-delta)
+			if happy_seconds == 0: _refresh_ui()
+		phone.advance(delta)
 		weather.tick(delta)
 		_advance_wipers(delta)
 		if warning_triangle.is_visible_in_tree():
@@ -709,7 +739,8 @@ func _mission_destination() -> Vector3:
 		var door := parked_cars[vehicle_index].to_global(parked_door_offset)
 		door.y = _foot_height(door.x, door.z)
 		return door
-	var destination := WALK_TARGETS[mission_index] if walker.visible else TARGETS[mission_index]
+	var stop := _mission_stop()
+	var destination := WALK_TARGETS[stop] if walker.visible else TARGETS[stop]
 	if vehicle_index == TAXI:
 		destination = _stop_curb(_taxi_stop())
 	elif vehicle_index == BUS:
@@ -782,7 +813,7 @@ func _help_at_target() -> void:
 	if _at_target() and (walker.visible or absf(speed)<.12):
 		parked_at_target = 0.0
 		mission_index += 1
-		phone.receive("First-aid supplies delivered to the marina. You earned 10 coins." if mission_index==TARGETS.size() else "Thank you for helping! You earned 10 coins.")
+		phone.receive("First-aid supplies delivered to the marina. You earned 10 coins." if vehicle_index==0 and mission_index==TARGETS.size() else "Thank you for helping! You earned 10 coins.")
 		wallet+=10
 		_save_preferences()
 		speed = 0.0
@@ -797,7 +828,7 @@ func _help_at_target() -> void:
 			start_button.grab_focus()
 		_update_mission_marker()
 	else:
-		if mission_index == 2:
+		if _mission_stop() == 2:
 			message = "Cross a bridge to the east side." if (walker.position.x if walker.visible else ambulance.position.x) < 87 else "Follow the quay to the green marker by the boats."
 		else:
 			message = "Follow the green mission marker."
@@ -1999,7 +2030,7 @@ func _change_seat() -> void:
 		var next := _nearest_car()
 		if next < 0: return
 		release_walk_keys = _walk_pedal_pressed()
-		vehicle_index = next
+		_change_mission_vehicle(next)
 		sound_on = parked_sound_settings[next]
 		lights_on = parked_light_settings[next]
 		vehicle_selector.select(next)
@@ -3059,7 +3090,7 @@ func _update_mission_marker() -> void:
 			companion.transform = leader.transform
 			companion.translate_object_local(Vector3(-1.1 if i==0 else 1.1,0,0))
 			companion.position.y = _foot_height(companion.position.x,companion.position.z)
-	var rescue := not free_drive and not boating and vehicle_index not in [TAXI, RECOVERY, BUS]
+	var rescue := not free_drive and not boating and vehicle_index == 0
 	square_neighbour.visible = rescue and mission_index <= 1
 	square_neighbour.get_meta("arms")[1].rotation.z = 2.35 if mission_index == 0 else 0.0
 	waiting_medic.visible = rescue and mission_index == 1
@@ -3087,7 +3118,7 @@ func _update_mission_marker() -> void:
 	if _needs_mission_vehicle():
 		marker_label.text = tr("Return to your taxi" if vehicle_index == TAXI else "Return to your bus" if vehicle_index==BUS else "Return to your recovery truck").to_upper()
 		return
-	marker_label.text = tr(BUS_MESSAGES[bus_leg%BUS_STOPS.size()] if vehicle_index==BUS else SERVICE_MESSAGES[recovery_leg%4] if vehicle_index==RECOVERY else _taxi_instruction() if vehicle_index==TAXI else TARGET_NAMES[mission_index]).to_upper()
+	marker_label.text = tr(BUS_MESSAGES[bus_leg%BUS_STOPS.size()] if vehicle_index==BUS else SERVICE_MESSAGES[recovery_leg%4] if vehicle_index==RECOVERY else _taxi_instruction() if vehicle_index==TAXI else _vehicle_tasks()[_mission_stop()]).to_upper()
 
 func _update_emergency_lights() -> void:
 	var phase := int(light_phase * 2.0) % 2
@@ -3507,6 +3538,8 @@ func _start_game() -> void:
 		outboard.rotation.y = 0.0
 	waiting_for_signal = false
 	last_dispatch=""
+	happy_seconds = 0
+	phone.reset_social()
 	phone.messages.clear()
 	phone.unread=0
 	phone.handset.hide()
@@ -3515,6 +3548,7 @@ func _start_game() -> void:
 	mode = "playing"
 	paused = false
 	mission_index = 0
+	vehicle_progress.clear()
 	recovery_leg = 0
 	taxi_leg = 0
 	bus_leg = 0
@@ -3556,7 +3590,7 @@ func _on_vehicle_selected(index: int) -> void:
 		parked_cars[vehicle_index].transform = parked_cars[index].transform
 		parked_cars[vehicle_index].visible = true
 		parked_cars[index].visible = false
-	vehicle_index = clampi(index, 0, VEHICLE_NAMES_ALL.size() - 1)
+	_change_mission_vehicle(clampi(index, 0, VEHICLE_NAMES_ALL.size() - 1))
 	speed = 0
 	steering = 0
 	brake_held = false
@@ -3708,7 +3742,9 @@ func _refresh_dispatch() -> void:
 		var requests := ["Taxi requested at the square.","Please take me to the marina.","A pupil is waiting at the square.","Please take me to school.","Taxi requested at the clinic.","Please take me to the square.","A pupil is waiting at school.","Please take me to the clinic.","Taxi requested at the marina.","Please take me to the clinic."]
 		dispatch=requests[taxi_leg%requests.size()]
 	else:
-		dispatch=["A neighbour needs help at the square.","A medic is waiting at the clinic. Please pick them up.","Please bring the first-aid supplies to the marina."][mission_index]
+		dispatch=_vehicle_tasks()[_mission_stop()]
+		if vehicle_index==0:
+			dispatch=["A neighbour needs help at the square.","A medic is waiting at the clinic. Please pick them up.","Please bring the first-aid supplies to the marina."][mission_index]
 	if dispatch!=last_dispatch:
 		last_dispatch=dispatch
 		phone.receive(dispatch)
@@ -3728,6 +3764,8 @@ func _refresh_ui() -> void:
 	_refresh_dispatch()
 	_sync_radio()
 	wallet_label.text = tr("%d coins") % wallet
+	if happy_seconds > 0:
+		wallet_label.text += "   ☺ " + tr("%s feels extra happy!") % ("Alma" if play_as_alma else "Axel")
 	light_button.text = "Lights ON" if lights_on else "Lights OFF"
 	if vehicle_index >= 3:
 		siren_button.text = "Engine ON" if sound_on else "Engine OFF"
@@ -3747,7 +3785,7 @@ func _refresh_ui() -> void:
 	elif vehicle_index==TAXI:
 		mission_label.text = tr(_taxi_instruction())
 	elif mission_index < TARGET_NAMES.size():
-		mission_label.text = tr("MISSION %d / %d   ·   %s") % [mission_index + 1, TARGET_NAMES.size(), tr(TARGET_NAMES[mission_index])]
+		mission_label.text = tr("MISSION %d / %d   ·   %s") % [mission_index + 1, TARGET_NAMES.size(), tr(_vehicle_tasks()[_mission_stop()])]
 	else:
 		mission_label.text = "ALL MISSIONS COMPLETE"
 	var show_overlay := mode == "menu" or mode == "complete" or paused
@@ -3801,6 +3839,8 @@ func _refresh_ui() -> void:
 		subtitle_label.text = "Choose a vehicle and drive to three missions.\nTake your time. You control the lights and siren."
 		if free_drive:
 			subtitle_label.text = "Explore on foot or by vehicle. Stop at the depot to change vehicles."
+		elif vehicle_index not in [0,TAXI,RECOVERY,BUS]:
+			subtitle_label.text = _vehicle_tasks()[_mission_stop()]
 		elif vehicle_index == BUS:
 			subtitle_label.text = BUS_MESSAGES[bus_leg%BUS_STOPS.size()]
 		elif vehicle_index == TAXI:
@@ -3810,7 +3850,7 @@ func _refresh_ui() -> void:
 		start_button.text = "Start driving"
 	elif mode == "complete":
 		title_label.text = "All missions complete!"
-		subtitle_label.text = tr("Well done, %s!") % ("Alma" if play_as_alma else "Axel") + "\n" + tr("First-aid supplies delivered to the marina. You earned 10 coins.")
+		subtitle_label.text = tr("Well done, %s!") % ("Alma" if play_as_alma else "Axel") + "\n" + tr("First-aid supplies delivered to the marina. You earned 10 coins." if vehicle_index==0 else "Thank you for helping! You earned 10 coins.")
 		start_button.text = "Drive again"
 	else:
 		title_label.text = "Pause"

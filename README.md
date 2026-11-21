@@ -104,3 +104,7 @@ The snowmobile is available in the vehicle selector and at the depot. It uses th
 Off-road, the snowmobile can go faster as snow accumulates. Gentle driving still caps it at 30 km/h.
 Bus route 502 serves six stops, including a passenger pickup at Västra torget and a drop-off at Västerängen.
 You can also hold the left mouse button directly on either on-screen pedal. Release it anywhere to let the pedal up.
+
+Police patrols, fire safety checks, ambulance calls, taxi fares, towing and bus routes depend on your vehicle. Personal cars deliver parcels and the snowmobile delivers blankets. Switching vehicles during a session preserves your place in each vehicle's jobs. The phone also receives occasional family texts during play.
+
+At the kiosk, buy an ice cream or a hot dog, then choose the matching **Eat** button. Axel or Alma consumes one snack and feels extra happy for 25 seconds of play.

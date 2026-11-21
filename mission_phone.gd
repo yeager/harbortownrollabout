@@ -6,6 +6,22 @@ var messages: Array[String] = []
 var inbox := Label.new()
 var unread := 0
 
+const SOCIAL := ["Have you done your homework? — Mum", "A duck just beat me to the ferry. — Grandpa", "I saved you a bun. It only has one tiny bite missing! — Mum"]
+var social_index := 0
+var social_wait := 75.0
+
+func reset_social() -> void:
+	social_index = 0
+	social_wait = 75.0
+
+func advance(delta: float) -> void:
+	if social_index >= SOCIAL.size(): return
+	social_wait -= delta
+	if social_wait <= 0:
+		receive(SOCIAL[social_index])
+		social_index += 1
+		social_wait = 150.0
+
 func _ready() -> void:
 	set_anchors_and_offsets_preset(Control.PRESET_TOP_LEFT)
 	position=Vector2(22,106)

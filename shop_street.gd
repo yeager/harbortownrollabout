@@ -12,6 +12,7 @@ var shop_card := PanelContainer.new()
 var panel := VBoxContainer.new()
 var first_product: Button
 var receipt: Label
+var snack_buttons := {}
 var basket: Label
 
 func storefront_x(index: int) -> float:
@@ -164,6 +165,7 @@ func update_customer(foot: bool, pos: Vector3, active: bool) -> void:
 		first_product.grab_focus()
 
 func rebuild_menu() -> void:
+	snack_buttons.clear()
 	for child in panel.get_children():
 		panel.remove_child(child)
 		child.queue_free()
@@ -187,11 +189,32 @@ func rebuild_menu() -> void:
 	basket = Label.new()
 	basket.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	panel.add_child(basket)
+	if inside == 1:
+		for product: String in MENUS[1]:
+			var eat := Button.new()
+			eat.text = "Eat ice cream" if product == "Ice cream" else "Eat hot dog"
+			eat.custom_minimum_size.y = 44
+			eat.pressed.connect(eat_snack.bind(product))
+			panel.add_child(eat)
+			snack_buttons[product] = eat
+	refresh_basket()
+
+func eat_snack(product: String) -> void:
+	var game = get_parent()
+	if inside != 1 or not shop_card.is_visible_in_tree() or not game.walker.visible or game.paused: return
+	if not product in MENUS[1] or int(game.purchases.get(product, 0)) <= 0: return
+	game.purchases[product] -= 1
+	game._save_preferences()
+	game.happy_seconds = 25
+	game._refresh_ui()
+	receipt.text = tr("%s feels extra happy!") % ("Alma" if game.play_as_alma else "Axel")
 	refresh_basket()
 
 func refresh_basket() -> void:
 	var lines := PackedStringArray()
 	var purchases: Dictionary = get_parent().purchases
+	for product in snack_buttons:
+		snack_buttons[product].visible = int(purchases.get(product,0)) > 0
 	for menu in MENUS:
 		for product in menu:
 			var count := int(purchases.get(product,0))
