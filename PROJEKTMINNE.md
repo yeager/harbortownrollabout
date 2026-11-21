@@ -281,3 +281,4 @@ Tvärbanans främre vagn visar nästa hållplats på en bärnstensfärgad sidosk
 Fyra signalreglerade övergångsställen har riktad nattbelysning. Godot 4.6.3 verifierade dags- och nattlägen samt att varje ljuskägla når övergångsställets mitt.
 Barnvagnens och rullatorns åtta hjul rullar efter verklig förflyttning och respektive hjulradie. Däck, fälg, nav och ventil följer samma axel. Verifierat i Godot 4.6.3.
 Fotgängarna på huvudgatans trottoar vänder och går tillbaka vid gatans båda ändar. Verifierade sammanhängande rörelse genom båda vändningarna i Godot 4.6.3.
+Dagsljuset dämpas före automatisk nederbörd och återvänder gradvis efteråt. Verifierade övergången sol–snö–sol i Godot 4.6.3.

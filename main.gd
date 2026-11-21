@@ -1663,7 +1663,7 @@ func _update_daylight(delta: float) -> void:
 		if mode == "playing" and not paused:
 			day_phase = fmod(day_phase+delta/360.0,1.0)
 	var night := 1.0 if time_mode == 1 else (smoothstep(-.4,.4,-cos(day_phase*TAU)) if time_mode == 2 else 0.0)
-	var cloud := maxf(weather.intensity.x,weather.intensity.y)*(1.0-night)
+	var cloud := weather.cloud_cover*(1.0-night)
 	city_sun.light_energy = lerpf(.73,.17,night)*(1.0-.52*cloud)
 	city_sun.shadow_opacity = 1.0-.48*cloud
 	var sunlight := Color("#fff1df").lerp(Color("#9db5eb"),night)

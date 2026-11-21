@@ -21,6 +21,7 @@ var forecast := 1
 var season_age := 0.0
 var forecast_age := 0.0
 var intensity := Vector2.ZERO
+var cloud_cover := 0.0
 var wet := 0.0
 var snow := 0.0
 var rain_particles: GPUParticles3D
@@ -31,6 +32,7 @@ func _ready() -> void:
 	snow_particles = particles(true)
 	# Start a new session in the chosen conditions. Later changes still ease in.
 	intensity = PRECIPITATION[weather_setting if weather_setting else forecast]
+	cloud_cover = maxf(intensity.x,intensity.y)
 	wet = intensity.x
 	snow = intensity.y
 	rain_particles.amount_ratio = wet
@@ -75,7 +77,13 @@ func tick(delta: float) -> void:
 	if season != 4 and forecast in [3,4]:
 		forecast = 2
 	var target: Vector2 = PRECIPITATION[weather_setting if weather_setting else forecast]
-	intensity = intensity.move_toward(target,delta/(75.0 if weather_setting==0 else 8.0))
+	var target_cover := maxf(target.x,target.y)
+	var cover_time := 32.0 if target_cover > cloud_cover else 120.0
+	if weather_setting != 0: cover_time = 4.0
+	cloud_cover = move_toward(cloud_cover,target_cover,delta/cover_time)
+	# Let the sky dim before a new shower starts.
+	var shower := smoothstep(0.18,0.52,cloud_cover)
+	intensity = intensity.move_toward(target*shower,delta/(75.0 if weather_setting==0 else 8.0))
 	var previous_snow := snow
 	snow = move_toward(snow,intensity.y,delta/55)
 	var meltwater := maxf(0.0,previous_snow-snow)
