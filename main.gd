@@ -1283,13 +1283,18 @@ func _build_city_blocks() -> void:
 	for stop in BUS_STOPS:
 		var gate: Vector3 = SCHOOL_GATE if stop==SCHOOL else WALK_TARGETS[stop]
 		var post := _make_box("Bus stop",Vector3(.08,2.65,.08),gate+Vector3(.9,1.32,0),Color("#52636c"))
-		var plate := _make_box("Bus stop flag",Vector3(.85,.55,.06),Vector3(0,1.15,0),Color("#263c51"),false,post)
-		var route := Label3D.new()
-		route.text="502"
-		route.double_sided=true
-		route.position.z=.04
-		route.pixel_size=.009
-		plate.add_child(route)
+		var plate := _make_box("Bus stop flag",Vector3(1.55,.72,.06),Vector3(0,1.15,0),Color("#263c51"),false,post)
+		# Each face points along the street so the name reads correctly on approach.
+		plate.rotation.y = PI*.5 if stop in [0,SCHOOL] else 0.0
+		for side in [-1,1]:
+			var route := Label3D.new()
+			route.name = "StopNameFront" if side==1 else "StopNameBack"
+			route.text = "502\n" + BUS_STOP_NAMES[stop]
+			route.double_sided = false
+			route.rotation.y = PI if side==-1 else 0.0
+			route.position.z = side*.035
+			route.pixel_size = .004
+			plate.add_child(route)
 	var plots := [
 		[Vector3(-34,0,-15),Vector3(13,6.4,9),Color("#835143"),"Polisstationen"],
 		[Vector3(128,0,-60),Vector3(20,13.3,9),Color("#e1e5df"),"Sjukhuset"],
