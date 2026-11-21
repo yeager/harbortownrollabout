@@ -306,3 +306,4 @@ Vid bussuppdragen väntar två resenärer tillsammans och lika många syns efter
 Svensk hållplatsinformation verifierad i förar- och passagerarläge genom hela Tvärbanans slinga. Under varje uppehåll visades rätt station och sex respektive fyra sekunder kvar; vid avgång växlade statusraden till nästa hållplats.
 Den första inlämnade bilen står kvar på verkstaden även medan nästa bil ligger på bärgarens flak. Verifierade båda bärgningarna och två utbetalningar om 20 mynt.
 - Slask kombinerar halsduk, regnhatt och regnkrage. Plaggens synlighet vid slask, snö, regn och uppehåll kontrollerades i Godot 4.6.3.
+- Automatiskt väder behåller den manuella prognosen i fem spelminuter även vid ovanligt årstidsväder. Testat med sommarsnö och gradvis upptining i Godot 4.6.3.

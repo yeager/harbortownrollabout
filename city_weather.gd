@@ -74,8 +74,7 @@ func tick(delta: float) -> void:
 		var choices := [1,2] if season != 4 else [1,3,4]
 		choices.erase(forecast)
 		forecast = choices.pick_random()
-	if season != 4 and forecast in [3,4]:
-		forecast = 2
+	# Keep the inherited manual forecast until the next seasonal forecast is due.
 	var target: Vector2 = PRECIPITATION[weather_setting if weather_setting else forecast]
 	var target_cover := maxf(target.x,target.y)
 	var cover_time := 32.0 if target_cover > cloud_cover else 120.0
