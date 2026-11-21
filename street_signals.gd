@@ -46,6 +46,8 @@ func _add_crossing(center: Vector3, east_west: bool) -> void:
 		mast.rotation.y = (-PI/2 if side==1 else PI/2) if east_west else (PI if side==1 else 0.)
 		get_parent()._make_box("Crossing pole",Vector3(.09,2.45,.09),Vector3.UP*1.22,Color("#737d7a"),false,mast)
 		get_parent()._make_box("Pedestrian signal",Vector3(.52,.9,.18),Vector3.UP*2.2,Color("#202927"),false,mast)
+		if side == 1:
+			_add_crossing_light(mast, center)
 		var signs: Array = []
 		for j in 2:
 			var figure := Node3D.new()
@@ -59,6 +61,26 @@ func _add_crossing(center: Vector3, east_west: bool) -> void:
 				limb.material_override=get_parent()._material(color,.35,true)
 			signs.append(figure)
 		heads.append({"figures":signs,"walk_phase":0 if east_west else 3})
+
+func _add_crossing_light(mast: Node3D, center: Vector3) -> void:
+	var world := get_parent()
+	world._make_box("Crossing mast extension",Vector3(.09,1.36,.09),Vector3.UP*3.1,Color("#737d7a"),false,mast)
+	world._make_box("Crossing luminaire",Vector3(.28,.12,.56),Vector3(0,3.75,.19),Color("#424b4c"),false,mast)
+	var diffuser = world._make_box("Crossing diffuser",Vector3(.22,.025,.34),Vector3(0,3.68,.26),Color.WHITE,false,mast)
+	diffuser.material_override = world.lamp_glass
+	var light := SpotLight3D.new()
+	mast.add_child(light)
+	light.position = Vector3(0,3.64,.26)
+	light.look_at(to_global(center))
+	light.light_color = Color("#ffebce")
+	light.spot_range = 14
+	light.spot_angle = 36
+	light.distance_fade_enabled = true
+	light.distance_fade_begin = 34
+	light.distance_fade_length = 20
+	light.visible = world.last_night > .05
+	light.light_energy = maxf(0,world.last_night)*3.2
+	world.street_lights.append(light)
 
 func lens(parent: Node3D, pos: Vector3, color: Color) -> MeshInstance3D:
 	var lamp := MeshInstance3D.new()
