@@ -151,3 +151,5 @@ Spelprojektet publiceras i det privata GitHub-repot yeager/axels-emergency-vehic
 - Nederbördspartiklarna döljs i butiksvyn och syns igen utanför. Entré och utgång provades vid samtliga fyra butiker.
 
 - Kafé Bullen har en plåt med sex modellerade kanelbullar på disken. Varje bulle har en kanelspiral som följer den välvda ytan.
+
+- Pizzerian visar en margherita på träbräda vid disken, med gräddad kant, tomatsås och mozzarella.

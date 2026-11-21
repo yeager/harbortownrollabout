@@ -54,6 +54,44 @@ func _ready() -> void:
 		if i == 0:
 			_display_cinnamon_buns(Vector3(x-1.3,1.09,47.55))
 
+		elif i == 2:
+			_display_margherita(Vector3(x,1.09,47.65))
+
+func _display_margherita(center: Vector3) -> void:
+	part("Pizza board",center,Vector3(.91,.032,.88),Color("#b28658"))
+	var crust := CylinderMesh.new()
+	crust.top_radius=.39
+	crust.bottom_radius=.38
+	crust.height=.047
+	crust.material=get_parent()._material(Color("#cc9554"),.87)
+	var pizza := MeshInstance3D.new()
+	pizza.name="Margherita"
+	pizza.mesh=crust
+	pizza.position=center+Vector3.UP*.04
+	add_child(pizza)
+	var sauce := CylinderMesh.new()
+	sauce.top_radius=.35
+	sauce.bottom_radius=.35
+	sauce.height=.008
+	sauce.material=get_parent()._material(Color("#aa4326"),.62)
+	var tomato := MeshInstance3D.new()
+	tomato.mesh=sauce
+	tomato.position.y=.027
+	pizza.add_child(tomato)
+	var cheese := SphereMesh.new()
+	cheese.radius=.077
+	cheese.height=.023
+	cheese.material=get_parent()._material(Color("#f2dfac"),.57)
+	for i in 7:
+		var topping := MeshInstance3D.new()
+		topping.mesh=cheese
+		var angle := i*2.4
+		var radius := .105*sqrt(float(i))
+		topping.position=Vector3(cos(angle)*radius,.034,sin(angle)*radius)
+		topping.scale.x=1.2
+		topping.rotation.y=angle
+		pizza.add_child(topping)
+
 func _display_cinnamon_buns(center: Vector3) -> void:
 	part("Bakery tray",center,Vector3(1.35,.035,.76),Color("#605859"))
 	var dough := SphereMesh.new()
