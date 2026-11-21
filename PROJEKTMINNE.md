@@ -297,3 +297,4 @@ Sammanhängande sparfilstest i Godot 4.6.3: skolskjuts gav 15 mynt, glassen kost
 Bussens bakre destinationsskylt visar linje och nästa hållplats även från följekamerans sida. Verifierade sex uppdragssteg och fri körning i Godot.
 Textstorleken på bussens destinationsskyltar anpassas till hållplatsnamnet. Kontrollerade textbredden för samtliga sex namn och samma storlek fram och bak.
 Verifierade sex hållplatser med bussens körhjälp: rullande buss betjänade ingen hållplats, tre avlämningar gav totalt 45 mynt och nästa mål och skylt återgick till torget.
+Ren import från publicerad 1c76c53: åtta scenariotester i Godot 4.6.3 godkända för muskamera, stopplinjer, Tvärbanans bromsning, skolskjuts och kiosksparande, bussrunda, vinterväder, telefon och radio. Varje scenario använde en separat sparmapp.
