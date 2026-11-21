@@ -131,3 +131,5 @@ Spelprojektet publiceras i det privata GitHub-repot yeager/axels-emergency-vehic
 - Verkstadens två garageportar har varmvita nedåtriktade armaturer som följer skymningen. I Godot kontrollerades båda lampornas ljusstyrka och synlighet vid natt och dag.
 
 - Efter avlämningen står en bil utanför verkstadsporten fram till nästa hämtning. Spelarens bil och gångväg tar hänsyn till den parkerade bilen.
+
+- AI-trafiken anpassar fart och avstånd till hur våt och snötäckt vägen är. Samma trafikbil provades på torr, våt och snötäckt väg samt vid en passagerare i körfältet.

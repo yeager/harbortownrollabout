@@ -1822,6 +1822,7 @@ func _player_extent() -> Vector2:
 		heading.z * player_half_size.y + heading.x * player_half_size.x)
 
 func _update_traffic(delta: float) -> void:
+	var weather_pace := 1.0-.12*weather.wet-.23*weather.snow
 	var player_size := _player_extent()
 	for item in traffic_data:
 		var actor: Node3D = item.actor
@@ -1874,7 +1875,7 @@ func _update_traffic(delta: float) -> void:
 		elif clearance>15:
 			item.greeted = false
 		var free_space := maxf(0.0, clearance - 1.0)
-		var target := minf(float(item.cruise), free_space * 0.95)
+		var target := minf(float(item.cruise)*weather_pace, free_space * .95*weather_pace)
 		if free_space < 0.1:
 			target = 0
 		var previous_speed := float(item.speed)
