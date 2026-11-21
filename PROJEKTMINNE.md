@@ -316,3 +316,4 @@ Den första inlämnade bilen står kvar på verkstaden även medan nästa bil li
 - Landfordon bromsar inför båda kajkanterna med karossens mått och kan inte vrida ut hörnen över vattenytan. Kontrollerat med ambulansen mot båda stränderna samt fri passage på båda broarna i Godot 4.6.3.
 - Lotten fick omformat skrov, relingar, landgångar, styrhytt och transparent salong med fjorton sittplatser samt skrovspegling i dagsljus. Slutlig GLB importerad och kontrollerad i kanalens ordinarie Godot-scen. Backning och sväng vid kajen också testade.
 - Spelarens fötter behöver stöd på kajen, trottoaren på bron eller bryggan. Även långa gångsteg delas upp så att de inte kan hoppa över vatten. Verifierat båda landgångarna, strandpromenaden och gång mot kajkanten.
+- Modellen har nu Lottens höga flaggstänger, övre reling, svarta fendrar, gula grindar, livbojar och vattenlinje från de nya referenserna. Slutlig spelvy kontrollerad i Godot.

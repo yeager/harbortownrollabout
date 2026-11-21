@@ -1,4 +1,5 @@
 """Build the twin-ended Lotten passenger ferry for the Sjöstad canal."""
+import math
 import os
 import sys
 from pathlib import Path
@@ -13,7 +14,7 @@ from build_vehicles import (clear_scene, cube, cylinder, mesh_from_rings, materi
 clear_scene()
 root = bpy.data.objects.new("Lotten", None)
 bpy.context.collection.objects.link(root)
-white = material("Painted aluminium", (.89,.91,.87), .24,.32)
+white = material("Painted aluminium", (.94,.924,.845), .24,.32)
 navy = material("Ship lettering", (.012,.045,.13))
 deck = material("Non-slip deck", (.19,.22,.21))
 glass = material("Wheelhouse glazing", (.13,.29,.33), .45,.16)
@@ -53,7 +54,7 @@ for row in range(7):
         box("Window seat back",(side*1.26,-3.14+row*.99,1.67),(.80,.13,.49),seat,.05)
         box("Headrest",(side*1.26,-3.14+row*.99,1.90),(.66,.16,.13),seat,.045)
 box("Saloon window header",(0,0,2.25),(3.81,8.61,.09),white)
-box("Shelter roof",(0,0,2.33),(3.97,8.82,.11),navy,.04)
+box("Shelter roof",(0,0,2.33),(3.97,8.82,.11),rubber,.04)
 for side in [-1,1]:
     for i in range(11):
         box("Saloon mullion",(side*1.865,-4.10+.82*i,1.86),(.065,.073,.81),white,.01)
@@ -88,7 +89,7 @@ for end in [-1,1]:
     box("Lower landing ramp",(0,end*6.23,.70),(1.95,.46,.11),deck)
     box("Ramp nosing",(0,end*6.40,.74),(1.95,.10,.07),rubber)
     for side in [-1,1]:
-        box("Landing fender",(side*1.11,end*6.33,.46),(.28,.17,.23),rubber,.065)
+        box("Landing fender",(side*1.11,end*6.33,.46),(.43,.25,.32),rubber,.095)
         box("Boarding door",(side*.98,end*4.29,1.41),(.84,.075,1.47),white,.04)
         box("Boarding door window",(side*.98,end*4.336,1.68),(.63,.027,.70),glass,.035)
         box("Door grab handle",(side*.67,end*4.36,1.25),(.035,.055,.18),steel,.01)
@@ -105,11 +106,99 @@ for height, width in [(4.02,.74),(4.25,.45)]:
 for x,y in [(-.8,-1.25),(.72,.16)]:
     tube("Whip antenna",(x,y,3.55),(x,y,4.62),.012,steel)
 box("Radar scanner",(0,-.8,4.43),(.8,.12,.1),white)
-pole("Ensign staff",(0,3.32,3.14),.032,1.62,steel)
-box("Swedish ensign",(0,3.64,3.68),(.022,.62,.37),navy)
-gold=material("Flag gold",(.96,.69,.04))
-box("Flag cross bar",(0,3.64,3.68),(.025,.62,.076),gold)
-box("Flag cross upright",(0,3.53,3.68),(.026,.078,.37),gold)
+gold = material("Signal yellow", (.99,.66,.035))
+red = material("Lifebuoy vermilion", (.82,.045,.022), .04,.46)
+oxide = material("Waterline oxide red", (.39,.065,.043), .13,.50)
+brass = material("Funnel bronze", (.34,.13,.068), .45,.43)
+
+# Follow the chines down to their intersection with the waterline.
+for side in [-1,1]:
+    vertices = []
+    for y,w,b,c in stations:
+        shoulder = b+(c-b)*.22
+        for z in [.016,.090]:
+            z = max(z,b+.002)
+            if z < shoulder:
+                fraction = .60+.29*(z-b)/(shoulder-b)
+            else:
+                fraction = .89+.11*(z-shoulder)/(.39-shoulder)
+            vertices.append((side*w*fraction+side*.006,y,z))
+    mesh = bpy.data.meshes.new("Waterline ribbon")
+    mesh.from_pydata(vertices,[],[(i,i+1,i+3,i+2) for i in range(0,len(vertices)-2,2)])
+    band = bpy.data.objects.new("Antifouling stripe",mesh)
+    bpy.context.collection.objects.link(band)
+    band.parent = root
+    mesh.materials.append(oxide)
+
+# The upper promenade wraps the wheelhouse and life-saving equipment.
+corners = [(-1.74,-2.18),(1.74,-2.18),(1.74,3.46),(-1.74,3.46)]
+for a,b in zip(corners,corners[1:]+corners[:1]):
+    length = math.dist(a,b)
+    count = math.ceil(length/1.1)
+    for i in range(count):
+        x,y = [a[k]+(b[k]-a[k])*i/count for k in (0,1)]
+        pole("Promenade baluster",(x,y,2.66),.018,.58,white)
+    for z in (2.64,2.95):
+        tube("Promenade rail",(*a,z),(*b,z),.022,white)
+
+for side in [-1,1]:
+    x = side*1.89
+    bpy.ops.mesh.primitive_torus_add(major_radius=.227, minor_radius=.062,
+            major_segments=48, minor_segments=10, location=(x,3.22,1.75),
+            rotation=(0,math.pi/2,0))
+    ring = bpy.context.object
+    ring.name = "Rescue ring"
+    ring.parent = root
+    ring.data.materials.append(red)
+    ring.data.materials.append(white)
+    for face in ring.data.polygons:
+        angle = math.atan2(face.center.y,face.center.x)
+        face.material_index = int(abs(math.sin(2*angle)) < .24)
+        face.use_smooth = True
+    for end in [-1,1]:
+        # Heavy oblique cushions absorb impacts as the ferry meets the landing.
+        tube("Docking buffer",(side*1.30,end*6.18,.40),(side*1.51,end*5.97,.66),.105,rubber)
+for end in [-1,1]:
+    for x in [-.84,.84]:
+        pole("Gate hinge",(x,end*6.06,.99),.028,.59,gold)
+    for height in (.91,1.27):
+        tube("Landing gate",(-.84,end*6.06,height),(.84,end*6.06,height),.026,gold)
+    for x in [-.54,-.27,0,.27,.54]:
+        pole("Gate spindle",(x,end*6.06,1.08),.014,.36,gold)
+
+pole("Funnel",(1.36,.51,3.12),.091,1.51,brass)
+pole("Exhaust cap",(1.36,.51,3.89),.099,.12,rubber)
+blue = material("Ensign blue", (.012,.15,.43))
+def flag(name,y,swedish):
+    pole(name+" staff",(0,y,3.91),.032,3.08,steel)
+    # Shared vertices give the fly and hem a gentle twist in the same wind.
+    width,height = .88,.51
+    us = sorted(set([i/12 for i in range(13)]+[.32,.46]))
+    vs = [0,.38,.50,.62,1]
+    coords,faces,indices = [],[],[]
+    for u in us:
+        for v in vs:
+            coords.append((u*.16*math.sin(8*u+v*.8),y+width*u,
+                           5.34-height*v-.085*u+.035*u*math.sin(7*u+v)))
+    for i in range(len(us)-1):
+        for j in range(len(vs)-1):
+            n = i*len(vs)+j
+            faces.append((n,n+len(vs),n+len(vs)+1,n+1))
+            u,v = (us[i]+us[i+1])/2,(vs[j]+vs[j+1])/2
+            mark = (.32<u<.46 or .38<v<.62) if swedish else abs(u-.48)*1.55+abs(v-.5)<.30
+            indices.append(int(mark))
+    mesh = bpy.data.meshes.new(name+" cloth")
+    mesh.from_pydata(coords,[],faces)
+    obj = bpy.data.objects.new(name,mesh)
+    bpy.context.collection.objects.link(obj)
+    obj.parent = root
+    mesh.materials.append(blue)
+    mesh.materials.append(gold)
+    for face,index in zip(mesh.polygons,indices):
+        face.material_index = index
+        face.use_smooth = True
+flag("Swedish ensign",-2.60,True)
+flag("House burgee",3.62,False)
 export_vehicle(root,"lotten.glb")
 bpy.context.preferences.filepaths.save_version=0
 bpy.ops.wm.save_as_mainfile(filepath=os.path.join(SOURCE_DIR,"Lotten.blend"))
