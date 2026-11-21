@@ -167,3 +167,5 @@ Spelprojektet publiceras i det privata GitHub-repot yeager/axels-emergency-vehic
 - Butikskvittot visar vara och betalt belopp på svenska och engelska. Svenskt kvitto för en kanelbulle kontrollerades mot tre dragna mynt.
 
 - Bärgarens bakre hjullyft har två modellerade hjulstöd med gångjärnstappar och infångningsarmar. Blender-källan och spelmodellen uppdaterades och importerades i Godot.
+
+- Bromshjälp för personer, framförvarande trafik och rödljus använder bilens uppmätta längd framåt respektive bakåt. Bärgarens nya hjulstöd ingår i bakmåttet även när den parkeras.

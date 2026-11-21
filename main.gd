@@ -95,6 +95,8 @@ var medical_bag := Node3D.new()
 var waiting_medic: Node3D
 var mission_marker: Node3D
 var reverse_lens: StandardMaterial3D
+var front_reach := 0.0
+var rear_reach := 0.0
 var player_half_size := Vector2.ZERO # Local half-width and half-length.
 var cabin_wheel: Node3D
 var cabin_wheel_rest_basis := Basis.IDENTITY
@@ -392,7 +394,8 @@ func _drive(delta: float) -> void:
 	ambulance.rotate_y(-clampf(yaw_rate, -max_yaw_rate, max_yaw_rate) * delta)
 	var forward := -ambulance.global_transform.basis.z
 	var travel_direction := forward * signf(speed)
-	var signal_gap := street_signals.red_clearance(ambulance.position,forward if is_zero_approx(speed) else travel_direction,player_half_size.y)
+	var leading_reach := rear_reach if speed<0 else front_reach
+	var signal_gap := street_signals.red_clearance(ambulance.position,forward if is_zero_approx(speed) else travel_direction,leading_reach)
 	var stopping_distance := signal_gap
 	var people: Array = [crossing_pedestrian,passenger,arriving_passenger,waiting_medic]
 	for item in walker_data:
@@ -401,7 +404,7 @@ func _drive(delta: float) -> void:
 		if not person.visible: continue
 		var offset := ambulance.to_local(person.position)
 		if absf(offset.x)<player_half_size.x+.36 and -offset.z*signf(speed)>0:
-			stopping_distance = minf(stopping_distance,maxf(0,absf(offset.z)-player_half_size.y-.65))
+			stopping_distance = minf(stopping_distance,maxf(0,absf(offset.z)-leading_reach-.65))
 	# Plan the stop before the bumper reaches a person or a stationary queue.
 	for item in traffic_data:
 		var offset := ambulance.to_local(item.actor.position)
@@ -412,7 +415,7 @@ func _drive(delta: float) -> void:
 		if ahead<=0: continue
 		var end_extent := absf(forward.x)*float(item.length)+absf(forward.z)*float(item.width)
 		var leader_speed := maxf(0,travel_direction.x*float(item.direction)*float(item.speed))
-		stopping_distance = minf(stopping_distance,maxf(0,ahead-player_half_size.y-end_extent-.65)+leader_speed*leader_speed/10)
+		stopping_distance = minf(stopping_distance,maxf(0,ahead-leading_reach-end_extent-.65)+leader_speed*leader_speed/10)
 	var assisted_braking := false
 	if stopping_distance < INF:
 		# Reserve the current frame's travel before applying the stopping curve.
@@ -1832,6 +1835,9 @@ func _vehicle_half_size(actor: Node3D, model: Node3D) -> Vector2:
 	var world_to_actor := actor.global_transform.affine_inverse()
 	for part: MeshInstance3D in model.find_children("*", "MeshInstance3D", true, false):
 		bounds = bounds.merge((world_to_actor * part.global_transform) * part.get_aabb())
+	if actor == ambulance:
+		front_reach = -bounds.position.z
+		rear_reach = bounds.end.z
 	return Vector2(maxf(-bounds.position.x, bounds.end.x), maxf(-bounds.position.z, bounds.end.z))
 
 func _player_extent() -> Vector2:
@@ -2269,7 +2275,7 @@ func _load_vehicle_model() -> void:
 	headlights.clear()
 	for side in [-1,1]:
 		var beam := SpotLight3D.new()
-		beam.position = Vector3(side*player_half_size.x*.72,.87,-player_half_size.y-.03)
+		beam.position = Vector3(side*player_half_size.x*.72,.87,-front_reach-.03)
 		beam.rotation.x = deg_to_rad(-7.0)
 		beam.spot_range = 28
 		beam.spot_angle = 26
