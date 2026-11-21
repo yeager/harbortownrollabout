@@ -447,7 +447,7 @@ func _drive(delta: float) -> void:
 		var side_gap := maxf(absf(relative.x) - player_half_size.x, 0.0)
 		if side_gap >= trunk.y or relative.z * travel_sign >= 0.0:
 			continue
-		var clearance := absf(relative.z) - player_half_size.y - sqrt(trunk.y * trunk.y - side_gap * side_gap)
+		var clearance := absf(relative.z) - leading_reach - sqrt(trunk.y * trunk.y - side_gap * side_gap)
 		if clearance <= step.length():
 			step = step.limit_length(maxf(0.0, clearance - 0.02))
 			speed = 0.0
