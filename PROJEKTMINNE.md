@@ -304,3 +304,4 @@ Mittenknappsdrag håller nu kameran stilla när telefonen eller butikens köpmen
 Telefonens aktuella uppdrag har en fast plats ovanför den rullbara SMS-historiken. Testat position vid rullning, svensk rubrik, olästa meddelanden och historik utan uppdrag.
 Vid bussuppdragen väntar två resenärer tillsammans och lika många syns efter avstigning. Testade gruppernas antal och position vid de sex hållplatserna.
 Svensk hållplatsinformation verifierad i förar- och passagerarläge genom hela Tvärbanans slinga. Under varje uppehåll visades rätt station och sex respektive fyra sekunder kvar; vid avgång växlade statusraden till nästa hållplats.
+Den första inlämnade bilen står kvar på verkstaden även medan nästa bil ligger på bärgarens flak. Verifierade båda bärgningarna och två utbetalningar om 20 mynt.

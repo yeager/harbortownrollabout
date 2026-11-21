@@ -2952,7 +2952,7 @@ func _update_hazard_lights() -> void:
 func _sync_recovery() -> void:
 	var active := vehicle_index==RECOVERY and not free_drive
 	var loaded := recovery_leg%2==1
-	workshop_car.visible=recovery_leg>=2 and not loaded
+	workshop_car.visible = recovery_leg >= 2
 	var carrier := ambulance if not walker.visible else parked_cars[RECOVERY]
 	if loaded and vehicle_index!=RECOVERY:
 		carrier=parked_cars[RECOVERY]
