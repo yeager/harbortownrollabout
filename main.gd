@@ -3831,7 +3831,16 @@ func _refresh_ui() -> void:
 		road_driver.visible = vehicle_index in [3,SNOWMOBILE] and mode == "playing" and not walker.visible and not boating and tram_mode == 0 and not cockpit_view
 	if skipper: skipper.visible = boating and mode == "playing"
 	if not is_instance_valid(mission_label): return
-	var mission_activity := "Bus route 502" if vehicle_index==BUS else "Taxi fares" if vehicle_index == TAXI else "Roadside recovery" if vehicle_index == RECOVERY else "Three missions"
+	var mission_activity := "Parcel deliveries"
+	match vehicle_index:
+		BUS: mission_activity = "Bus route 502"
+		TAXI: mission_activity = "Taxi fares"
+		RECOVERY: mission_activity = "Roadside recovery"
+		SNOWMOBILE: mission_activity = "Blanket deliveries"
+		0: mission_activity = "Ambulance calls"
+		2: mission_activity = "Fire safety checks"
+		_:
+			if _vehicle_tasks() == PATROL_TASKS: mission_activity = "Police patrols"
 	if activity.item_count > 0 and activity.get_item_text(0) != mission_activity:
 		activity.set_item_text(0,mission_activity)
 	_refresh_dispatch()

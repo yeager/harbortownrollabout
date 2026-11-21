@@ -27,6 +27,9 @@ msgstr "Polisbil"
 msgid "Fire engine"
 msgstr "Brandbil"
 
+msgid "Volvo XC60 Police"
+msgstr "Volvo XC60 polisbil"
+
 msgid "Mission complete. Well done!"
 msgstr "Uppdrag klart. Bra jobbat!"
 
@@ -692,3 +695,18 @@ msgstr "Aktuellt uppdrag"
 
 msgid "Tab to choose · Enter to buy or eat"
 msgstr "Tabb för att välja · Enter för att köpa eller äta"
+
+msgid "Ambulance calls"
+msgstr "Ambulansuppdrag"
+
+msgid "Police patrols"
+msgstr "Polispatruller"
+
+msgid "Fire safety checks"
+msgstr "Brandskyddskontroller"
+
+msgid "Parcel deliveries"
+msgstr "Paketleveranser"
+
+msgid "Blanket deliveries"
+msgstr "Filtleveranser"
