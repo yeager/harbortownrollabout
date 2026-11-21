@@ -868,7 +868,12 @@ func _help_at_target() -> void:
 	if _at_target() and (walker.visible or absf(speed)<.12):
 		parked_at_target = 0.0
 		mission_index += 1
-		phone.receive("First-aid supplies delivered to the marina. You earned 10 coins." if vehicle_index==0 and mission_index==TARGETS.size() else "Thank you for helping! You earned 10 coins.")
+		var receipt := "Thank you for helping! You earned 10 coins."
+		if vehicle_index == 0 and mission_index == TARGETS.size():
+			receipt = "First-aid supplies delivered to the marina. You earned 10 coins."
+		elif _vehicle_tasks() == DELIVERY_TASKS:
+			receipt = ["Two parcels collected at the square. You earned 10 coins.", "The clinic received its parcel. You earned 10 coins.", "The marina received the last parcel. You earned 10 coins."][mission_index-1]
+		phone.receive(receipt)
 		wallet+=10
 		_save_preferences()
 		speed = 0.0

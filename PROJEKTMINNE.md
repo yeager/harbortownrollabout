@@ -326,3 +326,4 @@ Den första inlämnade bilen står kvar på verkstaden även medan nästa bil li
 - Åtgärdat att Alma fick Axels längd när hon gick av Lotten. Ett test som mätte skalan även på bryggan misslyckades före ändringen och passerade efteråt.
 - Beständigt regressionstest för Lottens båda färdriktningar, avstigning över öppet vatten, fotfäste och bevarad karaktärsskala finns i tests/ferry_passenger.gd. Godkänt i Godot 4.6.3.
 - Radio med J fungerar också som passagerare på Lotten. Spelartest i Godot kontrollerade att påslagen radio pausades på gångvägen, återupptogs ombord och pausades vid avstigning.
+- Paketbilarnas uppdrag skickar SMS-kvitton för hämtningen på torget och respektive mottagare. Hela paketresan testad med Volvo 240, inklusive tre kvitton och sammanlagt 30 mynt.

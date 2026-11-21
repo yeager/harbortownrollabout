@@ -755,3 +755,12 @@ msgstr "Gå av vid nästa brygga · F"
 
 msgid "Stay on board · F"
 msgstr "Stanna ombord · F"
+
+msgid "Two parcels collected at the square. You earned 10 coins."
+msgstr "Två paket hämtade på torget. Du fick 10 mynt."
+
+msgid "The clinic received its parcel. You earned 10 coins."
+msgstr "Vårdcentralen har fått sitt paket. Du fick 10 mynt."
+
+msgid "The marina received the last parcel. You earned 10 coins."
+msgstr "Småbåtshamnen har fått det sista paketet. Du fick 10 mynt."
