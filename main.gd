@@ -1975,7 +1975,13 @@ func _update_traffic(delta: float) -> void:
 		for person: Node3D in [walker,passenger,arriving_passenger,waiting_medic,marina_recipient,square_neighbour]:
 			if not person.visible: continue
 			var offset := person.position - actor.position
-			if offset.x * direction >= 0 and absf(offset.z) < float(item.width)+.45:
+			var lane_margin := float(item.width) + .45
+			var in_path := absf(offset.z) < lane_margin
+			if person == walker and not in_path and offset.z * walking_velocity.z < 0:
+				# Yield as the player steps toward the lane, before their body enters it.
+				var time_to_lane := (absf(offset.z) - lane_margin) / absf(walking_velocity.z)
+				in_path = time_to_lane < 1.4
+			if offset.x * direction >= 0 and in_path:
 				clearance = minf(clearance, offset.x*direction-float(item.length)-.45)
 		if crossing_wait <= 0.0 and (absf(crossing_pedestrian.position.z)<6.31 or street_signals.phase==3):
 			var ahead := (crossing_pedestrian.position.x-actor.position.x)*direction

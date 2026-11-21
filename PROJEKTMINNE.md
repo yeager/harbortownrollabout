@@ -201,3 +201,4 @@ Spelprojektet publiceras i det privata GitHub-repot yeager/axels-emergency-vehic
 - Avsläppta passagerare placeras på gångytans uppmätta höjd och vänder sig mot taxins stoppunkt. Samtliga tre avlämningar verifierades i Godot.
 - Vid taxikörning och bärgning visar markeringen vägen tillbaka till det parkerade uppdragsfordonet till fots. Återinträde och byte till båt eller Tvärbana verifierades i Godot.
 - Till fots visar returmarkören dörren som användes vid urstigning. Testat i Godot med blockerad högerdörr på taxi och bärgare, inklusive återinträde på vänster sida.
+- Trafiken börjar bromsa när spelaren är på väg in i körfältet inom 1,4 sekunder. Stillastående och rörelse bort från körfältet jämfördes med rörelse mot körfältet i Godot.
