@@ -776,3 +776,18 @@ msgstr "Jag försökte vinka till dig från Lotten. Jag vinkade med mackan. Mås
 
 msgid "Could you pick up a cinnamon bun? Your dad bought cinnamon and a bun separately. — Mum"
 msgstr "Kan du köpa en kanelbulle? Pappa kom hem med kanel och en fralla. – Mamma"
+
+msgid "Find clear ground to unfold the scooter."
+msgstr "Hitta en fri yta för att fälla ut elsparkcykeln."
+
+msgid "Fold scooter · F"
+msgstr "Fäll ihop elsparkcykeln · F"
+
+msgid "U Unfold scooter"
+msgstr "U Fäll ut elsparkcykeln"
+
+msgid "W / ↑ Accelerate · S / ↓ Brake · A / D Steer · U Fold scooter"
+msgstr "W / ↑ Gasa · S / ↓ Bromsa · A / D Styr · U Fäll ihop"
+
+msgid "Electric scooter · %d km/h"
+msgstr "Elsparkcykel · %d km/h"

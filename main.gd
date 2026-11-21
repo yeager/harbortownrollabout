@@ -64,6 +64,8 @@ var time_mode := 0
 var day_phase := 0.0
 var last_night := -1.0
 var parked_door_offset := Vector3.ZERO
+const Scooter := preload("res://vehicles/kick_scooter.gd")
+var scooter := Scooter.new()
 var walker: Node3D
 var parked_cars: Array[Node3D] = []
 var parked_footprints: Array[Rect2] = []
@@ -415,6 +417,7 @@ func _unhandled_key_input(event: InputEvent) -> void:
 		match event.keycode:
 			KEY_T:
 				if phone.visible: phone.toggle()
+			KEY_U: _toggle_scooter()
 			KEY_H: _honk()
 			KEY_J: _toggle_radio()
 			KEY_F:
@@ -439,7 +442,7 @@ func _toggle_radio() -> void:
 	_sync_radio()
 
 func _sync_radio() -> void:
-	radio_button.visible = mode=="playing" and not paused and (not walker.visible or boating or tram_mode>0 or ferry_passenger)
+	radio_button.visible = mode=="playing" and not paused and (not walker.visible or scooter.visible or boating or tram_mode>0 or ferry_passenger)
 	radio_button.text = "Radio on · J" if radio_enabled else "Radio off · J"
 	if not radio_enabled:
 		radio.stop()
@@ -804,7 +807,7 @@ func _arrival_radius() -> float:
 	return 2.1 if walker.visible else 5.2
 
 func _at_target() -> bool:
-	if free_drive or boating or ferry_passenger or tram_mode != 0 or (vehicle_index in [TAXI,RECOVERY,BUS] and walker.visible) or mission_index >= TARGETS.size(): return false
+	if scooter.visible or free_drive or boating or ferry_passenger or tram_mode != 0 or (vehicle_index in [TAXI,RECOVERY,BUS] and walker.visible) or mission_index >= TARGETS.size(): return false
 	var actor := walker if walker.visible else ambulance
 	return actor.position.distance_to(_mission_destination()) < _arrival_radius()
 
@@ -1943,6 +1946,7 @@ func _build_depot() -> void:
 				_make_box("Parking stripe",Vector3(.10,.025,7.8),Vector3(body.position.x+2.5,-.116,15),Color("#deddd1")).material_override = marking_finish
 	_make_walker("Player on foot",0,0,1,Color("#648faa"),Color("#30414d"))
 	walker = walker_data.pop_back().actor
+	walker.add_child(scooter)
 	var ponytail := MeshInstance3D.new()
 	ponytail.name = "Ponytail"
 	var lock := CapsuleMesh.new()
@@ -2129,7 +2133,25 @@ func _near_ferry_landing() -> int:
 			return i
 	return -1
 
+func _toggle_scooter() -> void:
+	if mode != "playing" or paused or not walker.visible or boating or tram_mode != 0 or ferry_passenger: return
+	if phone.handset.is_visible_in_tree() or shops.inside >= 0: return
+	if scooter.visible:
+		scooter.dismount(walker)
+	else:
+		if not scooter.can_stand(self,walker.position,walker.rotation.y,walker.scale.y):
+			message = "Find clear ground to unfold the scooter."
+			message_timer = 3.0
+			return
+		_animate_steps(walker, 0.0, 1.0)
+		scooter.mount(walker)
+	walking_velocity = Vector3.ZERO
+	_refresh_ui()
+
 func _change_seat() -> void:
+	if scooter.visible:
+		_toggle_scooter()
+		return
 	if boating or tram_mode!=0: return
 	if mode != "playing" or paused: return
 	var stop := _ferry_stop()
@@ -2229,6 +2251,9 @@ func _change_seat() -> void:
 func _walk(delta: float) -> void:
 	var keys := Input.get_vector("ui_left","ui_right","ui_up","ui_down")
 	keys += Vector2(int(Input.is_key_pressed(KEY_D))-int(Input.is_key_pressed(KEY_A)),int(Input.is_key_pressed(KEY_S))-int(Input.is_key_pressed(KEY_W)))
+	if scooter.visible:
+		scooter.ride(self,-clampf(keys.y,-1,1),clampf(keys.x,-1,1),delta)
+		return
 	var desired := walk_basis * Vector3(keys.x,0,keys.y).limit_length(1) * 3.4
 	desired.y = 0
 	var horizontal := Vector3(walking_velocity.x,0,walking_velocity.z)
@@ -2257,6 +2282,11 @@ func _walk(delta: float) -> void:
 	_update_entry_button()
 
 func _update_entry_button() -> void:
+	if scooter.visible:
+		entry_marker.visible = false
+		seat_button.disabled = false
+		seat_button.text = "Fold scooter · F"
+		return
 	var landing := _near_ferry_landing()
 	if ferry_passenger or landing >= 0:
 		var stop := _ferry_stop()
@@ -2555,6 +2585,14 @@ func _build_pedestrians() -> void:
 	walker_data.back().actor.scale = Vector3.ONE*.72
 	_make_walker("Parent",10.9,6.42,1,Color("#876681"),Color("#424850"))
 	walker_data.back().speed = walker_data[-2].speed
+	_make_walker("Scooter neighbour",-36.0,-7.22,1.0,Color("#c78653"),Color("#424957"))
+	var neighbour: Dictionary = walker_data.back()
+	var local_scooter := Scooter.new()
+	neighbour.actor.add_child(local_scooter)
+	local_scooter.mount(neighbour.actor)
+	neighbour.scooter = local_scooter
+	neighbour.stretch = Vector2(-43,-8)
+	neighbour.speed = 2.9
 	_make_walker("JoggingNeighbour", -31.0, -6.32, 1.0, Color("#344e63"), Color("#4c514a"))
 	_make_walker("WalkingNeighbour", 31.0, 6.32, -1.0, Color("#9a5836"), Color("#33424a"))
 	_make_walker("ParkVisitor", -18.0, 6.42, 1.0, Color("#d1a33f"), Color("#38474a"))
@@ -2806,6 +2844,10 @@ func _update_pedestrians(delta: float) -> void:
 			distance = minf(absf(next.x-person.position.x), float(item.speed)*delta)
 			next.y = _foot_height(next.x,next.z)
 			person.position = next
+		if item.has("scooter"):
+			item.scooter.roll(distance,person.scale.y)
+			person.position.y = _foot_height(person.position.x,person.position.z) + Scooter.DECK_HEIGHT*person.scale.y
+			continue
 		if distance > 0 and item.has("wheels"):
 			for axle: Node3D in item.wheels:
 				axle.rotate_x(-distance / float(axle.get_meta("radius")))
@@ -3897,6 +3939,7 @@ func _starting_position() -> Vector3:
 	return Vector3(best_x, _surface_height(best_x, lane), lane)
 
 func _start_game() -> void:
+	scooter.dismount(walker)
 	ferry_passenger = false
 	if boating:
 		launch.transform = Transform3D(Basis.IDENTITY, LAUNCH_BERTH)
@@ -4203,6 +4246,8 @@ func _refresh_ui() -> void:
 	else:
 		hints.text = "W / ↑  Drive     A D / ← →  Steer     S / ↓  Brake or reverse\nRelease to slow down   ·   Space to help   ·   P to pause"
 	var camera_hint := tr("Hold V and move the mouse to look around")
+	if walker.visible and tram_mode == 0 and not boating and not ferry_passenger and shops.inside < 0:
+		camera_hint = tr("W / ↑ Accelerate · S / ↓ Brake · A / D Steer · U Fold scooter") if scooter.visible else tr("U Unfold scooter") + "   ·   " + camera_hint
 	hints.text = camera_hint if walker.visible and tram_mode == 0 and not boating else tr(hints.text) + "   ·   " + camera_hint
 	if show_overlay:
 		mouse_gas = false
@@ -4294,6 +4339,8 @@ func _refresh_status() -> void:
 			status_label.text = tr("%s · Departure in %d s") % [station,ceili(tram.dwell)]
 		else:
 			status_label.text = tr("Next stop: %s · %d m · %d km/h") % [tram.STATION_NAMES[tram.next_stop],ceili(tram.distance_to_next_stop()),roundi(tram.velocity*3.6)]
+	elif scooter.visible:
+		status_label.text = tr("Electric scooter · %d km/h") % roundi(scooter.speed*3.6)
 	elif message_timer > 0 and message != "":
 		status_label.text = message
 	elif mode == "playing" and not paused and walker.visible and _at_target():

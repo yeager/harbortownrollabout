@@ -84,6 +84,10 @@ Between the two bridges, leave your vehicle on the western bank and take the ste
 
 During the rescue route, the medic hands over a green first-aid bag. It travels inside the vehicle, appears in the player's hand on foot and stays on the quay after delivery.
 
+## Electric kick scooter
+
+On foot outdoors, press **U** to unfold the scooter on clear ground. **W / Up** accelerates, **S / Down** brakes and **A / D** steers. Press **U** or **F** to step off and fold it. Axel and Alma can both ride. Look for another rider on the pavement west of the square.
+
 ## School trips, buses and passenger cars
 
 Choose **City bus** and start **Bus route 502** to pick up passengers at the square and drop them off at Sjöstadsskolan. The next service runs from the marina to the clinic. Stop at the marker to serve each stop in gentle mode, or press Space while stationary in manual mode. Each completed journey pays 15 coins.

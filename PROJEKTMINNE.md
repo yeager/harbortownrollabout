@@ -362,3 +362,4 @@ Lokala Godot 4.7.dev.custom_build.f8d44ac6b: samtliga sju tests/*.gd godkända u
 XC60 har ny kaross, T-formade lyktor och frilagd blåljusramp. Tvärbanan har nya vagnskorgar, rörliga bälgar och två hytter. Bilar kan stöta i annan trafik och parkerade bilar. Bumpertestet kontrollerar kontakt och återstuds.
 Tvärbanans resenär sitter inne i mellanvagnen med fri musblick. Kupén har mönstrade säten, taklampor, gula handtag och hållplatsskyltar. Bild från passagerarkameran och tre skyltväxlingar kontrollerade med lokala Godot 4.7-dev.
 Tvärbanans perronger följer kurvan längs alla tre vagnsdelar. Sex dörrblad mot perrongen öppnas vid uppehåll och stängs före avgång. Testat vid samtliga tre stationer i Godot 4.7-dev.
+Elsparkcykeln viks ut med U på fri mark. Axel och Alma kan styra, gasa och bromsa. En granne åker på trottoaren. Testat båda spelarna, hjulrörelse samt stopp och avstigning vid brokanten i den lokala 4.7-dev-byggnaden.
