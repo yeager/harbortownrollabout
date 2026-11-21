@@ -623,3 +623,6 @@ msgstr "Hämta passagerare vid Västra torget."
 
 msgid "Drop off passengers at Västerängen."
 msgstr "Släpp av passagerare vid Västerängen."
+
+msgid "↑  Café · Snack kiosk"
+msgstr "↑  Kafé · Gatukök"

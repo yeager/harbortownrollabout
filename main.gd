@@ -1738,10 +1738,10 @@ func _build_depot() -> void:
 	_make_box("Footpath signpost",Vector3(.085,1.9,.085),waypost+Vector3.UP*.9,Color("#758384"))
 	_make_box("Shop direction sign",Vector3(2.0,.49,.08),waypost+Vector3.UP*1.68,Color("#20554c"))
 	var directions := Label3D.new()
-	directions.text = "↑  Café · Kiosk"
+	directions.text = "↑  Café · Snack kiosk"
 	directions.position = waypost+Vector3(0,1.68,-.047)
 	directions.rotation.y = PI
-	directions.font_size = 42
+	directions.font_size = 34
 	directions.pixel_size = .0048
 	add_child(directions)
 	var sign := Label3D.new()
