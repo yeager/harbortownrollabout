@@ -233,3 +233,4 @@ Gångbanorna längs de västra tvärgatorna ansluter i nivå runt alla tio kvart
 Buss 502 hämtar nu även vid Västra torget och lämnar vid Västerängen. Godot-test genom alla sex hållplatsutbyten med destinationsskylt, belöning och återgång till torget.
 Även medresenärerna vid busshållplatserna hälsar. Storlek och avstånd i gruppen återställs före placering vid byte från skoltaxi till buss. Testat vid västra hämtning och lämning.
 Nattvy jämförd i Compatibility, Mobile och Forward+ på AMD. Natthimlens färger färgrymdskonverteras nu av Godot så Vulkan-lägena inte visar en ljus skymningshimmel vid midnatt.
+I automatiskt dygnsläge vandrar ljusriktningen genom dagen, med lägre och varmare ljus vid gryning och skymning. Riktning, skugginställning och kontinuitet över dygnsskarven testade i Godot.

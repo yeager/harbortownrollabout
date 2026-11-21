@@ -1541,6 +1541,16 @@ func _update_daylight(delta: float) -> void:
 	var cloud := maxf(weather.intensity.x,weather.intensity.y)*(1.0-night)
 	city_sun.light_energy = lerpf(.73,.17,night)*(1.0-.52*cloud)
 	city_sun.shadow_opacity = 1.0-.48*cloud
+	var sunlight := Color("#fff1df").lerp(Color("#9db5eb"),night)
+	if time_mode == 2:
+		var height := cos(day_phase*TAU)
+		var elevation := 5.0 + absf(height)*(43.0 if height >= 0 else 22.0)
+		city_sun.rotation = Vector3(-deg_to_rad(elevation),deg_to_rad(-28.0)-day_phase*TAU,0)
+		var twilight := 1.0-smoothstep(.02,.42,absf(height))
+		sunlight = sunlight.lerp(Color("#ffc08b"),twilight*.7)
+	else:
+		city_sun.rotation_degrees = Vector3(-48+21*night,-28+73*night,0)
+	city_sun.light_color = sunlight
 	if absf(night-last_night)<.006: return
 	last_night = night
 	for lens in navigation_lenses:
@@ -1559,8 +1569,6 @@ func _update_daylight(delta: float) -> void:
 	city_env.sky.sky_material.set_shader_parameter("night",night)
 	city_env.ambient_light_energy = lerpf(.38,.28,night)
 	city_env.ambient_light_color = Color("#c4d5d1").lerp(Color("#9cb1d3"),night)
-	city_sun.light_color = Color("#fff1df").lerp(Color("#9db5eb"),night)
-	city_sun.rotation_degrees = Vector3(-48+21*night,-28+73*night,0)
 	city_fill.light_energy = .45*(1-night)
 	var entrance_glow := smoothstep(.15,.85,night)
 	entrance_diffuser.emission_energy_multiplier = entrance_glow*2.0
