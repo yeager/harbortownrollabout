@@ -219,3 +219,4 @@ Inställningar finns i en separat dialog med flikar. Renderaren väljs under Gra
 Västra stadsdelen ansluter till vägnätet i tre korsningar. Spelgränsen är nu 690 × 151 m. Axel och Alma använder Blender-modellerade ansikten och jackor. Bänken med färgprover byter jackfärg och bryggvärden har en särskild replik. Fullfart har dubbel toppfart för vägfordon, lugn körning behåller 30 km/h.
 Renderad närbild i Compatibility visade en glipa under huvudet. Hals, hår, ögon och mun justerades och kontrollerades i en ny spelrendering.
 Snöskoter från Blender med band, skidor, fjädring och synlig förare. Provkörd i Godot med gas, broms och avstigning. Parkbänken har fyra ben. Axel har formade ärmar, byxben, händer och skor.
+Snöskotern har nu en egen syntetiserad motorloop med hastighetsstyrd tonhöjd. Uppspelning och fordonsval verifierades i Godot.
