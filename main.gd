@@ -26,6 +26,8 @@ var vehicle_model: Node3D
 var headlights: Array[SpotLight3D] = []
 var bicycle_lenses: Array[StandardMaterial3D] = []
 var traffic_headlights: Array[SpotLight3D] = []
+var soil_finish: ShaderMaterial
+var sidewalk_finish: ShaderMaterial
 var road_finish: ShaderMaterial
 var apartment_lights: Array[StandardMaterial3D] = []
 var city_env: Environment
@@ -204,8 +206,9 @@ func _process(delta: float) -> void:
 					4: tint = tint.lerp(Color("#acb2a8"),.78)
 			foliage_finishes[finish].set_shader_parameter("leaf_color", tint)
 	weather.position = camera.position + Vector3.UP*8
-	road_finish.set_shader_parameter("wet",weather.wet)
-	road_finish.set_shader_parameter("snow_cover",weather.snow)
+	for surface in [road_finish,sidewalk_finish,soil_finish]:
+		surface.set_shader_parameter("wet",weather.wet)
+		surface.set_shader_parameter("snow_cover",weather.snow)
 	city_env.sky.sky_material.set_shader_parameter("overcast",maxf(weather.intensity.x,weather.intensity.y))
 	_update_daylight(delta)
 	if message_timer > 0.0:
@@ -683,7 +686,8 @@ func _build_world() -> void:
 	fill.omni_range = 48
 	add_child(fill)
 	var ground := _make_driving_surface("Natural ground", Vector3(115, 0.3, 174), Vector3(-2.5, -0.35, -6), Color("#78916e"), true)
-	ground.material_override = _noise_material(Color("#607751"), Color("#83966b"), 1.7, 0.14)
+	soil_finish = _noise_material(Color("#607751"), Color("#83966b"), 1.7, 0.14)
+	ground.material_override = soil_finish
 	_build_road_network()
 	_build_city_blocks()
 	_build_waterfront()
@@ -712,7 +716,7 @@ func _build_road_network() -> void:
 	main_road.material_override = road_finish
 	var cross_road := _make_driving_surface("Cross street", Vector3(9.6, 0.13, 72), Vector3(0, -0.07, -12), Color("#3e484a"), true)
 	cross_road.material_override = road_finish
-	var paving := _noise_material(Color("#8d8b7f"), Color("#aaa899"), 2.5, 0.09)
+	sidewalk_finish = _noise_material(Color("#8d8b7f"), Color("#aaa899"), 2.5, 0.09)
 	for direction in [Vector3.LEFT, Vector3.RIGHT, Vector3.FORWARD, Vector3.BACK]:
 		var end_distance := 50.0
 		if direction == Vector3.FORWARD: end_distance = 48.0
@@ -724,7 +728,7 @@ func _build_road_network() -> void:
 			var walk_length := end_distance - walk_start
 			var walk := _make_driving_surface("Stone sidewalk", direction.abs() * walk_length + edge.abs() * 2.45 + Vector3.UP * 0.10,
 				direction * (walk_start + walk_length / 2) + edge * side * 6.35 + Vector3.DOWN * 0.07, Color("#aaa899"), true)
-			walk.material_override = paving
+			walk.material_override = sidewalk_finish
 			var length := end_distance - start_distance
 			var middle: Vector3 = direction * (start_distance + length / 2)
 			_make_box("Kerb", direction.abs() * length + edge.abs() * 0.22 + Vector3.UP * 0.18,
@@ -741,7 +745,7 @@ func _build_road_network() -> void:
 
 func _build_waterfront() -> void:
 	var asphalt := Color("#414648")
-	_make_driving_surface("Östra stranden", Vector3(92, 0.3, 174), Vector3(133, -0.35, -6), Color("#859378"))
+	_make_driving_surface("Östra stranden", Vector3(92, 0.3, 174), Vector3(133, -0.35, -6), Color("#859378")).material_override = soil_finish
 	var canal := _make_box("Sjöstadskanalen", Vector3(32, 0.12, 174), Vector3(71, -1.05, -6), Color("#376675"))
 	var water := Shader.new()
 	water.code = """
