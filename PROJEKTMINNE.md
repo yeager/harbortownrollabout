@@ -270,3 +270,4 @@ Aktuellt uppdrag ligger överst i telefonen även efter att SMS-historiken fyllt
 Kioskens tangentbordsmarkering flyttas till nästa ätbara mellanmål när sista portionen är uppäten, därefter till första köpknappen. Verifierat med två Enter-tryck genom Godots viewport och kontroll av lagersaldo och mynt.
 Paketuppdragen har två synliga kartonger på torget. Efter hämtning visas respektive kartong på vårdcentralens eller småbåtshamnens avlämningsplats när leveransen är klar. Verifierade alla fyra tillstånd i Godot 4.
 Två hoprullade filtar syns vid snöskoterns hämtplats, på skotern under leverans och hos mottagarna efter avlämning. Hela uppdragsföljden verifierad i Godot 4.
+Telefonens SMS-lista går att rulla och öppnas högst upp. Verifierade separat med svensk text i Godot 4 och 640×360-fönster.

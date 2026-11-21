@@ -4,6 +4,7 @@ var open_button := Button.new()
 var handset := PanelContainer.new()
 var messages: Array[String] = []
 var inbox := Label.new()
+var history_scroll := ScrollContainer.new()
 var unread := 0
 var current_job := ""
 
@@ -40,7 +41,12 @@ func _ready() -> void:
 	inbox.custom_minimum_size.x=280
 	inbox.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
 	inbox.add_theme_font_size_override("font_size",18)
-	handset.add_child(inbox)
+	history_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	history_scroll.custom_minimum_size = Vector2(302, 172)
+	history_scroll.follow_focus = true
+	handset.add_child(history_scroll)
+	inbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	history_scroll.add_child(inbox)
 	handset.hide()
 	handset.visibility_changed.connect(_on_visibility_changed)
 	refresh()
@@ -48,6 +54,7 @@ func _ready() -> void:
 func _on_visibility_changed() -> void:
 	if handset.is_visible_in_tree():
 		unread=0
+		history_scroll.scroll_vertical = 0
 		refresh()
 
 func receive(body: String) -> void:
