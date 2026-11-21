@@ -2942,6 +2942,10 @@ func _build_target_marker() -> void:
 		_make_walker("Bus passenger",0,0,1,shirt,Color("#343c48"))
 		bus_companions.append(walker_data.pop_back().actor)
 	var square := WALK_TARGETS[0]
+	var hydrant := preload("res://environment/fire_hydrant.tscn").instantiate() as Node3D
+	hydrant.position = Vector3(square.x-.85,_foot_height(square.x-.85,square.z),square.z)
+	add_child(hydrant)
+	building_bounds.append(AABB(hydrant.position-Vector3(.22,.1,.2),Vector3(.44,1.1,.4)))
 	_make_walker("Neighbour at the square",square.x+.9,square.z,-1,Color("#408a91"),Color("#465162"))
 	square_neighbour = walker_data.pop_back().actor
 	square_neighbour.position.y = _foot_height(square_neighbour.position.x,square.z)
