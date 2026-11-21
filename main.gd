@@ -2479,7 +2479,7 @@ func _update_traffic(delta: float) -> void:
 			if offset.x*direction>=0 and absf(offset.z)<float(item.width)+.86:
 				clearance=minf(clearance,gap)
 		var player_offset := ambulance.position - actor.position
-		if absf(player_offset.z) < player_size.y + float(item.width):
+		if ambulance.visible and absf(player_offset.z) < player_size.y + float(item.width):
 			var ahead := player_offset.x * direction
 			var buffer := player_size.x + float(item.length)
 			if ahead < -buffer and ambulance.position.x >= TRAFFIC_WEST - buffer and ambulance.position.x <= TRAFFIC_EAST + buffer:
