@@ -11,9 +11,9 @@ var distance := 0.0
 var velocity := 0.0
 var dwell := 6.0
 
-func beam(a: Vector3, b: Vector3, width: float, height: float, color: Color) -> void:
-	var piece = get_parent()._make_box("Track", Vector3(width,height,a.distance_to(b)+.015), (a+b)/2, color,false,self)
-	piece.look_at(b)
+func beam(a: Vector3, b: Vector3, width: float, height: float, color: Color, mount: Node3D = self) -> void:
+	var piece = get_parent()._make_box("Track", Vector3(width,height,a.distance_to(b)+.015), (a+b)/2, color,false,mount)
+	piece.look_at(mount.to_global(b))
 
 func sign_at(parent: Node3D, words: String, at: Vector3, angle: float, scale_factor: float) -> void:
 	var label := Label3D.new()
@@ -38,6 +38,12 @@ func _ready() -> void:
 		beam(a-Vector3.UP*.25,b-Vector3.UP*.25,3.4,.46,Color("#888983"))
 		for s in [-1,1]:
 			beam(a+side*.72*s,b+side*.72*s,.07,.12,Color("#939c9c"))
+		beam(a+Vector3.UP*4.2,b+Vector3.UP*4.2,.028,.032,Color("#60594e"))
+		if i%8==0:
+			var pole := a+side*1.95
+			world._make_box("Overhead mast",Vector3(.14,4.7,.14),pole+Vector3.UP*2.12,Color("#758083"),false,self)
+			beam(pole+Vector3.UP*4.42,a+Vector3.UP*4.42,.075,.075,Color("#717c7d"))
+			world._make_box("Wire suspension",Vector3(.045,.23,.045),a+Vector3.UP*4.31,Color("#554f46"),false,self)
 		if i%10==0 and absf(a.z)>6 and absf(a.z+48)>6:
 			world._make_box("Viaduct pier",Vector3(1.1,6.3,1.4),a-Vector3.UP*3.45,Color("#a9aaa5"),false,self)
 	for i in 3:
@@ -75,6 +81,16 @@ func _ready() -> void:
 				world._make_box("Door glazing",Vector3(.02,1.10,.38),Vector3(s*.048,.26,0),Color("#213744"),false,leaf)
 				if i==0 and s==1:
 					platform_door_leaves.append(leaf)
+		if i==1:
+			var steel := Color("#384448")
+			world._make_box("Pantograph base",Vector3(1.05,.18,1.26),Vector3(0,2.78,.25),steel,false,car)
+			for side in [-1,1]:
+				var heel := Vector3(side*.33,2.87,.67)
+				var elbow := Vector3(side*.28,3.53,-.54)
+				var crown := Vector3(side*.39,4.13,0)
+				beam(heel,elbow,.065,.083,steel,car)
+				beam(elbow,crown,.048,.065,steel,car)
+			world._make_box("Contact shoe",Vector3(1.22,.065,.13),Vector3(0,4.16,0),steel,false,car)
 		if i==0:
 			car.add_child(preload("res://vehicles/tram_cab.glb").instantiate())
 			sign_at(car,"Sjöstaden",Vector3(0,2.32,-2.528),PI,.0036)
