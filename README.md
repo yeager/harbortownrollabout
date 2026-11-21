@@ -1,6 +1,6 @@
 # Axel's Emergency Vehicles
 
-Explore a 3D waterfront neighbourhood inspired by Hammarby Sjöstad in Stockholm. Drive an ambulance, police car, fire engine or black BMW X5 M60i. Follow three untimed missions or explore the streets and bridges at your own pace.
+Explore a 3D waterfront neighbourhood inspired by Hammarby Sjöstad in Stockholm. Choose Axel or Alma and drive through town, cross the canal by motorboat or ride the tram. Your vehicle determines the jobs you receive, from emergency calls and school taxi trips to roadside recovery. You can also explore at your own pace.
 
 ## Play
 
@@ -14,7 +14,10 @@ Open `project.godot` in Godot 4.6 and press **F5**. Select a vehicle and choose 
 | Reverse | Stop, release the brake, then press S or Down again |
 | Help at a mission marker | Space |
 | Leave or enter a parked vehicle | F |
-| Pause | P or Escape |
+| Open or close the phone | T |
+| Close the open phone and return to play | Escape |
+| Toggle the vehicle radio | J |
+| Pause | P, or Escape when the phone is closed |
 
 Gentle driving limits speed to 30 km/h and completes an interaction when you stop at the marker. The steering wheel and pedals on screen show your inputs. You can adjust volume and emergency lights independently, choose daylight or night, or let a full day pass in six minutes of active play.
 
@@ -52,7 +55,7 @@ Two slow, white pickup-converted A-traktors share the main street. Look for the 
 
 Choose **Axel · 15** or **Alma · 12** beside the vehicle selector. The choice changes the character you see on foot. Each rescue mission step earns 10 coins and completing a taxi fare earns 15. Both characters share one wallet on this installation.
 
-Press **T** or click **Phone** during play to open the four most recent dispatches. New rescue and taxi assignments appear silently with an unread count. Completed jobs send a payment receipt. Messages follow the selected language.
+Press **T** or click **Phone** to read your current assignment above the recent message history. The inbox holds up to four messages, including dispatches, family texts and payment receipts. Press **Escape** to close it and return to play. Changing the language also translates messages you have already received.
 
 ## Shops
 
@@ -78,11 +81,11 @@ During the rescue route, the medic hands over a green first-aid bag. It travels 
 
 Choose **City bus** and start **Bus route 502** to pick up passengers at the square and drop them off at Sjöstadsskolan. The next service runs from the marina to the clinic. Stop at the marker to serve each stop in gentle mode, or press Space while stationary in manual mode. Each completed journey pays 15 coins.
 
-The taxi rotation also includes a pupil travelling from the square to school and a pupil waiting outside school for a ride to the clinic. Follow the arrows and read the next request on the phone.
+The taxi rotation also includes a pupil travelling from the square to school and a pupil waiting outside school for a ride to the clinic. Follow the arrows to the yellow **TAXI** sign outside Sjöstadsskolan. With gentle driving enabled, stop at the marker for about a second to let the pupil board or get out. Read the next request on the phone.
 
 The vehicle selector and depot include a red BMW M3 E30, orange Volvo 240, green Saab 96 and white Tesla Model S. Full-speed mode gives the Volvo and Saab relaxed acceleration. The Tesla has a quiet electric motor sound and accelerates quickly. Gentle mode limits every vehicle to 30 km/h.
 
-Press **J** or click **Radio** in a vehicle to play the original instrumental loop on Sjöstad Radio. It also works aboard the motorboat and tram. Playback stops while paused or on foot.
+Press **J** or click **Radio** in a vehicle to play the original instrumental loop on Sjöstad Radio. It also works aboard the motorboat and tram. The radio pauses when you leave the vehicle and resumes at the same point when you get back in.
 
 ## Graphics settings
 
