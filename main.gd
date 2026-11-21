@@ -2060,29 +2060,35 @@ func _make_walker(label: String, start_x: float, lane_z: float, direction: float
 		person.get_meta("arms").append(arm_pivot)
 	walker_data.append({"actor": person, "direction": direction, "speed": 1.15 + randf() * 0.45, "phase": randf() * TAU})
 
+func _greet_nearby_player(person: Node3D) -> void:
+	var nearby := person.is_visible_in_tree() and walker.visible and walker.position.distance_to(person.position)<2.9
+	if nearby and not person.get_meta("greeted",false) and greeting_timer==0:
+		var phrase := tr(["Hello!", "How are you?", "Hi there!"][greeting_number%3])
+		greeting_number += 1
+		greeting.reparent(person,false)
+		greeting.position = Vector3.UP*2.18
+		greeting.text = phrase
+		greeting.visible = true
+		greeting_timer = 7.5
+		person.set_meta("greeted", true)
+		if not AudioServer.is_bus_mute(0):
+			var voices := DisplayServer.tts_get_voices_for_language(TranslationServer.get_locale().left(2))
+			if not voices.is_empty():
+				var level := roundi(65 * db_to_linear(AudioServer.get_bus_volume_db(0)))
+				DisplayServer.tts_speak(phrase,voices[0],clampi(level,0,100))
+	if walker.position.distance_to(person.position)>8:
+		person.set_meta("greeted", false)
+
 func _update_pedestrians(delta: float) -> void:
 	_advance_crossing(delta)
 	greeting_timer = maxf(0,greeting_timer-delta)
 	greeting.visible = walker.visible and greeting_timer>4.0
+	for person: Node3D in [square_neighbour, waiting_medic, marina_recipient, passenger, arriving_passenger]:
+		if is_instance_valid(person):
+			_greet_nearby_player(person)
 	for item in walker_data:
 		var person: Node3D = item["actor"]
-		var nearby := walker.visible and walker.position.distance_to(person.position)<2.9
-		if nearby and not item.get("greeted",false) and greeting_timer==0:
-			var phrase := tr(["Hello!", "How are you?", "Hi there!"][greeting_number%3])
-			greeting_number += 1
-			greeting.reparent(person,false)
-			greeting.position = Vector3.UP*2.18
-			greeting.text = phrase
-			greeting.visible = true
-			greeting_timer = 7.5
-			item.greeted = true
-			if not AudioServer.is_bus_mute(0):
-				var voices := DisplayServer.tts_get_voices_for_language(TranslationServer.get_locale().left(2))
-				if not voices.is_empty():
-					var level := roundi(65 * db_to_linear(AudioServer.get_bus_volume_db(0)))
-					DisplayServer.tts_speak(phrase,voices[0],clampi(level,0,100))
-		if walker.position.distance_to(person.position)>8:
-			item.greeted = false
+		_greet_nearby_player(person)
 		var direction: float = item["direction"]
 		var next := person.position
 		next.x = wrapf(next.x + direction * float(item.speed) * delta, -44.0, 44.0)

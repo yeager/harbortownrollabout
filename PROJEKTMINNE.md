@@ -189,3 +189,4 @@ Spelprojektet publiceras i det privata GitHub-repot yeager/axels-emergency-vehic
 - En hamnvärd i orange jacka väntar vid småbåtshamnen under förbandsleveransen och håller väskan efter överlämningen. Detta och kvittot provades genom alla tre uppdragsstegen.
 
 - Grannen i turkos jacka står vid första hjälpmålet på torget med handen höjd och sänker armen efter hjälpen. Båda tillstånden verifierades genom räddningsuppdraget.
+- Även uppdragspersoner kan nu hälsa när Axel eller Alma kommer fram till fots. Godot startkontrollerades utan grafik.
