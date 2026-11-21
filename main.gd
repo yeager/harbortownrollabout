@@ -296,7 +296,7 @@ func _process(delta: float) -> void:
 		snow_marks.visible_instance_count = 0
 		snow_cursor = 0
 	water_finish.set_shader_parameter("rain",weather.intensity.x)
-	city_env.sky.sky_material.set_shader_parameter("overcast",maxf(weather.intensity.x,weather.intensity.y))
+	city_env.sky.sky_material.set_shader_parameter("overcast",weather.cloud_cover)
 	_update_daylight(delta)
 	if not paused and message_timer > 0.0:
 		message_timer = maxf(0.0, message_timer - delta)
