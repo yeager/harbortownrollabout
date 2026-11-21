@@ -279,3 +279,4 @@ Musstyrning med V och fri pekare när knappen släpps. Axel, Alma och fotgängar
 Vid start får alla 25 personer sina väderkläder redan när scenen byggs. Testat med fyra sparade väderval i Godot 4.6.3 före första processbildrutan.
 Tvärbanans främre vagn visar nästa hållplats på en bärnstensfärgad sidoskylt vid dörren. Testade alla tre skyltbyten under både automatisk och manuell körning i Godot 4.6.3.
 Fyra signalreglerade övergångsställen har riktad nattbelysning. Godot 4.6.3 verifierade dags- och nattlägen samt att varje ljuskägla når övergångsställets mitt.
+Barnvagnens och rullatorns åtta hjul rullar efter verklig förflyttning och respektive hjulradie. Däck, fälg, nav och ventil följer samma axel. Verifierat i Godot 4.6.3.

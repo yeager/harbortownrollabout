@@ -2411,7 +2411,24 @@ func _build_pedestrians() -> void:
 func _equip_walker(scene: PackedScene, pace: float, stretch: Vector2) -> void:
 	var neighbour: Dictionary = walker_data.back()
 	var person: Node3D = neighbour.actor
-	person.add_child(scene.instantiate())
+	var aid := scene.instantiate() as Node3D
+	person.add_child(aid)
+	var wheels: Array[Node3D] = []
+	var pieces := aid.find_children("*","MeshInstance3D",true,false)
+	for tyre: MeshInstance3D in pieces:
+		if not str(tyre.name).begins_with("Tyre"): continue
+		var axle := Node3D.new()
+		tyre.get_parent().add_child(axle)
+		axle.position = tyre.position
+		# Each wheel centre sits one radius above the ground in the imported rig.
+		axle.set_meta("radius",axle.position.y)
+		for piece: MeshInstance3D in pieces:
+			if piece == tyre or ((str(piece.name).begins_with("Wheel dish") or str(piece.name).begins_with("Hub")) and piece.global_position.distance_to(axle.global_position)<.06):
+				piece.reparent(axle,true)
+		var valve_x := signf(axle.position.x)*.039
+		_make_box("Valve stem",Vector3(.015,.025,.012),Vector3(valve_x,axle.position.y*.73,0),Color("#393631"),false,axle)
+		wheels.append(axle)
+	neighbour.wheels = wheels
 	neighbour.speed = pace
 	neighbour.stretch = stretch
 	neighbour.pushing = true
@@ -2612,6 +2629,9 @@ func _update_pedestrians(delta: float) -> void:
 			distance = minf(absf(next.x-person.position.x), float(item.speed)*delta)
 			next.y = _foot_height(next.x,next.z)
 			person.position = next
+		if distance > 0 and item.has("wheels"):
+			for axle: Node3D in item.wheels:
+				axle.rotate_x(-distance / float(axle.get_meta("radius")))
 		_animate_steps(person, distance, delta, item.get("pushing",false), float(item.phase)/TAU)
 
 func _rig_wheels(model: Node3D) -> Array[Node3D]:
