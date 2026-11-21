@@ -5,6 +5,7 @@ const STATION_NAMES := ["Sjöstads kaj", "Kanalparken", "Brotorget"]
 var track := Curve3D.new()
 var sections: Array[Node3D] = []
 var platform_door_leaves: Array[Node3D] = []
+var next_stop_display: Label3D
 var stops: Array[float] = []
 var next_stop := 1
 var distance := 0.0
@@ -15,7 +16,7 @@ func beam(a: Vector3, b: Vector3, width: float, height: float, color: Color, mou
 	var piece = get_parent()._make_box("Track", Vector3(width,height,a.distance_to(b)+.015), (a+b)/2, color,false,mount)
 	piece.look_at(mount.to_global(b))
 
-func sign_at(parent: Node3D, words: String, at: Vector3, angle: float, scale_factor: float) -> void:
+func sign_at(parent: Node3D, words: String, at: Vector3, angle: float, scale_factor: float) -> Label3D:
 	var label := Label3D.new()
 	label.text = words
 	label.position = at
@@ -24,6 +25,7 @@ func sign_at(parent: Node3D, words: String, at: Vector3, angle: float, scale_fac
 	label.font_size = 42
 	label.outline_size = 4
 	parent.add_child(label)
+	return label
 
 func _ready() -> void:
 	var world := get_parent()
@@ -101,6 +103,10 @@ func _ready() -> void:
 		if i==0:
 			car.add_child(preload("res://vehicles/tram_cab.glb").instantiate())
 			sign_at(car,"Sjöstaden",Vector3(0,2.32,-2.528),PI,.0036)
+			world._make_box("Next stop display",Vector3(.04,.32,1.74),Vector3(1.20,2.48,-1.32),Color("#192426"),false,car)
+			next_stop_display = sign_at(car,STATION_NAMES[next_stop],Vector3(1.23,2.48,-1.32),PI/2,.0044)
+			next_stop_display.modulate = Color("#ffbd58")
+			next_stop_display.outline_size = 0
 			world._make_box("Door notice",Vector3(.035,.32,1.4),Vector3(1.21,1.04,1.46),Color("#174460"),false,car)
 			sign_at(car,"Vi åker inte till Ekerö",Vector3(1.24,1.04,1.46),PI/2,.003)
 	place_sections()
@@ -126,6 +132,7 @@ func advance(delta: float, manual: bool, gas: bool, brake: bool) -> void:
 	if remaining<=step+.015:
 		distance=stops[next_stop]
 		next_stop=(next_stop+1)%stops.size()
+		next_stop_display.text = STATION_NAMES[next_stop]
 		velocity=0
 		dwell=6
 	else:
