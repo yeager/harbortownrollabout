@@ -338,7 +338,7 @@ func _process(delta: float) -> void:
 	if lights_on and not steady_player_lights and mode == "playing" and not paused:
 		light_phase += delta * 3.2
 		_update_emergency_lights()
-	shops.update_customer(walker.visible and not boating and tram_mode==0,walker.position,mode=="playing" and not paused)
+	shops.update_customer(walker.visible and not ferry_passenger and not boating and tram_mode==0,walker.position,mode=="playing" and not paused)
 	weather.visible = shops.inside < 0
 	_update_camera(delta)
 	_refresh_status()
@@ -2133,6 +2133,7 @@ func _change_seat() -> void:
 		if not _on_foot_clear(landing): return
 		ferry_passenger = false
 		walker.position = landing
+		_update_route_arrows()
 		walk_basis = Basis(Vector3.UP, PI*.5)
 		walker.rotation.y = walk_basis.get_euler().y
 		listener.global_basis = walk_basis
@@ -2142,6 +2143,7 @@ func _change_seat() -> void:
 		return
 	if walker.visible and stop >= 0 and _near_ferry_landing() == stop:
 		ferry_passenger = true
+		_update_route_arrows()
 		ferry_exit_requested = false
 		walking_velocity = Vector3.ZERO
 		walker.rotation.y = -PI*.5
@@ -3050,7 +3052,7 @@ func _find_light_meshes(node: Node) -> void:
 
 func _update_route_arrows() -> void:
 	for arrow in route_arrows: arrow.visible = false
-	if free_drive or mode!="playing" or mission_index>=TARGETS.size(): return
+	if free_drive or ferry_passenger or mode!="playing" or mission_index>=TARGETS.size(): return
 	var origin := walker.position if walker.visible else ambulance.position
 	var target := _mission_destination()
 	var points := navigator.path(Vector2(origin.x,origin.z),Vector2(target.x,target.z))
