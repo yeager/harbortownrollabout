@@ -5,12 +5,13 @@ from math import atan2, cos, sin, pi
 import bpy
 from mathutils import Vector
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from build_vehicles import clear_scene, cube, cylinder, material, mesh_from_rings, export_vehicle, SOURCE_DIR, DARK, RUBBER, METAL, HEADLAMP, RED_LAMP
+from build_vehicles import clear_scene, cube, cylinder, material, mesh_from_rings, export_vehicle, SOURCE_DIR, DARK, RUBBER, METAL, HEADLAMP
 
 clear_scene()
 root = bpy.data.objects.new("Trail sled", None)
 bpy.context.collection.objects.link(root)
 blue = material("Cobalt enamel", (.018,.075,.62), .5,.25)
+tail_lens = material("Tail lamp", (.92,.025,.018), .02,.2,1.1)
 
 def shell(name, rows, finish):
     return mesh_from_rings(name, rows, finish, root, .019)
@@ -117,7 +118,12 @@ for side in [-1,1]:
     attach(beam("Grip",(side*.23,-.36,1.18),(side*.36,-.33,1.18),.028,RUBBER), bars)
 attach(beam("Handlebar",(-.3,-.36,1.18),(.3,-.36,1.18),.019,METAL), bars)
 beam("Steering column",(0,-.29,.9),(0,-.36,1.18),.032,DARK)
-cube("Tail lamp",(0,1.43,.57),(.20,.03,.055),RED_LAMP,.012,root)
+cube("Tail light housing",(0,1.434,.565),(.24,.045,.077),DARK,.015,root)
+cube("Tail lamp",(0,1.459,.57),(.20,.018,.052),tail_lens,.008,root)
+for side in [-1,1]:
+    beam("Rear grab rail mount",(side*.235,1.25,.54),(side*.235,1.49,.49),.021,blue)
+    beam("Rear grab rail corner",(side*.235,1.49,.49),(side*.20,1.53,.49),.021,blue)
+beam("Rear grab rail",(-.20,1.53,.49),(.20,1.53,.49),.021,blue)
 bpy.context.preferences.filepaths.save_version = 0
 bpy.ops.wm.save_as_mainfile(filepath=str(Path(SOURCE_DIR)/"Snowmobile.blend"))
 export_vehicle(root,"snowmobile.glb")
