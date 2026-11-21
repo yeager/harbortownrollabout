@@ -206,3 +206,4 @@ Spelprojektet publiceras i det privata GitHub-repot yeager/axels-emergency-vehic
 - Raggarbil och A-traktor har egna syntetiserade tutor. Cyklisternas ringklocka och de två nya ljudens koppling till trafikfordonen verifierades i Godot.
 - Paus avbryter tutor, däckljud och uppläst hälsning samt tystar trafiksirener direkt. Paus och återgång med samtidiga fordonsljud testades i Godot.
 - Paus fryser återstående lästid för tillfälliga meddelanden. Taxins bekräftelse vid upphämtning testades med 60 sekunders simulerad paus och återupptagen nedräkning.
+- Pausmenyn visar den aktuella uppdragstexten från telefonen. Sex uppdragssteg verifierades på svenska och engelska, utan dubbla telefonmeddelanden.

@@ -3370,6 +3370,8 @@ func _refresh_ui() -> void:
 			subtitle_label.text = "Explore on foot or by vehicle. Stop at the depot to change vehicles."
 		if walker.visible:
 			subtitle_label.text = "Walk up to a parked vehicle to get in."
+		if paused and not last_dispatch.is_empty():
+			subtitle_label.text = tr(last_dispatch)
 		start_button.text = "Continue walking" if walker.visible else "Continue driving"
 	if show_overlay and mode != "complete":
 		if boating:
