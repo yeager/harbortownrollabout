@@ -241,3 +241,4 @@ Motorbåtens inbromsning mot östra kajgränsen verifierad i Godot med gasen ned
 En ny båttur startar vid motorbåtens ursprungliga förtöjningsplats med noll fart och rak utombordare. Verifierat genom att köra en tur och starta en ny i samma spelinstans.
 Båtturens startmeny förklarar nu hur vänster och höger musknapp fungerar vid körning. Svenskt språkval och båtinstruktionernas översättning kontrollerade i Godot.
 Skärmpedalerna kan användas med vänster musknapp. Verifierat gas, broms och släpp utanför pedalen via Godots viewport.
+Paus återställer även den klickbara skärmbromsen. Provade att pausa med pedalen nedtryckt, fortsätta och gasa på nytt.

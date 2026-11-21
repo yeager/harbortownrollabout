@@ -3727,6 +3727,7 @@ func _refresh_ui() -> void:
 	if show_overlay:
 		mouse_gas = false
 		mouse_brake = false
+		brake_pedal_held = false
 	overlay.visible = show_overlay
 	overlay_panel.visible = show_overlay
 	vehicle_selector.visible = show_overlay and not walker.visible and not boating and tram_mode == 0
