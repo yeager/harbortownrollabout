@@ -1346,6 +1346,9 @@ func _update_daylight(delta: float) -> void:
 		if mode == "playing" and not paused:
 			day_phase = fmod(day_phase+delta/360.0,1.0)
 	var night := 1.0 if time_mode == 1 else (smoothstep(-.4,.4,-cos(day_phase*TAU)) if time_mode == 2 else 0.0)
+	var cloud := maxf(weather.intensity.x,weather.intensity.y)*(1.0-night)
+	city_sun.light_energy = lerpf(.73,.17,night)*(1.0-.52*cloud)
+	city_sun.shadow_opacity = 1.0-.48*cloud
 	if absf(night-last_night)<.006: return
 	last_night = night
 	for lens in navigation_lenses:
@@ -1365,7 +1368,6 @@ func _update_daylight(delta: float) -> void:
 	city_env.ambient_light_energy = lerpf(.38,.28,night)
 	city_env.ambient_light_color = Color("#c4d5d1").lerp(Color("#9cb1d3"),night)
 	city_sun.light_color = Color("#fff1df").lerp(Color("#9db5eb"),night)
-	city_sun.light_energy = lerpf(.73,.17,night)
 	city_sun.rotation_degrees = Vector3(-48+21*night,-28+73*night,0)
 	city_fill.light_energy = .45*(1-night)
 	var entrance_glow := smoothstep(.15,.85,night)
