@@ -153,3 +153,5 @@ Spelprojektet publiceras i det privata GitHub-repot yeager/axels-emergency-vehic
 - Kafé Bullen har en plåt med sex modellerade kanelbullar på disken. Varje bulle har en kanelspiral som följer den välvda ytan.
 
 - Pizzerian visar en margherita på träbräda vid disken, med gräddad kant, tomatsås och mozzarella.
+
+- När pengarna inte räcker visar butiken beloppet som saknas och hur spelaren tjänar mynt. Svenska besked och köp med exakt pris provades i kaféet.

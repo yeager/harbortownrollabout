@@ -195,7 +195,9 @@ func purchase(shop: int, item: int) -> void:
 	if shop!=inside or not shop_card.is_visible_in_tree() or not game.walker.visible or game.paused: return
 	var cost:int=PRICES[shop][item]
 	if game.wallet<cost:
-		receipt.text=tr("You need %d more coins.") % (cost-game.wallet)
+		var missing: int = cost-game.wallet
+		var amount := tr("You need one more coin.") if missing==1 else tr("You need %d more coins.") % missing
+		receipt.text=amount+" "+tr("Complete a mission to earn coins.")
 		return
 	var product:String=MENUS[shop][item]
 	game.wallet-=cost

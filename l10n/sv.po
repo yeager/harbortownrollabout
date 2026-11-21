@@ -482,3 +482,9 @@ msgstr "Hämta en passagerare på torget och kör till småbåtshamnen."
 
 msgid "Collect the car with a smoking bonnet and take it to the workshop."
 msgstr "Hämta bilen som ryker från motorhuven och kör den till verkstaden."
+
+msgid "You need one more coin."
+msgstr "Du behöver ett mynt till."
+
+msgid "Complete a mission to earn coins."
+msgstr "Gör klart ett uppdrag för att tjäna mynt."
