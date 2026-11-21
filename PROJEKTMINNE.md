@@ -109,3 +109,5 @@ Spelprojektet publiceras i det privata GitHub-repot yeager/axels-emergency-vehic
 - Vid bärgningen på östra kajen ligger det lossnade hjulet bredvid bilen tills den hämtas. Alla fyra uppdragssteg provades i Godot.
 
 - Parkerade uppdragsfordon kan inte utlösa hämtning medan spelaren åker båt eller tvärbana. Bärgning testad vid samma mål i fem färdlägen.
+
+- Vid räddningsmål visar manuellt körläge först att spelaren ska stanna och sedan vilken knapp som hjälper. Testat att mellanslag i fart inte tvärstoppar bilen och att hjälp efter stopp genomför uppdragssteget.

@@ -612,7 +612,7 @@ func _help_at_target() -> void:
 			_update_mission_marker()
 			_refresh_ui()
 		return
-	if _at_target():
+	if _at_target() and (walker.visible or absf(speed)<.12):
 		parked_at_target = 0.0
 		mission_index += 1
 		phone.receive("Thank you for helping! You earned 10 coins.")
@@ -3155,8 +3155,11 @@ func _refresh_status() -> void:
 		status_label.text = message
 	elif mode == "playing" and not paused and walker.visible and _at_target():
 		status_label.text = "Stand here to help" if gentle_driving else "Press Space to help"
-	elif mode == "playing" and not paused and gentle_driving and _at_target():
-		status_label.text = "Stop here to help." if absf(speed) >= 0.12 else "Helping …"
+	elif mode == "playing" and not paused and _at_target():
+		if absf(speed) >= .12:
+			status_label.text = "Stop here to help."
+		else:
+			status_label.text = "Helping …" if gentle_driving else "Press Space to help"
 	elif waiting_for_signal and mode=="playing" and not paused and not walker.visible and not boating:
 		status_label.text = "Waiting for a green light"
 	elif walker.visible and not boating and not paused:
