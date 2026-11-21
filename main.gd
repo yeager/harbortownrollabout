@@ -197,6 +197,7 @@ var boating := false
 var grip_radius := 0.0
 var road_driver: Node3D
 var skipper: Node3D
+const LAUNCH_BERTH := Vector3(79,-.94,46)
 var launch: Node3D
 var navigation_lenses: Array[StandardMaterial3D] = []
 var outboard: Node3D
@@ -1186,7 +1187,7 @@ func _build_marina() -> void:
 		lens.material_override = finish
 		navigation_lenses.append(finish)
 	outboard = launch_model.find_child("Outboard swivel",true,false)
-	launch.position=Vector3(79,-.94,46)
+	launch.position = LAUNCH_BERTH
 	for x in [58,65,72,79,84]:
 		for z in [6.8,76.5]:
 			_make_box("Fairway buoy",Vector3(.35,.75,.35),Vector3(x,-.82,z),Color("#bf5e37"))
@@ -3437,6 +3438,10 @@ func _starting_position() -> Vector3:
 	return Vector3(best_x, _surface_height(best_x, lane), lane)
 
 func _start_game() -> void:
+	if boating:
+		launch.transform = Transform3D(Basis.IDENTITY, LAUNCH_BERTH)
+		launch_speed = 0.0
+		outboard.rotation.y = 0.0
 	waiting_for_signal = false
 	last_dispatch=""
 	phone.messages.clear()

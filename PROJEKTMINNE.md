@@ -238,3 +238,4 @@ Kanalens vattenmaterial sprider ljus i regn och skum, med skarpare solblänk på
 Lotten drar ett V-format kölvatten bakom den aktiva aktern. Styrkan följer överfartens hastighet och går till noll vid kaj. Båda riktningarna testade och överfarten granskad i Forward+.
 Motorbåtens svall utgår från aktern vid framfart och från fören vid backning. Godot-test med tre kurser, båda färdriktningarna och stillastående.
 Motorbåtens inbromsning mot östra kajgränsen verifierad i Godot med gasen nedtryckt från 9 m/s vid 30, 60 och 120 uppdateringar per sekund. Farten nådde noll vid gränsen och båten kunde backa loss vid alla tre frekvenser.
+En ny båttur startar vid motorbåtens ursprungliga förtöjningsplats med noll fart och rak utombordare. Verifierat genom att köra en tur och starta en ny i samma spelinstans.
