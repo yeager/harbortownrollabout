@@ -97,3 +97,5 @@ Spelprojektet publiceras i det privata GitHub-repot yeager/axels-emergency-vehic
 - Upplästa hälsningar följer spelets huvudvolym. Vid ljud av stoppas pågående tal och nya hälsningar visas som text. ”Hej!” verifierades i svenskt, ljudlöst läge i Godot.
 
 - Tvärbanans förarläge visar gas och broms nere till höger. Muspedaler fungerar även när spelaren byter från promenad i pausmenyn. Test i Godot bekräftar acceleration med vänster knapp och bromsprioritet när båda hålls nere.
+
+- Tvärbanans främre hytt har en separat Blendermodell med rundad blå nos, lutande vindruta, strålkastare och destinationsskylt. Fronten granskades i en renderad trekvartsvy vid hållplatsen.

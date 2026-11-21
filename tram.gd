@@ -76,7 +76,8 @@ func _ready() -> void:
 				if i==0 and s==1:
 					platform_door_leaves.append(leaf)
 		if i==0:
-			world._make_box("Cab nose",Vector3(2.32,.77,.38),Vector3(0,.84,-2.31),Color("#1388bf"),false,car)
+			car.add_child(preload("res://vehicles/tram_cab.glb").instantiate())
+			sign_at(car,"Sjöstaden",Vector3(0,2.32,-2.528),PI,.0036)
 			world._make_box("Door notice",Vector3(.035,.32,1.4),Vector3(1.21,1.04,1.46),Color("#174460"),false,car)
 			sign_at(car,"Vi åker inte till Ekerö",Vector3(1.24,1.04,1.46),PI/2,.003)
 	place_sections()
