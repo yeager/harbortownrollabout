@@ -95,11 +95,10 @@ func tick(delta: float) -> void:
 	var target: Vector2 = PRECIPITATION[weather_setting if weather_setting else forecast]
 	var target_cover := maxf(target.x,target.y)
 	var cover_time := 32.0 if target_cover > cloud_cover else 120.0
-	if weather_setting != 0: cover_time = 4.0
 	cloud_cover = move_toward(cloud_cover,target_cover,delta/cover_time)
 	# Let the sky dim before a new shower starts.
 	var shower := smoothstep(0.18,0.52,cloud_cover)
-	intensity = intensity.move_toward(target*shower,delta/(75.0 if weather_setting==0 else 8.0))
+	intensity = intensity.move_toward(target*shower,delta/75.0)
 	var previous_snow := snow
 	snow = move_toward(snow,intensity.y,delta/55)
 	var meltwater := maxf(0.0,previous_snow-snow)
