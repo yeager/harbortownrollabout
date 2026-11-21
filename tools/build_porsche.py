@@ -471,9 +471,20 @@ def details(front_boundary):
                 arc.append((s*(profile(BODY,y,1)*.996),y,h+r*sin(a)+.008))
             tube("Wheel arch edge",arc,.012,paint)
         badge("GT3 RS",(s*.932,.065,.345),(pi/2,0,s*pi/2),.1,red_paint)
-    # Nose and splitter wrap smoothly around the curved corners.
-    outline=[(-.91,-1.89),(-.935,-2.03),(-.855,-2.245),(-.689,-2.33),(-.42,-2.35),(0,-2.36),(.42,-2.35),(.689,-2.33),(.855,-2.245),(.935,-2.03),(.91,-1.89)]
-    grid("Front carbon splitter", [[(x,y,z) for x,y in outline] for z in [.157,.19]],carbon,True)
+    # Cambered carbon shelf with a rolled leading edge. At the corners it
+    # sweeps aft and curls upwards into the return ahead of the wheel arch.
+    splitter = []
+    for i in range(81):
+        u = (i-40)/40
+        x = .951*u
+        edge = abs(u)
+        nose = front_depth(x) - .064 + .082*edge**12
+        rise = .036*edge**8
+        chord = .35-.19*edge**4
+        splitter.append([(x,nose+chord*f,z+rise) for f,z in
+                         [(0,.171),(.020,.179),(.10,.184),(.52,.196),
+                          (.85,.209),(1,.222),(1,.183),(.50,.167),(.07,.163),(.012,.165)]])
+    grid("Swept carbon splitter with rolled leading edge",splitter,carbon,True)
     front_intakes(front_boundary)
     hood_patch("Bonnet crest",[(-.023,-2.05),(0,-2.083),(.023,-2.05),(.024,-2.019),(-.024,-2.019)],gold,.008)
     for s in [-1,1]:
