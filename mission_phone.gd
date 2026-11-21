@@ -17,6 +17,8 @@ const SOCIAL := [
 	"I saved you a bun. It only has one tiny bite missing! — Mum",
 	"I said hello to someone on the tram. It was my reflection. — Grandpa",
 	"Your missing sock turned up. The teddy bear was wearing it as a hat. — Mum",
+	"I tried to wave at you from Lotten. I waved my sandwich. The gulls waved back! — Grandpa",
+	"Could you pick up a cinnamon bun? Your dad bought cinnamon and a bun separately. — Mum",
 ]
 var social_index := 0
 var social_wait := 75.0

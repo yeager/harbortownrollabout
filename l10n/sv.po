@@ -770,3 +770,9 @@ msgstr "Du går i land om %d s"
 
 msgid "School is over! To the clinic, please."
 msgstr "Skoldagen är slut! Till vårdcentralen, tack."
+
+msgid "I tried to wave at you from Lotten. I waved my sandwich. The gulls waved back! — Grandpa"
+msgstr "Jag försökte vinka till dig från Lotten. Jag vinkade med mackan. Måsarna vinkade tillbaka! – Morfar"
+
+msgid "Could you pick up a cinnamon bun? Your dad bought cinnamon and a bun separately. — Mum"
+msgstr "Kan du köpa en kanelbulle? Pappa kom hem med kanel och en fralla. – Mamma"
