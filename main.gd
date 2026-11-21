@@ -845,6 +845,11 @@ func _build_west_district() -> void:
 	var strokes: Array[Transform3D] = []
 	for z in junction_z:
 		for i in range(1,junction_x.size()):
+			var block_length := junction_x[i] - junction_x[i-1]
+			var block_center := (junction_x[i] + junction_x[i-1]) * .5
+			for side in [-1,1]:
+				var sidewalk := _make_driving_surface("West sidewalk", Vector3(block_length-9.6,.12,2.8), Vector3(block_center,.005,z+side*6.2), Color.WHITE)
+				sidewalk.material_override = sidewalk_finish
 			for x in range(junction_x[i-1]+9,junction_x[i]-7,8):
 				strokes.append(Transform3D(Basis.IDENTITY,Vector3(x,-.009,z)))
 	for i in junction_x.size()-1:
