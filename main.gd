@@ -1227,6 +1227,8 @@ func _update_daylight(delta: float) -> void:
 	var night := 1.0 if time_mode == 1 else (smoothstep(-.4,.4,-cos(day_phase*TAU)) if time_mode == 2 else 0.0)
 	if absf(night-last_night)<.006: return
 	last_night = night
+	if player_brake_lens:
+		_set_rear_lights(player_brake_lens, player_brake_lens.emission_energy_multiplier >= 2.399)
 	for item in traffic_data:
 		if item.brake_lens:
 			_set_rear_lights(item.brake_lens, item.brake_lens.emission_energy_multiplier >= 2.4 - .001)
