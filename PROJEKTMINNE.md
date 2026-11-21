@@ -329,3 +329,4 @@ Den första inlämnade bilen står kvar på verkstaden även medan nästa bil li
 - Paketbilarnas uppdrag skickar SMS-kvitton för hämtningen på torget och respektive mottagare. Hela paketresan testad med Volvo 240, inklusive tre kvitton och sammanlagt 30 mynt.
 - Nästa paket följer spelpersonen synligt till fots. Testat att båda paketen i Volvo-uppdraget flyttas till rätt mottagare efter leverans.
 - Paketet följer överkroppens gångrörelse och båda armarna hålls framåt under leveransen. Armställning och överlämning kontrollerade i Godot.
+- Närbilden visade att händerna försvann in i kartongen. Justerad armvinkel och ny kontroll från sidan visar den närmaste handen mot kartongens utsida.

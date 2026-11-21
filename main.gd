@@ -2619,9 +2619,10 @@ func _animate_steps(person: Node3D, distance: float, delta: float, pushing := fa
 		person.set_meta("gait", gait)
 	var carrying := person == walker and mission_index in [1,2] and delivery_parcels.size() >= mission_index and walker.is_ancestor_of(delivery_parcels[mission_index-1])
 	gait.advance(distance / person.scale.y, delta, pushing or carrying)
-	if carrying:
+	if person == walker:
 		for arm: Node3D in person.get_meta("arms"):
-			arm.rotation.x = .85
+			arm.rotation.z = signf(arm.position.x)*.16 if carrying else 0.0
+			if carrying: arm.rotation.x = .85
 
 func _make_walker(label: String, start_x: float, lane_z: float, direction: float, shirt: Color, trousers: Color) -> void:
 	var person := Node3D.new()
