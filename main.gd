@@ -26,6 +26,7 @@ var vehicle_model: Node3D
 var headlights: Array[SpotLight3D] = []
 var bicycle_lenses: Array[StandardMaterial3D] = []
 var traffic_headlights: Array[SpotLight3D] = []
+var quay_finish := ShaderMaterial.new()
 var soil_finish: ShaderMaterial
 var sidewalk_finish: ShaderMaterial
 var road_finish: ShaderMaterial
@@ -206,7 +207,7 @@ func _process(delta: float) -> void:
 					4: tint = tint.lerp(Color("#acb2a8"),.78)
 			foliage_finishes[finish].set_shader_parameter("leaf_color", tint)
 	weather.position = camera.position + Vector3.UP*8
-	for surface in [road_finish,sidewalk_finish,soil_finish]:
+	for surface in [road_finish,sidewalk_finish,soil_finish,quay_finish]:
 		surface.set_shader_parameter("wet",weather.wet)
 		surface.set_shader_parameter("snow_cover",weather.snow)
 	city_env.sky.sky_material.set_shader_parameter("overcast",maxf(weather.intensity.x,weather.intensity.y))
@@ -825,19 +826,18 @@ func _build_waterfront() -> void:
 		_make_driving_surface(route[0],Vector3(span.x,.10,span.y),Vector3(middle.x,-.095,middle.y),asphalt).material_override = road_finish
 	_build_quay_lane_markings()
 	# The eastern quay promenade follows the water between the bridge approaches.
-	var paving := ShaderMaterial.new()
-	paving.shader = preload("res://environment/quay_paving.gdshader")
+	quay_finish.shader = preload("res://environment/quay_paving.gdshader")
 	# Keep each bridge approach open where the pavement meets the junction.
 	for span in [Vector2(-74,-52.8), Vector2(-43.2,-4.8), Vector2(4.8,60)]:
 		var middle: float = (span.x + span.y) * .5
 		var length: float = span.y - span.x
 		var footway := _make_driving_surface("Trottoar vid kajhusen",Vector3(1.08,.26,length),Vector3(107.46,-.05,middle),Color("#b7afa2"))
-		footway.material_override = paving
+		footway.material_override = quay_finish
 		_make_driving_surface("Granitkant",Vector3(.12,.26,length),Vector3(106.86,-.05,middle),Color("#999893"))
 	for span in [Vector2(-90,-54), Vector2(-42,-6), Vector2(6,77)]:
 		var middle: float = (span.x + span.y) / 2
 		var promenade := _make_driving_surface("Strandpromenad", Vector3(6,.15,span.y-span.x), Vector3(90,-.11,middle), Color("#b7afa2"))
-		promenade.material_override = paving
+		promenade.material_override = quay_finish
 		for z in range(int(span.x)+1,int(span.y),3):
 			_make_box("Kajstolpe",Vector3(.12,.86,.12),Vector3(87.5,.40,z),Color("#525d60"))
 		_make_box("Handledare",Vector3(.065,.07,span.y-span.x),Vector3(87.5,.82,middle),Color("#626c6e"))

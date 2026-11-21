@@ -135,3 +135,5 @@ Spelprojektet publiceras i det privata GitHub-repot yeager/axels-emergency-vehic
 - AI-trafiken anpassar fart och avstånd till hur våt och snötäckt vägen är. Samma trafikbil provades på torr, våt och snötäckt väg samt vid en passagerare i körfältet.
 
 - Mark på båda kanalstränderna samt trottoarerna vid huvudgatorna följer nu samma successiva snötäcke och väta som körbanan. Materialvärdena kontrollerades vid fyra snönivåer i Godot.
+
+- Vädret påverkar även stenläggningen vid kajhusen och strandpromenaden. Våt granit mörknar och blir blankare, medan snö samlas först tydligare i fogarna.
