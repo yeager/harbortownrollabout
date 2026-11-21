@@ -165,3 +165,5 @@ Spelprojektet publiceras i det privata GitHub-repot yeager/axels-emergency-vehic
 - Tre separata grafiska Godot-processer under X11 fick fönsterhanterarens normala stängningsmeddelande medan ambulanssirenen spelade. Alla tre avslutades med kod 0 utan resursvarning i den utförliga loggen.
 
 - Butikskvittot visar vara och betalt belopp på svenska och engelska. Svenskt kvitto för en kanelbulle kontrollerades mot tre dragna mynt.
+
+- Bärgarens bakre hjullyft har två modellerade hjulstöd med gångjärnstappar och infångningsarmar. Blender-källan och spelmodellen uppdaterades och importerades i Godot.

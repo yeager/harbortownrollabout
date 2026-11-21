@@ -41,6 +41,14 @@ for i in range(12):
     cylinder("Wound cable",(i*.048-.27,-.46,1.49),.20,.025,DARK,True,24,root)
 box("Wheel lift",(0,3.68,.58),(.32,1.05,.18),DARK)
 box("Wheel lift crossbar",(0,4.08,.51),(1.71,.17,.15),METAL)
+for side in [-1, 1]:
+    # Folded tyre cradle and its pinned hinge at either end of the rear yoke.
+    box("Cradle pivot bracket", (side*.72,4.06,.53), (.21,.27,.22), DARK)
+    cylinder("Cradle hinge pin", (side*.72,4.09,.53), .075,.25,METAL,True,24,root)
+    box("Wheel cradle arm", (side*.72,4.30,.48), (.12,.52,.10), DARK)
+    box("Tyre retaining toe", (side*.57,4.52,.50), (.40,.10,.13), METAL)
+    for j in range(4):
+        box("Locker reflector", (side*1.229,-.40+j*.34,.66), (.012,.18,.065), PAINT_YELLOW,.008)
 export_vehicle(root,"bargare.glb")
 bpy.context.preferences.filepaths.save_version=0
 bpy.ops.wm.save_as_mainfile(filepath=str(Path(SOURCE_DIR)/"Bargare.blend"))
