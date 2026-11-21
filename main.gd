@@ -16,9 +16,9 @@ func _mission_stop() -> int:
 const ROAD_HALF := 4.8
 const VEHICLE_NAMES := ["Ambulance", "Police car", "Fire engine"]
 const VEHICLE_SCENES := ["res://vehicles/ambulance.glb", "res://vehicles/polisbil.glb", "res://vehicles/brandbil.glb"]
-const VEHICLE_NAMES_ALL := ["Ambulance", "Police car", "Fire engine", "BMW X5 M60i", "Taxi", "Recovery truck", "BMW M3 E30", "Volvo 240", "Saab 96", "Tesla Model S", "City bus", "Snowmobile"]
-const VEHICLE_SCENES_ALL := ["res://vehicles/ambulance.glb", "res://vehicles/polisbil.glb", "res://vehicles/brandbil.glb", "res://vehicles/bmw_x5_m60i.glb", "res://vehicles/taxi.glb", "res://vehicles/bargare.glb", "res://vehicles/m3_e30.glb", "res://vehicles/volvo240.glb", "res://vehicles/saab96.glb", "res://vehicles/model_s.glb", "res://vehicles/city_bus.glb", "res://vehicles/snowmobile.glb"]
-const SIREN_SOUNDS := ["res://audio/siren_ambulance.wav", "res://audio/siren_police.wav", "res://audio/siren_fire.wav", "res://audio/bmw_engine.wav", "res://audio/bmw_engine.wav", "res://audio/bmw_engine.wav", "res://audio/bmw_engine.wav", "res://audio/bmw_engine.wav", "res://audio/bmw_engine.wav", "res://audio/electric_drive.wav", "res://audio/bmw_engine.wav", "res://audio/sled_engine.wav"]
+const VEHICLE_NAMES_ALL := ["Ambulance", "Police car", "Fire engine", "BMW X5 M60i", "Taxi", "Recovery truck", "BMW M3 E30", "Volvo 240", "Saab 96", "Tesla Model S", "City bus", "Snowmobile", "Porsche 911 GT3 RS"]
+const VEHICLE_SCENES_ALL := ["res://vehicles/ambulance.glb", "res://vehicles/polisbil.glb", "res://vehicles/brandbil.glb", "res://vehicles/bmw_x5_m60i.glb", "res://vehicles/taxi.glb", "res://vehicles/bargare.glb", "res://vehicles/m3_e30.glb", "res://vehicles/volvo240.glb", "res://vehicles/saab96.glb", "res://vehicles/model_s.glb", "res://vehicles/city_bus.glb", "res://vehicles/snowmobile.glb", "res://vehicles/porsche_gt3_rs.glb"]
+const SIREN_SOUNDS := ["res://audio/siren_ambulance.wav", "res://audio/siren_police.wav", "res://audio/siren_fire.wav", "res://audio/bmw_engine.wav", "res://audio/bmw_engine.wav", "res://audio/bmw_engine.wav", "res://audio/bmw_engine.wav", "res://audio/bmw_engine.wav", "res://audio/bmw_engine.wav", "res://audio/electric_drive.wav", "res://audio/bmw_engine.wav", "res://audio/sled_engine.wav", "res://audio/porsche_engine.wav"]
 const BUILDING_SCENES := {"Sjukhuset":"res://environment/sjukhus.glb", "Polisstationen":"res://environment/polisstation.glb", "Bageriet":"res://environment/bageri.glb", "Vårdcentralen":"res://environment/vardcentral.glb", "Brandstationen":"res://environment/brandstation.glb", "Biblioteket":"res://environment/bibliotek.glb"}
 const TREE_SCENES := ["res://environment/lovtrad.glb", "res://environment/gran.glb", "res://environment/bredkronigt_lovtrad.glb"]
 
@@ -76,6 +76,7 @@ var crossing_direction := 1.0
 var entry_marker := Label3D.new()
 const BUS := 10
 const SNOWMOBILE := 11
+const PORSCHE := 12
 const SCHOOL := 3
 const SCHOOL_CURB := Vector3(136,0,3)
 const SCHOOL_GATE := Vector3(136,0,7)
@@ -88,7 +89,7 @@ var bus_board: Label3D
 const BUS_STOP_NAMES := ["TORGET","VÅRDCENTRALEN","SMÅBÅTSHAMNEN","SJÖSTADSSKOLAN","VÄSTRA TORGET","VÄSTERÄNGEN"]
 var bus_leg := 0
 const TAXI := 4
-const HORNS := ["ambulance","police","fire","bmw","taxi","recovery", "m3_e30", "volvo240", "saab96", "model_s", "city_bus","snowmobile"]
+const HORNS := ["ambulance","police","fire","bmw","taxi","recovery", "m3_e30", "volvo240", "saab96", "model_s", "city_bus","snowmobile", "porsche"]
 var horn := AudioStreamPlayer.new()
 var radio_button: Button
 var radio := AudioStreamPlayer.new()
@@ -185,9 +186,9 @@ var parked_at_target := 0.0
 var mode := "menu"
 var paused := false
 var lights_on := false
-var parked_light_settings: Array[bool] = [false, false, false, false, false, false, false, false, false, false, false, false]
+var parked_light_settings: Array[bool] = [false, false, false, false, false, false, false, false, false, false, false, false, false]
 var sound_on := true
-var parked_sound_settings: Array[bool] = [false, false, false, true, true, true, true, true, true, true, true, true]
+var parked_sound_settings: Array[bool] = [false, false, false, true, true, true, true, true, true, true, true, true, true]
 var siren_player: AudioStreamPlayer
 var ui: CanvasLayer
 var wardrobe := preload("res://characters/weather_clothing.gd").new()
@@ -509,7 +510,7 @@ func _drive(delta: float) -> void:
 	if Input.is_key_pressed(KEY_D): steer_input = 1.0
 	var max_speed := 250.0 / 3.6 if vehicle_index == 3 else 11.0
 	var acceleration := lerpf(8.0, 2.3, clampf(speed / max_speed, 0.0, 1.0)) if vehicle_index == 3 else 7.2
-	if vehicle_index >= 6:
+	if vehicle_index >= 6 and vehicle_index <= SNOWMOBILE:
 		max_speed = [53.0, 10.0, 8.5, 64.0, 12.0, 16.0][vehicle_index-6]
 		acceleration = [7.8, 2.2, 1.8, 10.0, 2.6, 5.2][vehicle_index-6]
 	if not gentle_driving:
@@ -517,6 +518,10 @@ func _drive(delta: float) -> void:
 	if gentle_driving:
 		max_speed = 30.0 / 3.6
 		acceleration = 6.0 if is_zero_approx(throttle) else minf(acceleration, 2.8)
+	if vehicle_index == PORSCHE:
+		max_speed *= 3.0
+		if throttle > 0.0:
+			acceleration *= 3.0
 	if mouse_brake or brake_pedal_held or (throttle < 0.0 and speed > 0.0):
 		brake_held = true
 	elif throttle >= 0.0:
@@ -537,7 +542,7 @@ func _drive(delta: float) -> void:
 	for knuckle in front_knuckles:
 		knuckle.rotation.y = -steering * deg_to_rad(33.0)
 	driving_controls.set_controls(steering, throttle > 0, brake_held, throttle < 0 and not brake_held)
-	var wheelbase: float = [3.7, 2.75, 4.1, 2.975, 2.85, 4.0, 2.56, 2.64, 2.46, 2.96, 6.06, 1.65][vehicle_index]
+	var wheelbase: float = [3.7, 2.75, 4.1, 2.975, 2.85, 4.0, 2.56, 2.64, 2.46, 2.96, 6.06, 1.65, 2.457][vehicle_index]
 	var yaw_rate := speed * tan(steering * deg_to_rad(33.0)) / wheelbase
 	# Limit lateral acceleration at speed while retaining tight parking turns.
 	var max_yaw_rate := 8.0 / maxf(absf(speed), 1.0)
@@ -1877,6 +1882,7 @@ func _fit_driver_sleeve(sleeve: MeshInstance3D, start: Vector3, end: Vector3) ->
 	sleeve.scale.y = (segment.length() + .045) / .65
 
 func _depot_position(i: int) -> Vector3:
+	if i == PORSCHE: return Vector3(-9,-.07,28)
 	if i == BUS: return Vector3(-34,-.13,25.4)
 	if i == SNOWMOBILE: return Vector3(-41,-.13,23)
 	if i == RECOVERY: return Vector3(-45,-.13,25)
@@ -1886,7 +1892,7 @@ func _depot_position(i: int) -> Vector3:
 func _build_depot() -> void:
 	_make_driving_surface("Motor pool", Vector3(25,.1,11), Vector3(-37,-.18,15), Color("#565c5a"))
 	_make_driving_surface("Recovery apron",Vector3(8.4,.10,9.8),Vector3(-45,-.18,25.4),Color("#565c5a"))
-	_make_driving_surface("Visitor parking",Vector3(25,.10,9),Vector3(-24,-.12,28),Color("#565c5a"))
+	_make_driving_surface("Visitor parking",Vector3(30,.10,9),Vector3(-21.5,-.12,28),Color("#565c5a"))
 	_make_driving_surface("Bus bay extension",Vector3(5,.10,4.6),Vector3(-34,-.12,21.2),Color("#565c5a"))
 	# A continuous pedestrian route from the parking bays to Stationsallén.
 	for span in [Vector2(20.5,31.3),Vector2(38.7,42.5)]:
@@ -1932,6 +1938,8 @@ func _build_depot() -> void:
 				_make_box("Recovery bay stripe",Vector3(.1,.025,9.3),body.position+Vector3(side*2.5,.014,.45),Color("#deddd1")).material_override = marking_finish
 		else:
 			_make_box("Parking stripe", Vector3(.10,.025,7.8), Vector3(body.position.x-2.5,-.066 if i>=6 else -.116,body.position.z), Color("#deddd1")).material_override = marking_finish
+			if i==PORSCHE:
+				_make_box("Parking stripe",Vector3(.10,.025,7.8),Vector3(body.position.x+2.5,-.066,28),Color("#deddd1")).material_override = marking_finish
 			if i==TAXI:
 				_make_box("Parking stripe",Vector3(.10,.025,7.8),Vector3(body.position.x+2.5,-.116,15),Color("#deddd1")).material_override = marking_finish
 	_make_walker("Player on foot",0,0,1,Color("#648faa"),Color("#30414d"))
@@ -2925,6 +2933,7 @@ func _load_vehicle_model() -> void:
 			arm.reparent(pivot)
 			blades[i].reparent(pivot)
 			wiper_pivots.append(pivot)
+	if vehicle_index in [3, PORSCHE]:
 		var rim := vehicle_model.find_child("Steering wheel rim*",true,false) as MeshInstance3D
 		if rim:
 			cabin_wheel = Node3D.new()
@@ -2932,7 +2941,7 @@ func _load_vehicle_model() -> void:
 			cabin_wheel.global_transform = Transform3D(ambulance.global_basis,rim.to_global(rim.get_aabb().get_center()))
 			cabin_wheel_rest_basis = cabin_wheel.basis
 			# Fit the rim's tilt in the vehicle's vertical/longitudinal plane.
-			# The exported mesh already includes the X5's dimensional corrections.
+			# Measure the exported rim so the hand positions also fit a lower sports-car cockpit.
 			var rim_to_pivot := cabin_wheel.global_transform.affine_inverse() * rim.global_transform
 			grip_radius = 0.0
 			var yy := 0.0
@@ -2992,8 +3001,9 @@ func _load_vehicle_model() -> void:
 		beam.queue_free()
 	headlights.clear()
 	var beam_origins: Array[Vector3] = []
-	if vehicle_index == SNOWMOBILE:
-		for lens: MeshInstance3D in vehicle_model.find_children("Headlight strip*", "MeshInstance3D", true, false):
+	if vehicle_index in [SNOWMOBILE, PORSCHE]:
+		var lens_pattern := "Headlight lens*" if vehicle_index == PORSCHE else "Headlight strip*"
+		for lens: MeshInstance3D in vehicle_model.find_children(lens_pattern, "MeshInstance3D", true, false):
 			var center := ambulance.to_local(lens.to_global(lens.get_aabb().get_center()))
 			beam_origins.append(center + Vector3.FORWARD * .035)
 	if beam_origins.is_empty():
@@ -3030,7 +3040,7 @@ func _load_vehicle_model() -> void:
 		elif hub.z > 0.0:
 			rear_tire_contacts.append(Vector3(hub.x, 0.0, hub.z))
 	player_brake_lens = _brake_lens(vehicle_model)
-	reverse_lens = _brake_lens(vehicle_model, true) if vehicle_index == 0 else null
+	reverse_lens = _brake_lens(vehicle_model, true) if vehicle_index in [0, PORSCHE] else null
 	_find_light_meshes(vehicle_model)
 	_update_emergency_lights()
 
@@ -3382,7 +3392,7 @@ func _update_mission_marker() -> void:
 			companion.position.y = _foot_height(companion.position.x,companion.position.z)
 	for member in clinic_fire_team:
 		member.visible = not free_drive and vehicle_index == 2 and mission_index == 0
-	var delivering := vehicle_index in [3,6,7,8,9] and not free_drive
+	var delivering := vehicle_index in [3,6,7,8,9, PORSCHE] and not free_drive
 	for i in delivery_parcels.size():
 		var parcel := delivery_parcels[i]
 		var delivered := mission_index >= i+2
@@ -3873,7 +3883,7 @@ func _start_game() -> void:
 	phone.messages.clear()
 	phone.unread=0
 	phone.handset.hide()
-	parked_sound_settings.assign([false, false, false, true, true, true, true, true, true, true, true, true])
+	parked_sound_settings.assign([false, false, false, true, true, true, true, true, true, true, true, true, true])
 	parked_light_settings.fill(false)
 	mode = "playing"
 	paused = false
@@ -4087,10 +4097,12 @@ func _refresh_ui() -> void:
 		for avatar in [walker, road_driver]:
 			avatar.get_node("Smile").visible = happy_seconds > 0
 		road_driver.position = Vector3(0,.82-.77*road_driver.scale.y,.18) if vehicle_index==SNOWMOBILE else Vector3(-.32,.88-.87*road_driver.scale.y,-.04)
+		if vehicle_index == PORSCHE:
+			road_driver.position = Vector3(-.356,.48-.87*road_driver.scale.y,.10)
 		road_driver.get_node("RidingLegs").visible = vehicle_index == SNOWMOBILE
 		for leg in road_driver.get_meta("legs"):
 			leg.visible = vehicle_index != SNOWMOBILE
-		road_driver.visible = vehicle_index in [3,SNOWMOBILE] and mode == "playing" and not walker.visible and not boating and tram_mode == 0 and not cockpit_view
+		road_driver.visible = vehicle_index in [3,PORSCHE,SNOWMOBILE] and mode == "playing" and not walker.visible and not boating and tram_mode == 0 and not cockpit_view
 	if skipper: skipper.visible = boating and mode == "playing"
 	if not is_instance_valid(mission_label): return
 	var mission_activity := "Parcel deliveries"

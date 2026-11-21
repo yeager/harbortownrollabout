@@ -19,7 +19,7 @@ Open `project.godot` in Godot 4.6 and press **F5**. Select a vehicle and choose 
 | Toggle the vehicle radio | J |
 | Pause | P, or Escape when the phone is closed |
 
-Gentle driving limits speed to 30 km/h and completes an interaction when you stop at the marker. The steering wheel and pedals on screen show your inputs. You can adjust volume and emergency lights independently, choose daylight or night, or let a full day pass in six minutes of active play.
+Gentle driving limits ordinary vehicles to 30 km/h and completes an interaction when you stop at the marker. The steering wheel and pedals on screen show your inputs. You can adjust volume and emergency lights independently, choose daylight or night, or let a full day pass in six minutes of active play.
 
 ## Project files
 
@@ -85,7 +85,11 @@ Choose **City bus** and start **Bus route 502** to pick up passengers at the squ
 
 The taxi rotation also includes a pupil travelling from the square to school and a pupil waiting outside school for a ride to the clinic. Follow the arrows to the yellow **TAXI** sign outside Sjöstadsskolan. With gentle driving enabled, stop at the marker for about a second to let the pupil board or get out. Read the next request on the phone.
 
-The vehicle selector and depot include a red BMW M3 E30, orange Volvo 240, green Saab 96 and white Tesla Model S. Full-speed mode gives the Volvo and Saab relaxed acceleration. The Tesla has a quiet electric motor sound and accelerates quickly. Gentle mode limits every vehicle to 30 km/h.
+The vehicle selector and depot include a red BMW M3 E30, orange Volvo 240, green Saab 96 and white Tesla Model S. Full-speed mode gives the Volvo and Saab relaxed acceleration. The Tesla has a quiet electric motor sound and accelerates quickly.
+
+The Porsche 911 GT3 RS has a separate sport tune. Select it at the depot to drive the wide-body coupe with its recessed front intakes, sculpted bonnet outlets, swan-neck rear wing and twin centre exhausts. Its acceleration under full throttle and its top speed are both three times those of the ordinary taxi in the same mode. It reaches 90 km/h in gentle driving or about 238 km/h in full-speed mode.
+
+![Silver Porsche 911 GT3 RS game model, front three-quarter view](docs/porsche-911-gt3-rs.png)
 
 Press **J** or click **Radio** in a vehicle to play the original instrumental loop on Sjöstad Radio. It also works aboard the motorboat and tram. The radio pauses when you leave the vehicle and resumes at the same point when you get back in.
 
@@ -106,7 +110,7 @@ Run one of the following from the project directory with Godot 4.6 installed. Th
 
 The main scene passed a four-frame startup check with each renderer on Linux using Godot 4.6.3 and AMD Radeon Renoir graphics. Compatibility used OpenGL, while Mobile and Forward+ used Vulkan. This check covers startup only.
 
-In full-speed driving mode, road vehicles can reach twice their former top speed. Gentle driving retains its 30 km/h limit. The western district adds connected street loops, bringing the playable boundary to 690 × 151 metres.
+In full-speed driving mode, road vehicles can reach twice their former top speed. Gentle driving retains its 30 km/h limit for ordinary vehicles. The western district adds connected street loops, bringing the playable boundary to 690 × 151 metres.
 The snowmobile is available in the vehicle selector and at the depot. It uses the same driving and braking controls as the cars.
 Off-road, the snowmobile can go faster as snow accumulates. Gentle driving still caps it at 30 km/h.
 Bus route 502 serves six stops, including a passenger pickup at Västra torget and a drop-off at Västerängen.
