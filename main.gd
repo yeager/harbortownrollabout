@@ -1495,14 +1495,15 @@ func _build_petrol_station(center: Vector3) -> void:
 		for x: float in [-1.85,1.85]:
 			_make_box("Sign bracket",Vector3(.11,.28,.11),sign_center+Vector3(x,-.59,0).rotated(Vector3.UP,yaw),graphite)
 		_station_sign("HARBOR FUEL",sign_center+outward*.082,.010,cream,yaw)
-	const PRICE_95 := "17.90"
+	const PRICES := {"95": "17.90", "98": "18.90", "D": "17.50"}
+	const GRADES := ["95", "D", "98", "95"]
 	var tower := center+Vector3(-11.8,0,-8)
 	_make_roadside_solid("Price tower",Vector3(.45,6.4,1.85),tower+Vector3.UP*3.2,graphite)
 	_make_box("Tower crown",Vector3(.51,1.18,1.97),tower+Vector3.UP*5.87,gold)
 	for side: float in [-1.0,1.0]:
 		var yaw := side*PI*.5
 		_station_sign("HARBOR FUEL",tower+Vector3(side*.27,5.87,0),.0038,graphite,yaw)
-		var listings := ["95    " + PRICE_95,"98    18.90","D     17.50","24 h"]
+		var listings := ["95    " + PRICES["95"], "98    " + PRICES["98"], "D     " + PRICES["D"], "24 h"]
 		for row in listings.size():
 			var panel := tower+Vector3(side*.24,4.84-row*.62,0)
 			_make_box("Tariff panel",Vector3(.035,.51,1.73),panel,Color("#172327"))
@@ -1523,6 +1524,8 @@ func _build_petrol_station(center: Vector3) -> void:
 			var number_plate := Vector3(0,1.89,0)
 			_make_box("Pump number",Vector3(.57,.48,.12),number_plate,gold,false,pump)
 			var number := (1 if x < 0 else 3)+(0 if z < 0 else 1)
+			var grade: String = GRADES[number-1]
+			var grip := Color("#303338") if grade == "D" else (Color("#186048") if grade == "95" else Color("#2476a2"))
 			for yaw: float in [PI,0.0]:
 				_station_sign(str(number),number_plate+Vector3.BACK.rotated(Vector3.UP,yaw)*.07,.006,graphite,yaw,pump)
 			_make_box("Pump plinth",Vector3(.86,.38,.70),Vector3.UP*.19,graphite,false,pump)
@@ -1531,9 +1534,9 @@ func _build_petrol_station(center: Vector3) -> void:
 				face.rotation.y = face_yaw
 				pump.add_child(face)
 				_make_box("Display",Vector3(.61,.3,.03),Vector3(0,1.29,-.34),Color("#21353a"),false,face)
-				_station_sign(PRICE_95 + " kr/L",Vector3(0,1.29,-.361),.0019,Color("#b5f2cc"),PI,face)
-				_make_box("Fuel grade badge",Vector3(.21,.18,.02),Vector3(-.19,.94,-.35),Color("#186048"),false,face)
-				_station_sign("95",Vector3(-.19,.94,-.363),.0018,cream,PI,face)
+				_station_sign(PRICES[grade] + " kr/L",Vector3(0,1.29,-.361),.0019,Color("#b5f2cc"),PI,face)
+				_make_box("Fuel grade badge",Vector3(.21,.18,.02),Vector3(-.19,.94,-.35),grip,false,face)
+				_station_sign(grade,Vector3(-.19,.94,-.363),.0018,cream,PI,face)
 				_make_box("Card reader",Vector3(.20,.24,.036),Vector3(.18,.91,-.35),graphite,false,face)
 				_make_box("Receipt slot",Vector3(.14,.02,.018),Vector3(.18,.86,-.375),cream,false,face)
 				for row in 3:
@@ -1543,7 +1546,6 @@ func _build_petrol_station(center: Vector3) -> void:
 				var hose := PackedVector3Array([Vector3(.40,1.35,.17),Vector3(.48,1.21,.19),Vector3(.53,.42,.16),Vector3(.53,.28,.08),Vector3(.52,.26,-.04),Vector3(.50,.36,-.12),Vector3(.45,1.01,-.10)])
 				for j in range(1,hose.size()):
 					_pump_tube(face,hose[j-1],hose[j],.022,graphite)
-				var grip := Color("#258153")
 				var heel := hose[hose.size()-1]
 				var head := Vector3(.49,1.23,-.16)
 				_pump_tube(face,heel,head,.043,grip)
