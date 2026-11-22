@@ -391,3 +391,15 @@ Sex spårövergångar har signaler för spårvagn, bil och gångtrafik. Rött st
 - Puch Dakota finns i fordonsmenyn och i depån. Axel och Alma kan köra den, och en granne åker moped i trafiken. Testet `tests/puch_dakota.gd` täcker bland annat grepp om styret, bromsning och fordonsbyte i depån.
 
 Tvärbanans Blender-modeller har rundat förarparti med infällda lampor, välvt tak, mjuk sidoprofil och blå takfält ovanför skjutdörrarna. Frontskylten följer aktuell hållplats. Spelets ledade bälgar har avrundade hörn. Utseendet granskat i den lokala Godot 4.7-dev-byggnaden. Bild i docs/tram-exterior.png.
+
+### Sjömackens pumpar – visuell bedömning 2026-11-22
+
+Bedömning mot pumpfotot och den aktuella spelvyn i [närbilden](docs/sjomacken-pump.jpg).
+
+| Del | Betyg av 100 | Iakttagelse |
+|---|---:|---|
+| Silhuett | 83 | Sockel, högt skåp och fristående nummerskylt känns igen. Skåpet har fortfarande helt raka hörn. |
+| Färg och läsbarhet | 88 | Mörk display, tydligt literpris och separata färger för handtagen gör pumparna lätta att skilja åt. |
+| Exteriöra detaljer | 80 | Slang, pistolhållare, betalterminal och ventilationsspringor syns. Förebildens infällda munstycksfack har större djup. |
+
+Samlat visuellt betyg **84/100** (avrundat medelvärde). Pumpens inre mekanik syns inte i referensen och ingår inte i betyget.
