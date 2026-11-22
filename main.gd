@@ -1495,13 +1495,14 @@ func _build_petrol_station(center: Vector3) -> void:
 		for x: float in [-1.85,1.85]:
 			_make_box("Sign bracket",Vector3(.11,.28,.11),sign_center+Vector3(x,-.59,0).rotated(Vector3.UP,yaw),graphite)
 		_station_sign("HARBOR FUEL",sign_center+outward*.082,.010,cream,yaw)
+	const PRICE_95 := "17.90"
 	var tower := center+Vector3(-11.8,0,-8)
 	_make_roadside_solid("Price tower",Vector3(.45,6.4,1.85),tower+Vector3.UP*3.2,graphite)
 	_make_box("Tower crown",Vector3(.51,1.18,1.97),tower+Vector3.UP*5.87,gold)
 	for side: float in [-1.0,1.0]:
 		var yaw := side*PI*.5
 		_station_sign("HARBOR FUEL",tower+Vector3(side*.27,5.87,0),.0038,graphite,yaw)
-		var listings := ["95    17.90","98    18.90","D     17.50","24 h"]
+		var listings := ["95    " + PRICE_95,"98    18.90","D     17.50","24 h"]
 		for row in listings.size():
 			var panel := tower+Vector3(side*.24,4.84-row*.62,0)
 			_make_box("Tariff panel",Vector3(.035,.51,1.73),panel,Color("#172327"))
@@ -1530,7 +1531,7 @@ func _build_petrol_station(center: Vector3) -> void:
 				face.rotation.y = face_yaw
 				pump.add_child(face)
 				_make_box("Display",Vector3(.61,.3,.03),Vector3(0,1.29,-.34),Color("#21353a"),false,face)
-				_station_sign("0.00 L",Vector3(0,1.29,-.361),.0025,Color("#b5f2cc"),PI,face)
+				_station_sign(PRICE_95 + " kr/L",Vector3(0,1.29,-.361),.0019,Color("#b5f2cc"),PI,face)
 				_make_box("Fuel grade badge",Vector3(.21,.18,.02),Vector3(-.19,.94,-.35),Color("#186048"),false,face)
 				_station_sign("95",Vector3(-.19,.94,-.363),.0018,cream,PI,face)
 				_make_box("Card reader",Vector3(.20,.24,.036),Vector3(.18,.91,-.35),graphite,false,face)
