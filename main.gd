@@ -791,7 +791,7 @@ func _drive(delta: float) -> void:
 		max_speed *= 3.0
 		if throttle > 0.0:
 			acceleration *= 3.0
-	if mouse_brake or brake_pedal_held or (throttle < 0.0 and speed > 0.0):
+	if mouse_brake or brake_pedal_held or (throttle < 0.0 and speed > .001):
 		brake_held = true
 	elif throttle >= 0.0:
 		brake_held = false
@@ -1537,6 +1537,9 @@ func _build_petrol_station(center: Vector3) -> void:
 				_station_sign(PRICES[grade] + " kr/L",Vector3(0,1.29,-.361),.0019,Color("#b5f2cc"),PI,face)
 				_make_box("Fuel grade badge",Vector3(.21,.18,.02),Vector3(-.19,.94,-.35),grip,false,face)
 				_station_sign(grade,Vector3(-.19,.94,-.363),.0018,cream,PI,face)
+				for slot in 6:
+					_make_box("Vent slot",Vector3(.18,.010,.008),Vector3(-.18,.68-slot*.028,-.34),graphite,false,face)
+				_make_box("Nozzle holster",Vector3(.12,.27,.14),Vector3(.415,1.19,-.12),graphite,false,face)
 				_make_box("Card reader",Vector3(.20,.24,.036),Vector3(.18,.91,-.35),graphite,false,face)
 				_make_box("Receipt slot",Vector3(.14,.02,.018),Vector3(.18,.86,-.375),cream,false,face)
 				for row in 3:

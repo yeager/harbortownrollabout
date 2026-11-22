@@ -1185,3 +1185,12 @@ msgstr "D     17,50"
 
 msgid "Allow crashes"
 msgstr "Tillåt krockar"
+
+msgid "17.90 kr/L"
+msgstr "17,90 kr/L"
+
+msgid "18.90 kr/L"
+msgstr "18,90 kr/L"
+
+msgid "17.50 kr/L"
+msgstr "17,50 kr/L"

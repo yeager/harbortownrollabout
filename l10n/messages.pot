@@ -1184,3 +1184,12 @@ msgstr ""
 
 msgid "Allow crashes"
 msgstr ""
+
+msgid "17.90 kr/L"
+msgstr ""
+
+msgid "18.90 kr/L"
+msgstr ""
+
+msgid "17.50 kr/L"
+msgstr ""
