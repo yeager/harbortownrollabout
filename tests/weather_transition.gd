@@ -43,5 +43,13 @@ func check_transition() -> void:
 		printerr("Clear weather should stop both particle emitters")
 		quit(1)
 		return
+	weather.season_setting = 4
+	weather.weather_setting = 3
+	for second in range(160): weather.tick(1.0)
+	weather.season_setting = 2
+	if weather.snow > 0 or weather.snow_particles.emitting or weather.weather_setting != 0 or weather.forecast != 1:
+		printerr("Summer retained winter snowfall")
+		quit(1)
+		return
 	print("Manual snowfall builds gradually and continues in automatic mode.")
 	quit()

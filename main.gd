@@ -5253,7 +5253,10 @@ func _build_overlay() -> void:
 			tile.button_group = group
 			tile.button_pressed = index == (weather.season_setting if is_season else weather.weather_setting)
 			tile.pressed.connect(func():
-				if is_season: weather.season_setting = index
+				if is_season:
+					weather.season_setting = index
+					var choices := pages[3].get_node("WeatherChoices")
+					choices.get_child(weather.weather_setting).button_pressed = true
 				else: weather.weather_setting = index
 				_save_preferences()
 			)

@@ -8,7 +8,7 @@ var season_setting := 0:
 		if value == season_setting: return
 		season_setting = value
 		season_age = 0
-		if value != 0: season = value
+		if value != 0: _apply_season(value)
 
 var weather_setting := 0:
 	set(value):
@@ -36,6 +36,22 @@ func _ready() -> void:
 	wet = intensity.x
 	snow = intensity.y
 	_update_emitters()
+
+func _apply_season(value: int) -> void:
+	season = value
+	if season != 2: return
+	var condition := weather_setting if weather_setting else forecast
+	if condition in [3, 4]:
+		weather_setting = 0
+		forecast = 2 if condition == 4 else 1
+		forecast_age = 0
+		intensity = PRECIPITATION[forecast]
+		cloud_cover = maxf(intensity.x, intensity.y)
+	intensity.y = 0
+	snow = 0
+	if is_instance_valid(snow_particles):
+		snow_particles.restart()
+		_update_emitters()
 
 func particles(flakes: bool) -> GPUParticles3D:
 	var emitter := GPUParticles3D.new()
@@ -83,7 +99,7 @@ func tick(delta: float) -> void:
 	if season_setting == 0: season_age += delta
 	if weather_setting == 0: forecast_age += delta
 	if season_age >= 1800:
-		season = season%4+1
+		_apply_season(season%4+1)
 		season_age = 0
 	if forecast_age >= 300:
 		forecast_age = 0
