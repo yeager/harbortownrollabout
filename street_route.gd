@@ -31,8 +31,16 @@ func _nearest(point: Vector2) -> Vector2i:
 			result=edge
 	return result
 
-func path(start: Vector2, goal: Vector2) -> PackedVector2Array:
-	var first := _nearest(start)
+func closest_street_point(point: Vector2) -> Vector2:
+	var edge := _nearest(point)
+	return Geometry2D.get_closest_point_to_segment(point, graph.get_point_position(edge.x), graph.get_point_position(edge.y))
+
+func path(start: Vector2, goal: Vector2, heading := Vector2.ZERO) -> PackedVector2Array:
+	var driving := not heading.is_zero_approx()
+	var first := _nearest(start + heading * 1.5 if driving else start)
+	var axis := graph.get_point_position(first.x).direction_to(graph.get_point_position(first.y))
+	var forward_id := first.y if axis.dot(heading) >= 0 else first.x
+	var forward := axis if forward_id == first.y else -axis
 	var last := _nearest(goal)
 	var temporary: Array[int]=[]
 	for pair in [[start,first],[goal,last]]:
@@ -40,13 +48,86 @@ func path(start: Vector2, goal: Vector2) -> PackedVector2Array:
 		var snap := Geometry2D.get_closest_point_to_segment(pair[0],graph.get_point_position(edge.x),graph.get_point_position(edge.y))
 		var id := graph.get_available_point_id()
 		graph.add_point(id,snap)
-		graph.connect_points(id,edge.x)
-		graph.connect_points(id,edge.y)
+		if driving and temporary.is_empty():
+			graph.connect_points(id,forward_id,false)
+		else:
+			graph.connect_points(id,edge.x)
+			graph.connect_points(id,edge.y)
 		temporary.append(id)
-	if first==last:
+	if first==last and (not driving or (goal-start).dot(forward)>=0):
 		graph.connect_points(temporary[0],temporary[1])
 	var points := graph.get_point_path(temporary[0],temporary[1])
 	for id in temporary:
 		graph.remove_point(id)
+	if driving:
+		points = _lane_path(points)
 	points.append(goal)
 	return points
+
+func _lane_path(centres: PackedVector2Array) -> PackedVector2Array:
+	var lane := PackedVector2Array()
+	var previous := Vector2.ZERO
+	for i in range(1, centres.size()):
+		var a := centres[i-1]
+		var b := centres[i]
+		if a.is_equal_approx(b): continue
+		var direction := a.direction_to(b)
+		var right := Vector2(-direction.y, direction.x)
+		var middle := (a+b)*.5
+		var along_tracks := (middle.y in [-48.0,35.0] and middle.x > -420 and middle.x < -150) or (middle.x in [-420.0,-150.0] and middle.y > -48 and middle.y < 35)
+		var offset := right * (6.0 if along_tracks else 2.35)
+		if previous.dot(direction) < -.99:
+			# Arc across the junction from the incoming lane to the returning lane.
+			var incoming := lane[-1] - a
+			for part in range(1, 8):
+				var angle := PI*part/8.0
+				lane.append(a + incoming*cos(angle) + previous*incoming.length()*sin(angle))
+		if not previous.is_zero_approx() and absf(previous.dot(direction)) < .01:
+			# Intersect the two lane lines, then round their corner with a tangent arc.
+			var corner := lane[-1] + previous * offset.dot(previous)
+			var approach := (corner - lane[-2]).dot(previous)
+			var exit_length := (b + offset - corner).dot(direction)
+			var radius := clampf(minf(approach, exit_length) * .5, 0.0, 3.5)
+			if approach >= 0 and exit_length >= 0:
+				var entry := corner - previous * radius
+				var exit := corner + direction * radius
+				lane[-1] = entry
+				for part in range(1, 6):
+					lane.append(entry.bezier_interpolate(entry.lerp(corner, 2.0/3.0), exit.lerp(corner, 2.0/3.0), exit, part/5.0))
+			else:
+				lane.append(a + offset)
+		else:
+			lane.append(a + offset)
+		lane.append(b + offset)
+		previous = direction
+	return lane
+
+# Keep the chosen junction while the vehicle follows a bend or U-turn.
+var remaining_lane := PackedVector2Array()
+var lane_goal := Vector2.INF
+
+func driving_path(start: Vector2, goal: Vector2, heading: Vector2) -> PackedVector2Array:
+	if goal.is_equal_approx(lane_goal):
+		var distance_ahead := 0.0
+		var best_gap := 4.0
+		var best_segment := -1
+		var nearest := start
+		for i in range(1, remaining_lane.size()):
+			var a := remaining_lane[i-1]
+			var b := remaining_lane[i]
+			if a.is_equal_approx(b): continue
+			var snap := Geometry2D.get_closest_point_to_segment(start, a, b)
+			var gap := snap.distance_to(start)
+			if gap < best_gap and a.direction_to(b).dot(heading) > 0.0:
+				best_segment = i
+				best_gap = gap
+				nearest = snap
+			distance_ahead += a.distance_to(b)
+			if distance_ahead > 30.0: break
+		if best_segment >= 0:
+			remaining_lane = remaining_lane.slice(best_segment-1)
+			remaining_lane[0] = nearest
+			return remaining_lane
+	lane_goal = goal
+	remaining_lane = path(start, goal, heading)
+	return remaining_lane

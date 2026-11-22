@@ -1,4 +1,4 @@
-# Axel's Emergency Vehicles
+# Harbor Town Rollabout
 
 Explore a 3D waterfront neighbourhood inspired by Hammarby Sjöstad in Stockholm. Choose Axel or Alma and drive through town, cross the canal by motorboat or ride the tram. Your vehicle determines the jobs you receive, from emergency calls and school taxi trips to roadside recovery. You can also explore at your own pace.
 
@@ -17,7 +17,9 @@ Open `project.godot` in Godot 4.6 and press **F5**. Select a vehicle and choose 
 | Open or close the phone | T |
 | Close the open phone and return to play | Escape |
 | Toggle the vehicle radio | J |
+| Next radio song | N |
 | Pause | P, or Escape when the phone is closed |
+| Quit the game | F10, then choose **Yes** to quit or **No** to return |
 
 Gentle driving limits ordinary vehicles to 30 km/h and completes an interaction when you stop at the marker. The steering wheel and pedals on screen show your inputs. You can adjust volume and emergency lights independently, choose daylight or night, or let a full day pass in six minutes of active play.
 
@@ -27,7 +29,7 @@ Godot loads the playable world from `main.tscn`. Vehicle meshes are in `vehicles
 
 ## Tvärbanan
 
-Select **Ride the tram** in the activity menu to follow an automatic service around a fictional three-stop canal loop. Select **Drive the tram** to control its speed with W and S or the arrow keys. Steering follows the rails, and the tram stops at each platform for six seconds. The lead car carries a Swedish notice beside a blue door.
+The tram runs at street level through the western district on a 685 m loop with four stops. Traffic runs in opposite directions on either side of the tracks. At the six crossings, red signals hold the tram and road traffic while pedestrians have a green walking figure. Walk onto a platform and press **F** when the doors open to board. Press **F** at a stop to get off. You can also select **Ride the tram** in the activity menu. Select **Drive the tram** to control its speed with W and S or the arrow keys. Steering follows the rails, and the tram stops at each platform for six seconds. The lead car carries a Swedish notice beside a blue door.
 Passengers look out from the middle carriage. Hold the middle mouse button and drag to look around. The amber display above the aisle shows the next stop.
 
 ![Passenger view inside the tram](docs/tram-interior.png)
@@ -38,7 +40,7 @@ In **Settings**, you can choose the season and weather independently. For exampl
 
 Clouds gather before rain or snow starts. Manual weather changes follow the same gradual transitions. Switch back to Automatic during a shower and it continues until the next forecast. Spring and autumn can bring slush, which leaves both water and snow on the ground. Wet and snowy roads increase braking distance. Daylight includes a visible sun aligned with the light casting the street shadows.
 
-Hold **V** and move the mouse for continuous camera control. Release **V** to use the pointer again. You can also hold the middle mouse button and drag to orbit the exterior camera or look around from the BMW driver’s seat. Returning to the driver’s seat with **C** centres the view. On foot, nearby neighbours greet you in the selected language. Greetings appear above the speaker and use a matching system speech voice when available.
+Hold **V** and move the mouse for continuous camera control. Release **V** to use the pointer again. You can also hold the middle mouse button and drag to orbit the exterior camera or look around from the SUV driver’s seat. Returning to the driver’s seat with **C** centres the view. On foot, nearby neighbours greet you in the selected language. Greetings appear above the speaker and use a matching system speech voice when available.
 
 The central junction has phased traffic lights and red and green pedestrian figures beside the crossing. Traffic waits for its green phase. The player's vehicle also slows as it approaches a red signal, pedestrians in its path or a queue.
 
@@ -50,11 +52,11 @@ The double-ended passenger ferry **Lotten** runs between two landings in the can
 
 Choose **Taxi** and start the mission activity to pick up a passenger. Follow the green arrows along the streets and over a bridge when needed. Stop at the marker to board or drop off your fare. Gentle driving handles boarding automatically. The next fare appears after drop-off.
 
-Press **H** or click **Horn** while driving. The ambulance, police car, fire engine, BMW and taxi each have their own horn.
+Press **H** or click **Horn** while driving. The ambulance, police car, fire engine, SUV and taxi each have their own horn.
 
 ## Motorboat
 
-Choose **Drive the motorboat** in the activity menu. The white centre-console boat starts in the southern canal basin. Use the same steering and pedal controls as a car. Hold the brake to slow down and reverse. The shore and buoy lines bound the boating area. Press **H** for the boat horn or drag with the middle mouse button to look around.
+Choose the **Motorboat** picture on the start menu. The white centre-console boat starts in the southern canal basin. Use the same steering and pedal controls as a car. Hold the brake to slow down and reverse. The shore and buoy lines bound the boating area. Press **H** for the boat horn or drag with the middle mouse button to look around.
 
 A blue-and-white Swedish police helicopter flies a continuous patrol above the waterfront during play. Its main and shrouded tail rotors turn independently. The editable model is in `source_blender/Polishelikopter.blend`.
 
@@ -94,13 +96,13 @@ Choose **City bus** and start **Bus route 502** to pick up passengers at the squ
 
 The taxi rotation also includes a pupil travelling from the square to school and a pupil waiting outside school for a ride to the clinic. Follow the arrows to the yellow **TAXI** sign outside Sjöstadsskolan. With gentle driving enabled, stop at the marker for about a second to let the pupil board or get out. Read the next request on the phone.
 
-The vehicle selector and depot include a red BMW M3 E30, orange Volvo 240, green Saab 96 and white Tesla Model S. Full-speed mode gives the Volvo and Saab relaxed acceleration. The Tesla has a quiet electric motor sound and accelerates quickly.
+The vehicle selector and depot include a red classic sports coupe, orange classic sedan, green vintage compact and white electric sedan. Full-speed mode gives the two classic family cars relaxed acceleration. The electric sedan has a quiet electric motor sound and accelerates quickly.
 
-The Porsche 911 GT3 RS has a separate sport tune. Select it at the depot to drive the wide-body coupe with its recessed front intakes, sculpted bonnet outlets, swan-neck rear wing and twin centre exhausts. Its acceleration under full throttle and its top speed are both three times those of the ordinary taxi in the same mode. It reaches 90 km/h in gentle driving or about 238 km/h in full-speed mode.
+The track sports car has a separate sport tune. Select it at the depot to drive the wide-body coupe with its recessed front intakes, sculpted bonnet outlets, swan-neck rear wing and twin centre exhausts. Its acceleration under full throttle and its top speed are both three times those of the ordinary taxi in the same mode. It reaches 90 km/h in gentle driving or about 238 km/h in full-speed mode.
 
-![White Porsche 911 GT3 RS game model with red wheels, side view](docs/porsche-911-gt3-rs.png)
+![White track sports car game model with red wheels, side view](docs/porsche-911-gt3-rs.png)
 
-Press **J** or click **Radio** in a vehicle to play the original instrumental loop on Sjöstad Radio. It also works aboard the motorboat, the tram and the Lotten ferry. The radio pauses when you leave the vehicle and resumes at the same point when you get back in.
+The radio starts with a shuffled song when you enter a vehicle. Press **J** to switch it off or on and **N** for the next song. It stops when you step out. The radio shuffles songs in the selected game language. Changing between Swedish and English switches the playlist. Lyrics and links to both recordings of each song are in [the songbook](docs/Radiolatar.md).
 
 ## Graphics settings
 
@@ -128,4 +130,4 @@ You can also hold the left mouse button directly on either on-screen pedal. Rele
 Police patrols, fire safety checks, ambulance calls, taxi fares, towing and bus routes depend on your vehicle. Personal cars deliver parcels and the snowmobile delivers blankets. Switching vehicles during a session preserves your place in each vehicle's jobs. The phone also receives occasional family texts during play.
 
 At the kiosk, buy an ice cream or a hot dog, then choose the matching **Eat** button. Axel or Alma consumes one snack and feels extra happy for 25 seconds of play.
-With the phone open, use Page Up or Page Down to read your messages. Home returns to the current job and End jumps to the oldest visible message.
+On foot, hold Page Up to raise the camera or Page Down to lower it. With the phone open, use Page Up or Page Down to read your messages. Home returns to the current job and End jumps to the oldest visible message.

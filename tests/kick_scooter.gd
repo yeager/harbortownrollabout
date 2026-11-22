@@ -13,6 +13,19 @@ func check_scooters() -> void:
 	for alma in [false,true]:
 		game.play_as_alma = alma
 		game._apply_player_appearance()
+		# The center is on the bridge but the leading wheel is over the water.
+		rider.position = Vector3(71,game._foot_height(71,5.1),5.1)
+		rider.rotation.y = PI
+		var edge_pose := rider.transform
+		if not game._feet_supported(rider.position):
+			printerr("Expected supported feet at bridge edge")
+			quit(1)
+			return
+		game._toggle_scooter()
+		if game.scooter.visible or not rider.transform.is_equal_approx(edge_pose):
+			printerr("Scooter unfolded with an unsupported front wheel")
+			quit(1)
+			return
 		rider.position = Vector3(71,game._foot_height(71,0),0)
 		rider.rotation.y = PI
 		game._toggle_scooter()
@@ -53,6 +66,12 @@ func check_scooters() -> void:
 			printerr("Dismount should leave the player on safe ground")
 			quit(1)
 			return
+		var limbs: Array = rider.get_meta("legs") + rider.get_meta("arms")
+		for i in limbs.size():
+			if not limbs[i].transform.is_equal_approx(game.scooter.stance[i]):
+				printerr("Dismount failed to restore the standing pose")
+				quit(1)
+				return
 	for item in game.walker_data:
 		if item.has("scooter"):
 			var start: Vector3 = item.actor.position

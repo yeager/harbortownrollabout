@@ -9,6 +9,8 @@ func check_fare() -> void:
 	root.add_child(game)
 	game._on_vehicle_selected(game.TAXI)
 	game._start_game()
+	game.phone.open_button.pressed.emit()
+	game.phone.take_job.pressed.emit()
 	var initial_wallet: int = game.wallet
 	game.ambulance.position = game._mission_destination()
 	game._help_at_target()

@@ -4,10 +4,13 @@ var open_button := Button.new()
 var handset := PanelContainer.new()
 var messages: Array[String] = []
 var job_heading := Label.new()
+var star_progress := Label.new()
 var inbox := Label.new()
 var history_scroll := ScrollContainer.new()
+var message_tone := AudioStreamPlayer.new()
 var unread := 0
 var current_job := ""
+var take_job := Button.new()
 
 const HISTORY_LIMIT := 32
 
@@ -36,6 +39,9 @@ func advance(delta: float) -> void:
 		social_wait = 150.0
 
 func _ready() -> void:
+	message_tone.stream = preload("res://audio/sms.wav")
+	message_tone.volume_db = -9
+	add_child(message_tone)
 	set_anchors_and_offsets_preset(Control.PRESET_TOP_LEFT)
 	position=Vector2(22,106)
 	custom_minimum_size.x=200
@@ -73,7 +79,11 @@ func _ready() -> void:
 	title.add_theme_font_size_override("font_size", 22)
 	title.add_theme_color_override("font_color", Color("#12594f"))
 	content.add_child(title)
-	for label in [job_heading, inbox]:
+	var recovery_hint := Label.new()
+	recovery_hint.text = "Stuck? Press R"
+	recovery_hint.add_theme_color_override("font_color", Color("#183a38"))
+	content.add_child(recovery_hint)
+	for label in [job_heading, inbox, star_progress]:
 		label.add_theme_color_override("font_color", Color("#183a38"))
 	inbox.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	inbox.add_theme_font_size_override("font_size", 16)
@@ -82,6 +92,9 @@ func _ready() -> void:
 	history_scroll.follow_focus = true
 	job_heading.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	job_heading.add_theme_font_size_override("font_size",18)
+	take_job.text = "Take a job"
+	content.add_child(star_progress)
+	content.add_child(take_job)
 	content.add_child(job_heading)
 	content.add_child(history_scroll)
 	inbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -116,10 +129,22 @@ func _unhandled_key_input(event: InputEvent) -> void:
 	get_viewport().set_input_as_handled()
 
 func receive(body: String) -> void:
+	# Preserve the line being read when new SMS push older ones down the screen.
+	var offset := history_scroll.scroll_vertical
+	var added_height := 0
+	if handset.is_visible_in_tree() and offset > 0 and body != current_job:
+		var old_text := inbox.text
+		var old_height := inbox.get_minimum_size().y
+		inbox.text = tr(body) + "\n\n" + old_text
+		added_height = roundi(inbox.get_minimum_size().y - old_height)
+		history_scroll.get_v_scroll_bar().max_value += added_height
 	messages.push_front(body)
+	if is_visible_in_tree(): message_tone.play()
 	if messages.size() > HISTORY_LIMIT: messages.pop_back()
 	if not handset.is_visible_in_tree(): unread=mini(unread+1,messages.size())
 	refresh()
+	if added_height > 0:
+		history_scroll.scroll_vertical = offset + added_height
 
 func toggle() -> void:
 	handset.visible=not handset.visible

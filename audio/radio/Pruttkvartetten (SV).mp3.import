@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://bbjcyl078o0bx"
+path="res://.godot/imported/Pruttkvartetten (SV).mp3-e9b274bd26bf1d69887835f15c0d3b46.mp3str"
+
+[deps]
+
+source_file="res://audio/radio/Pruttkvartetten (SV).mp3"
+dest_files=["res://.godot/imported/Pruttkvartetten (SV).mp3-e9b274bd26bf1d69887835f15c0d3b46.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

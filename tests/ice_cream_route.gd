@@ -7,7 +7,13 @@ func check_route() -> void:
 	var game = load("res://main.tscn").instantiate()
 	root.add_child(game)
 	game._on_vehicle_selected(game.ICE_CREAM)
-	game._start_game()
+	game.start_button.pressed.emit()
+	game.phone.open_button.pressed.emit()
+	if not game.free_drive or not game.phone.take_job.is_visible_in_tree():
+		printerr("The vehicle must start in free exploration and offer a job in the phone")
+		quit(1)
+		return
+	game.phone.take_job.pressed.emit()
 	var starting_balance: int = game.wallet
 	for leg in game.ICE_STOPS.size():
 		var curb: Vector3 = game._stop_curb(game.ICE_STOPS[leg])
@@ -23,7 +29,12 @@ func check_route() -> void:
 			quit(1)
 			return
 		game.speed = 0
-		game._update_arrival(game.HELP_DURATION)
+		if leg == 1:
+			game.gentle_driving = false
+			game._help_at_target()
+		else:
+			game.gentle_driving = true
+			game._update_arrival(game.HELP_DURATION)
 		if game.wallet != starting_balance + 10 * (leg+1) or game.horn.stream.resource_path != "res://audio/horn_icecream.wav":
 			printerr("Missing payout or van chime")
 			quit(1)

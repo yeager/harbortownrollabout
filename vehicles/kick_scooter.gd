@@ -68,7 +68,7 @@ func ride(game: Node3D, throttle: float, steer: float, delta: float) -> void:
 		var forward := Vector3.FORWARD.rotated(Vector3.UP,yaw)
 		var next := rider.position + forward*speed*delta/steps
 		next.y = game._foot_height(next.x,next.z)
-		if not can_stand(game,next,yaw,rider.scale.y):
+		if not game.street_signals.pedestrian_may_enter(rider.position,next) or not can_stand(game,next,yaw,rider.scale.y):
 			speed = 0.0
 			break
 		rider.rotation.y = yaw

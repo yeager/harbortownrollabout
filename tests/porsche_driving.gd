@@ -15,6 +15,8 @@ func measure_car(game, vehicle: int, gentle: bool) -> Vector2:
 	var after_one_second := 0.0
 	var peak := 0.0
 	for frame in 360:
+		# Measure the powertrain on a clear section, away from junctions.
+		game.ambulance.position = Vector3(-490, 0, -45.8)
 		game._drive(1.0 / 60.0)
 		peak = maxf(peak, game.speed)
 		if frame == 59:
@@ -25,7 +27,7 @@ func check_porsche() -> void:
 	var game = load("res://main.tscn").instantiate()
 	root.add_child(game)
 	game._start_game()
-	var porsche: int = game.VEHICLE_NAMES_ALL.find("Porsche 911 GT3 RS")
+	var porsche: int = game.PORSCHE
 	if porsche < 0:
 		printerr("Porsche missing from vehicle selector")
 		quit(1)

@@ -168,6 +168,89 @@ def build_portrait(root, alma=False):
         quads = [(i*5+j,i*5+j+1,(i+1)*5+j+1,(i+1)*5+j) for i in range(32) for j in range(4)]
         mesh('Upper lip' if upper else 'Lower lip', verts, quads if upper else [q[::-1] for q in quads], lip)
     patch('Mouth',1,(0,-.0655),.025,.0006,.00065,.0026,crease)
+    if alma:
+        from mathutils import Vector
+        acetate = material("Dark plum acetate", (.064,.029,.035))
+
+        def frame_tube(name, points, radius, closed=False):
+            verts, faces = [], []
+            path = [Vector(p) for p in points]
+            for i, point in enumerate(path):
+                before = path[i-1] if i or closed else point
+                after = path[(i+1)%len(path)] if closed or i+1<len(path) else point
+                tangent = (after-before).normalized()
+                normal = tangent.cross(Vector((0,1,0))).normalized()
+                if normal.length_squared<.01:
+                    normal = Vector((1,0,0))
+                across = tangent.cross(normal)
+                for k in range(8):
+                    angle = tau*k/8
+                    verts.append(point + radius*(normal*cos(angle)+across*sin(angle)))
+            for i in range(len(path) if closed else len(path)-1):
+                for k in range(8):
+                    j = (i+1)%len(path)
+                    faces.append((i*8+k,i*8+(k+1)%8,j*8+(k+1)%8,j*8+k))
+            return mesh(name,verts,faces,acetate)
+
+        front_y = surface(.042,.013)+.017
+        for side in (-1,1):
+            ring = []
+            for k in range(48):
+                a = tau*k/48
+                x = .044+.037*cos(a)
+                ring.append((side*x,front_y-.012*(x/.081)**2,.012+.033*sin(a)))
+            frame_tube("Rounded spectacle rim",ring,.0033,True)
+            frame_tube("Temple",[(side*.079,front_y-.012,.021),
+                                  (side*.099,.062,.025),(side*.11,.006,.023),
+                                  (side*.109,-.025,.012)],.0033)
+        frame_tube("Arched bridge",[(-.012,front_y,.022),(0,front_y+.003,.028),
+                                     (.012,front_y,.022)],.0032)
+
+        canvas = material("Raspberry cotton", (.69,.045,.22))
+        stitching = material("Rose seam", (.40,.029,.105))
+        def cap_point(t,a):
+            lat = t*pi*.499
+            return (.120*cos(lat)*cos(a), -.009+.145*cos(lat)*sin(a),
+                    .060+.132*sin(lat)+.013*sin(a)*cos(lat))
+        crown = shell("Six-panel cap",16,60,cap_point)
+        crown.data.materials.append(canvas)
+        for panel in range(6):
+            a = tau*panel/6
+            frame_points = [cap_point(j/18,a) for j in range(19)]
+            seam = frame_tube("Panel stitching",frame_points,.0011)
+            seam.data.materials[0] = stitching
+        verts, faces = [], []
+        for i in range(33):
+            a = pi*i/32
+            for edge in (0,1):
+                verts.append((.117*cos(a),.004+(.135+.058*edge)*sin(a),
+                              .059+.015*sin(a)-.015*edge*sin(a)))
+        for i in range(32):
+            faces.append((2*i,2*i+2,2*i+3,2*i+1))
+        brim = mesh("Curved cap brim",verts,faces,canvas)
+        brim.modifiers.new("Bound brim edge","SOLIDIFY").thickness=.003
+
+        hair_tones = [material("Chestnut lock", (.084,.040,.019)),
+                      material("Brown lock", (.066,.032,.017)),
+                      material("Sunlit lock", (.113,.058,.027))]
+        for side in (-1,1):
+            for strand, tone in enumerate(hair_tones):
+                points = []
+                for step in range(65):
+                    t = step/64
+                    phase = tau*(3.5*t+strand/3)
+                    x = .085+.029*sin(pi*t)+.013*cos(phase)*(1-.40*t)
+                    y = .014+.130*sin(t*pi/2)+.008*sin(2*phase)
+                    points.append((side*x,y,-.052-.319*t))
+                plait = frame_tube("Woven lock",points,.010)
+                plait.data.materials[0] = tone
+            tie = frame_tube("Hair elastic",[(side*.085,.144,-.368),
+                                            (side*.084,.145,-.379)],.020)
+            tie.data.materials[0] = stitching
+            tail = frame_tube("Loose hair end",[(side*.084,.145,-.377),
+                                               (side*.082,.145,-.396),
+                                               (side*.077,.142,-.413)],.012)
+            tail.data.materials[0] = hair_tones[0]
     bpy.ops.object.select_all(action='DESELECT')
     for obj in portrait.objects:
         obj.select_set(obj not in (head,hair,bob))

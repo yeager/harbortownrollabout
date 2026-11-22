@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://dwn5ccfmg2bf0"
+path="res://.godot/imported/Månen beställer mos (SV).mp3-f5e839e06f799c776e4e11355156b63d.mp3str"
+
+[deps]
+
+source_file="res://audio/radio/Månen beställer mos (SV).mp3"
+dest_files=["res://.godot/imported/Månen beställer mos (SV).mp3-f5e839e06f799c776e4e11355156b63d.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

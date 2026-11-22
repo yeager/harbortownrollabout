@@ -1,0 +1,1186 @@
+msgid ""
+msgstr ""
+"Language: \n"
+"Content-Type: text/plain; charset=UTF-8\n"
+
+msgid "Harbor Town Rollabout"
+msgstr ""
+
+msgid "Emergency Vehicles"
+msgstr ""
+
+msgid "Help at the square"
+msgstr ""
+
+msgid "Pick up the medic"
+msgstr ""
+
+msgid "Deliver first aid to the marina"
+msgstr ""
+
+msgid "Ambulance"
+msgstr ""
+
+msgid "Police car"
+msgstr ""
+
+msgid "Fire engine"
+msgstr ""
+
+
+msgid "Mission complete. Well done!"
+msgstr ""
+
+msgid "All missions complete! The city thanks you."
+msgstr ""
+
+msgid "Cross a bridge to the east side."
+msgstr ""
+
+msgid "Follow the quay to the green marker by the boats."
+msgstr ""
+
+msgid "Follow the green mission marker."
+msgstr ""
+
+msgid "MISSION"
+msgstr ""
+
+msgid "Lights OFF"
+msgstr ""
+
+msgid "Lights ON"
+msgstr ""
+
+msgid "Siren OFF"
+msgstr ""
+
+msgid "Siren ON"
+msgstr ""
+
+msgid "Engine ON"
+msgstr ""
+
+msgid "Engine OFF"
+msgstr ""
+
+msgid "Pause"
+msgstr ""
+
+msgid "W / ↑  Drive     A D / ← →  Steer     S / ↓  Brake or reverse\nRelease to slow down   ·   Space to help   ·   P to pause"
+msgstr ""
+
+msgid "Start a gentle drive"
+msgstr ""
+
+msgid "Settings"
+msgstr ""
+
+msgid "Close settings"
+msgstr ""
+
+msgid "Driving mode"
+msgstr ""
+
+msgid "Gentle driving · up to 30 km/h"
+msgstr ""
+
+msgid "Full speed"
+msgstr ""
+
+msgid "Preview vehicle sound"
+msgstr ""
+
+msgid "Game volume"
+msgstr ""
+
+msgid "Emergency lights in traffic"
+msgstr ""
+
+msgid "Traffic lights · Flashing blue"
+msgstr ""
+
+msgid "Traffic lights · Steady blue"
+msgstr ""
+
+msgid "Traffic lights · Blue lights off"
+msgstr ""
+
+msgid "Resume"
+msgstr ""
+
+msgid "MISSION %d / %d   ·   %s"
+msgstr ""
+
+msgid "ALL MISSIONS COMPLETE"
+msgstr ""
+
+msgid "Stop preview"
+msgstr ""
+
+msgid "Preview engine"
+msgstr ""
+
+msgid "Preview siren"
+msgstr ""
+
+msgid "Choose a vehicle and drive to three missions.\nTake your time. You control the lights and siren."
+msgstr ""
+
+msgid "Start driving"
+msgstr ""
+
+msgid "All missions complete!"
+msgstr ""
+
+msgid "You helped the whole city. Well done, Axel!\nReady for another drive?"
+msgstr ""
+
+msgid "Drive again"
+msgstr ""
+
+msgid "You can change vehicles here and continue your mission."
+msgstr ""
+
+msgid "Continue driving"
+msgstr ""
+
+msgid "Stop here to help."
+msgstr ""
+
+msgid "Helping …"
+msgstr ""
+
+msgid "Paused — take your time."
+msgstr ""
+
+msgid "Speed  %02d km/h"
+msgstr ""
+
+msgid "Gas"
+msgstr ""
+
+msgid "Left"
+msgstr ""
+
+msgid "Brake"
+msgstr ""
+
+msgid "Right"
+msgstr ""
+
+msgid "Language"
+msgstr ""
+
+msgid "Get out · F"
+msgstr ""
+
+msgid "Enter %s"
+msgstr ""
+
+msgid "Walk to a vehicle"
+msgstr ""
+
+msgid "Stop first to get out."
+msgstr ""
+
+msgid "Walk with WASD or arrows · F to enter a vehicle"
+msgstr ""
+
+msgid "Time · Day"
+msgstr ""
+
+msgid "Time · Night"
+msgstr ""
+
+msgid "Time · Day and night"
+msgstr ""
+
+msgid "Vehicle depot"
+msgstr ""
+
+msgid "Both doors are blocked. Park where there is more room."
+msgstr ""
+
+msgid "Activity"
+msgstr ""
+
+msgid "Three missions"
+msgstr ""
+
+msgid "Free exploration"
+msgstr ""
+
+msgid "Explore on foot or by vehicle. Stop at the depot to change vehicles."
+msgstr ""
+
+msgid "W / ↑ Drive   ·   A D / ← → Steer   ·   S / ↓ Brake or reverse   ·   F Get out   ·   P Pause"
+msgstr ""
+
+msgid "Continue walking"
+msgstr ""
+
+msgid "Walk up to a parked vehicle to get in."
+msgstr ""
+
+msgid "Stand here to help"
+msgstr ""
+
+msgid "Press Space to help"
+msgstr ""
+
+msgid "My vehicle · Flashing"
+msgstr ""
+
+msgid "My vehicle · Steady"
+msgstr ""
+
+msgid "Traffic sirens"
+msgstr ""
+
+msgid "Reverse"
+msgstr ""
+
+msgid "Driver view · C"
+msgstr ""
+
+msgid "Outside view · C"
+msgstr ""
+
+msgid "Forward"
+msgstr ""
+
+msgid "Stopped"
+msgstr ""
+
+msgid "Reversing"
+msgstr ""
+
+msgid "Ride the tram"
+msgstr ""
+
+msgid "Drive the tram"
+msgstr ""
+
+msgid "Season · Automatic"
+msgstr ""
+
+msgid "Spring"
+msgstr ""
+
+msgid "Summer"
+msgstr ""
+
+msgid "Autumn"
+msgstr ""
+
+msgid "Winter"
+msgstr ""
+
+msgid "Weather · Automatic"
+msgstr ""
+
+msgid "Sun"
+msgstr ""
+
+msgid "Rain"
+msgstr ""
+
+msgid "Snow"
+msgstr ""
+
+msgid "Slush"
+msgstr ""
+
+msgid "Hello!"
+msgstr ""
+
+msgid "How are you?"
+msgstr ""
+
+msgid "Hi there!"
+msgstr ""
+
+msgid "Horn · H"
+msgstr ""
+
+msgid "Pick up your passenger"
+msgstr ""
+
+msgid "Drop off your passenger"
+msgstr ""
+
+msgid "Passenger on board."
+msgstr ""
+
+msgid "Thank you for the ride!"
+msgstr ""
+
+msgid "Drive the motorboat"
+msgstr ""
+
+msgid "W / ↑ Throttle · A D / ← → Steer · S / ↓ Slow or reverse · H Horn · P Pause"
+msgstr ""
+
+#, c-format
+msgid "%d coin"
+msgid_plural "%d coins"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Well done, %s! Ready for another drive?"
+msgstr ""
+
+msgid "Character"
+msgstr ""
+
+msgid "Wallet"
+msgstr ""
+
+msgid "Phone · T"
+msgstr ""
+
+msgid "No messages yet."
+msgstr ""
+
+msgid "Taxi requested at the square."
+msgstr ""
+
+msgid "Please take me to the marina."
+msgstr ""
+
+msgid "Taxi requested at the clinic."
+msgstr ""
+
+msgid "Please take me to the square."
+msgstr ""
+
+msgid "Taxi requested at the marina."
+msgstr ""
+
+msgid "Please take me to the clinic."
+msgstr ""
+
+msgid "A neighbour needs help at the square."
+msgstr ""
+
+msgid "A medic is waiting at the clinic. Please pick them up."
+msgstr ""
+
+msgid "Please bring the first-aid supplies to the marina."
+msgstr ""
+
+msgid "Fare complete. You earned 15 coins."
+msgstr ""
+
+msgid "Thank you for helping! You earned 10 coins."
+msgstr ""
+
+msgid "Café"
+msgstr ""
+
+msgid "Sweet shop"
+msgstr ""
+
+msgid "Cinnamon bun"
+msgstr ""
+
+msgid "Berry cordial"
+msgstr ""
+
+msgid "Ice cream"
+msgstr ""
+
+msgid "Hot dog"
+msgstr ""
+
+msgid "Margherita pizza"
+msgstr ""
+
+msgid "Pick and mix"
+msgstr ""
+
+msgid "%s · %d coins"
+msgstr ""
+
+#, c-format
+msgid "You need %d more coin."
+msgid_plural "You need %d more coins."
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "%s · Paid %d coins. Thank you!"
+msgstr ""
+
+msgid "Recovery truck"
+msgstr ""
+
+msgid "Collect the car with a smoking bonnet."
+msgstr ""
+
+msgid "Take the car to the workshop."
+msgstr ""
+
+msgid "Collect the car with a missing wheel."
+msgstr ""
+
+msgid "Recovery complete. You earned 20 coins."
+msgstr ""
+
+msgid "Passenger ride · P to pause"
+msgstr ""
+
+msgid "W / ↑ Accelerate · S / ↓ Brake · Automatic station stops"
+msgstr ""
+
+msgid "%s · Departure in %d s"
+msgstr ""
+
+msgid "Next stop: %s · %d m · %d km/h"
+msgstr ""
+
+msgid "Tram bell · H"
+msgstr ""
+
+msgid "A car is smoking on the main street. Follow the arrows and stop beside it."
+msgstr ""
+
+msgid "A car on the east bank has lost a wheel. Follow the arrows to pick it up."
+msgstr ""
+
+msgid "The car is on your flatbed. Follow the arrows to the workshop for 20 coins."
+msgstr ""
+
+msgid "Car loaded onto the flatbed."
+msgstr ""
+
+msgid "Your purchases"
+msgstr ""
+
+msgid "%s × %d"
+msgstr ""
+
+msgid "Waiting for a green light"
+msgstr ""
+
+msgid "Steer with A and D or the arrow keys. Hold the left mouse button for throttle. Hold the right to slow down, then reverse."
+msgstr ""
+
+msgid "Start boating"
+msgstr ""
+
+msgid "Continue boating"
+msgstr ""
+
+msgid "The tram drives itself and stops at each platform."
+msgstr ""
+
+msgid "Control the speed. The tram follows the rails and stops at each platform."
+msgstr ""
+
+msgid "Taxi fares"
+msgstr ""
+
+msgid "Roadside recovery"
+msgstr ""
+
+msgid "Pick up a passenger at the square and drive them to the marina."
+msgstr ""
+
+msgid "Collect the car with a smoking bonnet and take it to the workshop."
+msgstr ""
+
+msgid "Complete a mission to earn coins."
+msgstr ""
+
+msgid "Tab to choose · Enter to buy"
+msgstr ""
+
+msgid "Enter to buy"
+msgstr ""
+
+msgid "F · Enter %s"
+msgstr ""
+
+msgid "Well done, %s!"
+msgstr ""
+
+msgid "First-aid supplies delivered to the marina. You earned 10 coins."
+msgstr ""
+
+msgid "Stop here to load the car."
+msgstr ""
+
+msgid "Stop here to unload the car."
+msgstr ""
+
+msgid "Loading the car …"
+msgstr ""
+
+msgid "Unloading the car …"
+msgstr ""
+
+msgid "Press Space to load the car."
+msgstr ""
+
+msgid "Press Space to unload the car."
+msgstr ""
+
+msgid "Stop for your passenger."
+msgstr ""
+
+msgid "Stop to let your passenger out."
+msgstr ""
+
+msgid "Your passenger is getting in …"
+msgstr ""
+
+msgid "Your passenger is getting out …"
+msgstr ""
+
+msgid "Press Space to pick up your passenger."
+msgstr ""
+
+msgid "Press Space to let your passenger out."
+msgstr ""
+
+msgid "Return to your taxi"
+msgstr ""
+
+msgid "Return to your recovery truck"
+msgstr ""
+
+msgid "Radio on · J"
+msgstr ""
+
+msgid "Radio off · J"
+msgstr ""
+
+msgid "City bus"
+msgstr ""
+
+msgid "Bus route 502"
+msgstr ""
+
+msgid "Collect passengers at the square."
+msgstr ""
+
+msgid "Drop off passengers at the school."
+msgstr ""
+
+msgid "Collect passengers at the marina."
+msgstr ""
+
+msgid "Drop off passengers at the clinic."
+msgstr ""
+
+msgid "Passengers on board."
+msgstr ""
+
+msgid "Bus journey complete. You earned 15 coins."
+msgstr ""
+
+msgid "A pupil is waiting at the square."
+msgstr ""
+
+msgid "Please take me to school."
+msgstr ""
+
+msgid "A pupil is waiting at school."
+msgstr ""
+
+msgid "Pick up the pupil"
+msgstr ""
+
+msgid "Drop off the pupil"
+msgstr ""
+
+msgid "Return to your bus"
+msgstr ""
+
+msgid "Graphics"
+msgstr ""
+
+msgid "Sound"
+msgstr ""
+
+msgid "Driving"
+msgstr ""
+
+msgid "World"
+msgstr ""
+
+msgid "Renderer changes apply next time you start the game."
+msgstr ""
+
+msgid "Could not save graphics settings."
+msgstr ""
+
+msgid "The ducks voted. They love your jacket!"
+msgstr ""
+
+msgid "Snowmobile"
+msgstr ""
+
+msgid "Collect passengers at Västra torget."
+msgstr ""
+
+msgid "Drop off passengers at Västerängen."
+msgstr ""
+
+msgid "↑  Café · Snack kiosk"
+msgstr ""
+
+msgid "Forward+ · NVIDIA DLSS (experimental; RTX required)"
+msgstr ""
+
+msgid "DLSS is experimental. It needs the NGX-enabled engine and a supported NVIDIA RTX GPU/driver; otherwise it continues without DLSS. Restart to apply."
+msgstr ""
+
+msgid "Check the crossing at the square"
+msgstr ""
+
+msgid "Check the clinic entrance"
+msgstr ""
+
+msgid "Patrol the marina"
+msgstr ""
+
+msgid "Check the hydrant at the square"
+msgstr ""
+
+msgid "Meet the fire safety team at the clinic"
+msgstr ""
+
+msgid "Check the rescue equipment at the marina"
+msgstr ""
+
+msgid "Collect parcels at the square"
+msgstr ""
+
+msgid "Deliver a parcel to the clinic"
+msgstr ""
+
+msgid "Deliver the last parcel to the marina"
+msgstr ""
+
+msgid "Collect warm blankets at the square"
+msgstr ""
+
+msgid "Bring blankets to the clinic"
+msgstr ""
+
+msgid "Bring blankets to the marina"
+msgstr ""
+
+msgid "Have you done your homework? — Mum"
+msgstr ""
+
+msgid "A duck just beat me to the ferry. — Grandpa"
+msgstr ""
+
+msgid "I saved you a bun. It only has one tiny bite missing! — Mum"
+msgstr ""
+
+msgid "Eat ice cream"
+msgstr ""
+
+msgid "Eat hot dog"
+msgstr ""
+
+msgid "%s feels extra happy!"
+msgstr ""
+
+msgid "Current job"
+msgstr ""
+
+msgid "Tab to choose · Enter to buy or eat"
+msgstr ""
+
+msgid "Ambulance calls"
+msgstr ""
+
+msgid "Police patrols"
+msgstr ""
+
+msgid "Fire safety checks"
+msgstr ""
+
+msgid "Parcel deliveries"
+msgstr ""
+
+msgid "Blanket deliveries"
+msgstr ""
+
+msgid "Hold V and move the mouse to look around"
+msgstr ""
+
+msgid "I said hello to someone on the tram. It was my reflection. — Grandpa"
+msgstr ""
+
+msgid "Your missing sock turned up. The teddy bear was wearing it as a hat. — Mum"
+msgstr ""
+
+msgid "Close phone · T"
+msgstr ""
+
+msgid "The pupil is on board."
+msgstr ""
+
+msgid "Thanks! I can see my school!"
+msgstr ""
+
+msgid "Board Lotten · F"
+msgstr ""
+
+msgid "Step ashore · F"
+msgstr ""
+
+msgid "On board Lotten"
+msgstr ""
+
+msgid "Lotten in %d s"
+msgstr ""
+
+msgid "You can step ashore at either landing."
+msgstr ""
+
+msgid "Next landing in %d s"
+msgstr ""
+
+msgid "Get off at next landing · F"
+msgstr ""
+
+msgid "Stay on board · F"
+msgstr ""
+
+msgid "Two parcels collected at the square. You earned 10 coins."
+msgstr ""
+
+msgid "The clinic received its parcel. You earned 10 coins."
+msgstr ""
+
+msgid "The marina received the last parcel. You earned 10 coins."
+msgstr ""
+
+msgid "Stepping ashore in %d s"
+msgstr ""
+
+msgid "School is over! To the clinic, please."
+msgstr ""
+
+msgid "I tried to wave at you from Lotten. I waved my sandwich. The gulls waved back! — Grandpa"
+msgstr ""
+
+msgid "Could you pick up a cinnamon bun? Your dad bought cinnamon and a bun separately. — Mum"
+msgstr ""
+
+msgid "Find clear ground to unfold the scooter."
+msgstr ""
+
+msgid "Fold scooter · F"
+msgstr ""
+
+msgid "U Unfold scooter"
+msgstr ""
+
+msgid "W / ↑ Accelerate · S / ↓ Brake · A / D Steer · U Fold scooter"
+msgstr ""
+
+msgid "Electric scooter · %d km/h"
+msgstr ""
+
+msgid "Ice cream van"
+msgstr ""
+
+msgid "Serve ice cream at the square"
+msgstr ""
+
+msgid "Serve ice cream outside the school"
+msgstr ""
+
+msgid "Serve ice cream at the marina"
+msgstr ""
+
+msgid "Ice cream served! You earned 10 coins."
+msgstr ""
+
+msgid "Return to your ice cream van"
+msgstr ""
+
+msgid "Ice cream chime · H"
+msgstr ""
+
+msgid "Grocery store"
+msgstr ""
+
+msgid "Apple"
+msgstr ""
+
+msgid "Milk"
+msgstr ""
+
+msgid "Get off tram · F"
+msgstr ""
+
+msgid "Wait for the tram"
+msgstr ""
+
+msgid "Board tram · F"
+msgstr ""
+
+msgid "Exit excavator · F"
+msgstr ""
+
+msgid "Drive excavator · F"
+msgstr ""
+
+msgid "Arrows or WASD: drive and steer · Q/E: turn the cab · F: get out\nI/K: raise or lower the boom · Y/G: move the outer arm · O/L: tilt the bucket"
+msgstr ""
+
+msgid "Walk or rest · Run again in %d s"
+msgstr ""
+
+msgid "W/S Walk · A/D Turn · Shift + W Run · F Enter · U Scooter"
+msgstr ""
+
+msgid "PgUp Raise camera · PgDn Lower camera"
+msgstr ""
+
+msgid "Operate the excavator in the equipment yard."
+msgstr ""
+
+msgid "Start excavating"
+msgstr ""
+
+msgid "Motorboat"
+msgstr ""
+
+msgid "J Off · N Next song"
+msgstr ""
+
+msgid "Now playing: %s"
+msgstr ""
+
+
+msgid "Farm tractor"
+msgstr ""
+
+msgid "Turn radio off · J"
+msgstr ""
+
+msgid "Turn radio on · J"
+msgstr ""
+
+msgid "Next song · N"
+msgstr ""
+
+msgid "Ready to run again! Hold Shift and walk forward."
+msgstr ""
+
+msgid "SUV"
+msgstr ""
+
+msgid "Classic sports coupe"
+msgstr ""
+
+msgid "Classic sedan"
+msgstr ""
+
+msgid "Vintage compact"
+msgstr ""
+
+msgid "Electric sedan"
+msgstr ""
+
+msgid "Police SUV"
+msgstr ""
+
+msgid "Track sports car"
+msgstr ""
+
+msgid "Small convertible"
+msgstr ""
+
+msgid "Classic moped"
+msgstr ""
+
+msgid "Wheel loader"
+msgstr ""
+
+msgid "Tracked excavator"
+msgstr ""
+
+msgid "Tram"
+msgstr ""
+
+msgid "Click the pictures to choose your vehicle and driver."
+msgstr ""
+
+msgid "★ %d points"
+msgstr ""
+
+msgid "Take a job"
+msgstr ""
+
+msgid "★ All stars found!"
+msgstr ""
+
+#, c-format
+msgid "★ %d star left"
+msgid_plural "★ %d stars left"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Can you find my red shoe? I lost it farther along the pavement."
+msgstr ""
+
+msgid "My shoe! Now I won’t have to hop home. Thank you!"
+msgstr ""
+
+msgid "Find the red shoe on the pavement."
+msgstr ""
+
+msgid "Bring the red shoe back to the neighbour."
+msgstr ""
+
+msgid "Can you find my cat? Look for white paws along this pavement."
+msgstr ""
+
+msgid "There you are, Socks! Thank you for bringing her home."
+msgstr ""
+
+msgid "Walk back to the neighbour with the cat."
+msgstr ""
+
+msgid "Find the cat with white paws."
+msgstr ""
+
+msgid "Collect seedlings at the square"
+msgstr ""
+
+msgid "Deliver herbs to the clinic garden"
+msgstr ""
+
+msgid "Bring flowers to the marina"
+msgstr ""
+
+msgid "Pick up soup ingredients at the square"
+msgstr ""
+
+msgid "Serve lunch to the clinic staff"
+msgstr ""
+
+msgid "Serve soup to the boat crews"
+msgstr ""
+
+msgid "Back in a safe place."
+msgstr ""
+
+msgid "Stuck? Press R"
+msgstr ""
+
+msgid "No clear spot yet. Try again in a moment."
+msgstr ""
+
+msgid "Take the car to the petrol station."
+msgstr ""
+
+msgid "The car is on your flatbed. Follow the arrows to the petrol station for 20 coins."
+msgstr ""
+
+msgid "My vehicle"
+msgstr ""
+
+msgid "Flashing"
+msgstr ""
+
+msgid "Steady"
+msgstr ""
+
+msgid "Off"
+msgstr ""
+
+msgid "Ducks park free"
+msgstr ""
+
+msgid "Hats on wheels only"
+msgstr ""
+
+msgid "Save a spot for a snail"
+msgstr ""
+
+msgid "Park with a smile"
+msgstr ""
+
+msgid "Bananas need a ticket"
+msgstr ""
+
+msgid "LANGUAGE_SELF_NAME"
+msgstr ""
+
+msgid "ICE CREAM  4\nHOT DOG  5"
+msgstr ""
+
+msgid "FRUIT  &  VEG"
+msgstr ""
+
+msgid "CHECKOUT"
+msgstr ""
+
+msgid "WOOD-FIRED PIZZA"
+msgstr ""
+
+msgid "MARGHERITA  ·  8 COINS"
+msgstr ""
+
+msgid "EAT IN  ·  TAKEAWAY"
+msgstr ""
+
+msgid "TAKEAWAY"
+msgstr ""
+
+msgid "PICK AND MIX"
+msgstr ""
+
+msgid "Raspberry"
+msgstr ""
+
+msgid "Lemon"
+msgstr ""
+
+msgid "Liquorice"
+msgstr ""
+
+msgid "Vanilla"
+msgstr ""
+
+msgid "Strawberry"
+msgstr ""
+
+msgid "Orange"
+msgstr ""
+
+msgid "Grape"
+msgstr ""
+
+msgid "No songs available in this language yet."
+msgstr ""
+
+msgid "HARBOR FUEL"
+msgstr ""
+
+msgid "Harbor Fuel  →"
+msgstr ""
+
+msgid "←  Harbor Fuel"
+msgstr ""
+
+msgid "Tow drop-off"
+msgstr ""
+
+msgid "Monster truck"
+msgstr ""
+
+msgid "A-tractor"
+msgstr ""
+
+msgid "Classic cruiser"
+msgstr ""
+
+msgid "Taxi"
+msgstr ""
+
+msgid "Food truck"
+msgstr ""
+
+msgid "HARBOR TOWN SCHOOL"
+msgstr ""
+
+msgid "HARBOR TOWN GARAGE"
+msgstr ""
+
+msgid "THE SQUARE"
+msgstr ""
+
+msgid "HEALTH CENTRE"
+msgstr ""
+
+msgid "MARINA"
+msgstr ""
+
+msgid "VÄSTRA TORGET"
+msgstr ""
+
+msgid "VÄSTERÄNGEN"
+msgstr ""
+
+msgid "HARBOR TOWN"
+msgstr ""
+
+msgid "Quit game"
+msgstr ""
+
+msgid "Quit game · F10"
+msgstr ""
+
+msgid "Do you want to quit the game?"
+msgstr ""
+
+msgid "Yes"
+msgstr ""
+
+msgid "No"
+msgstr ""
+
+msgid "About"
+msgstr ""
+
+msgid "About the game"
+msgstr ""
+
+msgid "Close"
+msgstr ""
+
+msgid "Version %s"
+msgstr ""
+
+msgid "Explore Harbor Town with Axel and Alma. Walk along the canal, take the tram or drive a tow truck to help a neighbour. You choose where to go next."
+msgstr ""
+
+msgid "My name is Daniel Nylander. I made this game for my children, who have autism and a language disorder. I wanted them to have a town they could explore at their own pace. That is why you can choose a vehicle by its picture and read what people say in speech bubbles."
+msgstr ""
+
+msgid "DISCO RINGS"
+msgstr ""
+
+msgid "Oops! One danced away!"
+msgstr ""
+
+msgid "ROCKET ICE"
+msgstr ""
+
+msgid "3, 2, 1 ... brain freeze!"
+msgstr ""
+
+msgid "HOT DOG YOGA"
+msgstr ""
+
+msgid "Breathe in. Ketchup out."
+msgstr ""
+
+#. Litres shown on a stationary fuel dispenser.
+msgid "0.00 L"
+msgstr ""
+
+msgid "95    17.90"
+msgstr ""
+
+msgid "98    18.90"
+msgstr ""
+
+msgid "D     17.50"
+msgstr ""
+
+msgid "Allow crashes"
+msgstr ""

@@ -1,0 +1,25 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://c2gt5gqq52e6g"
+path="res://.godot/imported/RelaxedHand.obj-ede6b93ad50cb6d23f889d6bae5cabff.mesh"
+
+[deps]
+
+files=["res://.godot/imported/RelaxedHand.obj-ede6b93ad50cb6d23f889d6bae5cabff.mesh"]
+
+source_file="res://characters/RelaxedHand.obj"
+dest_files=["res://.godot/imported/RelaxedHand.obj-ede6b93ad50cb6d23f889d6bae5cabff.mesh", "res://.godot/imported/RelaxedHand.obj-ede6b93ad50cb6d23f889d6bae5cabff.mesh"]
+
+[params]
+
+generate_tangents=true
+generate_lods=true
+generate_shadow_mesh=true
+generate_lightmap_uv2=false
+generate_lightmap_uv2_texel_size=0.2
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+force_disable_mesh_compression=false

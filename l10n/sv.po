@@ -1,10 +1,11 @@
 msgid ""
 msgstr ""
 "Language: sv\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 
-msgid "Axel's Emergency Vehicles"
-msgstr "Axels utryckningsfordon"
+msgid "Harbor Town Rollabout"
+msgstr "Full rulle i Sjöstaden"
 
 msgid "Emergency Vehicles"
 msgstr "Utryckningsfordon"
@@ -27,8 +28,6 @@ msgstr "Polisbil"
 msgid "Fire engine"
 msgstr "Brandbil"
 
-msgid "Volvo XC60 Police"
-msgstr "Volvo XC60 polisbil"
 
 msgid "Mission complete. Well done!"
 msgstr "Uppdrag klart. Bra jobbat!"
@@ -324,8 +323,11 @@ msgstr "Kör motorbåten"
 msgid "W / ↑ Throttle · A D / ← → Steer · S / ↓ Slow or reverse · H Horn · P Pause"
 msgstr "W / ↑ Gasa · A D / ← → Styr · S / ↓ Sakta in eller backa · H Tuta · P Paus"
 
-msgid "%d coins"
-msgstr "%d mynt"
+#, c-format
+msgid "%d coin"
+msgid_plural "%d coins"
+msgstr[0] "%d mynt"
+msgstr[1] "%d mynt"
 
 msgid "Well done, %s! Ready for another drive?"
 msgstr "Bra jobbat, %s! Vill du köra en runda till?"
@@ -402,8 +404,11 @@ msgstr "Lösgodis"
 msgid "%s · %d coins"
 msgstr "%s · %d mynt"
 
-msgid "You need %d more coins."
-msgstr "Du behöver %d mynt till."
+#, c-format
+msgid "You need %d more coin."
+msgid_plural "You need %d more coins."
+msgstr[0] "Du behöver %d mynt till."
+msgstr[1] "Du behöver %d mynt till."
 
 msgid "%s · Paid %d coins. Thank you!"
 msgstr "%s · Du betalade %d mynt. Tack!"
@@ -485,9 +490,6 @@ msgstr "Hämta en passagerare på torget och kör till småbåtshamnen."
 
 msgid "Collect the car with a smoking bonnet and take it to the workshop."
 msgstr "Hämta bilen som ryker från motorhuven och kör den till verkstaden."
-
-msgid "You need one more coin."
-msgstr "Du behöver ett mynt till."
 
 msgid "Complete a mission to earn coins."
 msgstr "Gör klart ett uppdrag för att tjäna mynt."
@@ -729,9 +731,6 @@ msgstr "Eleven sitter i taxin."
 msgid "Thanks! I can see my school!"
 msgstr "Tack! Jag ser min skola!"
 
-msgid "1 coin"
-msgstr "1 mynt"
-
 msgid "Board Lotten · F"
 msgstr "Gå ombord på Lotten · F"
 
@@ -812,3 +811,377 @@ msgstr "Gå tillbaka till glassbilen"
 
 msgid "Ice cream chime · H"
 msgstr "Spela glassmelodin · H"
+
+msgid "Grocery store"
+msgstr "Mataffär"
+
+msgid "Apple"
+msgstr "Äpple"
+
+msgid "Milk"
+msgstr "Mjölk"
+
+msgid "Get off tram · F"
+msgstr "Kliv av Tvärbanan · F"
+
+msgid "Wait for the tram"
+msgstr "Vänta på Tvärbanan"
+
+msgid "Board tram · F"
+msgstr "Kliv på Tvärbanan · F"
+
+msgid "Exit excavator · F"
+msgstr "Lämna grävmaskinen · F"
+
+msgid "Drive excavator · F"
+msgstr "Kör grävmaskinen · F"
+
+msgid "Arrows or WASD: drive and steer · Q/E: turn the cab · F: get out\nI/K: raise or lower the boom · Y/G: move the outer arm · O/L: tilt the bucket"
+msgstr "Pilar eller WASD: kör och styr · Q/E: snurra hytten · F: kliv ur\nI/K: höj eller sänk bommen · Y/G: rör den yttre armen · O/L: vinkla skopan"
+
+msgid "Walk or rest · Run again in %d s"
+msgstr "Gå eller vila · Du kan springa igen om %d s"
+
+msgid "W/S Walk · A/D Turn · Shift + W Run · F Enter · U Scooter"
+msgstr "W/S Gå · A/D Vänd · Skift + W Spring · F Kliv in · U Sparkcykel"
+
+msgid "PgUp Raise camera · PgDn Lower camera"
+msgstr "PgUp Höj kameran · PgDn Sänk kameran"
+
+msgid "Operate the excavator in the equipment yard."
+msgstr "Kör grävmaskinen på maskinplanen."
+
+msgid "Start excavating"
+msgstr "Börja gräva"
+
+msgid "Motorboat"
+msgstr "Motorbåt"
+
+msgid "J Off · N Next song"
+msgstr "J Av · N Nästa låt"
+
+msgid "Now playing: %s"
+msgstr "Nu spelas: %s"
+
+
+msgid "Farm tractor"
+msgstr "Traktor"
+
+msgid "Turn radio off · J"
+msgstr "Stäng av radion · J"
+
+msgid "Turn radio on · J"
+msgstr "Slå på radion · J"
+
+msgid "Next song · N"
+msgstr "Nästa låt · N"
+
+msgid "Ready to run again! Hold Shift and walk forward."
+msgstr "Nu kan du springa igen! Håll ner Skift och gå framåt."
+
+msgid "SUV"
+msgstr "SUV"
+
+msgid "Classic sports coupe"
+msgstr "Klassisk sportkupé"
+
+msgid "Classic sedan"
+msgstr "Klassisk sedan"
+
+msgid "Vintage compact"
+msgstr "Veteransmåbil"
+
+msgid "Electric sedan"
+msgstr "Elsedan"
+
+msgid "Police SUV"
+msgstr "Polis-SUV"
+
+msgid "Track sports car"
+msgstr "Banbil"
+
+msgid "Small convertible"
+msgstr "Liten cabriolet"
+
+msgid "Classic moped"
+msgstr "Klassisk moped"
+
+msgid "Wheel loader"
+msgstr "Hjullastare"
+
+msgid "Tracked excavator"
+msgstr "Bandgrävare"
+
+msgid "Tram"
+msgstr "Spårvagn"
+
+msgid "Click the pictures to choose your vehicle and driver."
+msgstr "Klicka på bilderna för att välja fordon och förare."
+
+msgid "★ %d points"
+msgstr "★ %d poäng"
+
+msgid "Take a job"
+msgstr "Ta ett uppdrag"
+
+msgid "★ All stars found!"
+msgstr "★ Alla stjärnor hittade!"
+
+#, c-format
+msgid "★ %d star left"
+msgid_plural "★ %d stars left"
+msgstr[0] "★ %d stjärna kvar"
+msgstr[1] "★ %d stjärnor kvar"
+
+msgid "Can you find my red shoe? I lost it farther along the pavement."
+msgstr "Kan du hitta min röda sko? Jag tappade den längre bort på trottoaren."
+
+msgid "My shoe! Now I won’t have to hop home. Thank you!"
+msgstr "Min sko! Nu slipper jag hoppa hem. Tack!"
+
+msgid "Find the red shoe on the pavement."
+msgstr "Hitta den röda skon på trottoaren."
+
+msgid "Bring the red shoe back to the neighbour."
+msgstr "Lämna tillbaka den röda skon till grannen."
+
+msgid "Can you find my cat? Look for white paws along this pavement."
+msgstr "Kan du hitta min katt? Leta efter vita tassar längs trottoaren."
+
+msgid "There you are, Socks! Thank you for bringing her home."
+msgstr "Där är du, Sockan! Tack för att du följde henne hem."
+
+msgid "Walk back to the neighbour with the cat."
+msgstr "Gå tillbaka till grannen tillsammans med katten."
+
+msgid "Find the cat with white paws."
+msgstr "Hitta katten med vita tassar."
+
+msgid "Collect seedlings at the square"
+msgstr "Hämta småplantor på torget"
+
+msgid "Deliver herbs to the clinic garden"
+msgstr "Lämna örter till vårdcentralens trädgård"
+
+msgid "Bring flowers to the marina"
+msgstr "Kör blommorna till småbåtshamnen"
+
+msgid "Pick up soup ingredients at the square"
+msgstr "Hämta ingredienser till soppan på torget"
+
+msgid "Serve lunch to the clinic staff"
+msgstr "Servera lunch till vårdcentralens personal"
+
+msgid "Serve soup to the boat crews"
+msgstr "Bjud båtbesättningarna på soppa"
+
+msgid "Back in a safe place."
+msgstr "Tillbaka på en säker plats."
+
+msgid "Stuck? Press R"
+msgstr "Fastnat? Tryck R"
+
+msgid "No clear spot yet. Try again in a moment."
+msgstr "Alla platser är upptagna. Försök igen om en stund."
+
+msgid "Take the car to the petrol station."
+msgstr "Kör bilen till bensinstationen."
+
+msgid "The car is on your flatbed. Follow the arrows to the petrol station for 20 coins."
+msgstr "Bilen står på flaket. Följ pilarna till bensinstationen för att få 20 mynt."
+
+msgid "My vehicle"
+msgstr "Mitt fordon"
+
+msgid "Flashing"
+msgstr "Blinkande"
+
+msgid "Steady"
+msgstr "Fast sken"
+
+msgid "Off"
+msgstr "Av"
+
+msgid "Ducks park free"
+msgstr "Ankor parkerar gratis"
+
+msgid "Hats on wheels only"
+msgstr "Endast hattar med hjul"
+
+msgid "Save a spot for a snail"
+msgstr "Spara en ruta åt snigeln"
+
+msgid "Park with a smile"
+msgstr "Parkera med ett leende"
+
+msgid "Bananas need a ticket"
+msgstr "Bananer behöver biljett"
+
+msgid "LANGUAGE_SELF_NAME"
+msgstr "Svenska"
+
+msgid "ICE CREAM  4\nHOT DOG  5"
+msgstr "GLASS  4\nKORV  5"
+
+msgid "FRUIT  &  VEG"
+msgstr "FRUKT  &  GRÖNT"
+
+msgid "CHECKOUT"
+msgstr "KASSA"
+
+msgid "WOOD-FIRED PIZZA"
+msgstr "VEDUGNSPIZZA"
+
+msgid "MARGHERITA  ·  8 COINS"
+msgstr "MARGHERITA  ·  8 MYNT"
+
+msgid "EAT IN  ·  TAKEAWAY"
+msgstr "SERVERING  ·  AVHÄMTNING"
+
+msgid "TAKEAWAY"
+msgstr "AVHÄMTNING"
+
+msgid "PICK AND MIX"
+msgstr "LÖSGODIS"
+
+msgid "Raspberry"
+msgstr "Hallon"
+
+msgid "Lemon"
+msgstr "Citron"
+
+msgid "Liquorice"
+msgstr "Lakrits"
+
+msgid "Vanilla"
+msgstr "Vanilj"
+
+msgid "Strawberry"
+msgstr "Jordgubb"
+
+msgid "Orange"
+msgstr "Apelsin"
+
+msgid "Grape"
+msgstr "Druva"
+
+msgid "No songs available in this language yet."
+msgstr "Det finns inga låtar på det här språket ännu."
+
+msgid "HARBOR FUEL"
+msgstr "SJÖMACKEN"
+
+msgid "Harbor Fuel  →"
+msgstr "Sjömacken  →"
+
+msgid "←  Harbor Fuel"
+msgstr "←  Sjömacken"
+
+msgid "Tow drop-off"
+msgstr "Bärgning · lämna här"
+
+msgid "Monster truck"
+msgstr "Monstertruck"
+
+msgid "A-tractor"
+msgstr "A-traktor"
+
+msgid "Classic cruiser"
+msgstr "Raggarbil"
+
+msgid "Taxi"
+msgstr "Taxi"
+
+msgid "Food truck"
+msgstr "Matbil"
+
+msgid "HARBOR TOWN SCHOOL"
+msgstr "SJÖSTADSSKOLAN"
+
+msgid "HARBOR TOWN GARAGE"
+msgstr "SJÖSTADENS BILVERKSTAD"
+
+msgid "THE SQUARE"
+msgstr "TORGET"
+
+msgid "HEALTH CENTRE"
+msgstr "VÅRDCENTRALEN"
+
+msgid "MARINA"
+msgstr "SMÅBÅTSHAMNEN"
+
+msgid "VÄSTRA TORGET"
+msgstr "VÄSTRA TORGET"
+
+msgid "VÄSTERÄNGEN"
+msgstr "VÄSTERÄNGEN"
+
+msgid "HARBOR TOWN"
+msgstr "SJÖSTADEN"
+
+msgid "Quit game"
+msgstr "Avsluta spelet"
+
+msgid "Quit game · F10"
+msgstr "Avsluta spelet · F10"
+
+msgid "Do you want to quit the game?"
+msgstr "Vill du avsluta spelet?"
+
+msgid "Yes"
+msgstr "Ja"
+
+msgid "No"
+msgstr "Nej"
+
+msgid "About"
+msgstr "Om"
+
+msgid "About the game"
+msgstr "Om spelet"
+
+msgid "Close"
+msgstr "Stäng"
+
+msgid "Version %s"
+msgstr "Version %s"
+
+msgid "Explore Harbor Town with Axel and Alma. Walk along the canal, take the tram or drive a tow truck to help a neighbour. You choose where to go next."
+msgstr "Upptäck Sjöstaden med Axel och Alma. Promenera längs kanalen, ta spårvagnen eller kör bärgningsbil och hjälp en granne. Du väljer själv vart du vill åka sedan."
+
+msgid "My name is Daniel Nylander. I made this game for my children, who have autism and a language disorder. I wanted them to have a town they could explore at their own pace. That is why you can choose a vehicle by its picture and read what people say in speech bubbles."
+msgstr "Jag heter Daniel Nylander. Jag gjorde spelet till mina barn som har autism och språkstörning. Jag ville ge dem en stad att upptäcka i sin egen takt. Därför kan man välja fordon genom att klicka på en bild och läsa vad människorna säger i pratbubblor."
+
+msgid "DISCO RINGS"
+msgstr "DISKOMUNKAR"
+
+msgid "Oops! One danced away!"
+msgstr "Hoppsan! En dansade iväg!"
+
+msgid "ROCKET ICE"
+msgstr "RAKETGLASS"
+
+msgid "3, 2, 1 ... brain freeze!"
+msgstr "3, 2, 1 ... hjärnfrys!"
+
+msgid "HOT DOG YOGA"
+msgstr "KORVYOGA"
+
+msgid "Breathe in. Ketchup out."
+msgstr "Andas in. Ketchup ut."
+
+#. Litres shown on a stationary fuel dispenser.
+msgid "0.00 L"
+msgstr "0,00 L"
+
+msgid "95    17.90"
+msgstr "95    17,90"
+
+msgid "98    18.90"
+msgstr "98    18,90"
+
+msgid "D     17.50"
+msgstr "D     17,50"
+
+msgid "Allow crashes"
+msgstr "Tillåt krockar"

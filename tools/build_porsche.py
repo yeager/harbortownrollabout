@@ -445,8 +445,14 @@ def details(front_boundary):
                  [(size,.000),(size*.83,-.012),(size*.31,-.016)]],alloy)
             grid("Headlight lens projector" if u<0 else "Auxiliary projector",
                  [lens_ring(u,v,r,r*.68,h) for r,h in [(size*.70,-.006),(.001,.001)]],glass_dark)
-        for u,v in [(-.62,-.25),(.28,-.66),(-.32,.62),(.65,.22)]:
-            grid("Daytime LED element",[lens_ring(u,v,.105,.048,-.001),lens_ring(u,v,.001,.001,.001)],lamp)
+        # Four short light guides sit in individual dark carriers under the cover.
+        for u,v in [(-.55,-.42),(.37,-.53),(-.42,.48),(.52,.49)]:
+            grid("Light guide bezel",[lens_ring(u,v,.162,.085,-.005),
+                 lens_ring(u,v,.143,.065,.001)],glass_dark)
+            grid("Daytime LED element",[lens_ring(u,v,.138,.060,.002),
+                 lens_ring(u,v,.111,.040,.005),lens_ring(u,v,.001,.001,.006)],lamp)
+        grid("Lens perimeter trim",[lens_ring(0,0,.978,.978,.0038),
+             lens_ring(0,0,.952,.952,.0042)],glass_dark)
         optical_glass = bpy.data.materials.get("Clear headlight glazing")
         if optical_glass is None:
             optical_glass = material("Clear headlight glazing",(.63,.77,.85),.09,.12)

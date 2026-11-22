@@ -33,7 +33,7 @@ gold = material("Gold moquette yarn", (.72,.47,.10), .0,.88)
 light = material("Warm ceiling diffuser", (.97,.87,.68), .0,.45,1.5)
 yellow = material("Grab rails", (.92,.58,.08), .25,.35)
 
-def section(name, start, end, levels, mat):
+def section(name, start, end, levels, mat, curved=False):
     # Each height has its own width. Aligning seams keeps the flanks flush.
     verts = []
     for y in (start,end):
@@ -46,6 +46,10 @@ def section(name, start, end, levels, mat):
     mesh.from_pydata(verts, [], faces)
     mesh.materials.append(mat)
     mesh.update()
+    if curved:
+        # Only blend the curved extrusion. The two end frames remain square.
+        for poly in list(mesh.polygons)[2:]:
+            poly.use_smooth=True
     obj = bpy.data.objects.new(name,mesh)
     bpy.context.collection.objects.link(obj)
     obj.parent = root
@@ -89,18 +93,22 @@ def seat_at(x, y, facing):
         for col in range(5):
             u = -.13+col*.064+rng.uniform(-.016,.016)
             v = -.21+row*.057+rng.uniform(-.015,.015)
-            # Four-point lozenge on the gently reclining fabric surface.
-            dx,dy = rng.choice([(.009,.007),(-.006,.009),(.008,-.002)])
-            offsets = [(u-dx,v-dy),(u+dx,v+dy),(u+dx+.004,v+dy-.004),(u-dx+.004,v-dy-.004)]
-            patch = []
-            for px,pz in offsets:
-                py = facing*.043
-                patch.append((x+px, back_y+facing*.014 + py*math.cos(tilt)-pz*math.sin(tilt),
-                              1.19 + py*math.sin(tilt)+pz*math.cos(tilt)))
+            # Small angular woven motifs, as on the blue Stockholm seat fabric.
+            motif = rng.choice([
+                [(-.010,-.006),(.002,.010),(.010,-.005),(-.010,-.006)],
+                [(-.010,.006),(0,-.004),(.010,.008)],
+                [(-.009,-.007),(.008,.008)],
+            ])
             yarn = rng.choice((teal,violet,teal,violet,rose,gold))
-            pattern_patches[yarn].append(patch)
-            if row < 7:
-                pattern_patches[yarn].append([(x+px,y+pz,.991) for px,pz in offsets])
+            for (ax,az),(bx,bz) in zip(motif,motif[1:]):
+                normal = Vector((az-bz,bx-ax)).normalized()*.0018
+                offsets = [(u+px+sign*normal.x,v+pz+sign*normal.y)
+                           for px,pz,sign in [(ax,az,1),(ax,az,-1),(bx,bz,-1),(bx,bz,1)]]
+                patch = [(x+px,back_y+facing*.014+facing*.043*math.cos(tilt)-pz*math.sin(tilt),
+                          1.19+facing*.043*math.sin(tilt)+pz*math.cos(tilt)) for px,pz in offsets]
+                pattern_patches[yarn].append(patch[::-1] if facing>0 else patch)
+                if row < 7:
+                    pattern_patches[yarn].append([(x+px,y+pz,.991) for px,pz in offsets])
 
 def add_yarn(finish, patches):
     verts = [vertex for patch in patches for vertex in patch]
@@ -125,15 +133,36 @@ for end in (-1,1):
         cube("Gangway side seal",(side*.828,end*2.18,1.34),(.068,.08,1.69),black,.022,root)
     cube("Gangway lintel",(0,end*2.15,2.195),(1.86,.10,.085),black,.024,root)
     cube("Gangway threshold",(0,end*2.27,.48),(.93,.31,.043),floor_mat,.014,root)
-band("Shoulder fascia", -2.20,2.20,2.27,2.55,1.18,1.13,silver)
-band("Rounded roof shoulders", -2.20,2.20,2.55,2.67,1.13,.98,silver)
+# A shallow barrel roof rolls into the upper waist. The wall is drawn as
+# an extrusion so it follows the doorway cut-outs and preserves the aisle.
+roof_profile=[(-1.182,2.27),(1.182,2.27),(1.177,2.36),(1.167,2.45),
+             (1.151,2.52),(1.126,2.575),(1.087,2.62),(1.036,2.65),
+             (.964,2.673),(.79,2.690),(.48,2.700),(0,2.705)]
+roof_profile += [(-x,z) for x,z in reversed(roof_profile[2:-1])]
+section("Rolled aluminium roof and cant rail",-2.20,2.20,roof_profile,silver,True)
+# The blue door portal rolls over the cant rail and stays fixed when the
+# leaves slide back. Its profile is a paint layer on the same curved shell.
+for side in [-1,1]:
+    cap=[(side*(x+.004),z+.002) for x,z in roof_profile[1:11]]
+    bottom=[(side*x,z) for x,z in reversed(roof_profile[1:11])]
+    skin=cap+bottom
+    section("Door portal crown",-.65,.39,skin if side>0 else list(reversed(skin)),blue,True)
+    for edge in [-.683,.423]:
+        cube("Recessed portal reveal",(side*1.194,edge,1.40),(.038,.052,1.79),frame,.017,root)
+    cube("Recessed roof drip edge",(side*1.182,0,2.286),(.025,4.36,.026),frame,.011,root)
 for start,end in [(-2.20,-.65),(.39,2.20)]:
-    band("Inset skirt",start,end,.28,.48,1.08,1.17,black)
     mid = (start+end)*.5
     for side in [-1,1]:
-        outer = sorted([side*1.20,side*1.12])
-        section("Side panel",start,end,[(outer[0],.65),(outer[1],.65),(outer[1],1.19),(outer[0],1.19)],silver)
-        section("Waist stripe",start,end,[(outer[0],.48),(outer[1],.48),(outer[1],.65),(outer[0],.65)],blue)
+        # Tucked-under sill grows into the broad, nearly vertical glazing band.
+        for name,levels,finish in [
+            ("Graphite rub rail",[(1.056,.287),(1.077,.31),(1.104,.36),(1.138,.42),(1.162,.474)],black),
+            ("Blue lower valance",[(1.162,.474),(1.177,.51),(1.189,.562),(1.195,.632),(1.196,.651)],blue),
+            ("Pearl side pressing",[(1.196,.651),(1.201,.76),(1.204,.91),(1.200,1.06),(1.19,1.19)],silver)
+        ]:
+            perimeter=[(1.12 if levels[0][0]>1.12 else 1.02,levels[0][1]),*levels,
+                       (1.12 if levels[0][0]>1.12 else 1.02,levels[-1][1])]
+            signed=[(x*side,z) for x,z in perimeter]
+            section(name,start,end,signed if side>0 else list(reversed(signed)),finish,True)
         cube("Seat plinth and wheel cover",(side*.855,mid,.536),(.53,end-start-.04,.10),floor_mat,.028,root)
         cube("Ivory window ledge",(side*1.09,mid,1.18),(.10,end-start,.066),cream,.024,root)
         cube("Ivory lower wall",(side*1.105,mid,.85),(.037,end-start,.67),cream,.015,root)

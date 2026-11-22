@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://tpdts2olmg44"
+path="res://.godot/imported/Korv med bröd och hatt (SV).mp3-add897f020724f8f0693609f82c24cd7.mp3str"
+
+[deps]
+
+source_file="res://audio/radio/Korv med bröd och hatt (SV).mp3"
+dest_files=["res://.godot/imported/Korv med bröd och hatt (SV).mp3-add897f020724f8f0693609f82c24cd7.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

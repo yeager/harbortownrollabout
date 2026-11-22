@@ -1,0 +1,309 @@
+diff --git a/doc/classes/CompositorEffect.xml b/doc/classes/CompositorEffect.xml
+index a2b5f0f..fcb6bff 100644
+--- a/doc/classes/CompositorEffect.xml
++++ b/doc/classes/CompositorEffect.xml
+@@ -89,7 +89,10 @@
+ 		<constant name="EFFECT_CALLBACK_TYPE_POST_TRANSPARENT" value="4" enum="EffectCallbackType">
+ 			The callback is called after our transparent rendering pass, but before any built-in post-processing effects and output to our render target.
+ 		</constant>
+-		<constant name="EFFECT_CALLBACK_TYPE_MAX" value="5" enum="EffectCallbackType">
++		<constant name="EFFECT_CALLBACK_TYPE_UPSCALE" value="5" enum="EffectCallbackType">
++			Runs after transparency and before post-processing when the viewport uses custom scaling. Call [method RenderSceneBuffersRD.commit_custom_upscale] after scheduling the output for all views.
++		</constant>
++		<constant name="EFFECT_CALLBACK_TYPE_MAX" value="6" enum="EffectCallbackType">
+ 			Represents the size of the [enum EffectCallbackType] enum.
+ 		</constant>
+ 	</constants>
+diff --git a/doc/classes/RenderSceneBuffersRD.xml b/doc/classes/RenderSceneBuffersRD.xml
+index 1d6ebc8..fb28722 100644
+--- a/doc/classes/RenderSceneBuffersRD.xml
++++ b/doc/classes/RenderSceneBuffersRD.xml
+@@ -12,6 +12,12 @@
+ 	<tutorials>
+ 	</tutorials>
+ 	<methods>
++		<method name="commit_custom_upscale">
++			<return type="void" />
++			<description>
++				Call from the custom upscale callback after scheduling a write to every view of the target-sized HDR texture obtained with [code]get_texture(&amp;"render_buffers", &amp;"color_upscaled")[/code]. Forward+ then uses this texture for post-processing in the current frame. Omit this call if the upscaler cannot produce a frame.
++			</description>
++		</method>
+ 		<method name="clear_context">
+ 			<return type="void" />
+ 			<param index="0" name="context" type="StringName" />
+diff --git a/doc/classes/RenderingServer.xml b/doc/classes/RenderingServer.xml
+index f373a64..8aec6a6 100644
+--- a/doc/classes/RenderingServer.xml
++++ b/doc/classes/RenderingServer.xml
+@@ -5435,7 +5435,10 @@
+ 			Use nearest-neighbor filtering for the viewport's 3D buffer. This looks crisper than [constant VIEWPORT_SCALING_3D_MODE_BILINEAR] and has no additional rendering cost. The amount of scaling can be set using [member Viewport.scaling_3d_scale]. Values greater than [code]1.0[/code] are not supported and bilinear downsampling will be used instead. A value of [code]1.0[/code] disables scaling.
+ 			[b]Note:[/b] When using the [b]Nearest[/b] scaling mode, to avoid uneven pixel scaling, it's highly recommended to use a value equal to an integer divisor with a dividend of [code]1[/code]. For example, it's best to use a scale of [code]0.5[/code] (1/2), [code]0.3333[/code] (1/3), [code]0.25[/code] (1/4), [code]0.2[/code] (1/5), and so on.
+ 		</constant>
+-		<constant name="VIEWPORT_SCALING_3D_MODE_MAX" value="6" enum="ViewportScaling3DMode">
++		<constant name="VIEWPORT_SCALING_3D_MODE_CUSTOM" value="6" enum="ViewportScaling3DMode">
++			Uses a custom compositor upscaler in Forward+.
++		</constant>
++		<constant name="VIEWPORT_SCALING_3D_MODE_MAX" value="7" enum="ViewportScaling3DMode">
+ 			Represents the size of the [enum ViewportScaling3DMode] enum.
+ 		</constant>
+ 		<constant name="VIEWPORT_UPDATE_DISABLED" value="0" enum="ViewportUpdateMode">
+diff --git a/doc/classes/Viewport.xml b/doc/classes/Viewport.xml
+index bafca16..aa4b7bf 100644
+--- a/doc/classes/Viewport.xml
++++ b/doc/classes/Viewport.xml
+@@ -579,7 +579,10 @@
+ 			Use nearest-neighbor filtering for the viewport's 3D buffer. This looks crisper than [constant SCALING_3D_MODE_BILINEAR] and has no additional rendering cost. The amount of scaling can be set using [member scaling_3d_scale]. Values greater than [code]1.0[/code] are not supported and bilinear downsampling will be used instead. A value of [code]1.0[/code] disables scaling.
+ 			[b]Note:[/b] When using the [b]Nearest[/b] scaling mode, to avoid uneven pixel scaling, it's highly recommended to use a value equal to an integer divisor with a dividend of [code]1[/code]. For example, it's best to use a scale of [code]0.5[/code] (1/2), [code]0.3333[/code] (1/3), [code]0.25[/code] (1/4), [code]0.2[/code] (1/5), and so on.
+ 		</constant>
+-		<constant name="SCALING_3D_MODE_MAX" value="6" enum="Scaling3DMode">
++		<constant name="SCALING_3D_MODE_CUSTOM" value="6" enum="Scaling3DMode">
++			Uses a custom compositor upscaler in Forward+.
++		</constant>
++		<constant name="SCALING_3D_MODE_MAX" value="7" enum="Scaling3DMode">
+ 			Represents the size of the [enum Scaling3DMode] enum.
+ 		</constant>
+ 		<constant name="MSAA_DISABLED" value="0" enum="MSAA">
+diff --git a/scene/main/viewport.cpp b/scene/main/viewport.cpp
+index 12c75ec..56984fc 100644
+--- a/scene/main/viewport.cpp
++++ b/scene/main/viewport.cpp
+@@ -5420,7 +5420,7 @@ void Viewport::_bind_methods() {
+ 
+ #ifndef _3D_DISABLED
+ 	ADD_GROUP("Scaling 3D", "");
+-	ADD_PROPERTY(PropertyInfo(Variant::INT, "scaling_3d_mode", PROPERTY_HINT_ENUM, "Nearest (Fastest):5,Bilinear (Fastest):0,FSR 1.0 (Fast):1,FSR 2.2 (Slow):2,MetalFX (Spatial - Fast):3,MetalFX (Temporal - Slow):4"), "set_scaling_3d_mode", "get_scaling_3d_mode");
++	ADD_PROPERTY(PropertyInfo(Variant::INT, "scaling_3d_mode", PROPERTY_HINT_ENUM, "Nearest (Fastest):5,Bilinear (Fastest):0,FSR 1.0 (Fast):1,FSR 2.2 (Slow):2,MetalFX (Spatial - Fast):3,MetalFX (Temporal - Slow):4,Custom:6"), "set_scaling_3d_mode", "get_scaling_3d_mode");
+ 	ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "scaling_3d_scale", PROPERTY_HINT_RANGE, "0.1,2.0,0.0001"), "set_scaling_3d_scale", "get_scaling_3d_scale");
+ 	ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "texture_mipmap_bias", PROPERTY_HINT_RANGE, "-2,2,0.001"), "set_texture_mipmap_bias", "get_texture_mipmap_bias");
+ 	ADD_PROPERTY(PropertyInfo(Variant::INT, "anisotropic_filtering_level", PROPERTY_HINT_ENUM, String::utf8("Disabled (Fastest),2× (Faster),4× (Fast),8× (Average),16x (Slow)")), "set_anisotropic_filtering_level", "get_anisotropic_filtering_level");
+@@ -5486,6 +5486,7 @@ void Viewport::_bind_methods() {
+ 	BIND_ENUM_CONSTANT(SCALING_3D_MODE_METALFX_SPATIAL);
+ 	BIND_ENUM_CONSTANT(SCALING_3D_MODE_METALFX_TEMPORAL);
+ 	BIND_ENUM_CONSTANT(SCALING_3D_MODE_NEAREST);
++	BIND_ENUM_CONSTANT(SCALING_3D_MODE_CUSTOM);
+ 	BIND_ENUM_CONSTANT(SCALING_3D_MODE_MAX);
+ 
+ 	BIND_ENUM_CONSTANT(MSAA_DISABLED);
+diff --git a/scene/main/viewport.h b/scene/main/viewport.h
+index 46d432d..3c69f76 100644
+--- a/scene/main/viewport.h
++++ b/scene/main/viewport.h
+@@ -106,6 +106,7 @@ public:
+ 		SCALING_3D_MODE_METALFX_SPATIAL,
+ 		SCALING_3D_MODE_METALFX_TEMPORAL,
+ 		SCALING_3D_MODE_NEAREST,
++		SCALING_3D_MODE_CUSTOM,
+ 		SCALING_3D_MODE_MAX
+ 	};
+ 
+diff --git a/scene/resources/compositor.cpp b/scene/resources/compositor.cpp
+index c189064..0af97cf 100644
+--- a/scene/resources/compositor.cpp
++++ b/scene/resources/compositor.cpp
+@@ -43,7 +43,7 @@ void CompositorEffect::_bind_methods() {
+ 
+ 	ClassDB::bind_method(D_METHOD("set_effect_callback_type", "effect_callback_type"), &CompositorEffect::set_effect_callback_type);
+ 	ClassDB::bind_method(D_METHOD("get_effect_callback_type"), &CompositorEffect::get_effect_callback_type);
+-	ADD_PROPERTY(PropertyInfo(Variant::INT, "effect_callback_type", PROPERTY_HINT_ENUM, "Pre Opaque,Post Opaque,Post Sky,Pre Transparent,Post Transparent"), "set_effect_callback_type", "get_effect_callback_type");
++	ADD_PROPERTY(PropertyInfo(Variant::INT, "effect_callback_type", PROPERTY_HINT_ENUM, "Pre Opaque,Post Opaque,Post Sky,Pre Transparent,Post Transparent,Upscale"), "set_effect_callback_type", "get_effect_callback_type");
+ 
+ 	ClassDB::bind_method(D_METHOD("set_access_resolved_color", "enable"), &CompositorEffect::set_access_resolved_color);
+ 	ClassDB::bind_method(D_METHOD("get_access_resolved_color"), &CompositorEffect::get_access_resolved_color);
+@@ -70,6 +70,7 @@ void CompositorEffect::_bind_methods() {
+ 	BIND_ENUM_CONSTANT(EFFECT_CALLBACK_TYPE_POST_SKY)
+ 	BIND_ENUM_CONSTANT(EFFECT_CALLBACK_TYPE_PRE_TRANSPARENT)
+ 	BIND_ENUM_CONSTANT(EFFECT_CALLBACK_TYPE_POST_TRANSPARENT)
++	BIND_ENUM_CONSTANT(EFFECT_CALLBACK_TYPE_UPSCALE)
+ 	BIND_ENUM_CONSTANT(EFFECT_CALLBACK_TYPE_MAX)
+ 
+ 	GDVIRTUAL_BIND(_render_callback, "effect_callback_type", "render_data");
+diff --git a/scene/resources/compositor.h b/scene/resources/compositor.h
+index 648be5a..14bc053 100644
+--- a/scene/resources/compositor.h
++++ b/scene/resources/compositor.h
+@@ -46,6 +46,7 @@ public:
+ 		EFFECT_CALLBACK_TYPE_POST_SKY,
+ 		EFFECT_CALLBACK_TYPE_PRE_TRANSPARENT,
+ 		EFFECT_CALLBACK_TYPE_POST_TRANSPARENT,
++		EFFECT_CALLBACK_TYPE_UPSCALE,
+ 		EFFECT_CALLBACK_TYPE_MAX
+ 	};
+ 
+diff --git a/servers/rendering/renderer_rd/forward_clustered/render_forward_clustered.cpp b/servers/rendering/renderer_rd/forward_clustered/render_forward_clustered.cpp
+index d8a0620..b419994 100644
+--- a/servers/rendering/renderer_rd/forward_clustered/render_forward_clustered.cpp
++++ b/servers/rendering/renderer_rd/forward_clustered/render_forward_clustered.cpp
+@@ -1863,9 +1863,15 @@ void RenderForwardClustered::_render_scene(RenderDataRD *p_render_data, const Co
+ 		SCALE_NONE,
+ 		SCALE_FSR2,
+ 		SCALE_MFX,
++		SCALE_CUSTOM,
+ 	} scale_type = SCALE_NONE;
+ 
+ 	switch (rb->get_scaling_3d_mode()) {
++		case RSE::VIEWPORT_SCALING_3D_MODE_CUSTOM:
++			if (_has_compositor_effect(RSE::COMPOSITOR_EFFECT_CALLBACK_TYPE_UPSCALE, p_render_data)) {
++				scale_type = SCALE_CUSTOM;
++			}
++			break;
+ 		case RSE::VIEWPORT_SCALING_3D_MODE_FSR2:
+ 			scale_type = SCALE_FSR2;
+ 			break;
+@@ -1880,6 +1886,7 @@ void RenderForwardClustered::_render_scene(RenderDataRD *p_render_data, const Co
+ 			break;
+ 	}
+ 
++	rb->reset_custom_upscale();
+ 	bool using_upscaling = scale_type != SCALE_NONE;
+ 
+ 	// check if we need motion vectors
+@@ -2563,7 +2570,9 @@ void RenderForwardClustered::_render_scene(RenderDataRD *p_render_data, const Co
+ 	}
+ 
+ 	if (rb_data.is_valid() && (using_upscaling || using_taa)) {
+-		if (scale_type == SCALE_FSR2) {
++		if (scale_type == SCALE_CUSTOM) {
++			_process_compositor_effects(RSE::COMPOSITOR_EFFECT_CALLBACK_TYPE_UPSCALE, p_render_data);
++		} else if (scale_type == SCALE_FSR2) {
+ 			rb_data->ensure_fsr2(fsr2_effect);
+ 
+ 			RID exposure;
+diff --git a/servers/rendering/renderer_rd/renderer_scene_render_rd.cpp b/servers/rendering/renderer_rd/renderer_scene_render_rd.cpp
+index 38540f4..d3110c2 100644
+--- a/servers/rendering/renderer_rd/renderer_scene_render_rd.cpp
++++ b/servers/rendering/renderer_rd/renderer_scene_render_rd.cpp
+@@ -470,7 +470,7 @@ void RendererSceneRenderRD::_render_buffers_post_process_and_tonemap(const Rende
+ 	bool can_use_storage = _render_buffers_can_be_storage();
+ 
+ 	RSE::ViewportScaling3DMode scale_mode = rb->get_scaling_3d_mode();
+-	bool use_upscaled_texture = rb->has_upscaled_texture() && (scale_mode == RSE::VIEWPORT_SCALING_3D_MODE_FSR2 || scale_mode == RSE::VIEWPORT_SCALING_3D_MODE_METALFX_TEMPORAL);
++	bool use_upscaled_texture = rb->has_upscaled_texture() && (scale_mode == RSE::VIEWPORT_SCALING_3D_MODE_FSR2 || scale_mode == RSE::VIEWPORT_SCALING_3D_MODE_METALFX_TEMPORAL || (scale_mode == RSE::VIEWPORT_SCALING_3D_MODE_CUSTOM && rb->is_custom_upscale_ready()));
+ 	SpatialUpscaler *spatial_upscaler = nullptr;
+ 	if (can_use_effects) {
+ 		if (scale_mode == RSE::VIEWPORT_SCALING_3D_MODE_FSR) {
+diff --git a/servers/rendering/renderer_rd/storage_rd/render_scene_buffers_rd.cpp b/servers/rendering/renderer_rd/storage_rd/render_scene_buffers_rd.cpp
+index 3315308..a75e2b9 100644
+--- a/servers/rendering/renderer_rd/storage_rd/render_scene_buffers_rd.cpp
++++ b/servers/rendering/renderer_rd/storage_rd/render_scene_buffers_rd.cpp
+@@ -49,6 +49,7 @@ RenderSceneBuffersRD::~RenderSceneBuffersRD() {
+ }
+ 
+ void RenderSceneBuffersRD::_bind_methods() {
++	ClassDB::bind_method(D_METHOD("commit_custom_upscale"), &RenderSceneBuffersRD::commit_custom_upscale);
+ 	ClassDB::bind_method(D_METHOD("has_texture", "context", "name"), &RenderSceneBuffersRD::has_texture);
+ 	ClassDB::bind_method(D_METHOD("create_texture", "context", "name", "data_format", "usage_bits", "texture_samples", "size", "layers", "mipmaps", "unique", "discardable"), &RenderSceneBuffersRD::create_texture);
+ 	ClassDB::bind_method(D_METHOD("create_texture_from_format", "context", "name", "format", "view", "unique"), &RenderSceneBuffersRD::_create_texture_from_format);
+diff --git a/servers/rendering/renderer_rd/storage_rd/render_scene_buffers_rd.h b/servers/rendering/renderer_rd/storage_rd/render_scene_buffers_rd.h
+index 48766aa..ff7cd51 100644
+--- a/servers/rendering/renderer_rd/storage_rd/render_scene_buffers_rd.h
++++ b/servers/rendering/renderer_rd/storage_rd/render_scene_buffers_rd.h
+@@ -182,6 +182,7 @@ private:
+ 	void update_samplers();
+ 
+ protected:
++	bool custom_upscale_ready = false;
+ 	static void _bind_methods();
+ 
+ public:
+@@ -308,6 +309,9 @@ public:
+ 
+ 	// Upscaled.
+ 	void ensure_upscaled();
++	void reset_custom_upscale() { custom_upscale_ready = false; }
++	void commit_custom_upscale() { custom_upscale_ready = true; }
++	bool is_custom_upscale_ready() const { return custom_upscale_ready; }
+ 
+ 	_FORCE_INLINE_ bool has_upscaled_texture() const {
+ 		return has_texture(RB_SCOPE_BUFFERS, RB_TEX_COLOR_UPSCALED);
+diff --git a/servers/rendering/renderer_viewport.cpp b/servers/rendering/renderer_viewport.cpp
+index 6037491..ba6efbd 100644
+--- a/servers/rendering/renderer_viewport.cpp
++++ b/servers/rendering/renderer_viewport.cpp
+@@ -159,7 +159,7 @@ void RendererViewport::_configure_3d_render_buffers(Viewport *p_viewport) {
+ 				WARN_PRINT_ONCE("MetalFX and FSR upscaling are not supported in the Compatibility renderer. Falling back to bilinear scaling.");
+ 			}
+ 
+-			if ((scaling_3d_mode == RSE::VIEWPORT_SCALING_3D_MODE_FSR || scaling_3d_mode == RSE::VIEWPORT_SCALING_3D_MODE_FSR2 || scaling_3d_mode == RSE::VIEWPORT_SCALING_3D_MODE_METALFX_TEMPORAL) && OS::get_singleton()->get_current_rendering_method() == "mobile") {
++			if ((scaling_3d_mode == RSE::VIEWPORT_SCALING_3D_MODE_FSR || scaling_3d_mode == RSE::VIEWPORT_SCALING_3D_MODE_FSR2 || scaling_3d_mode == RSE::VIEWPORT_SCALING_3D_MODE_METALFX_TEMPORAL || scaling_3d_mode == RSE::VIEWPORT_SCALING_3D_MODE_CUSTOM) && OS::get_singleton()->get_current_rendering_method() == "mobile") {
+ 				scaling_3d_mode = RSE::VIEWPORT_SCALING_3D_MODE_BILINEAR;
+ 				scaling_type = RSE::scaling_3d_mode_type(scaling_3d_mode);
+ 				WARN_PRINT_ONCE("MetalFX temporal and FSR upscaling are not supported in the Mobile renderer. Falling back to bilinear scaling.");
+@@ -252,6 +252,7 @@ void RendererViewport::_configure_3d_render_buffers(Viewport *p_viewport) {
+ 				case RSE::VIEWPORT_SCALING_3D_MODE_METALFX_SPATIAL:
+ 				case RSE::VIEWPORT_SCALING_3D_MODE_METALFX_TEMPORAL:
+ 				case RSE::VIEWPORT_SCALING_3D_MODE_FSR:
++				case RSE::VIEWPORT_SCALING_3D_MODE_CUSTOM:
+ 				case RSE::VIEWPORT_SCALING_3D_MODE_FSR2:
+ 					target_width = p_viewport->size.width;
+ 					target_height = p_viewport->size.height;
+diff --git a/servers/rendering/rendering_server.cpp b/servers/rendering/rendering_server.cpp
+index 319e83c..a14ac3d 100644
+--- a/servers/rendering/rendering_server.cpp
++++ b/servers/rendering/rendering_server.cpp
+@@ -2934,6 +2934,7 @@ void RenderingServer::_bind_methods() {
+ 	BIND_ENUM_CONSTANT(RSE::VIEWPORT_SCALING_3D_MODE_METALFX_SPATIAL);
+ 	BIND_ENUM_CONSTANT(RSE::VIEWPORT_SCALING_3D_MODE_METALFX_TEMPORAL);
+ 	BIND_ENUM_CONSTANT(RSE::VIEWPORT_SCALING_3D_MODE_NEAREST);
++	BIND_ENUM_CONSTANT(RSE::VIEWPORT_SCALING_3D_MODE_CUSTOM);
+ 	BIND_ENUM_CONSTANT(RSE::VIEWPORT_SCALING_3D_MODE_MAX);
+ 
+ 	BIND_ENUM_CONSTANT(RSE::VIEWPORT_UPDATE_DISABLED);
+@@ -3063,6 +3064,7 @@ void RenderingServer::_bind_methods() {
+ 	BIND_ENUM_CONSTANT(RSE::COMPOSITOR_EFFECT_CALLBACK_TYPE_POST_SKY);
+ 	BIND_ENUM_CONSTANT(RSE::COMPOSITOR_EFFECT_CALLBACK_TYPE_PRE_TRANSPARENT);
+ 	BIND_ENUM_CONSTANT(RSE::COMPOSITOR_EFFECT_CALLBACK_TYPE_POST_TRANSPARENT);
++	BIND_ENUM_CONSTANT(RSE::COMPOSITOR_EFFECT_CALLBACK_TYPE_UPSCALE);
+ 	BIND_ENUM_CONSTANT(RSE::COMPOSITOR_EFFECT_CALLBACK_TYPE_ANY);
+ 
+ 	/* COMPOSITOR */
+@@ -3782,7 +3784,7 @@ void RenderingServer::init() {
+ 			mode_hints = String(",").join(mode_hints_arr);
+ 
+ 			mode_hints_arr.push_back("MetalFX (Spatial - Fast):3");
+-			mode_hints_arr.push_back("MetalFX (Temporal - Slow):4");
++			mode_hints_arr.push_back("MetalFX (Temporal - Slow):4,Custom:6");
+ 			mode_hints_metal = String(",").join(mode_hints_arr);
+ 		}
+ 
+diff --git a/servers/rendering/rendering_server_enums.h b/servers/rendering/rendering_server_enums.h
+index eaa833a..0063cae 100644
+--- a/servers/rendering/rendering_server_enums.h
++++ b/servers/rendering/rendering_server_enums.h
+@@ -474,6 +474,7 @@ enum ViewportScaling3DMode {
+ 	VIEWPORT_SCALING_3D_MODE_METALFX_SPATIAL,
+ 	VIEWPORT_SCALING_3D_MODE_METALFX_TEMPORAL,
+ 	VIEWPORT_SCALING_3D_MODE_NEAREST,
++	VIEWPORT_SCALING_3D_MODE_CUSTOM,
+ 	VIEWPORT_SCALING_3D_MODE_MAX,
+ 	VIEWPORT_SCALING_3D_MODE_OFF = 255, // for internal use only
+ };
+@@ -488,7 +489,7 @@ enum ViewportScaling3DType {
+ inline ViewportScaling3DType scaling_3d_mode_type(ViewportScaling3DMode p_mode) {
+ 	if (p_mode == VIEWPORT_SCALING_3D_MODE_NEAREST || p_mode == VIEWPORT_SCALING_3D_MODE_BILINEAR || p_mode == VIEWPORT_SCALING_3D_MODE_FSR || p_mode == VIEWPORT_SCALING_3D_MODE_METALFX_SPATIAL) {
+ 		return VIEWPORT_SCALING_3D_TYPE_SPATIAL;
+-	} else if (p_mode == VIEWPORT_SCALING_3D_MODE_FSR2 || p_mode == VIEWPORT_SCALING_3D_MODE_METALFX_TEMPORAL) {
++	} else if (p_mode == VIEWPORT_SCALING_3D_MODE_FSR2 || p_mode == VIEWPORT_SCALING_3D_MODE_METALFX_TEMPORAL || p_mode == VIEWPORT_SCALING_3D_MODE_CUSTOM) {
+ 		return VIEWPORT_SCALING_3D_TYPE_TEMPORAL;
+ 	}
+ 	return VIEWPORT_SCALING_3D_TYPE_NONE;
+@@ -645,6 +646,7 @@ enum CompositorEffectCallbackType {
+ 	COMPOSITOR_EFFECT_CALLBACK_TYPE_POST_SKY,
+ 	COMPOSITOR_EFFECT_CALLBACK_TYPE_PRE_TRANSPARENT,
+ 	COMPOSITOR_EFFECT_CALLBACK_TYPE_POST_TRANSPARENT,
++	COMPOSITOR_EFFECT_CALLBACK_TYPE_UPSCALE,
+ 	COMPOSITOR_EFFECT_CALLBACK_TYPE_MAX,
+ 	COMPOSITOR_EFFECT_CALLBACK_TYPE_ANY = -1,
+ };
+diff --git a/servers/rendering/storage/render_scene_buffers.cpp b/servers/rendering/storage/render_scene_buffers.cpp
+index 3736709..0a5a3af 100644
+--- a/servers/rendering/storage/render_scene_buffers.cpp
++++ b/servers/rendering/storage/render_scene_buffers.cpp
+@@ -52,7 +52,7 @@ void RenderSceneBuffersConfiguration::_bind_methods() {
+ 
+ 	ClassDB::bind_method(D_METHOD("get_scaling_3d_mode"), &RenderSceneBuffersConfiguration::get_scaling_3d_mode);
+ 	ClassDB::bind_method(D_METHOD("set_scaling_3d_mode", "scaling_3d_mode"), &RenderSceneBuffersConfiguration::set_scaling_3d_mode);
+-	ADD_PROPERTY(PropertyInfo(Variant::INT, "scaling_3d_mode", PROPERTY_HINT_ENUM, "Nearest (Fastest):5,Bilinear (Fastest):0,FSR 1.0 (Fast):1,FSR 2.2 (Slow):2,MetalFX (Spatial - Fast):3,MetalFX (Temporal - Slow):4"), "set_scaling_3d_mode", "get_scaling_3d_mode"); // TODO VIEWPORT_SCALING_3D_MODE_OFF is possible here too, but we can't specify an enum string for it.
++	ADD_PROPERTY(PropertyInfo(Variant::INT, "scaling_3d_mode", PROPERTY_HINT_ENUM, "Nearest (Fastest):5,Bilinear (Fastest):0,FSR 1.0 (Fast):1,FSR 2.2 (Slow):2,MetalFX (Spatial - Fast):3,MetalFX (Temporal - Slow):4,Custom:6"), "set_scaling_3d_mode", "get_scaling_3d_mode"); // TODO VIEWPORT_SCALING_3D_MODE_OFF is possible here too, but we can't specify an enum string for it.
+ 
+ 	ClassDB::bind_method(D_METHOD("get_msaa_3d"), &RenderSceneBuffersConfiguration::get_msaa_3d);
+ 	ClassDB::bind_method(D_METHOD("set_msaa_3d", "msaa_3d"), &RenderSceneBuffersConfiguration::set_msaa_3d);

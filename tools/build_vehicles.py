@@ -157,12 +157,16 @@ def mesh_from_rings(name, rings, mat, root=None, bevel=0.035, section=None):
         attach(obj, root)
     return obj
 
-def text_obj(name, body, loc, size, mat, side=0, root=None):
+def text_obj(name, body, loc, size, mat, side=0, root=None, *, flat=False):
     curve = bpy.data.curves.new(name, "FONT")
     curve.body = body
     curve.size = size
-    curve.extrude = 0.002
-    curve.bevel_depth = 0.001
+    if flat:
+        curve.resolution_u = 5
+        curve.fill_mode = 'FRONT'
+    else:
+        curve.extrude = 0.002
+        curve.bevel_depth = 0.001
     obj = bpy.data.objects.new(name, curve)
     bpy.context.collection.objects.link(obj)
     obj.location = loc
@@ -198,9 +202,41 @@ def pumper_running_gear(root,chassis):
                   (1.174,.51),(1.181,.499),(1.188,.51),(1.225,.51),
                   (1.25,.495),(1.278,.451),(1.291,.389),(1.283,.303)]
             profile_loft("All terrain tire",rings(tire+[tire[0]]),RUBBER,root,close_ends=False)
-            profile_loft("Alloy wheel dish",rings([(1.232,.308),(1.287,.309),
-                (1.296,.298),(1.278,.277),(1.254,.232),(1.258,.192),
-                (1.283,.150),(1.285,.095)]),METAL,root)
+            profile_loft("Alloy wheel rim",rings([(1.232,.308),(1.287,.309),
+                (1.296,.298),(1.278,.277)]),METAL,root,close_ends=False)
+            # Stamp each vent into a sector of the dished steel centre.
+            vertices,faces=[],[]
+            for i in range(8):
+                center_angle=math.tau*(i+.5)/8
+                base=len(vertices)
+                for layer in range(3):
+                    for j in range(32):
+                        a=math.tau*j/32
+                        u,v=math.cos(a),math.sin(a)
+                        if layer==0:
+                            edge=max(abs(u),abs(v))
+                            angle=center_angle+(math.pi/8)*u/edge
+                            r=.214+.063*v/edge
+                            depth=1.278-.026*math.sin(math.pi*(r-.151)/.126)
+                        else:
+                            angle=center_angle+(.192 if layer==1 else .169)*u
+                            r=.220+(.036 if layer==1 else .032)*v
+                            depth=1.255 if layer==1 else 1.237
+                        vertices.append((side*depth,y+r*math.cos(angle),.51+r*math.sin(angle)))
+                for row in [base,base+32]:
+                    for j in range(32):
+                        k=(j+1)%32
+                        face=(row+j,row+k,row+32+k,row+32+j)
+                        faces.append(face if side<0 else face[::-1])
+            mesh=bpy.data.meshes.new("Pierced steel centre")
+            mesh.from_pydata(vertices,[],faces)
+            mesh.materials.append(METAL)
+            for face in mesh.polygons: face.use_smooth=True
+            dish=bpy.data.objects.new("Alloy wheel ventilated dish",mesh)
+            bpy.context.collection.objects.link(dish)
+            dish.parent=root
+            cylinder("Brake disc",(side*1.205,y,.51),.268,.028,DARK,root=root)
+            profile_loft("Alloy wheel bolt flange",rings([(1.278,.151),(1.285,.095)]),METAL,root)
             cylinder("Center cap",(side*1.296,y,.51),.105,.082,DARK,root=root)
             for i in range(8):
                 angle=math.tau*i/8
@@ -651,242 +687,103 @@ def make_taxi():
     return root
 
 def make_police():
-    root = make_bmw(PAINT_WHITE, "Polis | patrullbil")
+    root = make_bmw(PAINT_WHITE, "Polis | patrullbil", patrol=True)
     skin = next(obj for obj in root.children if obj.name.startswith("X5 M60i continuous"))
     bpy.context.view_layer.update()
     surface = skin.evaluated_get(bpy.context.evaluated_depsgraph_get())
+    foil_blue=material("Patrol cobalt reflective film",(.009,.058,.39),.08,.30)
+    foil_yellow=material("Patrol fluorescent lemon film",(.86,.98,.016),.03,.35)
     for side in (-1,1):
         for row in range(2):
             for col in range(8):
-                points = []
-                faces = []
-                for j in range(5):
-                    y = -1.90 + .48*(col+j/4)
-                    for z in (.84+row*.155,.992+row*.155):
-                        hit,pt,_,_ = surface.ray_cast((side*2,y,z),(-side,0,0))
-                        points.append((pt.x+.004*side,y,z) if hit else (side*.86,y,z))
-                    if j:
-                        k = j*2
-                        face=(k-2,k,k+1,k-1)
-                        faces.append(face if side>0 else face[::-1])
+                points=[]
+                faces=[]
+                previous={}
+                # Sample the vertical shoulder crease too. A tall flat quad cuts into the door.
+                for j in range(13):
+                    y=-1.90+.48*(col+j/12)
+                    column={}
+                    for h in range(9):
+                        z=.854+row*.16+.158*h/8
+                        hit,pt,normal,_=surface.ray_cast((side*2,y,z),(-side,0,0))
+                        if not hit or normal.x*side<.30:
+                            continue
+                        column[h]=len(points)
+                        points.append(tuple(pt+normal*.004))
+                        if h-1 in column and h in previous and h-1 in previous:
+                            face=(previous[h-1],column[h-1],column[h],previous[h])
+                            faces.append(face if side>0 else face[::-1])
+                    previous=column
+                if not faces: continue
                 mesh=bpy.data.meshes.new("Reflexfolie")
                 mesh.from_pydata(points,[],faces)
-                mesh.materials.append(POLICE_BLUE if (row+col)%2 else PAINT_YELLOW)
+                mesh.materials.append(foil_blue if (row+col)%2 else foil_yellow)
                 patch=bpy.data.objects.new("Blågul reflex",mesh)
                 bpy.context.collection.objects.link(patch)
                 patch.parent=root
-        text_obj("Polismärkning","POLIS",(side*.978,-.48*side,.86),.21,PAINT_WHITE,-side,root)
-    lights(root,-.40,1.82,1.23)
+    # Conform the lettering to the bonnet crown so every glyph sits on the paint.
+    lettering=text_obj("Bonnet police lettering","POLIS",(0,0,0),.29,foil_blue,root=root,flat=True)
+    lettering.rotation_euler=(0,0,0)
+    xs=[v.co.x for v in lettering.data.vertices]
+    midpoint=(min(xs)+max(xs))*.5
+    for v in lettering.data.vertices:
+        x=v.co.x-midpoint
+        y=-1.91+v.co.y
+        hit,point,_,_=surface.ray_cast((x,y,3),(0,0,-1))
+        if not hit: raise ValueError("Patrol lettering outside bonnet")
+        v.co=(x,y,point.z+.008)
+    for side in (-1,1):
+        label=text_obj("Door police lettering","POLIS",(0,0,0),.235,foil_blue,root=root,flat=True)
+        xs=[v.co.x for v in label.data.vertices]
+        mid=(min(xs)+max(xs))*.5
+        label.rotation_euler=(0,0,0)
+        for v in label.data.vertices:
+            y=-.30+side*(v.co.x-mid)
+            z=.653+v.co.y
+            hit,point,_,_=surface.ray_cast((side*2,y,z),(-side,0,0))
+            if not hit: raise ValueError(f"Patrol lettering outside door {y} {z}")
+            v.co=(point.x+.009*side,y,z)
+    roof=next(obj for obj in root.children if obj.name.startswith("Roof and cabin"))
+    def roof_z(x,y):
+        hit,point,_,_=roof.ray_cast((x,y,3),(0,0,-1))
+        if not hit: raise ValueError("Patrol equipment outside roof")
+        return point.z
+    antenna_z=roof_z(0,1.50)
+    cylinder("Dispatch antenna foot",(0,1.50,antenna_z+.016),.040,.035,DARK,False,24,root)
+    cylinder("Radio whip",(0,1.50,antenna_z+.221),.006,.38,DARK,False,12,root)
+    for x in [-.19,.19]:
+        cube("Front warning light bracket",(x,-2.484,.845),(.112,.038,.060),BLACK,.009,root)
+        cube("FlashBlue_Grille" if x<0 else "FlashRed_Grille",(x,-2.509,.845),(.088,.016,.033),BLUE_LAMP,.006,root)
+    y=-.08
+    base=roof_z(0,y)+.042
+    for x in [-.43,.43]:
+        foot=roof_z(x,y)
+        cube("Patrol lightbar foot",(x,y,(foot+base)*.5),(.11,.16,base-foot+.01),RUBBER,.009,root)
+    shell=[]
+    for elevation,w,d in [(0,.60,.099),(.012,.633,.126),(.069,.627,.124),(.085,.602,.104)]:
+        ring=[]
+        for i in range(48):
+            a=math.tau*i/48
+            c,sn=math.cos(a),math.sin(a)
+            ring.append((w*math.copysign(abs(c)**.45,c),y+d*math.copysign(abs(sn)**.45,sn),base+elevation))
+        shell.append(ring)
+    profile_loft("Patrol lightbar extrusion",shell,DARK,root)
+    for side in [-1,1]:
+        for i in range(5):
+            x=side*(.10+.104*i)
+            for face in [-1,1]:
+                depth=y+face*(.124-.010*(abs(x)/.59)**4)
+                cube("Blue lens surround",(x,depth,base+.042),(.100,.018,.055),foil_blue,.008,root)
+                cube("FlashBlue_Left" if side<0 else "FlashRed_Right",
+                     (x,depth+face*.011,base+.043),(.083,.009,.038),BLUE_LAMP,.004,root)
     rear=text_obj("Bakluckans märkning","POLIS",(.28,2.49,1.03),.18,POLICE_BLUE,root=root)
     rear.rotation_euler=(math.pi/2,0,math.pi)
     return root
 
 def make_volvo_xc60_police():
-    """Create a Swedish-marked Volvo XC60 patrol SUV, inspired by the supplied refs."""
-    root = bpy.data.objects.new("Volvo XC60 | Svensk polis patrullbil", None)
-    bpy.context.collection.objects.link(root)
-    root.empty_display_type = "CUBE"
-    white = material("XC60 police pearl white", (.91, .92, .89), .22, .25)
-    glass = material("XC60 deep smoked glass", (.020, .039, .047), .42, .15)
-    black = material("XC60 grille and trim", (.018, .024, .029), .38, .23)
-    chrome = material("XC60 brushed brightwork", (.63, .69, .70), .82, .22)
-    blue = material("Swedish police cobalt", (.018, .19, .64), .12, .31)
-    yellow = material("Swedish police fluorescent yellow", (.91, .91, .018), .08, .35, .12)
-    red_lens = material("XC60 rear LED", (.74, .024, .018), .06, .2, .3)
-    amber = material("XC60 indicators", (.96, .31, .018), .05, .2, .35)
-    led = material("XC60 Thor LED", (.83, .91, 1.0), .04, .16, .55)
-    emblem = material("Volvo emblem blue", (.03, .20, .42), .25, .22)
+    from xc60_body import build
+    return build()
 
-    # Rear is +Y, nose is -Y. The ring silhouette gives the taller, shorter
-    # proportions of an XC60 instead of the broader, longer donor X5.
-    rings = [
-        (-2.37,.82,.50,1.15,1.30), (-2.32,.91,.49,1.20,1.35),
-        (-2.20,.98,.47,1.27,1.42), (-1.92,1.02,.46,1.34,1.48),
-        (-1.48,1.04,.46,1.39,1.52), (-.70,1.045,.46,1.41,1.53),
-        (.48,1.04,.47,1.40,1.52), (1.48,1.01,.49,1.37,1.49),
-        (2.10,.99,.50,1.42,1.55), (2.34,.95,.54,1.44,1.57),
-        (2.40,.87,.58,1.39,1.50),
-    ]
-    body = mesh_from_rings("XC60 sculpted body shell", rings, white, root, .018)
-    sub = body.modifiers.new("Pressed XC60 body curvature", "SUBSURF")
-    sub.levels = 2
-    bpy.context.view_layer.objects.active = body
-    bpy.ops.object.modifier_apply(modifier=sub.name)
-
-    # The cabin tapers as it rises. Longitudinal sections define the glass and the
-    # painted roof in one closed shell, so neither can float above the belt line.
-    cabin_rows = [
-        (1.40, .947, -1.27, 2.22), (1.48, .940, -1.24, 2.20),
-        (1.53, .928, -1.20, 2.18), (1.69, .881, -1.04, 2.12),
-        (1.89, .817, -.78, 2.00), (1.991, .774, -.63, 1.89),
-        (2.022, .752, -.59, 1.84), (2.049, .698, -.50, 1.725),
-    ]
-    def cabin_outline(row):
-        z,w,fore,aft = row
-        return [(w*x, y, z+rise) for x,y,rise in [
-            (-1,fore+.145,0),(-.92,fore+.025,.014),(-.65,fore-.045,.03),
-            (0,fore-.085,.039),(.65,fore-.045,.03),(.92,fore+.025,.014),
-            (1,fore+.145,0),(1,aft-.13,0),(.88,aft-.014,.016),
-            (0,aft+.022,.026),(-.88,aft-.014,.016),(-1,aft-.13,0)]]
-    cabin = profile_loft("XC60 glazed cabin and pearl roof",
-                         [cabin_outline(row) for row in cabin_rows], white, root)
-    cabin.data.materials.append(glass)
-    # Fit rubber seals and thin painted A-pillars around the windshield.
-    for poly in cabin.data.polygons:
-        row, col = divmod(poly.index,12)
-        if 2 <= row <= 4 and col in (0,1,2,3,4,6,8,9,11):
-            poly.material_index = 1
-
-    def side_surface(side, u, row_index, offset=.009):
-        z,w,fore,aft = cabin_rows[row_index]
-        return (side*(w+offset), fore+.145 + u*(aft-.13-fore-.145), z)
-
-    def strip(name, rings, finish):
-        return profile_loft(name, rings, finish, root)
-
-    for side in [-1,1]:
-        # Door frames divide the side glass into three distinct openings.
-        for title, u, half, finish in [("B pillar",.47,.022,black),
-                ("Quarter glass divider",.79,.010,black),("Rear roof pillar",.96,.047,white)]:
-            rings = []
-            for k in range(2,6):
-                rings.append([side_surface(side,u+du,k,dx) for du,dx in
-                              [(-half,.003),(half,.003),(half,.012),(-half,.012)]])
-            strip("XC60 " + title, rings, finish)
-        for k in [2,5]:
-            rings=[]
-            for u in [0,.25,.5,.75,1]:
-                x,y,z=side_surface(side,u,k)
-                rings.append([(x,y,z-.008),(x+side*.009,y,z-.006),
-                              (x+side*.009,y,z+.006),(x,y,z+.008)])
-            strip("XC60 bright window surround",rings,chrome)
-        for y in [-.51,.81]:
-            cube("Recessed door release",(side*1.006,y,1.282),(.045,.158,.035),white,.016,root)
-        # High-mounted rear lamps hug the D pillars before turning across the hatch.
-        rings=[]
-        for k in range(1,7):
-            z,w,fore,aft = cabin_rows[k]
-            rings.append([(side*(w*.94+dx),aft-.055+dy,z)
-                          for dx,dy in [(-.04,-.04),(.036,-.07),(.044,-.025),(-.015,.033)]])
-        strip("XC60 pillar LED blade", rings, red_lens)
-        cube("XC60 hatch LED return",(side*.70,2.39,1.39),(.40,.06,.07),red_lens,.03,root)
-
-    # Cut openings in the painted shell to expose the tire and its dark wheel well.
-    for axle in [-1.48, 1.48]:
-        bpy.ops.mesh.primitive_cylinder_add(vertices=64,radius=.517,depth=2.8,
-            location=(0,axle,.49),rotation=(0,math.pi/2,0))
-        cutter=bpy.context.object
-        cut=body.modifiers.new("Wheel opening","BOOLEAN")
-        cut.operation="DIFFERENCE"
-        cut.object=cutter
-        bpy.context.view_layer.objects.active=body
-        bpy.ops.object.modifier_apply(modifier=cut.name)
-        bpy.data.objects.remove(cutter,do_unlink=True)
-
-    # Wheels: tall road tyres, turned alloy faces and dark wheel arch liners.
-    for y in (-1.48,1.48):
-        for side in (-1,1):
-            center=(side*1.00,y,.49)
-            cylinder("Performance tire XC60",center,.43,.20,RUBBER,True,48,root)
-            cylinder("Diamond cut rim XC60",(side*1.105,y,.49),.318,.035,chrome,True,48,root)
-            cylinder("Anthracite wheel barrel XC60",(side*1.128,y,.49),.241,.018,black,True,48,root)
-            cylinder("Wheel hub Volvo",(side*1.142,y,.49),.083,.03,chrome,True,32,root)
-            for i in range(10):
-                a=math.tau*i/10
-                spoke=cube("Five double spokes XC60",
-                    (side*1.145,y+.163*math.sin(a),.49+.163*math.cos(a)),
-                    (.026,.065,.225),chrome,.012,root)
-                spoke.rotation_euler.x=-a
-            arch=[]
-            for i in range(33):
-                a=.04+(math.pi-.08)*i/32
-                arch.append([(side*d,y+r*math.cos(a),.49+r*math.sin(a))
-                             for d,r in ((1.025,.472),(1.080,.486),(1.105,.511),
-                                         (1.10,.535),(1.075,.548),(1.025,.520))])
-            profile_loft("XC60 black wheel arch moulding",arch,black,root)
-
-    # A formed nose panel supports the grille and swept lamp clusters across the full width.
-    face_sections = []
-    for x in [-.96,-.90,-.76,-.53,-.40,0,.40,.53,.76,.90,.96]:
-        t=abs(x)/.96
-        y=-2.43+.19*t**2
-        high=1.27+.025*t-.05*t**6
-        face_sections.append([(x,y+.16,.76),(x,y,.79),(x,y,high-.052),
-                              (x,y+.06,high),(x,y+.27,high+.05)])
-    strip("XC60 pressed front mask",face_sections,white)
-    # Grille inset with a silver vertical mesh and Volvo diagonal slash/emblem.
-    cube("XC60 vertical grille shadow",(0,-2.405,1.00),(.78,.045,.41),black,.09,root)
-    for x in [i*.052 for i in range(-6,7)]:
-        cube("XC60 grille vertical vane",(x,-2.442,1.00),(.014,.018,.32),chrome,.006,root)
-    for z in (.84,.91,1.09,1.16):
-        cube("XC60 grille crossbar",(0,-2.447,z),(.72,.02,.014),black,.004,root)
-    cube("Volvo ironmark diagonal",(0,-2.46,1.00),(.72,.035,.045),chrome,.018,root).rotation_euler.y=-.47
-    cylinder("Volvo blue grille roundel",(0,-2.482,1.01),.095,.025,chrome,False,40,root).rotation_euler.x = math.pi/2
-    cylinder("Volvo roundel inlay",(0,-2.50,1.01),.072,.019,emblem,False,40,root).rotation_euler.x = math.pi/2
-    # Sculpted bumper, black lower intake, corner air curtains and skid trim.
-    cube("XC60 painted bumper fascia",(0,-2.386,.72),(1.88,.22,.31),white,.12,root)
-    cube("XC60 lower air intake",(0,-2.514,.665),(1.17,.035,.17),black,.055,root)
-    for x in (-.64,.64):
-        cube("XC60 side air curtain",(x,-2.49,.73),(.21,.05,.28),black,.065,root)
-        for z in (.67,.74,.81):
-            cube("Air curtain vane",(x,-2.524,z),(.13,.016,.014),chrome,.005,root)
-        cube("XC60 corner fog LED",(x,-2.532,.565),(.14,.025,.045),led,.02,root)
-    cube("XC60 front skid insert",(0,-2.49,.525),(1.06,.07,.045),chrome,.017,root)
-
-    # Hammer of Thor light bars are segmented, slim, and sweep towards the grille.
-    for side in (-1,1):
-        for name, xs, z0, z1, finish, depth in [
-            ("XC60 swept projector housing",[.43,.50,.66,.82,.94],1.116,1.25,glass,.041),
-            ("XC60 hammer daytime light",[.46,.60,.72,.83,.92],1.178,1.195,led,.050),
-            ("XC60 hammer light return",[.62,.652],1.133,1.19,led,.051),
-            ("XC60 corner indicator",[.90,.935],1.166,1.197,amber,.051)]:
-            sections=[]
-            for x in xs:
-                t=x/.96
-                y=-2.43+.19*t*t-depth
-                rise=.023*t
-                sections.append([(side*x,y+.018,z0+rise),(side*x,y,z0+rise),
-                                 (side*x,y,z1+rise),(side*x,y+.018,z1+rise)])
-            strip(name,sections,finish)
-        cube("XC60 rear vertical tail lamp",(side*.866,2.382,1.12),(.085,.035,.69),red_lens,.034,root)
-        cube("XC60 lower tail lamp",(side*.91,2.395,.91),(.052,.034,.30),red_lens,.02,root)
-        cube("XC60 side mirror stem",(side*.948,-.92,1.56),(.24,.15,.077),black,.035,root)
-        cube("XC60 side mirror cap",(side*1.085,-.92,1.606),(.207,.208,.142),white,.05,root)
-        cube("XC60 mirror indicator",(side*1.187,-.932,1.59),(.014,.13,.016),amber,.01,root)
-        cube("XC60 police light blue lens",(side*1.06,-1.05,1.05),(.018,.13,.065),BLUE_LAMP,.02,root)
-        cube("XC60 police light yellow lens",(side*1.065,-.88,1.05),(.018,.15,.065),yellow,.02,root)
-        # Blue and fluorescent checker belt follows each door over the white body.
-        for col in range(6):
-            y=-.96+col*.38
-            for row in range(2):
-                finish=blue if (col+row)%2==0 else yellow
-                cube("XC60 reflective door battenburg",(side*1.044,y,.83+.14*row),
-                     (.020,.377,.139),finish,.005,root)
-        text_obj("Swedish Police door marking","POLIS",(side*1.058,-.35,1.185),.23,blue,-side,root)
-        text_obj("Swedish police unit number","31-5130",(side*1.06,-1.0,1.36),.075,blue,-side,root)
-
-    # Mount a single lightbar above the roof on two rubber feet.
-    for x in [-.39,.39]:
-        cube("XC60 lightbar foot",(x,-.25,2.095),(.13,.20,.07),black,.018,root)
-    cube("XC60 roof lightbar lower rail",(0,-.25,2.137),(1.18,.24,.045),black,.02,root)
-    for i in range(12):
-        x=(i-5.5)*.097
-        name = "FlashBlue_Left" if x<0 else "FlashRed_Right"
-        cube(name,(x,-.25,2.191),(.093,.218,.077),BLUE_LAMP,.023,root)
-    for side in (-1,1):
-        cube("XC60 blue grille strobe",(side*.27,-2.47,.87),(.075,.022,.045),BLUE_LAMP,.02,root)
-    # Rear trim, plate, roof rails and bumpers complete the SUV silhouette.
-    cube("XC60 rear bumper",(0,2.39,.68),(1.91,.23,.28),white,.105,root)
-    cube("XC60 rear valance",(0,2.522,.56),(1.30,.05,.075),black,.025,root)
-    cube("XC60 registration plate",(0,2.427,1.03),(.52,.022,.13),black,.012,root)
-    text_obj("XC60 rear police label","POLIS",(.21,2.45,1.18),.14,blue,0,root).rotation_euler = (math.pi/2,0,math.pi)
-    for side in (-1,1):
-        rail=[]
-        for y in (-.51,.94,1.62):
-            rail.append([(side*x,y,z) for x,z in ((.68,2.035),(.69,2.077),(.72,2.086),(.74,2.045))])
-        profile_loft("XC60 roof rail",rail,chrome,root)
-    cube("XC60 side sill trim",(0,.05,.54),(1.92,2.74,.075),black,.035,root)
-    return root
 
 def make_fire_engine():
     root = bpy.data.objects.new("Fire engine | Swedish Rescue Pumper", None)
@@ -928,7 +825,10 @@ def make_fire_engine():
     finishes.extend((0,0))
     mesh=bpy.data.meshes.new("Crew cab glazing and steelwork")
     mesh.from_pydata(vertices,[],faces)
-    for finish in (PAINT_RED,material("Smoked panoramic truck glass",(.038,.078,.088),.32,.16),RUBBER):
+    truck_glass=material("Laminated panoramic truck glass",(.072,.126,.136),.11,.15)
+    shader=next(node for node in truck_glass.node_tree.nodes if node.type=="BSDF_PRINCIPLED")
+    shader.inputs["Alpha"].default_value=.48
+    for finish in (PAINT_RED,truck_glass,RUBBER):
         mesh.materials.append(finish)
     mesh.polygons.foreach_set("material_index",finishes)
     for face in mesh.polygons:
@@ -936,6 +836,25 @@ def make_fire_engine():
     cabin=bpy.data.objects.new("Fire crew cab",mesh)
     bpy.context.collection.objects.link(cabin)
     cabin.parent=root
+    upholstery=material("Fire crew woven graphite",(.065,.080,.084),.02,.8)
+    cube("Crew cab floor",(0,-1.78,1.45),(2.03,1.91,.09),DARK,.035,root)
+    for x in [-.57,.57]:
+        for y in [-2.12,-1.13]:
+            cube("Crew seat cushion",(x,y,1.63),(.49,.46,.12),upholstery,.049,root)
+            back=cube("Crew seat back",(x,y+.177,1.87),(.485,.124,.47),upholstery,.045,root)
+            back.rotation_euler.x=-.10
+            cube("Crew head restraint",(x,y+.203,2.16),(.30,.12,.16),upholstery,.044,root)
+    cube("Crew dashboard top",(0,-2.628,1.80),(1.96,.376,.135),DARK,.054,root)
+    cube("Driver instrument binnacle",(-.57,-2.535,1.90),(.47,.23,.17),BLACK,.046,root)
+    bpy.ops.mesh.primitive_torus_add(location=(-.57,-2.37,1.902),rotation=(math.radians(49),0,0),
+                                    major_radius=.168,minor_radius=.015,major_segments=36,minor_segments=10)
+    steering=bpy.context.object
+    steering.name="Crew cab steering rim"
+    steering.data.materials.append(RUBBER)
+    steering.parent=root
+    cube("Crew steering crossbar",(-.57,-2.37,1.902),(.32,.035,.045),DARK,.012,root)
+    cube("Dispatch terminal casing",(.072,-2.53,1.935),(.31,.075,.212),BLACK,.016,root)
+    cube("Dispatch terminal display",(.072,-2.487,1.94),(.275,.012,.168),GLASS_HI,.006,root)
     for side in (-1,1):
         for y in (-.26,.83,1.92):
             cube("Locker gasket",(side*1.105,y,1.99),(.043,1.01,.94),BLACK,.032,root)
@@ -982,8 +901,15 @@ def make_fire_engine():
         lettering.location.y-=side*(min(xs)+max(xs))*.5
         for z in (1.94,2.34):
             cube("Mirror support arm",(side*1.173,-2.615,z),(.210,.035,.033),BLACK,.011,root)
-        cube("Truck mirror casing",(side*1.286,-2.611,2.151),(.146,.135,.451),BLACK,.044,root)
-        cube("Truck mirror glazing",(side*1.286,-2.539,2.163),(.120,.016,.378),GLASS,.018,root)
+        housing=[]
+        for z,w,d in [(1.912,.044,.034),(1.94,.084,.054),(2.03,.090,.067),
+                      (2.23,.096,.068),(2.35,.087,.059),(2.375,.061,.041)]:
+            housing.append([(side*(1.286+w*math.cos(i*math.tau/24)),
+                             -2.608+d*math.sin(i*math.tau/24),z) for i in range(24)])
+        profile_loft("Two-part mirror housing",housing,BLACK,root)
+        for z,h in [(2.211,.235),(2.028,.102)]:
+            cube("Mirror glass seal",(side*1.286,-2.556,z),(.155,.033,h+.019),RUBBER,.012,root)
+            cube("Mirror glass",(side*1.286,-2.534,z),(.140,.015,h),GLASS,.006,root)
         for y in (-1.65,-.833):
             cube("Crew door handle",(side*1.134,y,1.691),(.024,.120,.033),BLACK,.009,root)
         # Wiper blades parked along the lower sweep of the panoramic screen.
@@ -1016,6 +942,19 @@ def make_fire_engine():
                       ((-1,.063),(-1,.025),(-.94,.009),(-.52,.002),
                        (0,0),(.52,.002),(.94,.009),(1,.025),(1,.063))])
     profile_loft("Tapered grille recess",grille,RUBBER,root)
+    # Narrow cooling fins follow the front bow behind the five horizontal vanes.
+    fins=[]
+    for i in range(-17,18):
+        x=i*.034
+        z0=1.234+max(0,abs(x)-.50)*1.9
+        y=-3.021+.020*(x/.62)**2
+        fins.append(cube("Radiator cooling fin",(x,y,(z0+1.695)/2),
+                         (.009,.014,1.695-z0),DARK,.002,root))
+    bpy.ops.object.select_all(action="DESELECT")
+    for fin in fins:
+        fin.select_set(True)
+    bpy.context.view_layer.objects.active=fins[0]
+    bpy.ops.object.join()
     for z,w in ((1.255,.565),(1.343,.594),(1.442,.615),(1.549,.640),(1.655,.665)):
         vane=[]
         for x in (-w,-.81*w,0,.81*w,w):
@@ -1023,11 +962,41 @@ def make_fire_engine():
             vane.append([(x,-3.025+bow+dy,z+dz) for dy,dz in
                          ((.023,-.018),(.002,-.014),(-.009,.003),(-.004,.014),(.024,.017))])
         profile_loft("Swept radiator blade",vane,DARK,root)
+    cube("Pump instrument surround",(-.17,3.015,1.79),(.91,.12,.38),DARK,.034,root)
+    for x in [-.42,-.17,.08]:
+        for label,r,y,finish in [("Gauge ring",.093,3.081,METAL),("Gauge face",.079,3.096,PAINT_WHITE)]:
+            gauge=cylinder(label,(x,y,1.79),r,.019,finish,False,32,root)
+            gauge.rotation_euler.x=math.pi/2
+        needle=cube("Pressure needle",(x+.012,3.109,1.81),(.009,.011,.062),BLACK,.002,root)
+        needle.rotation_euler.y=.54
     for x in (.710,.987):
         cube("Rear access ladder stile",(x,3.101,1.844),(.036,.048,1.568),METAL,.012,root)
     for i in range(6):
         cube("Rear access step",(.849,3.106,1.159+i*.272),(.284,.064,.036),METAL,.008,root)
-    lights(root,-2.32,2.68,1.69)
+    for x in [-.56,.56]:
+        cube("Beacon mounting foot",(x,-2.32,2.634),(.119,.191,.077),RUBBER,.018,root)
+    layers=[]
+    for z,w,d in [(2.665,.807,.115),(2.677,.847,.144),(2.709,.852,.147),
+                  (2.786,.832,.137),(2.803,.799,.109)]:
+        ring=[]
+        for i in range(48):
+            angle=i*math.tau/48
+            c,sn=math.cos(angle),math.sin(angle)
+            ring.append((w*math.copysign(abs(c)**.40,c),
+                         -2.32+d*math.copysign(abs(sn)**.40,sn),z))
+        layers.append(ring)
+    profile_loft("Low profile beacon housing",layers,DARK,root)
+    smoked_blue=material("Unlit blue LED optics",(.012,.063,.31),.18,.20)
+    for side in [-1,1]:
+        for i in range(5):
+            x=side*(.224+.125*i)
+            for face in [-1,1]:
+                y=-2.32+face*(.143-.014*(abs(x)/.8)**4)
+                cube("Blue optic bezel",(x,y,2.749),(.118,.027,.077),smoked_blue,.011,root)
+                cube("FlashBlue_Left" if side<0 else "FlashRed_Right",
+                     (x,y+face*.018,2.750),(.098,.014,.049),BLUE_LAMP,.006,root)
+    cube("Forward scene lamp surround",(0,-2.462,2.747),(.300,.025,.080),BLACK,.009,root)
+    cube("Forward scene lamp diffuser",(0,-2.479,2.747),(.276,.014,.048),HEADLAMP,.006,root)
     for x in (-.82,.82):
         cube("Deck rail",(x,1.06,2.728),(.046,3.52,.049),METAL,.014,root)
         for y in (-.62,.50,1.66,2.78):
@@ -1042,6 +1011,9 @@ def make_fire_engine():
         for i in range(14):
             cube("Extension ladder rung",(0,-1.17+i*.297+.09*level,z),
                  (2*w,.042,.030),METAL,.008,root)
+    cover=material("Clear fire engine lamp cover",(.70,.83,.87),.03,.09)
+    shader=next(node for node in cover.node_tree.nodes if node.type=="BSDF_PRINCIPLED")
+    shader.inputs["Alpha"].default_value=.19
     for x in (-0.82, 0.82):
         side=1 if x>0 else -1
         # The lens cluster wraps back towards the cab corner. Set each
@@ -1065,6 +1037,9 @@ def make_fire_engine():
             profile_loft("Cab projector",[
                 light_ring(cx,1.448,w*f,.155*f,d) for f,d in
                 ((.60,-3.018),(.54,-3.033),(.32,-3.041))],HEADLAMP,root)
+        cover_rings=[light_ring(.861,1.447,w,h,d) for w,h,d in
+                     ((.431,.194,-3.028),(.425,.187,-3.041),(.398,.162,-3.047))]
+        profile_loft("Swept transparent headlamp cover",cover_rings,cover,root)
         amber=material("Amber cab signal",(.88,.235,.012),.12,.23)
         profile_loft("Cab amber signal",[
             light_ring(.865,1.335,w,h,d) for w,h,d in
@@ -1086,6 +1061,13 @@ def make_fire_engine():
         cube("Fog light seal",(side*.862,-3.071,.856),(.210,.042,.128),BLACK,.023,root)
         cube("Fog lens",(side*.862,-3.096,.856),(.164,.016,.077),GLASS_HI,.018,root)
     cube("Rear bumper",(0,3.1,.75),(2.33,.28,.19),DARK,.046,root)
+    for x in [-.67,.67]:
+        for label,r,y,depth,mat in [("Outlet flange",.129,3.015,.09,METAL),
+                                     ("Coupling gasket",.096,3.072,.044,DARK),
+                                     ("Outlet cap",.081,3.101,.038,METAL)]:
+            part=cylinder(label,(x,y,1.27),r,depth,mat,False,24,root)
+            part.rotation_euler.x=math.pi/2
+        cube("Outlet cap grip",(x,3.13,1.27),(.127,.025,.024),PAINT_RED,.008,root)
     # Lengthen the equipment bay between axles without distorting the wheels.
     bpy.context.view_layer.update()
     for part in root.children:
@@ -1125,7 +1107,8 @@ def profile_loft(name, rings, finish, parent, close_ends=True):
     obj.parent=parent
     return obj
 
-def make_bmw(color, name="BMW X5 M60i"):
+def make_bmw(color, name="BMW X5 M60i", *, patrol=False):
+    detailed_cabin = patrol or color == PAINT_BLACK
     root = bpy.data.objects.new(name, None)
     bpy.context.collection.objects.link(root)
     root.empty_display_type = "CUBE"
@@ -1205,7 +1188,7 @@ def make_bmw(color, name="BMW X5 M60i"):
             faces.append((row*n+k,row*n+q,(row+1)*n+q,(row+1)*n+k))
             glazed = .10 <= levels[row] < .90 and k in (2,3,6,8,10,14,15,19,21,23)
             rear_glass = k in (8,10,14,15,19,21)
-            slots.append((2 if rear_glass and color == PAINT_BLACK else 1) if glazed else 0)
+            slots.append((2 if rear_glass and detailed_cabin else 1) if glazed else 0)
     # Fill the roof with crowned courses, keeping the perimeter welded to the pillars.
     top_start=(len(levels)-1)*n
     previous=top_start
@@ -1226,7 +1209,7 @@ def make_bmw(color, name="BMW X5 M60i"):
     mesh.from_pydata(vertices,[],faces)
     mesh.materials.append(color)
     mesh.materials.append(privacy)
-    if color == PAINT_BLACK:
+    if detailed_cabin:
         rear_tint=privacy.copy()
         rear_tint.name="Rear privacy glazing"
         rear_tint.surface_render_method="BLENDED"
@@ -1261,10 +1244,11 @@ def make_bmw(color, name="BMW X5 M60i"):
             arm.append([(point.x,point.y-.020+dy,point.z+dz) for dy,dz in
                         ((-.007,-.008),(.007,-.008),(.007,.008),(-.007,.008))])
         profile_loft("Wiper arm",arm,DARK,root)
-    if color == PAINT_BLACK:
+    if detailed_cabin:
         privacy.surface_render_method = "BLENDED"
         next(node for node in privacy.node_tree.nodes if node.type == "BSDF_PRINCIPLED").inputs["Alpha"].default_value = .39
-        leather = material("Mocha leather", (.135,.069,.043), .02,.54)
+        leather = (material("Patrol seat fabric",(.068,.082,.091),.01,.79) if patrol else
+                   material("Mocha leather",(.135,.069,.043),.02,.54))
         trim = material("Cabin charcoal", (.024,.025,.026), .02,.68)
         # Open the body between the bulkhead and rear shelf so the
         # footwells and cushions are visible below the window line.
@@ -1343,6 +1327,10 @@ def make_bmw(color, name="BMW X5 M60i"):
                     key=cube("Steering wheel thumb key",steering_point(side*x,h,.021),
                              (.020,.005,.011),trim,.002,root)
                     key.rotation_euler.x=math.radians(20)
+        if patrol:
+            cube("Dispatch screen mount",(.14,-.68,1.54),(.075,.10,.17),trim,.015,root)
+            cube("Dispatch screen bezel",(.14,-.68,1.65),(.34,.046,.20),BLACK,.019,root)
+            cube("Dispatch map display",(.14,-.654,1.65),(.304,.009,.162),GLASS_HI,.004,root)
         for side in (-1,1):
             lower=[]
             for h,x,w in ((-.045,.034,.012),(-.073,.029,.010),(-.116,.017,.009),(-.150,.012,.012)):
@@ -1631,8 +1619,9 @@ def make_bmw(color, name="BMW X5 M60i"):
         bpy.context.collection.objects.link(grille)
         grille.parent=root
         vertices,faces=[],[]
-        for i in range(8):
-            x=.072+i*.058
+        for i in range(10):
+            # Five paired M blades follow the bowed face of each kidney.
+            x=.082+(i//2)*.092+(i%2)*.026
             low,high=aperture_limits(x)
             base=len(vertices)
             for j in range(9):
@@ -1850,8 +1839,8 @@ def make_bmw(color, name="BMW X5 M60i"):
                               ((-.005,.007),(0,.014),(.005,.012),(.004,.006))])
             profile_loft("Air curtain louvre",blade,DARK,root)
         # Sweep each lens along the tailgate and around the quarter panel.
-        stations = [(.34,2.493,.038),(.43,2.496,.078),(.70,2.499,.089),
-                    (.79,2.497,.14),(.92,2.492,.145),(.978,2.464,.135),
+        stations = [(.34,2.493,.038),(.43,2.496,.078),(.64,2.499,.089),
+                    (.70,2.499,.094),(.755,2.498,.118),(.83,2.497,.14),(.92,2.492,.145),(.978,2.464,.135),
                     (1.005,2.393,.105),(1.027,2.29,.065),(1.032,2.23,.012)]
         for label, finish, band, thickness, outset in (
                 ("Smoked rear lamp carrier",BLACK,0,1,0),
@@ -1859,7 +1848,9 @@ def make_bmw(color, name="BMW X5 M60i"):
                 ("Lower ruby light guide",TAIL_LAMP,-.24,.23,.006)):
             vertices, faces = [], []
             for x,y,h in stations:
-                z = 1.395 + .055*x + h*band
+                # The two light guides exchange levels at the tailgate shoulder.
+                crossing = max(-1.0,min(1.0,(.755-x)/.085))
+                z = 1.395 + .055*x + h*band*crossing
                 for edge in (-.5,.5):
                     height = z+h*edge*thickness
                     hit, point, _, _ = hatch_skin.ray_cast((side*x,3,height),(0,-1,0))
@@ -2115,27 +2106,26 @@ def make_bmw(color, name="BMW X5 M60i"):
         glass_rings.append(top+[(x,y,z-.013) for x,y,z in reversed(top)])
     profile_loft("Panoramic sunroof",glass_rings,privacy,root)
     cube("Front plate", (0, -2.596, 1.035), (0.72, 0.035, 0.18), PAINT_WHITE, 0.025, root)
-    # Fictional registration, legible from either end of the parked player SUV.
-    if color == PAINT_BLACK:
-        for rear, depth, height, width in [(True,2.523,1.204,.56),(False,-2.615,1.035,.72)]:
-            facing = -1 if rear else 1
-            cube("Blue registration band",(-facing*width*.445,depth,height),
-                 (width*.09,.002,.12),POLICE_BLUE,.001,root)
-            glyphs = bpy.data.curves.new("Registration glyphs","FONT")
-            glyphs.body = "AXL 060"
-            glyphs.size = .12
-            glyphs.align_x = "CENTER"
-            glyphs.align_y = "CENTER"
-            lettering = bpy.data.objects.new("Registration AXL 060",glyphs)
-            bpy.context.collection.objects.link(lettering)
-            lettering.parent = root
-            lettering.location = (facing*.025,depth,height)
-            lettering.rotation_euler = (math.pi/2,0,math.pi if rear else 0)
-            glyphs.materials.append(BLACK)
-            bpy.ops.object.select_all(action="DESELECT")
-            lettering.select_set(True)
-            bpy.context.view_layer.objects.active = lettering
-            bpy.ops.object.convert(target="MESH")
+    registration = {PAINT_BLUE_CAR: "AXL 061", PAINT_SILVER: "AXL 062"}.get(color, "AXL 060")
+    for rear, depth, height, width in [(True,2.523,1.204,.56),(False,-2.615,1.035,.72)]:
+        facing = -1 if rear else 1
+        cube("Blue registration band",(-facing*width*.445,depth,height),
+             (width*.09,.002,.12),POLICE_BLUE,.001,root)
+        glyphs = bpy.data.curves.new("Registration glyphs","FONT")
+        glyphs.body = registration
+        glyphs.size = .12
+        glyphs.align_x = "CENTER"
+        glyphs.align_y = "CENTER"
+        lettering = bpy.data.objects.new("Registration " + registration,glyphs)
+        bpy.context.collection.objects.link(lettering)
+        lettering.parent = root
+        lettering.location = (facing*.025,depth,height)
+        lettering.rotation_euler = (math.pi/2,0,math.pi if rear else 0)
+        glyphs.materials.append(BLACK)
+        bpy.ops.object.select_all(action="DESELECT")
+        lettering.select_set(True)
+        bpy.context.view_layer.objects.active = lettering
+        bpy.ops.object.convert(target="MESH")
     # Map the styling mesh to metres. Within each arch, use the same
     # longitudinal and vertical scale so wheels and cutouts stay circular.
     height_scale = 1.765 / 2.3175

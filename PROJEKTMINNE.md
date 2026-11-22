@@ -8,7 +8,7 @@
 - Trafik, cyklister, utryckningar, långsamma A-traktorer, hälsande fotgängare, signaler vid centrala korsningen, dag/natt och gatlampor. Manuellt/automatiskt väder och årstider.
 - Telefonen (T) tar emot uppdrag och kvitton på engelska eller svenska och visar de 32 senaste meddelandena under spelomgången.
 - Tre uppdragssteg, vägvisande pilar och återkommande taxikörningar. 10 mynt per räddningssteg och 15 per avslutad taxiresa.
-- Tvärbanan kan följas som passagerare eller köras på en slinga med tre hållplatser. Dörrskylten säger ”Vi åker inte till Ekerö”.
+- Tvärbanan kan följas som passagerare eller köras på en slinga med fyra hållplatser mellan västra stadsdelens körfält. Dörrskylten säger ”Vi åker inte till Ekerö”.
 - Körbar motorbåt i södra bassängen, färjan Lotten i linjetrafik, polishelikopter på patrull.
 
 - Fyra butiker på Stationsalléns södra sida har gångbara entréer. Kanelbulle, saft, glass, korv med bröd, pizza och godis kan köpas för sparade mynt.
@@ -102,7 +102,7 @@ Spelprojektet publiceras i det privata GitHub-repot yeager/axels-emergency-vehic
 
 - Tvärbanan har kontaktledning och stolpar längs slingan samt strömavtagare på mittvagnen. Taket granskades i Godot och ett körtest passerade fyra stationsstopp med dörröppning och stängning.
 
-- Alla tre spårvagnshållplatser har dubbelsidiga namnskyltar under taket, bänk och markerad plattformskant.
+- Spårvagnshållplatserna har dubbelsidiga namnskyltar under taket, bänk och markerad plattformskant.
 
 - Tvärbanans status visar avstånd i meter längs rälsen till nästa hållplats tillsammans med namn och fart, på svenska och engelska.
 
@@ -363,3 +363,31 @@ XC60 har ny kaross, T-formade lyktor och frilagd blåljusramp. Tvärbanan har ny
 Tvärbanans resenär sitter inne i mellanvagnen med fri musblick. Kupén har mönstrade säten, taklampor, gula handtag och hållplatsskyltar. Bild från passagerarkameran och tre skyltväxlingar kontrollerade med lokala Godot 4.7-dev.
 Tvärbanans perronger följer kurvan längs alla tre vagnsdelar. Sex dörrblad mot perrongen öppnas vid uppehåll och stängs före avgång. Testat vid samtliga tre stationer i Godot 4.7-dev.
 Elsparkcykeln viks ut med U på fri mark. Axel och Alma kan styra, gasa och bromsa. En granne åker på trottoaren. Testat båda spelarna, hjulrörelse samt stopp och avstigning vid brokanten i den lokala 4.7-dev-byggnaden.
+
+## Lokal förhandsutgåva c8c5c83
+
+- Glassbilen och elsparkcykeln ingår i DEB, RPM, tar.gz och DMG i `~/Dokument/Axel-releaser/`. Välj filerna för c8c5c83. RPM-filen heter `axels-spel-0.1.0-0.1.preview.x86_64.rpm`.
+- Glassbilens redigerbara modell finns i `source_blender/IceCreamVan.blend`. H spelar melodin. Glassrundan har tre stopp och ger tio mynt per stopp.
+- Linuxpaketen använder det lokala Godot 4.7-dev-bygget och kräver glibc 2.44. Mac-appen använder Godot 4.6.3 och har verifierade Intel- och Apple Silicon-binärer i samma app. DMG-filens integritet samt den inbäddade spelfilen har kontrollerats.
+- Återstår för macOS: provkör appen på en Mac. Förhandsutgåvan är ad hoc-signerad och saknar notarisering.
+
+## Fordon och arbetsplats i västra stadsdelen
+
+- MINI Cooper S Cabriolet kan väljas i fordonsmenyn och står även vid depån. Öppen kupé med spelaren på förarplatsen. Provkörd i huvudscenen i Godot 4.7-dev.
+- Volvo EC950F och Volvos hjullastare står uppställda på grusplanen väster om depån. Båda spelmodellerna har verifierats i huvudscenen. Maskinerna är utställningsmodeller med fast skopställning.
+- Granitmuren omsluter spelområdet. Sjökiosken, pizzerian och Sjöstadens Livs har gångbara entréer.
+- Paket för c8c5c83 ligger i yeager/deb-repo och yeager/rpm-repo. Nyare lokala speländringar ingår i nästa paket först när det byggs. Skapa bara en GitHub-release på uttrycklig begäran.
+
+Tvärbanan går i gatuplan på en 685,4 meter lång slinga med fyra hållplatser, gräs mellan rälerna och körfält i motsatta riktningar. F vid öppna dörrar låter spelaren kliva på och av. Hela turen och skyddet för personer på spåret verifierades med Godot 4.7-dev och tests/street_tram.gd.
+
+Sex spårövergångar har signaler för spårvagn, bil och gångtrafik. Rött stoppar både automatisk och manuellt körd tvärbana. Efter gult och en rödtid får nästa riktning grönt först när korsningen är fri. Genomgång med tests/tram_signals.gd i Godot 4.7-dev.
+
+## Bebyggelse, nattljus och moped i den lokala spelversionen
+
+- I östra stadsdelen finns fyra historiskt inspirerade bostadshus och sju moderna Sjöstadshus. Sex av de moderna husen vetter mot kanalen. Trapphusen bakom glas lyser varmt på kvällen.
+- Sjöstadens Pizzeria har tegel, markiser och meny i skyltfönstret. Godisboden har 40 upplysta lösgodislådor. Gångväg in och ut, köp av pizza för åtta mynt och godis för fyra mynt samt ändringar i plånbok och väska är provade.
+- Av 155 väg- och parklyktor står 18 vid bänken, strandpromenaden och bryggan. Lyktorna tänds och släcks i dygnscykeln. Markbelysningen vid bänken är kontrollerad genom att jämföra renderade nattbilder med parklyktorna tända och släckta.
+- Kanalvattnet återger skenet från 15 kaj- och brygglyktor. Nattvyn har renderats i Compatibility, Mobile och Forward+ med det lokala Godot 4.7-dev-bygget på AMD Radeon. Provkörning av DLSS på en kompatibel NVIDIA-GPU återstår.
+- Puch Dakota finns i fordonsmenyn och i depån. Axel och Alma kan köra den, och en granne åker moped i trafiken. Testet `tests/puch_dakota.gd` täcker bland annat grepp om styret, bromsning och fordonsbyte i depån.
+
+Tvärbanans Blender-modeller har rundat förarparti med infällda lampor, välvt tak, mjuk sidoprofil och blå takfält ovanför skjutdörrarna. Frontskylten följer aktuell hållplats. Spelets ledade bälgar har avrundade hörn. Utseendet granskat i den lokala Godot 4.7-dev-byggnaden. Bild i docs/tram-exterior.png.

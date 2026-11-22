@@ -4,7 +4,7 @@ project_dir="$(cd "$(dirname "$0")" && pwd)"
 if [[ -n "${GODOT_BIN:-}" ]]; then
   candidates=("$GODOT_BIN")
 else
-  candidates=(godot4 godot "$HOME/.local/share/axel-godot/Godot_v4.6.3-stable_linux.x86_64")
+  candidates=("$project_dir/dlss_lab/third_party/godot-ngx-dlss-linux/bin/godot.linuxbsd.editor.x86_64" godot4 godot "$HOME/.local/share/axel-godot/Godot_v4.6.3-stable_linux.x86_64")
 fi
 engine=""
 for candidate in "${candidates[@]}"; do
@@ -23,6 +23,9 @@ case "${1:-saved}" in
   mobile) args=(--rendering-method mobile) ;;
   forward+) args=(--rendering-method forward_plus) ;;
   fsr2) args=(--rendering-method forward_plus -- --fsr2) ;;
-  *) echo 'Usage: play.sh [compatibility|mobile|forward+|fsr2]' >&2; exit 2 ;;
+  dlss-lab) args=(--rendering-method forward_plus res://dlss_lab/dlss_test.tscn) ;;
+  dlss-lab-fsr2) args=(--rendering-method forward_plus res://dlss_lab/dlss_test.tscn -- --fsr2) ;;
+  dlss-lab-dlss) args=(--verbose --rendering-method forward_plus res://dlss_lab/dlss_test.tscn -- --dlss) ;;
+  *) echo 'Usage: play.sh [compatibility|mobile|forward+|fsr2|dlss-lab|dlss-lab-fsr2|dlss-lab-dlss]' >&2; exit 2 ;;
 esac
 exec "$engine" --path "$project_dir" "${args[@]}"

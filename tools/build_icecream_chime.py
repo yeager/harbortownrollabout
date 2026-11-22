@@ -1,7 +1,9 @@
 """Synthesize the ice cream truck signal, from the score in BrandNews 10/2003, p.9.
 
 https://www.brandeye.se/form/artiklar/hart_bn1004.pdf
-Pitch and rhythm follow the notation. The speaker tone is synthesized here.
+Pitch and tempo checked against the Hemglass recording:
+https://hemglass.se/wp-content/uploads/2022/10/hemglassljud.wav
+The speaker tone is synthesized here.
 """
 from array import array
 from math import exp, sin, tau
@@ -10,9 +12,9 @@ import sys
 import wave
 
 rate = 22050
-eighth = .205
+eighth = .201
 phrase = [(71, 1), (74, 1), (71, 1), (67, 2), (62, 1)]
-score = [(62, 1)] + phrase * 2 + [(72, 2), (72, 1), (69, 2), (69, 1), (67, 3)]
+score = [(62, 1)] + phrase * 2 + [(71, 2), (71, 1), (69, 2), (69, 1), (67, 3)]
 samples = array("h")
 for key, length in score:
     frequency = 440 * 2 ** ((key - 69) / 12)

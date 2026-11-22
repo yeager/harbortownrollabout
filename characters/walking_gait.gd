@@ -6,7 +6,7 @@ const SHIN := 0.325
 const HIP_HEIGHT := 0.77
 const SOLE_HEIGHT := 0.054
 const STANCE := 0.55
-const UPPER_ARM := 0.245
+const UPPER_ARM := 0.34
 const BALANCE_FREQUENCY := 18.0
 static var trousers: ArrayMesh
 static var sleeve_mesh: ArrayMesh
@@ -162,6 +162,8 @@ func advance(distance: float, delta: float, pushing: bool) -> void:
 		shoes[i].basis = legs[i].basis.inverse() * Basis(Vector3.RIGHT, shoe_angles[i])
 		if not pushing:
 			arms[i].rotation.x = -foot.x * 1.05
+			# Leave room for the resting thumb beside the jacket and thigh.
+			arms[i].rotation.z = signf(hip_centres[i]) * .10
 		var flex := .15 + weight * (.18 - foot.x * .52)
 		if pushing:
 			flex = .12

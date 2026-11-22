@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="288" height="32" viewBox="0 0 288 32">
+ <defs>
+  <g id="auto" fill="none" stroke="#39796d" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 15a11 11 0 0 1 20-6l2 3m-1-8 1 8-8-1M27 18a11 11 0 0 1-20 5l-2-3m1 8-1-8 8 1"/></g>
+  <g id="sun" stroke="#975818" stroke-width="2" stroke-linecap="round"><circle cx="16" cy="16" r="7" fill="#ffd356"/><path d="M16 2v4m0 20v4M2 16h4m20 0h4M6 6l3 3m14 14 3 3M6 26l3-3M23 9l3-3"/></g>
+  <g id="snow" fill="none" stroke="#327593" stroke-width="2" stroke-linecap="round"><path d="M16 3v26M5 9l22 14M5 23 27 9m-15-4 4 4 4-4m-8 22 4-4 4 4M6 14l5-1-1-5m16 10-5 1 1 5M6 18l5 1-1 5m16-10-5-1 1-5"/></g>
+ </defs>
+ <use xlink:href="#auto"/>
+ <g transform="translate(32)" stroke="#377145" stroke-width="2"><path d="M16 29V14m0 12q-9 0-10-7 6-1 10 7" fill="#72aa5b"/><g fill="#ef91ac" stroke="#ad526c"><circle cx="16" cy="6" r="4"/><circle cx="10" cy="12" r="5"/><circle cx="22" cy="12" r="5"/><circle cx="16" cy="16" r="4"/></g><circle cx="16" cy="11" r="3" fill="#ffce54" stroke="none"/></g>
+ <use xlink:href="#sun" x="64"/>
+ <g transform="translate(96)" stroke="#865531" stroke-width="2"><path d="M5 25Q3 6 28 3q-1 24-23 22Z" fill="#dd8f44"/><path d="m3 29 20-20m-10 12v-7m5 3 6-1" fill="none"/></g>
+ <use xlink:href="#snow" x="128"/><use xlink:href="#sun" x="160"/>
+ <g transform="translate(192)" stroke="#42657a" stroke-width="2"><path d="M7 18a5 5 0 0 1-1-10q5-9 14-3a5 5 0 0 1 6 5q6 7-2 8Z" fill="#a8c5d3"/><path d="m10 21-3 6m10-6-3 6m10-6-3 6" stroke="#347eaa" stroke-width="3" stroke-linecap="round"/></g>
+ <use xlink:href="#snow" x="224"/>
+ <g transform="translate(256)"><ellipse cx="16" cy="25" rx="14" ry="4" fill="#6797aa"/><path d="m4 24 7-9 5 4 4-9 8 14Z" fill="#e1eceb" stroke="#5a7787" stroke-width="2"/><path d="m7 4-2 5m10-7-2 5" stroke="#347eaa" stroke-width="2"/></g>
+</svg>

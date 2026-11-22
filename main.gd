@@ -1,5 +1,7 @@
 extends Node3D
 
+const L10n := preload("res://l10n/localization.gd")
+
 const TARGETS: Array[Vector3] = [Vector3(30, 0, 3), Vector3(0, 0, -25), Vector3(99.65, 0, -24)]
 const WALK_TARGETS: Array[Vector3] = [Vector3(30,0,12), Vector3(6.35,0,-25), Vector3(90,0,-24)]
 const TARGET_NAMES := ["Help at the square", "Pick up the medic", "Deliver first aid to the marina"]
@@ -14,16 +16,19 @@ func _mission_stop() -> int:
 		_: return mission_index
 
 const ROAD_HALF := 4.8
+# Inside faces of the continuous perimeter wall, in world X/Z.
+const CITY_INTERIOR := Rect2(-520, -92, 690, 172)
 const VEHICLE_NAMES := ["Ambulance", "Police car", "Fire engine"]
 const VEHICLE_SCENES := ["res://vehicles/ambulance.glb", "res://vehicles/polisbil.glb", "res://vehicles/brandbil.glb"]
-const VEHICLE_NAMES_ALL := ["Ambulance", "Police car", "Fire engine", "BMW X5 M60i", "Taxi", "Recovery truck", "BMW M3 E30", "Volvo 240", "Saab 96", "Tesla Model S", "City bus", "Snowmobile", "Volvo XC60 Police", "Porsche 911 GT3 RS", "Ice cream van"]
-const VEHICLE_SCENES_ALL := ["res://vehicles/ambulance.glb", "res://vehicles/polisbil.glb", "res://vehicles/brandbil.glb", "res://vehicles/bmw_x5_m60i.glb", "res://vehicles/taxi.glb", "res://vehicles/bargare.glb", "res://vehicles/m3_e30.glb", "res://vehicles/volvo240.glb", "res://vehicles/saab96.glb", "res://vehicles/model_s.glb", "res://vehicles/city_bus.glb", "res://vehicles/snowmobile.glb", "res://vehicles/volvo_xc60_polis.glb", "res://vehicles/porsche_gt3_rs.glb", "res://vehicles/ice_cream_van.glb"]
-const SIREN_SOUNDS := ["res://audio/siren_ambulance.wav", "res://audio/siren_police.wav", "res://audio/siren_fire.wav", "res://audio/bmw_engine.wav", "res://audio/bmw_engine.wav", "res://audio/bmw_engine.wav", "res://audio/bmw_engine.wav", "res://audio/bmw_engine.wav", "res://audio/bmw_engine.wav", "res://audio/electric_drive.wav", "res://audio/bmw_engine.wav", "res://audio/sled_engine.wav", "res://audio/siren_police.wav", "res://audio/porsche_engine.wav", "res://audio/bmw_engine.wav"]
+const VEHICLE_NAMES_ALL := ["Ambulance", "Police car", "Fire engine", "SUV", "Taxi", "Recovery truck", "Classic sports coupe", "Classic sedan", "Vintage compact", "Electric sedan", "City bus", "Snowmobile", "Police SUV", "Track sports car", "Ice cream van", "Small convertible", "Classic moped", "Monster truck", "A-tractor", "Classic cruiser", "Wheel loader", "Farm tractor", "Food truck"]
+const VEHICLE_SCENES_ALL := ["res://vehicles/ambulance.glb", "res://vehicles/polisbil.glb", "res://vehicles/brandbil.glb", "res://vehicles/bmw_x5_m60i.glb", "res://vehicles/taxi.glb", "res://vehicles/bargare.glb", "res://vehicles/m3_e30.glb", "res://vehicles/volvo240.glb", "res://vehicles/saab96.glb", "res://vehicles/model_s.glb", "res://vehicles/city_bus.glb", "res://vehicles/snowmobile.glb", "res://vehicles/volvo_xc60_polis.glb", "res://vehicles/porsche_gt3_rs.glb", "res://vehicles/ice_cream_van.glb", "res://vehicles/mini_cooper_cabriolet.glb", "res://vehicles/puch_dakota.glb", "res://vehicles/monster_truck.glb", "res://vehicles/a_traktor.glb", "res://vehicles/raggarbil.glb", "res://vehicles/volvo_wheel_loader.glb", "res://vehicles/farm_tractor.glb", "res://vehicles/food_truck_road.glb"]
+const SIREN_SOUNDS := ["res://audio/siren_ambulance.wav", "res://audio/siren_police.wav", "res://audio/siren_fire.wav", "res://audio/bmw_engine.wav", "res://audio/bmw_engine.wav", "res://audio/bmw_engine.wav", "res://audio/bmw_engine.wav", "res://audio/bmw_engine.wav", "res://audio/bmw_engine.wav", "res://audio/electric_drive.wav", "res://audio/bmw_engine.wav", "res://audio/sled_engine.wav", "res://audio/siren_police.wav", "res://audio/porsche_engine.wav", "res://audio/bmw_engine.wav", "res://audio/bmw_engine.wav", "res://audio/moped_engine.wav", "res://audio/monster_engine.wav", "res://audio/bmw_engine.wav", "res://audio/bmw_engine.wav", "res://audio/loader_diesel.wav", "res://audio/tractor_diesel.wav", "res://audio/bmw_engine.wav"]
 const BUILDING_SCENES := {"Sjukhuset":"res://environment/sjukhus.glb", "Polisstationen":"res://environment/polisstation.glb", "Bageriet":"res://environment/bageri.glb", "Vårdcentralen":"res://environment/vardcentral.glb", "Brandstationen":"res://environment/brandstation.glb", "Biblioteket":"res://environment/bibliotek.glb"}
 const TREE_SCENES := ["res://environment/lovtrad.glb", "res://environment/gran.glb", "res://environment/bredkronigt_lovtrad.glb"]
 
 var ambulance: Node3D
 var trunks := PackedVector3Array() # Centre X, trunk radius, centre Z.
+var roadside_solids: Array[AABB] = []
 var building_bounds: Array[AABB] = []
 var pier_surfaces: Array[AABB] = []
 var driving_surfaces: Array[AABB] = []
@@ -43,6 +48,7 @@ var sidewalk_finish: ShaderMaterial
 var marking_finish: ShaderMaterial
 var road_finish: ShaderMaterial
 var apartment_lights: Array[StandardMaterial3D] = []
+var quay_stair_light: StandardMaterial3D
 var city_env: Environment
 var city_sun: DirectionalLight3D
 var city_fill: OmniLight3D
@@ -55,10 +61,26 @@ var previous_season := 0
 var greeting_timer := 0.0
 var greeting_number := 0
 var greeting := Label3D.new()
+var bubble_back := Sprite3D.new()
+enum FootQuest { WAITING, SEARCHING, RETURNING, FINISHED }
+var shoe_quest := FootQuest.WAITING
+var shoe_owner: Node3D
+var cat_quest := FootQuest.WAITING
+var cat_owner: Node3D
+var lost_cat := Node3D.new()
+var lost_shoe := Node3D.new()
+var speech_key := ""
+var speech_clip := ""
+var speech_locale := ""
+var bubble_time := 0.0
+var greeting_voice := AudioStreamPlayer.new()
 var wiper_pivots: Array[Node3D] = []
 var wiper_phase := 0.0
 var cockpit_look := Vector2.ZERO
 var orbit_angle := 0.0
+var footstep := AudioStreamPlayer.new()
+var star_chime := AudioStreamPlayer.new()
+var walk_camera_height := 0.0
 var orbit_height := 0.0
 var time_mode := 0
 var day_phase := 0.0
@@ -66,6 +88,44 @@ var last_night := -1.0
 var parked_door_offset := Vector3.ZERO
 const Scooter := preload("res://vehicles/kick_scooter.gd")
 var scooter := Scooter.new()
+var excavator: Node3D
+const CrawlerBelt := preload("res://vehicles/crawler_belt.gd")
+var crawler_belts: Array[CrawlerBelt] = []
+var cab_turntable := Node3D.new()
+var boom_joint := Node3D.new()
+var stick_joint := Node3D.new()
+var bucket_joint := Node3D.new()
+class LiftCylinder:
+	var foot: Node3D
+	var head: Node3D
+	var barrel: Node3D
+	var gland: Node3D
+	var rod: Node3D
+	var barrel_length: float
+	var gland_length: float
+	var rod_length: float
+
+	func update_pose() -> void:
+		var axis := foot.position.direction_to(foot.get_parent_node_3d().to_local(head.global_position))
+		var length := foot.global_position.distance_to(head.global_position)
+		var frame := Basis(Vector3.RIGHT,atan2(axis.z,axis.y))
+		barrel.transform = Transform3D(frame,foot.position + axis*barrel_length*.5)
+		gland.transform = Transform3D(frame,foot.position + axis*(barrel_length + gland_length*.5))
+		var rod_start := barrel_length + gland_length*.5
+		var visible_length := length - rod_start
+		rod.transform = Transform3D(frame.scaled_local(Vector3(1,visible_length/rod_length,1)),foot.position + axis*(rod_start + visible_length*.5))
+
+var boom_lifts: Array[LiftCylinder] = [LiftCylinder.new(), LiftCylinder.new()]
+var stick_cylinder := LiftCylinder.new()
+var bucket_cylinder := LiftCylinder.new()
+var bucket_profile := PackedVector2Array()
+const EXTRA_GALLERY_NAMES := ["Tracked excavator", "Tram", "Motorboat"]
+var start_in_excavator := false
+var operating_excavator := false
+var excavator_wall := -1
+var run_reserve := 60.0
+var winded := false
+var run_ready_hint_time := 0.0
 var walker: Node3D
 var parked_cars: Array[Node3D] = []
 var parked_footprints: Array[Rect2] = []
@@ -81,6 +141,13 @@ const BUS := 10
 const SNOWMOBILE := 11
 const PORSCHE := 13
 const ICE_CREAM := 14
+const MINI_CABRIO := 15
+const PUCH_DAKOTA := 16
+const WHEEL_LOADER := 20
+const FARM_TRACTOR := 21
+const FOOD_TRUCK := 22
+const MopedRider := preload("res://vehicles/moped_rider.gd")
+var moped_pose := MopedRider.new()
 const ICE_STOPS := [0, SCHOOL, 2]
 const XC60_POLICE := 12
 const SCHOOL := 3
@@ -92,20 +159,28 @@ const BUS_STOPS := [0,SCHOOL,2,1,4,5]
 const BUS_MESSAGES := ["Collect passengers at the square.", "Drop off passengers at the school.", "Collect passengers at the marina.", "Drop off passengers at the clinic.", "Collect passengers at Västra torget.", "Drop off passengers at Västerängen."]
 var rear_bus_board: Label3D
 var bus_board: Label3D
-const BUS_STOP_NAMES := ["TORGET","VÅRDCENTRALEN","SMÅBÅTSHAMNEN","SJÖSTADSSKOLAN","VÄSTRA TORGET","VÄSTERÄNGEN"]
+const BUS_STOP_NAMES := ["THE SQUARE","HEALTH CENTRE","MARINA","HARBOR TOWN SCHOOL","VÄSTRA TORGET","VÄSTERÄNGEN"]
 var bus_leg := 0
 const TAXI := 4
-const HORNS := ["ambulance","police","fire","bmw","taxi","recovery", "m3_e30", "volvo240", "saab96", "model_s", "city_bus","snowmobile", "police", "porsche", "icecream"]
+const HORNS := ["ambulance","police","fire","bmw","taxi","recovery", "m3_e30", "volvo240", "saab96", "model_s", "city_bus","snowmobile", "police", "porsche", "icecream", "bmw", "saab96"]
 var horn := AudioStreamPlayer.new()
+var next_song_button: Button
 var radio_button: Button
 var radio := AudioStreamPlayer.new()
 var radio_enabled := false
+var radio_vehicle := ""
+var radio_language := ""
+var radio_tracks := PackedStringArray()
+var radio_bag: Array[String] = []
+var radio_track := ""
 var horn_button: Button
 const RECOVERY := 5
-const SERVICE_STOPS := [Vector3(18,0,2.35), Vector3(34,0,-46), Vector3(126,0,-2.35), Vector3(34,0,-46)]
-const SERVICE_MESSAGES := ["Collect the car with a smoking bonnet.","Take the car to the workshop.","Collect the car with a missing wheel.","Take the car to the workshop."]
+const STATION_DROP := Vector3(-121,0,12)
+const STATION_PARKING := Vector3(-120,0,20)
+const SERVICE_STOPS := [Vector3(18,0,2.35), STATION_DROP, Vector3(126,0,-2.35), STATION_DROP]
+const SERVICE_MESSAGES := ["Collect the car with a smoking bonnet.","Take the car to the petrol station.","Collect the car with a missing wheel.","Take the car to the petrol station."]
 var recovery_leg := 0
-const WORKSHOP_CAR_BOUNDS := AABB(Vector3(27.9,-1,-40.86),Vector3(4.2,3,1.72))
+const WORKSHOP_CAR_BOUNDS := AABB(STATION_PARKING - Vector3(2.1,1,.86),Vector3(4.2,3,1.72))
 var workshop_car: Node3D
 var casualty: Node3D
 var hazard_lenses: Array[MeshInstance3D] = []
@@ -124,8 +199,9 @@ var arriving_passenger: Node3D
 var passenger: Node3D
 var seat_button: Button
 var vehicle_index := 0
-var activity := OptionButton.new()
-var vehicle_selector: OptionButton
+var game_volume_slider := HSlider.new()
+var traffic_volume_slider := HSlider.new()
+var vehicle_selector := GridContainer.new()
 var camera_turn := 0.0
 var cockpit_view := false
 var camera_button: Button
@@ -154,6 +230,7 @@ var mouse_gas := false
 var mouse_brake := false
 var brake_pedal_held := false
 var gentle_driving := true
+var allow_crashes := true
 var waiting_for_signal := false
 var brake_held := false
 var tire_player := AudioStreamPlayer.new()
@@ -168,7 +245,7 @@ var skid_anchors := PackedVector3Array()
 const SKID_CAPACITY := 2048
 var speed := 0.0
 var steering := 0.0
-var free_drive := false
+var free_drive := true
 var mission_index := 0
 var vehicle_progress := {}
 
@@ -185,10 +262,13 @@ func _vehicle_tasks() -> Array:
 		0: return TARGET_NAMES
 		1, XC60_POLICE: return PATROL_TASKS
 		2: return FIRE_TASKS
+		FARM_TRACTOR: return ["Collect seedlings at the square", "Deliver herbs to the clinic garden", "Bring flowers to the marina"]
+		FOOD_TRUCK: return ["Pick up soup ingredients at the square", "Serve lunch to the clinic staff", "Serve soup to the boat crews"]
 		SNOWMOBILE: return SLED_TASKS
 		ICE_CREAM: return ["Serve ice cream at the square", "Serve ice cream outside the school", "Serve ice cream at the marina"]
 		_: return DELIVERY_TASKS
 
+var quit_dialog := ConfirmationDialog.new()
 var parked_at_target := 0.0
 var mode := "menu"
 var paused := false:
@@ -198,16 +278,27 @@ var paused := false:
 			weather.rain_particles.speed_scale = 0.0 if value else 1.0
 			weather.snow_particles.speed_scale = weather.rain_particles.speed_scale
 var lights_on := false
-var parked_light_settings: Array[bool] = [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false]
+var parked_light_settings: Array[bool] = []
 var sound_on := true
-var parked_sound_settings: Array[bool] = [false, false, false, true, true, true, true, true, true, true, true, true, true, true, true]
+var parked_sound_settings: Array[bool] = []
 var siren_player: AudioStreamPlayer
+var menu_footer := VBoxContainer.new()
+var version_label := Label.new()
 var ui: CanvasLayer
 var wardrobe := preload("res://characters/weather_clothing.gd").new()
 var jacket_palette := -1
 var at_colour_bench := false
 const BENCH_COLOURS := [Color("#905bb9"), Color("#f1ab38"), Color("#399d83")]
 var play_as_alma := false
+const STAR_SITES := {
+	"main_street": Vector2(-7, 2.35), "park": Vector2(30, 18),
+	"west_avenue": Vector2(-205, 2.35), "north_bridge": Vector2(71, -45.65),
+	"south_bridge": Vector2(71, 2.35), "canal": Vector2(71, 42),
+	"east_street": Vector2(104.35, 32), "work_yard": Vector2(-113, 45)
+}
+const POINTS_PER_STAR := 10
+var collected_stars := PackedStringArray()
+var star_markers := {}
 var wallet := 0
 var wallet_label: Label
 var shops := preload("res://shop_street.gd").new()
@@ -269,7 +360,25 @@ var ferry: Node3D
 var wave_time := 0.0
 var walker_data: Array[Dictionary] = []
 
+func _reset_parked_controls() -> void:
+	parked_light_settings.resize(VEHICLE_SCENES_ALL.size())
+	parked_sound_settings.resize(VEHICLE_SCENES_ALL.size())
+	parked_light_settings.fill(false)
+	for i in parked_sound_settings.size():
+		parked_sound_settings[i] = i >= 3
+
 func _ready() -> void:
+	L10n.load_catalogs()
+	greeting_voice.volume_db = -4
+	add_child(greeting_voice)
+	star_chime.stream = preload("res://audio/star_pickup.wav")
+	star_chime.volume_db = -9
+	add_child(star_chime)
+	footstep.stream = preload("res://audio/footstep.wav")
+	footstep.volume_db = -13
+	add_child(footstep)
+	_reset_parked_controls()
+	_recover_unsupported_dlss_setting()
 	if RenderingServer.get_current_rendering_method()=="forward_plus" and "--fsr2" in OS.get_cmdline_user_args():
 		get_viewport().scaling_3d_mode=Viewport.SCALING_3D_MODE_FSR2
 		get_viewport().scaling_3d_scale=.75
@@ -278,11 +387,55 @@ func _ready() -> void:
 	add_child(weather)
 	wardrobe.update(weather.season, weather.intensity)
 	_build_world()
+	_build_stars()
 	_build_ui()
+	quit_dialog.process_mode = Node.PROCESS_MODE_ALWAYS
+	quit_dialog.exclusive = true
+	add_child(quit_dialog)
+	quit_dialog.confirmed.connect(_finish_quit)
+	quit_dialog.canceled.connect(func(): get_tree().paused = false)
 	_build_brake_effects()
 	_update_mission_marker()
 	_refresh_ui()
 	start_button.grab_focus()
+	if get_tree().get_root().has_meta("dlss_lab_autostart"):
+		var lab_config: Dictionary = get_tree().get_root().get_meta("dlss_lab_autostart")
+		_set_vehicle_and_activity_for_dlss_lab(lab_config)
+
+func _set_vehicle_and_activity_for_dlss_lab(lab_config: Dictionary) -> void:
+	var selected_vehicle := clampi(int(lab_config.get("vehicle_index", 1)), 0, VEHICLE_NAMES_ALL.size() - 1)
+	if selected_vehicle != vehicle_index:
+		vehicle_index = selected_vehicle
+		_load_vehicle_model()
+	_mark_selected_vehicle(vehicle_index)
+	free_drive = true
+	_start_game()
+
+func _engine_supports_dlss_mode() -> bool:
+	return ClassDB.class_get_integer_constant_list("Viewport", true).has("SCALING_3D_MODE_DLSS")
+
+func _active_renderer_reports_dlss() -> bool:
+	if not ClassDB.class_has_method("RenderingServer", "is_dlss_supported"):
+		return false
+	return bool(RenderingServer.call("is_dlss_supported"))
+
+func _recover_unsupported_dlss_setting() -> void:
+	if _engine_supports_dlss_mode() and _active_renderer_reports_dlss():
+		return
+	var graphics := ConfigFile.new()
+	if graphics.load("user://graphics.cfg") != OK:
+		return
+	if int(graphics.get_value("rendering", "scaling_3d/mode", 0)) != 5:
+		return
+	# A user may switch back to stock Godot after selecting DLSS in the custom fork.
+	# Clear the fork-only value so the stock renderer never keeps an unknown mode.
+	graphics.set_value("rendering", "scaling_3d/mode", 0)
+	graphics.set_value("rendering", "scaling_3d/scale", 1.0)
+	graphics.set_value("rendering", "anti_aliasing/quality/msaa_3d", 2)
+	graphics.save("user://graphics.cfg")
+	get_viewport().set("scaling_3d_mode", 0)
+	get_viewport().scaling_3d_scale = 1.0
+	push_warning("Saved DLSS setting is unsupported by this Godot build or active video adapter; restored standard Forward+ scaling.")
 
 func _process(delta: float) -> void:
 	if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED and not _can_capture_camera():
@@ -322,14 +475,19 @@ func _process(delta: float) -> void:
 	if not paused and message_timer > 0.0:
 		message_timer = maxf(0.0, message_timer - delta)
 	if mode == "playing" and not paused:
+		var star_actor := _star_collector()
+		var before := star_actor.global_position
 		_update_patrol(delta)
 		street_signals.advance(delta)
 		var tram_gas := mouse_gas or Input.is_physical_key_pressed(KEY_W) or Input.is_key_pressed(KEY_UP)
 		var tram_brake := mouse_brake or brake_pedal_held or Input.is_physical_key_pressed(KEY_S) or Input.is_key_pressed(KEY_DOWN)
 		tram.advance(delta, tram_mode == 2, tram_gas, tram_brake)
+		if tram_mode != 0: _update_entry_button()
 		if tram_mode == 2:
 			driving_controls.set_controls(0,tram_gas and not tram_brake,tram_brake)
-		if boating:
+		if operating_excavator:
+			_drive_excavator(delta)
+		elif boating:
 			_drive_launch(delta)
 		elif tram_mode > 0 or ferry_passenger:
 			_end_skid()
@@ -337,6 +495,7 @@ func _process(delta: float) -> void:
 			_walk(delta)
 		else:
 			_drive(delta)
+		_collect_stars(before, star_actor.global_position)
 		_update_arrival(delta)
 		route_timer -= delta
 		if route_timer<=0:
@@ -345,8 +504,8 @@ func _process(delta: float) -> void:
 		_update_traffic(delta)
 		_update_pedestrians(delta)
 		_update_moorings(delta)
-		if vehicle_index >= 3 and vehicle_index != XC60_POLICE and siren_player.playing:
-			var pitch_speed := 32.0 if vehicle_index == SNOWMOBILE else 250.0 / 3.6
+		if not boating and not operating_excavator and vehicle_index >= 3 and vehicle_index != XC60_POLICE and siren_player.playing:
+			var pitch_speed := 12.0 if vehicle_index in [FARM_TRACTOR, WHEEL_LOADER] else 8.33 if vehicle_index == PUCH_DAKOTA else 32.0 if vehicle_index == SNOWMOBILE else 250.0 / 3.6
 			siren_player.pitch_scale = 0.88 + clampf(absf(speed) / pitch_speed, 0.0, 1.0) * 0.72
 	else:
 		_end_skid()
@@ -360,7 +519,43 @@ func _process(delta: float) -> void:
 	weather.position = camera.position + Vector3.UP*8
 	_refresh_status()
 
+func _finish_quit() -> void:
+	var tree := get_tree()
+	# Release the game's audio players before the audio server shuts down.
+	for player in find_children("*", "AudioStreamPlayer", true, false):
+		player.stop()
+	for player in find_children("*", "AudioStreamPlayer3D", true, false):
+		player.stop()
+	tree.create_timer(maxf(.4, AudioServer.get_output_latency() + AudioServer.get_time_to_next_mix())).timeout.connect(tree.quit)
+	queue_free()
+
+func _dialog_quit_key(event: InputEvent, dialog: Window) -> void:
+	if event is InputEventKey and event.keycode == KEY_F10 and event.pressed and not event.echo:
+		dialog.set_input_as_handled()
+		_request_quit(dialog)
+
+func _request_quit(parent_window: Window = null) -> void:
+	if quit_dialog.visible: return
+	var host: Node = parent_window if parent_window else self
+	if quit_dialog.get_parent() != host:
+		quit_dialog.reparent(host, false)
+	mouse_gas = false
+	mouse_brake = false
+	brake_pedal_held = false
+	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	quit_dialog.title = tr("Quit game")
+	quit_dialog.dialog_text = tr("Do you want to quit the game?")
+	quit_dialog.ok_button_text = tr("Yes")
+	quit_dialog.cancel_button_text = tr("No")
+	get_tree().paused = true
+	quit_dialog.popup_centered()
+	quit_dialog.get_cancel_button().grab_focus()
+
 func _input(event: InputEvent) -> void:
+	if event is InputEventKey and event.keycode == KEY_F10 and event.pressed and not event.echo:
+		get_viewport().set_input_as_handled()
+		_request_quit()
+		return
 	if event is InputEventKey and event.physical_keycode == KEY_V and not event.echo:
 		if not event.pressed:
 			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
@@ -374,6 +569,9 @@ func _input(event: InputEvent) -> void:
 		if cockpit_view and not walker.visible and not boating and tram_mode==0:
 			cockpit_look.x = clampf(cockpit_look.x-event.relative.x*.007,-1.4,1.4)
 			cockpit_look.y = clampf(cockpit_look.y-event.relative.y*.006,-.45,.52)
+			return
+		if walker.visible and tram_mode == 0 and not (boating or ferry_passenger or operating_excavator):
+			walk_camera_height = clampf(walk_camera_height + event.relative.y*.022,-1.5,3.5)
 			return
 		orbit_angle -= event.relative.x*.007
 		orbit_height = clampf(orbit_height+event.relative.y*.022,-1.8,5)
@@ -403,6 +601,14 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_TRANSLATION_CHANGED and is_node_ready():
+		if bubble_time > 0 and not speech_key.is_empty() and speech_locale != TranslationServer.get_locale():
+			_say(greeting.get_parent(), speech_key, speech_clip)
+		game_volume_slider.accessibility_name = tr("Game volume")
+		traffic_volume_slider.accessibility_name = tr("Traffic sirens")
+		for tile: Button in vehicle_selector.get_children():
+			tile.accessibility_name = tr(tile.text)
+		for label: Label3D in get_tree().get_nodes_in_group("bus_stop_labels"):
+			_update_stop_label(label)
 		if shops.inside >= 0: shops.rebuild_menu()
 		_update_mission_marker()
 		_refresh_ui()
@@ -412,7 +618,7 @@ func _notification(what: int) -> void:
 		mouse_gas = false
 		mouse_brake = false
 		brake_pedal_held = false
-		if mode == "playing" and not paused:
+		if mode == "playing" and not paused and not get_tree().paused:
 			_toggle_pause()
 
 func _unhandled_key_input(event: InputEvent) -> void:
@@ -423,6 +629,8 @@ func _unhandled_key_input(event: InputEvent) -> void:
 			KEY_U: _toggle_scooter()
 			KEY_H: _honk()
 			KEY_J: _toggle_radio()
+			KEY_N:
+				if radio_enabled and radio_button.is_visible_in_tree(): _next_radio_track()
 			KEY_F:
 				if not phone.handset.is_visible_in_tree(): _change_seat()
 			KEY_C: _toggle_camera_view()
@@ -438,6 +646,7 @@ func _unhandled_key_input(event: InputEvent) -> void:
 				if mode == "menu": _start_game()
 			KEY_R:
 				if mode == "complete": _start_game()
+				elif mode == "playing" and not paused: _recover_position()
 
 func _toggle_radio() -> void:
 	if not radio_button.is_visible_in_tree(): return
@@ -445,17 +654,54 @@ func _toggle_radio() -> void:
 	_sync_radio()
 
 func _sync_radio() -> void:
-	radio_button.visible = mode=="playing" and not paused and (not walker.visible or scooter.visible or boating or tram_mode>0 or ferry_passenger)
-	radio_button.text = "Radio on · J" if radio_enabled else "Radio off · J"
-	if not radio_enabled:
+	var language_code := TranslationServer.get_locale()
+	if language_code != radio_language:
+		radio_language = language_code
 		radio.stop()
-	elif radio_button.visible:
-		if radio.stream_paused:
-			radio.stream_paused = false
-		elif not radio.playing:
-			radio.play()
-	elif radio.playing:
+		radio_bag.clear()
+		radio_tracks.clear()
+		radio_tracks.append_array(L10n.radio_tracks(language_code))
+	var aboard := mode == "playing" and (not walker.visible or scooter.visible or boating or operating_excavator or tram_mode > 0 or ferry_passenger)
+	var current_vehicle := ""
+	if aboard:
+		if boating: current_vehicle = "boat"
+		elif operating_excavator: current_vehicle = "excavator"
+		elif scooter.visible: current_vehicle = "scooter"
+		elif tram_mode > 0: current_vehicle = "tram"
+		elif ferry_passenger: current_vehicle = "ferry"
+		else: current_vehicle = VEHICLE_NAMES_ALL[vehicle_index]
+	if current_vehicle != radio_vehicle:
+		radio_vehicle = current_vehicle
+		radio.stop()
+		radio_enabled = aboard
+	radio_button.visible = aboard and not paused
+	next_song_button.visible = radio_button.visible and radio_enabled and radio_tracks.size() > 1
+	radio_button.text = "Turn radio off · J" if radio_enabled else "Turn radio on · J"
+	if not radio_enabled:
+		radio_button.tooltip_text = ""
+		radio.stop()
+		radio.stream_paused = false
+	elif radio_tracks.is_empty():
+		radio_button.tooltip_text = tr("No songs available in this language yet.")
+	elif paused:
 		radio.stream_paused = true
+	else:
+		radio.stream_paused = false
+		if not radio.playing: _next_radio_track()
+
+func _next_radio_track() -> void:
+	if radio_tracks.is_empty() or not radio_enabled or paused: return
+	if radio_bag.is_empty():
+		radio_bag.assign(radio_tracks)
+		radio_bag.shuffle()
+		if radio_bag.size() > 1 and radio_bag.back() == radio_track:
+			var last := radio_bag.size() - 1
+			radio_bag[last] = radio_bag[0]
+			radio_bag[0] = radio_track
+	radio_track = radio_bag.pop_back()
+	radio_button.tooltip_text = tr("Now playing: %s") % radio_track.get_basename().rsplit(" (", true, 1)[0]
+	radio.stream = load("res://audio/radio/" + radio_track)
+	radio.play()
 
 func _honk() -> void:
 	if mode != "playing" or paused or (walker.visible and not boating and tram_mode == 0) or tram_mode == 1 or horn.playing: return
@@ -507,6 +753,8 @@ func _drive_launch(delta: float) -> void:
 	var next := launch.position+heading*launch_speed*delta
 	var bounded := Vector3(clampf(next.x,58,84),-.94+.026*sin(wave_time*1.7),clampf(next.z,9,74))
 	if absf(next.x-bounded.x)+absf(next.z-bounded.z)>.0001: launch_speed=0
+	var engine_load := clampf(absf(launch_speed) / 9.0, 0, 1)
+	siren_player.pitch_scale = move_toward(siren_player.pitch_scale, 0.8 + engine_load * .85, delta * 1.5)
 	launch.position=bounded
 	launch.rotation.z=lerpf(launch.rotation.z,-turn*absf(launch_speed)*.012,1-exp(-3*delta))
 	driving_controls.set_controls(turn,gas and not brake,brake,reverse_requested and launch_speed<-.1)
@@ -536,6 +784,9 @@ func _drive(delta: float) -> void:
 	if gentle_driving:
 		max_speed = 30.0 / 3.6
 		acceleration = 6.0 if is_zero_approx(throttle) else minf(acceleration, 2.8)
+	if vehicle_index == PUCH_DAKOTA:
+		max_speed = 30.0 / 3.6
+		acceleration = 2.2
 	if vehicle_index == PORSCHE:
 		max_speed *= 3.0
 		if throttle > 0.0:
@@ -560,7 +811,7 @@ func _drive(delta: float) -> void:
 	for knuckle in front_knuckles:
 		knuckle.rotation.y = -steering * deg_to_rad(33.0)
 	driving_controls.set_controls(steering, throttle > 0, brake_held, throttle < 0 and not brake_held)
-	var wheelbase: float = [3.7, 2.75, 4.1, 2.975, 2.85, 4.0, 2.56, 2.64, 2.46, 2.96, 6.06, 1.65, 2.865, 2.457, 3.81][vehicle_index]
+	var wheelbase: float = [3.7, 2.75, 4.1, 2.975, 2.85, 4.0, 2.56, 2.64, 2.46, 2.96, 6.06, 1.65, 2.865, 2.457, 3.81, 2.495, 1.14, 3.37, 2.84, 3.1, 3.2, 2.61, 3.8][vehicle_index]
 	var yaw_rate := speed * tan(steering * deg_to_rad(33.0)) / wheelbase
 	# Limit lateral acceleration at speed while retaining tight parking turns.
 	var max_yaw_rate := 8.0 / maxf(absf(speed), 1.0)
@@ -572,6 +823,28 @@ func _drive(delta: float) -> void:
 			ambulance.basis = previous_pose.basis
 			extent = previous_extent
 			break
+	var obstacles := _road_obstacles()
+	if not extent.is_equal_approx(previous_extent):
+		var turn_obstacles := obstacles.duplicate()
+		for item in traffic_data:
+			turn_obstacles.append(_traffic_bounds(item))
+		for obstacle in turn_obstacles:
+			if _vehicle_overlap_depth(obstacle, extent) > _vehicle_overlap_depth(obstacle, previous_extent) + .00001:
+				ambulance.basis = previous_pose.basis
+				extent = previous_extent
+				break
+	if ambulance.global_transform.basis != previous_pose.basis:
+		var reach := maxf(front_reach, rear_reach)
+		var corner_radius := Vector2(player_half_size.x, reach).length()
+		for trunk in trunks:
+			var center := Vector3(trunk.x, ambulance.position.y, trunk.z)
+			if center.distance_squared_to(ambulance.position) > (corner_radius + trunk.y) ** 2:
+				continue
+			var gap := _trunk_gap(ambulance.to_local(center))
+			if gap < trunk.y and gap < _trunk_gap(previous_pose.affine_inverse() * center):
+				ambulance.basis = previous_pose.basis
+				extent = previous_extent
+				break
 	var forward := -ambulance.global_transform.basis.z
 	var travel_direction := forward * signf(speed)
 	var leading_reach := rear_reach if speed<0 else front_reach
@@ -589,6 +862,22 @@ func _drive(delta: float) -> void:
 			stopping_distance = minf(stopping_distance,maxf(0,absf(offset.z)-leading_reach-.65))
 	var margin := Vector3(extent.x, 0, extent.y)
 	var lookahead := ambulance.position + travel_direction * (1.0 + speed*speed/10.0 + absf(speed)*delta)
+	if not allow_crashes and not travel_direction.is_zero_approx():
+		# Leave a visible gap in assisted mode, including when reversing.
+		var hazards := obstacles.duplicate()
+		for item in traffic_data:
+			hazards.append(_traffic_bounds(item))
+		for trunk in trunks:
+			hazards.append(AABB(Vector3(trunk.x-trunk.y,-2,trunk.z-trunk.y),Vector3(2*trunk.y,6,2*trunk.y)))
+		for hazard in hazards:
+			var guard := AABB(hazard.position-margin,hazard.size+2*margin).grow(.35)
+			if guard.has_point(ambulance.position):
+				if _moves_deeper_into_box(guard, ambulance.position, travel_direction):
+					stopping_distance = 0
+			else:
+				var hit = guard.intersects_segment(ambulance.position,lookahead)
+				if hit != null:
+					stopping_distance = minf(stopping_distance,ambulance.position.distance_to(hit))
 	# Stop with the bumper on dry ground, including when approaching in reverse.
 	for span in OPEN_WATER:
 		var water := AABB(Vector3(55 - extent.x, -10, span.x - extent.y),
@@ -601,6 +890,11 @@ func _drive(delta: float) -> void:
 			var hit = water.intersects_segment(ambulance.position, lookahead)
 			if hit != null:
 				stopping_distance = minf(stopping_distance, ambulance.position.distance_to(hit))
+	for item in traffic_data:
+		if item.has("rider"):
+			var rider_offset := ambulance.to_local(item.actor.global_position)
+			if absf(rider_offset.x)<player_half_size.x+.49 and -rider_offset.z*signf(speed)>0:
+				stopping_distance = minf(stopping_distance,maxf(0,absf(rider_offset.z)-leading_reach-.9))
 	var assisted_braking := false
 	if stopping_distance < INF:
 		# Reserve the current frame's travel before applying the stopping curve.
@@ -612,17 +906,6 @@ func _drive(delta: float) -> void:
 	if player_brake_lens:
 		_set_rear_lights(player_brake_lens, brake_held or assisted_braking or waiting_for_signal)
 	var step := forward * speed * delta
-	for item in traffic_data:
-		var obstacle: Node3D = item.actor
-		var offset := ambulance.position - obstacle.position
-		var bounds := Vector2(extent.x + float(item.length), extent.y + float(item.width))
-		var footprint := AABB(Vector3(-bounds.x, -1, -bounds.y), Vector3(bounds.x * 2, 2, bounds.y * 2))
-		if footprint.has_point(offset) and offset.dot(step) >= 0:
-			continue
-		var contact = footprint.intersects_segment(offset, offset + step)
-		if contact != null:
-			step = step.limit_length(maxf(0.0, offset.distance_to(contact) - 0.02))
-			speed = -signf(speed) * minf(absf(speed) * .12, 1.4)
 	# In vehicle space the sweep is straight along Z. A round trunk also
 	# clears the bumper corners when passing diagonally beside a tree.
 	var travel_sign := signf(step.dot(forward))
@@ -635,28 +918,11 @@ func _drive(delta: float) -> void:
 		if clearance <= step.length():
 			step = step.limit_length(maxf(0.0, clearance - 0.02))
 			speed = 0.0
-	var obstacles := building_bounds.duplicate()
-	if workshop_car.visible: obstacles.append(WORKSHOP_CAR_BOUNDS)
-	if casualty.visible and casualty.get_parent()==self:
-		obstacles.append(AABB(casualty.position-Vector3(2.1,1,.86),Vector3(4.2,3,1.72)))
-	for person in [crossing_pedestrian,passenger,arriving_passenger,waiting_medic,marina_recipient,square_neighbour] + bus_companions + clinic_fire_team:
-		if not person.visible: continue
-		obstacles.append(AABB(person.position-Vector3(.28,1,.28),Vector3(.56,3,.56)))
-	for neighbour in walker_data:
-		var person: Node3D = neighbour.actor
-		obstacles.append(AABB(person.position-Vector3(.28,1,.28),Vector3(.56,3,.56)))
-		if neighbour.get("pushing",false):
-			var cart_position := person.position-person.basis.z*.73
-			obstacles.append(AABB(cart_position-Vector3(.48,1,.32),Vector3(.96,3,.64)))
-	for i in parked_cars.size():
-		if parked_cars[i].visible:
-			obstacles.append(_parked_bounds(i))
 	for building in obstacles:
 		var wall := AABB(building.position - margin, building.size + 2 * margin)
 		if wall.has_point(ambulance.position):
 			# A vehicle swap can enlarge the footprint beside an existing wall.
-			var exit_normal := wall.get_center().direction_to(ambulance.position)
-			if step.dot(exit_normal) < 0:
+			if _moves_deeper_into_box(wall, ambulance.position, step):
 				step = Vector3.ZERO
 				speed = 0.0
 			continue
@@ -664,10 +930,27 @@ func _drive(delta: float) -> void:
 		if contact != null:
 			step = step.limit_length(maxf(0.0, ambulance.position.distance_to(contact) - 0.02))
 			speed = 0.0
+	var contact_distance := INF
+	var struck_vehicle: Dictionary
+	for item in traffic_data:
+		var obstacle: Node3D = item.actor
+		var offset := ambulance.position - obstacle.position
+		var bounds := extent + _traffic_extent(item)
+		var footprint := AABB(Vector3(-bounds.x, -1, -bounds.y), Vector3(bounds.x * 2, 2, bounds.y * 2))
+		if footprint.has_point(offset) and not _moves_deeper_into_box(footprint, offset, step):
+			continue
+		var contact = footprint.intersects_segment(offset, offset + step)
+		if contact != null and offset.distance_to(contact) < contact_distance:
+			contact_distance = offset.distance_to(contact)
+			struck_vehicle = item
+	if contact_distance < INF:
+		step = step.limit_length(maxf(0.0, contact_distance - .02))
+		speed = -signf(speed) * minf(absf(speed) * .12, 1.4) if allow_crashes else 0.0
+		struck_vehicle.speed = 0.0
 	var destination := ambulance.position + step
 	var pos := destination
-	pos.x = clampf(pos.x, -520.0 + extent.x, 170.0 - extent.x)
-	pos.z = clampf(pos.z, -86.0 + extent.y, 65.0 - extent.y)
+	pos.x = clampf(pos.x, CITY_INTERIOR.position.x + extent.x, CITY_INTERIOR.end.x - extent.x)
+	pos.z = clampf(pos.z, CITY_INTERIOR.position.y + extent.y, CITY_INTERIOR.end.y - extent.y)
 	if not pos.is_equal_approx(destination):
 		speed = 0.0
 	pos.y = _surface_height(pos.x, pos.z)
@@ -826,6 +1109,7 @@ func _update_arrival(delta: float) -> void:
 		parked_at_target = 0.0
 
 func _help_at_target() -> void:
+	if operating_excavator: return
 	if free_drive or mission_index >= TARGETS.size(): return
 	if vehicle_index == BUS:
 		if _at_target() and absf(speed)<.2:
@@ -906,6 +1190,42 @@ func _help_at_target() -> void:
 		message_timer = 2.5
 		_refresh_status()
 
+func _build_stars() -> void:
+	for id: String in STAR_SITES:
+		if collected_stars.has(id): continue
+		var site: Vector2 = STAR_SITES[id]
+		var star := Label3D.new()
+		star.text = "★"
+		star.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+		star.modulate = Color("#ffdb52")
+		star.outline_modulate = Color("#794510")
+		star.font_size = 96
+		star.pixel_size = .016
+		star.position = Vector3(site.x, _surface_height(site.x, site.y) + 1.35, site.y)
+		add_child(star)
+		star_markers[id] = star
+
+func _star_collector() -> Node3D:
+	if operating_excavator: return excavator
+	if boating: return launch
+	if tram_mode > 0: return tram.sections[0]
+	if ferry_passenger: return ferry
+	return walker if walker.visible else ambulance
+
+func _collect_stars(start: Vector3, finish: Vector3) -> void:
+	for id: String in star_markers.keys():
+		var marker: Label3D = star_markers[id]
+		var target := marker.global_position - Vector3.UP * 1.35
+		var nearest := start if start.is_equal_approx(finish) else Geometry3D.get_closest_point_to_segment(target, start, finish)
+		if nearest.distance_squared_to(target) > 4.0: continue
+		collected_stars.append(id)
+		star_chime.play()
+		star_markers.erase(id)
+		marker.hide()
+		marker.queue_free()
+		_save_preferences()
+		_refresh_ui()
+
 func _build_world() -> void:
 	var environment := WorldEnvironment.new()
 	var env := Environment.new()
@@ -949,12 +1269,11 @@ func _build_world() -> void:
 	_build_road_network()
 	_build_city_blocks()
 	_build_west_district()
+	_build_city_wall()
 	_build_waterfront()
 	_build_trees()
 	_build_new_blocks()
 	add_child(shops)
-	_build_lampposts()
-	_update_daylight(0)
 	_build_ambulance()
 	_build_traffic()
 	_build_pedestrians()
@@ -968,6 +1287,27 @@ func _build_world() -> void:
 	tail_rotor = helicopter.find_child("TailRotor",true,false)
 	_update_patrol(0)
 	add_child(street_signals)
+	_build_lampposts()
+	_update_daylight(0)
+
+func _build_city_wall() -> void:
+	var wall := Node3D.new()
+	wall.name = "CityPerimeter"
+	add_child(wall)
+	var stone := _noise_material(Color("#706e67"), Color("#a09b8c"), 1.1, .13)
+	var middle := CITY_INTERIOR.get_center()
+	for along_x in [true, false]:
+		var length := CITY_INTERIOR.size.x if along_x else CITY_INTERIOR.size.y
+		var half_depth := CITY_INTERIOR.size.y * .5 if along_x else CITY_INTERIOR.size.x * .5
+		var tangent := Vector3.RIGHT if along_x else Vector3.BACK
+		var normal := Vector3.BACK if along_x else Vector3.RIGHT
+		for side in [-1, 1]:
+			# Overlap the four corners and extend the foundation below the canal.
+			var center: Vector3 = Vector3(middle.x,0,middle.y) + normal * side * (half_depth + .3)
+			var size := tangent * (length + 1.2) + normal * .6
+			var masonry := _make_box("Granitmur", size + Vector3.UP * 3.8, center + Vector3.UP * .4, Color.WHITE, true, wall)
+			masonry.material_override = stone
+			_make_box("Avtäckning", size + normal * .08 + Vector3.UP * .13, center + Vector3.UP * 2.365, Color("#a6a293"), false, wall)
 
 func _build_road_network() -> void:
 	marking_finish = _noise_material(Color("#d9d7ca"), Color("#eee9d9"), 2.3, .12)
@@ -1004,6 +1344,42 @@ func _build_road_network() -> void:
 			_make_box("Crosswalk", Vector3(0.50, 0.025, 2.1), Vector3(x, 0.016, z), Color("#eee9d9")).material_override = marking_finish
 
 func _build_west_district() -> void:
+	var yard := Vector3(-108,-.16,47)
+	_make_driving_surface("Equipment yard", Vector3(30,.12,16), yard, Color("#898378"))
+	excavator = preload("res://vehicles/volvo_ec950f.glb").instantiate()
+	excavator.position = yard + Vector3(-7,.06,0)
+	excavator.rotation.y = PI*.5
+	add_child(excavator)
+	_rig_excavator()
+	excavator_wall = building_bounds.size()
+	building_bounds.append(_crawler_bounds())
+	var truck := preload("res://vehicles/food_truck.glb").instantiate() as Node3D
+	var layby := Vector3(-85,-.16,44)
+	_make_driving_surface("Food truck layby",Vector3(10,.12,8),layby,Color("#928779"))
+	truck.position = layby + Vector3.UP*.06
+	truck.rotation.y = PI*.5
+	add_child(truck)
+	# The raised hatch overhangs the pavement above head height.
+	for local_box in [
+		AABB(Vector3(-1.12,0,-3.40), Vector3(2.24,3.19,6.65)),
+		AABB(Vector3(1.11,1.20,-3.13), Vector3(.29,.08,3.88)),
+		AABB(Vector3(1.10,2.65,-3.17), Vector3(1.16,.23,3.96)),
+	]:
+		building_bounds.append(truck.global_transform * local_box)
+	var kitchen_lens := _material(Color("#fff0ce"), .35, true)
+	for station_z in [-.55, -1.92]:
+		var fixture := _make_box("Arbetsljus i köket", Vector3(.11,.035,.61), Vector3(.08,2.78,station_z),Color.WHITE,false,truck)
+		fixture.material_override = kitchen_lens
+		var work_light := SpotLight3D.new()
+		truck.add_child(work_light)
+		work_light.position = fixture.position - Vector3.UP*.04
+		work_light.rotation_degrees.x = -90
+		work_light.spot_range = 2.8
+		work_light.spot_angle = 66
+		work_light.light_color = Color("#ffe8c2")
+		work_light.light_energy = 2.2
+		work_light.distance_fade_enabled = true
+		work_light.distance_fade_begin = 18
 	var junction_x := PackedInt32Array([-510,-420,-330,-240,-150,-55])
 	var junction_z := PackedInt32Array([-48,0,35])
 	var strokes: Array[Transform3D] = []
@@ -1011,21 +1387,37 @@ func _build_west_district() -> void:
 		for i in range(1,junction_x.size()):
 			var block_length := junction_x[i] - junction_x[i-1]
 			var block_center := (junction_x[i] + junction_x[i-1]) * .5
+			var median := z != 0 and block_center > tram.WEST and block_center < tram.EAST
+			var paving_offset := 9.8 if median else 6.2
+			if median:
+				_make_driving_surface("Tram avenue", Vector3(block_length,.12,16.8),Vector3(block_center,-.078,z), Color.WHITE).material_override = road_finish
 			for side in [-1,1]:
-				var sidewalk := _make_driving_surface("West sidewalk", Vector3(block_length-9.6,.12,2.8), Vector3(block_center,.005,z+side*6.2), Color.WHITE)
+				if z == 0 and side == 1 and STATION_DROP.x > junction_x[i-1] and STATION_DROP.x < junction_x[i]:
+					var entry_left := STATION_DROP.x - 3.0
+					var entry_right := STATION_DROP.x + 3.0
+					for span: Vector2 in [Vector2(junction_x[i-1]+4.8, entry_left), Vector2(entry_right, junction_x[i]-4.8)]:
+						_make_driving_surface("Station pavement", Vector3(span.y-span.x,.12,2.8), Vector3((span.x+span.y)*.5,.005,paving_offset), Color.WHITE).material_override = sidewalk_finish
+					_make_driving_surface("Station driveway", Vector3(6,.12,2.8), Vector3(STATION_DROP.x,-.075,paving_offset), Color.WHITE).material_override = road_finish
+					continue
+				var sidewalk := _make_driving_surface("West sidewalk", Vector3(block_length-9.6,.12,2.8), Vector3(block_center,.005,z+side*paving_offset), Color.WHITE)
 				sidewalk.material_override = sidewalk_finish
+			if median: continue
 			for x in range(junction_x[i-1]+9,junction_x[i]-7,8):
 				strokes.append(Transform3D(Basis.IDENTITY,Vector3(x,-.009,z)))
 	for i in junction_x.size():
 		for j in range(1,junction_z.size()):
 			var block_depth := junction_z[j] - junction_z[j-1]
 			var middle_z := (junction_z[j] + junction_z[j-1]) * .5
+			var median := junction_x[i] == tram.WEST or junction_x[i] == tram.EAST
+			var paving_offset := 9.8 if median else 6.2
+			if median:
+				_make_driving_surface("Tram cross street", Vector3(16.8,.12,block_depth),Vector3(junction_x[i],-.077,middle_z), Color.WHITE).material_override = road_finish
 			for side in [-1,1]:
 				if i == junction_x.size()-1 and side == 1: continue
 				# End at the inside edge of the adjoining pavement to keep the corner flush.
-				var sidewalk := _make_driving_surface("West side street pavement", Vector3(2.8,.12,block_depth-15.2), Vector3(junction_x[i]+side*6.2,.005,middle_z), Color.WHITE)
+				var sidewalk := _make_driving_surface("West side street pavement", Vector3(2.8,.12,block_depth-15.2), Vector3(junction_x[i]+side*paving_offset,.005,middle_z), Color.WHITE)
 				sidewalk.material_override = sidewalk_finish
-			if i == junction_x.size()-1: continue
+			if i == junction_x.size()-1 or median: continue
 			for z in range(junction_z[j-1]+9,junction_z[j]-7,8):
 				strokes.append(Transform3D(Basis(Vector3.UP,PI/2),Vector3(junction_x[i],-.009,z)))
 	var stripe := BoxMesh.new()
@@ -1041,7 +1433,7 @@ func _build_west_district() -> void:
 	for i in strokes.size():
 		markings.multimesh.set_instance_transform(i,strokes[i])
 	add_child(markings)
-	_make_driving_surface("West district ground", Vector3(460,.3,151), Vector3(-290,-.35,-10.5), Color.WHITE).material_override = soil_finish
+	_make_driving_surface("West district ground", Vector3(460,.3,CITY_INTERIOR.size.y), Vector3(-290,-.35,CITY_INTERIOR.get_center().y), Color.WHITE).material_override = soil_finish
 	for z in junction_z:
 		_make_driving_surface("West avenue", Vector3(455,.12,9.6), Vector3(-282.5,-.08,z), Color.WHITE).material_override = road_finish
 	for i in junction_x.size()-1:
@@ -1050,6 +1442,9 @@ func _build_west_district() -> void:
 		for z in [-24,17]:
 			for offset in [20,62]:
 				var center := Vector3(x+offset,0,z)
+				if x == -150 and offset == 20 and z == 17:
+					_build_petrol_station(center)
+					continue
 				var buildings := [preload("res://environment/bageri.glb"), preload("res://environment/bibliotek.glb"), preload("res://environment/vardcentral.glb")]
 				var home := buildings[posmod(x / 90 + offset + z, buildings.size())].instantiate() as Node3D
 				home.position = center
@@ -1057,6 +1452,197 @@ func _build_west_district() -> void:
 				add_child(home)
 				building_bounds.append(home.global_transform * _model_bounds(home,home))
 				_make_tree(center+Vector3(11,0,5),1.0)
+
+func _station_sign(words: String, at: Vector3, size: float, tint: Color, yaw := PI, parent: Node3D = self) -> void:
+	var sign_text := Label3D.new()
+	sign_text.text = words
+	sign_text.font_size = 64
+	sign_text.pixel_size = size
+	sign_text.outline_size = 0
+	sign_text.modulate = tint
+	sign_text.position = at
+	sign_text.rotation.y = yaw
+	parent.add_child(sign_text)
+
+func _pump_tube(parent: Node3D, start: Vector3, end: Vector3, radius: float, tint: Color) -> void:
+	var tube := CylinderMesh.new()
+	tube.top_radius = radius
+	tube.bottom_radius = radius
+	tube.radial_segments = 10
+	tube.rings = 0
+	var axis := end-start
+	tube.height = axis.length()+.006
+	var part := MeshInstance3D.new()
+	part.mesh = tube
+	part.material_override = _material(tint,.55)
+	part.position = (start+end)*.5
+	part.quaternion = Quaternion(Vector3.UP,axis.normalized())
+	parent.add_child(part)
+
+func _build_petrol_station(center: Vector3) -> void:
+	var gold := Color("#f6b82c")
+	var cream := Color("#fffae6")
+	var graphite := Color("#354246")
+	_make_driving_surface("Station forecourt", Vector3(27,.12,23), center+Vector3(0,-.08,-1.5), Color("#616567"))
+	_make_box("Canopy underside",Vector3(16,.22,9),center+Vector3(-2,4.45,-3),cream)
+	_make_box("Golden fascia",Vector3(16.15,.46,9.15),center+Vector3(-2,4.73,-3),gold)
+	_make_box("Roof flashing",Vector3(16.24,.09,9.24),center+Vector3(-2,5,-3),cream)
+	for yaw: float in [PI,0.0,PI*.5,-PI*.5]:
+		var outward := Vector3.BACK.rotated(Vector3.UP,yaw)
+		var sign_center := center+Vector3(-2,5.70,-3)+outward*(7.55 if absf(outward.x)>.5 else 4.06)
+		var plaque := _make_box("Roof nameboard",Vector3(5.25,.93,.14),sign_center,Color("#802930"))
+		plaque.rotation.y=yaw
+		for x: float in [-1.85,1.85]:
+			_make_box("Sign bracket",Vector3(.11,.28,.11),sign_center+Vector3(x,-.59,0).rotated(Vector3.UP,yaw),graphite)
+		_station_sign("HARBOR FUEL",sign_center+outward*.082,.010,cream,yaw)
+	var tower := center+Vector3(-11.8,0,-8)
+	_make_roadside_solid("Price tower",Vector3(.45,6.4,1.85),tower+Vector3.UP*3.2,graphite)
+	_make_box("Tower crown",Vector3(.51,1.18,1.97),tower+Vector3.UP*5.87,gold)
+	for side: float in [-1.0,1.0]:
+		var yaw := side*PI*.5
+		_station_sign("HARBOR FUEL",tower+Vector3(side*.27,5.87,0),.0038,graphite,yaw)
+		var listings := ["95    17.90","98    18.90","D     17.50","24 h"]
+		for row in listings.size():
+			var panel := tower+Vector3(side*.24,4.84-row*.62,0)
+			_make_box("Tariff panel",Vector3(.035,.51,1.73),panel,Color("#172327"))
+			_station_sign(listings[row],panel+Vector3(side*.024,0,0),.004,cream,yaw)
+	for x in [-7,3]:
+		var island := center+Vector3(x,0,-3)
+		_make_roadside_solid("Pump island",Vector3(1.45,.18,5.5),island+Vector3.UP*.08,Color("#a9aa9e"))
+		_make_roadside_solid("Canopy column",Vector3(.48,4.4,.54),island+Vector3.UP*2.2,gold)
+		_make_box("Column impact guard",Vector3(.54,.64,.60),island+Vector3.UP*.50,graphite)
+		_make_box("Column reflector",Vector3(.50,.12,.56),island+Vector3.UP*1.43,cream)
+		for z in [-1.65,1.65]:
+			var pump := Node3D.new()
+			pump.name = "Pump"
+			pump.position = island+Vector3(0,.17,z)
+			pump.rotation.y = PI*.5
+			add_child(pump)
+			_make_roadside_solid("Fuel dispenser",Vector3(.83,1.65,.67),Vector3.UP*.825,cream,false,pump)
+			var number_plate := Vector3(0,1.89,0)
+			_make_box("Pump number",Vector3(.57,.48,.12),number_plate,gold,false,pump)
+			var number := (1 if x < 0 else 3)+(0 if z < 0 else 1)
+			for yaw: float in [PI,0.0]:
+				_station_sign(str(number),number_plate+Vector3.BACK.rotated(Vector3.UP,yaw)*.07,.006,graphite,yaw,pump)
+			_make_box("Pump plinth",Vector3(.86,.38,.70),Vector3.UP*.19,graphite,false,pump)
+			for face_yaw: float in [0.0,PI]:
+				var face := Node3D.new()
+				face.rotation.y = face_yaw
+				pump.add_child(face)
+				_make_box("Display",Vector3(.61,.3,.03),Vector3(0,1.29,-.34),Color("#21353a"),false,face)
+				_station_sign("0.00 L",Vector3(0,1.29,-.361),.0025,Color("#b5f2cc"),PI,face)
+				_make_box("Fuel grade badge",Vector3(.21,.18,.02),Vector3(-.19,.94,-.35),Color("#186048"),false,face)
+				_station_sign("95",Vector3(-.19,.94,-.363),.0018,cream,PI,face)
+				_make_box("Card reader",Vector3(.20,.24,.036),Vector3(.18,.91,-.35),graphite,false,face)
+				_make_box("Receipt slot",Vector3(.14,.02,.018),Vector3(.18,.86,-.375),cream,false,face)
+				for row in 3:
+					for column in 3:
+						var key_position := Vector3(.13+column*.05,.95-row*.028,-.377)
+						_make_box("Payment key",Vector3(.037,.019,.012),key_position,cream,false,face)
+				var hose := PackedVector3Array([Vector3(.40,1.35,.17),Vector3(.48,1.21,.19),Vector3(.53,.42,.16),Vector3(.53,.28,.08),Vector3(.52,.26,-.04),Vector3(.50,.36,-.12),Vector3(.45,1.01,-.10)])
+				for j in range(1,hose.size()):
+					_pump_tube(face,hose[j-1],hose[j],.022,graphite)
+				var grip := Color("#258153")
+				var heel := hose[hose.size()-1]
+				var head := Vector3(.49,1.23,-.16)
+				_pump_tube(face,heel,head,.043,grip)
+				var guard := Vector3(.49,1.07,-.24)
+				_pump_tube(face,heel,guard,.014,graphite)
+				_pump_tube(face,guard,head,.014,graphite)
+				_pump_tube(face,head,Vector3(.40,1.32,-.16),.021,Color("#aebabe"))
+	for x: float in [-8,-2,4]:
+		for z: float in [-5.6,-.4]:
+			var mount := center+Vector3(x,4.30,z)
+			_make_box("Recessed lamp surround",Vector3(.96,.10,.58),mount,graphite)
+			_add_entry_light(mount-Vector3.UP*.065,Vector3(.82,.04,.44),8)
+	var kiosk := center+Vector3(-3,0,6)
+	var shell := Vector3(12,3.2,4.4)
+	building_bounds.append(AABB(kiosk+Vector3(-6,-1,-2.2),shell+Vector3.UP))
+	_make_box("Shop back wall",Vector3(12,3.2,.16),kiosk+Vector3(0,1.6,2.12),cream)
+	for side in [-1,1]:
+		_make_box("Shop end wall",Vector3(.18,3.2,4.4),kiosk+Vector3(side*5.91,1.6,0),cream)
+	_make_box("Shop tile floor",Vector3(12,.12,4.4),kiosk+Vector3.UP*.06,Color("#aca89b"))
+	_make_box("Shop ceiling",Vector3(12,.15,4.4),kiosk+Vector3.UP*3.02,cream)
+	_make_box("Window header",Vector3(12,.52,.2),kiosk+Vector3(0,2.75,-2.11),cream)
+	var glazing := _material(Color(.56,.75,.79,.20),.16)
+	glazing.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	for span: Vector2 in [Vector2(-6,-4.95),Vector2(-2.65,-2.35),Vector2(-.05,.55),Vector2(1.69,2.25),Vector2(4.55,6)]:
+		_make_box("Facade pier",Vector3(span.y-span.x,2.51,.2),kiosk+Vector3(span.x+span.y,2.51,-4.22)*.5,cream)
+	for x in [-3.8,-1.2,3.4]:
+		_make_box("Spandrel",Vector3(2.3,.95,.20),kiosk+Vector3(x,.475,-2.11),cream)
+		_make_box("Window sill",Vector3(2.5,.10,.23),kiosk+Vector3(x,.94,-2.23),graphite)
+		var pane := _make_box("Shop glazing",Vector3(2.30,1.55,.025),kiosk+Vector3(x,1.73,-2.12),cream)
+		pane.material_override = glazing
+		for offset in [-1.12,1.12]:
+			_make_box("Glazing jamb",Vector3(.052,1.59,.08),kiosk+Vector3(x+offset,1.72,-2.14),graphite)
+	var posters := [
+		[-3.8,"DISCO RINGS","Oops! One danced away!",Color("#534077"),Color("#ffcd60")],
+		[-1.2,"ROCKET ICE","3, 2, 1 ... brain freeze!",Color("#126264"),Color("#ffc193")],
+		[3.4,"HOT DOG YOGA","Breathe in. Ketchup out.",Color("#932c37"),Color("#ffe079")]
+	]
+	for ad in posters:
+		var at := kiosk+Vector3(ad[0],1.82,-2.155)
+		_make_box("Window poster",Vector3(1.42,.97,.016),at,ad[3])
+		var ink: Color = ad[4]
+		_station_sign(ad[1],at+Vector3(0,.31,-.018),.0026,Color.WHITE)
+		_station_sign(ad[2],at+Vector3(0,-.32,-.018),.00155,Color.WHITE)
+		var icon_center := at+Vector3(0,0,-.03)
+		if ad[0]==-3.8:
+			var ring := MeshInstance3D.new()
+			var doughnut := TorusMesh.new()
+			doughnut.inner_radius=.078
+			doughnut.outer_radius=.168
+			ring.mesh=doughnut
+			ring.material_override=_material(ink)
+			ring.position=icon_center
+			ring.rotation.x=PI*.5
+			add_child(ring)
+			for side: float in [-1.0,1.0]:
+				var leg := _make_box("Dancing leg",Vector3(.021,.084,.018),icon_center+Vector3(side*.09,-.15,-.025),ink)
+				leg.rotation.z=side*.55
+				var shoe := _make_box("Disco shoe",Vector3(.085,.035,.023),icon_center+Vector3(side*.13,-.18,-.03),Color("#ff92bc"))
+				shoe.rotation.z=side*.23
+				var arm := _make_box("Disco arm",Vector3(.105,.02,.018),icon_center+Vector3(side*.185,side*.07,-.025),ink)
+				arm.rotation.z=.58
+		elif ad[0]==-1.2:
+			_make_box("Ice lolly stick",Vector3(.035,.10,.025),icon_center+Vector3.DOWN*.14,cream)
+			var ice := _make_box("Rocket ice",Vector3(.16,.26,.035),icon_center,ink)
+			ice.rotation.z=-.13
+			for side: float in [-1.0,1.0]:
+				var fin := _make_box("Ice rocket fin",Vector3(.055,.099,.025),icon_center+Vector3(side*.088,-.075,-.02),Color("#ff7965"))
+				fin.rotation.z=-side*.45
+				var trail := _make_box("Rocket exhaust",Vector3(.016,.075,.015),icon_center+Vector3(side*.052,-.162,-.02),gold)
+				trail.rotation.z=-side*.14
+		else:
+			for j in 7:
+				var u := (j-3)/3.0
+				var dog := _make_box("Curved hot dog",Vector3(.088,.11,.035),icon_center+Vector3(u*.24,u*u*.075,0),ink)
+				dog.rotation.z=u*.52
+				var ketchup := _make_box("Ketchup zigzag",Vector3(.084,.019,.012),dog.position+Vector3(0,0,-.025),Color("#f33b29"))
+				ketchup.rotation.z=dog.rotation.z+(.32 if j%2==0 else -.32)
+			_make_box("Yoga mat",Vector3(.64,.035,.018),icon_center+Vector3.DOWN*.12,Color("#83ded0"))
+	for x in [-4.9,-2.8]:
+		for level in [1.13,1.58,2.03]:
+			_make_box("Grocery shelf",Vector3(1.95,.055,.47),kiosk+Vector3(x,level,1.59),cream)
+			for j in 7:
+				var tint: Color = [Color("#b34f30"),gold,Color("#438278")][posmod(j+roundi(level*5),3)]
+				_make_box("Pantry carton",Vector3(.18,.28,.22),kiosk+Vector3(x+(j-3)*.25,level+.17,1.56),tint)
+	_make_box("Checkout plinth",Vector3(2.25,1,.74),kiosk+Vector3(3.1,.57,-.70),graphite)
+	_make_box("Checkout countertop",Vector3(2.39,.08,.86),kiosk+Vector3(3.1,1.11,-.70),cream)
+	_make_box("Till monitor",Vector3(.48,.34,.10),kiosk+Vector3(2.75,1.32,-.56),graphite)
+	_add_entry_light(kiosk+Vector3(-2.7,2.92,.33),Vector3(2.1,.04,.18),5)
+	_make_box("Door kick plate",Vector3(1.14,.42,.07),kiosk+Vector3(1.12,.23,-2.18),graphite)
+	var door_glass := _make_box("Door glazing",Vector3(1.08,2.08,.03),kiosk+Vector3(1.12,1.47,-2.18),cream)
+	door_glass.material_override = glazing
+	for x in [.58,1.66]:
+		_make_box("Door stile",Vector3(.06,2.5,.09),kiosk+Vector3(x,1.25,-2.20),graphite)
+	_make_box("Door pull",Vector3(.045,.36,.095),kiosk+Vector3(1.45,1.13,-2.35),cream)
+	_make_box("Entrance awning",Vector3(3,.14,1.23),kiosk+Vector3(1.12,2.66,-2.66),gold)
+	_make_box("Shop cornice",Vector3(12.25,.27,4.65),kiosk+Vector3.UP*3.18,gold)
+	_make_box("Recovery bay stripe",Vector3(5,.012,.09),STATION_PARKING+Vector3(0,.002,1.35),cream)
+	var bay_sign := _signpost(STATION_PARKING + Vector3(3.4,0,1.35), PI)
+	_make_box("Recovery bay sign",Vector3(2.8,.52,.08),Vector3(0,2.65,.07),graphite,false,bay_sign)
+	_road_sign_text(bay_sign,"Tow drop-off",Vector3(0,2.65,.12),.0048,cream)
 
 func _build_waterfront() -> void:
 	var asphalt := Color("#414648")
@@ -1071,6 +1657,8 @@ func _build_waterfront() -> void:
 	uniform vec2 wake_origin;
 	uniform vec2 wake_heading;
 	uniform float wake_strength;
+	uniform vec3 quay_lamps[15];
+	uniform int quay_lamp_count;
 	uniform float dusk;
 	varying vec2 surface;
 	void vertex(){ surface=(MODEL_MATRIX*vec4(VERTEX,1.)).xz; }
@@ -1123,6 +1711,16 @@ func _build_waterfront() -> void:
 		float grazing = pow(1.-clamp(dot(-incoming,wave_normal),0.,1.),2.);
 		ALBEDO = mix(ALBEDO,vec3(.52,.60,.59),hull*grazing*(1.-dusk)*.60);
 		EMISSION = dusk*(vec3(.034,.058,.084)*(.75+.25*chop)+vec3(.66,.42,.21)*reflection*(.25+.75*smoothstep(-.5,.8,chop+fine*.38)));
+		if (dusk > .01 && ray.y > .008) {
+			for (int i=0; i<quay_lamp_count; i++) {
+				vec3 lamp = quay_lamps[i];
+				float distance_to_lamp = (lamp.y+.99)/ray.y;
+				vec2 miss = p+ray.xz*distance_to_lamp-lamp.xz;
+				float radius = .20+.014*distance_to_lamp;
+				float glow = 1.-smoothstep(.12*radius,radius,length(miss));
+				EMISSION += vec3(1.,.67,.37)*dusk*glow*grazing*(1.-smoothstep(45.,100.,distance_to_lamp));
+			}
+		}
 		// Clear wave faces catch sharp highlights. Rain and aerated wake scatter them.
 		ROUGHNESS = mix(.19+.16*rain,.65,clamp(foam,0.,1.));
 		METALLIC = 0.;
@@ -1184,9 +1782,18 @@ func _build_waterfront() -> void:
 	balcony_glass.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
 	balcony_glass.albedo_color = Color(.53,.72,.72,.36)
 	balcony_glass.roughness = .18
-	var plaster := [Color("#d0c9bb"), Color("#aa604b"), Color("#c7c6be"), Color("#ad7964")]
+	quay_stair_light = _material(Color("#d8cbbb"),.70)
+	quay_stair_light.emission_enabled = true
+	quay_stair_light.emission = Color("#ffaf69")
+	quay_stair_light.emission_energy_multiplier = 0
 	var panes := [Color("#354852"), Color("#475d68"), Color("#596971"), Color("#384e56")]
 	var window_batches: Array = [[], [], [], []]
+	var historic_windows := _material(Color("#576771"),.22)
+	historic_windows.metallic = .30
+	historic_windows.emission_enabled = true
+	historic_windows.emission = Color("#ffcd98")
+	historic_windows.emission_energy_multiplier = 0
+	apartment_lights.append(historic_windows)
 	for row in range(3):
 		for col in range(4):
 			var x := 115.0 + (col % 2)*21
@@ -1195,48 +1802,32 @@ func _build_waterfront() -> void:
 			var floors := 3+(col+row)%4
 			var height := floors*2.8
 			building_bounds.append(AABB(Vector3(x-7,-1,z-5),Vector3(14,height+1,10)))
-			_make_box("Kajhus",Vector3(14,height,10),Vector3(x,height/2-.2,z),plaster[(row+col)%4])
-			_make_box("Takfot",Vector3(14.5,.23,10.5),Vector3(x,height-.15,z),Color("#526264"))
-			_make_box("Indragen takvåning",Vector3(10,2.5,7),Vector3(x,height+1.1,z),Color("#ece7df"))
-			# Glazed doors open onto the set-back roof terrace.
-			for bay in [-2.3,0.0,2.3]:
-				window_batches[(row+col)%4].append(Transform3D(Basis.from_scale(Vector3(.07,1.88,1.72)),Vector3(x-5.05,height+.97,z+bay)))
+			if x == 136 and row != 1:
+				var historic := preload("res://environment/stockholm_apartment.gd").new()
+				var atlas := floors == 4
+				var ochre := Color("#d7ab76") if row==0 else Color("#ceb58a")
+				var rose := Color("#be8c77") if row==0 else Color("#ba765d")
+				historic.build(floors,atlas,ochre if atlas else rose,historic_windows)
+				historic.position = Vector3(x,0,z)
+				historic.rotation.y = PI if z == -35 else 0.0
+				add_child(historic)
+				if atlas:
+					var outward := -1.0 if z < 0 else 1.0
+					var threshold := z+outward*5.0
+					var kerb := -78.3 if z < 0 else 56.3
+					var approach := _make_driving_surface("Atlasgårdens entrégång",
+						Vector3(2.1,.16,absf(kerb-threshold)),Vector3(x,-.085,(threshold+kerb)*.5),Color.WHITE)
+					approach.material_override = quay_finish
+					_add_entry_light(Vector3(x,2.45,threshold+outward*.14),Vector3(.46,.04,.14),3.6)
+				continue
+			var house := preload("res://environment/sjostad_apartment.gd").new()
+			house.position = Vector3(x,0,z)
+			house.build(floors,row+col,window_batches,balcony_glass,quay_stair_light)
+			add_child(house)
 			if col % 2 == 0:
 				_make_tree(Vector3(94,0,z),1.25)
-			for level in range(floors):
-				if col % 2 == 0:
-					var y := level*2.8
-					for bay in range(4):
-						var center_z := z-3.0+2.0*bay
-						if level == 0 and bay == 1:
-							_make_quay_entrance(Vector3(x-7, -.18, center_z))
-							continue
-						window_batches[(row+bay+level*3)%4].append(Transform3D(Basis.from_scale(Vector3(.07,2.35,1.93)),Vector3(x-7.04,y+1.32,center_z)))
-					for mullion in [-4,-2,0,2,4]:
-						_make_box("Fönsterprofil",Vector3(.09,2.4,.07),Vector3(x-7.09,y+1.32,z+mullion),Color("#ced0cb"))
-					if level > 0:
-						_make_box("Kajbalkong",Vector3(1.5,.15,9),Vector3(x-7.72,y,z),Color("#dddcd3"))
-						var railing := _make_box("Glasräcke",Vector3(.06,.93,9),Vector3(x-8.43,y+.53,z),Color.WHITE)
-						railing.material_override = balcony_glass
-						_make_box("Överliggare",Vector3(.08,.05,9),Vector3(x-8.43,y+1.02,z),Color("#b8bbb8"))
-						if (level + row + col) % 3 == 1:
-							var bay_z := z + (2.2 if level % 2 == 1 else -2.2)
-							var cloth := Color("#425970") if (level + col) % 2 == 1 else Color("#b8ac88")
-							var awning := _make_box("Terrassmarkis",Vector3(1.65,.045,3.35),Vector3(x-7.82,y+2.26,bay_z),cloth)
-							awning.rotation.z = .22
-							_make_box("Markiskappa",Vector3(.04,.14,3.35),Vector3(x-8.62,y+2.02,bay_z),cloth)
-							for bracket in [-1.42,1.42]:
-								var arm := _make_box("Markisarm",Vector3(1.65,.038,.038),Vector3(x-7.82,y+2.21,bay_z+bracket),Color("#93958c"))
-								arm.rotation.z = .22
+				_make_quay_entrance(Vector3(x-7,-.18,z-1))
 
-				for face in [-1,1]:
-					for bay in [-4.8,0,4.8]:
-						for half in [-1,1]:
-							var pane_center := Vector3(x+bay+half*.68,1.45+level*2.8,z+face*5.04)
-							window_batches[posmod(col+level+roundi(bay)+half,4)].append(Transform3D(Basis.from_scale(Vector3(1.28,1.68,.07)),pane_center))
-					if level>0:
-						_make_box("Balkongplatta",Vector3(3.4,.18,1.35),Vector3(x,level*2.8,z+face*5.6),Color("#c9c9bb"))
-						_make_box("Balkongfront",Vector3(3.4,.82,.09),Vector3(x,level*2.8+.44,z+face*6.2),Color("#83979a"))
 
 	for i in panes.size():
 		var glass := _material(panes[i],.19)
@@ -1328,6 +1919,8 @@ func _pier_height(x: float,z: float) -> float:
 	return NAN
 
 func _foot_height(x: float,z: float) -> float:
+	var platform := tram.platform_height(Vector3(x,0,z))
+	if not is_nan(platform): return platform
 	var deck := _pier_height(x,z)
 	return _surface_height(x,z) if is_nan(deck) else deck
 
@@ -1363,7 +1956,7 @@ func _build_marina() -> void:
 	windows.material_override = saloon_glazing
 	for landing_z in FERRY_LANDINGS:
 		var sign_base := Vector3(54.55,0,landing_z+1.35)
-		_make_box("Landing signpost",Vector3(.07,2.35,.07),sign_base+Vector3.UP*.98,Color("#646e70"))
+		_make_roadside_solid("Landing signpost",Vector3(.07,2.35,.07),sign_base+Vector3.UP*.98,Color("#646e70"))
 		_make_box("Ferry stop sign",Vector3(.09,.58,1.48),sign_base+Vector3.UP*2.05,Color("#12385b"))
 		for side in [-1,1]:
 			var sign_text := Label3D.new()
@@ -1381,6 +1974,20 @@ func _build_marina() -> void:
 		_pier_section("Timber gangway",Vector3(7.46,.17,2),Vector3(60.31,-.745,landing_z),Color("#9d8469"))
 		for end in [-1,1]:
 			_make_box("Pier pile",Vector3(.24,1.4,.24),Vector3(65.75,-.67,landing_z+end*3.4),Color("#514e41"))
+	# Three tiny rubber ducks have each claimed a different landing.
+	for perch in [Vector3(59.08,.32,-33.8), Vector3(58.65,-.66,-22), Vector3(85.8,-.505,-15)]:
+		var duck := Node3D.new()
+		add_child(duck)
+		duck.position = perch
+		for part in [[Vector3(0,.12,0), Vector3(.43,.24,.26), Color.GOLD], [Vector3(.14,.25,0), Vector3(.21,.21,.2), Color.GOLD], [Vector3(.25,.24,0), Vector3(.13,.055,.12), Color.CORAL]]:
+			var piece := MeshInstance3D.new()
+			piece.mesh = SphereMesh.new()
+			piece.position = part[0]
+			piece.scale = part[1]
+			piece.material_override = _material(part[2], .46)
+			duck.add_child(piece)
+		for side in [-1,1]:
+			_make_box("Duck eye", Vector3(.024,.024,.012), Vector3(.18,.275,side*.085), Color.BLACK, false, duck)
 	# Boardwalk joins both ferry approaches along the sheltered bank.
 	_pier_section("Waterside boardwalk",Vector3(2.0,.18,21.1),Vector3(58.0,-.75,-23.5),Color("#ab9071"))
 	for i in range(46):
@@ -1542,7 +2149,7 @@ func _build_city_blocks() -> void:
 	building_bounds.append(AABB(Vector3(125,-1,13.2),Vector3(22,10,7.6)))
 	_make_driving_surface("School courtyard",Vector3(22,.12,9),Vector3(136,-.09,9),Color("#aaa198"))
 	# Mark the shared school pickup point from the approaching driver's side.
-	var pickup_post := _make_box("School pickup post",Vector3(.08,1.95,.08),SCHOOL_CURB+Vector3(-3, .97,2.1),Color("#626d72"))
+	var pickup_post := _make_roadside_solid("School pickup post",Vector3(.08,1.95,.08),SCHOOL_CURB+Vector3(-3, .97,2.1),Color("#626d72"))
 	var taxi_sign := _make_box("School taxi sign",Vector3(.06,.42,1.02),Vector3.UP*.82,Color("#eac451"),false,pickup_post)
 	for side in [-1,1]:
 		var lettering := Label3D.new()
@@ -1556,25 +2163,26 @@ func _build_city_blocks() -> void:
 		lettering.position.x = side*.035
 		taxi_sign.add_child(lettering)
 	var school_name := Label3D.new()
-	school_name.text = "SJÖSTADSSKOLAN"
+	school_name.text = "HARBOR TOWN SCHOOL"
 	school_name.rotation.y = PI
 	school_name.position = Vector3(0,3.06,-3.61)
 	school_name.pixel_size = .006
 	school.add_child(school_name)
 	for stop in BUS_STOPS:
 		var gate: Vector3 = _stop_pavement(stop)
-		var post := _make_box("Bus stop",Vector3(.08,2.65,.08),gate+Vector3(.9,1.32,0),Color("#52636c"))
+		var post := _make_roadside_solid("Bus stop",Vector3(.08,2.65,.08),gate+Vector3(.9,1.32,0),Color("#52636c"))
 		var plate := _make_box("Bus stop flag",Vector3(1.55,.72,.06),Vector3(0,1.15,0),Color("#263c51"),false,post)
 		# Each face points along the street so the name reads correctly on approach.
 		plate.rotation.y = PI*.5 if stop in [0,SCHOOL,4,5] else 0.0
 		for side in [-1,1]:
 			var route := Label3D.new()
 			route.name = "StopNameFront" if side==1 else "StopNameBack"
-			route.text = "502\n" + BUS_STOP_NAMES[stop]
+			route.set_meta("stop_name", BUS_STOP_NAMES[stop])
+			route.add_to_group("bus_stop_labels")
+			_update_stop_label(route)
 			route.double_sided = false
 			route.rotation.y = PI if side==-1 else 0.0
 			route.position.z = side*.035
-			route.pixel_size = .004
 			plate.add_child(route)
 	var plots := [
 		[Vector3(-34,0,-15),Vector3(13,6.4,9),Color("#835143"),"Polisstationen"],
@@ -1591,16 +2199,26 @@ func _build_city_blocks() -> void:
 	# Låg kantsten och planteringar runt torget.
 	_make_driving_surface("Square paving", Vector3(14, 0.24, 13), Vector3(30, -0.09, 16), Color("#cbbf9f"), true)
 	for p in [Vector3(25, 0, 12), Vector3(35, 0, 12), Vector3(25, 0, 20), Vector3(35, 0, 20)]:
-		_make_box("Planter", Vector3(1.3, 0.35, 1.3), p + Vector3(0, 0.15, 0), Color("#697f58"), true)
-		_make_tree(p, 0.9, "", 0.325)
+		var granite := Color("#878782")
+		_make_roadside_solid("Planter base",Vector3(1.3,.29,1.3),p+Vector3.UP*.12,granite,true)
+		_make_box("Planting soil",Vector3(1.10,.025,1.10),p+Vector3.UP*.274,Color("#4c4034"))
+		for side in [-1,1]:
+			_make_box("Granite coping",Vector3(1.34,.08,.12),p+Vector3(0,.303,side*.61),granite)
+			_make_box("Granite coping",Vector3(.12,.08,1.10),p+Vector3(side*.61,.303,0),granite)
+		_make_tree(p,0.9,"",.286)
+
 	for x in [29.25,30.75]:
 		for z in [21.54,21.86]:
 			_make_box("Bench leg",Vector3(.075,.51,.075),Vector3(x,.28,z),Color("#434e4b"))
 		_make_box("Seat support",Vector3(.10,.07,.46),Vector3(x,.51,21.7),Color("#434e4b"))
-	_make_box("Bench seat", Vector3(2.0, 0.18, 0.45), Vector3(30, 0.6, 21.7), Color("#80664c"), true)
+		_make_box("Backrest upright",Vector3(.065,.81,.065),Vector3(x,.90,21.99),Color("#434e4b"))
+		_make_box("Seat bearer",Vector3(.085,.12,.45),Vector3(x,.595,21.7),Color("#434e4b"))
+	for i in 4:
+		_make_roadside_solid("Seat board",Vector3(2.0,.055,.10),Vector3(30,.663,21.53+i*.113),Color("#926e4e"),true)
 	for i in 3:
 		_make_box("Paint swatch",Vector3(.18,.015,.23),Vector3(29.75+.22*i,.70,21.7),BENCH_COLOURS[i])
-	_make_box("Bench back", Vector3(2.0, 0.7, 0.16), Vector3(30, 0.95, 21.9), Color("#80664c"), true)
+	for i in 3:
+		_make_box("Backrest board",Vector3(2.0,.135,.065),Vector3(30,.86+i*.17,21.927),Color("#926e4e"),true)
 
 func _build_building(center: Vector3, size: Vector3, _color: Color, sign_text: String) -> void:
 	building_bounds.append(AABB(Vector3(center.x-size.x/2,-1,center.z-size.z/2), size+Vector3.UP))
@@ -1732,7 +2350,7 @@ func _build_new_blocks() -> void:
 			_make_box("Shutter window",Vector3(1.1,.43,.05),door+Vector3(pane*1.48,.69,-.13),Color("#263f49"))
 	_make_box("Workshop fascia",Vector3(14.8,.92,.18),p+Vector3(0,4.57,-5.12),Color("#244750"))
 	var workshop_name := Label3D.new()
-	workshop_name.text="SJÖSTADENS BILVERKSTAD"
+	workshop_name.text = "HARBOR TOWN GARAGE"
 	workshop_name.pixel_size=.012
 	workshop_name.font_size=48
 	workshop_name.outline_size=0
@@ -1761,7 +2379,9 @@ func _update_daylight(delta: float) -> void:
 	else:
 		city_sun.rotation_degrees = Vector3(-48+21*night,-28+73*night,0)
 	city_sun.light_color = sunlight
-	if absf(night-last_night)<.006: return
+	# Always settle on full day or full night after the gradual transition.
+	if night == last_night or (night > 0.0 and night < 1.0 and absf(night-last_night) < .006):
+		return
 	last_night = night
 	for lens in navigation_lenses:
 		lens.emission_energy_multiplier = night*3.2
@@ -1781,6 +2401,7 @@ func _update_daylight(delta: float) -> void:
 	city_env.ambient_light_color = Color("#c4d5d1").lerp(Color("#9cb1d3"),night)
 	city_fill.light_energy = .45*(1-night)
 	var entrance_glow := smoothstep(.15,.85,night)
+	quay_stair_light.emission_energy_multiplier = entrance_glow*1.05
 	entrance_diffuser.emission_energy_multiplier = entrance_glow*2.0
 	for lamp in entrance_lights:
 		lamp.visible = entrance_glow > .001
@@ -1821,18 +2442,24 @@ func _build_lampposts() -> void:
 	for block_x in [-510,-420,-330,-240,-150]:
 		for avenue_z in [-48,0,35]:
 			for offset in [10,34,57,80]:
-				var verge := 5.65 if offset in [10,57] else -5.65
+				var verge := 9.8 if avenue_z != 0 and block_x >= tram.WEST and block_x < tram.EAST else 5.65
+				if offset in [34,80]: verge = -verge
 				sites.append(Vector3(block_x+offset,0,avenue_z+verge))
 		for side_street_z in [-34,-14,17]:
-			sites.append(Vector3(block_x-5.65,0,side_street_z))
+			var verge := 9.8 if block_x in [tram.WEST,tram.EAST] else 5.65
+			sites.append(Vector3(block_x-verge,0,side_street_z))
 	for p in sites:
-		_make_box("Lamp post", Vector3(0.16, 4.5, 0.16), p + Vector3(0,2.25,0), Color("#45524e"), false)
-		_make_box("Lamp arm", Vector3(0.85, 0.13, 0.13), p + Vector3(0.34,4.35,0), Color("#45524e"), false)
-		var lens := _make_box("Lamp", Vector3(0.52, 0.15, 0.42), p + Vector3(0.66,4.24,0), Color("#e5d9ad"), false)
+		p.y = _surface_height(p.x,p.z)
+		var street := navigator.closest_street_point(Vector2(p.x, p.z))
+		var inward := Vector3(street.x - p.x, 0, street.y - p.z).normalized()
+		_make_roadside_solid("Lamp post", Vector3(0.16, 4.5, 0.16), p + Vector3(0,2.25,0), Color("#45524e"), false)
+		var arm := _make_box("Lamp arm", Vector3(.13, .13, .85), p + Vector3.UP * 4.35 + inward * .34, Color("#45524e"), false)
+		arm.rotation.y = atan2(inward.x, inward.z)
+		var lens := _make_box("Lamp", Vector3(0.52, 0.15, 0.42), p + Vector3.UP * 4.24 + inward * .66, Color("#e5d9ad"), false)
 		lens.material_override = lamp_glass
 		var light := SpotLight3D.new()
 		light.position = lens.position-Vector3.UP*.12
-		light.rotation_degrees.x = -90
+		light.basis = Basis.looking_at(inward * 2.5 + Vector3.DOWN * 4.24, Vector3.UP)
 		light.light_color = Color("#ffdbad")
 		light.spot_range = 17
 		light.spot_angle = 63
@@ -1843,13 +2470,61 @@ func _build_lampposts() -> void:
 		add_child(light)
 		street_lights.append(light)
 
+	# Lower lanterns keep light near the benches and the water's edge.
+	var park_sites := [Vector3(27,0,21.6),Vector3(34,0,16),Vector3(27,0,10.5)]
+	for z in range(-38,-6,9):
+		park_sites.append(Vector3(92,0,z))
+	for z in [-71,-62,13,22,31,40,49,58]:
+		park_sites.append(Vector3(92,0,z))
+	for z in [-32,-24,-16]:
+		park_sites.append(Vector3(58.8,0,z))
+	var reflected_lamps := PackedVector3Array()
+	var diffuser := CylinderMesh.new()
+	diffuser.radial_segments = 16
+	diffuser.rings = 0
+	diffuser.top_radius = .19
+	diffuser.bottom_radius = .11
+	diffuser.height = .28
+	diffuser.material = lamp_glass
+	var cap := CylinderMesh.new()
+	cap.radial_segments = 16
+	cap.rings = 0
+	cap.bottom_radius = .245
+	cap.top_radius = .045
+	cap.height = .11
+	cap.material = _material(Color("#384845"))
+	for point: Vector3 in park_sites:
+		point.y = _foot_height(point.x,point.z)
+		_make_roadside_solid("Park lantern post",Vector3(.12,2.55,.12),point+Vector3.UP*1.275,Color("#384845"))
+		var globe := MeshInstance3D.new()
+		globe.mesh = diffuser
+		globe.position = point+Vector3.UP*2.68
+		add_child(globe)
+		var hood := MeshInstance3D.new()
+		hood.mesh = cap
+		hood.position = point+Vector3.UP*2.875
+		add_child(hood)
+		var lantern := SpotLight3D.new()
+		lantern.position = point+Vector3.UP*2.51
+		lantern.rotation.x = -PI/2
+		lantern.spot_range = 8
+		lantern.spot_angle = 70
+		lantern.light_color = Color("#ffce96")
+		lantern.distance_fade_enabled = true
+		lantern.distance_fade_begin = 32
+		add_child(lantern)
+		street_lights.append(lantern)
+		if point.x > 55:
+			reflected_lamps.append(globe.position)
+	water_finish.set_shader_parameter("quay_lamps",reflected_lamps)
+	water_finish.set_shader_parameter("quay_lamp_count",reflected_lamps.size())
+
 func _apply_player_appearance() -> void:
 	var colour := Color("#a85641") if play_as_alma else Color("#648faa")
 	if jacket_palette >= 0: colour = BENCH_COLOURS[jacket_palette]
 	var jacket := _material(colour)
 	for figure: Node3D in [walker,skipper,road_driver]:
 		figure.scale = Vector3.ONE*(.88 if play_as_alma else 1.0)
-		figure.get_node("Ponytail").visible = play_as_alma
 		figure.get_node("Face").mesh = preload("res://characters/AlmaFace.obj") if play_as_alma else preload("res://characters/Face.obj")
 		figure.get_node("AxelPortrait").visible = not play_as_alma
 		figure.get_node("AlmaPortrait").visible = play_as_alma
@@ -1890,19 +2565,102 @@ func _fit_driver_sleeve(sleeve: MeshInstance3D, start: Vector3, end: Vector3) ->
 	sleeve.quaternion = Quaternion(Vector3.DOWN, segment.normalized())
 	sleeve.scale.y = (segment.length() + .045) / .65
 
+# Each row opens directly onto the adjacent avenue. Slots are spaced for door access.
+const DISTRICT_PARKING := [
+	[Vector2(-201,52), [3, 6, 15]],
+	[Vector2(-288,-65), [7, 8, 9]],
+	[Vector2(-382,52), [12, 13, 19]],
+	[Vector2(-465,-65), [11, 17, 18]],
+	[Vector2(-73,52), [14, 16, 22]],
+]
+
 func _depot_position(i: int) -> Vector3:
-	if i == ICE_CREAM: return Vector3(-52,-.13,15)
-	if i == PORSCHE: return Vector3(-9,-.07,28)
-	if i == BUS: return Vector3(-34,-.13,25.4)
-	if i == SNOWMOBILE: return Vector3(-41,-.13,23)
+	for lot in DISTRICT_PARKING:
+		var slot: int = lot[1].find(i)
+		if slot >= 0:
+			var center: Vector2 = lot[0]
+			return Vector3(center.x + (slot - 1) * 6, -.10, center.y)
+	if i == WHEEL_LOADER: return Vector3(-101,-.10,47)
+	if i == FARM_TRACTOR: return Vector3(-108,-.10,51)
 	if i == RECOVERY: return Vector3(-45,-.13,25)
-	if i >= 6 and i <= SNOWMOBILE: return Vector3(-14-(i-6)*5,-.13,28)
-	if i == XC60_POLICE: return Vector3(-44,-.13,33)
+	if i == BUS: return Vector3(-34,-.13,25.4)
 	return Vector3(-47+5*i,-.13,15)
 
+func _park_at_home(body: Node3D, index: int) -> void:
+	body.position = _depot_position(index)
+	# The northern bays open southwards onto the avenue.
+	body.rotation = Vector3(0, PI if body.position.z < -48 else 0.0, 0)
+
+func _road_sign_text(post: Node3D, words: String, at: Vector3, pixel: float, color: Color) -> void:
+	var letters := Label3D.new()
+	letters.text = words
+	letters.position = at
+	letters.pixel_size = pixel
+	letters.font_size = 48
+	letters.modulate = color
+	letters.outline_size = 0
+	post.add_child(letters)
+
+func _signpost(at: Vector3, heading: float) -> Node3D:
+	var post := Node3D.new()
+	add_child(post)
+	post.position = at
+	post.rotation.y = heading
+	_make_roadside_solid("Signpost", Vector3(.09,2.85,.09), Vector3.UP*1.425, Color("#879398"), false, post)
+	return post
+
+func _speed_sign(at: Vector3, heading: float, limit: int) -> void:
+	var post := _signpost(at, heading)
+	for inner in [false,true]:
+		var disc := CylinderMesh.new()
+		disc.top_radius = .46 if inner else .55
+		disc.bottom_radius = disc.top_radius
+		disc.height = .025 if inner else .06
+		var plate := MeshInstance3D.new()
+		plate.mesh = disc
+		plate.rotation.x = PI*.5
+		plate.position = Vector3(0,2.58,.09 if inner else .05)
+		plate.material_override = _material(Color("#ffdc59") if inner else Color("#bc292e"))
+		post.add_child(plate)
+	_road_sign_text(post,str(limit),Vector3(0,2.58,.11),.010,Color("#191c20"))
+
+func _build_road_signs() -> void:
+	for direction in [-1,1]:
+		var x: float = STATION_DROP.x - direction * 16.0
+		var z := 5.4 * float(direction)
+		var post := _signpost(Vector3(x,_surface_height(x,z),z), -direction * PI*.5)
+		_make_box("Station direction board",Vector3(2.75,.72,.08),Vector3(0,2.45,.06),Color.WHITE,false,post)
+		_make_box("Station direction panel",Vector3(2.68,.65,.03),Vector3(0,2.45,.11),Color("#215997"),false,post)
+		var caption := "Harbor Fuel  →" if direction == 1 else "←  Harbor Fuel"
+		_road_sign_text(post,caption,Vector3(0,2.45,.134),.0062,Color.WHITE)
+	for zone in [[-101,30],[-210,50],[-431,30]]:
+		for direction in [-1,1]:
+			var x: float = zone[0] + direction * 6
+			var z := 5.1 * float(direction)
+			_speed_sign(Vector3(x,_surface_height(x,z),z), -direction * PI*.5, zone[1])
+	var rules := ["Ducks park free", "Hats on wheels only", "Save a spot for a snail", "Park with a smile", "Bananas need a ticket"]
+	for index in DISTRICT_PARKING.size():
+		var center: Vector2 = DISTRICT_PARKING[index][0]
+		var side := signf(center.y)
+		var at := Vector3(center.x+9.8,0,center.y-side*6)
+		at.y = _surface_height(at.x,at.z)
+		var post := _signpost(at,PI if side>0 else 0.0)
+		_make_box("Parking sign", Vector3(.84,.94,.08), Vector3(0,2.65,.06), Color.WHITE,false,post)
+		_make_box("Blue parking panel", Vector3(.77,.87,.03), Vector3(0,2.65,.11), Color("#215997"),false,post)
+		_road_sign_text(post,"P",Vector3(0,2.65,.133),.016,Color.WHITE)
+		_make_box("Parking rule", Vector3(2.55,.45,.08), Vector3(0,1.89,.06), Color("#fff8df"),false,post)
+		_road_sign_text(post,rules[index],Vector3(0,1.89,.11),.0035,Color("#182531"))
+
 func _build_depot() -> void:
-	_make_driving_surface("Ice cream van bay", Vector3(5,.1,9), Vector3(-52,-.18,15), Color("#565c5a"))
-	_make_driving_surface("Motor pool", Vector3(25,.1,11), Vector3(-37,-.18,15), Color("#565c5a"))
+	_build_road_signs()
+	for lot in DISTRICT_PARKING:
+		var center: Vector2 = lot[0]
+		var street_z := 35.0 if center.y > 0 else -48.0
+		var inner_edge := street_z + signf(center.y - street_z) * 4.8
+		var outer_edge := center.y + signf(center.y - street_z) * 6.0
+		_make_driving_surface("Neighbourhood parking", Vector3(19,.10,absf(outer_edge-inner_edge)),
+			Vector3(center.x,-.15,(outer_edge+inner_edge)*.5),Color("#565c5a"))
+	_make_driving_surface("Motor pool", Vector3(30,.1,11), Vector3(-34.5,-.18,15), Color("#565c5a"))
 	_make_driving_surface("Recovery apron",Vector3(8.4,.10,9.8),Vector3(-45,-.18,25.4),Color("#565c5a"))
 	_make_driving_surface("Visitor parking",Vector3(30,.10,9),Vector3(-21.5,-.12,28),Color("#565c5a"))
 	_make_driving_surface("Bus bay extension",Vector3(5,.10,4.6),Vector3(-34,-.12,21.2),Color("#565c5a"))
@@ -1914,7 +2672,7 @@ func _build_depot() -> void:
 	for i in 8:
 		_make_box("Stationsallén crossing",Vector3(2.25,.014,.48),Vector3(-39,-.028,31.85+i*.90),Color("#edece1"))
 	var waypost := Vector3(-37.65,0,21.2)
-	_make_box("Footpath signpost",Vector3(.085,1.9,.085),waypost+Vector3.UP*.9,Color("#758384"))
+	_make_roadside_solid("Footpath signpost",Vector3(.085,1.9,.085),waypost+Vector3.UP*.9,Color("#758384"))
 	_make_box("Shop direction sign",Vector3(2.0,.49,.08),waypost+Vector3.UP*1.68,Color("#20554c"))
 	var directions := Label3D.new()
 	directions.text = "↑  Café · Snack kiosk"
@@ -1935,43 +2693,34 @@ func _build_depot() -> void:
 		var model := (load(VEHICLE_SCENES_ALL[i]) as PackedScene).instantiate() as Node3D
 		model.rotation.y = PI
 		body.add_child(model)
-		body.position = _depot_position(i)
+		_park_at_home(body, i)
 		for lamp in model.find_children("Flash*", "MeshInstance3D", true, false):
 			lamp.visible = false
 		parked_cars.append(body)
 		var bounds := _model_bounds(body,model)
 		parked_footprints.append(Rect2(bounds.position.x,bounds.position.z,bounds.size.x,bounds.size.z))
 		parked_sizes.append(Vector2(maxf(-bounds.position.x,bounds.end.x),maxf(-bounds.position.z,bounds.end.z)))
-		if i == BUS:
+		if i == PUCH_DAKOTA:
+			for side in [-1,1]:
+				_make_box("Moped bay stripe",Vector3(.07,.019,3.3),body.position+Vector3(side*.91,.015,0),Color("#deddd1")).material_override = marking_finish
+		elif i == BUS:
 			for side in [-1,1]:
 				_make_box("Bus bay stripe",Vector3(.10,.025,11.6),body.position+Vector3(side*2.3,.064,0),Color("#deddd1")).material_override = marking_finish
 		elif i == RECOVERY:
 			for side in [-1,1]:
 				_make_box("Recovery bay stripe",Vector3(.1,.025,9.3),body.position+Vector3(side*2.5,.014,.45),Color("#deddd1")).material_override = marking_finish
 		else:
-			_make_box("Parking stripe", Vector3(.10,.025,7.8), Vector3(body.position.x-2.5,-.066 if i>=6 else -.116,body.position.z), Color("#deddd1")).material_override = marking_finish
-			if i==PORSCHE:
-				_make_box("Parking stripe",Vector3(.10,.025,7.8),Vector3(body.position.x+2.5,-.066,28),Color("#deddd1")).material_override = marking_finish
-			if i==TAXI:
-				_make_box("Parking stripe",Vector3(.10,.025,7.8),Vector3(body.position.x+2.5,-.116,15),Color("#deddd1")).material_override = marking_finish
+			for side in [-1,1]:
+				_make_box("Parking stripe",Vector3(.10,.025,7.8),body.position+Vector3(side*2.35,.014,0),Color("#deddd1")).material_override = marking_finish
 	_make_walker("Player on foot",0,0,1,Color("#648faa"),Color("#30414d"))
 	walker = walker_data.pop_back().actor
 	walker.add_child(scooter)
-	var ponytail := MeshInstance3D.new()
-	ponytail.name = "Ponytail"
-	var lock := CapsuleMesh.new()
-	lock.radius=.042
-	lock.height=.191
-	ponytail.mesh=lock
-	ponytail.position=Vector3(0,1.63,.131)
-	ponytail.rotation.x=-.24
-	ponytail.material_override=_material(Color("#523b30"))
-	walker.add_child(ponytail)
 	_make_walker("BMW driver",0,0,1,Color("#648faa"),Color("#30414d"))
 	road_driver = walker_data.pop_back().actor
 	road_driver.reparent(ambulance,false)
 	road_driver.rotation = Vector3.ZERO
-	road_driver.add_child(ponytail.duplicate())
+	road_driver.add_child(moped_pose)
+	moped_pose.hide()
 	for avatar in [walker, road_driver]:
 		var lip: MeshInstance3D = avatar.get_meta("lip")
 		var smile := Node3D.new()
@@ -2021,11 +2770,9 @@ func _build_depot() -> void:
 		arm.add_child(forearm)
 		var hand := MeshInstance3D.new()
 		hand.name = "Hand"
-		var palm := SphereMesh.new()
-		palm.radius = .067
-		palm.height = .15
-		hand.mesh = palm
-		hand.material_override = _material(Color("#c58e6d"),.94)
+		hand.mesh = preload("res://characters/GrippingHand.obj")
+		hand.scale.x = signf(arm.position.x)
+		hand.material_override = road_driver.get_node("Face").material_override
 		arm.add_child(hand)
 	road_driver.hide()
 	_make_walker("Helmsperson",0,0,1,Color("#648faa"),Color("#30414d"))
@@ -2033,7 +2780,6 @@ func _build_depot() -> void:
 	skipper.reparent(launch,false)
 	skipper.rotation = Vector3.ZERO
 	skipper.position = Vector3(-.21,-.16,.56)
-	skipper.add_child(ponytail.duplicate())
 	var vest_finish := _material(Color("#f07724"),.91)
 	for side in [-1,0,1]:
 		var pad := MeshInstance3D.new()
@@ -2114,17 +2860,21 @@ func _feet_supported(p: Vector3) -> bool:
 func _on_foot_clear(p: Vector3) -> bool:
 	if is_instance_valid(workshop_car) and workshop_car.visible and WORKSHOP_CAR_BOUNDS.grow(.2).has_point(p): return false
 	if is_instance_valid(casualty) and casualty.visible and casualty.get_parent()==self and AABB(casualty.position-Vector3(2.35,1,1.1),Vector3(4.7,3,2.2)).has_point(p): return false
-	if p.x < -520 or p.x > 170 or p.z < -86 or p.z > 65:
+	if not CITY_INTERIOR.grow(-.25).has_point(Vector2(p.x,p.z)):
 		return false
+	for body in tram.car_bounds():
+		if body.grow(.22).has_point(p+Vector3.UP): return false
 	if not _feet_supported(p):
 		return false
 	for wall in building_bounds:
 		if wall.grow(.25).has_point(p+Vector3.UP):
 			return false
+	for solid in roadside_solids:
+		if solid.grow(.22).has_point(p+Vector3.UP): return false
 	if _near_parked_vehicle(p,.22): return false
 	for item in traffic_data:
-		var offset: Vector3 = p - item.actor.position
-		if absf(offset.x) < float(item.length)+.28 and absf(offset.z) < float(item.width)+.28:
+		var offset: Vector3 = item.actor.to_local(p)
+		if absf(offset.z) < float(item.length)+.28 and absf(offset.x) < float(item.width)+.28:
 			return false
 	for trunk in trunks:
 		if Vector2(p.x-trunk.x,p.z-trunk.z).length_squared() < pow(trunk.y+.22,2):
@@ -2158,12 +2908,195 @@ func _toggle_scooter() -> void:
 	walking_velocity = Vector3.ZERO
 	_refresh_ui()
 
+func _rig_excavator() -> void:
+	var parts := excavator.find_children("*", "MeshInstance3D", true, false)
+	excavator.add_child(cab_turntable)
+	cab_turntable.add_child(boom_joint)
+	boom_joint.position = Vector3(-.12,2.16,.90)
+	boom_joint.add_child(stick_joint)
+	stick_joint.position = Vector3(0,3.27,5.11)
+	stick_joint.add_child(bucket_joint)
+	bucket_joint.position = Vector3(0,-4.25,.82)
+	for part in parts:
+		var label := String(part.name).to_lower().replace(" ","").replace("_","")
+		if label.begins_with("continuouscrawler"):
+			var belt := CrawlerBelt.new()
+			excavator.add_child(belt)
+			belt.position.x = excavator.to_local(part.global_position).x
+			belt.configure(part)
+			crawler_belts.append(belt)
+			continue
+		if label.begins_with("track") or label.begins_with("continuous") or label.begins_with("bearing") or label.begins_with("lowerroller") or label.begins_with("finaldrive") or label.begins_with("crosscarriage") or label.begins_with("swingbearing"): continue
+		var joint := cab_turntable
+		for prefix in ["boom","hardened","highpressure"]:
+			if label.begins_with(prefix): joint = boom_joint
+		for prefix in ["bucket","dipper","cylinderport","swaged"]:
+			if label.begins_with(prefix): joint = stick_joint
+		if label.begins_with("hardened") and excavator.to_local(part.global_position).z > 6.5:
+			joint = stick_joint
+		for prefix in ["digging","bucketcheek","bucketbell","heel","cheekwear","replaceable"]:
+			if label.begins_with(prefix): joint = bucket_joint
+		if label.begins_with("boomlift") or label.begins_with("stickcylinder") or label.begins_with("bucketcylinder"):
+			var mount := excavator.to_local(part.global_position)
+			var lift := boom_lifts[int(mount.x > 0)]
+			var moving_joint := boom_joint
+			var base_pin := mount.y < boom_joint.position.y
+			joint = cab_turntable
+			if label.begins_with("stickcylinder"):
+				lift = stick_cylinder
+				joint = boom_joint
+				moving_joint = stick_joint
+				base_pin = mount.z < 4
+			elif label.begins_with("bucketcylinder"):
+				lift = bucket_cylinder
+				joint = stick_joint
+				moving_joint = bucket_joint
+				base_pin = mount.y > 4
+			if "pivot" in label:
+				if base_pin:
+					lift.foot = part
+				else:
+					lift.head = part
+					joint = moving_joint
+			elif "barrel" in label:
+				lift.barrel = part
+				lift.barrel_length = part.get_aabb().size.y
+			elif "gland" in label:
+				lift.gland = part
+				lift.gland_length = part.get_aabb().size.y
+			else:
+				lift.rod = part
+				lift.rod_length = part.get_aabb().size.y
+		part.reparent(joint,true)
+		if joint == bucket_joint:
+			for surface in part.mesh.get_surface_count():
+				var vertices: PackedVector3Array = part.mesh.surface_get_arrays(surface)[Mesh.ARRAY_VERTEX]
+				for vertex in vertices:
+					var local: Vector3 = part.transform * vertex
+					bucket_profile.append(Vector2(local.y,local.z))
+	bucket_profile = Geometry2D.convex_hull(bucket_profile)
+
+func _bucket_clearance() -> float:
+	var pose := bucket_joint.global_transform
+	var lowest := INF
+	for point in bucket_profile:
+		lowest = minf(lowest,pose.origin.y + pose.basis.y.y*point.x + pose.basis.z.y*point.y)
+	return lowest - excavator.global_position.y
+
+func _support_bucket() -> void:
+	if _bucket_clearance() >= 0: return
+	var lowered := boom_joint.rotation.x
+	var raised := -.82
+	for iteration in 12:
+		boom_joint.rotation.x = (lowered + raised)*.5
+		if _bucket_clearance() < 0:
+			lowered = boom_joint.rotation.x
+		else:
+			raised = boom_joint.rotation.x
+	boom_joint.rotation.x = raised
+
+func _crawler_bounds() -> AABB:
+	return excavator.global_transform * AABB(Vector3(-1.93,0,-2.75),Vector3(3.86,3.8,5.5))
+
+func _near_excavator() -> bool:
+	return is_instance_valid(excavator) and walker.visible and walker.position.distance_to(excavator.position)<4.4
+
+func _drive_excavator(delta: float) -> void:
+	var old := excavator.transform
+	var steer := Input.get_axis("ui_left","ui_right") + int(Input.is_key_pressed(KEY_D))-int(Input.is_key_pressed(KEY_A))
+	var drive := Input.get_axis("ui_down","ui_up") + int(Input.is_key_pressed(KEY_W))-int(Input.is_key_pressed(KEY_S))
+	excavator.rotate_y(-clampf(steer,-1,1)*delta)
+	excavator.position += excavator.basis.z*clampf(drive,-1,1)*1.8*delta
+	var hull := _crawler_bounds()
+	var allowed := Rect2(-123,39,30,16).encloses(Rect2(hull.position.x,hull.position.z,hull.size.x,hull.size.z))
+	for i in building_bounds.size():
+		if i != excavator_wall and hull.intersects(building_bounds[i]):
+			allowed = false
+			break
+	if allowed and excavator.transform != old:
+		for i in parked_cars.size():
+			if parked_cars[i].visible and hull.intersects(_parked_bounds(i)):
+				allowed = false
+				break
+	if not allowed:
+		excavator.transform = old
+	elif drive != 0 or steer != 0:
+		var travel := (excavator.position - old.origin).dot(excavator.basis.z)
+		var turn := old.basis.z.signed_angle_to(excavator.basis.z,Vector3.UP)
+		for belt in crawler_belts:
+			belt.advance(travel - turn*belt.position.x)
+	building_bounds[excavator_wall] = _crawler_bounds()
+	var previous_slew := cab_turntable.rotation.y
+	var previous_arm := Vector3(boom_joint.rotation.x, stick_joint.rotation.x, bucket_joint.rotation.x)
+	cab_turntable.rotate_y((int(Input.is_key_pressed(KEY_Q))-int(Input.is_key_pressed(KEY_E)))*delta)
+	boom_joint.rotation.x = clampf(boom_joint.rotation.x + (int(Input.is_key_pressed(KEY_K))-int(Input.is_key_pressed(KEY_I)))*delta*.50,-.82,0)
+	stick_joint.rotation.x = clampf(stick_joint.rotation.x + (int(Input.is_key_pressed(KEY_Y))-int(Input.is_key_pressed(KEY_G)))*delta*.65,-.62,.65)
+	bucket_joint.rotation.x = clampf(bucket_joint.rotation.x + (int(Input.is_key_pressed(KEY_O))-int(Input.is_key_pressed(KEY_L)))*delta*.85,-.95,.95)
+	_support_bucket()
+	var arm_pose := Vector3(boom_joint.rotation.x, stick_joint.rotation.x, bucket_joint.rotation.x)
+	var working := not excavator.transform.is_equal_approx(old) or not is_equal_approx(previous_slew, cab_turntable.rotation.y) or not arm_pose.is_equal_approx(previous_arm)
+	siren_player.pitch_scale = move_toward(siren_player.pitch_scale, 1.18 if working else 0.78, delta * 1.5)
+	for lift in boom_lifts: lift.update_pose()
+	stick_cylinder.update_pose()
+	bucket_cylinder.update_pose()
+	walker.position = excavator.position
+	_update_entry_button()
+
 func _change_seat() -> void:
 	if scooter.visible:
 		_toggle_scooter()
 		return
-	if boating or tram_mode!=0: return
-	if mode != "playing" or paused: return
+	if boating or mode != "playing" or paused: return
+	if operating_excavator or (_near_excavator() and tram_mode == 0 and not ferry_passenger):
+		if operating_excavator:
+			var landed := false
+			for angle in [0, PI/4, -PI/4, PI/2, -PI/2, 3*PI/4, -3*PI/4, PI]:
+				var doorway := Vector3(3.8,0,1.0).rotated(Vector3.UP,angle)
+				var door := cab_turntable.to_global(doorway)
+				door.y = _foot_height(door.x,door.z)
+				if _on_foot_clear(door):
+					walker.position = door
+					landed = true
+					break
+			if not landed: return
+			walker.show()
+		else:
+			walker.hide()
+		operating_excavator = not operating_excavator
+		_update_siren()
+		walking_velocity = Vector3.ZERO
+		_refresh_ui()
+		_update_entry_button()
+		return
+	var open_stop := tram.open_station()
+	if tram_mode != 0:
+		if open_stop < 0: return
+		var station: Node3D = tram.stations[open_stop]
+		var landing := station.to_global(Vector3(2.75,.29,.15))
+		if not _on_foot_clear(landing): return
+		if ambulance.visible:
+			parked_cars[vehicle_index].transform = ambulance.transform
+			parked_cars[vehicle_index].visible = true
+			ambulance.hide()
+		tram_mode = 0
+		walker.position = landing
+		walker.show()
+		walking_velocity = Vector3.ZERO
+		walk_basis = station.basis
+		listener.reparent(walker,false)
+		listener.position = Vector3.UP*1.6
+		_update_camera(0,true)
+		_refresh_ui()
+		return
+	if walker.visible and not ferry_passenger and open_stop >= 0 and tram.platform_at(walker.position)==open_stop:
+		tram_mode = 1
+		walker.hide()
+		walking_velocity = Vector3.ZERO
+		listener.reparent(tram.sections[1],false)
+		listener.position = Vector3.UP*1.6
+		_update_camera(0,true)
+		_refresh_ui()
+		return
 	var stop := _ferry_stop()
 	if ferry_passenger:
 		if stop < 0:
@@ -2241,7 +3174,7 @@ func _change_seat() -> void:
 		_change_mission_vehicle(next)
 		sound_on = parked_sound_settings[next]
 		lights_on = parked_light_settings[next]
-		vehicle_selector.select(next)
+		_mark_selected_vehicle(next)
 		ambulance.transform = parked_cars[next].transform
 		parked_cars[next].visible = false
 		ambulance.visible = true
@@ -2258,13 +3191,29 @@ func _change_seat() -> void:
 	_refresh_ui()
 	get_viewport().gui_release_focus()
 
+func _rest_seconds() -> int:
+	return ceili((60.0-run_reserve)/3.0) if winded else 0
+
+func _walking_hint() -> String:
+	if winded:
+		return tr("Walk or rest · Run again in %d s") % _rest_seconds()
+	if run_ready_hint_time > 0:
+		return tr("Ready to run again! Hold Shift and walk forward.")
+	return tr("W/S Walk · A/D Turn · Shift + W Run · F Enter · U Scooter") + "   ·   " + tr("PgUp Raise camera · PgDn Lower camera")
+
 func _walk(delta: float) -> void:
 	var keys := Input.get_vector("ui_left","ui_right","ui_up","ui_down")
 	keys += Vector2(int(Input.is_key_pressed(KEY_D))-int(Input.is_key_pressed(KEY_A)),int(Input.is_key_pressed(KEY_S))-int(Input.is_key_pressed(KEY_W)))
 	if scooter.visible:
 		scooter.ride(self,-clampf(keys.y,-1,1),clampf(keys.x,-1,1),delta)
 		return
-	var desired := walk_basis * Vector3(keys.x,0,keys.y).limit_length(1) * 3.4
+	if _can_capture_camera():
+		var height_input := int(Input.is_key_pressed(KEY_PAGEUP)) - int(Input.is_key_pressed(KEY_PAGEDOWN))
+		walk_camera_height = clampf(walk_camera_height + height_input*delta*2.0,-1.5,3.5)
+	walker.rotate_y(-clampf(keys.x,-1,1)*2.5*delta)
+	walk_basis = Basis(Vector3.UP,walker.rotation.y)
+	var running := Input.is_key_pressed(KEY_SHIFT) and not winded and keys.y < 0
+	var desired := walk_basis.z * clampf(keys.y,-1,1) * (6.4 if running else 3.4)
 	desired.y = 0
 	var horizontal := Vector3(walking_velocity.x,0,walking_velocity.z)
 	var acceleration := 14.0 if keys.is_zero_approx() else 9.0
@@ -2274,12 +3223,29 @@ func _walk(delta: float) -> void:
 		var pieces := maxi(1, ceili(step.length()/.16))
 		var stride: Vector3 = step / pieces
 		for piece in pieces:
-			if not _on_foot_clear(next+stride): break
+			if tram.crosses_boarding_edge(next, next + stride):
+				_change_seat()
+				if tram_mode == 1: return
+			if not _on_foot_clear(next+stride) or not street_signals.pedestrian_may_enter(next,next+stride): break
 			next += stride
 	next.y = _foot_height(next.x,next.z)
 	var travel := next-walker.position
-	if travel.length_squared()>.000001:
-		walker.rotation.y = rotate_toward(walker.rotation.y, atan2(-travel.x,-travel.z), 9.0 * delta)
+	var previous_rest := _rest_seconds()
+	var showed_ready := run_ready_hint_time > 0
+	run_ready_hint_time = maxf(0, run_ready_hint_time - delta)
+	if running and travel.length_squared() > .000001:
+		run_reserve = maxf(0,run_reserve-delta)
+		if run_reserve < 0.000001:
+			run_reserve = 0.0
+			winded = true
+	else:
+		run_reserve = minf(60,run_reserve+3*delta)
+		if 60.0 - run_reserve < 0.000001:
+			run_reserve = 60.0
+			if winded: run_ready_hint_time = 3.0
+			winded = false
+	if _rest_seconds() != previous_rest or showed_ready != (run_ready_hint_time > 0):
+		ui.get_node("DrivingHints").text = _walking_hint()
 	walker.position = next
 	var near_bench := Vector2(next.x-30,next.z-20).length() < 1.2
 	if near_bench and not at_colour_bench:
@@ -2292,6 +3258,23 @@ func _walk(delta: float) -> void:
 	_update_entry_button()
 
 func _update_entry_button() -> void:
+	if operating_excavator or _near_excavator():
+		entry_marker.visible = false
+		seat_button.disabled = false
+		seat_button.text = tr("Exit excavator · F") if operating_excavator else tr("Drive excavator · F")
+		return
+	if tram_mode != 0:
+		entry_marker.visible = false
+		seat_button.disabled = tram.open_station()<0
+		seat_button.text = "Get off tram · F"
+		return
+	if walker.visible and not scooter.visible:
+		var station := tram.platform_at(walker.position)
+		if station >= 0:
+			entry_marker.visible = false
+			seat_button.disabled = tram.open_station()!=station
+			seat_button.text = "Wait for the tram" if seat_button.disabled else "Board tram · F"
+			return
 	if scooter.visible:
 		entry_marker.visible = false
 		seat_button.disabled = false
@@ -2335,34 +3318,81 @@ func _build_ambulance() -> void:
 	listener.make_current()
 	_load_vehicle_model()
 
-const TRAFFIC_WEST := -47.0
-const TRAFFIC_EAST := 162.0
-
 func _build_traffic() -> void:
 	_spawn_traffic("res://vehicles/a_traktor.glb", 51, 2.35, 1, 3.2, 1)
-	_spawn_traffic("res://vehicles/a_traktor.glb", 95, -2.35, -1, 3.5, 1)
 	# Two-way, steady traffic on both sides of the main street.
 	_spawn_traffic("res://vehicles/traffic_bmw_blue.glb", -40.0, 2.35, 1.0, 6.4)
-	_spawn_traffic("res://vehicles/traffic_bmw_silver.glb", 5.0, 2.35, 1.0, 6.4)
-	_spawn_traffic("res://vehicles/traffic_bmw_silver.glb", 39.0, -2.35, -1.0, 7.0)
-	_spawn_traffic("res://vehicles/traffic_bmw_blue.glb", -6.0, -2.35, -1.0, 7.0)
 	_spawn_traffic("res://environment/cyklist.glb", -24.0, 4.18, 1.0, 2.7, 0.72)
 	_spawn_traffic("res://environment/cyklist.glb", 26.0, -4.18, -1.0, 2.45, 0.72)
-
-	_spawn_traffic("res://vehicles/traffic_bmw_silver.glb", 124.0, 2.35, 1.0, 6.1)
-	_spawn_traffic("res://vehicles/traffic_bmw_blue.glb", 108.0, -2.35, -1.0, 6.8)
-
-	for spawn in [Vector3(68,2.35,1),Vector3(146,-2.35,-1)]:
-		_spawn_traffic("res://vehicles/raggarbil.glb",spawn.x,spawn.y,spawn.z,4.75,.89)
-		var cruiser: Dictionary=traffic_data.back()
-		cruiser.lane_center=spawn.y
-		cruiser.cruise_phase=0.0
-		# Reserve the lateral envelope of the yawed bonnet as well as its tyres.
-		cruiser.width+=float(cruiser.length)*.065
+	_spawn_traffic("res://vehicles/raggarbil.glb",68,2.35,1,4.75,.89)
 	_spawn_emergency_traffic(0, -19.0, 2.35, 1.0)
 	_spawn_emergency_traffic(1, 19.0, -2.35, -1.0)
 	_spawn_emergency_traffic(2, 77.0, 2.35, 1.0)
-	_spawn_emergency_traffic(3, -68.0, -2.35, -1.0)
+	_spawn_emergency_traffic(XC60_POLICE, -68.0, -2.35, -1.0)
+	var moped := _spawn_traffic(VEHICLE_SCENES_ALL[PUCH_DAKOTA], -30, 2.35, 1, 5.3, 1.0)
+	_make_walker("Dakota rider",0,0,1,Color("#c77e4a"),Color("#35444c"))
+	var rider: Node3D = walker_data.pop_back().actor
+	rider.reparent(moped,false)
+	rider.rotation = Vector3.ZERO
+	rider.scale = Vector3.ONE*.96
+	var pose := MopedRider.new()
+	rider.add_child(pose)
+	for limb: Node3D in rider.get_meta("arms") + rider.get_meta("legs"):
+		limb.hide()
+	pose.fit_to(moped.get_child(0))
+	traffic_data.back().rider = rider
+	# Separate neighbourhood circuits share intersections and stay entirely on paved streets.
+	var blocks := [Rect2(0,-48,102,48), Rect2(102,-48,60,48), Rect2(-55,0,55,35), Rect2(102,0,60,60)]
+	for i in traffic_data.size():
+		var item: Dictionary = traffic_data[i]
+		var block: Rect2 = blocks[i % blocks.size()]
+		var lane := absf(item.actor.position.z)
+		var curve := _traffic_circuit(block,lane,item.direction > 0)
+		item.route = curve
+		item.distance = curve.get_baked_length()*fmod(.28+i*.382,1.0)
+		_place_traffic(item)
+
+func _traffic_circuit(block: Rect2,lane: float,outside: bool) -> Curve3D:
+	var edges := block.grow(lane if outside else -lane)
+	var corners := [edges.position,Vector2(edges.position.x,edges.end.y),edges.end,Vector2(edges.end.x,edges.position.y)]
+	if not outside: corners.reverse()
+	var route := Curve3D.new()
+	var radius := 5.0 if outside else 2.2
+	for i in 4:
+		var corner: Vector2 = corners[i]
+		var incoming := (corner-Vector2(corners[(i+3)%4])).normalized()
+		var outgoing := (Vector2(corners[(i+1)%4])-corner).normalized()
+		for j in 13:
+			var t := j/12.0
+			var point := corner-incoming*radius*(1-t)*(1-t)+outgoing*radius*t*t
+			route.add_point(Vector3(point.x,0,point.y))
+	route.add_point(route.get_point_position(0))
+	return route
+
+func _place_traffic(item: Dictionary) -> void:
+	var route: Curve3D = item.route
+	var actor: Node3D = item.actor
+	var pos := route.sample_baked(item.distance)
+	var next := route.sample_baked(fposmod(float(item.distance)+.12,route.get_baked_length()))
+	var forward := pos.direction_to(next)
+	actor.position = Vector3(pos.x,_surface_height(pos.x,pos.z),pos.z)
+	actor.rotation.y = atan2(-forward.x,-forward.z)
+
+func _traffic_bounds(item: Dictionary) -> AABB:
+	var half := _traffic_extent(item)
+	return AABB(item.actor.position - Vector3(half.x, 1, half.y), Vector3(half.x * 2, 3, half.y * 2))
+
+func _traffic_extent(item: Dictionary) -> Vector2:
+	var heading: Vector3 = item.actor.transform.basis.z.abs()
+	return Vector2(heading.x*item.length+heading.z*item.width,heading.z*item.length+heading.x*item.width)
+
+func _traffic_gap(item: Dictionary, point: Vector3, extent: Vector2) -> float:
+	var actor: Node3D = item.actor
+	var offset := point-actor.position
+	var ahead := -actor.basis.z.dot(offset)
+	if ahead<=0 or absf(actor.basis.x.dot(offset))>=float(item.width)+absf(actor.basis.x.x)*extent.x+absf(actor.basis.x.z)*extent.y:
+		return INF
+	return ahead-float(item.length)-absf(actor.basis.z.x)*extent.x-absf(actor.basis.z.z)*extent.y
 
 func _spawn_emergency_traffic(index: int, x: float, lane: float, direction: float) -> void:
 	var actor := _spawn_traffic(VEHICLE_SCENES_ALL[index], x, lane, direction, 9.0, 1.0)
@@ -2375,7 +3405,7 @@ func _spawn_emergency_traffic(index: int, x: float, lane: float, direction: floa
 		lamps.append(lamp)
 	# One local light per responding vehicle keeps the night-time spill affordable.
 	var spill := OmniLight3D.new()
-	spill.position.y = [2.8,1.7,3.1,2.38][index]
+	spill.position.y = 2.38 if index==XC60_POLICE else [2.8,1.7,3.1][index]
 	spill.light_color = Color("#3879ff")
 	spill.light_energy = 2.6
 	spill.omni_range = 6.0
@@ -2416,7 +3446,7 @@ func _update_traffic_signals(delta: float) -> void:
 		if active and traffic_siren_volume > 0 and not AudioServer.is_bus_mute(0):
 			var traffic: Dictionary = unit.traffic
 			var towards_listener := siren.global_position.direction_to(listener.global_position)
-			var source_velocity := Vector3.RIGHT * float(traffic.direction) * float(traffic.speed)
+			var source_velocity: Vector3 = -traffic.actor.basis.z * float(traffic.speed)
 			var received := 343.0 - listener_velocity.dot(towards_listener)
 			var emitted := 343.0 - source_velocity.dot(towards_listener)
 			siren.pitch_scale = clampf(received / emitted, 0.85, 1.15)
@@ -2464,7 +3494,7 @@ func _spawn_traffic(scene_path: String, x: float, lane_z: float, direction: floa
 			lens.material_override = finish
 			bicycle_lenses.append(finish)
 	var traffic_horn := AudioStreamPlayer3D.new()
-	var voice: String = {"cyklist": "bicycle", "a_traktor": "a_traktor", "raggarbil": "raggarbil"}.get(scene_path.get_file().get_basename(), "bmw")
+	var voice: String = {"cyklist": "bicycle", "a_traktor": "a_traktor", "raggarbil": "raggarbil", "puch_dakota": "saab96"}.get(scene_path.get_file().get_basename(), "bmw")
 	var emergency_index := VEHICLE_SCENES.find(scene_path)
 	if emergency_index >= 0:
 		voice = HORNS[emergency_index]
@@ -2501,6 +3531,29 @@ func _shore_overlap(span: Vector2, point: Vector3, extent: Vector2) -> float:
 	var along := minf(point.z - span.x + extent.y, span.y - point.z + extent.y)
 	return maxf(0, minf(across, along))
 
+static func _moves_deeper_into_box(box: AABB, point: Vector3, motion: Vector3) -> bool:
+	var offset := point - box.get_center()
+	var x_depth := box.size.x * .5 - absf(offset.x)
+	var z_depth := box.size.z * .5 - absf(offset.z)
+	var inward_x := offset.x * motion.x < 0
+	var inward_z := offset.z * motion.z < 0
+	if is_equal_approx(x_depth, z_depth):
+		return inward_x and inward_z
+	return inward_x if x_depth < z_depth else inward_z
+
+func _vehicle_overlap_depth(obstacle: AABB, extent: Vector2) -> float:
+	var center := ambulance.position
+	if center.y < obstacle.position.y or center.y > obstacle.end.y:
+		return 0.0
+	var dx := minf(center.x - obstacle.position.x, obstacle.end.x - center.x) + extent.x
+	var dz := minf(center.z - obstacle.position.z, obstacle.end.z - center.z) + extent.y
+	return maxf(0, minf(dx, dz))
+
+func _trunk_gap(local_center: Vector3) -> float:
+	var side := maxf(absf(local_center.x) - player_half_size.x, 0)
+	var end := maxf(maxf(-front_reach - local_center.z, local_center.z - rear_reach), 0)
+	return Vector2(side, end).length()
+
 func _player_extent() -> Vector2:
 	var heading := ambulance.transform.basis.z.abs()
 	return Vector2(heading.x * player_half_size.y + heading.z * player_half_size.x,
@@ -2511,54 +3564,26 @@ func _update_traffic(delta: float) -> void:
 	var player_size := _player_extent()
 	for item in traffic_data:
 		var actor: Node3D = item.actor
-		var direction: float = item.direction
-		var clearance := minf(TRAFFIC_EAST - TRAFFIC_WEST,street_signals.red_clearance(actor.position,Vector3.RIGHT*direction,float(item.length)) + 1.0)
+		var clearance := street_signals.red_clearance(actor.position,-actor.basis.z,float(item.length))+1.0
 		var tractor_gap := INF
 		for other in traffic_data:
-			var neighbour: Node3D = other.actor
-			if neighbour == actor or absf(neighbour.position.z - actor.position.z) >= float(item.width) + float(other.width):
-				continue
-			var ahead := fposmod((neighbour.position.x - actor.position.x) * direction, TRAFFIC_EAST - TRAFFIC_WEST)
-			var gap := ahead - float(item.length) - float(other.length)
-			if other.tractor and other.direction == direction:
-				tractor_gap = minf(tractor_gap, gap)
-			clearance = minf(clearance, gap)
+			if item.actor == other.actor: continue
+			var gap := _traffic_gap(item,other.actor.position,_traffic_extent(other))
+			if other.tractor: tractor_gap=minf(tractor_gap,gap)
+			clearance=minf(clearance,gap)
 		if casualty.visible and casualty.get_parent()==self:
-			var offset := casualty.position-actor.position
-			var gap := offset.x*direction-float(item.length)-2.1
-			if offset.x*direction>=0 and absf(offset.z)<float(item.width)+.86:
-				clearance=minf(clearance,gap)
-		var player_offset := ambulance.position - actor.position
-		if ambulance.visible and absf(player_offset.z) < player_size.y + float(item.width):
-			var ahead := player_offset.x * direction
-			var buffer := player_size.x + float(item.length)
-			if ahead < -buffer and ambulance.position.x >= TRAFFIC_WEST - buffer and ambulance.position.x <= TRAFFIC_EAST + buffer:
-				# Check the entry as well when this lane wraps at the edge of town.
-				ahead += TRAFFIC_EAST - TRAFFIC_WEST
-			if ahead >= -buffer:
-				clearance = minf(clearance, ahead - buffer)
+			clearance=minf(clearance,_traffic_gap(item,casualty.position,Vector2(2.1,.9)))
+		if ambulance.visible:
+			clearance=minf(clearance,_traffic_gap(item,ambulance.position,player_size))
 		for i in parked_cars.size():
 			if not parked_cars[i].visible: continue
 			var bounds := _parked_bounds(i)
-			var offset := bounds.get_center()-actor.position
-			if absf(offset.z)<float(item.width)+bounds.size.z*.5 and offset.x*direction >= 0:
-				clearance = minf(clearance,offset.x*direction-bounds.size.x*.5-float(item.length))
-		for person: Node3D in [walker,passenger,arriving_passenger,waiting_medic,marina_recipient,square_neighbour] + bus_companions + clinic_fire_team:
+			clearance=minf(clearance,_traffic_gap(item,bounds.get_center(),Vector2(bounds.size.x,bounds.size.z)*.5))
+		for person: Node3D in [walker,passenger,arriving_passenger,waiting_medic,marina_recipient,square_neighbour,crossing_pedestrian] + bus_companions + clinic_fire_team:
 			if not person.visible: continue
-			var offset := person.position - actor.position
-			var lane_margin := float(item.width) + .45
-			var in_path := absf(offset.z) < lane_margin
-			if person == walker and not in_path and offset.z * walking_velocity.z < 0:
-				# Yield as the player steps toward the lane, before their body enters it.
-				var time_to_lane := (absf(offset.z) - lane_margin) / absf(walking_velocity.z)
-				in_path = time_to_lane < 1.4
-			if offset.x * direction >= 0 and in_path:
-				clearance = minf(clearance, offset.x*direction-float(item.length)-.45)
-		if crossing_wait <= 0.0 and (absf(crossing_pedestrian.position.z)<6.31 or street_signals.phase==3):
-			var ahead := (crossing_pedestrian.position.x-actor.position.x)*direction
-			var remaining := (actor.position.z-crossing_pedestrian.position.z)*crossing_direction
-			if ahead >= 0 and remaining >= -float(item.width)-.45:
-				clearance = minf(clearance,ahead-float(item.length)-1.2)
+			clearance=minf(clearance,_traffic_gap(item,person.position,Vector2(.45,.45)))
+			if person==walker:
+				clearance=minf(clearance,_traffic_gap(item,person.position+walking_velocity*.8,Vector2(.45,.45)))
 		if tractor_gap <= clearance and tractor_gap<8 and not item.tractor and item.speed>1:
 			if not item.greeted:
 				item.horn.play()
@@ -2577,20 +3602,47 @@ func _update_traffic(delta: float) -> void:
 			var braking := float(item.speed) < previous_speed - .0001 or target == 0.0
 			_set_rear_lights(item.brake_lens, braking)
 		_roll_wheels(item.wheels, travel)
-		actor.position.x = wrapf(actor.position.x + direction * travel, TRAFFIC_WEST, TRAFFIC_EAST)
-		if item.has("lane_center"):
-			item.cruise_phase=fmod(float(item.cruise_phase)+travel*.23,TAU)
-			var phase: float=item.cruise_phase
-			actor.position.z=float(item.lane_center)+.27*sin(phase)
-			actor.rotation.y=-direction*(PI*.5+atan(.27*.23*cos(phase)))
-		actor.position.y = _surface_height(actor.position.x, actor.position.z)
+		item.distance = fposmod(float(item.distance)+travel,item.route.get_baked_length())
+		_place_traffic(item)
 
 func _build_pedestrians() -> void:
 	greeting.billboard = BaseMaterial3D.BILLBOARD_ENABLED
 	greeting.pixel_size = .003
 	greeting.font_size = 64
+	greeting.modulate = Color("#1f3040")
+	greeting.outline_size = 0
+	greeting.render_priority = 2
+	bubble_back.texture = preload("res://characters/speech_bubble.svg")
+	bubble_back.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+	bubble_back.pixel_size = greeting.pixel_size
+	bubble_back.render_priority = 1
+	bubble_back.offset.y = -13
+	greeting.add_child(bubble_back)
 	greeting.visible = false
 	add_child(greeting)
+	_make_walker("Neighbour with a missing shoe", 16, 6.8, 1, Color("#427cab"), Color("#48455a"))
+	shoe_owner = walker_data.pop_back().actor
+	add_child(lost_shoe)
+	lost_shoe.position = Vector3(33, _foot_height(33, 6.8), 6.8)
+	_make_box("White sole", Vector3(.24,.055,.47), Vector3(0,.03,0), Color.IVORY, false, lost_shoe)
+	_make_box("Red trainer", Vector3(.22,.14,.43), Vector3(0,.11,0), Color.CRIMSON, false, lost_shoe)
+	for lace in 3:
+		_make_box("Lace", Vector3(.16,.015,.018), Vector3(0,.186,-.09+.05*lace), Color.WHITE, false, lost_shoe)
+	lost_shoe.hide()
+	_make_walker("Cat owner", -18, -6.8, 1, Color("#76984b"), Color("#36485b"))
+	cat_owner = walker_data.pop_back().actor
+	add_child(lost_cat)
+	lost_cat.position = Vector3(-35, _foot_height(-35,-6.8), -6.8)
+	var ginger := Color("#da8348")
+	_make_box("Body", Vector3(.23,.24,.44), Vector3(0,.25,0), ginger, false, lost_cat)
+	_make_box("Head", Vector3(.24,.22,.21), Vector3(0,.41,-.19), ginger, false, lost_cat)
+	for side in [-1,1]:
+		_make_box("Ear", Vector3(.075,.12,.07), Vector3(side*.081,.54,-.16), ginger, false, lost_cat)
+		_make_box("Eye", Vector3(.033,.04,.015), Vector3(side*.062,.43,-.302), Color.BLACK, false, lost_cat)
+		for z in [-.13,.13]:
+			_make_box("White paw", Vector3(.08,.15,.11), Vector3(side*.075,.075,z), Color.IVORY, false, lost_cat)
+	var tail := _make_box("Striped tail", Vector3(.065,.34,.07), Vector3(0,.36,.25), ginger, false, lost_cat)
+	tail.rotation.x = .3
 	_make_walker("Child",12,6.42,1,Color("#568f86"),Color("#404c59"))
 	walker_data.back().actor.scale = Vector3.ONE*.72
 	_make_walker("Parent",10.9,6.42,1,Color("#876681"),Color("#424850"))
@@ -2615,9 +3667,15 @@ func _build_pedestrians() -> void:
 	senior.get_node("Hair").material_override=_material(Color("#bcbab3"))
 	_make_walker("CrossingNeighbour",-12,-6.32,1,Color("#bb703d"),Color("#465663"))
 	crossing_pedestrian = walker_data.pop_back().actor
+	# Cross the boulevard at the marked east-side tram junction.
+	_make_walker("Tram crossing neighbour",tram.EAST-10.8,street_signals.ZEBRA_OFFSET,1,Color("#589598"),Color("#4b4e59"))
+	walker_data.back().stretch = Vector2(tram.EAST-10.8,tram.EAST+10.8)
 	for i in 5:
 		var start_x := -510.0 + i*90.0
 		var pavement_z := [-41.3,6.7,28.3][i%3] as float
+		if start_x >= tram.WEST and start_x < tram.EAST:
+			if i%3==0: pavement_z = tram.NORTH+9.8
+			if i%3==2: pavement_z = tram.SOUTH-9.8
 		var coat: Color = [Color("#874e46"),Color("#547184"),Color("#81733e")][i%3]
 		_make_walker("West resident", start_x+27+i*4, pavement_z, 1 if i%2==0 else -1, coat, Color("#404757"))
 		walker_data.back().stretch = Vector2(start_x+9,start_x+81)
@@ -2662,8 +3720,8 @@ func _advance_crossing(delta: float) -> void:
 		if player_blocks or _near_parked_vehicle(next,.4):
 			step = 0.0
 		for item in traffic_data:
-			var offset: Vector3 = next-item.actor.position
-			if absf(offset.x)<float(item.length)+.5 and absf(offset.z)<float(item.width)+.5:
+			var offset: Vector3 = item.actor.to_local(next)
+			if absf(offset.z)<float(item.length)+.5 and absf(offset.x)<float(item.width)+.5:
 				step = 0.0
 				break
 		crossing_pedestrian.position.z += step
@@ -2681,11 +3739,18 @@ func _animate_steps(person: Node3D, distance: float, delta: float, pushing := fa
 		gait = Gait.new(person, phase, _foot_height if person == walker else Callable())
 		person.set_meta("gait", gait)
 	var carrying := person == walker and mission_index in [1,2] and delivery_parcels.size() >= mission_index and walker.is_ancestor_of(delivery_parcels[mission_index-1])
+	var left_stance := gait.phase < 0.5
 	gait.advance(distance / person.scale.y, delta, pushing or carrying)
 	if person == walker:
-		for arm: Node3D in person.get_meta("arms"):
-			arm.rotation.z = signf(arm.position.x)*.16 if carrying else 0.0
-			if carrying: arm.rotation.x = .85
+		if left_stance != (gait.phase < 0.5) and distance > 0.0:
+			var impact := smoothstep(3.4, 6.4, distance / maxf(delta, .00001))
+			footstep.volume_db = lerpf(-13.0, -9.0, impact)
+			footstep.pitch_scale = (0.94 if left_stance else 1.06) * lerpf(1.0, 0.94, impact)
+			footstep.play()
+		if carrying:
+			for arm: Node3D in person.get_meta("arms"):
+				arm.rotation.z = signf(arm.position.x)*.16
+				arm.rotation.x = .85
 
 func _make_walker(label: String, start_x: float, lane_z: float, direction: float, shirt: Color, trousers: Color) -> void:
 	var person := Node3D.new()
@@ -2758,6 +3823,16 @@ func _make_walker(label: String, start_x: float, lane_z: float, direction: float
 	lip.hide()
 	person.add_child(lip)
 	person.set_meta("lip", lip)
+	var hips := MeshInstance3D.new()
+	hips.name = "TrouserSeat"
+	var seat_mesh := SphereMesh.new()
+	seat_mesh.radius = .5
+	seat_mesh.height = 1.0
+	hips.mesh = seat_mesh
+	hips.scale = Vector3(.355,.244,.232)
+	hips.position = Vector3(0,.762,.009)
+	hips.material_override = _material(trousers,.94)
+	person.add_child(hips)
 	for side in [-1.0, 1.0]:
 		var leg_pivot := Node3D.new()
 		leg_pivot.position = Vector3(side * 0.115, 0.77, 0)
@@ -2780,14 +3855,14 @@ func _make_walker(label: String, start_x: float, lane_z: float, direction: float
 		arm_mesh.radius = 0.075
 		arm_mesh.height = 0.65
 		arm.mesh = arm_mesh if label == "BMW driver" else preload("res://characters/Sleeve.obj")
-		arm.position.y = -.29 if label == "BMW driver" else -.20
+		arm.position.y = -.29 if label == "BMW driver" else -.296
 		arm.material_override = _material(shirt, 0.9)
 		arm_pivot.add_child(arm)
 		if label != "BMW driver":
 			var palm := MeshInstance3D.new()
-			palm.mesh = head_mesh
-			palm.scale = Vector3(.22,.47,.29)
-			palm.position = Vector3(0,-.49,-.025)
+			palm.mesh = preload("res://characters/RelaxedHand.obj")
+			palm.scale.x = side
+			palm.position = Vector3(0,-.688,-.025)
 			palm.material_override = head.material_override
 			arm_pivot.add_child(palm)
 		if not person.has_meta("legs"): person.set_meta("legs", [])
@@ -2796,31 +3871,138 @@ func _make_walker(label: String, start_x: float, lane_z: float, direction: float
 		person.get_meta("arms").append(arm_pivot)
 	walker_data.append({"actor": person, "direction": direction, "speed": 1.15 + randf() * 0.45, "phase": randf() * TAU})
 
+func _show_speech_bubble(speaker: Node3D, phrase: String) -> void:
+	if greeting.get_parent() != speaker:
+		greeting.reparent(speaker, false)
+	greeting.position = Vector3.UP * 2.48
+	var lines := PackedStringArray([""])
+	var font := ThemeDB.fallback_font
+	for word in phrase.split(" "):
+		var candidate := (lines[-1] + " " + word).strip_edges()
+		if candidate.length() > 24 and not lines[-1].is_empty():
+			lines.append(word)
+		else:
+			lines[-1] = candidate
+	greeting.text = "\n".join(lines)
+	var width := 0.0
+	for line in lines:
+		width = maxf(width, font.get_string_size(line, HORIZONTAL_ALIGNMENT_LEFT, -1, greeting.font_size).x)
+	bubble_back.scale.x = (width + 88.0) / bubble_back.texture.get_width()
+	bubble_back.scale.y = 1.0 + (lines.size() - 1) * .9
+	greeting.position.y += (lines.size() - 1) * .14
+	bubble_time = maxf(3.5, phrase.length() * .1)
+	greeting.show()
+
+func _say(speaker: Node3D, phrase: String, clip: String) -> void:
+	speech_key = phrase
+	speech_clip = clip
+	speech_locale = TranslationServer.get_locale()
+	_show_speech_bubble(speaker, tr(phrase))
+	greeting_voice.stop()
+	greeting_voice.stream = L10n.media("res://audio/voices/%s_" + clip + ".wav", TranslationServer.get_locale())
+	if greeting_voice.stream != null:
+		bubble_time = maxf(bubble_time, greeting_voice.stream.get_length() + .4)
+		if not paused and not AudioServer.is_bus_mute(0):
+			greeting_voice.play()
+	greeting_timer = maxf(7.5, bubble_time)
+
+func _update_shoe_quest(delta: float) -> void:
+	if not walker.visible or shops.inside >= 0 or shoe_quest == FootQuest.FINISHED:
+		return
+	var distance := walker.position.distance_to(shoe_owner.position)
+	match shoe_quest:
+		FootQuest.WAITING:
+			if distance > 8 or absf(walker.position.z - 6.8) > 1.4:
+				return
+			if absf(walker.position.x - shoe_owner.position.x) > .1:
+				shoe_owner.look_at(Vector3(walker.position.x, shoe_owner.position.y, walker.position.z))
+			if distance > 2.1:
+				shoe_owner.position.x = move_toward(shoe_owner.position.x, walker.position.x, 1.5 * delta)
+			else:
+				shoe_quest = FootQuest.SEARCHING
+				lost_shoe.show()
+				_say(shoe_owner, "Can you find my red shoe? I lost it farther along the pavement.", "lost_shoe")
+				phone.receive("Find the red shoe on the pavement.")
+		FootQuest.SEARCHING:
+			if walker.position.distance_to(lost_shoe.position) < 1.6:
+				shoe_quest = FootQuest.RETURNING
+				lost_shoe.hide()
+				star_chime.play()
+				phone.receive("Bring the red shoe back to the neighbour.")
+				message = "Bring the red shoe back to the neighbour."
+				message_timer = 5
+				_refresh_status()
+		FootQuest.RETURNING:
+			if distance < 2.3:
+				shoe_quest = FootQuest.FINISHED
+				_say(shoe_owner, "My shoe! Now I won’t have to hop home. Thank you!", "shoe_returned")
+				wallet += 10
+				phone.receive("Thank you for helping! You earned 10 coins.")
+				_save_preferences()
+				_refresh_ui()
+
+const CAT_PAVEMENT := Vector2(-36, -8)
+
+func _update_cat_quest(delta: float) -> void:
+	if not walker.visible or shops.inside >= 0 or cat_quest == FootQuest.FINISHED:
+		return
+	var distance := walker.position.distance_to(cat_owner.position)
+	match cat_quest:
+		FootQuest.WAITING:
+			if distance > 8 or absf(walker.position.z + 6.8) > 1.4:
+				return
+			if distance > 2.1:
+				cat_owner.rotation.y = -signf(walker.position.x - cat_owner.position.x) * PI * .5
+				cat_owner.position.x = move_toward(cat_owner.position.x, clampf(walker.position.x, CAT_PAVEMENT.x, CAT_PAVEMENT.y), delta * 1.5)
+			else:
+				cat_quest = FootQuest.SEARCHING
+				_say(cat_owner, "Can you find my cat? Look for white paws along this pavement.", "lost_cat")
+				phone.receive("Find the cat with white paws.")
+		FootQuest.SEARCHING:
+			if walker.position.distance_to(lost_cat.position) < 1.6:
+				cat_quest = FootQuest.RETURNING
+				star_chime.play()
+				message = "Walk back to the neighbour with the cat."
+				message_timer = 5
+				phone.receive(message)
+				_refresh_status()
+		FootQuest.RETURNING:
+			# Socks waits on her pavement if the player takes a detour.
+			var target := clampf(walker.position.x, CAT_PAVEMENT.x, CAT_PAVEMENT.y)
+			if absf(walker.position.z - lost_cat.position.z) <= 1.4 and absf(lost_cat.position.x - target) > .75:
+				lost_cat.rotation.y = -signf(target - lost_cat.position.x) * PI * .5
+				lost_cat.position.x = move_toward(lost_cat.position.x, target, 3.5 * delta)
+				lost_cat.position.y = _foot_height(lost_cat.position.x, lost_cat.position.z)
+			if distance < 2.3 and lost_cat.position.distance_to(cat_owner.position) < 2.7:
+				cat_quest = FootQuest.FINISHED
+				_say(cat_owner, "There you are, Socks! Thank you for bringing her home.", "cat_returned")
+				wallet += 10
+				phone.receive("Thank you for helping! You earned 10 coins.")
+				_save_preferences()
+				_refresh_ui()
+
 func _greet_nearby_player(person: Node3D) -> void:
 	var nearby := person.is_visible_in_tree() and walker.visible and walker.position.distance_to(person.position)<2.9
 	if nearby and not person.get_meta("greeted",false) and greeting_timer==0:
-		var phrase := tr(["Hello!", "How are you?", "Hi there!"][greeting_number%3])
+		var index := greeting_number % 3
+		var clip: String = ["hello", "how_are_you", "hi_there"][index]
+		var phrase: String = ["Hello!", "How are you?", "Hi there!"][index]
 		if person.name == "Marina attendant" and jacket_palette >= 0:
-			phrase = tr("The ducks voted. They love your jacket!")
+			clip = "ducks"
+			phrase = "The ducks voted. They love your jacket!"
 		greeting_number += 1
-		greeting.reparent(person,false)
-		greeting.position = Vector3.UP*2.18
-		greeting.text = phrase
-		greeting.visible = true
-		greeting_timer = 7.5
+		_say(person, phrase, clip)
 		person.set_meta("greeted", true)
-		if not AudioServer.is_bus_mute(0):
-			var voices := DisplayServer.tts_get_voices_for_language(TranslationServer.get_locale().left(2))
-			if not voices.is_empty():
-				var level := roundi(65 * db_to_linear(AudioServer.get_bus_volume_db(0)))
-				DisplayServer.tts_speak(phrase,voices[0],clampi(level,0,100))
 	if walker.position.distance_to(person.position)>8:
 		person.set_meta("greeted", false)
 
 func _update_pedestrians(delta: float) -> void:
 	_advance_crossing(delta)
 	greeting_timer = maxf(0,greeting_timer-delta)
-	greeting.visible = walker.visible and greeting_timer>4.0
+	bubble_time = maxf(0, bubble_time - delta)
+	greeting.visible = bubble_time > 0
+	_update_shoe_quest(delta)
+	_update_cat_quest(delta)
 	for person: Node3D in [square_neighbour, waiting_medic, marina_recipient, passenger, arriving_passenger] + bus_companions + clinic_fire_team:
 		if is_instance_valid(person):
 			_greet_nearby_player(person)
@@ -2843,7 +4025,7 @@ func _update_pedestrians(delta: float) -> void:
 		var enters_crossing := absf(person.position.x)>=5.15 and absf(next.x)<5.15
 		if absf(absf(next.z)-6.35)<1.05 and enters_crossing and street_signals.phase!=0:
 			blocked = true
-		blocked = blocked or _near_parked_vehicle(next,.4)
+		blocked = blocked or not street_signals.pedestrian_may_enter(person.position,next) or _near_parked_vehicle(next,.4)
 		if item.get("pushing",false):
 			var front := next-person.basis.z*.88
 			var relative := ambulance.to_local(front)
@@ -2865,6 +4047,11 @@ func _update_pedestrians(delta: float) -> void:
 
 func _rig_wheels(model: Node3D) -> Array[Node3D]:
 	var pivots: Array[Node3D] = []
+	for axle: Node3D in model.find_children("Wheel_*","Node3D",true,false):
+		if axle.find_child("Rounded tire casing*",true,false):
+			axle.set_meta("radius",.85)
+			pivots.append(axle)
+	if not pivots.is_empty(): return pivots
 	var pieces := model.find_children("*", "MeshInstance3D", true, false)
 	for tire: MeshInstance3D in pieces:
 		if not String(tire.name).begins_with("Performance tire") and not String(tire.name).begins_with("Däck") and not String(tire.name).begins_with("All terrain tire") and not String(tire.name).begins_with("Rear axle tire") and not String(tire.name).begins_with("Bicycle wheel"):
@@ -3064,10 +4251,10 @@ func _load_vehicle_model() -> void:
 	headlights.clear()
 	projector_finish = null
 	var beam_origins: Array[Vector3] = []
-	if vehicle_index in [SNOWMOBILE, PORSCHE]:
-		var lens_pattern := "Headlight lens*" if vehicle_index == PORSCHE else "Headlight strip*"
+	if vehicle_index in [SNOWMOBILE, PORSCHE, FARM_TRACTOR]:
+		var lens_pattern: String = {PORSCHE:"Headlight lens*", SNOWMOBILE:"Headlight strip*", FARM_TRACTOR:"Projector lens*"}[vehicle_index]
 		for lens: MeshInstance3D in vehicle_model.find_children(lens_pattern, "MeshInstance3D", true, false):
-			if vehicle_index == PORSCHE:
+			if vehicle_index in [PORSCHE, FARM_TRACTOR]:
 				if not projector_finish:
 					projector_finish = lens.get_active_material(0).duplicate() as StandardMaterial3D
 					projector_finish.emission_enabled = true
@@ -3076,6 +4263,8 @@ func _load_vehicle_model() -> void:
 				lens.set_surface_override_material(0,projector_finish)
 			var center := ambulance.to_local(lens.to_global(lens.get_aabb().get_center()))
 			beam_origins.append(center + Vector3.FORWARD * .035)
+	if vehicle_index == PUCH_DAKOTA:
+		beam_origins.append(Vector3(0,.793,-.58))
 	if beam_origins.is_empty():
 		for side in [-1,1]:
 			beam_origins.append(Vector3(side*player_half_size.x*.72,.87,-front_reach-.03))
@@ -3105,12 +4294,12 @@ func _load_vehicle_model() -> void:
 		grip_radius = -.29
 	for pivot in player_wheels:
 		var hub := ambulance.to_local(pivot.global_position)
-		if hub.z < 0.0:
+		if hub.z < 0.0 and not front_knuckles.has(pivot.get_parent()):
 			front_knuckles.append(pivot.get_parent())
 		elif hub.z > 0.0:
 			rear_tire_contacts.append(Vector3(hub.x, 0.0, hub.z))
 	player_brake_lens = _brake_lens(vehicle_model)
-	reverse_lens = _brake_lens(vehicle_model, true) if vehicle_index in [0, PORSCHE] else null
+	reverse_lens = _brake_lens(vehicle_model, true) if vehicle_index in [0, PORSCHE, XC60_POLICE] else null
 	_find_light_meshes(vehicle_model)
 	_update_emergency_lights()
 
@@ -3135,7 +4324,7 @@ func _find_light_meshes(node: Node) -> void:
 
 func _update_route_arrows() -> void:
 	for arrow in route_arrows: arrow.visible = false
-	if free_drive or ferry_passenger or mode!="playing" or mission_index>=TARGETS.size(): return
+	if free_drive or ferry_passenger or tram_mode != 0 or mode!="playing" or mission_index>=TARGETS.size(): return
 	var origin := walker.position if walker.visible else ambulance.position
 	var target := _mission_destination()
 	var start := Vector2(origin.x, origin.z)
@@ -3146,7 +4335,13 @@ func _update_route_arrows() -> void:
 		points.append(Vector2(start.x, landing_z))
 		start = Vector2(48, landing_z)
 		points.append(start)
-	points.append_array(navigator.path(start, Vector2(target.x, target.z)))
+	var goal := Vector2(target.x, target.z)
+	if walker.visible:
+		navigator.remaining_lane.clear()
+		points.append_array(navigator.path(start, goal))
+	else:
+		var forward := -ambulance.global_basis.z
+		points = navigator.driving_path(start, goal, Vector2(forward.x, forward.z).normalized())
 	var gap := 3.5
 	var used := 0
 	for i in range(1,points.size()):
@@ -3197,7 +4392,7 @@ func _build_target_marker() -> void:
 	var roadside_model := preload("res://vehicles/traffic_bmw_silver.glb")
 	workshop_car=roadside_model.instantiate()
 	add_child(workshop_car)
-	workshop_car.position=Vector3(30,0,-40)
+	workshop_car.position=STATION_PARKING
 	workshop_car.scale=Vector3.ONE*.79
 	workshop_car.rotation.y=PI/2
 	workshop_car.hide()
@@ -3383,16 +4578,15 @@ func _update_camera(delta: float, snap_to_car := false) -> void:
 		camera.position = cab.to_global(Vector3(4.0,4.1+orbit_height,8.0).rotated(Vector3.UP,orbit_angle))
 		camera.look_at(cab.to_global(Vector3(0,1.4,-1)))
 		return
-	if walker.visible and shops.inside>=0:
-		var focus := walker.position + Vector3(0,.9,1)
-		var offset := Vector3(0,2.9+orbit_height,-3.7).rotated(Vector3.UP,orbit_angle)
-		camera.position = _clear_camera_view(focus, focus+offset)
-		camera.look_at(focus)
+	if operating_excavator:
+		var focus := excavator.position + Vector3.UP*2.2
+		camera.position = focus + cab_turntable.global_basis * Vector3(8,4,-9).rotated(Vector3.UP,orbit_angle)
+		camera.look_at(focus + cab_turntable.global_basis.z*1.8)
 		return
 	if walker.visible:
 		var target := walker.position + Vector3.UP*1.2
-		var chase := camera.position.lerp(target+walk_basis.z.rotated(Vector3.UP,orbit_angle)*5+Vector3.UP*(2.7+orbit_height),1-exp(-6*delta))
-		camera.position = _clear_camera_view(target, chase)
+		var chase := target + walker.basis.z.normalized()*4.5 + Vector3.UP*(2.0+walk_camera_height)
+		camera.position = _clear_camera_view(target,chase)
 		camera.look_at(target)
 		return
 	if cockpit_view and vehicle_index == 3:
@@ -3401,20 +4595,23 @@ func _update_camera(delta: float, snap_to_car := false) -> void:
 		camera.look_at(camera.global_position + ambulance.global_basis*gaze)
 		return
 	var forward := -ambulance.global_transform.basis.z
-	var desired := ambulance.global_position - forward.rotated(Vector3.UP,orbit_angle) * 10.5 + Vector3(0, 6.0+orbit_height, 0)
+	var chase_distance := 5.0 if vehicle_index == PUCH_DAKOTA else 10.5
+	var chase_height := 2.65 if vehicle_index == PUCH_DAKOTA else 6.0
+	var desired := ambulance.global_position - forward.rotated(Vector3.UP,orbit_angle) * chase_distance + Vector3(0, chase_height+orbit_height, 0)
 	var preview := steering * clampf(1.0 - absf(speed) / 45.0, 0.35, 1.0)
 	if speed < -0.1:
 		preview = 0.0
 	camera_turn = 0.0 if snap_to_car else lerpf(camera_turn, preview, 1.0 - exp(-5.0 * delta))
 	var right := ambulance.global_transform.basis.x
 	desired += right * camera_turn * 0.65
-	var look := ambulance.global_position + forward * 4.0 + right * camera_turn * 2.5 + Vector3.UP
+	var look_ahead := 1.6 if vehicle_index == PUCH_DAKOTA else 4.0
+	var look := ambulance.global_position + forward * look_ahead + right * camera_turn * 2.5 + Vector3.UP
 	var weight := 1.0 if snap_to_car else 1.0 - exp(-4.0 * maxf(delta, 0.0))
 	var followed := camera.global_position.lerp(desired, weight)
 	# Bound lag along the road while preserving the damped orbit through turns.
 	var lag := (desired - followed).dot(forward)
 	followed += forward * (lag - clampf(lag, -2.0, 2.0))
-	var anchor := ambulance.global_position + Vector3.UP * 2.8
+	var anchor := ambulance.global_position + Vector3.UP * (1.5 if vehicle_index == PUCH_DAKOTA else 2.8)
 	camera.global_position = _clear_camera_view(anchor, followed)
 	camera.look_at(look, Vector3.UP)
 
@@ -3432,9 +4629,16 @@ func _place_taxi_passenger(person: Node3D, stop: int) -> void:
 	var curb := _stop_curb(stop)
 	person.look_at(Vector3(curb.x, pavement.y, curb.z))
 
+func _update_stop_label(label: Label3D) -> void:
+	var stop_name := tr(label.get_meta("stop_name"))
+	label.text = "502\n" + stop_name
+	var font := ThemeDB.fallback_font
+	var width := font.get_string_size(stop_name, HORIZONTAL_ALIGNMENT_LEFT, -1, label.font_size).x
+	label.pixel_size = minf(.004, 1.43 / maxf(width, 1.0))
+
 func _update_bus_board() -> void:
 	if is_instance_valid(bus_board):
-		bus_board.text = "SJÖSTADEN" if free_drive else "502  " + BUS_STOP_NAMES[BUS_STOPS[bus_leg % BUS_STOPS.size()]]
+		bus_board.text = tr("HARBOR TOWN") if free_drive else "502  " + tr(BUS_STOP_NAMES[BUS_STOPS[bus_leg % BUS_STOPS.size()]])
 		var font := ThemeDB.fallback_font
 		var pixels := font.get_string_size(bus_board.text,HORIZONTAL_ALIGNMENT_LEFT,-1,bus_board.font_size)
 		# Leave a margin inside the narrower of the two destination panels.
@@ -3473,7 +4677,7 @@ func _update_mission_marker() -> void:
 			companion.position.y = _foot_height(companion.position.x,companion.position.z)
 	for member in clinic_fire_team:
 		member.visible = not free_drive and vehicle_index == 2 and mission_index == 0
-	var delivering := vehicle_index in [3,6,7,8,9,PORSCHE] and not free_drive
+	var delivering := vehicle_index in [3,6,7,8,9,PORSCHE,MINI_CABRIO] and not free_drive
 	for i in delivery_parcels.size():
 		var parcel := delivery_parcels[i]
 		var delivered := mission_index >= i+2
@@ -3555,7 +4759,7 @@ func _build_ui() -> void:
 	row.add_theme_constant_override("separation", 14)
 	top.add_child(row)
 	var title := Label.new()
-	title.text = "Axel's Emergency Vehicles"
+	title.text = "Harbor Town Rollabout"
 	title.add_theme_font_size_override("font_size", 24)
 	title.add_theme_color_override("font_color", Color("#f4f1e8"))
 	row.add_child(title)
@@ -3567,7 +4771,6 @@ func _build_ui() -> void:
 	mission_label.add_theme_color_override("font_color", Color("#c5efce"))
 	row.add_child(mission_label)
 	wallet_label=Label.new()
-	wallet_label.accessibility_name="Wallet"
 	row.add_child(wallet_label)
 	light_button = _button("Lights OFF", 140)
 	light_button.pressed.connect(_toggle_lights)
@@ -3625,6 +4828,10 @@ func _build_ui() -> void:
 	help.text = "W / ↑  Drive     A D / ← →  Steer     S / ↓  Brake or reverse\nRelease to slow down   ·   Space to help   ·   P to pause"
 	help.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_WIDE)
 	help.offset_top = -50
+	help.offset_left = 12
+	help.offset_right = -12
+	help.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	help.grow_vertical = Control.GROW_DIRECTION_BEGIN
 	help.add_theme_font_size_override("font_size", 16)
 	help.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	help.add_theme_color_override("font_color", Color("#f5f1df"))
@@ -3634,7 +4841,7 @@ func _build_ui() -> void:
 	driving_controls.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	shops.build_menu(ui)
 	ui.add_child(phone)
-	radio_button = _button("Radio off · J",180)
+	radio_button = _button("Turn radio on · J", 180)
 	phone.handset.visibility_changed.connect(func():
 		if phone.handset.is_visible_in_tree():
 			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
@@ -3642,14 +4849,23 @@ func _build_ui() -> void:
 			mouse_brake = false
 			brake_pedal_held = false
 	)
+	phone.take_job.pressed.connect(func():
+		free_drive = false
+		phone.toggle()
+		_update_mission_marker()
+		_update_route_arrows()
+		_refresh_ui()
+	)
 	phone.add_child(radio_button)
 	radio_button.pressed.connect(_toggle_radio)
-	radio.stream = preload("res://audio/sjostad_radio.wav")
-	(radio.stream as AudioStreamWAV).loop_mode=AudioStreamWAV.LOOP_FORWARD
-	(radio.stream as AudioStreamWAV).loop_end=roundi(radio.stream.get_length()*(radio.stream as AudioStreamWAV).mix_rate)
+	next_song_button = _button("Next song · N", 180)
+	phone.add_child(next_song_button)
+	next_song_button.pressed.connect(_next_radio_track)
+	radio.finished.connect(_next_radio_track)
 	radio.volume_db=-10
 	add_child(radio)
 	_build_overlay()
+	_build_menu_footer()
 	siren_player = AudioStreamPlayer.new()
 	siren_player.volume_db = -11
 	add_child(siren_player)
@@ -3659,6 +4875,30 @@ func _build_ui() -> void:
 		stream.loop_end = roundi(stream.get_length() * stream.mix_rate)
 		stream.loop_mode = AudioStreamWAV.LOOP_FORWARD
 		siren_streams.append(stream)
+
+func _build_menu_footer() -> void:
+	overlay.add_child(menu_footer)
+	menu_footer.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_LEFT)
+	menu_footer.offset_left = 20
+	menu_footer.offset_bottom = -12
+	menu_footer.grow_vertical = Control.GROW_DIRECTION_BEGIN
+	var about := _button("About", 92)
+	menu_footer.add_child(about)
+	menu_footer.add_child(version_label)
+	var popup := AcceptDialog.new()
+	popup.exclusive = true
+	add_child(popup)
+	popup.window_input.connect(_dialog_quit_key.bind(popup))
+	popup.dialog_autowrap = true
+	about.pressed.connect(func():
+		popup.title = tr("About the game")
+		popup.ok_button_text = tr("Close")
+		popup.dialog_text = tr("Explore Harbor Town with Axel and Alma. Walk along the canal, take the tram or drive a tow truck to help a neighbour. You choose where to go next.") + "\n\n" + tr("My name is Daniel Nylander. I made this game for my children, who have autism and a language disorder. I wanted them to have a town they could explore at their own pace. That is why you can choose a vehicle by its picture and read what people say in speech bubbles.")
+		popup.popup_centered(Vector2i(520, 270))
+	)
+	popup.visibility_changed.connect(func():
+		if not popup.visible and about.is_visible_in_tree(): about.grab_focus()
+	)
 
 func _build_overlay() -> void:
 	overlay = ColorRect.new()
@@ -3676,7 +4916,7 @@ func _build_overlay() -> void:
 	box.alignment = BoxContainer.ALIGNMENT_CENTER
 	box.add_theme_constant_override("separation", 12)
 	overlay_panel.add_child(box)
-	brand_logo.custom_minimum_size = Vector2(320, 128)
+	brand_logo.custom_minimum_size = Vector2(320, 80)
 	brand_logo.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	brand_logo.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	box.add_child(brand_logo)
@@ -3694,58 +4934,94 @@ func _build_overlay() -> void:
 	start_button = _button("Start a gentle drive", 300)
 	start_button.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	start_button.pressed.connect(_overlay_action)
-	vehicle_selector = OptionButton.new()
-	vehicle_selector.custom_minimum_size = Vector2(320, 48)
+	vehicle_selector.columns = 7
 	vehicle_selector.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
-	vehicle_selector.add_theme_font_size_override("font_size", 19)
-	for name in VEHICLE_NAMES_ALL:
-		vehicle_selector.add_item(tr(name))
-	vehicle_selector.item_selected.connect(_on_vehicle_selected)
+	var vehicle_group := ButtonGroup.new()
+	var normal_style := _style(Color("#49616b"),8)
+	var hover_style := _style(Color("#536e78"),8)
+	var selected_style := _style(Color("#355d64"),8)
+	for style in [normal_style,hover_style,selected_style]:
+		style.content_margin_left = 4
+		style.content_margin_right = 4
+		style.content_margin_top = 4
+		style.content_margin_bottom = 4
+	selected_style.set_border_width_all(3)
+	selected_style.border_color = Color("#ffe395")
+	for index in VEHICLE_NAMES_ALL.size()+EXTRA_GALLERY_NAMES.size():
+		var tile := Button.new()
+		tile.custom_minimum_size = Vector2(146,78)
+		tile.toggle_mode = true
+		tile.button_group = vehicle_group
+		tile.text = VEHICLE_NAMES_ALL[index] if index < VEHICLE_NAMES_ALL.size() else EXTRA_GALLERY_NAMES[index-VEHICLE_NAMES_ALL.size()]
+		tile.accessibility_name = tr(tile.text)
+		tile.add_theme_font_size_override("font_size",14)
+		tile.add_theme_stylebox_override("normal",normal_style)
+		tile.add_theme_stylebox_override("hover",hover_style)
+		tile.add_theme_stylebox_override("pressed",selected_style)
+		tile.add_theme_stylebox_override("hover_pressed",selected_style)
+		var thumbnail := AtlasTexture.new()
+		thumbnail.atlas = preload("res://vehicles/menu_thumbnails.png")
+		thumbnail.region = Rect2(index % 6 * 256, floori(index / 6.0) * 128,256,128)
+		thumbnail.filter_clip = true
+		tile.icon = thumbnail
+		tile.expand_icon = true
+		tile.icon_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		tile.vertical_icon_alignment = VERTICAL_ALIGNMENT_TOP
+		if index == VEHICLE_NAMES_ALL.size():
+			tile.pressed.connect(func():
+				if boating or tram_mode != 0: _select_gallery_activity(1)
+				_mark_selected_vehicle(index)
+				start_in_excavator = true
+				_refresh_ui()
+			)
+		elif index > VEHICLE_NAMES_ALL.size():
+			tile.pressed.connect(_select_gallery_activity.bind(3 if index == VEHICLE_NAMES_ALL.size()+1 else 4))
+		else:
+			tile.pressed.connect(_on_vehicle_selected.bind(index))
+		vehicle_selector.add_child(tile)
+	_mark_selected_vehicle(vehicle_index)
+	box.add_child(vehicle_selector)
 	var player_row := HBoxContainer.new()
 	player_row.alignment=BoxContainer.ALIGNMENT_CENTER
 	box.add_child(player_row)
-	var character := OptionButton.new()
-	character.accessibility_name="Character"
-	character.add_item("Axel · 15")
-	character.add_item("Alma · 12")
-	character.select(int(play_as_alma))
-	character.item_selected.connect(func(index: int):
-		play_as_alma=index==1
-		_apply_player_appearance()
-		_save_preferences()
-		_refresh_ui()
-	)
-	player_row.add_child(character)
-	player_row.add_child(vehicle_selector)
-	activity.accessibility_name = "Activity"
-	activity.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
-	activity.add_item("Three missions")
-	activity.add_item("Free exploration")
-	activity.add_item("Ride the tram")
-	activity.add_item("Drive the tram")
-	activity.add_item("Drive the motorboat")
-	activity.item_selected.connect(func(index: int):
-		boating = index==4
-		if mode == "menu" and index >= 2: siren_player.stop()
-		tram_mode = index-1 if index in [2,3] else 0
-		launch_speed = 0
-		var ear: Node3D = tram.sections[0] if tram_mode > 0 else launch if boating else (walker if walker.visible else ambulance)
-		if listener.get_parent()!=ear:
-			listener.reparent(ear,false)
-			listener.position=Vector3.UP*1.3
-		free_drive = index != 0
-		parked_at_target = 0.0
-		message_timer = 0.0
-		_update_mission_marker()
-		_refresh_ui()
-	)
-	box.add_child(activity)
+	var drivers := ButtonGroup.new()
+	for index in 2:
+		var driver := _button("Axel" if index == 0 else "Alma", 135)
+		driver.toggle_mode = true
+		driver.button_group = drivers
+		if index == 0:
+			var portrait := AtlasTexture.new()
+			portrait.atlas = preload("res://branding/rollabout-sv.png")
+			portrait.region = Rect2(100, 156, 405, 405)
+			portrait.filter_clip = true
+			driver.icon = portrait
+		else:
+			driver.icon = preload("res://branding/driver-alma.png")
+		driver.add_theme_constant_override("icon_max_width", 46)
+		for state in ["pressed", "hover_pressed"]:
+			driver.add_theme_stylebox_override(state, selected_style)
+			driver.add_theme_color_override("font_" + state + "_color", Color.WHITE)
+		driver.button_pressed = index == int(play_as_alma)
+		driver.pressed.connect(func():
+			play_as_alma = index == 1
+			_apply_player_appearance()
+			_save_preferences()
+			_refresh_ui()
+		)
+		player_row.add_child(driver)
 	box.add_child(start_button)
 	var settings_toggle := _button("Settings", 220)
 	settings_toggle.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
-	box.add_child(settings_toggle)
+	var menu_actions := HBoxContainer.new()
+	menu_actions.alignment = BoxContainer.ALIGNMENT_CENTER
+	box.add_child(menu_actions)
+	menu_actions.add_child(settings_toggle)
+	var quit_button := _button("Quit game · F10", 220)
+	menu_actions.add_child(quit_button)
+	quit_button.pressed.connect(_request_quit)
 	var dialog := AcceptDialog.new()
 	dialog.name = "GameSettings"
+	dialog.window_input.connect(_dialog_quit_key.bind(dialog))
 	dialog.title = tr("Settings")
 	dialog.ok_button_text = tr("Close settings")
 	dialog.exclusive = true
@@ -3761,32 +5037,60 @@ func _build_overlay() -> void:
 		tabs.add_child(page)
 		tabs.set_tab_title(page.get_index(),title)
 		pages.append(page)
-	var renderer := OptionButton.new()
+	var renderer := GridContainer.new()
+	renderer.columns = 2
+	renderer.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	renderer.name = "RendererChoice"
 	renderer.accessibility_name = "Renderer"
 	var methods := ["gl_compatibility","mobile","forward_plus","fsr2"]
-	for caption in ["Compatibility (OpenGL)", "Mobile", "Forward+", "Forward+ · AMD FSR 2.2"]:
-		renderer.add_item(caption)
+	var captions := ["Compatibility (OpenGL)", "Mobile", "Forward+", "Forward+ · AMD FSR 2.2"]
+	var supports_dlss := _engine_supports_dlss_mode() and _active_renderer_reports_dlss()
+	if supports_dlss:
+		methods.append("dlss")
+		captions.append("Forward+ · NVIDIA DLSS (experimental; RTX required)")
 	var graphics := ConfigFile.new()
 	graphics.load("user://graphics.cfg")
 	var selected := str(graphics.get_value("rendering","renderer/rendering_method", RenderingServer.get_current_rendering_method()))
-	if selected=="forward_plus" and (graphics.get_value("rendering","scaling_3d/mode",0)==2 or "--fsr2" in OS.get_cmdline_user_args()):
-		selected="fsr2"
-	renderer.select(maxi(0,methods.find(selected)))
+	if selected=="forward_plus":
+		var saved_upscaler_mode := int(graphics.get_value("rendering","scaling_3d/mode",0))
+		if supports_dlss and saved_upscaler_mode == 5:
+			selected="dlss"
+		elif saved_upscaler_mode == 2 or "--fsr2" in OS.get_cmdline_user_args():
+			selected="fsr2"
 	var renderer_note := Label.new()
 	renderer_note.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	renderer_note.text = "Renderer changes apply next time you start the game."
 	pages[0].add_child(renderer)
 	pages[0].add_child(renderer_note)
-	renderer.item_selected.connect(func(index: int):
-		var fsr := index==3
-		graphics.set_value("rendering","renderer/rendering_method","forward_plus" if fsr else methods[index])
-		graphics.set_value("rendering","scaling_3d/mode",2 if fsr else 0)
-		graphics.set_value("rendering","scaling_3d/scale",.75 if fsr else 1.0)
-		graphics.set_value("rendering","anti_aliasing/quality/msaa_3d",0 if fsr else 2)
+	var save_renderer := func(index: int):
+		var fsr: bool = methods[index]=="fsr2"
+		var dlss: bool = methods[index]=="dlss"
+		var uses_forward_plus: bool = fsr or dlss
+		graphics.set_value("rendering","renderer/rendering_method","forward_plus" if uses_forward_plus else methods[index])
+		graphics.set_value("rendering","scaling_3d/mode",5 if dlss else (2 if fsr else 0))
+		graphics.set_value("rendering","scaling_3d/scale",.67 if dlss else (.75 if fsr else 1.0))
+		graphics.set_value("rendering","anti_aliasing/quality/msaa_3d",0 if uses_forward_plus else 2)
 		if graphics.save("user://graphics.cfg")!=OK:
 			renderer_note.text = "Could not save graphics settings."
-	)
+		elif dlss:
+			renderer_note.text = "DLSS is experimental. It needs the NGX-enabled engine and a supported NVIDIA RTX GPU/driver; otherwise it continues without DLSS. Restart to apply."
+		else:
+			renderer_note.text = "Renderer changes apply next time you start the game."
+	var renderer_group := ButtonGroup.new()
+	for index in methods.size():
+		var tile := _button(captions[index], 180)
+		if methods[index] == "dlss":
+			tile.text = "NVIDIA DLSS"
+			tile.tooltip_text = captions[index]
+		var icon := AtlasTexture.new()
+		icon.atlas = preload("res://branding/graphics-modes.svg")
+		icon.region = Rect2(index*32,0,32,32)
+		tile.icon = icon
+		tile.button_group = renderer_group
+		tile.toggle_mode = true
+		tile.button_pressed = index == maxi(0, methods.find(selected))
+		tile.pressed.connect(save_renderer.bind(index))
+		renderer.add_child(tile)
 	settings_toggle.pressed.connect(func():
 		dialog.title = tr("Settings")
 		dialog.ok_button_text = tr("Close settings")
@@ -3798,35 +5102,45 @@ func _build_overlay() -> void:
 	var language_row := HBoxContainer.new()
 	language_row.alignment = BoxContainer.ALIGNMENT_CENTER
 	pages[4].add_child(language_row)
-	var language_label := Label.new()
-	language_label.text = "Language"
-	language_row.add_child(language_label)
-	var language := OptionButton.new()
-	language.accessibility_name = "Language"
-	language.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
-	var locales := PackedStringArray(["en"])
-	for locale in TranslationServer.get_loaded_locales():
-		if not locale in locales:
-			locales.append(locale)
-	for locale in locales:
-		language.add_item("Svenska" if locale == "sv" else TranslationServer.get_locale_name(locale))
-	language.select(maxi(0, locales.find(TranslationServer.get_locale())))
-	language.item_selected.connect(func(index: int):
-		TranslationServer.set_locale(locales[index])
-		dialog.title=tr("Settings")
-		dialog.ok_button_text=tr("Close settings")
+	var language_group := ButtonGroup.new()
+	for locale in L10n.locales():
+		var catalog := TranslationServer.get_translation_object(locale)
+		var native_name := catalog.get_message("LANGUAGE_SELF_NAME") if catalog and catalog.locale == locale else &""
+		var language := _button(str(native_name) if native_name != &"" else TranslationServer.get_locale_name(locale), 156)
+		language.icon = L10n.media("res://branding/language-%s.svg", locale)
+		language.toggle_mode = true
+		language.button_group = language_group
+		language.button_pressed = locale == TranslationServer.get_locale()
+		language.pressed.connect(func():
+			TranslationServer.set_locale(locale)
+			dialog.title = tr("Settings")
+			dialog.ok_button_text = tr("Close settings")
+			_save_preferences()
+		)
+		language_row.add_child(language)
+	var handling := HBoxContainer.new()
+	handling.name = "Korlage"
+	handling.alignment = BoxContainer.ALIGNMENT_CENTER
+	var speed_group := ButtonGroup.new()
+	for index in 2:
+		var choice := _button("Gentle driving · up to 30 km/h" if index == 0 else "Full speed", 170)
+		choice.icon = preload("res://branding/gentle-driving.svg") if index == 0 else preload("res://branding/full-speed.svg")
+		choice.toggle_mode = true
+		choice.button_group = speed_group
+		choice.button_pressed = gentle_driving == (index == 0)
+		choice.pressed.connect(_set_handling.bind(index))
+		handling.add_child(choice)
+	pages[2].add_child(handling)
+	var crashes := CheckButton.new()
+	crashes.name = "AllowCrashes"
+	crashes.text = "Allow crashes"
+	crashes.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	crashes.button_pressed = allow_crashes
+	crashes.toggled.connect(func(enabled: bool):
+		allow_crashes = enabled
 		_save_preferences()
 	)
-	language_row.add_child(language)
-	var handling := OptionButton.new()
-	handling.name = "Korlage"
-	handling.accessibility_name = "Driving mode"
-	handling.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
-	handling.add_item("Gentle driving · up to 30 km/h")
-	handling.add_item("Full speed")
-	handling.select(0 if gentle_driving else 1)
-	handling.item_selected.connect(_set_handling)
-	pages[2].add_child(handling)
+	pages[2].add_child(crashes)
 	preview_sound_button = _button("Preview vehicle sound", 300)
 	preview_sound_button.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	preview_sound_button.pressed.connect(_preview_sound)
@@ -3836,8 +5150,8 @@ func _build_overlay() -> void:
 	var volume_label := Label.new()
 	volume_label.text = "Game volume"
 	volume_row.add_child(volume_label)
-	var volume := HSlider.new()
-	volume.accessibility_name = "Game volume"
+	var volume := game_volume_slider
+	volume.accessibility_name = tr("Game volume")
 	volume.custom_minimum_size.x = 180
 	volume.max_value = 100
 	volume.step = 5
@@ -3847,8 +5161,8 @@ func _build_overlay() -> void:
 	var traffic_volume_label := Label.new()
 	traffic_volume_label.text = "Traffic sirens"
 	volume_row.add_child(traffic_volume_label)
-	var traffic_volume := HSlider.new()
-	traffic_volume.accessibility_name = "Traffic sirens"
+	var traffic_volume := traffic_volume_slider
+	traffic_volume.accessibility_name = tr("Traffic sirens")
 	traffic_volume.custom_minimum_size.x = 120
 	traffic_volume.max_value = 100
 	traffic_volume.step = 5
@@ -3862,53 +5176,78 @@ func _build_overlay() -> void:
 	)
 	volume_row.add_child(traffic_volume)
 	pages[1].add_child(volume_row)
-	var traffic_lights := OptionButton.new()
-	traffic_lights.name = "Trafikljusval"
-	traffic_lights.accessibility_name = "Emergency lights in traffic"
-	traffic_lights.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
-	for caption in ["Traffic lights · Flashing blue", "Traffic lights · Steady blue", "Traffic lights · Blue lights off"]:
-		traffic_lights.add_item(caption)
-	traffic_lights.select(traffic_light_mode)
-	traffic_lights.item_selected.connect(_set_traffic_light_mode)
-	var beacon_row := HBoxContainer.new()
-	beacon_row.alignment = BoxContainer.ALIGNMENT_CENTER
-	pages[0].add_child(beacon_row)
-	beacon_row.add_child(traffic_lights)
-	var own_beacon := OptionButton.new()
-	own_beacon.add_item("My vehicle · Flashing")
-	own_beacon.add_item("My vehicle · Steady")
-	own_beacon.select(int(steady_player_lights))
-	own_beacon.item_selected.connect(func(index: int):
-		steady_player_lights = index == 1
-		_update_emergency_lights()
-		_save_preferences()
-	)
-	beacon_row.add_child(own_beacon)
-	var daylight := OptionButton.new()
-	daylight.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
-	for caption in ["Time · Day", "Time · Night", "Time · Day and night"]:
-		daylight.add_item(caption)
-	daylight.select(time_mode)
-	daylight.item_selected.connect(func(index: int):
-		time_mode = index
-		_update_daylight(0)
-		_save_preferences()
-	)
-	var weather_row := HBoxContainer.new()
-	weather_row.alignment = BoxContainer.ALIGNMENT_CENTER
-	pages[3].add_child(weather_row)
-	weather_row.add_child(daylight)
-	for is_season in [true,false]:
-		var choice := OptionButton.new()
-		for caption in (weather.SEASONS if is_season else weather.CONDITIONS):
-			choice.add_item(caption)
-		choice.select(weather.season_setting if is_season else weather.weather_setting)
-		choice.item_selected.connect(func(index: int):
-			if is_season: weather.season_setting = index
-			else: weather.weather_setting = index
+	for own in [false, true]:
+		var row := HBoxContainer.new()
+		row.name = "OwnBeacon" if own else "TrafficBeacons"
+		row.alignment = BoxContainer.ALIGNMENT_CENTER
+		pages[0].add_child(row)
+		var heading := Label.new()
+		heading.text = "My vehicle" if own else "Emergency lights in traffic"
+		row.add_child(heading)
+		var group := ButtonGroup.new()
+		var beacon_labels := ["Flashing", "Steady", "Off"]
+		for index in (2 if own else 3):
+			var tile := _button(beacon_labels[index], 90)
+			var icon := AtlasTexture.new()
+			icon.atlas = preload("res://branding/beacon-modes.svg")
+			icon.region = Rect2(index * 32, 0, 32, 32)
+			tile.icon = icon
+			tile.toggle_mode = true
+			tile.button_group = group
+			tile.button_pressed = index == (int(steady_player_lights) if own else traffic_light_mode)
+			tile.pressed.connect(func():
+				if own:
+					steady_player_lights = index == 1
+					_update_emergency_lights()
+					_save_preferences()
+				else:
+					_set_traffic_light_mode(index)
+			)
+			row.add_child(tile)
+	var daylight := HBoxContainer.new()
+	daylight.name = "TimeChoices"
+	daylight.alignment = BoxContainer.ALIGNMENT_CENTER
+	var time_group := ButtonGroup.new()
+	var time_icons := [preload("res://branding/time-day.svg"), preload("res://branding/time-night.svg"), preload("res://branding/time-cycle.svg")]
+	var time_labels := ["Time · Day", "Time · Night", "Time · Day and night"]
+	for index in time_labels.size():
+		var tile := _button(time_labels[index], 132)
+		tile.icon = time_icons[index]
+		tile.button_group = time_group
+		tile.toggle_mode = true
+		tile.button_pressed = time_mode == index
+		tile.pressed.connect(func():
+			time_mode = index
+			_update_daylight(0)
 			_save_preferences()
 		)
-		weather_row.add_child(choice)
+		daylight.add_child(tile)
+	pages[3].add_child(daylight)
+	for is_season in [true, false]:
+		var row := HBoxContainer.new()
+		row.name = "SeasonChoices" if is_season else "WeatherChoices"
+		row.alignment = BoxContainer.ALIGNMENT_CENTER
+		pages[3].add_child(row)
+		var group := ButtonGroup.new()
+		var labels: Array = weather.SEASONS if is_season else weather.CONDITIONS
+		for index in labels.size():
+			var tile := _button(labels[index], 80)
+			var icon := AtlasTexture.new()
+			icon.atlas = preload("res://branding/weather-symbols.svg")
+			var column := index if is_season or index == 0 else index + 4
+			icon.region = Rect2(column * 32, 0, 32, 32)
+			tile.icon = icon
+			tile.vertical_icon_alignment = VERTICAL_ALIGNMENT_TOP
+			tile.icon_alignment = HORIZONTAL_ALIGNMENT_CENTER
+			tile.toggle_mode = true
+			tile.button_group = group
+			tile.button_pressed = index == (weather.season_setting if is_season else weather.weather_setting)
+			tile.pressed.connect(func():
+				if is_season: weather.season_setting = index
+				else: weather.weather_setting = index
+				_save_preferences()
+			)
+			row.add_child(tile)
 
 func _button(caption: String, width: float) -> Button:
 	var button := Button.new()
@@ -3935,6 +5274,86 @@ func _style(color: Color, radius: int) -> StyleBoxFlat:
 	style.content_margin_bottom = 8
 	return style
 
+func _road_obstacles() -> Array[AABB]:
+	var obstacles := building_bounds.duplicate()
+	obstacles.append_array(roadside_solids)
+	obstacles.append_array(tram.car_bounds())
+	if workshop_car.visible: obstacles.append(WORKSHOP_CAR_BOUNDS)
+	if casualty.visible and casualty.get_parent()==self:
+		obstacles.append(AABB(casualty.position-Vector3(2.1,1,.86),Vector3(4.2,3,1.72)))
+	for person in [crossing_pedestrian,passenger,arriving_passenger,waiting_medic,marina_recipient,square_neighbour] + bus_companions + clinic_fire_team:
+		if not person.visible: continue
+		obstacles.append(AABB(person.position-Vector3(.28,1,.28),Vector3(.56,3,.56)))
+	for neighbour in walker_data:
+		var person: Node3D = neighbour.actor
+		obstacles.append(AABB(person.position-Vector3(.28,1,.28),Vector3(.56,3,.56)))
+		if neighbour.get("pushing",false):
+			var cart_position := person.position-person.basis.z*.73
+			obstacles.append(AABB(cart_position-Vector3(.48,1,.32),Vector3(.96,3,.64)))
+	for i in parked_cars.size():
+		if parked_cars[i].visible:
+			obstacles.append(_parked_bounds(i))
+	return obstacles
+
+func _recover_road_vehicle() -> bool:
+	var obstacles := _road_obstacles()
+	for item in traffic_data:
+		var traffic_size := _traffic_extent(item)
+		var half_size := Vector3(traffic_size.x+1,2,traffic_size.y+.3)
+		obstacles.append(AABB(item.actor.position - half_size, half_size * 2))
+	var old_pose := ambulance.transform
+	ambulance.rotation = Vector3(0, -PI * .5, 0)
+	var extent := _player_extent() + Vector2(.4,.4)
+	for x: float in [-34, -22, 19, 39, -58, -79, -130, -190]:
+		ambulance.position = Vector3(x, _surface_height(x, 2.35), 2.35)
+		var clear := true
+		for obstacle in obstacles:
+			if _vehicle_overlap_depth(obstacle, extent) > 0:
+				clear = false
+				break
+		if clear: return true
+	ambulance.transform = old_pose
+	return false
+
+func _recover_position() -> void:
+	var success := true
+	if tram_mode > 0:
+		tram.stop_at_station(0)
+	elif boating:
+		launch.transform = Transform3D(Basis.IDENTITY, LAUNCH_BERTH)
+		launch_speed = 0
+		outboard.rotation.y = 0
+	elif operating_excavator:
+		excavator.transform = Transform3D(Basis(Vector3.UP, PI*.5), Vector3(-115,-.10,47))
+		building_bounds[excavator_wall] = _crawler_bounds()
+	elif walker.visible or ferry_passenger:
+		success = false
+		for site in [Vector2(20,6.8), Vector2(-23,-6.8), Vector2(90,-24)]:
+			var landing := Vector3(site.x, _foot_height(site.x, site.y), site.y)
+			if _on_foot_clear(landing):
+				ferry_passenger = false
+				ferry_exit_requested = false
+				walker.position = landing
+				walking_velocity = Vector3.ZERO
+				success = true
+				break
+	else:
+		success = _recover_road_vehicle()
+	if success:
+		speed = 0
+		steering = 0
+		mouse_gas = false
+		mouse_brake = false
+		brake_pedal_held = false
+		parked_at_target = 0
+		_end_skid()
+		_update_camera(0, true)
+		_update_route_arrows()
+		_update_entry_button()
+	message = "Back in a safe place." if success else "No clear spot yet. Try again in a moment."
+	message_timer = 4
+	_refresh_status()
+
 func _starting_position() -> Vector3:
 	var best_x := -35.0
 	var largest_gap := -INF
@@ -3952,6 +5371,11 @@ func _starting_position() -> Vector3:
 	return Vector3(best_x, _surface_height(best_x, lane), lane)
 
 func _start_game() -> void:
+	free_drive = true
+	operating_excavator = false
+	run_reserve = 60
+	run_ready_hint_time = 0
+	winded = false
 	scooter.dismount(walker)
 	ferry_passenger = false
 	if boating:
@@ -3965,8 +5389,7 @@ func _start_game() -> void:
 	phone.messages.clear()
 	phone.unread=0
 	phone.handset.hide()
-	parked_sound_settings.assign([false, false, false, true, true, true, true, true, true, true, true, true, true, true, true])
-	parked_light_settings.fill(false)
+	_reset_parked_controls()
 	mode = "playing"
 	paused = false
 	mission_index = 0
@@ -3984,10 +5407,18 @@ func _start_game() -> void:
 	ambulance.visible = true
 	for i in parked_cars.size():
 		parked_cars[i].visible = i != vehicle_index
-		parked_cars[i].position = _depot_position(i)
-		parked_cars[i].rotation = Vector3.ZERO
+		_park_at_home(parked_cars[i], i)
 	ambulance.global_position = _starting_position()
 	ambulance.rotation = Vector3(0, -PI * 0.5, 0)
+	if start_in_excavator:
+		free_drive = true
+		parked_cars[vehicle_index].show()
+		ambulance.hide()
+		walker.position = excavator.position
+		listener.reparent(walker,false)
+		listener.position = Vector3.UP*1.6
+		operating_excavator = true
+		start_in_excavator = false
 	_update_camera(0.0, true)
 	speed = 0
 	steering = 0
@@ -3997,10 +5428,34 @@ func _start_game() -> void:
 	_refresh_ui()
 	get_viewport().gui_release_focus()
 
+func _select_gallery_activity(index: int) -> void:
+	start_in_excavator = false
+	if mode == "menu":
+		var gallery_index := VEHICLE_NAMES_ALL.size() + (2 if index == 4 else 1) if index >= 2 else vehicle_index
+		_mark_selected_vehicle(gallery_index)
+	boating = index==4
+	if mode == "menu" and index >= 2: siren_player.stop()
+	tram_mode = index-1 if index in [2,3] else 0
+	launch_speed = 0
+	var ear: Node3D = tram.sections[0] if tram_mode > 0 else launch if boating else (walker if walker.visible else ambulance)
+	if listener.get_parent()!=ear:
+		listener.reparent(ear,false)
+		listener.position=Vector3.UP*1.3
+	parked_at_target = 0.0
+	message_timer = 0.0
+	_update_mission_marker()
+	_refresh_ui()
+
+func _mark_selected_vehicle(index: int) -> void:
+	var tile := vehicle_selector.get_child(index) as Button
+	tile.button_pressed = true
+
 func _on_vehicle_selected(index: int) -> void:
 	if mode == "playing" and not paused:
-		vehicle_selector.select(vehicle_index)
+		_mark_selected_vehicle(vehicle_index)
 		return
+	start_in_excavator = false
+	if mode == "menu" and (boating or tram_mode != 0): _select_gallery_activity(0)
 	if siren_player.playing:
 		siren_player.stop()
 	if index != vehicle_index:
@@ -4012,6 +5467,7 @@ func _on_vehicle_selected(index: int) -> void:
 		parked_cars[vehicle_index].transform = parked_cars[index].transform
 		parked_cars[vehicle_index].visible = true
 		parked_cars[index].visible = false
+	_mark_selected_vehicle(index)
 	_change_mission_vehicle(clampi(index, 0, VEHICLE_NAMES_ALL.size() - 1))
 	speed = 0
 	steering = 0
@@ -4047,8 +5503,7 @@ func _toggle_pause() -> void:
 		_end_skid()
 		for item in traffic_data:
 			item.horn.stop()
-		if DisplayServer.tts_is_speaking():
-			DisplayServer.tts_stop()
+		greeting_voice.stop()
 	_update_traffic_signals(0)
 	_update_siren()
 	_refresh_ui()
@@ -4071,13 +5526,21 @@ func _load_preferences() -> void:
 	play_as_alma=config.get_value("player","alma",false)==true
 	purchases=config.get_value("player","purchases",{})
 	wallet=maxi(0,int(config.get_value("player","coins",0)))
+	var saved_stars = config.get_value("player", "stars", PackedStringArray())
+	if saved_stars is PackedStringArray:
+		for id in saved_stars:
+			if STAR_SITES.has(id) and not collected_stars.has(id): collected_stars.append(id)
 	var saved_locale := str(config.get_value("language", "locale", "en"))
-	if saved_locale in TranslationServer.get_loaded_locales():
-		TranslationServer.set_locale(saved_locale)
+	var available_locales := L10n.locales()
+	for variant in L10n.variants(saved_locale):
+		if variant in available_locales:
+			TranslationServer.set_locale(variant)
+			break
 	weather.season_setting = clampi(int(config.get_value("world","season",0)),0,4)
 	weather.weather_setting = clampi(int(config.get_value("world","weather",0)),0,4)
 	time_mode = clampi(int(config.get_value("world","daylight",0)),0,2)
 	steady_player_lights = config.get_value("driving","steady_lights",false) == true
+	allow_crashes = config.get_value("driving","allow_crashes",true) == true
 	var gentle = config.get_value("driving","gentle",true)
 	if gentle is bool:
 		gentle_driving = gentle
@@ -4094,6 +5557,7 @@ func _save_preferences() -> void:
 	var volume := 0.0 if AudioServer.is_bus_mute(0) else db_to_linear(AudioServer.get_bus_volume_db(0))*100
 	config.set_value("player","alma",play_as_alma)
 	config.set_value("player","coins",wallet)
+	config.set_value("player","stars",collected_stars)
 	config.set_value("player","purchases",purchases)
 	config.set_value("language", "locale", TranslationServer.get_locale())
 	config.set_value("audio","volume",roundi(volume))
@@ -4101,6 +5565,7 @@ func _save_preferences() -> void:
 	config.set_value("world","season",weather.season_setting)
 	config.set_value("world","weather",weather.weather_setting)
 	config.set_value("world","daylight",time_mode)
+	config.set_value("driving","allow_crashes",allow_crashes)
 	config.set_value("driving","gentle",gentle_driving)
 	config.set_value("traffic","lights",traffic_light_mode)
 	config.set_value("driving","steady_lights",steady_player_lights)
@@ -4124,8 +5589,8 @@ func _set_game_volume(percent: float) -> void:
 
 func _apply_game_volume(percent: float) -> void:
 	AudioServer.set_bus_mute(0, percent <= 0)
-	if percent <= 0 and DisplayServer.tts_is_speaking():
-		DisplayServer.tts_stop()
+	if percent <= 0:
+		greeting_voice.stop()
 	if percent > 0:
 		AudioServer.set_bus_volume_db(0, linear_to_db(percent / 100.0))
 
@@ -4135,7 +5600,16 @@ func _toggle_sound() -> void:
 	_refresh_ui()
 
 func _update_siren() -> void:
-	if sound_on and not boating and tram_mode == 0 and mode == "playing" and not paused and not walker.visible:
+	if (operating_excavator or boating) and mode == "playing" and not paused:
+		var engine: AudioStream = preload("res://audio/outboard.wav") if boating else siren_streams[WHEEL_LOADER]
+		if siren_player.stream != engine:
+			siren_player.stream = engine
+		siren_player.volume_db = -8
+		if not siren_player.playing:
+			siren_player.pitch_scale = 0.78
+			siren_player.play()
+		return
+	if sound_on and not operating_excavator and not boating and tram_mode == 0 and mode == "playing" and not paused and not walker.visible:
 		if siren_player.stream != siren_streams[vehicle_index]:
 			siren_player.stream = siren_streams[vehicle_index]
 		if vehicle_index < 3 or vehicle_index == XC60_POLICE:
@@ -4147,6 +5621,7 @@ func _update_siren() -> void:
 			siren_player.stop()
 
 func _refresh_dispatch() -> void:
+	phone.take_job.visible = free_drive and not walker.visible and not boating and not operating_excavator and tram_mode == 0 and not ferry_passenger and mission_index < TARGETS.size()
 	phone.visible = mode=="playing" and not paused
 	phone.refresh()
 	if free_drive or mode!="playing" or mission_index>=TARGETS.size():
@@ -4159,7 +5634,7 @@ func _refresh_dispatch() -> void:
 		match recovery_leg%4:
 			0: dispatch="A car is smoking on the main street. Follow the arrows and stop beside it."
 			2: dispatch="A car on the east bank has lost a wheel. Follow the arrows to pick it up."
-			_: dispatch="The car is on your flatbed. Follow the arrows to the workshop for 20 coins."
+			_: dispatch="The car is on your flatbed. Follow the arrows to the petrol station for 20 coins."
 	elif vehicle_index==BUS:
 		dispatch=BUS_MESSAGES[bus_leg%BUS_STOPS.size()]
 	elif vehicle_index==TAXI:
@@ -4178,32 +5653,37 @@ func _refresh_ui() -> void:
 	if road_driver:
 		for avatar in [walker, road_driver]:
 			avatar.get_node("Smile").visible = happy_seconds > 0
+		var on_moped := vehicle_index == PUCH_DAKOTA
+		road_driver.scale = Vector3.ONE * (.88 if play_as_alma else 1.0) * (1.0 if on_moped else .78)
 		road_driver.position = Vector3(0,.82-.77*road_driver.scale.y,.18) if vehicle_index==SNOWMOBILE else Vector3(-.32,.88-.87*road_driver.scale.y,-.04)
+		if vehicle_index == MINI_CABRIO:
+			road_driver.position = Vector3(-.38,.595-.87*road_driver.scale.y,-.19)
 		if vehicle_index == PORSCHE:
 			road_driver.position = Vector3(-.356,.48-.87*road_driver.scale.y,.10)
+		moped_pose.visible = on_moped
+		if on_moped:
+			moped_pose.fit_to(vehicle_model)
+		for arm in road_driver.get_meta("arms"):
+			arm.visible = not on_moped
 		road_driver.get_node("RidingLegs").visible = vehicle_index == SNOWMOBILE
 		for leg in road_driver.get_meta("legs"):
-			leg.visible = vehicle_index != SNOWMOBILE
-		road_driver.visible = vehicle_index in [3,PORSCHE,SNOWMOBILE,XC60_POLICE] and mode == "playing" and not walker.visible and not boating and tram_mode == 0 and not cockpit_view
+			leg.visible = vehicle_index not in [SNOWMOBILE,PUCH_DAKOTA]
+		road_driver.visible = vehicle_index in [3,PORSCHE,SNOWMOBILE,XC60_POLICE,MINI_CABRIO,PUCH_DAKOTA] and mode == "playing" and not walker.visible and not boating and tram_mode == 0 and not cockpit_view
 	if skipper: skipper.visible = boating and mode == "playing"
 	if not is_instance_valid(mission_label): return
-	var mission_activity := "Parcel deliveries"
-	match vehicle_index:
-		BUS: mission_activity = "Bus route 502"
-		TAXI: mission_activity = "Taxi fares"
-		RECOVERY: mission_activity = "Roadside recovery"
-		SNOWMOBILE: mission_activity = "Blanket deliveries"
-		0: mission_activity = "Ambulance calls"
-		2: mission_activity = "Fire safety checks"
-		_:
-			if _vehicle_tasks() == PATROL_TASKS: mission_activity = "Police patrols"
-	if activity.item_count > 0 and activity.get_item_text(0) != mission_activity:
-		activity.set_item_text(0,mission_activity)
+	menu_footer.visible = mode == "menu"
+	version_label.text = tr("Version %s") % ProjectSettings.get_setting("application/config/version")
 	_refresh_dispatch()
 	_sync_radio()
-	wallet_label.text = tr("%d coins") % wallet
+	var remaining := STAR_SITES.size() - collected_stars.size()
+	if remaining == 0:
+		phone.star_progress.text = tr("★ All stars found!")
+	else:
+		phone.star_progress.text = tr_n("★ %d star left", "★ %d stars left", remaining) % remaining
+	wallet_label.text = tr("★ %d points") % (collected_stars.size() * POINTS_PER_STAR) + "   ·   " + tr_n("%d coin", "%d coins", wallet) % wallet
 	if happy_seconds > 0:
 		wallet_label.text += "   ☺ " + tr("%s feels extra happy!") % ("Alma" if play_as_alma else "Axel")
+	wallet_label.accessibility_name = tr("Wallet") + ". " + wallet_label.text
 	light_button.text = "Lights ON" if lights_on else "Lights OFF"
 	if vehicle_index >= 3 and vehicle_index != XC60_POLICE:
 		siren_button.text = "Engine ON" if sound_on else "Engine OFF"
@@ -4235,10 +5715,10 @@ func _refresh_ui() -> void:
 	camera_button.text = "Outside view · C" if cockpit_view else "Driver view · C"
 	horn_button.visible = not show_overlay and (tram_mode==2 or (tram_mode==0 and (boating or not walker.visible)))
 	horn_button.text = "Tram bell · H" if tram_mode==2 else tr("Ice cream chime · H") if vehicle_index == ICE_CREAM and not boating else "Horn · H"
-	seat_button.visible = not show_overlay and tram_mode==0 and not boating
+	seat_button.visible = not show_overlay and not boating
 	light_button.visible = tram_mode == 0 and not boating and not walker.visible and (vehicle_index < 3 or vehicle_index == XC60_POLICE)
 	siren_button.visible = tram_mode == 0 and not boating and not walker.visible
-	if walker.visible:
+	if walker.visible or tram_mode != 0 or operating_excavator:
 		_update_entry_button()
 	else:
 		seat_button.disabled = false
@@ -4262,35 +5742,31 @@ func _refresh_ui() -> void:
 	if walker.visible and tram_mode == 0 and not boating and not ferry_passenger and shops.inside < 0:
 		camera_hint = tr("W / ↑ Accelerate · S / ↓ Brake · A / D Steer · U Fold scooter") if scooter.visible else tr("U Unfold scooter") + "   ·   " + camera_hint
 	hints.text = camera_hint if walker.visible and tram_mode == 0 and not boating else tr(hints.text) + "   ·   " + camera_hint
+	if operating_excavator:
+		hints.text = tr("Arrows or WASD: drive and steer · Q/E: turn the cab · F: get out\nI/K: raise or lower the boom · Y/G: move the outer arm · O/L: tilt the bucket")
+		for control in [driving_controls, camera_button, horn_button, light_button, siren_button]:
+			control.hide()
+	elif walker.visible and not scooter.visible and not ferry_passenger and not boating and tram_mode == 0:
+		hints.text = _walking_hint()
 	if show_overlay:
 		mouse_gas = false
 		mouse_brake = false
 		brake_pedal_held = false
 	overlay.visible = show_overlay
 	overlay_panel.visible = show_overlay
-	vehicle_selector.visible = show_overlay and not walker.visible and not boating and tram_mode == 0
-	preview_sound_button.visible = mode == "menu" and not boating and tram_mode == 0
+	vehicle_selector.visible = mode == "menu" or (show_overlay and not walker.visible and not boating and tram_mode == 0)
+	for extra in EXTRA_GALLERY_NAMES.size():
+		vehicle_selector.get_child(VEHICLE_NAMES_ALL.size()+extra).visible = mode == "menu"
+	preview_sound_button.visible = not start_in_excavator and mode == "menu" and not boating and tram_mode == 0
 	preview_sound_button.text = "Stop preview" if siren_player.playing and mode == "menu" else ("Preview engine" if vehicle_index >= 3 and vehicle_index != XC60_POLICE else "Preview siren")
-	var locale := TranslationServer.get_locale().get_slice("_", 0)
-	var localized_logo := locale in ["en", "sv"]
-	title_label.visible = mode != "menu" or not localized_logo
-	brand_logo.visible = mode == "menu" and localized_logo
-	brand_logo.texture = preload("res://branding/game-logo-sv.png") if locale == "sv" else preload("res://branding/game-logo-en.png")
-	brand_logo.accessibility_name = tr("Axel's Emergency Vehicles")
-	get_window().title = tr("Axel's Emergency Vehicles")
+	brand_logo.texture = L10n.media("res://branding/rollabout-%s.png", TranslationServer.get_locale())
+	title_label.visible = mode != "menu" or brand_logo.texture == null
+	brand_logo.visible = mode == "menu" and brand_logo.texture != null
+	brand_logo.accessibility_name = tr("Harbor Town Rollabout")
+	get_window().title = tr("Harbor Town Rollabout")
 	if mode == "menu":
-		title_label.text = "Axel's Emergency Vehicles"
-		subtitle_label.text = "Choose a vehicle and drive to three missions.\nTake your time. You control the lights and siren."
-		if free_drive:
-			subtitle_label.text = "Explore on foot or by vehicle. Stop at the depot to change vehicles."
-		elif vehicle_index not in [0,TAXI,RECOVERY,BUS]:
-			subtitle_label.text = _vehicle_tasks()[_mission_stop()]
-		elif vehicle_index == BUS:
-			subtitle_label.text = BUS_MESSAGES[bus_leg%BUS_STOPS.size()]
-		elif vehicle_index == TAXI:
-			subtitle_label.text = "Pick up a passenger at the square and drive them to the marina."
-		elif vehicle_index == RECOVERY:
-			subtitle_label.text = "Collect the car with a smoking bonnet and take it to the workshop."
+		title_label.text = "Harbor Town Rollabout"
+		subtitle_label.text = "Click the pictures to choose your vehicle and driver."
 		start_button.text = "Start driving"
 	elif mode == "complete":
 		title_label.text = "All missions complete!"
@@ -4306,6 +5782,9 @@ func _refresh_ui() -> void:
 		if paused and not last_dispatch.is_empty():
 			subtitle_label.text = tr(last_dispatch)
 		start_button.text = "Continue walking" if walker.visible else "Continue driving"
+	if mode == "menu" and start_in_excavator:
+		subtitle_label.text = tr("Operate the excavator in the equipment yard.")
+		start_button.text = tr("Start excavating")
 	if show_overlay and mode != "complete":
 		if ferry_passenger:
 			subtitle_label.text = "You can step ashore at either landing."
@@ -4399,6 +5878,14 @@ func _surface_height(x: float, z: float) -> float:
 		if x >= surface.position.x and x <= surface.end.x and z >= surface.position.z and z <= surface.end.z:
 			height = maxf(height, surface.end.y)
 	return height
+
+func _make_roadside_solid(label: String, size: Vector3, pos: Vector3, color: Color, collision := false, parent: Node = self) -> MeshInstance3D:
+	var mesh := _make_box(label, size, pos, color, collision, parent)
+	var bounds := mesh.global_transform * mesh.get_aabb()
+	# Driving sweeps use the vehicle's ground pivot, including on raised paving.
+	bounds = bounds.expand(Vector3(bounds.position.x, bounds.position.y - 2.0, bounds.position.z))
+	roadside_solids.append(bounds)
+	return mesh
 
 func _make_box(label: String, size: Vector3, pos: Vector3, color: Color, collision := false, parent: Node = self) -> MeshInstance3D:
 	var mesh_instance := MeshInstance3D.new()

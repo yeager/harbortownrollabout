@@ -23,8 +23,7 @@ func check_exits() -> void:
 				printerr("Could not return to the car from the bridge")
 				quit(1)
 				return
-	game.activity.select(4)
-	game.activity.item_selected.emit(4)
+	game._select_gallery_activity(4)
 	game.launch.position = Vector3(71, 0, 25)
 	game._change_seat()
 	if game.walker.visible or not game.boating or game.listener.get_parent() != game.launch:

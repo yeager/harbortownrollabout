@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://k1vdiclq6ctv"
+path="res://.godot/imported/Skopans lilla hicka (SV).mp3-e0af18dd8fc0d28768fdb159305c5e63.mp3str"
+
+[deps]
+
+source_file="res://audio/radio/Skopans lilla hicka (SV).mp3"
+dest_files=["res://.godot/imported/Skopans lilla hicka (SV).mp3-e0af18dd8fc0d28768fdb159305c5e63.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

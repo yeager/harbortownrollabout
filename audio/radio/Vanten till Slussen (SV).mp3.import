@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://dfb452kn1g1q8"
+path="res://.godot/imported/Vanten till Slussen (SV).mp3-c81dde2ebb48c5f90cca6074d7c8034f.mp3str"
+
+[deps]
+
+source_file="res://audio/radio/Vanten till Slussen (SV).mp3"
+dest_files=["res://.godot/imported/Vanten till Slussen (SV).mp3-c81dde2ebb48c5f90cca6074d7c8034f.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4
