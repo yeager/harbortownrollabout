@@ -3004,26 +3004,30 @@ func _crawler_bounds() -> AABB:
 func _near_excavator() -> bool:
 	return is_instance_valid(excavator) and walker.visible and walker.position.distance_to(excavator.position)<4.4
 
+func _crawler_clear() -> bool:
+	var hull := _crawler_bounds()
+	if not Rect2(-123,39,30,16).encloses(Rect2(hull.position.x,hull.position.z,hull.size.x,hull.size.z)):
+		return false
+	for i in building_bounds.size():
+		if i != excavator_wall and hull.intersects(building_bounds[i]): return false
+	for i in parked_cars.size():
+		if parked_cars[i].visible and hull.intersects(_parked_bounds(i)): return false
+	return true
+
 func _drive_excavator(delta: float) -> void:
 	var old := excavator.transform
 	var steer := Input.get_axis("ui_left","ui_right") + int(Input.is_key_pressed(KEY_D))-int(Input.is_key_pressed(KEY_A))
 	var drive := Input.get_axis("ui_down","ui_up") + int(Input.is_key_pressed(KEY_W))-int(Input.is_key_pressed(KEY_S))
-	excavator.rotate_y(-clampf(steer,-1,1)*delta)
-	excavator.position += excavator.basis.z*clampf(drive,-1,1)*1.8*delta
-	var hull := _crawler_bounds()
-	var allowed := Rect2(-123,39,30,16).encloses(Rect2(hull.position.x,hull.position.z,hull.size.x,hull.size.z))
-	for i in building_bounds.size():
-		if i != excavator_wall and hull.intersects(building_bounds[i]):
-			allowed = false
-			break
-	if allowed and excavator.transform != old:
-		for i in parked_cars.size():
-			if parked_cars[i].visible and hull.intersects(_parked_bounds(i)):
-				allowed = false
-				break
-	if not allowed:
-		excavator.transform = old
-	elif drive != 0 or steer != 0:
+	if steer != 0:
+		excavator.rotate_y(-clampf(steer,-1,1)*delta)
+		if not _crawler_clear(): excavator.basis = old.basis
+	var motion := excavator.basis.z * clampf(drive,-1,1) * 1.8 * delta
+	for step in [Vector3(motion.x,0,0),Vector3(0,0,motion.z)]:
+		if step.is_zero_approx(): continue
+		var before := excavator.position
+		excavator.position += step
+		if not _crawler_clear(): excavator.position = before
+	if excavator.transform != old:
 		var travel := (excavator.position - old.origin).dot(excavator.basis.z)
 		var turn := old.basis.z.signed_angle_to(excavator.basis.z,Vector3.UP)
 		for belt in crawler_belts:
