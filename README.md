@@ -4,7 +4,7 @@ Explore a 3D waterfront neighbourhood inspired by Hammarby Sjöstad in Stockholm
 
 ## Play
 
-Open `project.godot` in Godot 4.6 and press **F5**. Select a vehicle and choose **Start driving**. English is the default. Select **Settings → Language → Svenska** for Swedish.
+Open `project.godot` in Godot 4.6 and press **F5**. Select a vehicle and choose **Start driving**. English is the default. Open **Settings → Language** to choose English, Svenska, Español, Deutsch, Français, Norsk bokmål or Suomi. The game remembers your choice.
 
 | Action | Control |
 | --- | --- |
@@ -25,7 +25,7 @@ Gentle driving limits ordinary vehicles to 30 km/h and completes an interaction 
 
 ## Project files
 
-Godot loads the playable world from `main.tscn`. Vehicle meshes are in `vehicles/`, buildings and vegetation in `environment/`, and editable Blender scenes in `source_blender/`. The Python scripts in `tools/` generate models and audio. Swedish translations live in `l10n/`.
+Godot loads the playable world from `main.tscn`. Vehicle meshes are in `vehicles/`, buildings and vegetation in `environment/`, and editable Blender scenes in `source_blender/`. The Python scripts in `tools/` generate models and audio. Translation catalogs and the [guide to adding a language](l10n/README.md) live in `l10n/`.
 
 ## Tvärbanan
 
@@ -40,7 +40,7 @@ In **Settings**, you can choose the season and weather independently. For exampl
 
 Clouds gather before rain or snow starts. Manual weather changes follow the same gradual transitions. Switch back to Automatic during a shower and it continues until the next forecast. Spring and autumn can bring slush, which leaves both water and snow on the ground. Wet and snowy roads increase braking distance. Daylight includes a visible sun aligned with the light casting the street shadows.
 
-Hold **V** and move the mouse for continuous camera control. Release **V** to use the pointer again. You can also hold the middle mouse button and drag to orbit the exterior camera or look around from the SUV driver’s seat. Returning to the driver’s seat with **C** centres the view. On foot, nearby neighbours greet you in the selected language. Greetings appear above the speaker and use a matching system speech voice when available.
+Hold **V** and move the mouse for continuous camera control. Release **V** to use the pointer again. You can also hold the middle mouse button and drag to orbit the exterior camera or look around from the SUV driver’s seat. Returning to the driver’s seat with **C** centres the view. On foot, nearby neighbours greet you in the selected language. Greetings and the lost-cat and lost-shoe conversations appear in speech bubbles and use bundled voice clips in English, Swedish, Spanish, German, French, Norwegian Bokmål and Finnish.
 
 The central junction has phased traffic lights and red and green pedestrian figures beside the crossing. Traffic waits for its green phase. The player's vehicle also slows as it approaches a red signal, pedestrians in its path or a queue.
 
@@ -102,7 +102,7 @@ The track sports car has a separate sport tune. Select it at the depot to drive 
 
 ![White track sports car game model with red wheels, side view](docs/porsche-911-gt3-rs.png)
 
-The radio starts with a shuffled song when you enter a vehicle. Press **J** to switch it off or on and **N** for the next song. It stops when you step out. The radio shuffles songs in the selected game language. Changing between Swedish and English switches the playlist. Lyrics and links to both recordings of each song are in [the songbook](docs/Radiolatar.md).
+The radio starts with a shuffled song when you enter a vehicle. Press **J** to switch it off or on and **N** for the next song. It stops when you step out. The radio shuffles songs in the selected game language. Songs are available in Swedish and English. For the other languages, the radio tooltip explains that songs are still missing. Lyrics and links to both recordings of each song are in [the songbook](docs/Radiolatar.md).
 
 ## Graphics settings
 

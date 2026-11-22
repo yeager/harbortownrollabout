@@ -1,0 +1,1272 @@
+#
+msgid ""
+msgstr ""
+"Language: fi\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Harbor Town Rollabout"
+msgstr "Harbor Town Rollabout"
+
+msgid "Emergency Vehicles"
+msgstr "Hätäajoneuvot"
+
+msgid "Help at the square"
+msgstr "Apua aukiolla"
+
+msgid "Pick up the medic"
+msgstr "Hae ensihoitaja"
+
+msgid "Deliver first aid to the marina"
+msgstr "Toimita ensiapua satamaan"
+
+msgid "Ambulance"
+msgstr "Ambulanssi"
+
+msgid "Police car"
+msgstr "Poliisiauto"
+
+msgid "Fire engine"
+msgstr "Paloauto"
+
+msgid "Mission complete. Well done!"
+msgstr "Tehtävä suoritettu. Hienoa!"
+
+msgid "All missions complete! The city thanks you."
+msgstr "Kaikki tehtävät on tehty! Kaupunki kiittää sinua."
+
+msgid "Cross a bridge to the east side."
+msgstr "Ylitä silta itäpuolelle."
+
+msgid "Follow the quay to the green marker by the boats."
+msgstr "Kulje rantaa pitkin veneiden luona olevalle vihreälle merkille."
+
+msgid "Follow the green mission marker."
+msgstr "Seuraa vihreää tehtävämerkkiä."
+
+msgid "MISSION"
+msgstr "TEHTÄVÄ"
+
+msgid "Lights OFF"
+msgstr "Valot pois päältä"
+
+msgid "Lights ON"
+msgstr "Valot päälle"
+
+msgid "Siren OFF"
+msgstr "Sireeni pois päältä"
+
+msgid "Siren ON"
+msgstr "Sireeni päällä"
+
+msgid "Engine ON"
+msgstr "Moottori käynnissä"
+
+msgid "Engine OFF"
+msgstr "Moottori sammutettu"
+
+msgid "Pause"
+msgstr "Tauko"
+
+msgid ""
+"W / ↑  Drive     A D / ← →  Steer     S / ↓  Brake or reverse\n"
+"Release to slow down   ·   Space to help   ·   P to pause"
+msgstr ""
+"W / ↑  Aja     A D / ← →  Ohjaa     S / ↓  Jarruta tai peruuta\n"
+"Hidasta päästämällä irti   ·   Auta välilyönnillä   ·   P keskeyttää pelin"
+
+msgid "Start a gentle drive"
+msgstr "Aloita lempeä asema"
+
+msgid "Settings"
+msgstr "Asetukset"
+
+msgid "Close settings"
+msgstr "Sulje asetukset"
+
+msgid "Driving mode"
+msgstr "Ajotila"
+
+msgid "Gentle driving · up to 30 km/h"
+msgstr "Hellästi ajaminen · enintään 30 km/h"
+
+msgid "Full speed"
+msgstr "Täysi nopeus"
+
+msgid "Preview vehicle sound"
+msgstr "Kuuntele ajoneuvon ääntä"
+
+msgid "Game volume"
+msgstr "Pelin äänenvoimakkuus"
+
+msgid "Emergency lights in traffic"
+msgstr "Muiden ajoneuvojen sinivalot"
+
+msgid "Traffic lights · Flashing blue"
+msgstr "Hälytysajoneuvojen sinivalot · Vilkkuvat"
+
+msgid "Traffic lights · Steady blue"
+msgstr "Hälytysajoneuvojen sinivalot · Palavat tasaisesti"
+
+msgid "Traffic lights · Blue lights off"
+msgstr "Hälytysajoneuvojen sinivalot · Pois päältä"
+
+msgid "Resume"
+msgstr "Jatka"
+
+msgid "MISSION %d / %d   ·   %s"
+msgstr "TEHTÄVÄ %d / %d   ·   %s"
+
+msgid "ALL MISSIONS COMPLETE"
+msgstr "KAIKKI TEHTÄVÄT SUORITETTU"
+
+msgid "Stop preview"
+msgstr "Pysäytä esikatselu"
+
+msgid "Preview engine"
+msgstr "Kuuntele moottorin ääntä"
+
+msgid "Preview siren"
+msgstr "Kuuntele sireeniä"
+
+msgid ""
+"Choose a vehicle and drive to three missions.\n"
+"Take your time. You control the lights and siren."
+msgstr ""
+"Valitse ajoneuvo ja aja kolmeen tehtävään.\n"
+" Hallitset valoja ja sireeniä."
+
+msgid "Start driving"
+msgstr "Lähde ajamaan"
+
+msgid "All missions complete!"
+msgstr "Kaikki tehtävät suoritettu!"
+
+msgid ""
+"You helped the whole city. Well done, Axel!\n"
+"Ready for another drive?"
+msgstr ""
+"Autoit koko kaupunkia.\n"
+"Oletko valmis uuteen ajelulle?"
+
+msgid "Drive again"
+msgstr "Aja uudelleen"
+
+msgid "You can change vehicles here and continue your mission."
+msgstr "Täällä voit vaihtaa ajoneuvoa ja jatkaa tehtävääsi."
+
+msgid "Continue driving"
+msgstr "Jatka ajamista"
+
+msgid "Stop here to help."
+msgstr "Pysähdy auttamaan."
+
+msgid "Helping …"
+msgstr "Autan..."
+
+msgid "Paused — take your time."
+msgstr "Peli on tauolla. Ei kiirettä."
+
+msgid "Speed  %02d km/h"
+msgstr "Nopeus  %02d km/h"
+
+msgid "Gas"
+msgstr "Kaasu"
+
+msgid "Left"
+msgstr "Vasen"
+
+msgid "Brake"
+msgstr "Jarruta"
+
+msgid "Right"
+msgstr "Oikea"
+
+msgid "Language"
+msgstr "Kieli"
+
+msgid "Get out · F"
+msgstr "Ulos. · F"
+
+msgid "Enter %s"
+msgstr "Nouse kyytiin: %s"
+
+msgid "Walk to a vehicle"
+msgstr "Kävele ajoneuvon luo"
+
+msgid "Stop first to get out."
+msgstr "Pysähdy ensin päästäksesi ulos."
+
+msgid "Walk with WASD or arrows · F to enter a vehicle"
+msgstr "Liiku WASD- tai nuolinäppäimillä · Nouse kyytiin painamalla F"
+
+msgid "Time · Day"
+msgstr "Vuorokaudenaika · Päivä"
+
+msgid "Time · Night"
+msgstr "Vuorokaudenaika · Yö"
+
+msgid "Time · Day and night"
+msgstr "Vuorokaudenaika · Päivä ja yö"
+
+msgid "Vehicle depot"
+msgstr "Ajoneuvon varikko"
+
+msgid "Both doors are blocked. Park where there is more room."
+msgstr ""
+"Molempien ovien edessä on este. Pysäköi paikkaan, jossa on enemmän tilaa."
+
+msgid "Activity"
+msgstr "Toiminto"
+
+msgid "Three missions"
+msgstr "Kolme tehtävää"
+
+msgid "Free exploration"
+msgstr "Vapaa etsintä"
+
+msgid "Explore on foot or by vehicle. Stop at the depot to change vehicles."
+msgstr ""
+"Tutki kaupunkia jalan tai ajoneuvolla. Varikolla voit vaihtaa ajoneuvoa."
+
+msgid ""
+"W / ↑ Drive   ·   A D / ← → Steer   ·   S / ↓ Brake or reverse   ·   F Get "
+"out   ·   P Pause"
+msgstr ""
+"W / ↑ Aja   ·   A D / ← → Ohjaa   ·   S / ↓ Jarruta tai peruuta   ·   F "
+"Poistu   ·   P Tauko"
+
+msgid "Continue walking"
+msgstr "Jatka kävelyä"
+
+msgid "Walk up to a parked vehicle to get in."
+msgstr "Kävele pysäköidyn ajoneuvon luo, niin pääset kyytiin."
+
+msgid "Stand here to help"
+msgstr "Seiso täällä auttaaksesi."
+
+msgid "Press Space to help"
+msgstr "Paina tilaa auttaaksesi"
+
+msgid "My vehicle · Flashing"
+msgstr "Minun autoni. · Välähdykset"
+
+msgid "My vehicle · Steady"
+msgstr "Minun autoni. · Vakaa"
+
+msgid "Traffic sirens"
+msgstr "Muiden ajoneuvojen sireenit"
+
+msgid "Reverse"
+msgstr "Peruuta"
+
+msgid "Driver view · C"
+msgstr "Kuljettajan näkymä · C"
+
+msgid "Outside view · C"
+msgstr "Ulkonäkymä · C"
+
+msgid "Forward"
+msgstr "Eteenpäin"
+
+msgid "Stopped"
+msgstr "Pysäytetty"
+
+msgid "Reversing"
+msgstr "Perutaan."
+
+msgid "Ride the tram"
+msgstr "Matkusta raitiovaunulla"
+
+msgid "Drive the tram"
+msgstr "Aja raitiovaunua"
+
+msgid "Season · Automatic"
+msgstr "Vuodenaika · Automaattinen"
+
+msgid "Spring"
+msgstr "Kevät"
+
+msgid "Summer"
+msgstr "Kesä"
+
+msgid "Autumn"
+msgstr "Syksy"
+
+msgid "Winter"
+msgstr "Talvi"
+
+msgid "Weather · Automatic"
+msgstr "Sää · Automaattinen"
+
+msgid "Sun"
+msgstr "Aurinko"
+
+msgid "Rain"
+msgstr "Vesisade"
+
+msgid "Snow"
+msgstr "Lumi"
+
+msgid "Slush"
+msgstr "Loska"
+
+msgid "Hello!"
+msgstr "Hei!"
+
+msgid "How are you?"
+msgstr "Mitä kuuluu?"
+
+msgid "Hi there!"
+msgstr "Hei!"
+
+msgid "Horn · H"
+msgstr "Äänimerkki · H"
+
+msgid "Pick up your passenger"
+msgstr "Hae matkustaja"
+
+msgid "Drop off your passenger"
+msgstr "Jätä matkustaja kyydistä"
+
+msgid "Passenger on board."
+msgstr "Matkustaja kyydissä."
+
+msgid "Thank you for the ride!"
+msgstr "Kiitos kyydistä!"
+
+msgid "Drive the motorboat"
+msgstr "Aja moottorivenettä"
+
+msgid ""
+"W / ↑ Throttle · A D / ← → Steer · S / ↓ Slow or reverse · H Horn · P Pause"
+msgstr ""
+"W / ↑ Kaasuta · A D / ← → Ohjaa · S / ↓ Hidasta tai peruuta · H Äänimerkki ·"
+" P Tauko"
+
+#, c-format
+msgid "%d coin"
+msgid_plural "%d coins"
+msgstr[0] "%d kolikko"
+msgstr[1] "%d kolikkoa"
+
+msgid "Well done, %s! Ready for another drive?"
+msgstr "Hienosti tehty, %s! Lähdetäänkö uudelle ajelulle?"
+
+msgid "Character"
+msgstr "Merkki"
+
+msgid "Wallet"
+msgstr "Lompakko"
+
+msgid "Phone · T"
+msgstr "Puhelin · T"
+
+msgid "No messages yet."
+msgstr "Ei viestejä vielä."
+
+msgid "Taxi requested at the square."
+msgstr "Taksi haki torilta."
+
+msgid "Please take me to the marina."
+msgstr "Vie minut satamaan."
+
+msgid "Taxi requested at the clinic."
+msgstr "Joku odottaa taksia klinikalla."
+
+msgid "Please take me to the square."
+msgstr "Viekää minut aukiolle."
+
+msgid "Taxi requested at the marina."
+msgstr "Taksi haki satamasta."
+
+msgid "Please take me to the clinic."
+msgstr "Vie minut klinikalle."
+
+msgid "A neighbour needs help at the square."
+msgstr "Naapuri tarvitsee apua torilla."
+
+msgid "A medic is waiting at the clinic. Please pick them up."
+msgstr "Ensihoitaja odottaa klinikalla. Käy hakemassa hänet."
+
+msgid "Please bring the first-aid supplies to the marina."
+msgstr "Viekää ensiaputarvikkeet satamaan."
+
+msgid "Fare complete. You earned 15 coins."
+msgstr "Ansaitsit 15 kolikkoa."
+
+msgid "Thank you for helping! You earned 10 coins."
+msgstr "Kiitos avusta! Sait 10 kolikkoa."
+
+msgid "Café"
+msgstr "Kahvila"
+
+msgid "Sweet shop"
+msgstr "Karkkikauppa"
+
+msgid "Cinnamon bun"
+msgstr "Korvapuusti"
+
+msgid "Berry cordial"
+msgstr "Marjamehu"
+
+msgid "Ice cream"
+msgstr "Jäätelö"
+
+msgid "Hot dog"
+msgstr "Nakkisämpylä"
+
+msgid "Margherita pizza"
+msgstr "Margheritapizza"
+
+msgid "Pick and mix"
+msgstr "Irtokarkit"
+
+msgid "%s · %d coins"
+msgstr "%s · %d kolikkoa"
+
+#, c-format
+msgid "You need %d more coin."
+msgid_plural "You need %d more coins."
+msgstr[0] "Tarvitset vielä %d kolikon."
+msgstr[1] "Tarvitset vielä %d kolikkoa."
+
+msgid "%s · Paid %d coins. Thank you!"
+msgstr "%s · Maksoit %d kolikkoa. Kiitos!"
+
+msgid "Recovery truck"
+msgstr "Hinausauto"
+
+msgid "Collect the car with a smoking bonnet."
+msgstr "Hae auto, jonka konepellin alta nousee savua."
+
+msgid "Take the car to the workshop."
+msgstr "Vie auto verstaalle."
+
+msgid "Collect the car with a missing wheel."
+msgstr "Hae auto, josta puuttuu pyörä."
+
+msgid "Recovery complete. You earned 20 coins."
+msgstr "Auto on perillä! Sait 20 kolikkoa."
+
+msgid "Passenger ride · P to pause"
+msgstr "Olet kyydissä · P pitää tauon"
+
+msgid "W / ↑ Accelerate · S / ↓ Brake · Automatic station stops"
+msgstr "W / ↑ Kiihdytä · S / ↓ Jarruta · Automaattinen pysähdys pysäkeillä"
+
+msgid "%s · Departure in %d s"
+msgstr "%s · Lähtöön %d s"
+
+msgid "Next stop: %s · %d m · %d km/h"
+msgstr "Seuraava pysäkki: %s · %d m · %d km/h"
+
+msgid "Tram bell · H"
+msgstr "Raitiovaunun kello · H"
+
+msgid ""
+"A car is smoking on the main street. Follow the arrows and stop beside it."
+msgstr "Pääkadulla on savuava auto. Seuraa nuolia ja pysähdy auton viereen."
+
+msgid ""
+"A car on the east bank has lost a wheel. Follow the arrows to pick it up."
+msgstr ""
+"Itärannalla olevasta autosta on irronnut pyörä. Seuraa nuolia ja hae auto."
+
+msgid ""
+"The car is on your flatbed. Follow the arrows to the workshop for 20 coins."
+msgstr "Auto on lavalla. Seuraa nuolia korjaamolle, niin saat 20 kolikkoa."
+
+msgid "Car loaded onto the flatbed."
+msgstr "Auto on nyt lavalla."
+
+msgid "Your purchases"
+msgstr "Ostoksesi"
+
+msgid "%s × %d"
+msgstr "%s × %d"
+
+msgid "Waiting for a green light"
+msgstr "Odotetaan vihreää valoa"
+
+msgid ""
+"Steer with A and D or the arrow keys. Hold the left mouse button for "
+"throttle. Hold the right to slow down, then reverse."
+msgstr ""
+"Ohjaa A sekä D tai nuolinäppäimillä. Pidä vasenta hiiren painiketta kaasua. "
+"Pidä oikeaa hidastaa, sitten peruuttaa."
+
+msgid "Start boating"
+msgstr "Lähde veneilemään"
+
+msgid "Continue boating"
+msgstr "Jatka veneilyä"
+
+msgid "The tram drives itself and stops at each platform."
+msgstr "Raitiovaunu ajaa itse ja pysähtyy jokaisella laiturilla."
+
+msgid ""
+"Control the speed. The tram follows the rails and stops at each platform."
+msgstr "Raitiovaunu seuraa kiskoja ja pysähtyy jokaiselle laiturille."
+
+msgid "Taxi fares"
+msgstr "Taksin hinnat"
+
+msgid "Roadside recovery"
+msgstr "Tiepalvelu"
+
+msgid "Pick up a passenger at the square and drive them to the marina."
+msgstr "Hae matkustaja torilta ja vie hänet venesatamaan."
+
+msgid "Collect the car with a smoking bonnet and take it to the workshop."
+msgstr "Hae auto, jonka konepellin alta nousee savua, ja vie se korjaamolle."
+
+msgid "Complete a mission to earn coins."
+msgstr "Ansaitse kolikoita suorittamalla tehtävä."
+
+msgid "Tab to choose · Enter to buy"
+msgstr "Valitse sarkaimella · Osta Enterillä"
+
+msgid "Enter to buy"
+msgstr "Osta Enterillä"
+
+msgid "F · Enter %s"
+msgstr "F · Nouse kyytiin (%s)"
+
+msgid "Well done, %s!"
+msgstr "Hienoa. %s!"
+
+msgid "First-aid supplies delivered to the marina. You earned 10 coins."
+msgstr "Toimitit ensiaputarvikkeet venesatamaan. Ansaitsit 10 kolikkoa."
+
+msgid "Stop here to load the car."
+msgstr "Pysähdy tähän, niin auton voi nostaa lavalle."
+
+msgid "Stop here to unload the car."
+msgstr "Pysähdy tähän, niin auton voi laskea lavalta."
+
+msgid "Loading the car …"
+msgstr "Autoa nostetaan lavalle…"
+
+msgid "Unloading the car …"
+msgstr "Autoa lasketaan lavalta…"
+
+msgid "Press Space to load the car."
+msgstr "Nosta auto lavalle painamalla välilyöntiä."
+
+msgid "Press Space to unload the car."
+msgstr "Laske auto lavalta painamalla välilyöntiä."
+
+msgid "Stop for your passenger."
+msgstr "Pysähdy matkustajan kohdalle."
+
+msgid "Stop to let your passenger out."
+msgstr "Pysähdy, jotta matkustaja pääsee pois kyydistä."
+
+msgid "Your passenger is getting in …"
+msgstr "Matkustaja nousee kyytiin…"
+
+msgid "Your passenger is getting out …"
+msgstr "Matkustaja poistuu kyydistä…"
+
+msgid "Press Space to pick up your passenger."
+msgstr "Paina välilyöntiä, niin matkustaja pääsee kyytiin."
+
+msgid "Press Space to let your passenger out."
+msgstr "Paina välilyöntiä, niin matkustaja pääsee pois kyydistä."
+
+msgid "Return to your taxi"
+msgstr "Palaa taksille"
+
+msgid "Return to your recovery truck"
+msgstr "Palaa hinausautollesi"
+
+msgid "Radio on · J"
+msgstr "Radio päällä · J"
+
+msgid "Radio off · J"
+msgstr "Radio pois päältä · J"
+
+msgid "City bus"
+msgstr "Kaupunkibussi"
+
+msgid "Bus route 502"
+msgstr "Bussilinja 502"
+
+msgid "Collect passengers at the square."
+msgstr "Hae matkustajat torilta."
+
+msgid "Drop off passengers at the school."
+msgstr "Jätä matkustajat koululle."
+
+msgid "Collect passengers at the marina."
+msgstr "Hae matkustajat venesatamasta."
+
+msgid "Drop off passengers at the clinic."
+msgstr "Jätä matkustajat klinikalle."
+
+msgid "Passengers on board."
+msgstr "Matkustajat ovat kyydissä."
+
+msgid "Bus journey complete. You earned 15 coins."
+msgstr "Bussimatka on ohi! Ansaitsit 15 kolikkoa."
+
+msgid "A pupil is waiting at the square."
+msgstr "Oppilas odottaa torilla."
+
+msgid "Please take me to school."
+msgstr "Vie minut kouluun."
+
+msgid "A pupil is waiting at school."
+msgstr "Oppilas odottaa koululla."
+
+msgid "Pick up the pupil"
+msgstr "Nosta oppilas"
+
+msgid "Drop off the pupil"
+msgstr "Pudota oppilas"
+
+msgid "Return to your bus"
+msgstr "Palaa bussiin."
+
+msgid "Graphics"
+msgstr "Grafiikka"
+
+msgid "Sound"
+msgstr "Ääni"
+
+msgid "Driving"
+msgstr "Ajaminen"
+
+msgid "World"
+msgstr "Maailma"
+
+msgid "Renderer changes apply next time you start the game."
+msgstr ""
+"Uusi grafiikkatila tulee käyttöön, kun seuraavan kerran käynnistät pelin."
+
+msgid "Could not save graphics settings."
+msgstr "Graafisten asetusten tallennus epäonnistui."
+
+msgid "The ducks voted. They love your jacket!"
+msgstr "Sorsat äänestivät. Ne tykkäävät takistasi!"
+
+msgid "Snowmobile"
+msgstr "Moottorikelkka"
+
+msgid "Collect passengers at Västra torget."
+msgstr "Hae matkustajat Västra torgetin pysäkiltä."
+
+msgid "Drop off passengers at Västerängen."
+msgstr "Jätä matkustajat Västerängenin pysäkille."
+
+msgid "↑  Café · Snack kiosk"
+msgstr "↑  Kahvila · Kioski"
+
+msgid "Forward+ · NVIDIA DLSS (experimental; RTX required)"
+msgstr "Forward+ · NVIDIA DLSS (kokeellinen, vaatii RTX-näytönohjaimen)"
+
+msgid ""
+"DLSS is experimental. It needs the NGX-enabled engine and a supported NVIDIA"
+" RTX GPU/driver; otherwise it continues without DLSS. Restart to apply."
+msgstr ""
+"DLSS on kokeellinen. Se vaatii NGX-tuella varustetun pelimoottorin, tuetun "
+"NVIDIA RTX -näytönohjaimen ja sopivan ajurin. Muuten peli toimii ilman "
+"DLSS:ää. Ota muutos käyttöön käynnistämällä peli uudelleen."
+
+msgid "Check the crossing at the square"
+msgstr "Tarkista torin suojatie"
+
+msgid "Check the clinic entrance"
+msgstr "Tarkista klinikan sisäänkäynti"
+
+msgid "Patrol the marina"
+msgstr "Partioitkaa satamaa."
+
+msgid "Check the hydrant at the square"
+msgstr "Tarkista paloposti aukiolla"
+
+msgid "Meet the fire safety team at the clinic"
+msgstr "Tapaa paloturvallisuusryhmä klinikalla"
+
+msgid "Check the rescue equipment at the marina"
+msgstr "Tarkista pelastusvälineet venesatamassa"
+
+msgid "Collect parcels at the square"
+msgstr "Kerää paketteja aukiolta"
+
+msgid "Deliver a parcel to the clinic"
+msgstr "Toimita paketti lääkärille"
+
+msgid "Deliver the last parcel to the marina"
+msgstr "Toimita viimeinen paketti satamaan"
+
+msgid "Collect warm blankets at the square"
+msgstr "Kerää lämpimät huovat aukiolta"
+
+msgid "Bring blankets to the clinic"
+msgstr "Tuo peitot klinikalle"
+
+msgid "Bring blankets to the marina"
+msgstr "Tuo huopia satamaan."
+
+msgid "Have you done your homework? — Mum"
+msgstr "Oletko tehnyt läksyt? — Äiti"
+
+msgid "A duck just beat me to the ferry. — Grandpa"
+msgstr "Ankka ehti lautalle ennen minua. — Vaari"
+
+msgid "I saved you a bun. It only has one tiny bite missing! — Mum"
+msgstr ""
+"Säästin sinulle pullan. Siitä puuttuu vain ihan pieni haukkaus! — Äiti"
+
+msgid "Eat ice cream"
+msgstr "Syö jäätelöä"
+
+msgid "Eat hot dog"
+msgstr "Syö nakkisämpylä"
+
+msgid "%s feels extra happy!"
+msgstr "%s Tuntuu erittäin onnelliselta!"
+
+msgid "Current job"
+msgstr "Nykyinen tehtävä"
+
+msgid "Tab to choose · Enter to buy or eat"
+msgstr "Valitse sarkaimella · Osta tai syö Enterillä"
+
+msgid "Ambulance calls"
+msgstr "Ambulanssitehtävät"
+
+msgid "Police patrols"
+msgstr "Poliisipartiot"
+
+msgid "Fire safety checks"
+msgstr "Paloturvallisuustarkastukset"
+
+msgid "Parcel deliveries"
+msgstr "Pakettitoimitukset"
+
+msgid "Blanket deliveries"
+msgstr "Tyhjennykset"
+
+msgid "Hold V and move the mouse to look around"
+msgstr "Pidä V pohjassa ja liikuta hiirtä katsellaksesi ympärillesi"
+
+msgid "I said hello to someone on the tram. It was my reflection. — Grandpa"
+msgstr "Tervehdin ratikassa jotakuta. Se olikin peilikuvani. — Vaari"
+
+msgid ""
+"Your missing sock turned up. The teddy bear was wearing it as a hat. — Mum"
+msgstr "Kadonnut sukkasi löytyi. Nalle käytti sitä pipona. — Äiti"
+
+msgid "Close phone · T"
+msgstr "Sulje puhelin · T"
+
+msgid "The pupil is on board."
+msgstr "Oppilas on kyydissä."
+
+msgid "Thanks! I can see my school!"
+msgstr "Kiitos! I Näen kouluni!"
+
+msgid "Board Lotten · F"
+msgstr "Nouse Lottenin kyytiin · F"
+
+msgid "Step ashore · F"
+msgstr "Nouse maihin · F"
+
+msgid "On board Lotten"
+msgstr "Lottenin laivalla"
+
+msgid "Lotten in %d s"
+msgstr "Lotten saapuu %d s kuluttua"
+
+msgid "You can step ashore at either landing."
+msgstr "Voit jäädä maihin kummalla tahansa laiturilla."
+
+msgid "Next landing in %d s"
+msgstr "Seuraavalle laiturille %d s"
+
+msgid "Get off at next landing · F"
+msgstr "Jää pois seuraavalla laiturilla · F"
+
+msgid "Stay on board · F"
+msgstr "Jää kyytiin · F"
+
+msgid "Two parcels collected at the square. You earned 10 coins."
+msgstr "Hait torilta kaksi pakettia. Ansaitsit 10 kolikkoa."
+
+msgid "The clinic received its parcel. You earned 10 coins."
+msgstr "Klinikka sai pakettinsa. Ansaitsit 10 kolikkoa."
+
+msgid "The marina received the last parcel. You earned 10 coins."
+msgstr "Viimeinen paketti on perillä venesatamassa. Ansaitsit 10 kolikkoa."
+
+msgid "Stepping ashore in %d s"
+msgstr "Pääset maihin %d s kuluttua"
+
+msgid "School is over! To the clinic, please."
+msgstr "Koulu loppui! Veisitkö minut klinikalle?"
+
+msgid ""
+"I tried to wave at you from Lotten. I waved my sandwich. The gulls waved "
+"back! — Grandpa"
+msgstr ""
+"Yritin vilkuttaa sinulle Lottenilta. Heilutinkin voileipääni. Lokit "
+"vilkuttivat takaisin! — Vaari"
+
+msgid ""
+"Could you pick up a cinnamon bun? Your dad bought cinnamon and a bun "
+"separately. — Mum"
+msgstr "Toisitko kanelipullan? Isä osti kanelin ja pullan erikseen. — Äiti"
+
+msgid "Find clear ground to unfold the scooter."
+msgstr "Etsikää selkeä maa skootterin avaamiseksi."
+
+msgid "Fold scooter · F"
+msgstr "Taita potkulauta · F"
+
+msgid "U Unfold scooter"
+msgstr "U Avaa potkulauta"
+
+msgid "W / ↑ Accelerate · S / ↓ Brake · A / D Steer · U Fold scooter"
+msgstr "W / ↑ Kiihdytä · S / ↓ Jarruta · A / D Ohjaa · U Taita potkulauta"
+
+msgid "Electric scooter · %d km/h"
+msgstr "Sähköpotkulauta · %d km/h"
+
+msgid "Ice cream van"
+msgstr "Jäätelöauto"
+
+msgid "Serve ice cream at the square"
+msgstr "Tarjoile jäätelöä torilla"
+
+msgid "Serve ice cream outside the school"
+msgstr "Tarjoile jäätelöä koulun edessä"
+
+msgid "Serve ice cream at the marina"
+msgstr "Tarjoile jäätelöä venesatamassa"
+
+msgid "Ice cream served! You earned 10 coins."
+msgstr "Jäätelö on tarjoiltu! Ansaitsit 10 kolikkoa."
+
+msgid "Return to your ice cream van"
+msgstr "Palaa jäätelöautollesi"
+
+msgid "Ice cream chime · H"
+msgstr "Jäätelöauton tunnari · H"
+
+msgid "Grocery store"
+msgstr "Ruokakauppa"
+
+msgid "Apple"
+msgstr "Omena"
+
+msgid "Milk"
+msgstr "Maito"
+
+msgid "Get off tram · F"
+msgstr "Jää pois raitiovaunusta · F"
+
+msgid "Wait for the tram"
+msgstr "Odota raitiovaunua"
+
+msgid "Board tram · F"
+msgstr "Nouse raitiovaunuun · F"
+
+msgid "Exit excavator · F"
+msgstr "Poistu kaivinkoneesta · F"
+
+msgid "Drive excavator · F"
+msgstr "Aja kaivinkonetta · F"
+
+msgid ""
+"Arrows or WASD: drive and steer · Q/E: turn the cab · F: get out\n"
+"I/K: raise or lower the boom · Y/G: move the outer arm · O/L: tilt the bucket"
+msgstr ""
+"Nuolinäppäimet tai WASD: aja ja ohjaa · Q/E: käännä ohjaamoa · F: poistu\n"
+"I/K: nosta tai laske puomia · Y/G: liikuta kaivuvartta · O/L: kallista kauhaa"
+
+msgid "Walk or rest · Run again in %d s"
+msgstr "Kävele tai lepää · Voit taas juosta %d s kuluttua"
+
+msgid "W/S Walk · A/D Turn · Shift + W Run · F Enter · U Scooter"
+msgstr ""
+"W/S Kävele · A/D Käänny · Shift + W Juokse · F Nouse kyytiin · U Potkulauta"
+
+msgid "PgUp Raise camera · PgDn Lower camera"
+msgstr "PgUp Nosta kameraa · PgDn Laske kameraa"
+
+msgid "Operate the excavator in the equipment yard."
+msgstr "Käyttäkää kaivinkonetta."
+
+msgid "Start excavating"
+msgstr "Aloita kaivaminen"
+
+msgid "Motorboat"
+msgstr "Moottorivene"
+
+msgid "J Off · N Next song"
+msgstr "J Sammuta · N Seuraava kappale"
+
+msgid "Now playing: %s"
+msgstr "Nyt soi: %s"
+
+msgid "Farm tractor"
+msgstr "Traktori"
+
+msgid "Turn radio off · J"
+msgstr "Sammuta radio · J"
+
+msgid "Turn radio on · J"
+msgstr "Kytke radio päälle · J"
+
+msgid "Next song · N"
+msgstr "Seuraava kappale · N"
+
+msgid "Ready to run again! Hold Shift and walk forward."
+msgstr "Voit taas juosta! Pidä Shift pohjassa ja kävele eteenpäin."
+
+msgid "SUV"
+msgstr "Katumaasturi"
+
+msgid "Classic sports coupe"
+msgstr "Klassinen urheilucoupé"
+
+msgid "Classic sedan"
+msgstr "Klassinen sedan"
+
+msgid "Vintage compact"
+msgstr "Pieni museoauto"
+
+msgid "Electric sedan"
+msgstr "Sähkösedan"
+
+msgid "Police SUV"
+msgstr "Poliisin katumaasturi"
+
+msgid "Track sports car"
+msgstr "Kilpa-auto"
+
+msgid "Small convertible"
+msgstr "Pieni avoauto"
+
+msgid "Classic moped"
+msgstr "Klassinen mopo"
+
+msgid "Wheel loader"
+msgstr "Pyöräkuormaaja"
+
+msgid "Tracked excavator"
+msgstr "Tela-alustainen kaivinkone"
+
+msgid "Tram"
+msgstr "Raitiovaunu"
+
+msgid "Click the pictures to choose your vehicle and driver."
+msgstr "Valitse ajoneuvo ja kuljettaja napauttamalla kuvia."
+
+msgid "★ %d points"
+msgstr "★ %d pistettä"
+
+msgid "Take a job"
+msgstr "Ota tehtävä"
+
+msgid "★ All stars found!"
+msgstr "★ Kaikki tähdet löytyivät!"
+
+#, c-format
+msgid "★ %d star left"
+msgid_plural "★ %d stars left"
+msgstr[0] "★ %d tähti jäljellä"
+msgstr[1] "★ %d tähteä jäljellä"
+
+msgid "Can you find my red shoe? I lost it farther along the pavement."
+msgstr ""
+"Löytäisitkö punaisen kenkäni? Se katosi vähän kauempana tällä "
+"jalkakäytävällä."
+
+msgid "My shoe! Now I won’t have to hop home. Thank you!"
+msgstr "Kenkäni! Nyt minun ei tarvitse hyppiä kotiin yhdellä jalalla. Kiitos!"
+
+msgid "Find the red shoe on the pavement."
+msgstr "Etsi punainen kenkä jalkakäytävältä."
+
+msgid "Bring the red shoe back to the neighbour."
+msgstr "Vie punainen kenkä takaisin naapurille."
+
+msgid "Can you find my cat? Look for white paws along this pavement."
+msgstr ""
+"Löytäisitkö kissani? Etsi valkoisia tassuja tämän jalkakäytävän varrelta."
+
+msgid "There you are, Socks! Thank you for bringing her home."
+msgstr "Siinähän sinä olet, Socks! Kiitos, kun toit kissani kotiin."
+
+msgid "Walk back to the neighbour with the cat."
+msgstr "Kävele kissan kanssa takaisin naapurin luo."
+
+msgid "Find the cat with white paws."
+msgstr "Etsi kissa, jolla on valkoiset tassut."
+
+msgid "Collect seedlings at the square"
+msgstr "Kerää taimet aukiolla"
+
+msgid "Deliver herbs to the clinic garden"
+msgstr "Toimita yrttejä klinikan puutarhaan"
+
+msgid "Bring flowers to the marina"
+msgstr "Tuo kukkia satamaan"
+
+msgid "Pick up soup ingredients at the square"
+msgstr "Poimi keitto ainesosia aukiolta"
+
+msgid "Serve lunch to the clinic staff"
+msgstr "Tarjoile lounasta klinikan henkilökunnalle"
+
+msgid "Serve soup to the boat crews"
+msgstr "Tarjoile keittoa laivaväelle"
+
+msgid "Back in a safe place."
+msgstr "Olet taas turvallisessa paikassa."
+
+msgid "Stuck? Press R"
+msgstr "Jäitkö jumiin? Paina R"
+
+msgid "No clear spot yet. Try again in a moment."
+msgstr "Vapaata paikkaa ei vielä löytynyt. Kokeile hetken kuluttua uudelleen."
+
+msgid "Take the car to the petrol station."
+msgstr "Vie auto huoltoasemalle."
+
+msgid ""
+"The car is on your flatbed. Follow the arrows to the petrol station for 20 "
+"coins."
+msgstr "Auto on lavalla. Seuraa nuolia huoltoasemalle, niin saat 20 kolikkoa."
+
+msgid "My vehicle"
+msgstr "Oma ajoneuvo"
+
+msgid "Flashing"
+msgstr "Vilkkuvat"
+
+msgid "Steady"
+msgstr "Tasainen valo"
+
+msgid "Off"
+msgstr "Pois päältä"
+
+msgid "Ducks park free"
+msgstr "Ankat pysäköivät ilmaiseksi"
+
+msgid "Hats on wheels only"
+msgstr "Vain pyörillä kulkeville hatuille"
+
+msgid "Save a spot for a snail"
+msgstr "Jätä paikka etanalle"
+
+msgid "Park with a smile"
+msgstr "Pysäköi hymyillen"
+
+msgid "Bananas need a ticket"
+msgstr "Banaanit tarvitsevat parkkilipun"
+
+msgid "LANGUAGE_SELF_NAME"
+msgstr "Suomi"
+
+msgid ""
+"ICE CREAM  4\n"
+"HOT DOG  5"
+msgstr ""
+"JÄÄTELÖ  4\n"
+"NAKKISÄMPYLÄ  5"
+
+msgid "FRUIT  &  VEG"
+msgstr "HEDELMÄT JA VIHANNEKSET"
+
+msgid "CHECKOUT"
+msgstr "KASSA"
+
+msgid "WOOD-FIRED PIZZA"
+msgstr "PUU-UUNIPIZZA"
+
+msgid "MARGHERITA  ·  8 COINS"
+msgstr "MARGHERITA  ·  8 KOLIKKOA"
+
+msgid "EAT IN  ·  TAKEAWAY"
+msgstr "SYÖ TÄÄLLÄ  ·  OTA MUKAAN"
+
+msgid "TAKEAWAY"
+msgstr "MUKAAN"
+
+msgid "PICK AND MIX"
+msgstr "IRTOKARKIT"
+
+msgid "Raspberry"
+msgstr "Vadelma"
+
+msgid "Lemon"
+msgstr "Sitruuna"
+
+msgid "Liquorice"
+msgstr "Lakritsi"
+
+msgid "Vanilla"
+msgstr "Vanilja"
+
+msgid "Strawberry"
+msgstr "Mansikka"
+
+msgid "Orange"
+msgstr "Oranssi"
+
+msgid "Grape"
+msgstr "Viinirypäleet"
+
+msgid "No songs available in this language yet."
+msgstr "Tällä kielellä ei vielä ole lauluja."
+
+msgid "HARBOR FUEL"
+msgstr "HARBOR FUEL"
+
+msgid "Harbor Fuel  →"
+msgstr "Harbor Fuel  →"
+
+msgid "←  Harbor Fuel"
+msgstr "←  Harbor Fuel"
+
+msgid "Tow drop-off"
+msgstr "Hinattujen autojen jättöpaikka"
+
+msgid "Monster truck"
+msgstr "Monsteriauto"
+
+msgid "A-tractor"
+msgstr "A-traktori"
+
+msgid "Classic cruiser"
+msgstr "Amerikanrauta"
+
+msgid "Taxi"
+msgstr "Taksi"
+
+msgid "Food truck"
+msgstr "Ruokarekka"
+
+msgid "HARBOR TOWN SCHOOL"
+msgstr "HARBOR TOWNIN KOULU"
+
+msgid "HARBOR TOWN GARAGE"
+msgstr "HARBOR TOWNIN KORJAAMO"
+
+msgid "THE SQUARE"
+msgstr "TORI"
+
+msgid "HEALTH CENTRE"
+msgstr "TERVEYSKESKUS"
+
+msgid "MARINA"
+msgstr "VENESATAMA"
+
+msgid "VÄSTRA TORGET"
+msgstr "VÄSTRA TORGET"
+
+msgid "VÄSTERÄNGEN"
+msgstr "VÄSTERÄNGEN"
+
+msgid "HARBOR TOWN"
+msgstr "HARBOR TOWN"
+
+msgid "Quit game"
+msgstr "Lopeta peli"
+
+msgid "Quit game · F10"
+msgstr "Lopeta peli · F10"
+
+msgid "Do you want to quit the game?"
+msgstr "Haluatko lopettaa pelin?"
+
+msgid "Yes"
+msgstr "Kyllä"
+
+msgid "No"
+msgstr "Ei"
+
+msgid "About"
+msgstr "Tietoja"
+
+msgid "About the game"
+msgstr "Tietoja pelistä"
+
+msgid "Close"
+msgstr "Sulje"
+
+msgid "Version %s"
+msgstr "Versio %s"
+
+msgid ""
+"Explore Harbor Town with Axel and Alma. Walk along the canal, take the tram "
+"or drive a tow truck to help a neighbour. You choose where to go next."
+msgstr ""
+"Tutustu Harbor Towniin Axelin ja Alman kanssa. Kävele kanavan varrella, "
+"hyppää ratikkaan tai auta naapuria hinausautolla. Sinä päätät, minne lähdet "
+"seuraavaksi."
+
+msgid ""
+"My name is Daniel Nylander. I made this game for my children, who have "
+"autism and a language disorder. I wanted them to have a town they could "
+"explore at their own pace. That is why you can choose a vehicle by its "
+"picture and read what people say in speech bubbles."
+msgstr ""
+"Olen Daniel Nylander. Tein tämän pelin lapsilleni, joilla on autismi ja "
+"kielellinen häiriö. Halusin antaa heille kaupungin, jota he voisivat tutkia "
+"omaan tahtiinsa. Siksi voit valita ajoneuvon sen kuvaa napauttamalla ja "
+"lukea puhekuplista, mitä ihmiset sanovat."
+
+msgid "DISCO RINGS"
+msgstr "DISKORENKAAT"
+
+msgid "Oops! One danced away!"
+msgstr "Hups! Yksi tanssi karkuun!"
+
+msgid "ROCKET ICE"
+msgstr "RAKETTIJÄÄTELÖ"
+
+msgid "3, 2, 1 ... brain freeze!"
+msgstr "3, 2, 1… aivojää!"
+
+msgid "HOT DOG YOGA"
+msgstr "NAKKIJOOGA"
+
+msgid "Breathe in. Ketchup out."
+msgstr "Ilma sisään. Ketsuppi ulos."
+
+#. Litres shown on a stationary fuel dispenser.
+msgid "0.00 L"
+msgstr "0,00 L"
+
+msgid "95    17.90"
+msgstr "95    17,90"
+
+msgid "98    18.90"
+msgstr "98    18,90"
+
+msgid "D     17.50"
+msgstr "D     17,50"
+
+msgid "Allow crashes"
+msgstr "Salli törmäykset"
+
+msgid "17.90 kr/L"
+msgstr "17,90 kr/L"
+
+msgid "18.90 kr/L"
+msgstr "18,90 kr/L"
+
+msgid "17.50 kr/L"
+msgstr "17,50 kr/L"
+
+msgid "Allow driving through red lights"
+msgstr "Salli punaista päin ajaminen"
+
+msgid "Red light! Stop at the line and wait for green."
+msgstr "Punainen valo! Pysähdy viivalle ja odota vihreää."

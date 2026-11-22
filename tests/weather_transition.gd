@@ -51,5 +51,34 @@ func check_transition() -> void:
 		printerr("Summer retained winter snowfall")
 		quit(1)
 		return
-	print("Manual snowfall builds gradually and continues in automatic mode.")
+	var game = preload("res://main.tscn").instantiate()
+	root.add_child(game)
+	game.weather.season_setting = 4
+	game.weather.weather_setting = 4
+	game.weather.tick(160)
+	game._process(0)
+	var ground := [game.road_finish,game.marking_finish,game.sidewalk_finish,game.soil_finish,game.quay_finish]
+	for surface in ground:
+		if surface.get_shader_parameter("snow_cover") <= 0:
+			printerr("Winter slush failed to reach the ground material")
+			quit(1)
+			return
+	game.snow_marks.visible_instance_count = 1
+	game.snow_cursor = 1
+	game.weather.season_setting = 2
+	game._process(0)
+	for surface in ground:
+		if surface.get_shader_parameter("snow_cover") != 0.0:
+			printerr("Summer retained visible ground snow")
+			quit(1)
+			return
+	if game.snow_marks.visible_instance_count != 0 or game.snow_cursor != 0 or game.snow_track_finish.albedo_color.a > 0:
+		printerr("Summer retained snow tracks")
+		quit(1)
+		return
+	if game.weather.snow_particles.emitting or not game.weather.rain_particles.emitting:
+		printerr("Winter slush did not change to summer rain")
+		quit(1)
+		return
+	print("Snowfall, slush and summer transitions verified on ground materials, tracks and emitters.")
 	quit()

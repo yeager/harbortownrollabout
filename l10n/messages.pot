@@ -1193,3 +1193,9 @@ msgstr ""
 
 msgid "17.50 kr/L"
 msgstr ""
+
+msgid "Allow driving through red lights"
+msgstr ""
+
+msgid "Red light! Stop at the line and wait for green."
+msgstr ""

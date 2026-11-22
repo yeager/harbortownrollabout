@@ -35,7 +35,7 @@ func closest_street_point(point: Vector2) -> Vector2:
 	var edge := _nearest(point)
 	return Geometry2D.get_closest_point_to_segment(point, graph.get_point_position(edge.x), graph.get_point_position(edge.y))
 
-func path(start: Vector2, goal: Vector2, heading := Vector2.ZERO) -> PackedVector2Array:
+func path(start: Vector2, goal: Vector2, heading := Vector2.ZERO, wide_turns := false) -> PackedVector2Array:
 	var driving := not heading.is_zero_approx()
 	var first := _nearest(start + heading * 1.5 if driving else start)
 	var axis := graph.get_point_position(first.x).direction_to(graph.get_point_position(first.y))
@@ -56,7 +56,15 @@ func path(start: Vector2, goal: Vector2, heading := Vector2.ZERO) -> PackedVecto
 		temporary.append(id)
 	if first==last and (not driving or (goal-start).dot(forward)>=0):
 		graph.connect_points(temporary[0],temporary[1])
+	# Long vehicles need more turning room than the gap between opposing lanes.
+	# Route around the block if the shortest route doubles back at the junction.
 	var points := graph.get_point_path(temporary[0],temporary[1])
+	if wide_turns and driving and points.size() >= 3 and (points[2]-points[1]).dot(forward) < -.01:
+		graph.disconnect_points(first.x,first.y)
+		if first == last: graph.disconnect_points(temporary[1],forward_id)
+		var detour := graph.get_point_path(temporary[0],temporary[1])
+		graph.connect_points(first.x,first.y)
+		if not detour.is_empty(): points = detour
 	for id in temporary:
 		graph.remove_point(id)
 	if driving:
@@ -105,9 +113,10 @@ func _lane_path(centres: PackedVector2Array) -> PackedVector2Array:
 # Keep the chosen junction while the vehicle follows a bend or U-turn.
 var remaining_lane := PackedVector2Array()
 var lane_goal := Vector2.INF
+var cached_wide_turns := false
 
-func driving_path(start: Vector2, goal: Vector2, heading: Vector2) -> PackedVector2Array:
-	if goal.is_equal_approx(lane_goal):
+func driving_path(start: Vector2, goal: Vector2, heading: Vector2, wide_turns := false) -> PackedVector2Array:
+	if goal.is_equal_approx(lane_goal) and wide_turns == cached_wide_turns:
 		var distance_ahead := 0.0
 		var best_gap := 4.0
 		var best_segment := -1
@@ -129,5 +138,6 @@ func driving_path(start: Vector2, goal: Vector2, heading: Vector2) -> PackedVect
 			remaining_lane[0] = nearest
 			return remaining_lane
 	lane_goal = goal
-	remaining_lane = path(start, goal, heading)
+	cached_wide_turns = wide_turns
+	remaining_lane = path(start, goal, heading, wide_turns)
 	return remaining_lane

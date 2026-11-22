@@ -1,0 +1,1276 @@
+#
+msgid ""
+msgstr ""
+"Language: nb\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Harbor Town Rollabout"
+msgstr "Harbor Town Rollabout"
+
+msgid "Emergency Vehicles"
+msgstr "Nødkjøretøy"
+
+msgid "Help at the square"
+msgstr "Hjelp på plassen"
+
+msgid "Pick up the medic"
+msgstr "Hent ambulansearbeideren"
+
+msgid "Deliver first aid to the marina"
+msgstr "Lever førstehjelp til marinaen"
+
+msgid "Ambulance"
+msgstr "Ambulanse"
+
+msgid "Police car"
+msgstr "Politibil"
+
+msgid "Fire engine"
+msgstr "Brannbil"
+
+msgid "Mission complete. Well done!"
+msgstr "Oppdraget er fullført. Bra jobbet!"
+
+msgid "All missions complete! The city thanks you."
+msgstr "Du har fullført alle oppdragene! Byen takker deg."
+
+msgid "Cross a bridge to the east side."
+msgstr "Gå over en bro til østsiden."
+
+msgid "Follow the quay to the green marker by the boats."
+msgstr "Følg kaia til det grønne merket ved båtene."
+
+msgid "Follow the green mission marker."
+msgstr "Følg det grønne merket for oppdraget."
+
+msgid "MISSION"
+msgstr "OPPDRAG"
+
+msgid "Lights OFF"
+msgstr "Lys OFF"
+
+msgid "Lights ON"
+msgstr "Lys på"
+
+msgid "Siren OFF"
+msgstr "Sirene av"
+
+msgid "Siren ON"
+msgstr "Sirene på"
+
+msgid "Engine ON"
+msgstr "Motor på"
+
+msgid "Engine OFF"
+msgstr "Motor av"
+
+msgid "Pause"
+msgstr "Pause"
+
+msgid ""
+"W / ↑  Drive     A D / ← →  Steer     S / ↓  Brake or reverse\n"
+"Release to slow down   ·   Space to help   ·   P to pause"
+msgstr ""
+"W / ↑  Kjør     A D / ← →  Styr     S / ↓  Brems eller rygg\n"
+"Slipp for å senke farten   ·   Mellomrom for å hjelpe   ·   P for pause"
+
+msgid "Start a gentle drive"
+msgstr "Start en mild kjøring"
+
+msgid "Settings"
+msgstr "Innstillinger"
+
+msgid "Close settings"
+msgstr "Lukk innstillingene"
+
+msgid "Driving mode"
+msgstr "Kjøremodus"
+
+msgid "Gentle driving · up to 30 km/h"
+msgstr "Gentle kjøring · Opp til 30 km/t"
+
+msgid "Full speed"
+msgstr "Full fart"
+
+msgid "Preview vehicle sound"
+msgstr "Hør lyden av kjøretøyet"
+
+msgid "Game volume"
+msgstr "Spillvolum"
+
+msgid "Emergency lights in traffic"
+msgstr "Blålys på andre kjøretøy"
+
+msgid "Traffic lights · Flashing blue"
+msgstr "Blålys i trafikken · Blinkende lys"
+
+msgid "Traffic lights · Steady blue"
+msgstr "Blålys i trafikken · Fast lys"
+
+msgid "Traffic lights · Blue lights off"
+msgstr "Blålys i trafikken · Av"
+
+msgid "Resume"
+msgstr "Fortsett"
+
+msgid "MISSION %d / %d   ·   %s"
+msgstr "OPPDRAG %d / %d   ·   %s"
+
+msgid "ALL MISSIONS COMPLETE"
+msgstr "ALLE OPPDRAG FULLFØRT"
+
+msgid "Stop preview"
+msgstr "Stopp forhåndsvisning"
+
+msgid "Preview engine"
+msgstr "Hør motoren"
+
+msgid "Preview siren"
+msgstr "Hør sirenen"
+
+msgid ""
+"Choose a vehicle and drive to three missions.\n"
+"Take your time. You control the lights and siren."
+msgstr ""
+"Velg et kjøretøy og kjør til tre oppdrag.\n"
+"Ta deg tid, du kontrollerer lyset og siren."
+
+msgid "Start driving"
+msgstr "Begynn å kjøre"
+
+msgid "All missions complete!"
+msgstr "Alle oppdragene er ferdige!"
+
+msgid ""
+"You helped the whole city. Well done, Axel!\n"
+"Ready for another drive?"
+msgstr ""
+"Du hjalp hele byen.\n"
+" Klar til en annen kjøring?"
+
+msgid "Drive again"
+msgstr "Kjør igjen"
+
+msgid "You can change vehicles here and continue your mission."
+msgstr "Her kan du bytte kjøretøy og fortsette oppdraget ditt."
+
+msgid "Continue driving"
+msgstr "Fortsett å kjøre"
+
+msgid "Stop here to help."
+msgstr "Stopp her for å hjelpe."
+
+msgid "Helping …"
+msgstr "Hjelper..."
+
+msgid "Paused — take your time."
+msgstr "Spillet er på pause. Ta den tiden du trenger."
+
+msgid "Speed  %02d km/h"
+msgstr "Fart  %02d km/t"
+
+msgid "Gas"
+msgstr "Gi gass"
+
+msgid "Left"
+msgstr "Venstre"
+
+msgid "Brake"
+msgstr "Brems"
+
+msgid "Right"
+msgstr "Høyre"
+
+msgid "Language"
+msgstr "Språk"
+
+msgid "Get out · F"
+msgstr "Kom deg ut · F"
+
+msgid "Enter %s"
+msgstr "Sett deg inn: %s"
+
+msgid "Walk to a vehicle"
+msgstr "Gå bort til et kjøretøy"
+
+msgid "Stop first to get out."
+msgstr "Stopp først for å komme ut."
+
+msgid "Walk with WASD or arrows · F to enter a vehicle"
+msgstr "Gå med WASD eller piltastene · Trykk F for å gå inn i et kjøretøy"
+
+msgid "Time · Day"
+msgstr "Tid på døgnet · Dag"
+
+msgid "Time · Night"
+msgstr "Tid på døgnet · Natt"
+
+msgid "Time · Day and night"
+msgstr "Tid på døgnet · Dag og natt"
+
+msgid "Vehicle depot"
+msgstr "Kjøretøy depot"
+
+msgid "Both doors are blocked. Park where there is more room."
+msgstr "Begge dørene er sperret. Parker et sted med bedre plass."
+
+msgid "Activity"
+msgstr "Aktivitet"
+
+msgid "Three missions"
+msgstr "Tre oppdrag"
+
+msgid "Free exploration"
+msgstr "Gratis utforskning"
+
+msgid "Explore on foot or by vehicle. Stop at the depot to change vehicles."
+msgstr ""
+"Utforsk byen til fots eller med et kjøretøy. Stopp på depotet for å bytte "
+"kjøretøy."
+
+msgid ""
+"W / ↑ Drive   ·   A D / ← → Steer   ·   S / ↓ Brake or reverse   ·   F Get "
+"out   ·   P Pause"
+msgstr ""
+"W / ↑ Kjør   ·   A D / ← → Styr   ·   S / ↓ Brems eller rygg   ·   F Gå ut"
+"   ·   P Pause"
+
+msgid "Continue walking"
+msgstr "Fortsett å gå"
+
+msgid "Walk up to a parked vehicle to get in."
+msgstr "Gå bort til et parkert kjøretøy for å sette deg inn."
+
+msgid "Stand here to help"
+msgstr "Stå her for å hjelpe"
+
+msgid "Press Space to help"
+msgstr "Trykk på plass for å hjelpe"
+
+msgid "My vehicle · Flashing"
+msgstr "Min bil · Blitzing"
+
+msgid "My vehicle · Steady"
+msgstr "Min bil · Steady"
+
+msgid "Traffic sirens"
+msgstr "Sirener fra andre kjøretøy"
+
+msgid "Reverse"
+msgstr "Reverser"
+
+msgid "Driver view · C"
+msgstr "Drivervisning · C"
+
+msgid "Outside view · C"
+msgstr "Utendørs visning · C"
+
+msgid "Forward"
+msgstr "Forward"
+
+msgid "Stopped"
+msgstr "Stoppet"
+
+msgid "Reversing"
+msgstr "Reversing"
+
+msgid "Ride the tram"
+msgstr "Ta trikken"
+
+msgid "Drive the tram"
+msgstr "Kjør sporvognen"
+
+msgid "Season · Automatic"
+msgstr "Årstid · Automatisk"
+
+msgid "Spring"
+msgstr "Vår"
+
+msgid "Summer"
+msgstr "Sommer"
+
+msgid "Autumn"
+msgstr "Høst"
+
+msgid "Winter"
+msgstr "Vinter"
+
+msgid "Weather · Automatic"
+msgstr "Vær · Automatisk"
+
+msgid "Sun"
+msgstr "Sol"
+
+msgid "Rain"
+msgstr "Regn"
+
+msgid "Snow"
+msgstr "Snø"
+
+msgid "Slush"
+msgstr "Slaps"
+
+msgid "Hello!"
+msgstr "Hei!"
+
+msgid "How are you?"
+msgstr "Hvordan har du det?"
+
+msgid "Hi there!"
+msgstr "Hei der!"
+
+msgid "Horn · H"
+msgstr "Horn · H"
+
+msgid "Pick up your passenger"
+msgstr "Hent passasjeren din"
+
+msgid "Drop off your passenger"
+msgstr "Slipp av passasjeren din"
+
+msgid "Passenger on board."
+msgstr "Passasjer om bord."
+
+msgid "Thank you for the ride!"
+msgstr "Takk for turen!"
+
+msgid "Drive the motorboat"
+msgstr "Kjør motorbåten"
+
+msgid ""
+"W / ↑ Throttle · A D / ← → Steer · S / ↓ Slow or reverse · H Horn · P Pause"
+msgstr ""
+"W / ↑ Gi gass · A D / ← → Styr · S / ↓ Senk farten eller rygg · H Tut · P "
+"Pause"
+
+#, c-format
+msgid "%d coin"
+msgid_plural "%d coins"
+msgstr[0] "%d mynt"
+msgstr[1] "%d mynter"
+
+msgid "Well done, %s! Ready for another drive?"
+msgstr "Bra jobbet, %s! Klar for en tur til?"
+
+msgid "Character"
+msgstr "Tegn"
+
+msgid "Wallet"
+msgstr "Lommebok"
+
+msgid "Phone · T"
+msgstr "Telefon · T"
+
+msgid "No messages yet."
+msgstr "Ingen meldinger ennå."
+
+msgid "Taxi requested at the square."
+msgstr "Taxi etterspurt på plassen."
+
+msgid "Please take me to the marina."
+msgstr "Ta meg med til marinaen."
+
+msgid "Taxi requested at the clinic."
+msgstr "Noen venter på taxi ved klinikken."
+
+msgid "Please take me to the square."
+msgstr "Ta meg til plassen."
+
+msgid "Taxi requested at the marina."
+msgstr "Taxi etterspurt på marinaen."
+
+msgid "Please take me to the clinic."
+msgstr "Ta meg med til klinikken."
+
+msgid "A neighbour needs help at the square."
+msgstr "En nabo trenger hjelp på torget."
+
+msgid "A medic is waiting at the clinic. Please pick them up."
+msgstr "En ambulansearbeider venter ved klinikken. Kjør dit og hent personen."
+
+msgid "Please bring the first-aid supplies to the marina."
+msgstr "Ta med førstehjelpsforsyningene til marinaen."
+
+msgid "Fare complete. You earned 15 coins."
+msgstr "Du tjente 15 mynter."
+
+msgid "Thank you for helping! You earned 10 coins."
+msgstr "Takk for hjelpen! Du fikk 10 mynter."
+
+msgid "Café"
+msgstr "Café"
+
+msgid "Sweet shop"
+msgstr "Godteributikk"
+
+msgid "Cinnamon bun"
+msgstr "Kanelsnurr"
+
+msgid "Berry cordial"
+msgstr "Bærsaft"
+
+msgid "Ice cream"
+msgstr "Iskrem"
+
+msgid "Hot dog"
+msgstr "Pølse i brød"
+
+msgid "Margherita pizza"
+msgstr "Pizza Margherita"
+
+msgid "Pick and mix"
+msgstr "Smågodt"
+
+msgid "%s · %d coins"
+msgstr "%s · %d mynter"
+
+#, c-format
+msgid "You need %d more coin."
+msgid_plural "You need %d more coins."
+msgstr[0] "Du mangler %d mynt."
+msgstr[1] "Du mangler %d mynter."
+
+msgid "%s · Paid %d coins. Thank you!"
+msgstr "%s · Du betalte %d mynter. Takk!"
+
+msgid "Recovery truck"
+msgstr "Bergingsbil"
+
+msgid "Collect the car with a smoking bonnet."
+msgstr "Hent bilen som ryker fra panseret."
+
+msgid "Take the car to the workshop."
+msgstr "Ta bilen til verkstedet."
+
+msgid "Collect the car with a missing wheel."
+msgstr "Hent bilen som mangler et hjul."
+
+msgid "Recovery complete. You earned 20 coins."
+msgstr "Bilen er levert! Du fikk 20 mynter."
+
+msgid "Passenger ride · P to pause"
+msgstr "Du er passasjer · P for pause"
+
+msgid "W / ↑ Accelerate · S / ↓ Brake · Automatic station stops"
+msgstr "W / ↑ Øk farten · S / ↓ Brems · Stopper automatisk ved holdeplassene"
+
+msgid "%s · Departure in %d s"
+msgstr "%s · Avgang om %d s"
+
+msgid "Next stop: %s · %d m · %d km/h"
+msgstr "Neste stopp: %s · %d m · %d km/t"
+
+msgid "Tram bell · H"
+msgstr "Trikkeklokke · H"
+
+msgid ""
+"A car is smoking on the main street. Follow the arrows and stop beside it."
+msgstr ""
+"Det ryker fra en bil i hovedgata. Følg pilene og stopp ved siden av bilen."
+
+msgid ""
+"A car on the east bank has lost a wheel. Follow the arrows to pick it up."
+msgstr ""
+"En bil på østsiden av kanalen har mistet et hjul. Følg pilene og hent bilen."
+
+msgid ""
+"The car is on your flatbed. Follow the arrows to the workshop for 20 coins."
+msgstr ""
+"Bilen står på lasteplanet. Følg pilene til verkstedet, så får du 20 mynter."
+
+msgid "Car loaded onto the flatbed."
+msgstr "Bilen står på lasteplanet."
+
+msgid "Your purchases"
+msgstr "Kjøpene dine"
+
+msgid "%s × %d"
+msgstr "%s × %d"
+
+msgid "Waiting for a green light"
+msgstr "Venter på grønt lys"
+
+msgid ""
+"Steer with A and D or the arrow keys. Hold the left mouse button for "
+"throttle. Hold the right to slow down, then reverse."
+msgstr ""
+"Styre med A og D eller piltastene. Hold venstre museknapp for trottle. Hold "
+"høyre for å bremse ned, og deretter reversere."
+
+msgid "Start boating"
+msgstr "Start båtturen"
+
+msgid "Continue boating"
+msgstr "Fortsett båtturen"
+
+msgid "The tram drives itself and stops at each platform."
+msgstr "Sporvognen kjører seg selv og stopper på hver plattform."
+
+msgid ""
+"Control the speed. The tram follows the rails and stops at each platform."
+msgstr ""
+"Styr hastigheten. Sporvognen følger skinnene og stopper på hver plattform."
+
+msgid "Taxi fares"
+msgstr "Taxipriser"
+
+msgid "Roadside recovery"
+msgstr "Veihjelp"
+
+msgid "Pick up a passenger at the square and drive them to the marina."
+msgstr "Hent passasjeren på torget og kjør til småbåthavna."
+
+msgid "Collect the car with a smoking bonnet and take it to the workshop."
+msgstr "Hent bilen som ryker fra panseret, og frakt den til verkstedet."
+
+msgid "Complete a mission to earn coins."
+msgstr "Fullfør et oppdrag for å tjene mynter."
+
+msgid "Tab to choose · Enter to buy"
+msgstr "Tab for å velge · Enter for å kjøpe"
+
+msgid "Enter to buy"
+msgstr "Enter for å kjøpe"
+
+msgid "F · Enter %s"
+msgstr "F · Gå inn i kjøretøyet (%s)"
+
+msgid "Well done, %s!"
+msgstr "Godt gjort, %s!"
+
+msgid "First-aid supplies delivered to the marina. You earned 10 coins."
+msgstr "Du har levert førstehjelpsutstyret i småbåthavna. Du fikk 10 mynter."
+
+msgid "Stop here to load the car."
+msgstr "Stopp her for å laste bilen på planet."
+
+msgid "Stop here to unload the car."
+msgstr "Stopp her for å losse bilen."
+
+msgid "Loading the car …"
+msgstr "Bilen lastes på …"
+
+msgid "Unloading the car …"
+msgstr "Bilen losses …"
+
+msgid "Press Space to load the car."
+msgstr "Trykk på mellomrom for å laste bilen på planet."
+
+msgid "Press Space to unload the car."
+msgstr "Trykk på mellomrom for å losse bilen."
+
+msgid "Stop for your passenger."
+msgstr "Stopp ved passasjeren din."
+
+msgid "Stop to let your passenger out."
+msgstr "Stopp og slipp av passasjeren."
+
+msgid "Your passenger is getting in …"
+msgstr "Passasjeren setter seg inn …"
+
+msgid "Your passenger is getting out …"
+msgstr "Passasjeren går ut …"
+
+msgid "Press Space to pick up your passenger."
+msgstr "Trykk på mellomromstasten for å slippe passasjeren inn."
+
+msgid "Press Space to let your passenger out."
+msgstr "Trykk på mellomromstasten for å slippe passasjeren ut."
+
+msgid "Return to your taxi"
+msgstr "Tilbake til drosjen din"
+
+msgid "Return to your recovery truck"
+msgstr "Gå tilbake til bergingsbilen din"
+
+msgid "Radio on · J"
+msgstr "Radio på · J"
+
+msgid "Radio off · J"
+msgstr "Radio av · J"
+
+msgid "City bus"
+msgstr "Bybuss"
+
+msgid "Bus route 502"
+msgstr "Busslinje 502"
+
+msgid "Collect passengers at the square."
+msgstr "Hent passasjerene på torget."
+
+msgid "Drop off passengers at the school."
+msgstr "Slipp av passasjerene ved skolen."
+
+msgid "Collect passengers at the marina."
+msgstr "Hent passasjerene i småbåthavna."
+
+msgid "Drop off passengers at the clinic."
+msgstr "Slipp av passasjerene ved klinikken."
+
+msgid "Passengers on board."
+msgstr "Passasjerene er om bord."
+
+msgid "Bus journey complete. You earned 15 coins."
+msgstr "Bussturen er ferdig! Du fikk 15 mynter."
+
+msgid "A pupil is waiting at the square."
+msgstr "En elev venter på torget."
+
+msgid "Please take me to school."
+msgstr "Ta meg med på skolen."
+
+msgid "A pupil is waiting at school."
+msgstr "En elev venter ved skolen."
+
+msgid "Pick up the pupil"
+msgstr "Ta opp eleven"
+
+msgid "Drop off the pupil"
+msgstr "Legg av elev"
+
+msgid "Return to your bus"
+msgstr "Gå tilbake til bussen din"
+
+msgid "Graphics"
+msgstr "Grafikk"
+
+msgid "Sound"
+msgstr "Lyd"
+
+msgid "Driving"
+msgstr "Kjøring"
+
+msgid "World"
+msgstr "Verden"
+
+msgid "Renderer changes apply next time you start the game."
+msgstr "Den nye grafikkmodusen tas i bruk neste gang du starter spillet."
+
+msgid "Could not save graphics settings."
+msgstr "Kunne ikke lagre grafikkinnstillinger."
+
+msgid "The ducks voted. They love your jacket!"
+msgstr "Endene har stemt. De elsker jakka di!"
+
+msgid "Snowmobile"
+msgstr "Snøskuter"
+
+msgid "Collect passengers at Västra torget."
+msgstr "Hent passasjerene på Västra torget."
+
+msgid "Drop off passengers at Västerängen."
+msgstr "Slipp av passasjerene ved Västerängen."
+
+msgid "↑  Café · Snack kiosk"
+msgstr "↑  Kafé · Kiosk"
+
+msgid "Forward+ · NVIDIA DLSS (experimental; RTX required)"
+msgstr "Forward+ · NVIDIA DLSS (eksperimentelt, krever RTX)"
+
+msgid ""
+"DLSS is experimental. It needs the NGX-enabled engine and a supported NVIDIA"
+" RTX GPU/driver; otherwise it continues without DLSS. Restart to apply."
+msgstr ""
+"DLSS er eksperimentelt. Det krever en spillmotor med NGX, et støttet NVIDIA "
+"RTX-grafikkort og en passende driver. Ellers kjører spillet uten DLSS. Start"
+" spillet på nytt for å bruke endringen."
+
+msgid "Check the crossing at the square"
+msgstr "Sjekk gangfeltet ved torget"
+
+msgid "Check the clinic entrance"
+msgstr "Sjekk klinikkens inngang"
+
+msgid "Patrol the marina"
+msgstr "Patrol marinaen"
+
+msgid "Check the hydrant at the square"
+msgstr "Sjekk hydranten på plassen"
+
+msgid "Meet the fire safety team at the clinic"
+msgstr "Møt brannvernlaget ved klinikken"
+
+msgid "Check the rescue equipment at the marina"
+msgstr "Sjekk redningsutstyret i småbåthavna"
+
+msgid "Collect parcels at the square"
+msgstr "Samle pakker på plassen"
+
+msgid "Deliver a parcel to the clinic"
+msgstr "Levere pakke til klinikken"
+
+msgid "Deliver the last parcel to the marina"
+msgstr "Lever den siste pakken til marinaen"
+
+msgid "Collect warm blankets at the square"
+msgstr "Samle varme tepper på plassen"
+
+msgid "Bring blankets to the clinic"
+msgstr "Ta med tepper til klinikken"
+
+msgid "Bring blankets to the marina"
+msgstr "Ta med tepper til marinaen"
+
+msgid "Have you done your homework? — Mum"
+msgstr "Har du gjort leksene dine? — Mamma"
+
+msgid "A duck just beat me to the ferry. — Grandpa"
+msgstr "En and kom før meg til ferga. — Bestefar"
+
+msgid "I saved you a bun. It only has one tiny bite missing! — Mum"
+msgstr ""
+"Jeg har spart en bolle til deg. Det mangler bare en bitteliten bit! — Mamma"
+
+msgid "Eat ice cream"
+msgstr "Spis is"
+
+msgid "Eat hot dog"
+msgstr "Spis pølse i brød"
+
+msgid "%s feels extra happy!"
+msgstr "%s Føles ekstra lykkelig!"
+
+msgid "Current job"
+msgstr "Oppdraget ditt"
+
+msgid "Tab to choose · Enter to buy or eat"
+msgstr "Tab for å velge · Enter for å kjøpe eller spise"
+
+msgid "Ambulance calls"
+msgstr "Ambulanseoppdrag"
+
+msgid "Police patrols"
+msgstr "Politiets patruljer"
+
+msgid "Fire safety checks"
+msgstr "Brannsikkerhetskontroll"
+
+msgid "Parcel deliveries"
+msgstr "Parcel leverer"
+
+msgid "Blanket deliveries"
+msgstr "Blanket leveranser"
+
+msgid "Hold V and move the mouse to look around"
+msgstr "Hold V inne og flytt musa for å se deg rundt"
+
+msgid "I said hello to someone on the tram. It was my reflection. — Grandpa"
+msgstr "Jeg hilste på en på trikken. Det var speilbildet mitt. — Bestefar"
+
+msgid ""
+"Your missing sock turned up. The teddy bear was wearing it as a hat. — Mum"
+msgstr "Jeg fant sokken du savnet. Bamsen hadde den på hodet som lue. — Mamma"
+
+msgid "Close phone · T"
+msgstr "Lukk telefonen · T"
+
+msgid "The pupil is on board."
+msgstr "Eleven er om bord."
+
+msgid "Thanks! I can see my school!"
+msgstr "Takk! I Jeg kan se skolen min!"
+
+msgid "Board Lotten · F"
+msgstr "Gå om bord på Lotten · F"
+
+msgid "Step ashore · F"
+msgstr "Gå i land · F"
+
+msgid "On board Lotten"
+msgstr "Om bord på Lotten"
+
+msgid "Lotten in %d s"
+msgstr "Lotten kommer om %d s"
+
+msgid "You can step ashore at either landing."
+msgstr "Du kan gå i land ved begge bryggene."
+
+msgid "Next landing in %d s"
+msgstr "Neste brygge om %d s"
+
+msgid "Get off at next landing · F"
+msgstr "Gå av ved neste brygge · F"
+
+msgid "Stay on board · F"
+msgstr "Bli om bord · F"
+
+msgid "Two parcels collected at the square. You earned 10 coins."
+msgstr "Du hentet to pakker på torget. Du fikk 10 mynter."
+
+msgid "The clinic received its parcel. You earned 10 coins."
+msgstr "Klinikken har fått pakken sin. Du fikk 10 mynter."
+
+msgid "The marina received the last parcel. You earned 10 coins."
+msgstr "Den siste pakken er levert i småbåthavna. Du fikk 10 mynter."
+
+msgid "Stepping ashore in %d s"
+msgstr "Du går i land om %d s"
+
+msgid "School is over! To the clinic, please."
+msgstr "Skolen er slutt! Kan du kjøre meg til klinikken?"
+
+msgid ""
+"I tried to wave at you from Lotten. I waved my sandwich. The gulls waved "
+"back! — Grandpa"
+msgstr ""
+"Jeg prøvde å vinke til deg fra Lotten. Jeg vinket med brødskiva. Måkene "
+"vinket tilbake! — Bestefar"
+
+msgid ""
+"Could you pick up a cinnamon bun? Your dad bought cinnamon and a bun "
+"separately. — Mum"
+msgstr ""
+"Kan du ta med en kanelbolle? Pappa kjøpte kanel og bolle hver for seg. — "
+"Mamma"
+
+msgid "Find clear ground to unfold the scooter."
+msgstr "Finn klar grunn til å utfolde Scooter."
+
+msgid "Fold scooter · F"
+msgstr "Slå sammen sparkesykkelen · F"
+
+msgid "U Unfold scooter"
+msgstr "U Slå ut sparkesykkelen"
+
+msgid "W / ↑ Accelerate · S / ↓ Brake · A / D Steer · U Fold scooter"
+msgstr ""
+"W / ↑ Øk farten · S / ↓ Brems · A / D Styr · U Slå sammen sparkesykkelen"
+
+msgid "Electric scooter · %d km/h"
+msgstr "Elsparkesykkel · %d km/t"
+
+msgid "Ice cream van"
+msgstr "Isbil"
+
+msgid "Serve ice cream at the square"
+msgstr "Server is på torget"
+
+msgid "Serve ice cream outside the school"
+msgstr "Server is utenfor skolen"
+
+msgid "Serve ice cream at the marina"
+msgstr "Server is i småbåthavna"
+
+msgid "Ice cream served! You earned 10 coins."
+msgstr "Isen er servert! Du fikk 10 mynter."
+
+msgid "Return to your ice cream van"
+msgstr "Gå tilbake til isbilen din"
+
+msgid "Ice cream chime · H"
+msgstr "Isbilmelodi · H"
+
+msgid "Grocery store"
+msgstr "Matbutikk"
+
+msgid "Apple"
+msgstr "Apple"
+
+msgid "Milk"
+msgstr "Melk"
+
+msgid "Get off tram · F"
+msgstr "Gå av trikken · F"
+
+msgid "Wait for the tram"
+msgstr "Vent på trikken"
+
+msgid "Board tram · F"
+msgstr "Gå på trikken · F"
+
+msgid "Exit excavator · F"
+msgstr "Gå ut av gravemaskinen · F"
+
+msgid "Drive excavator · F"
+msgstr "Kjør gravemaskinen · F"
+
+msgid ""
+"Arrows or WASD: drive and steer · Q/E: turn the cab · F: get out\n"
+"I/K: raise or lower the boom · Y/G: move the outer arm · O/L: tilt the bucket"
+msgstr ""
+"Piltaster eller WASD: kjør og styr · Q/E: sving førerhuset · F: gå ut\n"
+"I/K: hev eller senk bommen · Y/G: beveg gravearmen · O/L: vipp skuffa"
+
+msgid "Walk or rest · Run again in %d s"
+msgstr "Gå eller hvil · Du kan løpe igjen om %d s"
+
+msgid "W/S Walk · A/D Turn · Shift + W Run · F Enter · U Scooter"
+msgstr "W/S Gå · A/D Snu · Shift + W Løp · F Gå inn · U Sparkesykkel"
+
+msgid "PgUp Raise camera · PgDn Lower camera"
+msgstr "PgUp Hev kameraet · PgDn Senk kameraet"
+
+msgid "Operate the excavator in the equipment yard."
+msgstr "Bruk gravemaskinen i utstyrsgården."
+
+msgid "Start excavating"
+msgstr "Begynn å utgrave"
+
+msgid "Motorboat"
+msgstr "Motorbåt"
+
+msgid "J Off · N Next song"
+msgstr "J Slå av · N Neste sang"
+
+msgid "Now playing: %s"
+msgstr "Nå spilles: %s"
+
+msgid "Farm tractor"
+msgstr "Traktor"
+
+msgid "Turn radio off · J"
+msgstr "Slå av radioen · J"
+
+msgid "Turn radio on · J"
+msgstr "Slå på radioen · J"
+
+msgid "Next song · N"
+msgstr "Neste sang · N"
+
+msgid "Ready to run again! Hold Shift and walk forward."
+msgstr "Du kan løpe igjen! Hold inne Shift og gå framover."
+
+msgid "SUV"
+msgstr "SUV"
+
+msgid "Classic sports coupe"
+msgstr "Klassisk sportskupé"
+
+msgid "Classic sedan"
+msgstr "Klassisk sedan"
+
+msgid "Vintage compact"
+msgstr "Liten veteranbil"
+
+msgid "Electric sedan"
+msgstr "Elektrisk sedan"
+
+msgid "Police SUV"
+msgstr "Politi-SUV"
+
+msgid "Track sports car"
+msgstr "Racerbil"
+
+msgid "Small convertible"
+msgstr "Liten kabriolet"
+
+msgid "Classic moped"
+msgstr "Klassisk moped"
+
+msgid "Wheel loader"
+msgstr "Hjullaster"
+
+msgid "Tracked excavator"
+msgstr "Beltegraver"
+
+msgid "Tram"
+msgstr "Trikk"
+
+msgid "Click the pictures to choose your vehicle and driver."
+msgstr "Trykk på bildene for å velge kjøretøy og sjåfør."
+
+msgid "★ %d points"
+msgstr "★ %d poeng"
+
+msgid "Take a job"
+msgstr "Ta et oppdrag"
+
+msgid "★ All stars found!"
+msgstr "★ Alle stjerner funnet!"
+
+#, c-format
+msgid "★ %d star left"
+msgid_plural "★ %d stars left"
+msgstr[0] "★ %d stjerne igjen"
+msgstr[1] "★ %d stjerner igjen"
+
+msgid "Can you find my red shoe? I lost it farther along the pavement."
+msgstr ""
+"Kan du finne den røde skoen min? Jeg mistet den litt lenger borte på "
+"fortauet."
+
+msgid "My shoe! Now I won’t have to hop home. Thank you!"
+msgstr "Skoen min! Nå slipper jeg å hinke hjem. Takk!"
+
+msgid "Find the red shoe on the pavement."
+msgstr "Let etter den røde skoen på fortauet."
+
+msgid "Bring the red shoe back to the neighbour."
+msgstr "Ta med den røde skoen tilbake til naboen."
+
+msgid "Can you find my cat? Look for white paws along this pavement."
+msgstr "Kan du finne katten min? Se etter hvite poter langs dette fortauet."
+
+msgid "There you are, Socks! Thank you for bringing her home."
+msgstr "Der er du, Socks! Takk for at du fulgte henne hjem."
+
+msgid "Walk back to the neighbour with the cat."
+msgstr "Gå tilbake til naboen sammen med katten."
+
+msgid "Find the cat with white paws."
+msgstr "Finn katten med de hvite potene."
+
+msgid "Collect seedlings at the square"
+msgstr "Samle frøplanter på plassen"
+
+msgid "Deliver herbs to the clinic garden"
+msgstr "Lever urter til klinikken hage"
+
+msgid "Bring flowers to the marina"
+msgstr "Ta med blomster til marinaen"
+
+msgid "Pick up soup ingredients at the square"
+msgstr "Plukk opp suppe ingredienser på plassen"
+
+msgid "Serve lunch to the clinic staff"
+msgstr "Server lunsj til klinikkens ansatte"
+
+msgid "Serve soup to the boat crews"
+msgstr "Server suppe til båtbesetningene"
+
+msgid "Back in a safe place."
+msgstr "Nå er du på et trygt sted igjen."
+
+msgid "Stuck? Press R"
+msgstr "Sitter du fast? Trykk R"
+
+msgid "No clear spot yet. Try again in a moment."
+msgstr "Det er ingen ledig plass akkurat nå. Prøv igjen om litt."
+
+msgid "Take the car to the petrol station."
+msgstr "Kjør bilen til bensinstasjonen."
+
+msgid ""
+"The car is on your flatbed. Follow the arrows to the petrol station for 20 "
+"coins."
+msgstr ""
+"Bilen står på lasteplanet. Følg pilene til bensinstasjonen, så får du 20 "
+"mynter."
+
+msgid "My vehicle"
+msgstr "Mitt kjøretøy"
+
+msgid "Flashing"
+msgstr "Blinkende"
+
+msgid "Steady"
+msgstr "Fast lys"
+
+msgid "Off"
+msgstr "Av"
+
+msgid "Ducks park free"
+msgstr "Ender parkerer gratis"
+
+msgid "Hats on wheels only"
+msgstr "Kun hatter på hjul"
+
+msgid "Save a spot for a snail"
+msgstr "Hold av plass til en snegl"
+
+msgid "Park with a smile"
+msgstr "Parker med et smil"
+
+msgid "Bananas need a ticket"
+msgstr "Bananer må ha parkeringsbillett"
+
+msgid "LANGUAGE_SELF_NAME"
+msgstr "Norsk bokmål"
+
+msgid ""
+"ICE CREAM  4\n"
+"HOT DOG  5"
+msgstr ""
+"IS  4\n"
+"PØLSE I BRØD  5"
+
+msgid "FRUIT  &  VEG"
+msgstr "FRUKT OG GRØNT"
+
+msgid "CHECKOUT"
+msgstr "KASSE"
+
+msgid "WOOD-FIRED PIZZA"
+msgstr "VEDOVNSPIZZA"
+
+msgid "MARGHERITA  ·  8 COINS"
+msgstr "MARGHERITA  ·  8 MYNTER"
+
+msgid "EAT IN  ·  TAKEAWAY"
+msgstr "SPIS HER  ·  TA MED"
+
+msgid "TAKEAWAY"
+msgstr "TA MED"
+
+msgid "PICK AND MIX"
+msgstr "SMÅGODT"
+
+msgid "Raspberry"
+msgstr "Raspberry"
+
+msgid "Lemon"
+msgstr "Lemon"
+
+msgid "Liquorice"
+msgstr "Liquorice"
+
+msgid "Vanilla"
+msgstr "Vanilla"
+
+msgid "Strawberry"
+msgstr "Jordbær"
+
+msgid "Orange"
+msgstr "Orange"
+
+msgid "Grape"
+msgstr "Grape"
+
+msgid "No songs available in this language yet."
+msgstr "Det finnes ingen sanger på dette språket ennå."
+
+msgid "HARBOR FUEL"
+msgstr "HARBOR FUEL"
+
+msgid "Harbor Fuel  →"
+msgstr "Harbor Fuel  →"
+
+msgid "←  Harbor Fuel"
+msgstr "←  Harbor Fuel"
+
+msgid "Tow drop-off"
+msgstr "Levering av biler"
+
+msgid "Monster truck"
+msgstr "Monstertruck"
+
+msgid "A-tractor"
+msgstr "A-traktor"
+
+msgid "Classic cruiser"
+msgstr "Amerikansk veteranbil"
+
+msgid "Taxi"
+msgstr "Taxi"
+
+msgid "Food truck"
+msgstr "Matvogn"
+
+msgid "HARBOR TOWN SCHOOL"
+msgstr "HARBOR TOWN SKOLE"
+
+msgid "HARBOR TOWN GARAGE"
+msgstr "HARBOR TOWN BILVERKSTED"
+
+msgid "THE SQUARE"
+msgstr "TORGET"
+
+msgid "HEALTH CENTRE"
+msgstr "HELSESENTER"
+
+msgid "MARINA"
+msgstr "SMÅBÅTHAVN"
+
+msgid "VÄSTRA TORGET"
+msgstr "VÄSTRA TORGET"
+
+msgid "VÄSTERÄNGEN"
+msgstr "VÄSTERÄNGEN"
+
+msgid "HARBOR TOWN"
+msgstr "HARBOR TOWN"
+
+msgid "Quit game"
+msgstr "Avslutt spillet"
+
+msgid "Quit game · F10"
+msgstr "Avslutt spillet · F10"
+
+msgid "Do you want to quit the game?"
+msgstr "Vil du avslutte spillet?"
+
+msgid "Yes"
+msgstr "Ja"
+
+msgid "No"
+msgstr "Nei"
+
+msgid "About"
+msgstr "Om"
+
+msgid "About the game"
+msgstr "Om spillet"
+
+msgid "Close"
+msgstr "Lukk"
+
+msgid "Version %s"
+msgstr "Versjon %s"
+
+msgid ""
+"Explore Harbor Town with Axel and Alma. Walk along the canal, take the tram "
+"or drive a tow truck to help a neighbour. You choose where to go next."
+msgstr ""
+"Utforsk Harbor Town med Axel og Alma. Gå langs kanalen, ta trikken eller "
+"kjør bergingsbil for å hjelpe en nabo. Du bestemmer hvor turen går videre."
+
+msgid ""
+"My name is Daniel Nylander. I made this game for my children, who have "
+"autism and a language disorder. I wanted them to have a town they could "
+"explore at their own pace. That is why you can choose a vehicle by its "
+"picture and read what people say in speech bubbles."
+msgstr ""
+"Jeg heter Daniel Nylander. Jeg laget dette spillet for barna mine, som har "
+"autisme og språkforstyrrelse. Jeg ville gi dem en by de kunne utforske i "
+"sitt eget tempo. Derfor kan du velge kjøretøy ved å trykke på et bilde og "
+"lese hva folk sier i snakkeboblene."
+
+msgid "DISCO RINGS"
+msgstr "DISKORINGER"
+
+msgid "Oops! One danced away!"
+msgstr "Oi! Én danset av sted!"
+
+msgid "ROCKET ICE"
+msgstr "RAKETTIS"
+
+msgid "3, 2, 1 ... brain freeze!"
+msgstr "3, 2, 1 … hjernefrys!"
+
+msgid "HOT DOG YOGA"
+msgstr "PØLSEYOGA"
+
+msgid "Breathe in. Ketchup out."
+msgstr "Pust inn. Ketchup ut."
+
+#. Litres shown on a stationary fuel dispenser.
+msgid "0.00 L"
+msgstr "0,00 L"
+
+msgid "95    17.90"
+msgstr "95    17,90"
+
+msgid "98    18.90"
+msgstr "98    18,90"
+
+msgid "D     17.50"
+msgstr "D     17,50"
+
+msgid "Allow crashes"
+msgstr "Tillat kollisjoner"
+
+msgid "17.90 kr/L"
+msgstr "17,90 kr/L"
+
+msgid "18.90 kr/L"
+msgstr "18,90 kr/L"
+
+msgid "17.50 kr/L"
+msgstr "17,50 kr/L"
+
+msgid "Allow driving through red lights"
+msgstr "Tillat kjøring på rødt lys"
+
+msgid "Red light! Stop at the line and wait for green."
+msgstr "Rødt lys! Stopp ved linjen og vent på grønt."

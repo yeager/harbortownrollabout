@@ -13,6 +13,10 @@ var shop_card := PanelContainer.new()
 var panel := VBoxContainer.new()
 var first_product: Button
 var till_sound := AudioStreamPlayer.new()
+enum ReceiptKind { NONE, PURCHASE, SHORTFALL, SNACK }
+var receipt_kind := ReceiptKind.NONE
+var receipt_subject := ""
+var receipt_amount := 0
 var receipt: Label
 var snack_buttons := {}
 var balance: Label
@@ -178,6 +182,7 @@ func update_customer(foot: bool, pos: Vector3, active: bool) -> void:
 				break
 	var entering := index!=inside or not shop_card.visible
 	if index!=inside:
+		receipt_kind = ReceiptKind.NONE
 		if inside>=0: awnings[inside].show()
 		inside=index
 		if inside>=0:
@@ -215,6 +220,7 @@ func rebuild_menu() -> void:
 	receipt=Label.new()
 	receipt.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
 	panel.add_child(receipt)
+	_refresh_receipt()
 	basket = Label.new()
 	basket.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	panel.add_child(basket)
@@ -241,7 +247,9 @@ func eat_snack(product: String) -> void:
 	game._save_preferences()
 	game.happy_seconds = 25
 	game._refresh_ui()
-	receipt.text = tr("%s feels extra happy!") % ("Alma" if game.play_as_alma else "Axel")
+	receipt_kind = ReceiptKind.SNACK
+	receipt_subject = "Alma" if game.play_as_alma else "Axel"
+	_refresh_receipt()
 	refresh_basket()
 	if restore_focus:
 		for eat: Button in snack_buttons.values():
@@ -269,9 +277,9 @@ func purchase(shop: int, item: int) -> void:
 	if shop!=inside or not shop_card.is_visible_in_tree() or not game.walker.visible or game.paused: return
 	var cost:int=PRICES[shop][item]
 	if game.wallet<cost:
-		var missing: int = cost-game.wallet
-		var amount := tr_n("You need %d more coin.", "You need %d more coins.", missing) % missing
-		receipt.text=amount+" "+tr("Complete a mission to earn coins.")
+		receipt_kind = ReceiptKind.SHORTFALL
+		receipt_amount = cost-game.wallet
+		_refresh_receipt()
 		return
 	var product:String=MENUS[shop][item]
 	game.wallet-=cost
@@ -280,7 +288,22 @@ func purchase(shop: int, item: int) -> void:
 	refresh_basket()
 	game._save_preferences()
 	game._refresh_ui()
-	receipt.text=tr("%s · Paid %d coins. Thank you!") % [tr(product),cost]
+	receipt_kind = ReceiptKind.PURCHASE
+	receipt_subject = product
+	receipt_amount = cost
+	_refresh_receipt()
+
+func _refresh_receipt() -> void:
+	match receipt_kind:
+		ReceiptKind.PURCHASE:
+			receipt.text = tr("%s · Paid %d coins. Thank you!") % [tr(receipt_subject),receipt_amount]
+		ReceiptKind.SHORTFALL:
+			var missing := tr_n("You need %d more coin.", "You need %d more coins.", receipt_amount) % receipt_amount
+			receipt.text = missing+" "+tr("Complete a mission to earn coins.")
+		ReceiptKind.SNACK:
+			receipt.text = tr("%s feels extra happy!") % receipt_subject
+		ReceiptKind.NONE:
+			receipt.text = ""
 
 func _lettering(words: String, pos: Vector3, pixel_size: float, color: Color) -> Label3D:
 	var letters := Label3D.new()
@@ -397,7 +420,17 @@ func _grocery(x: float) -> void:
 		part("Milk carton",Vector3(cx,1.29,47.69),Vector3(.20,.42,.19),ivory)
 		part("Carton label",Vector3(cx,1.26,47.58),Vector3(.18,.12,.025),Color("#679fc3"))
 
+func _neon_outline(center: Vector3, points: PackedVector2Array, hue: Color) -> void:
+	var finish: Material = get_parent()._material(hue,.32,true)
+	for i in range(1,points.size()):
+		var segment := points[i]-points[i-1]
+		var mid := (points[i]+points[i-1])*.5
+		var tube := part("Neon tube",center+Vector3(mid.x,mid.y,0),Vector3(segment.length()+.025,.047,.047),hue)
+		tube.rotation.z = segment.angle()
+		tube.material_override = finish
+
 func _pizzeria_front(x: float) -> void:
+	_neon_outline(Vector3(x-2.4,2.05,42.01),PackedVector2Array([Vector2(-.46,.26),Vector2(-.2,.37),Vector2(.18,.36),Vector2(.48,.23),Vector2(.1,-.39),Vector2(-.46,.26)]),Color("#ff9953"))
 	var wine := Color("#951d20")
 	var gold := Color("#ffdb72")
 	var timber := Color("#54372c")
@@ -468,6 +501,13 @@ func _pizzeria_front(x: float) -> void:
 	_shop_light(Vector3(x,2.8,46.0),Color("#ffddab"),1.15)
 
 func _sweet_shop(x: float) -> void:
+	var spiral := PackedVector2Array()
+	for i in 33:
+		var angle := float(i)*TAU/20
+		spiral.append(Vector2(cos(angle),sin(angle))*(.04+.009*i))
+	var center := Vector3(x+2.4,2.08,42.02)
+	_neon_outline(center,spiral,Color("#ff70ac"))
+	_neon_outline(center,PackedVector2Array([Vector2(0,-.22),Vector2(.13,-.58)]),Color("#70ffdc"))
 	var frame := Color("#28282c")
 	var pearl := Color("#fff4df")
 	var palette := [Color("#ff78a6"),Color("#ffd25b"),Color("#64dfd0"),Color("#fc8a47"),Color("#b4a6fc")]

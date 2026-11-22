@@ -1,0 +1,1283 @@
+#
+msgid ""
+msgstr ""
+"Language: es\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Harbor Town Rollabout"
+msgstr "Harbor Town Rollabout"
+
+msgid "Emergency Vehicles"
+msgstr "Vehículos de emergencia"
+
+msgid "Help at the square"
+msgstr "Ayuda en la plaza"
+
+msgid "Pick up the medic"
+msgstr "Recoge al sanitario"
+
+msgid "Deliver first aid to the marina"
+msgstr "Entrega primeros auxilios al puerto deportivo"
+
+msgid "Ambulance"
+msgstr "Ambulancia"
+
+msgid "Police car"
+msgstr "Coche de policía"
+
+msgid "Fire engine"
+msgstr "Camión de bomberos"
+
+msgid "Mission complete. Well done!"
+msgstr "¡Misión cumplida! ¡Bien hecho!"
+
+msgid "All missions complete! The city thanks you."
+msgstr "¡Has completado todas las misiones! La ciudad te da las gracias."
+
+msgid "Cross a bridge to the east side."
+msgstr "Cruza un puente hacia el lado este."
+
+msgid "Follow the quay to the green marker by the boats."
+msgstr "Sigue el muelle hasta la marca verde junto a los barcos."
+
+msgid "Follow the green mission marker."
+msgstr "Sigue la marca verde de la misión."
+
+msgid "MISSION"
+msgstr "MISIÓN"
+
+msgid "Lights OFF"
+msgstr "Luces OFF"
+
+msgid "Lights ON"
+msgstr "Luces encendidos"
+
+msgid "Siren OFF"
+msgstr "Sirena apagada"
+
+msgid "Siren ON"
+msgstr "Sirena encendida"
+
+msgid "Engine ON"
+msgstr "Motor encendido"
+
+msgid "Engine OFF"
+msgstr "Motor apagado"
+
+msgid "Pause"
+msgstr "Pausa"
+
+msgid ""
+"W / ↑  Drive     A D / ← →  Steer     S / ↓  Brake or reverse\n"
+"Release to slow down   ·   Space to help   ·   P to pause"
+msgstr ""
+"W / ↑  Avanza     A D / ← →  Gira     S / ↓  Frena o da marcha atrás\n"
+"Suelta para ir más despacio   ·   Espacio para ayudar   ·   P para pausar"
+
+msgid "Start a gentle drive"
+msgstr "Comience una conducción suave"
+
+msgid "Settings"
+msgstr "Ajustes"
+
+msgid "Close settings"
+msgstr "Cerrar ajustes"
+
+msgid "Driving mode"
+msgstr "Modo de conducción"
+
+msgid "Gentle driving · up to 30 km/h"
+msgstr "Manejo suave · hasta 30 km/h"
+
+msgid "Full speed"
+msgstr "Velocidad total"
+
+msgid "Preview vehicle sound"
+msgstr "Escuchar el vehículo"
+
+msgid "Game volume"
+msgstr "Volumen del juego"
+
+msgid "Emergency lights in traffic"
+msgstr "Luces azules de otros vehículos"
+
+msgid "Traffic lights · Flashing blue"
+msgstr "Luces azules de emergencia · Intermitentes"
+
+msgid "Traffic lights · Steady blue"
+msgstr "Luces azules de emergencia · Fijas"
+
+msgid "Traffic lights · Blue lights off"
+msgstr "Luces azules de emergencia · Apagadas"
+
+msgid "Resume"
+msgstr "Continuar"
+
+msgid "MISSION %d / %d   ·   %s"
+msgstr "MISIÓN %d / %d   ·   %s"
+
+msgid "ALL MISSIONS COMPLETE"
+msgstr "TODAS LAS MISIONES COMPLETADAS"
+
+msgid "Stop preview"
+msgstr "Stop vista"
+
+msgid "Preview engine"
+msgstr "Escuchar el motor"
+
+msgid "Preview siren"
+msgstr "Escuchar la sirena"
+
+msgid ""
+"Choose a vehicle and drive to three missions.\n"
+"Take your time. You control the lights and siren."
+msgstr ""
+"Elige un vehículo y conduce a tres misiones.\n"
+"Tómate tu tiempo, controlas las luces y la sirena."
+
+msgid "Start driving"
+msgstr "Empezar a conducir"
+
+msgid "All missions complete!"
+msgstr "¡Todas las misiones completas!"
+
+msgid ""
+"You helped the whole city. Well done, Axel!\n"
+"Ready for another drive?"
+msgstr ""
+"Ayudaste a toda la ciudad. ¡Bien hecho, Axel!\n"
+"¿Listo para otra unidad?"
+
+msgid "Drive again"
+msgstr "Conduce de nuevo"
+
+msgid "You can change vehicles here and continue your mission."
+msgstr "Aquí puedes cambiar de vehículo y seguir con tu misión."
+
+msgid "Continue driving"
+msgstr "Continúa conduciendo"
+
+msgid "Stop here to help."
+msgstr "Para aquí para ayudar."
+
+msgid "Helping …"
+msgstr "Ayudando..."
+
+msgid "Paused — take your time."
+msgstr "Juego en pausa. Tómate tu tiempo."
+
+msgid "Speed  %02d km/h"
+msgstr "Velocidad  %02d km/h"
+
+msgid "Gas"
+msgstr "Acelerar"
+
+msgid "Left"
+msgstr "Izquierda"
+
+msgid "Brake"
+msgstr "Frenar"
+
+msgid "Right"
+msgstr "Derecha"
+
+msgid "Language"
+msgstr "Idioma"
+
+msgid "Get out · F"
+msgstr "Sal de aquí. · F"
+
+msgid "Enter %s"
+msgstr "Sube a bordo: %s"
+
+msgid "Walk to a vehicle"
+msgstr "Acércate a un vehículo"
+
+msgid "Stop first to get out."
+msgstr "Paren primero para salir."
+
+msgid "Walk with WASD or arrows · F to enter a vehicle"
+msgstr "Camina con WASD o las flechas · Pulsa F para subir"
+
+msgid "Time · Day"
+msgstr "Hora del día · Día"
+
+msgid "Time · Night"
+msgstr "Hora del día · Noche"
+
+msgid "Time · Day and night"
+msgstr "Hora del día · Día y noche"
+
+msgid "Vehicle depot"
+msgstr "Depósito de vehículos"
+
+msgid "Both doors are blocked. Park where there is more room."
+msgstr "Las dos puertas están bloqueadas. Aparca donde haya más espacio."
+
+msgid "Activity"
+msgstr "Actividad"
+
+msgid "Three missions"
+msgstr "Tres misiones"
+
+msgid "Free exploration"
+msgstr "Exploración gratuita"
+
+msgid "Explore on foot or by vehicle. Stop at the depot to change vehicles."
+msgstr ""
+"Explora a pie o en un vehículo. Para en el depósito para cambiar de "
+"vehículo."
+
+msgid ""
+"W / ↑ Drive   ·   A D / ← → Steer   ·   S / ↓ Brake or reverse   ·   F Get "
+"out   ·   P Pause"
+msgstr ""
+"W / ↑ Avanza   ·   A D / ← → Gira   ·   S / ↓ Frena o da marcha atrás   ·   "
+"F Baja   ·   P Pausa"
+
+msgid "Continue walking"
+msgstr "Seguir caminando"
+
+msgid "Walk up to a parked vehicle to get in."
+msgstr "Acércate a un vehículo aparcado para subir."
+
+msgid "Stand here to help"
+msgstr "Quédate aquí para ayudar"
+
+msgid "Press Space to help"
+msgstr "Espacio de prensa para ayudar"
+
+msgid "My vehicle · Flashing"
+msgstr "Mi vehículo · Flashing"
+
+msgid "My vehicle · Steady"
+msgstr "Mi vehículo · Tranquila."
+
+msgid "Traffic sirens"
+msgstr "Sirenas de otros vehículos"
+
+msgid "Reverse"
+msgstr "Inversión"
+
+msgid "Driver view · C"
+msgstr "Vista del conductor · C"
+
+msgid "Outside view · C"
+msgstr "Vista exterior · C"
+
+msgid "Forward"
+msgstr "Adelante."
+
+msgid "Stopped"
+msgstr "Detenido."
+
+msgid "Reversing"
+msgstr "Reversión"
+
+msgid "Ride the tram"
+msgstr "Viajar en tranvía"
+
+msgid "Drive the tram"
+msgstr "Conducir el tranvía"
+
+msgid "Season · Automatic"
+msgstr "Estación del año · Automática"
+
+msgid "Spring"
+msgstr "Primavera"
+
+msgid "Summer"
+msgstr "Verano"
+
+msgid "Autumn"
+msgstr "Otoño"
+
+msgid "Winter"
+msgstr "Invierno"
+
+msgid "Weather · Automatic"
+msgstr "Tiempo · Automático"
+
+msgid "Sun"
+msgstr "Sol"
+
+msgid "Rain"
+msgstr "Lluvia"
+
+msgid "Snow"
+msgstr "Nieve"
+
+msgid "Slush"
+msgstr "Nieve derretida"
+
+msgid "Hello!"
+msgstr "¡Hola!"
+
+msgid "How are you?"
+msgstr "¿Cómo estás?"
+
+msgid "Hi there!"
+msgstr "¡Hola!"
+
+msgid "Horn · H"
+msgstr "Claxon · H"
+
+msgid "Pick up your passenger"
+msgstr "Recoge a tu pasajero"
+
+msgid "Drop off your passenger"
+msgstr "Deja a tu pasajero en su destino"
+
+msgid "Passenger on board."
+msgstr "Pasajero a bordo."
+
+msgid "Thank you for the ride!"
+msgstr "¡Gracias por el paseo!"
+
+msgid "Drive the motorboat"
+msgstr "Conducir la lancha"
+
+msgid ""
+"W / ↑ Throttle · A D / ← → Steer · S / ↓ Slow or reverse · H Horn · P Pause"
+msgstr ""
+"W / ↑ Acelera · A D / ← → Gira · S / ↓ Frena o da marcha atrás · H Bocina · "
+"P Pausa"
+
+#, c-format
+msgid "%d coin"
+msgid_plural "%d coins"
+msgstr[0] "%d moneda"
+msgstr[1] "%d monedas"
+
+msgid "Well done, %s! Ready for another drive?"
+msgstr "¡Muy bien, %s! ¿Damos otra vuelta?"
+
+msgid "Character"
+msgstr "Cara"
+
+msgid "Wallet"
+msgstr "Monedero"
+
+msgid "Phone · T"
+msgstr "Teléfono · T"
+
+msgid "No messages yet."
+msgstr "Aún no hay mensajes."
+
+msgid "Taxi requested at the square."
+msgstr "Taxi solicitado en la plaza."
+
+msgid "Please take me to the marina."
+msgstr "Por favor llévame al puerto deportivo."
+
+msgid "Taxi requested at the clinic."
+msgstr "Alguien ha pedido un taxi en la clínica."
+
+msgid "Please take me to the square."
+msgstr "Por favor llévame a la plaza."
+
+msgid "Taxi requested at the marina."
+msgstr "Taxi solicitado en el puerto deportivo."
+
+msgid "Please take me to the clinic."
+msgstr "Por favor llévame a la clínica."
+
+msgid "A neighbour needs help at the square."
+msgstr "Un vecino necesita ayuda en la plaza."
+
+msgid "A medic is waiting at the clinic. Please pick them up."
+msgstr "Hay un sanitario esperando en la clínica. Ve a recogerlo."
+
+msgid "Please bring the first-aid supplies to the marina."
+msgstr "Por favor, traiga los primeros auxilios al puerto deportivo."
+
+msgid "Fare complete. You earned 15 coins."
+msgstr "Te ganaste 15 monedas."
+
+msgid "Thank you for helping! You earned 10 coins."
+msgstr "¡Gracias por ayudar! Has ganado 10 monedas."
+
+msgid "Café"
+msgstr "Café"
+
+msgid "Sweet shop"
+msgstr "Tienda de golosinas"
+
+msgid "Cinnamon bun"
+msgstr "Bollo de canela"
+
+msgid "Berry cordial"
+msgstr "Refresco de bayas"
+
+msgid "Ice cream"
+msgstr "Helado"
+
+msgid "Hot dog"
+msgstr "Perrito caliente"
+
+msgid "Margherita pizza"
+msgstr "Pizza margarita"
+
+msgid "Pick and mix"
+msgstr "Golosinas a granel"
+
+msgid "%s · %d coins"
+msgstr "%s · %d monedas"
+
+#, c-format
+msgid "You need %d more coin."
+msgid_plural "You need %d more coins."
+msgstr[0] "Te falta %d moneda."
+msgstr[1] "Te faltan %d monedas."
+
+msgid "%s · Paid %d coins. Thank you!"
+msgstr "%s · Has pagado %d monedas. ¡Gracias!"
+
+msgid "Recovery truck"
+msgstr "Grúa"
+
+msgid "Collect the car with a smoking bonnet."
+msgstr "Recoge el coche que echa humo por el capó."
+
+msgid "Take the car to the workshop."
+msgstr "Lleve el coche al taller."
+
+msgid "Collect the car with a missing wheel."
+msgstr "Recoge el coche al que le falta una rueda."
+
+msgid "Recovery complete. You earned 20 coins."
+msgstr "¡Coche entregado! Has ganado 20 monedas."
+
+msgid "Passenger ride · P to pause"
+msgstr "Vas de pasajero · P para pausar"
+
+msgid "W / ↑ Accelerate · S / ↓ Brake · Automatic station stops"
+msgstr "W / ↑ Acelera · S / ↓ Frena · Paradas automáticas en las estaciones"
+
+msgid "%s · Departure in %d s"
+msgstr "%s · Salida en %d s"
+
+msgid "Next stop: %s · %d m · %d km/h"
+msgstr "Siguiente parada: %s · %d m · %d km/h"
+
+msgid "Tram bell · H"
+msgstr "Campana del tranvía · H"
+
+msgid ""
+"A car is smoking on the main street. Follow the arrows and stop beside it."
+msgstr ""
+"Hay un coche echando humo en la calle principal. Sigue las flechas y para a "
+"su lado."
+
+msgid ""
+"A car on the east bank has lost a wheel. Follow the arrows to pick it up."
+msgstr ""
+"Un coche ha perdido una rueda en la orilla este. Sigue las flechas para "
+"recoger el coche."
+
+msgid ""
+"The car is on your flatbed. Follow the arrows to the workshop for 20 coins."
+msgstr ""
+"El coche ya está en la grúa. Sigue las flechas hasta el taller para ganar 20"
+" monedas."
+
+msgid "Car loaded onto the flatbed."
+msgstr "El coche ya está en la plataforma."
+
+msgid "Your purchases"
+msgstr "Tus compras"
+
+msgid "%s × %d"
+msgstr "%s × %d"
+
+msgid "Waiting for a green light"
+msgstr "Esperando a que el semáforo se ponga verde"
+
+msgid ""
+"Steer with A and D or the arrow keys. Hold the left mouse button for "
+"throttle. Hold the right to slow down, then reverse."
+msgstr ""
+"Cargador con A y D o las teclas de flecha. Sostenga el botón izquierdo del "
+"ratón para el acelerador. Sostenga la derecha para frenar, y luego revertir."
+
+msgid "Start boating"
+msgstr "Empezar el paseo en barco"
+
+msgid "Continue boating"
+msgstr "Seguir navegando"
+
+msgid "The tram drives itself and stops at each platform."
+msgstr "El tranvía se conduce a sí mismo y se detiene en cada plataforma."
+
+msgid ""
+"Control the speed. The tram follows the rails and stops at each platform."
+msgstr ""
+"Controla la velocidad. El tranvía sigue los carriles y se detiene en cada "
+"plataforma."
+
+msgid "Taxi fares"
+msgstr "Tarifas de taxi"
+
+msgid "Roadside recovery"
+msgstr "Ayuda en carretera"
+
+msgid "Pick up a passenger at the square and drive them to the marina."
+msgstr "Recoge a tu pasajero en la plaza y llévalo al puerto deportivo."
+
+msgid "Collect the car with a smoking bonnet and take it to the workshop."
+msgstr "Recoge el coche que echa humo por el capó y llévalo al taller."
+
+msgid "Complete a mission to earn coins."
+msgstr "Completa una misión para ganar monedas."
+
+msgid "Tab to choose · Enter to buy"
+msgstr "Tab para elegir · Intro para comprar"
+
+msgid "Enter to buy"
+msgstr "Intro para comprar"
+
+msgid "F · Enter %s"
+msgstr "F · Subir al vehículo (%s)"
+
+msgid "Well done, %s!"
+msgstr "Bien hecho, %s!"
+
+msgid "First-aid supplies delivered to the marina. You earned 10 coins."
+msgstr ""
+"¡Has entregado el material de primeros auxilios en el puerto deportivo! Has "
+"ganado 10 monedas."
+
+msgid "Stop here to load the car."
+msgstr "Para aquí para subir el coche a la grúa."
+
+msgid "Stop here to unload the car."
+msgstr "Para aquí para bajar el coche de la grúa."
+
+msgid "Loading the car …"
+msgstr "Subiendo el coche…"
+
+msgid "Unloading the car …"
+msgstr "Bajando el coche…"
+
+msgid "Press Space to load the car."
+msgstr "Pulsa la barra espaciadora para subir el coche."
+
+msgid "Press Space to unload the car."
+msgstr "Pulsa la barra espaciadora para bajar el coche."
+
+msgid "Stop for your passenger."
+msgstr "Para junto a tu pasajero."
+
+msgid "Stop to let your passenger out."
+msgstr "Para para que pueda bajar tu pasajero."
+
+msgid "Your passenger is getting in …"
+msgstr "Tu pasajero está subiendo…"
+
+msgid "Your passenger is getting out …"
+msgstr "Tu pasajero está bajando…"
+
+msgid "Press Space to pick up your passenger."
+msgstr "Pulsa la barra espaciadora para que suba tu pasajero."
+
+msgid "Press Space to let your passenger out."
+msgstr "Pulsa la barra espaciadora para que baje tu pasajero."
+
+msgid "Return to your taxi"
+msgstr "Regresa a tu taxi"
+
+msgid "Return to your recovery truck"
+msgstr "Vuelve a tu grúa"
+
+msgid "Radio on · J"
+msgstr "Radio encendida · J"
+
+msgid "Radio off · J"
+msgstr "Radio apagada · J"
+
+msgid "City bus"
+msgstr "Autobús urbano"
+
+msgid "Bus route 502"
+msgstr "Línea de autobús 502"
+
+msgid "Collect passengers at the square."
+msgstr "Recoge a los pasajeros en la plaza."
+
+msgid "Drop off passengers at the school."
+msgstr "Deja a los pasajeros en la escuela."
+
+msgid "Collect passengers at the marina."
+msgstr "Recoge a los pasajeros en el puerto deportivo."
+
+msgid "Drop off passengers at the clinic."
+msgstr "Deja a los pasajeros en la clínica."
+
+msgid "Passengers on board."
+msgstr "Los pasajeros ya están a bordo."
+
+msgid "Bus journey complete. You earned 15 coins."
+msgstr "¡Has terminado el recorrido! Has ganado 15 monedas."
+
+msgid "A pupil is waiting at the square."
+msgstr "Hay un estudiante esperando en la plaza."
+
+msgid "Please take me to school."
+msgstr "Por favor llévame a la escuela."
+
+msgid "A pupil is waiting at school."
+msgstr "Hay un estudiante esperando en la escuela."
+
+msgid "Pick up the pupil"
+msgstr "Recoge la pupila"
+
+msgid "Drop off the pupil"
+msgstr "Suelta al alumno."
+
+msgid "Return to your bus"
+msgstr "Regresa a tu autobús"
+
+msgid "Graphics"
+msgstr "Gráficos"
+
+msgid "Sound"
+msgstr "Sonido"
+
+msgid "Driving"
+msgstr "Conducción"
+
+msgid "World"
+msgstr "Mundo"
+
+msgid "Renderer changes apply next time you start the game."
+msgstr ""
+"El cambio de modo gráfico se aplicará la próxima vez que abras el juego."
+
+msgid "Could not save graphics settings."
+msgstr "No podía guardar la configuración gráfica."
+
+msgid "The ducks voted. They love your jacket!"
+msgstr "Los patos han votado. ¡Les encanta tu chaqueta!"
+
+msgid "Snowmobile"
+msgstr "Moto de nieve"
+
+msgid "Collect passengers at Västra torget."
+msgstr "Recoge a los pasajeros en Västra torget."
+
+msgid "Drop off passengers at Västerängen."
+msgstr "Deja a los pasajeros en Västerängen."
+
+msgid "↑  Café · Snack kiosk"
+msgstr "↑  Café · Quiosco"
+
+msgid "Forward+ · NVIDIA DLSS (experimental; RTX required)"
+msgstr "Forward+ · NVIDIA DLSS (experimental, requiere RTX)"
+
+msgid ""
+"DLSS is experimental. It needs the NGX-enabled engine and a supported NVIDIA"
+" RTX GPU/driver; otherwise it continues without DLSS. Restart to apply."
+msgstr ""
+"DLSS es experimental. Requiere un motor con NGX, una tarjeta NVIDIA RTX "
+"compatible y un controlador adecuado. Si falta algo, el juego funciona sin "
+"DLSS. Reinicia el juego para aplicar el cambio."
+
+msgid "Check the crossing at the square"
+msgstr "Revisa el paso de peatones de la plaza"
+
+msgid "Check the clinic entrance"
+msgstr "Revisa la entrada de la clínica"
+
+msgid "Patrol the marina"
+msgstr "Patrulla el puerto deportivo"
+
+msgid "Check the hydrant at the square"
+msgstr "Compruebe el hidratante en la plaza"
+
+msgid "Meet the fire safety team at the clinic"
+msgstr "Reúnete con el equipo de prevención de incendios en la clínica"
+
+msgid "Check the rescue equipment at the marina"
+msgstr "Revisa el equipo de rescate en el puerto deportivo"
+
+msgid "Collect parcels at the square"
+msgstr "Recoger paquetes en la plaza"
+
+msgid "Deliver a parcel to the clinic"
+msgstr "Entregar un paquete a la clínica"
+
+msgid "Deliver the last parcel to the marina"
+msgstr "Entrega el último paquete al puerto deportivo"
+
+msgid "Collect warm blankets at the square"
+msgstr "Recoger mantas calientes en la plaza"
+
+msgid "Bring blankets to the clinic"
+msgstr "Trae mantas a la clínica"
+
+msgid "Bring blankets to the marina"
+msgstr "Trae mantas al puerto deportivo"
+
+msgid "Have you done your homework? — Mum"
+msgstr "¿Has hecho los deberes? — Mamá"
+
+msgid "A duck just beat me to the ferry. — Grandpa"
+msgstr "Un pato llegó al ferry antes que yo. — Abuelo"
+
+msgid "I saved you a bun. It only has one tiny bite missing! — Mum"
+msgstr "Te he guardado un bollo. ¡Solo le falta un mordisquito! — Mamá"
+
+msgid "Eat ice cream"
+msgstr "Comer helado"
+
+msgid "Eat hot dog"
+msgstr "Comer un perrito caliente"
+
+msgid "%s feels extra happy!"
+msgstr "%s ¡Se siente más feliz!"
+
+msgid "Current job"
+msgstr "Misión actual"
+
+msgid "Tab to choose · Enter to buy or eat"
+msgstr "Tab para elegir · Intro para comprar o comer"
+
+msgid "Ambulance calls"
+msgstr "Avisos de ambulancia"
+
+msgid "Police patrols"
+msgstr "patrullas policiales"
+
+msgid "Fire safety checks"
+msgstr "Controles de seguridad de incendios"
+
+msgid "Parcel deliveries"
+msgstr "Entregas de Parcel"
+
+msgid "Blanket deliveries"
+msgstr "Entregas en blanco"
+
+msgid "Hold V and move the mouse to look around"
+msgstr "Mantén pulsada V y mueve el ratón para mirar alrededor"
+
+msgid "I said hello to someone on the tram. It was my reflection. — Grandpa"
+msgstr "He saludado a alguien en el tranvía. Era mi reflejo. — Abuelo"
+
+msgid ""
+"Your missing sock turned up. The teddy bear was wearing it as a hat. — Mum"
+msgstr "Ya apareció tu calcetín. El osito lo llevaba de gorro. — Mamá"
+
+msgid "Close phone · T"
+msgstr "Cerrar el teléfono · T"
+
+msgid "The pupil is on board."
+msgstr "El alumno está a bordo."
+
+msgid "Thanks! I can see my school!"
+msgstr "¡Gracias! I puede ver mi escuela!"
+
+msgid "Board Lotten · F"
+msgstr "Subir al Lotten · F"
+
+msgid "Step ashore · F"
+msgstr "Bajar a tierra · F"
+
+msgid "On board Lotten"
+msgstr "A bordo de Lotten"
+
+msgid "Lotten in %d s"
+msgstr "Lotten llega en %d s"
+
+msgid "You can step ashore at either landing."
+msgstr "Puedes bajar a tierra en cualquiera de los dos muelles."
+
+msgid "Next landing in %d s"
+msgstr "Siguiente muelle en %d s"
+
+msgid "Get off at next landing · F"
+msgstr "Bajar en el próximo muelle · F"
+
+msgid "Stay on board · F"
+msgstr "Seguir a bordo · F"
+
+msgid "Two parcels collected at the square. You earned 10 coins."
+msgstr "Has recogido dos paquetes en la plaza. Has ganado 10 monedas."
+
+msgid "The clinic received its parcel. You earned 10 coins."
+msgstr "La clínica ya tiene su paquete. ¡Has ganado 10 monedas!"
+
+msgid "The marina received the last parcel. You earned 10 coins."
+msgstr ""
+"El último paquete ha llegado al puerto deportivo. Has ganado 10 monedas."
+
+msgid "Stepping ashore in %d s"
+msgstr "Bajarás a tierra en %d s"
+
+msgid "School is over! To the clinic, please."
+msgstr "¡Ya han terminado las clases! A la clínica, por favor."
+
+msgid ""
+"I tried to wave at you from Lotten. I waved my sandwich. The gulls waved "
+"back! — Grandpa"
+msgstr ""
+"Intenté saludarte desde el Lotten y agité mi bocadillo. ¡Las gaviotas me "
+"devolvieron el saludo! — Abuelo"
+
+msgid ""
+"Could you pick up a cinnamon bun? Your dad bought cinnamon and a bun "
+"separately. — Mum"
+msgstr ""
+"¿Puedes traer un bollo de canela? Papá compró la canela y el bollo por "
+"separado. — Mamá"
+
+msgid "Find clear ground to unfold the scooter."
+msgstr "Encuentra un terreno claro para desenvolver el scooter."
+
+msgid "Fold scooter · F"
+msgstr "Plegar el patinete · F"
+
+msgid "U Unfold scooter"
+msgstr "U Desplegar el patinete"
+
+msgid "W / ↑ Accelerate · S / ↓ Brake · A / D Steer · U Fold scooter"
+msgstr "W / ↑ Acelera · S / ↓ Frena · A / D Gira · U Pliega el patinete"
+
+msgid "Electric scooter · %d km/h"
+msgstr "Patinete eléctrico · %d km/h"
+
+msgid "Ice cream van"
+msgstr "Furgoneta de helados"
+
+msgid "Serve ice cream at the square"
+msgstr "Sirve helados en la plaza"
+
+msgid "Serve ice cream outside the school"
+msgstr "Sirve helados delante de la escuela"
+
+msgid "Serve ice cream at the marina"
+msgstr "Sirve helados en el puerto deportivo"
+
+msgid "Ice cream served! You earned 10 coins."
+msgstr "¡Has servido el helado! Has ganado 10 monedas."
+
+msgid "Return to your ice cream van"
+msgstr "Vuelve a tu furgoneta de helados"
+
+msgid "Ice cream chime · H"
+msgstr "Melodía de los helados · H"
+
+msgid "Grocery store"
+msgstr "Supermercado"
+
+msgid "Apple"
+msgstr "Apple"
+
+msgid "Milk"
+msgstr "Milk"
+
+msgid "Get off tram · F"
+msgstr "Bajar del tranvía · F"
+
+msgid "Wait for the tram"
+msgstr "Espera el tranvía"
+
+msgid "Board tram · F"
+msgstr "Subir al tranvía · F"
+
+msgid "Exit excavator · F"
+msgstr "Bajar de la excavadora · F"
+
+msgid "Drive excavator · F"
+msgstr "Conducir la excavadora · F"
+
+msgid ""
+"Arrows or WASD: drive and steer · Q/E: turn the cab · F: get out\n"
+"I/K: raise or lower the boom · Y/G: move the outer arm · O/L: tilt the bucket"
+msgstr ""
+"Flechas o WASD: conduce y gira · Q/E: gira la cabina · F: baja\n"
+"I/K: sube o baja la pluma · Y/G: mueve el brazo exterior · O/L: inclina el cucharón"
+
+msgid "Walk or rest · Run again in %d s"
+msgstr "Camina o descansa · Podrás correr en %d s"
+
+msgid "W/S Walk · A/D Turn · Shift + W Run · F Enter · U Scooter"
+msgstr "W/S Camina · A/D Gira · Shift + W Corre · F Sube · U Patinete"
+
+msgid "PgUp Raise camera · PgDn Lower camera"
+msgstr "PgUp Sube la cámara · PgDn Baja la cámara"
+
+msgid "Operate the excavator in the equipment yard."
+msgstr "Opera la excavadora en el patio del equipo."
+
+msgid "Start excavating"
+msgstr "Inicio de excavación"
+
+msgid "Motorboat"
+msgstr "Lancha motora"
+
+msgid "J Off · N Next song"
+msgstr "J Apagar · N Siguiente canción"
+
+msgid "Now playing: %s"
+msgstr "Está sonando: %s"
+
+msgid "Farm tractor"
+msgstr "Tractor agrícola"
+
+msgid "Turn radio off · J"
+msgstr "Apagar la radio · J"
+
+msgid "Turn radio on · J"
+msgstr "Encender la radio · J"
+
+msgid "Next song · N"
+msgstr "Siguiente canción · N"
+
+msgid "Ready to run again! Hold Shift and walk forward."
+msgstr "¡Ya puedes correr! Mantén pulsada Shift y camina hacia delante."
+
+msgid "SUV"
+msgstr "SUV"
+
+msgid "Classic sports coupe"
+msgstr "Cupé deportivo clásico"
+
+msgid "Classic sedan"
+msgstr "Sedán clásico"
+
+msgid "Vintage compact"
+msgstr "Compacto de época"
+
+msgid "Electric sedan"
+msgstr "Sedán eléctrico"
+
+msgid "Police SUV"
+msgstr "SUV de policía"
+
+msgid "Track sports car"
+msgstr "Coche de carreras"
+
+msgid "Small convertible"
+msgstr "Descapotable pequeño"
+
+msgid "Classic moped"
+msgstr "Ciclomotor clásico"
+
+msgid "Wheel loader"
+msgstr "Pala cargadora"
+
+msgid "Tracked excavator"
+msgstr "Excavadora de orugas"
+
+msgid "Tram"
+msgstr "Tranvía"
+
+msgid "Click the pictures to choose your vehicle and driver."
+msgstr "Elige el vehículo y quién conduce pulsando las imágenes."
+
+msgid "★ %d points"
+msgstr "★ %d puntos"
+
+msgid "Take a job"
+msgstr "Aceptar una misión"
+
+msgid "★ All stars found!"
+msgstr "★ ¡Todas las estrellas encontradas!"
+
+#, c-format
+msgid "★ %d star left"
+msgid_plural "★ %d stars left"
+msgstr[0] "★ Queda %d estrella"
+msgstr[1] "★ Quedan %d estrellas"
+
+msgid "Can you find my red shoe? I lost it farther along the pavement."
+msgstr ""
+"¿Me ayudas a encontrar mi zapato rojo? Lo perdí un poco más adelante en esta"
+" acera."
+
+msgid "My shoe! Now I won’t have to hop home. Thank you!"
+msgstr "¡Mi zapato! Ya no tendré que volver a casa a la pata coja. ¡Gracias!"
+
+msgid "Find the red shoe on the pavement."
+msgstr "Busca el zapato rojo en la acera."
+
+msgid "Bring the red shoe back to the neighbour."
+msgstr "Devuélvele el zapato rojo a tu vecino."
+
+msgid "Can you find my cat? Look for white paws along this pavement."
+msgstr ""
+"¿Me ayudas a encontrar a mi gata? Busca unas patitas blancas en esta acera."
+
+msgid "There you are, Socks! Thank you for bringing her home."
+msgstr "¡Aquí estás, Socks! Gracias por traerla a casa."
+
+msgid "Walk back to the neighbour with the cat."
+msgstr "Vuelve con la gata hasta donde está tu vecino."
+
+msgid "Find the cat with white paws."
+msgstr "Busca a la gata de las patitas blancas."
+
+msgid "Collect seedlings at the square"
+msgstr "Recoger plántulas en la plaza"
+
+msgid "Deliver herbs to the clinic garden"
+msgstr "Entrega hierbas al jardín de la clínica"
+
+msgid "Bring flowers to the marina"
+msgstr "Trae flores al puerto"
+
+msgid "Pick up soup ingredients at the square"
+msgstr "Recoger ingredientes de sopa en la plaza"
+
+msgid "Serve lunch to the clinic staff"
+msgstr "Almuerzo al personal de la clínica"
+
+msgid "Serve soup to the boat crews"
+msgstr "Servir sopa a los tripulantes del barco"
+
+msgid "Back in a safe place."
+msgstr "Ya estás en un lugar seguro."
+
+msgid "Stuck? Press R"
+msgstr "¿No puedes moverte? Pulsa R"
+
+msgid "No clear spot yet. Try again in a moment."
+msgstr "Todavía no hay sitio libre. Inténtalo de nuevo en un momento."
+
+msgid "Take the car to the petrol station."
+msgstr "Lleva el coche a la gasolinera."
+
+msgid ""
+"The car is on your flatbed. Follow the arrows to the petrol station for 20 "
+"coins."
+msgstr ""
+"El coche ya está en la grúa. Sigue las flechas hasta la gasolinera para "
+"ganar 20 monedas."
+
+msgid "My vehicle"
+msgstr "Mi vehículo"
+
+msgid "Flashing"
+msgstr "Intermitentes"
+
+msgid "Steady"
+msgstr "Fijas"
+
+msgid "Off"
+msgstr "Apagadas"
+
+msgid "Ducks park free"
+msgstr "Los patos aparcan gratis"
+
+msgid "Hats on wheels only"
+msgstr "Solo sombreros con ruedas"
+
+msgid "Save a spot for a snail"
+msgstr "Deja sitio para un caracol"
+
+msgid "Park with a smile"
+msgstr "Aparca con una sonrisa"
+
+msgid "Bananas need a ticket"
+msgstr "Los plátanos pagan aparcamiento"
+
+msgid "LANGUAGE_SELF_NAME"
+msgstr "Español"
+
+msgid ""
+"ICE CREAM  4\n"
+"HOT DOG  5"
+msgstr ""
+"HELADO  4\n"
+"PERRITO CALIENTE  5"
+
+msgid "FRUIT  &  VEG"
+msgstr "FRUTAS Y VERDURAS"
+
+msgid "CHECKOUT"
+msgstr "CAJA"
+
+msgid "WOOD-FIRED PIZZA"
+msgstr "PIZZA AL HORNO DE LEÑA"
+
+msgid "MARGHERITA  ·  8 COINS"
+msgstr "MARGHERITA  ·  8 MONEDAS"
+
+msgid "EAT IN  ·  TAKEAWAY"
+msgstr "AQUÍ  ·  PARA LLEVAR"
+
+msgid "TAKEAWAY"
+msgstr "PARA LLEVAR"
+
+msgid "PICK AND MIX"
+msgstr "GOLOSINAS A GRANEL"
+
+msgid "Raspberry"
+msgstr "Raspberry"
+
+msgid "Lemon"
+msgstr "Lemon"
+
+msgid "Liquorice"
+msgstr "Liquorice"
+
+msgid "Vanilla"
+msgstr "Vainilla"
+
+msgid "Strawberry"
+msgstr "Fresa"
+
+msgid "Orange"
+msgstr "Naranja"
+
+msgid "Grape"
+msgstr "Grape"
+
+msgid "No songs available in this language yet."
+msgstr "Todavía no hay canciones en este idioma."
+
+msgid "HARBOR FUEL"
+msgstr "HARBOR FUEL"
+
+msgid "Harbor Fuel  →"
+msgstr "Harbor Fuel  →"
+
+msgid "←  Harbor Fuel"
+msgstr "←  Harbor Fuel"
+
+msgid "Tow drop-off"
+msgstr "Entrega de vehículos"
+
+msgid "Monster truck"
+msgstr "Camión monstruo"
+
+msgid "A-tractor"
+msgstr "Tractor A sueco"
+
+msgid "Classic cruiser"
+msgstr "Clásico americano"
+
+msgid "Taxi"
+msgstr "Taxi"
+
+msgid "Food truck"
+msgstr "Cocina sobre ruedas"
+
+msgid "HARBOR TOWN SCHOOL"
+msgstr "ESCUELA DE HARBOR TOWN"
+
+msgid "HARBOR TOWN GARAGE"
+msgstr "TALLER DE HARBOR TOWN"
+
+msgid "THE SQUARE"
+msgstr "LA PLAZA"
+
+msgid "HEALTH CENTRE"
+msgstr "CENTRO DE SALUD"
+
+msgid "MARINA"
+msgstr "PUERTO DEPORTIVO"
+
+msgid "VÄSTRA TORGET"
+msgstr "VÄSTRA TORGET"
+
+msgid "VÄSTERÄNGEN"
+msgstr "VÄSTERÄNGEN"
+
+msgid "HARBOR TOWN"
+msgstr "HARBOR TOWN"
+
+msgid "Quit game"
+msgstr "Salir del juego"
+
+msgid "Quit game · F10"
+msgstr "Salir del juego · F10"
+
+msgid "Do you want to quit the game?"
+msgstr "¿Quieres salir del juego?"
+
+msgid "Yes"
+msgstr "Sí"
+
+msgid "No"
+msgstr "No"
+
+msgid "About"
+msgstr "Acerca de"
+
+msgid "About the game"
+msgstr "Acerca del juego"
+
+msgid "Close"
+msgstr "Cerrar"
+
+msgid "Version %s"
+msgstr "Versión %s"
+
+msgid ""
+"Explore Harbor Town with Axel and Alma. Walk along the canal, take the tram "
+"or drive a tow truck to help a neighbour. You choose where to go next."
+msgstr ""
+"Explora Harbor Town con Axel y Alma. Pasea junto al canal, toma el tranvía o"
+" conduce una grúa para ayudar a un vecino. Tú eliges adónde ir después."
+
+msgid ""
+"My name is Daniel Nylander. I made this game for my children, who have "
+"autism and a language disorder. I wanted them to have a town they could "
+"explore at their own pace. That is why you can choose a vehicle by its "
+"picture and read what people say in speech bubbles."
+msgstr ""
+"Me llamo Daniel Nylander. Hice este juego para mis hijos, que tienen autismo"
+" y un trastorno del lenguaje. Quería que tuvieran una ciudad que pudieran "
+"explorar a su ritmo. Por eso puedes elegir un vehículo tocando su imagen y "
+"leer en bocadillos lo que dicen los personajes."
+
+msgid "DISCO RINGS"
+msgstr "AROS DISCO"
+
+msgid "Oops! One danced away!"
+msgstr "¡Uy! ¡Uno se fue bailando!"
+
+msgid "ROCKET ICE"
+msgstr "HELADO COHETE"
+
+msgid "3, 2, 1 ... brain freeze!"
+msgstr "3, 2, 1… ¡cerebro helado!"
+
+msgid "HOT DOG YOGA"
+msgstr "YOGA HOT DOG"
+
+msgid "Breathe in. Ketchup out."
+msgstr "Inhala. ¡Suelta kétchup!"
+
+#. Litres shown on a stationary fuel dispenser.
+msgid "0.00 L"
+msgstr "0,00 L"
+
+msgid "95    17.90"
+msgstr "95    17,90"
+
+msgid "98    18.90"
+msgstr "98    18,90"
+
+msgid "D     17.50"
+msgstr "D     17,50"
+
+msgid "Allow crashes"
+msgstr "Permitir choques"
+
+msgid "17.90 kr/L"
+msgstr "17,90 kr/L"
+
+msgid "18.90 kr/L"
+msgstr "18,90 kr/L"
+
+msgid "17.50 kr/L"
+msgstr "17,50 kr/L"
+
+msgid "Allow driving through red lights"
+msgstr "Permitir pasar en rojo"
+
+msgid "Red light! Stop at the line and wait for green."
+msgstr "¡Semáforo en rojo! Para en la línea y espera a que se ponga verde."

@@ -1194,3 +1194,9 @@ msgstr "18,90 kr/L"
 
 msgid "17.50 kr/L"
 msgstr "17,50 kr/L"
+
+msgid "Allow driving through red lights"
+msgstr "Tillåt körning mot rött ljus"
+
+msgid "Red light! Stop at the line and wait for green."
+msgstr "Rött ljus! Stanna vid linjen och vänta på grönt."

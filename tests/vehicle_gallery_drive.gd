@@ -25,7 +25,18 @@ func check_gallery() -> void:
 			printerr("Menu driving failed for ",tile.text," distance=",travel," turn=",turn)
 			quit(1)
 			return
-	print("All ",game.VEHICLE_NAMES_ALL.size()," road vehicles started, moved and steered from the picture menu.")
+		game.ambulance.transform = start
+		game.speed = 0.0
+		Input.action_press("ui_down")
+		for frame in 60:
+			game._drive(1.0/60.0)
+		Input.action_release("ui_down")
+		var reverse_travel: float = (game.ambulance.position - start.origin).dot(start.basis.z)
+		if reverse_travel < .3 or game.speed >= 0:
+			printerr("Reverse failed for ", tile.text, " distance=", reverse_travel)
+			quit(1)
+			return
+	print("All ",game.VEHICLE_NAMES_ALL.size()," road vehicles started, moved, steered and reversed from the picture menu.")
 	game.queue_free()
 	await process_frame
 	await create_timer(.4).timeout

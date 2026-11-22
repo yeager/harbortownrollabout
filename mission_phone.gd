@@ -81,6 +81,7 @@ func _ready() -> void:
 	content.add_child(title)
 	var recovery_hint := Label.new()
 	recovery_hint.text = "Stuck? Press R"
+	recovery_hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	recovery_hint.add_theme_color_override("font_color", Color("#183a38"))
 	content.add_child(recovery_hint)
 	for label in [job_heading, inbox, star_progress]:

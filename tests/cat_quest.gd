@@ -32,6 +32,20 @@ func check_quest() -> void:
 		printerr("Expected a reunion and one ten-coin reward.")
 		quit(1)
 		return
+	var reunion := "There you are, Socks! Thank you for bringing her home."
+	for locale in ["de", "es", "fi", "fr", "nb", "sv", "en"]:
+		TranslationServer.set_locale(locale)
+		await process_frame
+		var clip = game.greeting_voice.stream
+		var expected_path := "res://audio/voices/%s_cat_returned.wav" % locale
+		if clip == null or clip.resource_path != expected_path or not game.greeting_voice.playing:
+			printerr("Missing spoken reunion in ", locale)
+			quit(1)
+			return
+		if game.greeting.text.replace("\n", " ") != game.tr(reunion) or not game.greeting.visible:
+			printerr("Reunion speech bubble did not follow the voice in ", locale)
+			quit(1)
+			return
 	game.queue_free()
 	await process_frame
 	await create_timer(.4).timeout

@@ -43,6 +43,27 @@ func verify() -> void:
 				fail("Traffic lane runs off-road at "+str(pose.origin))
 				return
 	world._change_seat()
+	for stop in train.stations.size():
+		train.stop_at_station(stop)
+		train.advance(1,false,false,false)
+		for car: Node3D in train.sections:
+			for side in [-1,1]:
+				var doorway := car.to_global(Vector3(1.5,.29,.13))
+				world.walker.position = car.to_global(Vector3(2.8,.29,.13+side*.55))
+				world.walker.look_at(Vector3(doorway.x,world.walker.position.y,doorway.z))
+				Input.action_press("ui_up")
+				for frame in 60:
+					world._walk(1.0/60)
+					if world.tram_mode == 1: break
+				Input.action_release("ui_up")
+				if world.tram_mode != 1:
+					fail("Diagonal boarding failed at stop %d, car %s, side %d" % [stop,car.name,side])
+					return
+				world._change_seat()
+				if not world.walker.visible or train.platform_at(world.walker.position) != stop:
+					fail("Alighting failed at stop "+str(stop))
+					return
+	train.stop_at_station(0)
 	train.advance(1,false,false,false)
 	var platform: Node3D = train.stations[0]
 	world.walker.position = platform.to_global(Vector3(2.8,.29,0))

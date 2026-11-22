@@ -13,6 +13,16 @@ func check() -> void:
 	game._start_game()
 	var lights = game.street_signals
 	var train = game.tram
+	var approach := Vector3(.8660254,0,.5)
+	var stop_point := Vector3(-lights.WEST_STOP_DISTANCE,0,1.85)
+	lights.phase = 3
+	if not is_equal_approx(lights.red_clearance(stop_point-approach*5,approach,2,true),3.0):
+		fail("Angled approach missed the red stop line")
+		return
+	if lights.red_clearance(stop_point+Vector3.BACK*8-approach*5,approach,2,true) < INF:
+		fail("Stop line extended beyond the crossing")
+		return
+	lights.advance(0)
 	if lights.tram_crossings.size()!=6:
 		fail("Missing crossing signals")
 		return
@@ -73,6 +83,7 @@ func check() -> void:
 	var axis: Vector3 = crossing.across
 	game.ambulance.position = crossing.center-axis*25+axis.cross(Vector3.UP)*2.3
 	game.ambulance.basis=Basis.looking_at(axis)
+	game.allow_red_lights=false
 	game.mouse_gas=true
 	game.speed=7
 	for i in 120: game._drive(.1)
@@ -80,6 +91,37 @@ func check() -> void:
 	if absf(car_gap)>.25 or absf(game.speed)>.05:
 		fail("Player car failed to stop at red, gap %f" % car_gap)
 		return
+	game.allow_red_lights = true
+	for i in 20: game._drive(.1)
+	if (Vector3(crossing.center)-game.ambulance.position).dot(axis) >= lights.SIDE_LINE+game.front_reach or game.message != "Red light! Stop at the line and wait for green.":
+		fail("Crossing red with permission must show the traffic rule")
+		return
+	var original_locale := TranslationServer.get_locale()
+	var warning_key := "Red light! Stop at the line and wait for green."
+	for locale in ["en", "sv", "de", "es", "fi", "fr", "nb"]:
+		TranslationServer.set_locale(locale)
+		game._refresh_status()
+		var expected := String(TranslationServer.translate(warning_key))
+		if (locale != "en" and expected == warning_key) or game.status_label.tr(game.status_label.text) != expected:
+			fail("Active red-light warning did not follow locale "+locale)
+			return
+	TranslationServer.set_locale(original_locale)
+	for index in game.shops.SHOPS.size():
+		var x: float = game.shops.storefront_x(index)
+		for crashes in [true,false]:
+			game.allow_crashes = crashes
+			game.ambulance.position = Vector3(x,0,38)
+			game.ambulance.basis = Basis.looking_at(Vector3.BACK)
+			game.speed = 5
+			for tick in 35: game._drive(.1)
+			if game.ambulance.position.z+game.front_reach > game.shops.FRONT_Z+.05:
+				fail("Vehicle entered a shop")
+				return
+		if index == 2:
+			for z in [42.0,43.0]:
+				if not game._on_foot_clear(Vector3(x,0,z)):
+					fail("Pizzeria doorway blocked on foot")
+					return
 	var user: Vector3 = Vector3(crossing.center) + Vector3(crossing.tangent)*lights.ZEBRA_OFFSET
 	if lights.pedestrian_may_enter(user+axis*8.75,user+axis*8.65):
 		fail("Red figure let pedestrian enter")

@@ -53,6 +53,7 @@ var city_env: Environment
 var city_sun: DirectionalLight3D
 var city_fill: OmniLight3D
 var entrance_lights: Array[SpotLight3D] = []
+var tower_lightbox: StandardMaterial3D
 var entrance_diffuser: StandardMaterial3D
 var street_lights: Array[SpotLight3D] = []
 var lamp_glass: StandardMaterial3D
@@ -231,6 +232,7 @@ var mouse_brake := false
 var brake_pedal_held := false
 var gentle_driving := true
 var allow_crashes := true
+var allow_red_lights := false
 var waiting_for_signal := false
 var brake_held := false
 var tire_player := AudioStreamPlayer.new()
@@ -282,7 +284,7 @@ var parked_light_settings: Array[bool] = []
 var sound_on := true
 var parked_sound_settings: Array[bool] = []
 var siren_player: AudioStreamPlayer
-var menu_footer := VBoxContainer.new()
+var menu_footer := HBoxContainer.new()
 var version_label := Label.new()
 var ui: CanvasLayer
 var wardrobe := preload("res://characters/weather_clothing.gd").new()
@@ -392,6 +394,8 @@ func _ready() -> void:
 	quit_dialog.process_mode = Node.PROCESS_MODE_ALWAYS
 	quit_dialog.exclusive = true
 	add_child(quit_dialog)
+	_color_action(quit_dialog.get_ok_button(), true)
+	_color_action(quit_dialog.get_cancel_button(), false)
 	quit_dialog.confirmed.connect(_finish_quit)
 	quit_dialog.canceled.connect(func(): get_tree().paused = false)
 	_build_brake_effects()
@@ -849,7 +853,7 @@ func _drive(delta: float) -> void:
 	var travel_direction := forward * signf(speed)
 	var leading_reach := rear_reach if speed<0 else front_reach
 	var signal_gap := street_signals.red_clearance(ambulance.position,forward if is_zero_approx(speed) else travel_direction,leading_reach)
-	var stopping_distance := signal_gap
+	var stopping_distance := INF if allow_red_lights else signal_gap
 	var people: Array = [crossing_pedestrian,passenger,arriving_passenger,waiting_medic,marina_recipient,square_neighbour]
 	people.append_array(bus_companions)
 	people.append_array(clinic_fire_team)
@@ -902,7 +906,7 @@ func _drive(delta: float) -> void:
 		var limit := sqrt(frame_brake*frame_brake + 10.0*maxf(0,stopping_distance-.04))-frame_brake
 		assisted_braking = absf(speed)>limit
 		speed = signf(speed)*minf(absf(speed),limit)
-	waiting_for_signal = signal_gap <= .35 and signal_gap == stopping_distance and absf(speed) < .25
+	waiting_for_signal = not allow_red_lights and signal_gap <= .35 and signal_gap == stopping_distance and absf(speed) < .25
 	if player_brake_lens:
 		_set_rear_lights(player_brake_lens, brake_held or assisted_braking or waiting_for_signal)
 	var step := forward * speed * delta
@@ -957,6 +961,11 @@ func _drive(delta: float) -> void:
 	if pos.y < -0.15:
 		var terrain_limit := lerpf(6.0, max_speed, weather.snow) if vehicle_index == SNOWMOBILE else 6.0
 		speed = clampf(speed, -3.0, terrain_limit)
+	if allow_red_lights and signal_gap < INF:
+		var red_gap := street_signals.red_clearance(previous_pose.origin,travel_direction,leading_reach,true)
+		if red_gap >= 0 and (pos-previous_pose.origin).dot(travel_direction) > red_gap:
+			message = "Red light! Stop at the line and wait for green."
+			message_timer = 4.0
 	_roll_wheels(player_wheels, (pos - previous_pose.origin).dot(forward))
 	ambulance.global_position = pos
 	if reverse_lens:
@@ -1450,7 +1459,8 @@ func _build_west_district() -> void:
 				home.position = center
 				home.rotation.y = PI if z > 0 else 0.0
 				add_child(home)
-				building_bounds.append(home.global_transform * _model_bounds(home,home))
+				var bounds: AABB = home.global_transform * _model_bounds(home,home)
+				building_bounds.append(bounds.expand(Vector3(center.x,-1,center.z)))
 				_make_tree(center+Vector3(11,0,5),1.0)
 
 func _station_sign(words: String, at: Vector3, size: float, tint: Color, yaw := PI, parent: Node3D = self) -> void:
@@ -1499,7 +1509,8 @@ func _build_petrol_station(center: Vector3) -> void:
 	const GRADES := ["95", "D", "98", "95"]
 	var tower := center+Vector3(-11.8,0,-8)
 	_make_roadside_solid("Price tower",Vector3(.45,6.4,1.85),tower+Vector3.UP*3.2,graphite)
-	_make_box("Tower crown",Vector3(.51,1.18,1.97),tower+Vector3.UP*5.87,gold)
+	tower_lightbox = _material(gold,.48,true)
+	_make_box("Tower crown",Vector3(.51,1.18,1.97),tower+Vector3.UP*5.87,gold).material_override = tower_lightbox
 	for side: float in [-1.0,1.0]:
 		var yaw := side*PI*.5
 		_station_sign("HARBOR FUEL",tower+Vector3(side*.27,5.87,0),.0038,graphite,yaw)
@@ -1508,6 +1519,24 @@ func _build_petrol_station(center: Vector3) -> void:
 			var panel := tower+Vector3(side*.24,4.84-row*.62,0)
 			_make_box("Tariff panel",Vector3(.035,.51,1.73),panel,Color("#172327"))
 			_station_sign(listings[row],panel+Vector3(side*.024,0,0),.004,cream,yaw)
+		var poster := Node3D.new()
+		poster.position = tower + Vector3(side*.25,1.73,0)
+		poster.rotation.y = yaw
+		add_child(poster)
+		var panel := _make_box("Rocket ice lightbox",Vector3(1.61,1.58,.042),Vector3.ZERO,gold,false,poster)
+		panel.material_override = tower_lightbox
+		_station_sign("ROCKET ICE",Vector3(0,-.48,.03),.0034,graphite,0,poster)
+		_make_box("Ice stick",Vector3(.08,.24,.03),Vector3(0,-.18,.05),cream,false,poster)
+		var rocket := CSGPolygon3D.new()
+		rocket.polygon = PackedVector2Array([Vector2(-.22,-.13),Vector2(.22,-.13),Vector2(.22,.27),Vector2(.17,.39),Vector2(0,.61),Vector2(-.17,.39),Vector2(-.22,.27)])
+		rocket.depth = .025
+		rocket.position.z = .074
+		rocket.material = _material(Color("#16737b"),.5)
+		poster.add_child(rocket)
+		_make_box("Ice cream stripe",Vector3(.44,.085,.016),Vector3(0,.20,.083),cream,false,poster)
+		for fin_side: float in [-1,1]:
+			var fin := _make_box("Rocket fin",Vector3(.11,.27,.04),Vector3(fin_side*.19,.01,.05),Color("#ad3640"),false,poster)
+			fin.rotation.z = -fin_side*.43
 	for x in [-7,3]:
 		var island := center+Vector3(x,0,-3)
 		_make_roadside_solid("Pump island",Vector3(1.45,.18,5.5),island+Vector3.UP*.08,Color("#a9aa9e"))
@@ -1520,7 +1549,8 @@ func _build_petrol_station(center: Vector3) -> void:
 			pump.position = island+Vector3(0,.17,z)
 			pump.rotation.y = PI*.5
 			add_child(pump)
-			_make_roadside_solid("Fuel dispenser",Vector3(.83,1.65,.67),Vector3.UP*.825,cream,false,pump)
+			var cabinet := _make_roadside_solid("Fuel dispenser",Vector3(.83,1.65,.67),Vector3.UP*.825,cream,false,pump)
+			cabinet.mesh = preload("res://environment/pump_shell.obj")
 			var number_plate := Vector3(0,1.89,0)
 			_make_box("Pump number",Vector3(.57,.48,.12),number_plate,gold,false,pump)
 			var number := (1 if x < 0 else 3)+(0 if z < 0 else 1)
@@ -1533,15 +1563,22 @@ func _build_petrol_station(center: Vector3) -> void:
 				var face := Node3D.new()
 				face.rotation.y = face_yaw
 				pump.add_child(face)
-				_make_box("Display",Vector3(.61,.3,.03),Vector3(0,1.29,-.34),Color("#21353a"),false,face)
-				_station_sign(PRICES[grade] + " kr/L",Vector3(0,1.29,-.361),.0019,Color("#b5f2cc"),PI,face)
+				_make_box("Service panel gasket",Vector3(.72,1.10,.012),Vector3(0,.97,-.337),graphite,false,face)
+				_make_box("Service panel enamel",Vector3(.705,1.085,.014),Vector3(0,.97,-.343),cream,false,face)
+				_make_box("Service panel stripe",Vector3(.705,.075,.006),Vector3(0,.47,-.352),gold,false,face)
+				_make_box("Display",Vector3(.61,.3,.03),Vector3(0,1.29,-.352),Color("#21353a"),false,face)
+				_station_sign(PRICES[grade] + " kr/L",Vector3(0,1.29,-.372),.0019,Color("#b5f2cc"),PI,face)
 				_make_box("Fuel grade badge",Vector3(.21,.18,.02),Vector3(-.19,.94,-.35),grip,false,face)
 				_station_sign(grade,Vector3(-.19,.94,-.363),.0018,cream,PI,face)
 				for slot in 6:
-					_make_box("Vent slot",Vector3(.18,.010,.008),Vector3(-.18,.68-slot*.028,-.34),graphite,false,face)
-				_make_box("Nozzle holster",Vector3(.12,.27,.14),Vector3(.415,1.19,-.12),graphite,false,face)
+					_make_box("Vent slot",Vector3(.18,.010,.008),Vector3(-.18,.68-slot*.028,-.352),graphite,false,face)
+				_make_box("Holster back",Vector3(.018,.37,.205),Vector3(.423,1.16,-.14),Color("#182024"),false,face)
+				for lip_z: float in [-.246,-.034]:
+					_make_box("Holster side lip",Vector3(.09,.37,.022),Vector3(.46,1.16,lip_z),graphite,false,face)
+				_make_box("Holster ledge",Vector3(.09,.024,.23),Vector3(.46,.975,-.14),graphite,false,face)
 				_make_box("Card reader",Vector3(.20,.24,.036),Vector3(.18,.91,-.35),graphite,false,face)
-				_make_box("Receipt slot",Vector3(.14,.02,.018),Vector3(.18,.86,-.375),cream,false,face)
+				_make_box("Receipt slot",Vector3(.14,.02,.018),Vector3(.18,.824,-.375),Color("#151e20"),false,face)
+				_make_box("Reader screen",Vector3(.146,.044,.009),Vector3(.18,.985,-.373),Color("#90bba5"),false,face)
 				for row in 3:
 					for column in 3:
 						var key_position := Vector3(.13+column*.05,.95-row*.028,-.377)
@@ -1555,12 +1592,21 @@ func _build_petrol_station(center: Vector3) -> void:
 				var guard := Vector3(.49,1.07,-.24)
 				_pump_tube(face,heel,guard,.014,graphite)
 				_pump_tube(face,guard,head,.014,graphite)
-				_pump_tube(face,head,Vector3(.40,1.32,-.16),.021,Color("#aebabe"))
+				var elbow := Vector3(.49,1.30,-.16)
+				_pump_tube(face,head,elbow,.024,Color("#aebabe"))
+				_pump_tube(face,elbow,Vector3(.43,1.32,-.16),.021,Color("#aebabe"))
+				_pump_tube(face,head.lerp(guard,.22),guard.lerp(heel,.52),.009,Color("#aebabe"))
 	for x: float in [-8,-2,4]:
 		for z: float in [-5.6,-.4]:
 			var mount := center+Vector3(x,4.30,z)
 			_make_box("Recessed lamp surround",Vector3(.96,.10,.58),mount,graphite)
 			_add_entry_light(mount-Vector3.UP*.065,Vector3(.82,.04,.44),8)
+	# Four flush strips follow the fascia and dim with the canopy lamps.
+	for sign_side: float in [-1.0, 1.0]:
+		var long_strip := _make_box("Canopy light strip", Vector3(16.16,.07,.025), center+Vector3(-2,4.56,-3+sign_side*4.58), cream)
+		var end_strip := _make_box("Canopy end light strip", Vector3(.025,.07,9.16), center+Vector3(-2+sign_side*8.08,4.56,-3), cream)
+		long_strip.material_override = entrance_diffuser
+		end_strip.material_override = entrance_diffuser
 	var kiosk := center+Vector3(-3,0,6)
 	var shell := Vector3(12,3.2,4.4)
 	building_bounds.append(AABB(kiosk+Vector3(-6,-1,-2.2),shell+Vector3.UP))
@@ -1628,6 +1674,7 @@ func _build_petrol_station(center: Vector3) -> void:
 				ketchup.rotation.z=dog.rotation.z+(.32 if j%2==0 else -.32)
 			_make_box("Yoga mat",Vector3(.64,.035,.018),icon_center+Vector3.DOWN*.12,Color("#83ded0"))
 	for x in [-4.9,-2.8]:
+		_add_entry_light(kiosk+Vector3(x,2.77,1.14),Vector3(1.78,.035,.10),3.0)
 		for level in [1.13,1.58,2.03]:
 			_make_box("Grocery shelf",Vector3(1.95,.055,.47),kiosk+Vector3(x,level,1.59),cream)
 			for j in 7:
@@ -1636,7 +1683,7 @@ func _build_petrol_station(center: Vector3) -> void:
 	_make_box("Checkout plinth",Vector3(2.25,1,.74),kiosk+Vector3(3.1,.57,-.70),graphite)
 	_make_box("Checkout countertop",Vector3(2.39,.08,.86),kiosk+Vector3(3.1,1.11,-.70),cream)
 	_make_box("Till monitor",Vector3(.48,.34,.10),kiosk+Vector3(2.75,1.32,-.56),graphite)
-	_add_entry_light(kiosk+Vector3(-2.7,2.92,.33),Vector3(2.1,.04,.18),5)
+	_add_entry_light(kiosk+Vector3(3.1,2.87,-.70),Vector3(1.9,.04,.18),3.6)
 	_make_box("Door kick plate",Vector3(1.14,.42,.07),kiosk+Vector3(1.12,.23,-2.18),graphite)
 	var door_glass := _make_box("Door glazing",Vector3(1.08,2.08,.03),kiosk+Vector3(1.12,1.47,-2.18),cream)
 	door_glass.material_override = glazing
@@ -1644,6 +1691,7 @@ func _build_petrol_station(center: Vector3) -> void:
 		_make_box("Door stile",Vector3(.06,2.5,.09),kiosk+Vector3(x,1.25,-2.20),graphite)
 	_make_box("Door pull",Vector3(.045,.36,.095),kiosk+Vector3(1.45,1.13,-2.35),cream)
 	_make_box("Entrance awning",Vector3(3,.14,1.23),kiosk+Vector3(1.12,2.66,-2.66),gold)
+	_add_entry_light(kiosk+Vector3(1.12,2.56,-2.84),Vector3(.86,.035,.16),3.3)
 	_make_box("Shop cornice",Vector3(12.25,.27,4.65),kiosk+Vector3.UP*3.18,gold)
 	_make_box("Recovery bay stripe",Vector3(5,.012,.09),STATION_PARKING+Vector3(0,.002,1.35),cream)
 	var bay_sign := _signpost(STATION_PARKING + Vector3(3.4,0,1.35), PI)
@@ -1800,6 +1848,14 @@ func _build_waterfront() -> void:
 	historic_windows.emission = Color("#ffcd98")
 	historic_windows.emission_energy_multiplier = 0
 	apartment_lights.append(historic_windows)
+	for x: float in [-468,-378]:
+		for z: float in [-24,17]:
+			var home := preload("res://environment/stockholm_apartment.gd").new()
+			home.build(4,z>0,Color("#d7ab76") if z>0 else Color("#bb8878"),historic_windows)
+			home.position = Vector3(x,0,z)
+			home.rotation.y = PI if z<0 else 0.0
+			add_child(home)
+			building_bounds.append(AABB(Vector3(x-7,-1,z-5),Vector3(14,13,10)))
 	for row in range(3):
 		for col in range(4):
 			var x := 115.0 + (col % 2)*21
@@ -2409,6 +2465,7 @@ func _update_daylight(delta: float) -> void:
 	var entrance_glow := smoothstep(.15,.85,night)
 	quay_stair_light.emission_energy_multiplier = entrance_glow*1.05
 	entrance_diffuser.emission_energy_multiplier = entrance_glow*2.0
+	tower_lightbox.emission_energy_multiplier = entrance_glow*.85
 	for lamp in entrance_lights:
 		lamp.visible = entrance_glow > .001
 		lamp.light_energy = entrance_glow*2.1
@@ -2440,8 +2497,8 @@ func _build_lampposts() -> void:
 		for x in [114,132,150]:
 			sites.append(Vector3(x,0,z+4.1))
 	for x in [-55,48]:
-		for z in [-37,-18,14,29]:
-			sites.append(Vector3(x-4.3,0,z))
+		for z in [-37,-18,14,22]:
+			sites.append(Vector3(x-6.0,0,z))
 	for x in [-43,-24,-8,13,34]:
 		sites.append(Vector3(x,0,39.3))
 		sites.append(Vector3(x,0,-52.3))
@@ -3352,7 +3409,12 @@ func _build_traffic() -> void:
 	pose.fit_to(moped.get_child(0))
 	traffic_data.back().rider = rider
 	# Separate neighbourhood circuits share intersections and stay entirely on paved streets.
-	var blocks := [Rect2(0,-48,102,48), Rect2(102,-48,60,48), Rect2(-55,0,55,35), Rect2(102,0,60,60)]
+	var blocks := [
+		Rect2(0,-48,102,48), Rect2(102,-48,60,48), Rect2(-55,0,55,35),
+		Rect2(102,0,60,60), Rect2(-150,0,95,35), Rect2(-55,-48,55,48),
+		Rect2(-510,0,90,35), Rect2(-150,-48,95,48), Rect2(102,-82,60,34),
+		Rect2(0,0,48,35),
+	]
 	for i in traffic_data.size():
 		var item: Dictionary = traffic_data[i]
 		var block: Rect2 = blocks[i % blocks.size()]
@@ -4351,13 +4413,16 @@ func _update_route_arrows() -> void:
 		points.append_array(navigator.path(start, goal))
 	else:
 		var forward := -ambulance.global_basis.z
-		points = navigator.driving_path(start, goal, Vector2(forward.x, forward.z).normalized())
+		points = navigator.driving_path(start, goal, Vector2(forward.x, forward.z).normalized(), vehicle_index == RECOVERY)
+	var car_forward := Vector2(-ambulance.global_basis.z.x, -ambulance.global_basis.z.z).normalized()
 	var gap := 3.5
 	var used := 0
 	for i in range(1,points.size()):
 		var segment := points[i]-points[i-1]
 		var length := segment.length()
 		var direction := segment.normalized()
+		# Reveal the return lane as the driver turns into it.
+		if not walker.visible and direction.dot(car_forward) < -0.15: break
 		while gap<length and used<route_arrows.size():
 			var point := points[i-1]+direction*gap
 			var arrow := route_arrows[used]
@@ -4888,13 +4953,17 @@ func _build_ui() -> void:
 
 func _build_menu_footer() -> void:
 	overlay.add_child(menu_footer)
-	menu_footer.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_LEFT)
+	menu_footer.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_WIDE)
+	menu_footer.offset_right = -20
 	menu_footer.offset_left = 20
 	menu_footer.offset_bottom = -12
 	menu_footer.grow_vertical = Control.GROW_DIRECTION_BEGIN
 	var about := _button("About", 92)
-	menu_footer.add_child(about)
 	menu_footer.add_child(version_label)
+	version_label.size_flags_vertical = Control.SIZE_SHRINK_END
+	menu_footer.add_spacer(false)
+	menu_footer.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	menu_footer.add_child(about)
 	var popup := AcceptDialog.new()
 	popup.exclusive = true
 	add_child(popup)
@@ -4942,6 +5011,7 @@ func _build_overlay() -> void:
 	subtitle_label.add_theme_color_override("font_color", Color("#d4e2dc"))
 	box.add_child(subtitle_label)
 	start_button = _button("Start a gentle drive", 300)
+	_color_action(start_button, true)
 	start_button.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	start_button.pressed.connect(_overlay_action)
 	vehicle_selector.columns = 7
@@ -5109,8 +5179,9 @@ func _build_overlay() -> void:
 	dialog.visibility_changed.connect(func():
 		if not dialog.visible: settings_toggle.grab_focus()
 	)
-	var language_row := HBoxContainer.new()
-	language_row.alignment = BoxContainer.ALIGNMENT_CENTER
+	var language_row := GridContainer.new()
+	language_row.columns = 3
+	language_row.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	pages[4].add_child(language_row)
 	var language_group := ButtonGroup.new()
 	for locale in L10n.locales():
@@ -5151,6 +5222,15 @@ func _build_overlay() -> void:
 		_save_preferences()
 	)
 	pages[2].add_child(crashes)
+	var red_lights := CheckButton.new()
+	red_lights.text = "Allow driving through red lights"
+	red_lights.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	red_lights.button_pressed = allow_red_lights
+	red_lights.toggled.connect(func(enabled: bool):
+		allow_red_lights = enabled
+		_save_preferences()
+	)
+	pages[2].add_child(red_lights)
 	preview_sound_button = _button("Preview vehicle sound", 300)
 	preview_sound_button.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	preview_sound_button.pressed.connect(_preview_sound)
@@ -5274,6 +5354,14 @@ func _button(caption: String, width: float) -> Button:
 	button.add_theme_stylebox_override("pressed", _style(Color("#a8cfb1"), 12))
 	return button
 
+func _color_action(button: Button, affirmative: bool) -> void:
+	var base := Color("#20743f") if affirmative else Color("#ae3339")
+	for state in ["normal","hover","pressed","hover_pressed"]:
+		var shade := base.lightened(.06) if state == "hover" else base.darkened(.15) if state != "normal" else base
+		button.add_theme_stylebox_override(state,_style(shade,12))
+	for state in ["font_color","font_hover_color","font_pressed_color","font_hover_pressed_color","font_focus_color"]:
+		button.add_theme_color_override(state,Color.WHITE)
+
 func _style(color: Color, radius: int) -> StyleBoxFlat:
 	var style := StyleBoxFlat.new()
 	style.bg_color = color
@@ -5289,6 +5377,8 @@ func _style(color: Color, radius: int) -> StyleBoxFlat:
 
 func _road_obstacles() -> Array[AABB]:
 	var obstacles := building_bounds.duplicate()
+	for i in shops.SHOPS.size():
+		obstacles.append(AABB(Vector3(shops.storefront_x(i)-4.2,-1,shops.FRONT_Z-.08),Vector3(8.4,4.7,7.14)))
 	obstacles.append_array(roadside_solids)
 	obstacles.append_array(tram.car_bounds())
 	if workshop_car.visible: obstacles.append(WORKSHOP_CAR_BOUNDS)
@@ -5553,6 +5643,7 @@ func _load_preferences() -> void:
 	weather.weather_setting = clampi(int(config.get_value("world","weather",0)),0,4)
 	time_mode = clampi(int(config.get_value("world","daylight",0)),0,2)
 	steady_player_lights = config.get_value("driving","steady_lights",false) == true
+	allow_red_lights = config.get_value("driving","allow_red_lights",false) == true
 	allow_crashes = config.get_value("driving","allow_crashes",true) == true
 	var gentle = config.get_value("driving","gentle",true)
 	if gentle is bool:
@@ -5578,6 +5669,7 @@ func _save_preferences() -> void:
 	config.set_value("world","season",weather.season_setting)
 	config.set_value("world","weather",weather.weather_setting)
 	config.set_value("world","daylight",time_mode)
+	config.set_value("driving","allow_red_lights",allow_red_lights)
 	config.set_value("driving","allow_crashes",allow_crashes)
 	config.set_value("driving","gentle",gentle_driving)
 	config.set_value("traffic","lights",traffic_light_mode)

@@ -7,7 +7,7 @@ var phase := -1
 # Boulevard and tram share a phase. Crossing traffic and pedestrians each have
 # their own green, separated by amber and all-red clearance intervals.
 enum Stage { BOULEVARD, BOULEVARD_AMBER, CLEAR_BOULEVARD, SIDE_STREET, SIDE_AMBER, CLEAR_SIDE, WALK, CLEAR_WALK }
-const STAGE_SECONDS := [20.0,3.0,2.0,10.0,3.0,2.0,12.0,2.0]
+const STAGE_SECONDS := [3.0,0.8,0.4,3.0,0.8,0.4,3.0,0.4]
 const BOULEVARD_LINE := 10.0
 const SIDE_LINE := 10.5
 const ZEBRA_OFFSET := 6.3
@@ -115,8 +115,8 @@ func lens(parent: Node3D, pos: Vector3, color: Color) -> MeshInstance3D:
 	return lamp
 
 func advance(delta: float) -> void:
-	elapsed=fmod(elapsed+delta,42)
-	var current := 0 if elapsed<18 else 1 if elapsed<21 else 2 if elapsed<23 else 3 if elapsed<37 else 4 if elapsed<40 else 5
+	elapsed=fmod(elapsed+delta,16)
+	var current := 0 if elapsed<6 else 1 if elapsed<7 else 2 if elapsed<8 else 3 if elapsed<14 else 4 if elapsed<15 else 5
 	if current==phase: return
 	phase=current
 	for head in heads:
@@ -138,7 +138,7 @@ func _build_tram_crossings() -> void:
 		var across := pose.basis.x
 		var zebra := center + tangent * ZEBRA_OFFSET
 		var crossing := {"center":center,"tangent":tangent,"across":across,"offset":offset,
-			"stage":Stage.BOULEVARD,"timer":fmod(offset*.1,15),"boulevard":[],"side":[],
+			"stage":Stage.BOULEVARD,"timer":fmod(offset*.1,STAGE_SECONDS[0]),"boulevard":[],"side":[],
 			"pedestrians":_add_crossing(zebra,absf(across.x)>.9,9.15)}
 		for stripe in range(-9,10):
 			var mark = world._make_box("Spårövergång",Vector3(2.1,.012,.49),zebra+across*stripe*.91+Vector3.UP*.006,Color("#dfdfd4"),false,self)
@@ -228,32 +228,37 @@ func pedestrian_may_enter(from: Vector3, to: Vector3) -> bool:
 		if absf(start)>=8.7 and absf(dest.dot(c.across))<8.7: return false
 	return true
 
-func red_clearance(pos: Vector3, heading: Vector3, half_length: float) -> float:
-	var nearest := _central_clearance(pos,heading,half_length)
+func red_clearance(pos: Vector3, heading: Vector3, half_length: float, red_only := false) -> float:
+	var nearest := _central_clearance(pos,heading,half_length,red_only)
 	for crossing in tram_crossings:
 		var tangent: Vector3 = crossing.tangent
 		var across: Vector3 = crossing.across
-		var along := absf(heading.dot(tangent))>.91
+		var along := absf(heading.dot(tangent)) >= absf(heading.dot(across))
+		var green := Stage.BOULEVARD if along else Stage.SIDE_STREET
+		if crossing.stage==green or (red_only and crossing.stage==green+1): continue
 		var axis := tangent if along else across
-		if absf(heading.dot(axis))<.91: continue
-		if crossing.stage==(Stage.BOULEVARD if along else Stage.SIDE_STREET): continue
-		var offset := Vector3(crossing.center)-pos
-		if absf(offset.dot(across if along else tangent))>(8.45 if along else 4.85): continue
-		var gap := offset.dot(axis)*signf(heading.dot(axis))-(BOULEVARD_LINE if along else SIDE_LINE)-half_length
-		if gap>=-.05: nearest=minf(nearest,maxf(0,gap))
+		var gap := _line_clearance(pos,heading,half_length,crossing.center,axis,
+			BOULEVARD_LINE if along else SIDE_LINE,8.45 if along else 4.85)
+		nearest = minf(nearest,gap)
 	return nearest
 
-func _central_clearance(pos: Vector3, heading: Vector3, half_length: float) -> float:
-	var east_west := absf(heading.x)>.95
-	if not east_west and absf(heading.z)<.95: return INF
+func _line_clearance(pos: Vector3, heading: Vector3, reach: float, center: Vector3, axis: Vector3, setback: float, width: float) -> float:
+	var approach := heading.dot(axis)
+	if absf(approach) < .001: return INF
+	var distance := ((center-pos).dot(axis)-signf(approach)*setback)/approach
+	var gap := distance-reach
+	if gap < -.001: return INF
+	var intersection := pos+heading*distance
+	if absf((intersection-center).dot(axis.cross(Vector3.UP))) > width: return INF
+	return maxf(0,gap)
+
+func _central_clearance(pos: Vector3, heading: Vector3, half_length: float, red_only := false) -> float:
+	var east_west := absf(heading.x)>=absf(heading.z)
 	var green := 0 if east_west else 3
-	if phase==green: return INF
-	var along := pos.x if east_west else pos.z
-	var across := pos.z if east_west else pos.x
-	var direction := signf(heading.x if east_west else heading.z)
-	if east_west and absf(across-SHOP_CROSSING.z)<=3.7:
-		var shop_gap := (SHOP_CROSSING.x-along)*direction-3-half_length
-		return shop_gap if shop_gap>=-.05 else INF
-	if absf(across)>4.85: return INF
-	var gap := -along*direction - (WEST_STOP_DISTANCE if east_west and direction>0 else JUNCTION_STOP_DISTANCE) - half_length
-	return gap if gap>=-.05 else INF
+	if phase==green or (red_only and phase==green+1): return INF
+	var setback := WEST_STOP_DISTANCE if east_west and heading.x>0 else JUNCTION_STOP_DISTANCE
+	var axis := Vector3.RIGHT if east_west else Vector3.BACK
+	var nearest := _line_clearance(pos,heading,half_length,Vector3.ZERO,axis,setback,4.85)
+	if east_west:
+		nearest = minf(nearest,_line_clearance(pos,heading,half_length,SHOP_CROSSING,axis,3,3.7))
+	return nearest
