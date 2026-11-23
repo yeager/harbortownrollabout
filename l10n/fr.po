@@ -1617,5 +1617,5 @@ msgstr "Réécouter"
 msgid "Practice driving"
 msgstr "S’entraîner à conduire"
 
-msgid "Larger speech bubbles"
-msgstr "Bulles de dialogue agrandies"
+msgid "Larger text"
+msgstr "Texte agrandi"

@@ -1598,5 +1598,5 @@ msgstr "Kuuntele uudelleen"
 msgid "Practice driving"
 msgstr "Harjoittele ajamista"
 
-msgid "Larger speech bubbles"
-msgstr "Suuremmat puhekuplat"
+msgid "Larger text"
+msgstr "Suurempi teksti"

@@ -1609,5 +1609,5 @@ msgstr "Volver a escuchar"
 msgid "Practice driving"
 msgstr "Practicar la conducción"
 
-msgid "Larger speech bubbles"
-msgstr "Bocadillos de diálogo más grandes"
+msgid "Larger text"
+msgstr "Texto más grande"

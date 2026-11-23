@@ -198,10 +198,19 @@ func _display_cinnamon_buns(center: Vector3) -> void:
 			spiral.mesh=filling
 			bun.add_child(spiral)
 
+func set_large_text(enabled: bool) -> void:
+	var reading_theme := Theme.new()
+	if enabled:
+		reading_theme.set_font_size("font_size", "Label", 22)
+		reading_theme.set_font_size("font_size", "Button", 22)
+	shop_card.theme = reading_theme
+	if shop_card.is_inside_tree():
+		shop_card.offset_left = -362 if enabled else -302
+
 func build_menu(ui: CanvasLayer) -> void:
 	ui.add_child(shop_card)
 	shop_card.set_anchors_and_offsets_preset(Control.PRESET_RIGHT_WIDE)
-	shop_card.offset_left = -302
+	shop_card.offset_left = -362 if get_parent().large_text else -302
 	shop_card.offset_right = -22
 	shop_card.offset_top = 108
 	shop_card.offset_bottom = -155
@@ -214,6 +223,7 @@ func build_menu(ui: CanvasLayer) -> void:
 	var layout := VBoxContainer.new()
 	shop_card.add_child(layout)
 	balance = Label.new()
+	balance.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	layout.add_child(balance)
 	var scroll := ScrollContainer.new()
 	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -262,6 +272,7 @@ func rebuild_menu() -> void:
 		child.queue_free()
 	var title:=Label.new()
 	title.text=tr(SHOPS[inside])
+	title.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	panel.add_child(title)
 	var keyboard_hint := Label.new()
 	keyboard_hint.text = "Tab to choose · Enter to buy" if MENUS[inside].size()>1 else "Enter to buy"

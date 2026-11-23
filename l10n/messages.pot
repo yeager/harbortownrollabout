@@ -1531,5 +1531,5 @@ msgstr ""
 msgid "Practice driving"
 msgstr ""
 
-msgid "Larger speech bubbles"
+msgid "Larger text"
 msgstr ""

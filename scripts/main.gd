@@ -103,6 +103,8 @@ var walk_camera_height := 0.0
 var orbit_height := 0.0
 var time_mode := 0
 var day_phase := 0.0
+var santa: Node3D
+var santa_encounters := {}
 var christmas_spruce := preload("res://environment/christmas_spruce.gd").new()
 var last_night := -1.0
 var parked_door_offset := Vector3.ZERO
@@ -4595,6 +4597,12 @@ func _build_pedestrians() -> void:
 	_equip_walker(preload("res://environment/rullator.glb"),.61,Vector2(12,40),Vector3(.26,.90,-.36))
 	var senior: Node3D=walker_data.back().actor
 	senior.get_node("Hair").material_override=_material(Color("#bcbab3"))
+	_make_walker("Santa",26,6.65,-1,Color("#b12531"),Color("#89202b"))
+	santa = walker_data.back().actor
+	walker_data.back().stretch = Vector2(10,42)
+	walker_data.back().speed = 1.15
+	preload("res://characters/santa_costume.gd").dress(santa, _material(Color("#ae2030"),.94,false,"cotton_jersey"), _material(Color("#fff2df"),.98,false,"cotton_jersey"), _material(Color("#332621")), _material(Color("#edb346")))
+	santa.hide()
 	_make_walker("CrossingNeighbour",-12,-6.32,1,Color("#bb703d"),Color("#465663"))
 	crossing_pedestrian = walker_data.pop_back().actor
 	# Cross the boulevard at the marked east-side tram junction.
@@ -4840,6 +4848,7 @@ func _make_walker(label: String, start_x: float, lane_z: float, direction: float
 	walker_data.append({"actor": person, "direction": direction, "speed": 1.15 + randf() * 0.45, "phase": randf() * TAU})
 
 func _apply_reading_size() -> void:
+	shops.set_large_text(large_text)
 	greeting.pixel_size = .0042 if large_text else .003
 	bubble_back.pixel_size = greeting.pixel_size
 
@@ -4873,7 +4882,7 @@ func _say(speaker: Node3D, phrase: String, clip: String) -> void:
 	speech_locale = TranslationServer.get_locale()
 	_show_speech_bubble(speaker, tr(phrase))
 	greeting_voice.stop()
-	greeting_voice.stream = null if clip.is_empty() else L10n.media("res://audio/voices/%s_" + clip + ".wav", TranslationServer.get_locale())
+	greeting_voice.stream = null if clip.is_empty() else preload("res://audio/voices/santa.wav") if clip == "santa" else L10n.media("res://audio/voices/%s_" + clip + ".wav", TranslationServer.get_locale())
 	if greeting_voice.stream != null:
 		bubble_time = maxf(bubble_time, greeting_voice.stream.get_length() + .4)
 		if not AudioServer.is_bus_mute(0):
@@ -4999,6 +5008,26 @@ func _greet_nearby_player(person: Node3D) -> void:
 	if walker.position.distance_to(person.position)>8:
 		person.set_meta("greeted", false)
 
+func _update_santa_encounters() -> void:
+	var people := [walker, shoe_owner, cat_owner, crossing_pedestrian, square_neighbour, waiting_medic, marina_recipient, passenger, arriving_passenger] + bus_companions + clinic_fire_team
+	for entry in walker_data:
+		if entry.actor != santa: people.append(entry.actor)
+	var observer := walker.position if walker.visible else camera.global_position
+	if observer.distance_to(santa.position) > 24 or shops.inside >= 0:
+		santa_encounters.clear()
+		return
+	var greeted := false
+	for person: Node3D in people:
+		if not is_instance_valid(person): continue
+		var gap := santa.position.distance_to(person.position)
+		if not person.is_visible_in_tree() or gap > 5:
+			santa_encounters.erase(person)
+		elif gap < 3 and not santa_encounters.has(person) and bubble_time <= 0:
+			santa_encounters[person] = true
+			greeted = true
+	if greeted:
+		_say(santa, "Ho ho ho", "santa")
+
 func _update_small_talk(delta: float) -> void:
 	chat_wait = maxf(chat_wait-delta,0.0)
 	var observer := walker.global_position if walker.visible else camera.global_position
@@ -5020,12 +5049,12 @@ func _update_small_talk(delta: float) -> void:
 	for i in walker_data.size():
 		var first: Dictionary = walker_data[i]
 		var a: Node3D = first.actor
-		if first.has("scooter") or observer.distance_to(a.position) > 16.0: continue
+		if a == santa or first.has("scooter") or observer.distance_to(a.position) > 16.0: continue
 		for j in range(i+1,walker_data.size()):
 			var second: Dictionary = walker_data[j]
 			var b: Node3D = second.actor
 			var gap := b.position.x-a.position.x
-			if second.has("scooter") or first.direction == second.direction or gap*float(first.direction) <= .85: continue
+			if b == santa or second.has("scooter") or first.direction == second.direction or gap*float(first.direction) <= .85: continue
 			if a.position.distance_to(b.position) > 2.3 or absf(a.position.z-b.position.z) > 1.1: continue
 			chat_pair.assign([a,b])
 			chat_reply = false
@@ -5056,10 +5085,18 @@ func _update_pedestrians(delta: float) -> void:
 		if person.visible:
 			_animate_steps(person, 0, delta)
 			person.get_meta("gait").wave(passenger_wave_time, person == passenger or mission_index == 0, delta)
+	santa.visible = weather.season == 4 and weather.snow > .02
+	if santa.visible:
+		_update_santa_encounters()
+	else:
+		santa_encounters.clear()
 	_update_small_talk(delta)
 	for item in walker_data:
 		var person: Node3D = item["actor"]
-		_greet_nearby_player(person)
+		if person == santa:
+			if not santa.visible: continue
+		else:
+			_greet_nearby_player(person)
 		if person in chat_pair:
 			var other := chat_pair[1] if person == chat_pair[0] else chat_pair[0]
 			var relative := other.position-person.position
@@ -6203,7 +6240,7 @@ func _build_overlay() -> void:
 		pages.append(page)
 	var reading_size := CheckButton.new()
 	reading_size.name = "LargeText"
-	reading_size.text = "Larger speech bubbles"
+	reading_size.text = "Larger text"
 	reading_size.button_pressed = large_text
 	reading_size.toggled.connect(func(enabled: bool):
 		large_text = enabled

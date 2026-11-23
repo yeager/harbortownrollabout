@@ -51,9 +51,14 @@ func check() -> void:
 		quit(1)
 		return
 	await game._change_seat()
+	game.find_child("LargeText", true, false).button_pressed = true
 	var shops = game.shops
 	game.walker.position = Vector3(shops.storefront_x(6),0,41.7)
 	shops.update_customer(true,game.walker.position,true)
+	if shops.first_product.get_theme_font_size("font_size") != 22 or shops.balance.get_theme_font_size("font_size") != 22:
+		printerr("Large text did not reach the shop balance and purchase buttons")
+		quit(1)
+		return
 	const CURRENCIES := {"sv":"mynt","de":"Münzen","es":"monedas","fi":"kolikkoa","fr":"pièces","nb":"mynter","en":"coins"}
 	for locale: String in CURRENCIES.keys():
 		TranslationServer.set_locale(locale)
