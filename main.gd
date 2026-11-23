@@ -4412,9 +4412,9 @@ func _build_pedestrians() -> void:
 
 
 	_make_walker("Neighbour with pushchair",-26,-6.7,1,Color("#87633f"),Color("#465662"))
-	_equip_walker(preload("res://environment/barnvagn.glb"),.97,Vector2(-43,-16))
+	_equip_walker(preload("res://environment/barnvagn.glb"),.97,Vector2(-43,-16),Vector3(.205,.948,-.32))
 	_make_walker("Neighbour with rollator",22,7.0,-1,Color("#567375"),Color("#51495b"))
-	_equip_walker(preload("res://environment/rullator.glb"),.61,Vector2(12,40))
+	_equip_walker(preload("res://environment/rullator.glb"),.61,Vector2(12,40),Vector3(.26,.90,-.36))
 	var senior: Node3D=walker_data.back().actor
 	senior.get_node("Hair").material_override=_material(Color("#bcbab3"))
 	_make_walker("CrossingNeighbour",-12,-6.32,1,Color("#bb703d"),Color("#465663"))
@@ -4434,7 +4434,7 @@ func _build_pedestrians() -> void:
 		walker_data.back().stretch = Vector2(start_x+9,start_x+81)
 		walker_data.back().actor.position.y = _foot_height(start_x+27+i*4,pavement_z)
 
-func _equip_walker(scene: PackedScene, pace: float, stretch: Vector2) -> void:
+func _equip_walker(scene: PackedScene, pace: float, stretch: Vector2, right_grip: Vector3) -> void:
 	var neighbour: Dictionary = walker_data.back()
 	var person: Node3D = neighbour.actor
 	var aid := scene.instantiate() as Node3D
@@ -4458,9 +4458,7 @@ func _equip_walker(scene: PackedScene, pace: float, stretch: Vector2) -> void:
 	neighbour.speed = pace
 	neighbour.stretch = stretch
 	neighbour.pushing = true
-	for arm in person.get_meta("arms"):
-		arm.position.y=1.40
-		arm.rotation.x=.63
+	person.set_meta("aid_right_grip", right_grip)
 
 func _advance_crossing(delta: float) -> void:
 	crossing_wait = maxf(0,crossing_wait-delta)
@@ -4495,6 +4493,11 @@ func _animate_steps(person: Node3D, distance: float, delta: float, pushing := fa
 	var left_stance := gait.phase < 0.5
 	var tuck := sin(PI * walk_jump_left / WALK_JUMP_TIME) if person == walker else 0.0
 	gait.advance(distance / person.scale.y if tuck <= 0 else 0.0, delta, pushing or carrying, tuck)
+	if pushing:
+		var right_grip: Vector3 = person.get_meta("aid_right_grip")
+		for i in 2:
+			var grip := Vector3(-right_grip.x if i == 0 else right_grip.x, right_grip.y, right_grip.z)
+			gait.reach_with_hand(i, person.to_global(grip))
 	if person == walker:
 		if left_stance != (gait.phase < 0.5) and distance > 0.0:
 			var shoe := gait.shoes[0 if gait.phase < .5 else 1]
