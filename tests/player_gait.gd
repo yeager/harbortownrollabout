@@ -67,7 +67,7 @@ func check_gait() -> void:
 				quit(1)
 				return
 		gait.ground_height = func(_x: float, _z: float) -> float: return player.global_position.y
-		for speed: float in [3.4, 6.4]:
+		for speed: float in [game.Gait.WALK_SPEED, game.Gait.RUN_SPEED]:
 			var double_support := false
 			var flight := false
 			var measured_steps := 0
@@ -85,13 +85,17 @@ func check_gait() -> void:
 						contacts += 1
 				double_support = double_support or contacts == 2
 				flight = flight or contacts == 0
-			if speed == 6.4:
+			if speed == game.Gait.WALK_SPEED and (measured_steps < 2 or measured_steps > 4):
+				printerr("Unexpected walking cadence: ", measured_steps, " steps in 1.25 seconds")
+				quit(1)
+				return
+			if speed == game.Gait.RUN_SPEED:
 				print("Sprint contacts over 1.25 seconds: ", measured_steps, " Alma=", alma)
 				if measured_steps < 4 or measured_steps > 7:
 					printerr("Unexpected sprint cadence")
 					quit(1)
 					return
-			if (speed == 3.4 and (flight or not double_support)) or (speed == 6.4 and not flight):
+			if (speed == game.Gait.WALK_SPEED and (flight or not double_support)) or (speed == game.Gait.RUN_SPEED and not flight):
 				printerr("Unexpected foot contact at ", speed, " m/s for Alma=", alma)
 				quit(1)
 				return

@@ -1,6 +1,8 @@
 extends RefCounted
 ## Distance-driven foot placement in a character's local space. Forward is -Z.
 
+const WALK_SPEED := 1.5
+const RUN_SPEED := 6.4
 const THIGH := 0.37
 const SHIN := 0.325
 const HIP_HEIGHT := 0.77
@@ -98,7 +100,7 @@ func advance(distance: float, delta: float, pushing: bool, tuck := 0.0) -> void:
 	if not is_zero_approx(distance):
 		walking_backwards = distance < 0.0
 	var running := smoothstep(2.6, 5.8, pace) * weight if not pushing else 0.0
-	var sprint := smoothstep(3.4, 6.4, pace * actor.scale.y) * weight
+	var sprint := smoothstep(WALK_SPEED, RUN_SPEED, pace * actor.scale.y) * weight
 	# Running covers more ground between contacts while each planted foot
 	# remains within leg reach. Stride is measured between same-foot landings.
 	var stride := clampf(0.64 + pace * 0.41, 0.78, 1.57) + 1.55 * sprint

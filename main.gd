@@ -15,6 +15,7 @@ func _mission_stop() -> int:
 		2: return [1, 2, 0][mission_index]
 		_: return mission_index
 
+const Gait := preload("res://characters/walking_gait.gd")
 const ROAD_HALF := 4.8
 # Inside faces of the continuous perimeter wall, in world X/Z.
 const CITY_INTERIOR := Rect2(-520, -92, 690, 172)
@@ -3843,7 +3844,7 @@ func _walk(delta: float) -> void:
 	walker.rotate_y(-clampf(keys.x,-1,1)*2.5*delta)
 	walk_basis = Basis(Vector3.UP,walker.rotation.y)
 	var running := Input.is_key_pressed(KEY_SHIFT) and not winded and keys.y < 0
-	var desired := walk_basis.z * clampf(keys.y,-1,1) * (6.4 if running else 3.4)
+	var desired := walk_basis.z * clampf(keys.y,-1,1) * (Gait.RUN_SPEED if running else Gait.WALK_SPEED)
 	desired.y = 0
 	var horizontal := Vector3(walking_velocity.x,0,walking_velocity.z)
 	var acceleration := 14.0 if keys.is_zero_approx() else 9.0
@@ -4490,7 +4491,6 @@ func _advance_crossing(delta: float) -> void:
 	_animate_steps(crossing_pedestrian, absf(step), delta)
 
 func _animate_steps(person: Node3D, distance: float, delta: float, pushing := false, phase := 0.0) -> void:
-	const Gait := preload("res://characters/walking_gait.gd")
 	var gait: Gait = person.get_meta("gait") if person.has_meta("gait") else null
 	if gait == null:
 		gait = Gait.new(person, phase, _foot_height if person == walker else Callable())
@@ -4513,7 +4513,7 @@ func _animate_steps(person: Node3D, distance: float, delta: float, pushing := fa
 			if snowy:
 				_stamp_snow_step(shoe, gait.phase < .5)
 			footstep.stream = SNOW_STEP if snowy else DRY_STEP
-			var impact := smoothstep(3.4, 6.4, absf(distance) / maxf(delta, .00001))
+			var impact := smoothstep(Gait.WALK_SPEED, Gait.RUN_SPEED, absf(distance) / maxf(delta, .00001))
 			footstep.volume_db = lerpf(-13.0, -9.0, impact)
 			footstep.pitch_scale = (0.94 if left_stance else 1.06) * lerpf(1.0, 0.94, impact)
 			footstep.play()
