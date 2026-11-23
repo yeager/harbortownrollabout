@@ -273,6 +273,8 @@ var requested_ice := TextureRect.new()
 var flavour_choices := GridContainer.new()
 var ice_flavours: Array[AtlasTexture] = []
 var grocery_bags: Array[Node3D] = []
+const PARCEL_VEHICLES := [3,6,7,8,9,PORSCHE,MINI_CABRIO]
+var carried_parcel_leg := -1
 var delivery_parcels: Array[Node3D] = []
 var clinic_fire_team: Array[Node3D] = []
 var bus_companions: Array[Node3D] = []
@@ -738,6 +740,7 @@ func _save_checkpoint() -> void:
 		elif boating:
 			road_checkpoint["launch_transform"] = launch.transform
 		elif walker.visible:
+			road_checkpoint["carried_parcel_leg"] = carried_parcel_leg
 			road_checkpoint["walk_position"] = walker.position
 			road_checkpoint["walk_heading"] = walker.rotation.y
 			road_checkpoint["door_offset"] = parked_door_offset
@@ -1502,6 +1505,8 @@ func _arrival_radius() -> float:
 	return 2.1 if walker.visible else 5.2
 
 func _at_target() -> bool:
+	if walker.visible and vehicle_index in PARCEL_VEHICLES and mission_index in [1,2] and carried_parcel_leg != mission_index:
+		return false
 	if scooter.visible or free_drive or boating or ferry_passenger or tram_mode != 0 or (vehicle_index in [TAXI,RECOVERY,BUS,ICE_CREAM,REFUSE,SHOPPER] and walker.visible) or mission_index >= TARGETS.size(): return false
 	var actor := walker if walker.visible else ambulance
 	return actor.position.distance_to(_mission_destination()) < _arrival_radius()
@@ -4408,6 +4413,7 @@ func _change_seat() -> void:
 			old_car.hide()
 			await _swing_shopper(vehicle_model,true)
 			old_car.show()
+		carried_parcel_leg = mission_index
 		parked_door_offset = old_car.to_local(door)
 		walker.position = Vector3(door.x,_foot_height(door.x,door.z),door.z)
 		walk_basis = ambulance.basis
@@ -6383,9 +6389,22 @@ func _build_target_marker() -> void:
 		var parcel := Node3D.new()
 		parcel.name = "Delivery parcel %d" % (i+1)
 		add_child(parcel)
-		_make_box("Carton",Vector3(.46,.31,.33),Vector3.UP*.155,Color("#b48355"),false,parcel)
-		_make_box("Packing tape",Vector3(.065,.012,.335),Vector3.UP*.31,Color("#dfbc86"),false,parcel)
-		_make_box("Address label",Vector3(.12,.008,.085),Vector3(.13,.313,.02),Color("#f3efdf"),false,parcel)
+		if i == 0:
+			_make_box("Clinic supply case",Vector3(.46,.28,.33),Vector3.UP*.14,Color("#e1e7dc"),false,parcel)
+			_make_box("Case lid",Vector3(.47,.045,.34),Vector3.UP*.275,Color("#367873"),false,parcel)
+			for side in [-1,1]:
+				_make_box("Case latch",Vector3(.045,.065,.018),Vector3(side*.13,.245,-.166),Color("#333c3f"),false,parcel)
+		else:
+			_make_box("Marina crate base",Vector3(.46,.045,.33),Vector3.UP*.023,Color("#935832"),false,parcel)
+			for side in [-1,1]:
+				for level in 3:
+					_make_box("Crate slat",Vector3(.46,.065,.018),Vector3(0,.072+level*.082,side*.16),Color("#b78254"),false,parcel)
+				_make_box("Crate end",Vector3(.025,.27,.30),Vector3(side*.22,.136,0),Color("#a06d49"),false,parcel)
+			var rope_finish := _material(Color("#e6b86d"))
+			for coil in 4:
+				var z := -.098+coil*.065
+				_tube_between(parcel,Vector3(-.17,.175,z),Vector3(.17,.175,z),.035,rope_finish)
+				_tube_between(parcel,Vector3(-.17,.238,z),Vector3(.17,.238,z),.035,rope_finish)
 		delivery_parcels.append(parcel)
 		var roll := Node3D.new()
 		roll.name = "Blanket roll %d" % (i+1)
@@ -6709,11 +6728,11 @@ func _update_mission_marker() -> void:
 			var site := WALK_TARGETS[0] if stage == 0 else WALK_TARGETS[i+1]
 			bag.position = site + Vector3(.35+i*.34,0,.58)
 			bag.position.y = _foot_height(bag.position.x,bag.position.z)
-	var delivering := vehicle_index in [3,6,7,8,9,PORSCHE,MINI_CABRIO] and not free_drive
+	var delivering := vehicle_index in PARCEL_VEHICLES and not free_drive
 	for i in delivery_parcels.size():
 		var parcel := delivery_parcels[i]
 		var delivered := mission_index >= i+2
-		var carried := delivering and walker.visible and mission_index == i+1
+		var carried := delivering and walker.visible and carried_parcel_leg == mission_index and mission_index == i+1
 		var holder: Node3D = walker.get_node("Jacket") if carried else self
 		var onboard := delivering and mission_index > 0 and not delivered and not carried
 		if onboard:
@@ -7967,6 +7986,7 @@ func _resume_road_checkpoint() -> void:
 		walker.position = road_checkpoint.walk_position
 		walker.rotation.y = road_checkpoint.walk_heading
 		walk_basis = walker.basis
+		carried_parcel_leg = road_checkpoint.get("carried_parcel_leg",mission_index)
 		parked_door_offset = road_checkpoint.door_offset
 		walker.show()
 		listener.reparent(walker, false)
