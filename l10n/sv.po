@@ -221,8 +221,8 @@ msgstr "Fri utforskning"
 msgid "Explore on foot or by vehicle. Stop at the depot to change vehicles."
 msgstr "Utforska till fots eller med ett fordon. Stanna vid depån för att byta fordon."
 
-msgid "{up} / ↑ Drive   ·   {left} {right} / ← → Steer   ·   {down} / ↓ Brake or reverse   ·   F Get out   ·   P Pause"
-msgstr "{up} / ↑ Gasa   ·   {left} {right} / ← → Styr   ·   {down} / ↓ Bromsa eller backa   ·   F Kliv ur   ·   P Paus"
+msgid "{up} / ↑ Drive   ·   {left} {right} / ← → Steer   ·   {down} / ↓ Brake or reverse   ·   {seat} Get out   ·   P Pause"
+msgstr "{up} / ↑ Gasa   ·   {left} {right} / ← → Styr   ·   {down} / ↓ Bromsa eller backa   ·   {seat} Kliv ur   ·   P Paus"
 
 msgid "Continue walking"
 msgstr "Fortsätt gå"
@@ -859,15 +859,15 @@ msgstr "Lämna grävmaskinen · F"
 msgid "Drive excavator · F"
 msgstr "Kör grävmaskinen · F"
 
-msgid "Arrows or {up}{left}{down}{right}: drive and steer · Q/E: turn the cab · F: get out\nI/K: raise or lower the boom · Y/G: move the outer arm · O/L: tilt the bucket"
-msgstr "Pilar eller {up}{left}{down}{right}: kör och styr · Q/E: snurra hytten · F: kliv ur\nI/K: höj eller sänk bommen · Y/G: rör den yttre armen · O/L: vinkla skopan"
+msgid "Arrows or {up}{left}{down}{right}: drive and steer · Q/E: turn the cab · {seat}: get out\nI/K: raise or lower the boom · Y/G: move the outer arm · O/L: tilt the bucket"
+msgstr "Pilar eller {up}{left}{down}{right}: kör och styr · Q/E: snurra hytten · {seat}: kliv ur\nI/K: höj eller sänk bommen · Y/G: rör den yttre armen · O/L: vinkla skopan"
 
 #, c-format
 msgid "Walk or rest · Run again in %d s"
 msgstr "Gå eller vila · Du kan springa igen om %d s"
 
-msgid "{up}/{down} Walk · {left}/{right} Turn · Shift + {up} Run · F Enter · {scooter} Scooter"
-msgstr "{up}/{down} Gå · {left}/{right} Vänd · Skift + {up} Spring · F Kliv in · {scooter} Sparkcykel"
+msgid "{up}/{down} Walk · {left}/{right} Turn · Shift + {up} Run · {seat} Enter · {scooter} Scooter"
+msgstr "{up}/{down} Gå · {left}/{right} Vänd · Skift + {up} Spring · {seat} Kliv in · {scooter} Sparkcykel"
 
 msgid "PgUp Raise camera · PgDn Lower camera"
 msgstr "PgUp Höj kameran · PgDn Sänk kameran"

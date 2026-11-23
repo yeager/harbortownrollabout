@@ -236,10 +236,10 @@ msgstr ""
 "kjøretøy."
 
 msgid ""
-"{up} / ↑ Drive   ·   {left} {right} / ← → Steer   ·   {down} / ↓ Brake or reverse   ·   F Get "
+"{up} / ↑ Drive   ·   {left} {right} / ← → Steer   ·   {down} / ↓ Brake or reverse   ·   {seat} Get "
 "out   ·   P Pause"
 msgstr ""
-"{up} / ↑ Kjør   ·   {left} {right} / ← → Styr   ·   {down} / ↓ Brems eller rygg   ·   F Gå ut"
+"{up} / ↑ Kjør   ·   {left} {right} / ← → Styr   ·   {down} / ↓ Brems eller rygg   ·   {seat} Gå ut"
 "   ·   P Pause"
 
 msgid "Continue walking"
@@ -905,18 +905,18 @@ msgid "Drive excavator · F"
 msgstr "Kjør gravemaskinen · F"
 
 msgid ""
-"Arrows or {up}{left}{down}{right}: drive and steer · Q/E: turn the cab · F: get out\n"
+"Arrows or {up}{left}{down}{right}: drive and steer · Q/E: turn the cab · {seat}: get out\n"
 "I/K: raise or lower the boom · Y/G: move the outer arm · O/L: tilt the bucket"
 msgstr ""
-"Piltaster eller {up}{left}{down}{right}: kjør og styr · Q/E: sving førerhuset · F: gå ut\n"
+"Piltaster eller {up}{left}{down}{right}: kjør og styr · Q/E: sving førerhuset · {seat}: gå ut\n"
 "I/K: hev eller senk bommen · Y/G: beveg gravearmen · O/L: vipp skuffa"
 
 #, c-format
 msgid "Walk or rest · Run again in %d s"
 msgstr "Gå eller hvil · Du kan løpe igjen om %d s"
 
-msgid "{up}/{down} Walk · {left}/{right} Turn · Shift + {up} Run · F Enter · {scooter} Scooter"
-msgstr "{up}/{down} Gå · {left}/{right} Snu · Shift + {up} Løp · F Gå inn · {scooter} Sparkesykkel"
+msgid "{up}/{down} Walk · {left}/{right} Turn · Shift + {up} Run · {seat} Enter · {scooter} Scooter"
+msgstr "{up}/{down} Gå · {left}/{right} Snu · Shift + {up} Løp · {seat} Gå inn · {scooter} Sparkesykkel"
 
 msgid "PgUp Raise camera · PgDn Lower camera"
 msgstr "PgUp Hev kameraet · PgDn Senk kameraet"

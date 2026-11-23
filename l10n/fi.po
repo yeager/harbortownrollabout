@@ -236,10 +236,10 @@ msgstr ""
 "Tutki kaupunkia jalan tai ajoneuvolla. Varikolla voit vaihtaa ajoneuvoa."
 
 msgid ""
-"{up} / ↑ Drive   ·   {left} {right} / ← → Steer   ·   {down} / ↓ Brake or reverse   ·   F Get "
+"{up} / ↑ Drive   ·   {left} {right} / ← → Steer   ·   {down} / ↓ Brake or reverse   ·   {seat} Get "
 "out   ·   P Pause"
 msgstr ""
-"{up} / ↑ Aja   ·   {left} {right} / ← → Ohjaa   ·   {down} / ↓ Jarruta tai peruuta   ·   F "
+"{up} / ↑ Aja   ·   {left} {right} / ← → Ohjaa   ·   {down} / ↓ Jarruta tai peruuta   ·   {seat} "
 "Poistu   ·   P Tauko"
 
 msgid "Continue walking"
@@ -900,19 +900,19 @@ msgid "Drive excavator · F"
 msgstr "Aja kaivinkonetta · F"
 
 msgid ""
-"Arrows or {up}{left}{down}{right}: drive and steer · Q/E: turn the cab · F: get out\n"
+"Arrows or {up}{left}{down}{right}: drive and steer · Q/E: turn the cab · {seat}: get out\n"
 "I/K: raise or lower the boom · Y/G: move the outer arm · O/L: tilt the bucket"
 msgstr ""
-"Nuolinäppäimet tai {up}{left}{down}{right}: aja ja ohjaa · Q/E: käännä ohjaamoa · F: poistu\n"
+"Nuolinäppäimet tai {up}{left}{down}{right}: aja ja ohjaa · Q/E: käännä ohjaamoa · {seat}: poistu\n"
 "I/K: nosta tai laske puomia · Y/G: liikuta kaivuvartta · O/L: kallista kauhaa"
 
 #, c-format
 msgid "Walk or rest · Run again in %d s"
 msgstr "Kävele tai lepää · Voit taas juosta %d s kuluttua"
 
-msgid "{up}/{down} Walk · {left}/{right} Turn · Shift + {up} Run · F Enter · {scooter} Scooter"
+msgid "{up}/{down} Walk · {left}/{right} Turn · Shift + {up} Run · {seat} Enter · {scooter} Scooter"
 msgstr ""
-"{up}/{down} Kävele · {left}/{right} Käänny · Shift + {up} Juokse · F Nouse kyytiin · {scooter} Potkulauta"
+"{up}/{down} Kävele · {left}/{right} Käänny · Shift + {up} Juokse · {seat} Nouse kyytiin · {scooter} Potkulauta"
 
 msgid "PgUp Raise camera · PgDn Lower camera"
 msgstr "PgUp Nosta kameraa · PgDn Laske kameraa"

@@ -220,7 +220,7 @@ msgstr ""
 msgid "Explore on foot or by vehicle. Stop at the depot to change vehicles."
 msgstr ""
 
-msgid "{up} / ↑ Drive   ·   {left} {right} / ← → Steer   ·   {down} / ↓ Brake or reverse   ·   F Get out   ·   P Pause"
+msgid "{up} / ↑ Drive   ·   {left} {right} / ← → Steer   ·   {down} / ↓ Brake or reverse   ·   {seat} Get out   ·   P Pause"
 msgstr ""
 
 msgid "Continue walking"
@@ -858,14 +858,14 @@ msgstr ""
 msgid "Drive excavator · F"
 msgstr ""
 
-msgid "Arrows or {up}{left}{down}{right}: drive and steer · Q/E: turn the cab · F: get out\nI/K: raise or lower the boom · Y/G: move the outer arm · O/L: tilt the bucket"
+msgid "Arrows or {up}{left}{down}{right}: drive and steer · Q/E: turn the cab · {seat}: get out\nI/K: raise or lower the boom · Y/G: move the outer arm · O/L: tilt the bucket"
 msgstr ""
 
 #, c-format
 msgid "Walk or rest · Run again in %d s"
 msgstr ""
 
-msgid "{up}/{down} Walk · {left}/{right} Turn · Shift + {up} Run · F Enter · {scooter} Scooter"
+msgid "{up}/{down} Walk · {left}/{right} Turn · Shift + {up} Run · {seat} Enter · {scooter} Scooter"
 msgstr ""
 
 msgid "PgUp Raise camera · PgDn Lower camera"

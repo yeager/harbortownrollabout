@@ -236,11 +236,11 @@ msgstr ""
 "vehículo."
 
 msgid ""
-"{up} / ↑ Drive   ·   {left} {right} / ← → Steer   ·   {down} / ↓ Brake or reverse   ·   F Get "
+"{up} / ↑ Drive   ·   {left} {right} / ← → Steer   ·   {down} / ↓ Brake or reverse   ·   {seat} Get "
 "out   ·   P Pause"
 msgstr ""
 "{up} / ↑ Avanza   ·   {left} {right} / ← → Gira   ·   {down} / ↓ Frena o da marcha atrás   ·   "
-"F Baja   ·   P Pausa"
+"{seat} Baja   ·   P Pausa"
 
 msgid "Continue walking"
 msgstr "Seguir caminando"
@@ -911,18 +911,18 @@ msgid "Drive excavator · F"
 msgstr "Conducir la excavadora · F"
 
 msgid ""
-"Arrows or {up}{left}{down}{right}: drive and steer · Q/E: turn the cab · F: get out\n"
+"Arrows or {up}{left}{down}{right}: drive and steer · Q/E: turn the cab · {seat}: get out\n"
 "I/K: raise or lower the boom · Y/G: move the outer arm · O/L: tilt the bucket"
 msgstr ""
-"Flechas o {up}{left}{down}{right}: conduce y gira · Q/E: gira la cabina · F: baja\n"
+"Flechas o {up}{left}{down}{right}: conduce y gira · Q/E: gira la cabina · {seat}: baja\n"
 "I/K: sube o baja la pluma · Y/G: mueve el brazo exterior · O/L: inclina el cucharón"
 
 #, c-format
 msgid "Walk or rest · Run again in %d s"
 msgstr "Camina o descansa · Podrás correr en %d s"
 
-msgid "{up}/{down} Walk · {left}/{right} Turn · Shift + {up} Run · F Enter · {scooter} Scooter"
-msgstr "{up}/{down} Camina · {left}/{right} Gira · Shift + {up} Corre · F Sube · {scooter} Patinete"
+msgid "{up}/{down} Walk · {left}/{right} Turn · Shift + {up} Run · {seat} Enter · {scooter} Scooter"
+msgstr "{up}/{down} Camina · {left}/{right} Gira · Shift + {up} Corre · {seat} Sube · {scooter} Patinete"
 
 msgid "PgUp Raise camera · PgDn Lower camera"
 msgstr "Re Pág: sube la cámara · Av Pág: baja la cámara"

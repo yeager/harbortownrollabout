@@ -4849,7 +4849,7 @@ func _movement_hint(text: String) -> String:
 	return text.format({"up":"8","left":"4","down":"5","right":"6"} if number_movement else {"up":"W","left":"A","down":"S","right":"D"})
 
 func _with_recovery_hint(controls: String) -> String:
-	return _movement_hint(controls) + "   ·   " + _recovery_hint()
+	return _movement_hint(controls).replace("{seat}", "F / F3" if seat_f3 else "F") + "   ·   " + _recovery_hint()
 
 func _recovery_hint() -> String:
 	return tr("Stuck? Press %s") % OS.get_keycode_string(recovery_key)
@@ -4859,7 +4859,7 @@ func _walking_hint() -> String:
 		return tr("Walk or rest · Run again in %d s") % _rest_seconds()
 	if run_ready_hint_time > 0:
 		return tr("Ready to run again! Hold Shift and walk forward.")
-	return tr("{up}/{down} Walk · {left}/{right} Turn · Shift + {up} Run · F Enter · {scooter} Scooter").replace("{scooter}",OS.get_keycode_string(scooter_key)) + "   ·   " + (tr("%s Jump") % OS.get_keycode_string(jump_key)) + "   ·   " + tr("9 Raise camera · 3 Lower camera" if number_camera else "PgUp Raise camera · PgDn Lower camera") + "\n" + tr("Hold V and move the mouse to look around")
+	return tr("{up}/{down} Walk · {left}/{right} Turn · Shift + {up} Run · {seat} Enter · {scooter} Scooter").replace("{scooter}",OS.get_keycode_string(scooter_key)) + "   ·   " + (tr("%s Jump") % OS.get_keycode_string(jump_key)) + "   ·   " + tr("9 Raise camera · 3 Lower camera" if number_camera else "PgUp Raise camera · PgDn Lower camera") + "\n" + tr("Hold V and move the mouse to look around")
 
 func _walk(delta: float) -> void:
 	if boule_guest_turn or boule_seated: return
@@ -9824,7 +9824,7 @@ func _refresh_ui() -> void:
 	elif boating:
 		hints.text = "{up} / ↑ Throttle · {left} {right} / ← → Steer · {down} / ↓ Slow or reverse · H Horn · P Pause"
 	elif free_drive:
-		hints.text = "{up} / ↑ Drive   ·   {left} {right} / ← → Steer   ·   {down} / ↓ Brake or reverse   ·   F Get out   ·   P Pause"
+		hints.text = "{up} / ↑ Drive   ·   {left} {right} / ← → Steer   ·   {down} / ↓ Brake or reverse   ·   {seat} Get out   ·   P Pause"
 	else:
 		hints.text = "{up} / ↑  Drive     {left} {right} / ← →  Steer     {down} / ↓  Brake or reverse\nRelease to slow down   ·   Space to help   ·   P to pause"
 	var camera_hint := tr("Hold V and move the mouse to look around")
@@ -9833,7 +9833,7 @@ func _refresh_ui() -> void:
 		camera_hint = camera_hint.replace("{scooter}",OS.get_keycode_string(scooter_key))
 	hints.text = camera_hint if walker.visible and tram_mode == 0 and not boating else tr(hints.text) + "   ·   " + camera_hint
 	if operating_excavator:
-		hints.text = tr("Arrows or {up}{left}{down}{right}: drive and steer · Q/E: turn the cab · F: get out\nI/K: raise or lower the boom · Y/G: move the outer arm · O/L: tilt the bucket")
+		hints.text = tr("Arrows or {up}{left}{down}{right}: drive and steer · Q/E: turn the cab · {seat}: get out\nI/K: raise or lower the boom · Y/G: move the outer arm · O/L: tilt the bucket")
 		hints.text += "\n" + tr("Hold left mouse to drive forward or right mouse to reverse.")
 		for control in [horn_button, light_button, siren_button]:
 			control.hide()

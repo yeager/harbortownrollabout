@@ -236,11 +236,11 @@ msgstr ""
 "Fahrzeug wechseln."
 
 msgid ""
-"{up} / ↑ Drive   ·   {left} {right} / ← → Steer   ·   {down} / ↓ Brake or reverse   ·   F Get "
+"{up} / ↑ Drive   ·   {left} {right} / ← → Steer   ·   {down} / ↓ Brake or reverse   ·   {seat} Get "
 "out   ·   P Pause"
 msgstr ""
 "{up} / ↑ Fahren   ·   {left} {right} / ← → Lenken   ·   {down} / ↓ Bremsen oder rückwärtsfahren"
-"   ·   F Aussteigen   ·   P Pause"
+"   ·   {seat} Aussteigen   ·   P Pause"
 
 msgid "Continue walking"
 msgstr "Weitergehen"
@@ -918,18 +918,18 @@ msgid "Drive excavator · F"
 msgstr "Bagger fahren · F"
 
 msgid ""
-"Arrows or {up}{left}{down}{right}: drive and steer · Q/E: turn the cab · F: get out\n"
+"Arrows or {up}{left}{down}{right}: drive and steer · Q/E: turn the cab · {seat}: get out\n"
 "I/K: raise or lower the boom · Y/G: move the outer arm · O/L: tilt the bucket"
 msgstr ""
-"Pfeiltasten oder {up}{left}{down}{right}: fahren und lenken · Q/E: Kabine drehen · F: aussteigen\n"
+"Pfeiltasten oder {up}{left}{down}{right}: fahren und lenken · Q/E: Kabine drehen · {seat}: aussteigen\n"
 "I/K: Ausleger heben oder senken · Y/G: Stiel bewegen · O/L: Schaufel kippen"
 
 #, c-format
 msgid "Walk or rest · Run again in %d s"
 msgstr "Geh oder ruh dich aus · In %d s kannst du wieder rennen"
 
-msgid "{up}/{down} Walk · {left}/{right} Turn · Shift + {up} Run · F Enter · {scooter} Scooter"
-msgstr "{up}/{down} Gehen · {left}/{right} Drehen · Shift + {up} Rennen · F Einsteigen · {scooter} Roller"
+msgid "{up}/{down} Walk · {left}/{right} Turn · Shift + {up} Run · {seat} Enter · {scooter} Scooter"
+msgstr "{up}/{down} Gehen · {left}/{right} Drehen · Shift + {up} Rennen · {seat} Einsteigen · {scooter} Roller"
 
 msgid "PgUp Raise camera · PgDn Lower camera"
 msgstr "Bild ↑ Kamera höher · Bild ↓ Kamera tiefer"
