@@ -3341,22 +3341,31 @@ func _build_fire_station_bay(model: Node3D) -> void:
 	building_bounds.append(fire_door_bounds)
 
 func _update_fire_station_door(delta: float) -> void:
-	var truck: AABB
-	if vehicle_index == 2 and ambulance.visible:
-		truck = ambulance.global_transform*AABB(Vector3(-player_half_size.x,-.1,-front_reach),Vector3(player_half_size.x*2,3.8,front_reach+rear_reach))
-	elif parked_cars[2].visible:
-		truck = _parked_bounds(2)
-	var sensor := fire_door_bounds.grow(2.2)
-	if fire_door_open == 0 and not sensor.intersects(truck): return
-	var clear_doorway := not sensor.intersects(truck)
-	if walker.visible and fire_door_bounds.grow(.5).has_point(walker.position+Vector3.UP):
-		clear_doorway = false
-	fire_door_open = move_toward(fire_door_open,0.0 if clear_doorway else 1.0,delta)
+	var player_body := ambulance.global_transform*AABB(Vector3(-player_half_size.x,-.1,-front_reach),
+		Vector3(player_half_size.x*2,3.8,front_reach+rear_reach))
+	var approach := fire_door_bounds.grow(2.2)
+	var requested := vehicle_index == 2 and ambulance.visible and approach.intersects(player_body)
+	if parked_cars[2].visible:
+		requested = requested or approach.intersects(_parked_bounds(2))
+	if not requested and fire_door_open == 0: return
+	var occupied := requested or _fire_door_occupied(fire_door_bounds.grow(.5),player_body)
+	fire_door_open = move_toward(fire_door_open,1.0 if occupied else 0.0,delta)
 	fire_station_shutter.scale.y = lerpf(1,.025,fire_door_open)
 	fire_station_shutter.position.y = 4.60-2.35*fire_station_shutter.scale.y
 	var barrier := fire_door_bounds
 	if fire_door_open >= .99: barrier.position.y += 6
 	building_bounds[fire_door_index] = barrier
+
+func _fire_door_occupied(opening: AABB, player_body: AABB) -> bool:
+	if ambulance.visible and opening.intersects(player_body): return true
+	if walker.visible and opening.has_point(walker.position+Vector3.UP): return true
+	for i in parked_cars.size():
+		if parked_cars[i].visible and opening.intersects(_parked_bounds(i)): return true
+	for item in traffic_data:
+		if opening.intersects(_traffic_bounds(item)): return true
+	for item in walker_data:
+		if item.actor.visible and opening.has_point(item.actor.position+Vector3.UP): return true
+	return false
 
 
 func _build_trees() -> void:
