@@ -158,18 +158,40 @@ for part in moving_parts:
     part.parent = hinge
     part.location -= hinge.location
 box("Seat cushion",(0,.18,.595),(.61,.42,.093),vinyl,.044)
-back=box("Upright seat back",(0,.395,.82),(.60,.074,.48),vinyl,.034)
-back.rotation_euler.x=-.12
-# Contrasting welt sewn around the face of the original vinyl backrest.
-welt = v.material("Ivory seat piping", (.72,.62,.44), 0,.52)
+# Upholstery sections run from the padded face to the shallow rear shell.
 outline = []
-for cx, cz, start in ((.255,.195,0),(-.255,.195,90),(-.255,-.195,180),(.255,-.195,270)):
-    for step in range(6):
-        angle = math.radians(start+step*18)
-        outline.append(Vector((cx+.035*math.cos(angle), -.037, cz+.035*math.sin(angle))))
-for i, point in enumerate(outline):
+for cx, cz, start in ((.235,.19,0),(-.235,.19,90),(-.235,-.19,180),(.235,-.19,270)):
+    for step in range(7):
+        angle = math.radians(start + step*15)
+        x = cx + .065*math.cos(angle)
+        z = cz + .065*math.sin(angle)
+        outline.append((x*(1-.09*(z+.255)/.51), z))
+vertices, faces = [], []
+sections = [(.68,-.066),(.90,-.054),(.98,-.034),(1,0),(.96,.033),(.84,.049)]
+count = len(outline)
+for ring, (scale, depth) in enumerate(sections):
+    for i, (x,z) in enumerate(outline):
+        vertices.append((x*scale, depth-.012*(x/.30)**2, z*scale))
+        if ring:
+            prev = (ring-1)*count
+            j = (i+1)%count
+            faces.append((prev+i,ring*count+i,ring*count+j,prev+j))
+faces.extend([tuple(range(count)),tuple(reversed(range(len(vertices)-count,len(vertices))))])
+mesh = bpy.data.meshes.new("Padded backrest")
+mesh.from_pydata(vertices, [], faces)
+mesh.materials.append(vinyl)
+back = bpy.data.objects.new("Upright seat back",mesh)
+bpy.context.collection.objects.link(back)
+back.parent = root
+back.location = (0,.407,.85)
+back.rotation_euler.x = -.19
+for face in mesh.polygons:
+    face.use_smooth = True
+welt = v.material("Ivory seat piping", (.72,.62,.44), 0,.52)
+seam = [Vector((x,-.012*(x/.30)**2,z)) for x,z in outline]
+for i, point in enumerate(seam):
     tube("Backrest welt", back.location+back.rotation_euler.to_matrix()@point,
-         back.location+back.rotation_euler.to_matrix()@outline[(i+1)%len(outline)], .0045, welt)
+         back.location+back.rotation_euler.to_matrix()@seam[(i+1)%count], .005, welt)
 tube("Steering column",(0,-.42,.245),(0,-.13,.85),.022,v.DARK)
 tube("Handlebar",(-.25,-.13,.85),(.25,-.13,.85),.017,v.METAL)
 for side in (-1,1):
