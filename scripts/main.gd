@@ -571,6 +571,7 @@ const SMALL_TALK := [
 ]
 var boule_join_requested := false
 const BOULE_BENCH := BOULE_CENTRE + Vector3(3.3,0,0)
+const BOULE_BENCH_APPROACH := BOULE_BENCH + Vector3.LEFT*.85
 var boule_seated := false
 const THERMOS_REQUEST := "I lost my green flask after the boule match. Could you check by the bench?"
 const THERMOS_RETURN := "Bring the flask back to the boule player in the green jacket."
@@ -5088,7 +5089,7 @@ func _set_boule_seated(seated: bool) -> void:
 		walker.position = BOULE_BENCH + Vector3.UP*(.50-gait.legs[0].position.y*walker.scale.y)
 		gait.sit()
 	else:
-		walker.position = BOULE_BENCH + Vector3.LEFT*.85
+		walker.position = BOULE_BENCH_APPROACH
 		walker.position.y = _foot_height(walker.position.x,walker.position.z)
 	_update_entry_button()
 
@@ -7243,10 +7244,13 @@ func _update_route_arrows() -> void:
 	var grill_destination := free_drive and target == shops.grill_counter()
 	var walking_to_grill := grill_destination and walker.visible
 	var arrived := shops.at_grill_counter(origin) if walking_to_grill else origin.distance_to(target) < _arrival_radius()
+	var bench_destination := free_drive and target == BOULE_BENCH_APPROACH
+	if bench_destination and walker.visible:
+		arrived = _at_boule_bench()
 	if free_drive and target == FIRE_RETURN_BAY:
 		arrived = _parked_in_fire_bay()
 	if free_drive and arrived:
-		if not grill_destination or walker.visible:
+		if walker.visible or not (grill_destination or bench_destination):
 			map_goal = Vector3.INF
 		return
 	var start := Vector2(origin.x, origin.z)
@@ -7260,7 +7264,9 @@ func _update_route_arrows() -> void:
 	var goal := Vector2(target.x, target.z)
 	if walker.visible:
 		navigator.remaining_lane.clear()
-		if walking_to_grill and origin.z <= shops.FRONT_Z and start.distance_to(goal) <= 5.0:
+		var near_counter := walking_to_grill and origin.z <= shops.FRONT_Z
+		var near_bench := bench_destination and origin.x <= BOULE_BENCH.x
+		if (near_counter or near_bench) and start.distance_to(goal) <= 5.0:
 			points = PackedVector2Array([start, goal])
 		else:
 			points.append_array(navigator.path(start, goal))
@@ -7272,7 +7278,7 @@ func _update_route_arrows() -> void:
 	if not walker.visible and not paused and not boating and not operating_excavator:
 		turn_preview.text = navigator.turn_preview(points, car_forward, show_turn_street)
 		turn_preview.visible = not turn_preview.text.is_empty()
-	var gap := minf(3.5, start.distance_to(goal) * .5) if walking_to_grill else 3.5
+	var gap := minf(3.5, start.distance_to(goal) * .5) if walking_to_grill or (bench_destination and walker.visible) else 3.5
 	var used := 0
 	for i in range(1,points.size()):
 		var segment := points[i]-points[i-1]
@@ -8174,7 +8180,7 @@ func _build_town_map() -> void:
 	var chart := preload("res://scripts/town_map.gd").new()
 	body.add_child(chart)
 	var counter := shops.grill_counter()
-	chart.configure(navigator,PackedVector3Array([TARGETS[0],TARGETS[1],TARGETS[2],SCHOOL_CURB,STATION_DROP,counter,FLOUR_CURB,BOULE_BENCH+Vector3.LEFT*.85]),MAP_NAMES)
+	chart.configure(navigator,PackedVector3Array([TARGETS[0],TARGETS[1],TARGETS[2],SCHOOL_CURB,STATION_DROP,counter,FLOUR_CURB,BOULE_BENCH_APPROACH]),MAP_NAMES)
 	var legend := HFlowContainer.new()
 	body.add_child(legend)
 	for i in MAP_NAMES.size():

@@ -7,6 +7,27 @@ func check_rounds() -> void:
 	var game = load("res://main.tscn").instantiate()
 	root.add_child(game)
 	game._start_game()
+	game.free_drive = true
+	game.map_goal = game.BOULE_BENCH_APPROACH
+	game.ambulance.position = game.map_goal + Vector3.LEFT * 4
+	game._update_route_arrows()
+	if game.map_goal == Vector3.INF:
+		printerr("Parking near the court cleared the walking destination")
+		quit(1)
+		return
+	game.walker.show()
+	game.walker.position = game.map_goal + Vector3.LEFT * 1.5
+	game._update_route_arrows()
+	if game.map_goal == Vector3.INF or not game.route_arrows.any(func(arrow): return arrow.visible):
+		printerr("Directions ended before the spectator could sit down")
+		quit(1)
+		return
+	game.walker.position = game.BOULE_BENCH_APPROACH
+	game._update_route_arrows()
+	if not game._at_boule_bench() or game.map_goal != Vector3.INF:
+		printerr("The bench should be usable when directions end")
+		quit(1)
+		return
 	for step: float in [1.0/60.0, 0.1]:
 		var throws: Array[int] = []
 		var pickups: Array[int] = []
