@@ -3212,6 +3212,20 @@ func _build_new_blocks() -> void:
 		for bar in [-1,0,1]:
 			_make_box("Steel mullion",Vector3(.08,2.9,.21),bay+Vector3.RIGHT*bar*.91,Color("#84908b"))
 		_make_box("Steel transom",Vector3(3.65,.08,.21),bay,Color("#84908b"))
+	# The striped stack makes the workshop recognizable above the surrounding roofs.
+	for band in 5:
+		var stack := MeshInstance3D.new()
+		stack.name = "WorkshopChimneyBand%d" % band
+		var section := CylinderMesh.new()
+		section.height = 1.5
+		section.bottom_radius = .8 - band * .065
+		section.top_radius = section.bottom_radius - .065
+		section.radial_segments = 24
+		section.rings = 0
+		stack.mesh = section
+		stack.material_override = _material(Color("#ad513c") if band % 2 == 0 else Color("#e4dacc"))
+		stack.position = p + Vector3(6, 6.25 + band * section.height, -2.8)
+		add_child(stack)
 	# The recovery route approaches the workshop from the north.
 	for x in [-4.0,4.0]:
 		var lamp_mount := p+Vector3(x,3.94,-5.43)
