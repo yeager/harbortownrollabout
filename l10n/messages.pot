@@ -1596,3 +1596,21 @@ msgstr ""
 
 msgid "Tap a star on a vehicle to add it here."
 msgstr ""
+
+msgid "Town map"
+msgstr ""
+
+msgid "Town square"
+msgstr ""
+
+msgid "Clinic"
+msgstr ""
+
+msgid "Marina"
+msgstr ""
+
+msgid "School"
+msgstr ""
+
+msgid "Petrol station"
+msgstr ""

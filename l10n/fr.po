@@ -1682,3 +1682,21 @@ msgstr "Véhicules favoris"
 
 msgid "Tap a star on a vehicle to add it here."
 msgstr "Touche l’étoile d’un véhicule pour l’ajouter ici."
+
+msgid "Town map"
+msgstr "Plan de la ville"
+
+msgid "Town square"
+msgstr "Place centrale"
+
+msgid "Clinic"
+msgstr "Clinique"
+
+msgid "Marina"
+msgstr "Port de plaisance"
+
+msgid "School"
+msgstr "École"
+
+msgid "Petrol station"
+msgstr "Station-service"

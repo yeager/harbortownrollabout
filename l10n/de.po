@@ -1684,3 +1684,21 @@ msgstr "Lieblingsfahrzeuge"
 
 msgid "Tap a star on a vehicle to add it here."
 msgstr "Tippe auf den Stern eines Fahrzeugs, um es hier hinzuzufügen."
+
+msgid "Town map"
+msgstr "Stadtplan"
+
+msgid "Town square"
+msgstr "Marktplatz"
+
+msgid "Clinic"
+msgstr "Klinik"
+
+msgid "Marina"
+msgstr "Yachthafen"
+
+msgid "School"
+msgstr "Schule"
+
+msgid "Petrol station"
+msgstr "Tankstelle"

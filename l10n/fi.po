@@ -1663,3 +1663,21 @@ msgstr "Suosikkiajoneuvot"
 
 msgid "Tap a star on a vehicle to add it here."
 msgstr "Lisää ajoneuvo tähän napauttamalla sen tähteä."
+
+msgid "Town map"
+msgstr "Kaupungin kartta"
+
+msgid "Town square"
+msgstr "Tori"
+
+msgid "Clinic"
+msgstr "Klinikka"
+
+msgid "Marina"
+msgstr "Venesatama"
+
+msgid "School"
+msgstr "Koulu"
+
+msgid "Petrol station"
+msgstr "Huoltoasema"

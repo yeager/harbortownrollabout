@@ -1667,3 +1667,21 @@ msgstr "Favorittkjøretøy"
 
 msgid "Tap a star on a vehicle to add it here."
 msgstr "Trykk på stjernen på et kjøretøy for å legge det til her."
+
+msgid "Town map"
+msgstr "Bykart"
+
+msgid "Town square"
+msgstr "Torget"
+
+msgid "Clinic"
+msgstr "Klinikken"
+
+msgid "Marina"
+msgstr "Småbåthavna"
+
+msgid "School"
+msgstr "Skolen"
+
+msgid "Petrol station"
+msgstr "Bensinstasjonen"

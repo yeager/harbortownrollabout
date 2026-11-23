@@ -312,6 +312,9 @@ var skid_anchors := PackedVector3Array()
 const SKID_CAPACITY := 2048
 var speed := 0.0
 var steering := 0.0
+var map_goal := Vector3.INF
+var map_button := Button.new()
+const MAP_NAMES := ["Town square","Clinic","Marina","School","Petrol station"]
 var free_drive := true
 var mission_index := 0
 var refuse_pump := AudioStreamPlayer3D.new()
@@ -5518,9 +5521,13 @@ func _find_light_meshes(node: Node) -> void:
 func _update_route_arrows() -> void:
 	turn_preview.hide()
 	for arrow in route_arrows: arrow.visible = false
-	if free_drive or ferry_passenger or tram_mode != 0 or mode!="playing" or mission_index>=TARGETS.size(): return
+	if ferry_passenger or tram_mode != 0 or mode!="playing" or boating or operating_excavator: return
+	if (free_drive and map_goal == Vector3.INF) or (not free_drive and mission_index >= TARGETS.size()): return
 	var origin := walker.position if walker.visible else ambulance.position
-	var target := _mission_destination()
+	var target := map_goal if free_drive else _mission_destination()
+	if free_drive and origin.distance_to(target) < _arrival_radius():
+		map_goal = Vector3.INF
+		return
 	var start := Vector2(origin.x, origin.z)
 	var points := PackedVector2Array()
 	if walker.visible and not is_nan(_pier_height(start.x, start.y)):
@@ -6099,6 +6106,7 @@ func _build_ui() -> void:
 	driving_controls.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	shops.build_menu(ui)
 	ui.add_child(phone)
+	_build_town_map()
 	radio_button = _button(tr("Turn radio on · %s") % OS.get_keycode_string(radio_keys[0]), 180)
 	phone.handset.visibility_changed.connect(func():
 		if phone.handset.is_visible_in_tree():
@@ -6106,6 +6114,7 @@ func _build_ui() -> void:
 			_release_mouse_pedals()
 	)
 	phone.take_job.pressed.connect(func():
+		map_goal = Vector3.INF
 		free_drive = false
 		phone.toggle()
 		_update_mission_marker()
@@ -6133,6 +6142,51 @@ func _build_ui() -> void:
 		stream.loop_end = roundi(stream.get_length() * stream.mix_rate)
 		stream.loop_mode = AudioStreamWAV.LOOP_FORWARD
 		siren_streams.append(stream)
+
+func _build_town_map() -> void:
+	var dialog := AcceptDialog.new()
+	dialog.name = "TownMap"
+	dialog.exclusive = true
+	dialog.transient = true
+	add_child(dialog)
+	var body := VBoxContainer.new()
+	dialog.add_child(body)
+	var chart := preload("res://scripts/town_map.gd").new()
+	body.add_child(chart)
+	chart.configure(navigator,PackedVector3Array([TARGETS[0],TARGETS[1],TARGETS[2],SCHOOL_CURB,STATION_DROP]),MAP_NAMES)
+	var legend := HFlowContainer.new()
+	body.add_child(legend)
+	for i in MAP_NAMES.size():
+		var button := Button.new()
+		button.text = "%d · %s" % [i+1,tr(MAP_NAMES[i])]
+		button.pressed.connect(func(): chart.picked.emit(i))
+		legend.add_child(button)
+	chart.picked.connect(func(index: int):
+		map_goal = chart.stops[index]
+		dialog.hide()
+		_update_route_arrows()
+	)
+	map_button.text = "Town map"
+	phone.add_child(map_button)
+	map_button.pressed.connect(func():
+		var actor := walker if walker.visible else ambulance
+		chart.player = Vector2(actor.position.x,actor.position.z)
+		for i in MAP_NAMES.size():
+			var caption := tr(MAP_NAMES[i])
+			legend.get_child(i).text = "%d · %s" % [i+1,caption]
+			chart.get_child(i).tooltip_text = caption
+			chart.get_child(i).accessibility_name = caption
+		chart.queue_redraw()
+		_release_mouse_pedals()
+		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+		dialog.title = tr("Town map")
+		dialog.ok_button_text = tr("Close")
+		_toggle_pause()
+		dialog.popup_centered()
+	)
+	dialog.visibility_changed.connect(func():
+		if not dialog.visible and paused and mode == "playing": _toggle_pause()
+	)
 
 func _build_menu_footer() -> void:
 	overlay.add_child(menu_footer)
@@ -6907,6 +6961,7 @@ func _starting_position() -> Vector3:
 	return Vector3(best_x, _surface_height(best_x, lane), lane)
 
 func _resume_road_checkpoint() -> void:
+	map_goal = Vector3.INF
 	if mode != "menu" or road_checkpoint.is_empty():
 		return
 	_on_vehicle_selected(road_checkpoint.vehicle)
@@ -6986,6 +7041,7 @@ func _resume_road_checkpoint() -> void:
 	_refresh_ui()
 
 func _start_game() -> void:
+	map_goal = Vector3.INF
 	komodo.visible = randf() < .25
 	chat_pair.clear()
 	chat_wait = 0
@@ -7362,6 +7418,7 @@ func _refresh_dispatch() -> void:
 		if shoe_quest == FootQuest.RETURNING: phone.foot_jobs.append("Bring the red shoe back to the neighbour.")
 		if cat_quest == FootQuest.SEARCHING: phone.foot_jobs.append("Find the cat with white paws.")
 		if cat_quest == FootQuest.RETURNING: phone.foot_jobs.append("Walk back to the neighbour with the cat.")
+	map_button.visible = free_drive and not boating and not operating_excavator and tram_mode == 0 and not ferry_passenger and _play_bounds(walker.position if walker.visible else ambulance.position) != PRACTICE_YARD
 	phone.take_job.visible = free_drive and not walker.visible and not boating and not operating_excavator and tram_mode == 0 and not ferry_passenger and mission_index < TARGETS.size()
 	phone.visible = mode=="playing" and not paused
 	if free_drive or mode!="playing" or mission_index>=TARGETS.size():
