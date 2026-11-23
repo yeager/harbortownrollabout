@@ -1510,3 +1510,6 @@ msgstr "Gurkfenor och raketnos av morot"
 
 msgid "Crispy onion tail and a mustard star"
 msgstr "Svans av rostad lök och en senapsstjärna"
+
+msgid "Candy Cabin"
+msgstr "Godisboden"

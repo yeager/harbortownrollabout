@@ -1595,3 +1595,6 @@ msgstr "Ailerons en cornichon et nez en carotte"
 
 msgid "Crispy onion tail and a mustard star"
 msgstr "Queue d’oignons croustillants et étoile de moutarde"
+
+msgid "Candy Cabin"
+msgstr "Cabane à bonbons"

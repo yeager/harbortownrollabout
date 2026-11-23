@@ -41,6 +41,7 @@ const FRONT_Z := 42.5
 var grill_neon_finishes: Array[StandardMaterial3D] = []
 var grill_neon_phase := 0.0
 var grill_neon_lit := true
+var candy_letters: Array[Label3D] = []
 var kiosk_menu_signs: Array[Label3D] = []
 var grill_price_signs: Array[Label3D] = []
 var pizza_price_signs: Array[Label3D] = []
@@ -578,6 +579,7 @@ func _product_price(shop: int, item: int) -> String:
 
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_TRANSLATION_CHANGED and is_node_ready():
+		_update_candy_letters()
 		for i in kiosk_menu_signs.size():
 			kiosk_menu_signs[i].text = _product_price(1,i)
 			get_parent()._fit_world_sign(kiosk_menu_signs[i])
@@ -778,6 +780,24 @@ func _pizzeria_front(x: float) -> void:
 			pizza_price_signs.append(card)
 	_shop_light(Vector3(x,2.8,46.0),Color("#ffddab"),1.15)
 
+func _update_candy_letters() -> void:
+	var title := tr("Candy Cabin").to_upper()
+	var spacing := minf(.55,5.92/maxi(1,title.length()))
+	var palette := [Color("#ff78a6"),Color("#ffd25b"),Color("#64dfd0"),Color("#fc8a47"),Color("#b4a6fc")]
+	while candy_letters.size() < title.length():
+		var index := candy_letters.size()
+		var letter := _lettering("",Vector3.ZERO,.0255,palette[index%palette.size()])
+		letter.font = shop_sign_font
+		letter.rotation.z = sin(index*2.0)*.045
+		candy_letters.append(letter)
+	for i in candy_letters.size():
+		var letter := candy_letters[i]
+		letter.visible = i < title.length()
+		if letter.visible:
+			letter.text = title[i]
+			letter.pixel_size = .0255*.25*spacing/.55
+			letter.position = Vector3(storefront_x(3)+(.5*(title.length()-1)-i)*spacing,3.04+.028*sin(i*1.65),41.94)
+
 func _sweet_shop(x: float) -> void:
 	var spiral := PackedVector2Array()
 	for i in 33:
@@ -789,15 +809,10 @@ func _sweet_shop(x: float) -> void:
 	var frame := Color("#28282c")
 	var pearl := Color("#fff4df")
 	var palette := [Color("#ff78a6"),Color("#ffd25b"),Color("#64dfd0"),Color("#fc8a47"),Color("#b4a6fc")]
-	var sign_box := part("Ebony candy fascia",Vector3(x,3.04,42.12),Vector3(8.5,.91,.30),frame)
+	part("Ebony candy fascia",Vector3(x,3.04,42.12),Vector3(8.5,.91,.30),frame)
 	for y in [2.64,3.44]:
 		part("Fascia rolled rim",Vector3(x,y,41.95),Vector3(8.45,.041,.035),Color("#4b4951"))
-	var nameplate := "GODISBODEN"
-	for i in nameplate.length():
-		var cx := x+(.5*(nameplate.length()-1)-i)*.55
-		var letter := _lettering(nameplate[i],Vector3(cx,3.04+.028*sin(i*1.65),sign_box.position.z-.18),.0255,palette[i%palette.size()])
-		letter.font = shop_sign_font
-		letter.rotation.z = sin(i*2.0)*.045
+	_update_candy_letters()
 	# Two wrapped boiled sweets at opposite ends complete the shop's sign.
 	for side in [-1,1]:
 		var cx:float=x+side*3.56

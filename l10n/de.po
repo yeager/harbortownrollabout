@@ -1597,3 +1597,6 @@ msgstr "Gurkenflossen und eine Raketenspitze aus Karotte"
 
 msgid "Crispy onion tail and a mustard star"
 msgstr "Schweif aus Röstzwiebeln und ein Senfstern"
+
+msgid "Candy Cabin"
+msgstr "Naschhütte"

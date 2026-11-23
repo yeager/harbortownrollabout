@@ -1509,3 +1509,6 @@ msgstr ""
 
 msgid "Crispy onion tail and a mustard star"
 msgstr ""
+
+msgid "Candy Cabin"
+msgstr ""

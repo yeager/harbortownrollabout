@@ -1587,3 +1587,6 @@ msgstr "Aletas de pepinillo y punta de zanahoria"
 
 msgid "Crispy onion tail and a mustard star"
 msgstr "Cola de cebolla crujiente y estrella de mostaza"
+
+msgid "Candy Cabin"
+msgstr "Cabaña de dulces"

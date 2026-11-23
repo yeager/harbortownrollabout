@@ -1580,3 +1580,6 @@ msgstr "Agurkfinner og rakettnese av gulrot"
 
 msgid "Crispy onion tail and a mustard star"
 msgstr "Hale av sprøstekt løk og en sennepsstjerne"
+
+msgid "Candy Cabin"
+msgstr "Godteribua"

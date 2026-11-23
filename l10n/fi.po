@@ -1576,3 +1576,6 @@ msgstr "Suolakurkkuevät ja porkkanakärki"
 
 msgid "Crispy onion tail and a mustard star"
 msgstr "Rapea sipulipyrstö ja sinappitähti"
+
+msgid "Candy Cabin"
+msgstr "Karkkitupa"
