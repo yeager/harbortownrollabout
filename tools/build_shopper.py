@@ -244,6 +244,14 @@ for side in (-1,1):
     for i in range(7):
         t=i/6
         tube("Basket wire",(side*(.30-.055*t),.53+.52*t,.55),(side*(.345-.055*t),.49+.63*t,.72),.005,v.METAL)
+# The filler cap sits beside the forward air intake, inside the luggage rail.
+v.cylinder("Filler gasket",(.19,.56,.559),.040,.009,v.RUBBER,False,32,root)
+v.cylinder("Filler cap",(.19,.56,.577),.035,.030,v.METAL,False,32,root)
+for rib in range(12):
+    angle = math.tau * rib / 12
+    x = .19 + .035*math.cos(angle)
+    y = .56 + .035*math.sin(angle)
+    tube("Cap grip",(x,y,.568),(x,y,.585),.0025,v.METAL)
 # The deck itself forms the basket floor, leaving the two air intakes visible.
 for y, z in ((.53,.559),(.78,.549)):
     v.cylinder("Deck vent bezel",(0,y,z),.094,.012,v.METAL,False,40,root)
