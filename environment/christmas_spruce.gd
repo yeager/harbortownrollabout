@@ -1,7 +1,7 @@
 extends Node3D
 
 const HEIGHT := 12.0
-const COLORS := ["#ff435b", "#ffc945", "#46dbad", "#779eff", "#ee86ed"]
+const COLORS := ["#fa1532", "#ffb312", "#12d56b", "#265dff", "#cd22eb"]
 var bulbs: Array[StandardMaterial3D] = []
 var glow := OmniLight3D.new()
 var obstacle: AABB
@@ -64,6 +64,6 @@ func update_lights(snowy_winter: bool, darkness: float) -> void:
 	if not visible: return
 	var strength := smoothstep(.12,.72,darkness)
 	for finish in bulbs:
-		finish.emission_energy_multiplier = strength * 4
+		finish.emission_energy_multiplier = strength * 1.25
 	glow.light_energy = strength * .85
 	glow.visible = strength > 0
