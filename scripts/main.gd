@@ -125,6 +125,7 @@ var crawler_belts: Array[CrawlerBelt] = []
 var cab_turntable := Node3D.new()
 var boom_joint := Node3D.new()
 var stick_joint := Node3D.new()
+var excavation_sand := preload("res://environment/excavation_sand.gd").new()
 var bucket_joint := Node3D.new()
 class LiftCylinder:
 	var foot: Node3D
@@ -651,6 +652,7 @@ func _save_checkpoint() -> void:
 		road_checkpoint = {
 			"vehicle": vehicle_index, "position": ambulance.global_position,
 			"heading": ambulance.rotation.y, "mission": mission_index,
+			"sand": Vector2i(excavation_sand.remaining, excavation_sand.delivered),
 			"recovery": recovery_leg, "taxi": taxi_leg, "bus": bus_leg,
 			"free_drive": free_drive, "progress": vehicle_progress.duplicate()
 		}
@@ -1675,6 +1677,8 @@ func _build_west_district() -> void:
 	excavator.rotation.y = PI*.5
 	add_child(excavator)
 	_rig_excavator()
+	add_child(excavation_sand)
+	excavation_sand.setup(self,bucket_joint,yard)
 	excavator_wall = building_bounds.size()
 	building_bounds.append(_crawler_bounds())
 	var truck := preload("res://vehicles/food_truck.glb").instantiate() as Node3D
@@ -3843,6 +3847,7 @@ func _drive_excavator(delta: float) -> void:
 	stick_joint.rotation.x = clampf(stick_joint.rotation.x + (int(Input.is_key_pressed(KEY_Y))-int(Input.is_key_pressed(KEY_G)))*delta*.65,-.62,.65)
 	bucket_joint.rotation.x = clampf(bucket_joint.rotation.x + (int(Input.is_key_pressed(KEY_O))-int(Input.is_key_pressed(KEY_L)))*delta*.85,-.95,.95)
 	_support_bucket()
+	excavation_sand.move_bucket(bucket_joint, bucket_joint.rotation.x - previous_arm.z)
 	var arm_pose := Vector3(boom_joint.rotation.x, stick_joint.rotation.x, bucket_joint.rotation.x)
 	var working := not excavator.transform.is_equal_approx(old) or not is_equal_approx(previous_slew, cab_turntable.rotation.y) or not arm_pose.is_equal_approx(previous_arm)
 	siren_player.pitch_scale = move_toward(siren_player.pitch_scale, 1.18 if working else 0.78, delta * 1.5)
@@ -6999,6 +7004,11 @@ func _resume_road_checkpoint() -> void:
 	map_goal = Vector3.INF
 	if mode != "menu" or road_checkpoint.is_empty():
 		return
+	var sand: Variant = road_checkpoint.get("sand", Vector2i(excavation_sand.LOADS,0))
+	if sand is Vector2i and sand.x >= 0 and sand.y >= 0 and sand.x + sand.y in [excavation_sand.LOADS,excavation_sand.LOADS-1]:
+		excavation_sand.remaining = sand.x
+		excavation_sand.delivered = sand.y
+		excavation_sand.refresh()
 	_on_vehicle_selected(road_checkpoint.vehicle)
 	if road_checkpoint.has("tram"):
 		_select_gallery_activity(road_checkpoint.tram.mode + 1)
