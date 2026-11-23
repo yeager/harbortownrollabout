@@ -89,7 +89,7 @@ Listan innehåller 100 jobb. En tom ruta är öppen. En punkt bockas av när bet
 - [ ] 62. Låt spelaren sikta på lillen och välja mellan ett kort, ett mellanlångt och ett långt kast med bilder.
 - [x] 63. Andra spelarens klot kan träffa det första snett och sätta det i rullning. I Godot flyttades det träffade klotet 28 cm och båda stannade med 35 cm mellan centrum. Kontrollerat med tidssteg på både 1/60 och 1/10 sekund.
 - [x] 64. Efter tredje kastet visas en gul ring i fem sekunder runt klotet närmast lillen. Kontrollerat med en hel omgång, 0,1 mm skillnad och delad förstaplats vid exakt lika avstånd.
-- [x] 65. Efter resultatvisningen går de tre boulespelarna i tur och ordning fram till sina klot, böjer knäna, plockar upp kloten och bär tillbaka dem till kastringens väntplatser. En hel omgång med alla tre hämtningarna har kontrollerats i Godot.
+- [x] 65. Efter resultatvisningen går de tre boulespelarna i tur och ordning fram till sina klot, böjer knäna, plockar upp kloten och bär tillbaka dem till kastringens väntplatser. Två omgångar i följd med alla sex kast och hämtningar kontrolleras i tests/boule_rounds.gd.
 - [x] 66. Kontakt mellan två rullande eller stillaliggande bouleklot ger ett kort metalliskt klick vid träffpunkten. Grusljudet spelas vid nedslaget. Uppspelningen av klicket verifierades under andra spelarens kast.
 - [ ] 67. Ge boulebanan en sittbänk där spelaren kan sätta sig, följa omgången och resa sig igen.
 - [x] 68. Båda färjelägena har dubbelsidiga vägvisare under Lottens hållplatsskylt. Ett räfflat klot, en gul lille och en pil visar vägen mot närmaste bro på vägen till boulebanan. Pilarnas riktning är kontrollerad från båda sidor.
