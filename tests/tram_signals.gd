@@ -22,6 +22,23 @@ func check() -> void:
 	if lights.red_clearance(stop_point+Vector3.BACK*8-approach*5,approach,2,true) < INF:
 		fail("Stop line extended beyond the crossing")
 		return
+	# Amber requests braking, but crossing the line is only a red-light
+	# violation once the red lens is lit.
+	lights.elapsed = 6.5
+	lights.advance(0)
+	for head in lights.heads:
+		if head.has("lamps") and head.east_west:
+			if head.lamps[0].visible or not head.lamps[1].visible or head.lamps[2].visible:
+				fail("East-west amber must light only the middle lens")
+				return
+	var before_line := stop_point - approach*5
+	if not is_equal_approx(lights.red_clearance(before_line,approach,2),3.0):
+		fail("Amber did not request braking at the stop line")
+		return
+	if lights._central_clearance(before_line,approach,2,true) < INF:
+		fail("Amber was counted as a red-light violation")
+		return
+	lights.elapsed = 0
 	for zebra in lights.street_crosswalks:
 		for side in [-1,1]:
 			var axis: Vector3 = zebra.axis * side
