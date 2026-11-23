@@ -104,11 +104,8 @@ func check_scooters() -> void:
 			var start: Vector3 = item.actor.position
 			game._update_pedestrians(.2)
 			if start.distance_to(item.actor.position) > .1 and item.scooter.is_visible_in_tree():
-				game.queue_free()
-				await game.tree_exited
-				await create_timer(.2).timeout
 				print("Both playable riders and the scooter neighbour passed.")
-				quit()
+				game._finish_quit()
 				return
 	printerr("Missing travelling scooter neighbour")
 	quit(1)

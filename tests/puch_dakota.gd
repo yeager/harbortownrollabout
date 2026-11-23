@@ -98,11 +98,8 @@ func check_dakota() -> void:
 			var pose: Node3D = item.rider.find_child("Helmet",true,false)
 			game._update_traffic(.12)
 			if pose and pose.is_visible_in_tree() and item.wheels.size() == 2 and start.distance_to(item.actor.position) > .1:
-				game.queue_free()
-				await process_frame
-				await process_frame
 				print("Puch Dakota menu, Axel, Alma, grips, depot, brakes, wheels and NPC passed")
-				quit()
+				game._finish_quit()
 				return
 	printerr("Missing moving Dakota with seated NPC rider")
 	quit(1)

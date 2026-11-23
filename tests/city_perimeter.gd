@@ -30,6 +30,7 @@ func check_geometry(game) -> void:
 	var driveway := Rect2(drive_box.position.x, drive_box.position.z, drive_box.size.x, drive_box.size.z)
 	var yard := Rect2(yard_box.position.x, yard_box.position.z, yard_box.size.x, yard_box.size.z)
 	asphalt.erase(driveway)
+	asphalt.erase(yard)
 	var entry := Vector2(game.STATION_DROP.x, driveway.position.y)
 	var exit := Vector2(entry.x, driveway.end.y)
 	if not asphalt.any(func(rect: Rect2): return rect.grow(.001).has_point(entry)) or not yard.grow(.001).has_point(exit):
@@ -93,7 +94,4 @@ func check_geometry(game) -> void:
 			fail("Vehicle penetrated perimeter or failed to stop at " + str(side))
 			return
 	print("Verified ", ids.size(), " junctions, ", route.edges.size(), " road segments, ", asphalt.size(), " asphalt meshes and four perimeter walls including corner collisions.")
-	game.queue_free()
-	await process_frame
-	await create_timer(.4).timeout
-	quit()
+	game._finish_quit()

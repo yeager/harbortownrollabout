@@ -11,7 +11,8 @@ func check_exits() -> void:
 	game.traffic_data.clear()
 	for center_z in [0.0, -48.0]:
 		for side in [-1.0, 1.0]:
-			game.ambulance.position = Vector3(71, 0, center_z + side * 4.1)
+			var z: float = center_z + side * 4.1
+			game.ambulance.position = Vector3(71, game._surface_height(71, z), z)
 			game.ambulance.rotation.y = -side * PI / 2
 			game._change_seat()
 			if not game.walker.visible or absf(game.walker.position.z - center_z) > 4.9:
