@@ -6486,10 +6486,11 @@ func _fit_bus_interior() -> void:
 	bus_stop_request.text = "Stop requested"
 	bus_stop_request.rotation.y = PI
 	bus_stop_request.position.z = -.032
-	bus_stop_request.pixel_size = .00135
+	bus_stop_request.pixel_size = .0025
 	bus_stop_request.modulate = Color("#ff604b")
 	bus_stop_request.outline_size = 0
 	request_panel.add_child(bus_stop_request)
+	_size_world_sign(bus_stop_request,.70)
 	bus_stop_request.hide()
 	bus_press_time = 0
 
