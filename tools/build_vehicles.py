@@ -825,9 +825,9 @@ def make_fire_engine():
     finishes.extend((0,0))
     mesh=bpy.data.meshes.new("Crew cab glazing and steelwork")
     mesh.from_pydata(vertices,[],faces)
-    truck_glass=material("Laminated panoramic truck glass",(.072,.126,.136),.11,.15)
+    truck_glass=material("Laminated panoramic truck glass",(.015,.034,.048),.045,.095)
     shader=next(node for node in truck_glass.node_tree.nodes if node.type=="BSDF_PRINCIPLED")
-    shader.inputs["Alpha"].default_value=.70
+    shader.inputs["Alpha"].default_value=.60
     for finish in (PAINT_RED,truck_glass,RUBBER):
         mesh.materials.append(finish)
     mesh.polygons.foreach_set("material_index",finishes)
@@ -1037,6 +1037,7 @@ def make_fire_engine():
     cover=material("Clear fire engine lamp cover",(.70,.83,.87),.03,.09)
     shader=next(node for node in cover.node_tree.nodes if node.type=="BSDF_PRINCIPLED")
     shader.inputs["Alpha"].default_value=.19
+    projector_glass = material("Clear graphite projector lens",(.27,.34,.37),.38,.12)
     for x in (-0.82, 0.82):
         side=1 if x>0 else -1
         # The lens cluster wraps back towards the cab corner. Set each
@@ -1047,21 +1048,22 @@ def make_fire_engine():
                 angle=i*math.tau/32
                 c,sn=math.cos(angle),math.sin(angle)
                 u=cx+.5*w*math.copysign(abs(c)**.48,c)
-                z=cz-.445+.5*h*math.copysign(abs(sn)**.48,sn)
+                sweep=(u-.86)/.24
+                z=cz-.445+.035*sweep+.5*h*(1-.25*sweep)*math.copysign(abs(sn)**.48,sn)
                 ring.append((side*u,depth-.103+.080*((u-.63)/.48)**2,z))
             return ring
         shell=[light_ring(.866,1.424,w,h,d) for w,h,d in
-               ((.480,.291,-2.914),(.478,.288,-2.982),(.463,.273,-3.012))]
+               ((.490,.296,-2.93),(.494,.297,-3.030),(.468,.264,-3.052),(.426,.223,-3.044))]
         profile_loft("Cab headlamp seal",shell,RUBBER,root)
         for cx,w in ((.763,.179),(.945,.156)):
             optic=[light_ring(cx,1.448,w*f,.155*f,d) for f,d in
-                   ((1,-3.015),(.97,-3.025),(.85,-3.028),(.65,-3.017))]
-            profile_loft("Cab reflector",optic,METAL,root)
+                   ((1,-3.050),(.94,-3.061),(.81,-3.047),(.63,-3.027))]
+            profile_loft("Cab reflector",optic,METAL,root,close_ends=False)
             profile_loft("Cab projector",[
                 light_ring(cx,1.448,w*f,.155*f,d) for f,d in
-                ((.60,-3.018),(.54,-3.033),(.32,-3.041))],HEADLAMP,root)
+                ((.64,-3.036),(.52,-3.052),(.26,-3.061))],projector_glass,root)
         cover_rings=[light_ring(.861,1.447,w,h,d) for w,h,d in
-                     ((.431,.194,-3.028),(.425,.187,-3.041),(.398,.162,-3.047))]
+                     ((.447,.224,-3.060),(.443,.222,-3.067),(.427,.213,-3.073))]
         profile_loft("Swept transparent headlamp cover",cover_rings,cover,root)
         amber=material("Amber cab signal",(.88,.235,.012),.12,.23)
         profile_loft("Cab amber signal",[

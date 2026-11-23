@@ -6082,18 +6082,21 @@ func _load_vehicle_model() -> void:
 	var beam_origins: Array[Vector3] = []
 	if vehicle_index in [2, SNOWMOBILE, PORSCHE, FARM_TRACTOR, SHOPPER, REFUSE]:
 		var lens_pattern: String = {2:"Swept transparent headlamp cover*", PORSCHE:"Headlight lens*", SNOWMOBILE:"Headlight strip*", FARM_TRACTOR:"Projector lens*", SHOPPER:"Headlight lens*", REFUSE:"Headlight lens*"}[vehicle_index]
-		for lens: MeshInstance3D in vehicle_model.find_children(lens_pattern, "MeshInstance3D", true, false):
-			if vehicle_index not in [2, SNOWMOBILE]:
+		var lenses := vehicle_model.find_children(lens_pattern, "MeshInstance3D", true, false)
+		for lens: MeshInstance3D in lenses:
+			var center := ambulance.to_local(lens.to_global(lens.get_aabb().get_center()))
+			beam_origins.append(center + Vector3.FORWARD * .035)
+		if vehicle_index != SNOWMOBILE:
+			var emitters := vehicle_model.find_children("Cab projector*", "MeshInstance3D", true, false) if vehicle_index == 2 else lenses
+			for emitter: MeshInstance3D in emitters:
 				if not projector_finish:
-					projector_finish = lens.get_active_material(0).duplicate() as StandardMaterial3D
+					projector_finish = emitter.get_active_material(0).duplicate() as StandardMaterial3D
 					if vehicle_index == SHOPPER:
 						projector_finish.vertex_color_use_as_albedo = true
 					projector_finish.emission_enabled = true
 					projector_finish.emission = Color("#fff0d9")
 					projector_finish.emission_energy_multiplier = 3.0*maxf(last_night,0)
-				lens.set_surface_override_material(0,projector_finish)
-			var center := ambulance.to_local(lens.to_global(lens.get_aabb().get_center()))
-			beam_origins.append(center + Vector3.FORWARD * .035)
+				emitter.set_surface_override_material(0,projector_finish)
 	if vehicle_index == FARM_TRACTOR and projector_finish:
 		for guide: MeshInstance3D in vehicle_model.find_children("Upper running light*", "MeshInstance3D", true, false):
 			guide.set_surface_override_material(0, projector_finish)
