@@ -31,6 +31,7 @@ Click a vehicle picture, choose Axel or Alma, then select **Start driving**. Hol
 
 - **Drive bus 74 to Sickla udde.** Pick up passengers at Västra torget and follow the route to the terminus.
 - **Take the garbage truck on its rounds.** Empty the bins at the square and the clinic, then unload at the marina. A full truck takes longer to get moving.
+- **Return the ice cream crates.** In **Free exploration**, stop the ice cream van outside the kiosk on Stationsallén to collect two empty crates. Drive west along the same street and park in the bay marked **Ice cream depot**.
 - **Make the morning flour run.** Choose the tow truck in **Free exploration** and set the clock to **Day and night**. Stop beside the square between 5 a.m. and noon to load three flour sacks. Stop outside the bakery opposite the fire station to unload them. Your delivery receipt is in the phone.
 - **Bring a cake to a birthday party.** Walk up to the pink box at the bakery door and carry it to the party table in the square. The host opens the lid when you arrive.
 - **Find the moon rabbit.** Look on the pavement outside the sweet shop. Carry the lost figurine to the counter in the clothing shop to hear the owner's thank-you.
