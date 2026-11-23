@@ -10,7 +10,7 @@ Choose your computer below. For a ZIP or tar.gz download, extract the archive be
 
 | Platform | Download | Launch |
 | --- | --- | --- |
-| Windows 64-bit | [Windows ZIP](https://github.com/yeager/harbortownrollabout/releases/download/v0.1.3-binaries.20261123/harbortown-windows-x86_64.zip) | Open `harbortown.exe`. Keep `harbortown.pck` beside it. |
+| Windows 64-bit | [Windows installer](https://github.com/yeager/harbortownrollabout/releases/download/v0.1.3-binaries.20261123/harbortown-0.1.3-windows-x64.exe) | Run the installer, choose your language, then open **harbortown** from the Start menu. |
 | Mac with Apple Silicon (M-series) | [Apple Silicon DMG](https://github.com/yeager/harbortownrollabout/releases/download/v0.1.3-binaries.20261123/harbortown-macos-arm64.dmg) | Open the disk image and drag **harbortown** into **Applications**. |
 | Mac with an Intel processor | [Intel Mac DMG](https://github.com/yeager/harbortownrollabout/releases/download/v0.1.3-binaries.20261123/harbortown-macos-x86_64.dmg) | Open the disk image and drag **harbortown** into **Applications**. |
 | Ubuntu or Debian (64-bit) | [DEB package](https://github.com/yeager/harbortownrollabout/releases/download/v0.1.3-binaries.20261123/harbortown_0.1.3_amd64.deb) | Install the package, then open **harbortown** from your apps. |
