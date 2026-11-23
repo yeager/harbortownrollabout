@@ -61,7 +61,18 @@ func _vehicle_head(mast: Node3D, east_west: bool) -> Dictionary:
 	get_parent()._make_box("Signal head",Vector3(.44,1.04,.26),Vector3(0,3.54,.1),Color("#242d2b"),false,mast)
 	var lamps: Array = []
 	for j in 3:
-		lamps.append(lens(mast,Vector3(0,3.85-.31*j,.25),[Color.RED,Color.ORANGE,Color.LIME_GREEN][j]))
+		var lamp := lens(mast,Vector3(0,3.85-.31*j,.25),[Color.RED,Color.ORANGE,Color.LIME_GREEN][j])
+		lamps.append(lamp)
+		if j != 1:
+			var symbol := Label3D.new()
+			symbol.name = "StopSymbol" if j == 0 else "GoSymbol"
+			symbol.text = "■" if j == 0 else "▶"
+			symbol.pixel_size = .0036
+			symbol.outline_size = 0
+			symbol.modulate = Color("#101010")
+			symbol.double_sided = false
+			symbol.position.z = .132
+			lamp.add_child(symbol)
 	return {"lamps":lamps,"east_west":east_west}
 
 func _add_crossing(center: Vector3, east_west: bool, pavement_offset := 5.45) -> Array[Dictionary]:

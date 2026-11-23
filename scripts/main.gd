@@ -8728,7 +8728,7 @@ func _refresh_status() -> void:
 		else:
 			status_label.text = "Helping …" if gentle_driving else "Press Space to help"
 	elif waiting_for_signal and mode=="playing" and not paused and not walker.visible and not boating:
-		status_label.text = "Wait until the crossing is clear." if waiting_for_clear_crossing else "Waiting for a green light"
+		status_label.text = "■  " + tr("Wait until the crossing is clear." if waiting_for_clear_crossing else "Waiting for a green light")
 	elif walker.visible and not boating and not paused:
 		status_label.text = _movement_hint(tr("Walk with {up}{left}{down}{right} or arrows · F to enter a vehicle"))
 	else:
