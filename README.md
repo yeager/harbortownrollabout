@@ -34,6 +34,18 @@ Click a vehicle picture, choose Axel or Alma, then select **Start driving**. Hol
 
 ![Driving an ambulance through Harbor Town](docs/screenshots/driving.png)
 
+## Around town
+
+| Bus 74 by the school | Garbage truck passing the fuel station |
+| --- | --- |
+| ![Red city bus driving past the school](docs/screenshots/bus-school.jpg) | ![Green garbage truck on the road beside the pumps](docs/screenshots/garbage-truck-station.jpg) |
+| **Crossing the high bridge** | **Riding past Västra torget** |
+| ![White track sports car crossing the canal bridge](docs/screenshots/sports-car-bridge.jpg) | ![A rider on a blue moped in the western district](docs/screenshots/moped-west-square.jpg) |
+
+**Cutting the grass at the picnic meadow**
+
+![Orange ride-on mower at work on the grass](docs/screenshots/mower-meadow.jpg)
+
 ## While you play
 
 | To do this | Press |
