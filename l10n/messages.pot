@@ -1686,3 +1686,6 @@ msgstr ""
 
 msgid "Show street names with turn arrows"
 msgstr ""
+
+msgid "Also use F4 to sound the horn"
+msgstr ""
