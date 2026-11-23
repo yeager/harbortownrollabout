@@ -1786,3 +1786,6 @@ msgstr "Kadotin vihreän termospulloni petankkipelin jälkeen. Katsoisitko penki
 
 msgid "Bring the flask back to the boule player in the green jacket."
 msgstr "Vie termospullo takaisin vihreätakkiselle pelaajalle."
+
+msgid "Bring the umbrella to the passenger in the yellow jacket at Lotten’s landing."
+msgstr "Vie sateenvarjo keltatakkiselle matkustajalle Lottenin laiturille."

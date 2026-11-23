@@ -1797,3 +1797,6 @@ msgstr "Perdí mi termo verde después de la partida de petanca. ¿Puedes mirar 
 
 msgid "Bring the flask back to the boule player in the green jacket."
 msgstr "Devuelve el termo al jugador de petanca de la chaqueta verde."
+
+msgid "Bring the umbrella to the passenger in the yellow jacket at Lotten’s landing."
+msgstr "Lleva el paraguas al pasajero de la chaqueta amarilla en el embarcadero de Lotten."

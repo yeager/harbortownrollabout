@@ -1719,3 +1719,6 @@ msgstr ""
 
 msgid "Bring the flask back to the boule player in the green jacket."
 msgstr ""
+
+msgid "Bring the umbrella to the passenger in the yellow jacket at Lotten’s landing."
+msgstr ""

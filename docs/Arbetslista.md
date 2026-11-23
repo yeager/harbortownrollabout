@@ -94,7 +94,7 @@ Listan innehåller 100 jobb. En tom ruta är öppen. En punkt bockas av när bet
 - [x] 67. Ge boulebanan en sittbänk där spelaren kan sätta sig, följa omgången och resa sig igen. Provad i Godot med ett helt kast från bänken och uppstigning på fri mark.
 - [x] 68. Båda färjelägena har dubbelsidiga vägvisare under Lottens hållplatsskylt. Ett räfflat klot, en gul lille och en pil visar vägen mot närmaste bro på vägen till boulebanan. Pilarnas riktning är kontrollerad från båda sidor.
 - [x] 69. Gör ett uppdrag där en granne behöver hjälp att hitta sin termos efter boulematchen. Efter matchen ber spelaren i grön jacka om hjälp via telefonen. Hämtning vid bänken, överlämning och en engångsbelöning har verifierats i Godot.
-- [ ] 70. Låt spelaren lämna tillbaka ett upphittat paraply vid färjeläget och se ägaren fälla upp det när det regnar.
+- [x] 70. Låt spelaren lämna tillbaka ett upphittat paraply vid färjeläget och se ägaren fälla upp det när det regnar. Hämtning, överlämning samt utfällning i regn och hopfällning vid uppehåll har verifierats i Godot.
 
 ## Leveranser och stadens butiker
 

@@ -540,6 +540,11 @@ const BOULE_BENCH := BOULE_CENTRE + Vector3(3.3,0,0)
 var boule_seated := false
 const THERMOS_REQUEST := "I lost my green flask after the boule match. Could you check by the bench?"
 const THERMOS_RETURN := "Bring the flask back to the boule player in the green jacket."
+const UMBRELLA_RETURN := "Bring the umbrella to the passenger in the yellow jacket at Lotten’s landing."
+var umbrella_stage := FootQuest.WAITING
+var umbrella_owner: Node3D
+var umbrella := Node3D.new()
+var canopy := Node3D.new()
 var thermos_stage := FootQuest.WAITING
 var boule_match_finished := false
 var thermos := Node3D.new()
@@ -5404,7 +5409,68 @@ func _build_pedestrians() -> void:
 		walker_data.back().stretch = Vector2(start_x+9,start_x+81)
 		walker_data.back().actor.position.y = _foot_height(start_x+27+i*4,pavement_z)
 
+	_build_lost_umbrella()
 	_build_boule_court()
+
+func _build_lost_umbrella() -> void:
+	_make_walker("Waiting umbrella owner",54,-14,1,Color("#e8ae36"),Color("#454657"))
+	umbrella_owner = walker_data.pop_back().actor
+	umbrella_owner.position.y = _foot_height(54,-14)
+	add_child(umbrella)
+	_tube_between(umbrella,Vector3.DOWN*.08,Vector3.UP*1.17,.014,_material(Color("#999da2"),.28))
+	_tube_between(umbrella,Vector3.DOWN*.10,Vector3.UP*.06,.024,_material(Color("#6f4532")))
+	umbrella.add_child(canopy)
+	canopy.position.y = 1.16
+	var fabric := _material(Color("#af2848"),.7)
+	fabric.cull_mode = BaseMaterial3D.CULL_DISABLED
+	for i in 8:
+		var a := Vector3.RIGHT.rotated(Vector3.UP,i*TAU/8)
+		var b := Vector3.RIGHT.rotated(Vector3.UP,(i+1)*TAU/8)
+		var mesh := SurfaceTool.new()
+		mesh.begin(Mesh.PRIMITIVE_TRIANGLES)
+		mesh.set_material(fabric)
+		for vertex: Vector3 in [Vector3.ZERO,a*.45+Vector3.DOWN*.10,b*.45+Vector3.DOWN*.10,
+				a*.45+Vector3.DOWN*.10,a*.64+Vector3.DOWN*.28,b*.64+Vector3.DOWN*.28,
+				a*.45+Vector3.DOWN*.10,b*.64+Vector3.DOWN*.28,b*.45+Vector3.DOWN*.10]:
+			mesh.add_vertex(vertex)
+		mesh.generate_normals()
+		var panel := MeshInstance3D.new()
+		panel.mesh = mesh.commit()
+		canopy.add_child(panel)
+		_tube_between(canopy,a*.45+Vector3.DOWN*.10,a*.64+Vector3.DOWN*.28,.008,_material(Color("#6c2637")))
+	_place_umbrella()
+
+func _place_umbrella() -> void:
+	if not umbrella.is_inside_tree(): return
+	var holder: Node3D = self
+	if umbrella_stage == FootQuest.RETURNING:
+		holder = walker.get_meta("arms")[1].get_child(1)
+	elif umbrella_stage == FootQuest.FINISHED:
+		holder = umbrella_owner.get_meta("arms")[1].get_child(1)
+	if umbrella.get_parent() != holder:
+		umbrella.reparent(holder,false)
+	umbrella.position = Vector3(54,_foot_height(54,-18)+.10,-18) if holder == self else PALM_GRIP
+	var spread := 1.0 if umbrella_stage == FootQuest.FINISHED and weather.intensity.x > .15 else .10
+	canopy.scale = Vector3(spread,lerpf(2.8,1.0,spread),spread)
+
+func _update_lost_umbrella(delta: float) -> void:
+	if umbrella_stage == FootQuest.FINISHED:
+		var spread := move_toward(canopy.scale.x,1.0 if weather.intensity.x > .15 else .10,delta*1.6)
+		canopy.scale = Vector3(spread,lerpf(2.8,1.0,spread),spread)
+		umbrella.global_basis = Basis.IDENTITY
+		return
+	if not walker.visible or ferry_passenger or tram_mode != 0: return
+	if umbrella_stage == FootQuest.WAITING and walker.position.distance_to(umbrella.position)<1.4:
+		umbrella_stage = FootQuest.RETURNING
+		phone.receive(UMBRELLA_RETURN)
+	elif umbrella_stage == FootQuest.RETURNING and walker.position.distance_to(umbrella_owner.position)<1.8:
+		umbrella_stage = FootQuest.FINISHED
+		_reward_foot_quest(1)
+	else: return
+	_place_umbrella()
+	canopy.scale = Vector3(.1,2.62,.1)
+	_refresh_dispatch()
+	_save_preferences()
 
 func _build_boule_court() -> void:
 	boule_impact.stream = preload("res://audio/boule_gravel.wav")
@@ -6171,6 +6237,7 @@ func _update_pedestrians(delta: float) -> void:
 	var cat_owner_x := cat_owner.position.x
 	_update_shoe_quest(delta)
 	_update_thermos()
+	_update_lost_umbrella(delta)
 	_update_cat_quest(delta)
 	_update_search_hints()
 	_update_pet_jobs()
@@ -8806,6 +8873,9 @@ func _load_player_progress(config: ConfigFile, section: String) -> void:
 	boutique_jacket = config.get_value(section,"boutique_jacket","")
 	shops.carried_toy = config.get_value(section,"carried_toy","")
 	wallet=maxi(0,int(config.get_value(section,"coins",0)))
+	umbrella_stage = config.get_value(section,"umbrella",FootQuest.WAITING)
+	if umbrella_stage not in [FootQuest.RETURNING,FootQuest.FINISHED]: umbrella_stage = FootQuest.WAITING
+	_place_umbrella()
 	thermos_stage = clampi(int(config.get_value(section,"thermos",FootQuest.WAITING)),FootQuest.WAITING,FootQuest.FINISHED)
 	_place_thermos()
 	foot_quest_points = maxi(0, int(config.get_value(section, "foot_quest_points", 0)))
@@ -8831,6 +8901,7 @@ func _store_player_progress(config: ConfigFile, section: String) -> void:
 	config.set_value(section,"delivery_receipts",phone.delivery_receipts)
 	config.set_value(section,"stars",collected_stars)
 	config.set_value(section,"thermos",thermos_stage)
+	config.set_value(section,"umbrella",umbrella_stage)
 	config.set_value(section, "foot_quest_points", foot_quest_points)
 	config.set_value(section, "delivery_points", delivery_points)
 	config.set_value(section,"purchases",purchases)
@@ -9003,6 +9074,7 @@ func _refresh_dispatch() -> void:
 		for i in 2:
 			if pet_stages[i] == FootQuest.SEARCHING: phone.foot_jobs.append(PET_REQUESTS[i])
 		if pet_stages[0] == FootQuest.RETURNING: phone.foot_jobs.append("Bring the ball back to the dog.")
+		if umbrella_stage == FootQuest.RETURNING: phone.foot_jobs.append(UMBRELLA_RETURN)
 		if thermos_stage == FootQuest.SEARCHING: phone.foot_jobs.append(THERMOS_REQUEST)
 		if thermos_stage == FootQuest.RETURNING: phone.foot_jobs.append(THERMOS_RETURN)
 		if shoe_quest == FootQuest.SEARCHING: phone.foot_jobs.append("Find the red shoe on the pavement.")

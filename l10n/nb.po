@@ -1790,3 +1790,6 @@ msgstr "Jeg mistet den grønne termosen min etter boulekampen. Kan du se ved ben
 
 msgid "Bring the flask back to the boule player in the green jacket."
 msgstr "Gi termosen tilbake til boulespilleren i grønn jakke."
+
+msgid "Bring the umbrella to the passenger in the yellow jacket at Lotten’s landing."
+msgstr "Gi paraplyen til passasjeren i gul jakke ved Lottens fergeleie."

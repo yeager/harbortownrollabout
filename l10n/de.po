@@ -1807,3 +1807,6 @@ msgstr "Nach dem Boulespiel habe ich meine grüne Thermoskanne verloren. Schaust
 
 msgid "Bring the flask back to the boule player in the green jacket."
 msgstr "Bring die Thermoskanne zum Boulespieler mit der grünen Jacke."
+
+msgid "Bring the umbrella to the passenger in the yellow jacket at Lotten’s landing."
+msgstr "Bring den Schirm zum Fahrgast mit der gelben Jacke am Fähranleger der Lotten."

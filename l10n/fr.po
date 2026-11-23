@@ -1805,3 +1805,6 @@ msgstr "J’ai perdu mon thermos vert après la partie de pétanque. Tu peux reg
 
 msgid "Bring the flask back to the boule player in the green jacket."
 msgstr "Rapporte le thermos au joueur de pétanque en veste verte."
+
+msgid "Bring the umbrella to the passenger in the yellow jacket at Lotten’s landing."
+msgstr "Rapporte le parapluie au passager en veste jaune à l’embarcadère de Lotten."
