@@ -1862,3 +1862,6 @@ msgstr "Ta den stripete pakken tilbake til sykkelbudet utenfor kafeen."
 
 msgid "Fold or unfold the scooter with F9"
 msgstr "Slå sammen eller ut sparkesykkelen med F9"
+
+msgid "Drive to the bakery. Look for the coffee cup above the door. Drop off the flour there."
+msgstr "Kjør til bakeriet. Se etter kaffekoppen over døra. Lever melet der."

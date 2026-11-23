@@ -287,7 +287,7 @@ const CRATE_DONE := "The ice cream depot received both empty crates."
 var flour_sacks := Node3D.new()
 const FLOUR_CURB := Vector3(-15,0,-3)
 const FLOUR_PICKUP := "Stop the flatbed at the square in the morning to collect flour."
-const FLOUR_ROUTE := "Take the flour sacks to the bakery across from the fire station."
+const FLOUR_ROUTE := "Drive to the bakery. Look for the coffee cup above the door. Drop off the flour there."
 const WORKSHOP_CAR_BOUNDS := AABB(STATION_PARKING - Vector3(2.1,1,.86),Vector3(4.2,3,1.72))
 var workshop_wheel: Node3D
 var wheel_rest: Vector3

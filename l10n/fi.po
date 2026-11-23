@@ -1858,3 +1858,6 @@ msgstr "Vie raidallinen paketti pyörälähetille kahvilan eteen."
 
 msgid "Fold or unfold the scooter with F9"
 msgstr "Taita tai avaa potkulauta F9-näppäimellä"
+
+msgid "Drive to the bakery. Look for the coffee cup above the door. Drop off the flour there."
+msgstr "Aja leipomoon. Etsi kahvikuppi oven yläpuolelta. Vie jauhot sinne."

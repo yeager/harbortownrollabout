@@ -1791,3 +1791,6 @@ msgstr ""
 
 msgid "Fold or unfold the scooter with F9"
 msgstr ""
+
+msgid "Drive to the bakery. Look for the coffee cup above the door. Drop off the flour there."
+msgstr ""

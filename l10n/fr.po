@@ -1877,3 +1877,6 @@ msgstr "Rapporte le colis rayé au cycliste devant le café."
 
 msgid "Fold or unfold the scooter with F9"
 msgstr "Plier ou déplier la trottinette avec F9"
+
+msgid "Drive to the bakery. Look for the coffee cup above the door. Drop off the flour there."
+msgstr "Va à la boulangerie. Cherche la tasse de café au-dessus de la porte. Dépose la farine là-bas."
