@@ -1703,3 +1703,6 @@ msgstr "Station-service"
 
 msgid "Bucket view · C"
 msgstr "Vue du godet · C"
+
+msgid "The road to school is clear!"
+msgstr "La route de l’école est déneigée !"

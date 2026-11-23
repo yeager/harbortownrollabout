@@ -1684,3 +1684,6 @@ msgstr "Huoltoasema"
 
 msgid "Bucket view · C"
 msgstr "Kauhanäkymä · C"
+
+msgid "The road to school is clear!"
+msgstr "Koulutie on aurattu!"

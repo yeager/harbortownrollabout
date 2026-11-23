@@ -1695,3 +1695,6 @@ msgstr "Gasolinera"
 
 msgid "Bucket view · C"
 msgstr "Vista del cucharón · C"
+
+msgid "The road to school is clear!"
+msgstr "¡El camino a la escuela está despejado!"

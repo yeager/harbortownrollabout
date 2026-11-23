@@ -31,7 +31,7 @@ De 50 förbättringarna från genomgången. En tom ruta är öppen. En punkt boc
 ## Uppdrag med synliga resultat
 
 - [x] 21. Grävmaskinen kan ta sand ur en hög och tippa den i en grop eller på ett flak.
-- [ ] 22. Ploga vägen till skolan och visa den öppnade passagen.
+- [x] 22. Ploga vägen till skolan och visa den öppnade passagen.
 - [ ] 23. Klipp en avgränsad picknickäng och visa när arbetet är färdigt.
 - [ ] 24. Sorteringsrunda med kärl märkta med både bild och färg.
 - [ ] 25. Visa hur verkstaden lagar den bärgade bilen.

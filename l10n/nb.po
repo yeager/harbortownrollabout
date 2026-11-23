@@ -1688,3 +1688,6 @@ msgstr "Bensinstasjonen"
 
 msgid "Bucket view · C"
 msgstr "Skuffevisning · C"
+
+msgid "The road to school is clear!"
+msgstr "Veien til skolen er brøytet!"

@@ -199,6 +199,8 @@ const ICE_STOPS := [0, SCHOOL, 2]
 const XC60_POLICE := 12
 const SCHOOL := 3
 const SCHOOL_CURB := Vector3(136,0,3)
+var school_plough_flags: Array[Label3D] = []
+var school_plough_open := false
 const SCHOOL_GATE := Vector3(136,0,7)
 const TAXI_STOPS := [0,2, 0,SCHOOL, 1,0, SCHOOL,1, 2,1]
 const WEST_STOPS := [Vector3(-205,0,2.8),Vector3(-460,0,-45.2)]
@@ -565,6 +567,7 @@ func _process(delta: float) -> void:
 			_update_hazard_lights()
 	wardrobe.update(weather.season, weather.intensity)
 	ground_work.update(delta, weather.snow)
+	_update_school_plough()
 	if previous_season != weather.season:
 		for blade in ploughs:
 			blade.visible = weather.season == 4
@@ -1242,6 +1245,27 @@ func _drive(delta: float) -> void:
 		_draw_skid(previous_pose)
 	else:
 		_end_skid()
+
+func _update_school_plough() -> void:
+	var active := weather.season == 4 and weather.snow >= .12
+	var complete := active
+	for flag in school_plough_flags:
+		flag.visible = active and vehicle_index == FARM_TRACTOR and mode == "playing"
+		if not active:
+			continue
+		var cleared := true
+		for offset in [-.55,0.0,.55]:
+			for along in [-.75,-.25,.25,.75]:
+				if not ground_work.cleared_at(Vector3(flag.position.x+along,0,2.35+offset)):
+					cleared = false
+		flag.text = "✓" if cleared else "❄"
+		flag.modulate = Color("#68e895") if cleared else Color("#bceaff")
+		complete = complete and cleared
+	if complete and not school_plough_open:
+		message = "The road to school is clear!"
+		message_timer = 5
+		_refresh_status()
+	school_plough_open = complete
 
 func _build_brake_effects() -> void:
 	asphalt_track_finish.vertex_color_use_as_albedo = true
@@ -2826,6 +2850,12 @@ func _build_city_blocks() -> void:
 	building_bounds.append(AABB(Vector3(125,-1,13.2),Vector3(22,10,7.6)))
 	_make_driving_surface("School courtyard",Vector3(22,.12,9),Vector3(136,-.09,9),Color("#aaa198"))
 	# Mark the shared school pickup point from the approaching driver's side.
+	for i in 8:
+		var x := SCHOOL_CURB.x - (7-i)*2.0
+		var flag := _station_sign("❄", Vector3(x,1.05,4.82), .009, Color.WHITE)
+		flag.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+		flag.hide()
+		school_plough_flags.append(flag)
 	var pickup_post := _make_roadside_solid("School pickup post",Vector3(.08,1.95,.08),SCHOOL_CURB+Vector3(-3, .97,2.1),Color("#626d72"))
 	var taxi_sign := _make_box("School taxi sign",Vector3(.06,.42,1.02),Vector3.UP*.82,Color("#eac451"),false,pickup_post)
 	for side in [-1,1]:

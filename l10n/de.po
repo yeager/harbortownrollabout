@@ -1705,3 +1705,6 @@ msgstr "Tankstelle"
 
 msgid "Bucket view · C"
 msgstr "Schaufelansicht · C"
+
+msgid "The road to school is clear!"
+msgstr "Der Weg zur Schule ist geräumt!"
