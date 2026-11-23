@@ -1575,3 +1575,15 @@ msgstr "Cometa de cebolla crujiente"
 
 msgid "Eat %s"
 msgstr "Comer %s"
+
+msgid "Grilled sausage in a soft bun"
+msgstr "Salchicha a la parrilla en pan tierno"
+
+msgid "Sausage with a moon of mash and pea craters"
+msgstr "Salchicha con luna de puré y cráteres de guisantes"
+
+msgid "Pickle fins and a carrot nose cone"
+msgstr "Aletas de pepinillo y punta de zanahoria"
+
+msgid "Crispy onion tail and a mustard star"
+msgstr "Cola de cebolla crujiente y estrella de mostaza"

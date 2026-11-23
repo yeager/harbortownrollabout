@@ -1568,3 +1568,15 @@ msgstr "Sprø løkkomet"
 
 msgid "Eat %s"
 msgstr "Spis %s"
+
+msgid "Grilled sausage in a soft bun"
+msgstr "Grillpølse i mykt brød"
+
+msgid "Sausage with a moon of mash and pea craters"
+msgstr "Pølse med en måne av potetmos og ertekratere"
+
+msgid "Pickle fins and a carrot nose cone"
+msgstr "Agurkfinner og rakettnese av gulrot"
+
+msgid "Crispy onion tail and a mustard star"
+msgstr "Hale av sprøstekt løk og en sennepsstjerne"

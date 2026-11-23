@@ -1554,7 +1554,7 @@ msgid "Hot dog stand"
 msgstr "Nakkikioski"
 
 msgid "Moon mash dog"
-msgstr "Kuumuurinakki"
+msgstr "Muusikuunakki"
 
 msgid "Pickle rocket"
 msgstr "Kurkkuraketti"
@@ -1564,3 +1564,15 @@ msgstr "Rapea sipulikomeetta"
 
 msgid "Eat %s"
 msgstr "Syö %s"
+
+msgid "Grilled sausage in a soft bun"
+msgstr "Grillattu nakki pehmeässä sämpylässä"
+
+msgid "Sausage with a moon of mash and pea craters"
+msgstr "Nakki, muusikuu ja hernekraattereita"
+
+msgid "Pickle fins and a carrot nose cone"
+msgstr "Suolakurkkuevät ja porkkanakärki"
+
+msgid "Crispy onion tail and a mustard star"
+msgstr "Rapea sipulipyrstö ja sinappitähti"

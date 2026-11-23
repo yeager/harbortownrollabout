@@ -1585,3 +1585,15 @@ msgstr "Knuspriger Zwiebelkomet"
 
 msgid "Eat %s"
 msgstr "%s essen"
+
+msgid "Grilled sausage in a soft bun"
+msgstr "Grillwurst im weichen Brötchen"
+
+msgid "Sausage with a moon of mash and pea craters"
+msgstr "Wurst mit Kartoffelbreimond und Erbsenkratern"
+
+msgid "Pickle fins and a carrot nose cone"
+msgstr "Gurkenflossen und eine Raketenspitze aus Karotte"
+
+msgid "Crispy onion tail and a mustard star"
+msgstr "Schweif aus Röstzwiebeln und ein Senfstern"

@@ -32,6 +32,7 @@ const PRODUCT_ICONS := {
 	5: preload("res://branding/boutique-products.png"),
 }
 const PRICES := [[3,2],[4,5],[8,7,8,9,10],[4,3,2,4,5,4,6,3,3,4],[2,4],[9,9,5,4],[5,7,6,8]]
+const GRILL_TOPPINGS := ["Grilled sausage in a soft bun", "Sausage with a moon of mash and pea craters", "Pickle fins and a carrot nose cone", "Crispy onion tail and a mustard star"]
 const PIZZA_TOPPINGS := ["Mozzarella, tomato and carrot stars", "Popcorn, sweetcorn and cheese", "Pickle wheels and crispy onions", "Banana moons and coconut snow", "Blueberries, vanilla cream and raspberry swirls"]
 const SIGNS := ["KAFÉ BULLEN","SJÖKIOSKEN","PIZZERIA","GODISBODEN","SJÖSTADENS LIVS","MOMO & BORI"]
 const COLORS := ["#a86343","#427868","#b65f51","#927198","#355e4b","#375c68"]
@@ -276,6 +277,8 @@ func rebuild_menu() -> void:
 			button.text += "\n" + tr(PIZZA_TOPPINGS[i])
 		elif inside == 3:
 			button.text += "\n" + tr(SWEET_INGREDIENTS[i])
+		elif inside == 6:
+			button.text += "\n" + tr(GRILL_TOPPINGS[i])
 		button.pressed.connect(purchase.bind(inside,i))
 		panel.add_child(button)
 		if i==0: first_product=button

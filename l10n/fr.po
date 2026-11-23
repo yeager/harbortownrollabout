@@ -1583,3 +1583,15 @@ msgstr "Comète aux oignons croustillants"
 
 msgid "Eat %s"
 msgstr "Manger %s"
+
+msgid "Grilled sausage in a soft bun"
+msgstr "Saucisse grillée dans un pain moelleux"
+
+msgid "Sausage with a moon of mash and pea craters"
+msgstr "Saucisse, lune de purée et cratères de petits pois"
+
+msgid "Pickle fins and a carrot nose cone"
+msgstr "Ailerons en cornichon et nez en carotte"
+
+msgid "Crispy onion tail and a mustard star"
+msgstr "Queue d’oignons croustillants et étoile de moutarde"

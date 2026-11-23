@@ -1498,3 +1498,15 @@ msgstr "Krispig lökkomet"
 
 msgid "Eat %s"
 msgstr "Ät %s"
+
+msgid "Grilled sausage in a soft bun"
+msgstr "Grillad korv i mjukt bröd"
+
+msgid "Sausage with a moon of mash and pea craters"
+msgstr "Korv med en måne av mos och kratrar av ärtor"
+
+msgid "Pickle fins and a carrot nose cone"
+msgstr "Gurkfenor och raketnos av morot"
+
+msgid "Crispy onion tail and a mustard star"
+msgstr "Svans av rostad lök och en senapsstjärna"

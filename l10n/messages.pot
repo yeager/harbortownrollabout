@@ -1497,3 +1497,15 @@ msgstr ""
 
 msgid "Eat %s"
 msgstr ""
+
+msgid "Grilled sausage in a soft bun"
+msgstr ""
+
+msgid "Sausage with a moon of mash and pea craters"
+msgstr ""
+
+msgid "Pickle fins and a carrot nose cone"
+msgstr ""
+
+msgid "Crispy onion tail and a mustard star"
+msgstr ""
