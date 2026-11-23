@@ -364,6 +364,9 @@ var leave_practice_button := Button.new()
 const MAP_NAMES := ["Town square","Clinic","Marina","School","Petrol station","Hot dog stand"]
 var free_drive := true
 var mission_index := 0
+const FireLocker := preload("res://scripts/fire_locker.gd")
+var driven_fire_locker: FireLocker
+var parked_fire_locker: FireLocker
 var practice_hose := Node3D.new()
 var practice_spray := CPUParticles3D.new()
 var hose_seconds := 0.0
@@ -638,6 +641,11 @@ func _process(delta: float) -> void:
 		if reward_seconds == 0 or mode == "menu": reward_badge.hide()
 	if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED and not _can_capture_camera():
 		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	if not paused or not practice_hose.visible:
+		var hose_out := vehicle_index == 2 and practice_hose.visible
+		if is_instance_valid(driven_fire_locker):
+			driven_fire_locker.advance(delta,hose_out)
+		parked_fire_locker.advance(delta,hose_out and walker.visible)
 	if mode == "playing" and not paused:
 		if happy_seconds > 0:
 			happy_seconds = maxf(0, happy_seconds-delta)
@@ -3965,6 +3973,9 @@ func _build_depot() -> void:
 		model.rotation.y = PI
 		body.add_child(model)
 		_park_at_home(body, i)
+		if i == 2:
+			parked_fire_locker = FireLocker.new()
+			parked_fire_locker.fit(model)
 		for lamp in model.find_children("Flash*", "MeshInstance3D", true, false):
 			lamp.visible = false
 		parked_cars.append(body)
@@ -6196,6 +6207,10 @@ func _load_vehicle_model() -> void:
 	red_light_meshes.clear()
 	var packed: PackedScene = load(VEHICLE_SCENES_ALL[vehicle_index])
 	vehicle_model = packed.instantiate() as Node3D
+	driven_fire_locker = null
+	if vehicle_index == 2:
+		driven_fire_locker = FireLocker.new()
+		driven_fire_locker.fit(vehicle_model)
 	bus_board = null
 	rear_bus_board = null
 	if vehicle_index == BUS:
