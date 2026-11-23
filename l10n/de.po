@@ -1894,3 +1894,6 @@ msgstr "Mit Strg rennen"
 
 msgid "Ctrl"
 msgstr "Strg"
+
+msgid "Help at mission stops with Insert"
+msgstr "Mit Einfg am Einsatzziel helfen"

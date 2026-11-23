@@ -1806,3 +1806,6 @@ msgstr ""
 
 msgid "Ctrl"
 msgstr ""
+
+msgid "Help at mission stops with Insert"
+msgstr ""

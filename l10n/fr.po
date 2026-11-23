@@ -1892,3 +1892,6 @@ msgstr "Courir avec Ctrl"
 
 msgid "Ctrl"
 msgstr "Ctrl"
+
+msgid "Help at mission stops with Insert"
+msgstr "Aider aux étapes de la mission avec Inser"

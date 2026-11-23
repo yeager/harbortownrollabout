@@ -96,6 +96,7 @@ var practice_active := false
 var recovery_key := KEY_R
 var jump_key := KEY_E
 var number_camera := false
+var insert_help := false
 var ctrl_run := false
 var radio_keys: Array[int] = [KEY_J, KEY_N]
 var driving_hints := Label.new()
@@ -1036,7 +1037,8 @@ func _unhandled_key_input(event: InputEvent) -> void:
 					get_viewport().set_input_as_handled()
 				elif mode == "playing":
 					_toggle_pause()
-			KEY_SPACE:
+			KEY_SPACE, KEY_INSERT:
+				if event.keycode == KEY_INSERT and not insert_help: return
 				if mode == "playing" and not paused: _help_at_target()
 			KEY_ENTER:
 				if mode == "menu": _start_game()
@@ -8508,6 +8510,15 @@ func _build_overlay() -> void:
 		_refresh_ui()
 	)
 	pages[2].add_child(run)
+	var help := CheckButton.new()
+	help.name = "InsertHelp"
+	help.text = "Help at mission stops with Insert"
+	help.button_pressed = insert_help
+	help.toggled.connect(func(enabled: bool):
+		insert_help = enabled
+		_save_preferences()
+	)
+	pages[2].add_child(help)
 	var phone_key := CheckButton.new()
 	phone_key.name = "PhoneF2"
 	phone_key.text = "Open the phone with F2"
@@ -9629,6 +9640,7 @@ func _load_preferences() -> void:
 		if code in RADIO_KEYS[i]: radio_keys[i] = code
 	var saved_favorites = config.get_value("gallery","favorites",PackedStringArray())
 	if saved_favorites is PackedStringArray: favorites = saved_favorites
+	insert_help = config.get_value("keyboard","insert_help",false) == true
 	ctrl_run = config.get_value("keyboard","ctrl_run",false) == true
 	number_camera = config.get_value("keyboard","number_camera",false) == true
 	scooter_key = KEY_F9 if config.get_value("keyboard","scooter_f9",false) == true else KEY_U
@@ -9694,6 +9706,7 @@ func _save_preferences() -> void:
 	for i in RADIO_KEYS.size():
 		config.set_value("keyboard","radio_%d" % i, radio_keys[i])
 	config.set_value("gallery","favorites",favorites)
+	config.set_value("keyboard","insert_help",insert_help)
 	config.set_value("keyboard","ctrl_run",ctrl_run)
 	config.set_value("keyboard","number_camera",number_camera)
 	config.set_value("keyboard","scooter_f9",scooter_key == KEY_F9)

@@ -1873,3 +1873,6 @@ msgstr "Juokse Ctrl-näppäimellä"
 
 msgid "Ctrl"
 msgstr "Ctrl"
+
+msgid "Help at mission stops with Insert"
+msgstr "Auta tehtäväkohteissa Insert-näppäimellä"

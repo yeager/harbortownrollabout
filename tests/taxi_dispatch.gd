@@ -13,7 +13,17 @@ func check_fare() -> void:
 	game.phone.take_job.pressed.emit()
 	var initial_wallet: int = game.wallet
 	game.ambulance.position = game._mission_destination()
-	game._help_at_target()
+	var help_key := InputEventKey.new()
+	help_key.pressed = true
+	help_key.keycode = KEY_INSERT
+	game._unhandled_key_input(help_key)
+	if game._vehicle_payload() != 0:
+		printerr("Insert should be inactive by default")
+		quit(1)
+		return
+	game.find_child("InsertHelp", true, false).button_pressed = true
+	help_key.keycode = KEY_SPACE
+	game._unhandled_key_input(help_key)
 	if game._vehicle_payload() != 75.0:
 		printerr("Incorrect passenger payload")
 		quit(1)
@@ -45,7 +55,12 @@ func check_fare() -> void:
 		return
 
 	game.ambulance.position = dropoff
-	game._help_at_target()
+	help_key.keycode = KEY_INSERT
+	game._unhandled_key_input(help_key)
+	if game.wallet != initial_wallet + 15:
+		printerr("Saved Insert binding did not complete the fare")
+		quit(1)
+		return
 	game._help_at_target()
 	if game.wallet != initial_wallet + 15 or game.phone.current_job != "A pupil is waiting at the square.":
 		printerr("Expected one fare payment and the next school pickup")

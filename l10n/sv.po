@@ -1807,3 +1807,6 @@ msgstr "Spring med Ctrl"
 
 msgid "Ctrl"
 msgstr "Ctrl"
+
+msgid "Help at mission stops with Insert"
+msgstr "Hjälp till vid uppdragsmål med Insert"

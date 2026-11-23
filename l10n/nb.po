@@ -1877,3 +1877,6 @@ msgstr "Løp med Ctrl"
 
 msgid "Ctrl"
 msgstr "Ctrl"
+
+msgid "Help at mission stops with Insert"
+msgstr "Hjelp til ved oppdragsmål med Insert"
