@@ -36,6 +36,12 @@ On first launch, the game uses your system language if supported, with English a
 | Reverse | Stop, release the brake, then press S, Down or the right mouse button again |
 | Help at a mission marker | Space |
 | Leave or enter a parked vehicle | F |
+| Walk forward or backward | W/S or Up/Down arrows |
+| Turn on foot | A/D or Left/Right arrows |
+| Run | Hold Shift while walking forward |
+| Jump on foot | E |
+| Raise or lower the walking camera | Page Up / Page Down |
+| Return to a safe spot when stuck | R while playing |
 | Open or close the phone | T |
 | Close the open phone and return to play | Escape |
 | Toggle the vehicle radio | J |
