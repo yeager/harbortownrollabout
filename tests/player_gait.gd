@@ -24,6 +24,11 @@ func check_gait() -> void:
 				printerr("Pelvis and shoulders should counterrotate during walking")
 				quit(1)
 				return
+			for shoulder: Node3D in gait.arms:
+				if not is_equal_approx(shoulder.rotation.y, gait.jacket.rotation.y):
+					printerr("Swinging arm did not turn with the shoulders")
+					quit(1)
+					return
 			min_shift = minf(min_shift, gait.lateral_shift)
 			max_shift = maxf(max_shift, gait.lateral_shift)
 			for side in 2:

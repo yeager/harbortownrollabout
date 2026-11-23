@@ -207,7 +207,7 @@ func advance(distance: float, delta: float, pushing: bool, tuck := 0.0) -> void:
 		shoes[i].position += legs[i].basis.inverse() * (Vector3.FORWARD * 0.025)
 		shoes[i].basis = legs[i].basis.inverse() * Basis(Vector3.RIGHT, shoe_angles[i])
 		if not pushing:
-			arms[i].rotation.y = 0.0
+			arms[i].rotation.y = shoulder_yaw
 			arms[i].rotation.x = -foot.x * lerpf(1.05, 1.65, running) - .30 * running + .40 * tuck
 			# Leave room for the resting thumb beside the jacket and thigh.
 			arms[i].rotation.z = signf(hip_centres[i]) * .10
