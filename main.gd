@@ -5037,8 +5037,9 @@ func _load_vehicle_model() -> void:
 			arm.reparent(pivot)
 			blades[i].reparent(pivot)
 			wiper_pivots.append(pivot)
-	if vehicle_index in [3, PORSCHE]:
-		var rim := vehicle_model.find_child("Steering wheel rim*",true,false) as MeshInstance3D
+	if vehicle_index in [3, PORSCHE, MOWER]:
+		var rim_name := "Steering wheel" if vehicle_index == MOWER else "Steering wheel rim*"
+		var rim := vehicle_model.find_child(rim_name,true,false) as MeshInstance3D
 		if rim:
 			cabin_wheel = Node3D.new()
 			vehicle_model.add_child(cabin_wheel)
@@ -5062,9 +5063,11 @@ func _load_vehicle_model() -> void:
 			grip_radius *= .9
 			var tilt := 0.5 * atan2(2.0 * yz, yy - zz)
 			cabin_wheel_axis = Vector3(0,-sin(tilt),cos(tilt))
-			for part in vehicle_model.find_children("*steering spoke*", "MeshInstance3D",true,false) + vehicle_model.find_children("Steering wheel*", "MeshInstance3D",true,false):
+			var spoke_name := "Wheel spoke*" if vehicle_index == MOWER else "*steering spoke*"
+			for part in vehicle_model.find_children(spoke_name, "MeshInstance3D",true,false) + vehicle_model.find_children("Steering wheel*", "MeshInstance3D",true,false):
 				part.reparent(cabin_wheel)
 
+	if vehicle_index in [3, PORSCHE]:
 		var screen := vehicle_model.find_child("Curved instrument screen*",true,false) as MeshInstance3D
 		if screen:
 			var bounds: AABB = ambulance.global_transform.affine_inverse() * screen.global_transform * screen.get_aabb()
