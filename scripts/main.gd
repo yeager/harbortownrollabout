@@ -77,6 +77,7 @@ const RADIO_KEYS := [[KEY_J, KEY_B, KEY_X], [KEY_N, KEY_M, KEY_Z]]
 const NUMBER_MOVEMENT := {KEY_W: KEY_8, KEY_A: KEY_4, KEY_S: KEY_5, KEY_D: KEY_6}
 var number_movement := false
 var seat_f3 := false
+var camera_f6 := false
 var horn_f4 := false
 var quit_key := KEY_F10
 var recovery_key := KEY_R
@@ -957,7 +958,8 @@ func _unhandled_key_input(event: InputEvent) -> void:
 			KEY_F, KEY_F3:
 				if (event.keycode == KEY_F or seat_f3) and not phone.handset.is_visible_in_tree():
 					_change_seat()
-			KEY_C: _toggle_camera_view()
+			KEY_C, KEY_F6:
+				if event.keycode == KEY_C or camera_f6: _toggle_camera_view()
 			KEY_ESCAPE, KEY_P:
 				if event.keycode == KEY_ESCAPE and phone.handset.is_visible_in_tree():
 					phone.toggle()
@@ -7940,6 +7942,15 @@ func _build_overlay() -> void:
 		_save_preferences()
 	)
 	pages[2].add_child(horn_binding)
+	var view_binding := CheckButton.new()
+	view_binding.name = "CameraF6"
+	view_binding.text = "Also use F6 to change camera view"
+	view_binding.button_pressed = camera_f6
+	view_binding.toggled.connect(func(enabled: bool):
+		camera_f6 = enabled
+		_save_preferences()
+	)
+	pages[2].add_child(view_binding)
 	var quit_binding := CheckButton.new()
 	quit_binding.name = "QuitF8"
 	quit_binding.text = "Quit with F8"
@@ -8933,6 +8944,7 @@ func _load_preferences() -> void:
 	number_camera = config.get_value("keyboard","number_camera",false) == true
 	seat_f3 = config.get_value("keyboard","seat_f3",false) == true
 	horn_f4 = config.get_value("keyboard","horn_f4",false) == true
+	camera_f6 = config.get_value("keyboard","camera_f6",false) == true
 	quit_key = KEY_F8 if config.get_value("keyboard","quit_f8",false) == true else KEY_F10
 	phone.toggle_key = KEY_F2 if config.get_value("keyboard","phone_f2",false) == true else KEY_T
 	jump_key = KEY_0 if config.get_value("keyboard","zero_jump",false) == true else KEY_E
@@ -8994,6 +9006,7 @@ func _save_preferences() -> void:
 	config.set_value("keyboard","number_camera",number_camera)
 	config.set_value("keyboard","seat_f3",seat_f3)
 	config.set_value("keyboard","horn_f4",horn_f4)
+	config.set_value("keyboard","camera_f6",camera_f6)
 	config.set_value("keyboard","quit_f8",quit_key == KEY_F8)
 	config.set_value("keyboard","phone_f2",phone.toggle_key == KEY_F2)
 	config.set_value("keyboard","zero_jump",jump_key == KEY_0)

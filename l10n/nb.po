@@ -1805,3 +1805,6 @@ msgstr "Bland to sorter i en pose"
 
 msgid "Choose a second sweet for %s"
 msgstr "Velg en sort til sammen med %s"
+
+msgid "Also use F6 to change camera view"
+msgstr "Bruk også F6 for å bytte kameravisning"

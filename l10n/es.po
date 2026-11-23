@@ -1812,3 +1812,6 @@ msgstr "Mezclar dos tipos en una bolsa"
 
 msgid "Choose a second sweet for %s"
 msgstr "Elige otro dulce para mezclar con %s"
+
+msgid "Also use F6 to change camera view"
+msgstr "Usar también F6 para cambiar de vista"

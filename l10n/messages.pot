@@ -1734,3 +1734,6 @@ msgstr ""
 
 msgid "Choose a second sweet for %s"
 msgstr ""
+
+msgid "Also use F6 to change camera view"
+msgstr ""

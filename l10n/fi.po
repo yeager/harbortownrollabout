@@ -1801,3 +1801,6 @@ msgstr "Sekoita kaksi lajia pussiin"
 
 msgid "Choose a second sweet for %s"
 msgstr "Valitse toinen makeinen kaveriksi tuotteelle %s"
+
+msgid "Also use F6 to change camera view"
+msgstr "Vaihda kameranäkymää myös F6-näppäimellä"

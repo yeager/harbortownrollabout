@@ -1820,3 +1820,6 @@ msgstr "Mélanger deux sortes dans un sachet"
 
 msgid "Choose a second sweet for %s"
 msgstr "Choisis une deuxième sorte avec %s"
+
+msgid "Also use F6 to change camera view"
+msgstr "Utiliser aussi F6 pour changer de vue"

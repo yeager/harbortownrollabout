@@ -1735,3 +1735,6 @@ msgstr "Blanda två sorter i en påse"
 
 msgid "Choose a second sweet for %s"
 msgstr "Välj en sort till att blanda med %s"
+
+msgid "Also use F6 to change camera view"
+msgstr "Använd även F6 för att byta kameravy"
