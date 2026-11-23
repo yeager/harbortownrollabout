@@ -1771,3 +1771,6 @@ msgstr "Lieferbelege"
 
 msgid "Return to bay 711"
 msgstr "Zurück zu Stellplatz 711"
+
+msgid "Show street names with turn arrows"
+msgstr "Straßennamen bei Abbiegepfeilen anzeigen"

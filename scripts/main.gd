@@ -339,6 +339,7 @@ var mouse_brake := false
 var brake_pedal_held := false
 var gentle_driving := true
 var allow_crashes := true
+var show_turn_street := false
 var allow_red_lights := false
 var waiting_for_signal := false
 var waiting_for_clear_crossing := false
@@ -6509,7 +6510,7 @@ func _update_route_arrows() -> void:
 		points = navigator.driving_path(start, goal, Vector2(forward.x, forward.z).normalized(), needs_wide_turns)
 	var car_forward := Vector2(-ambulance.global_basis.z.x, -ambulance.global_basis.z.z).normalized()
 	if not walker.visible and not paused and not boating and not operating_excavator:
-		turn_preview.text = navigator.turn_preview(points, car_forward)
+		turn_preview.text = navigator.turn_preview(points, car_forward, show_turn_street)
 		turn_preview.visible = not turn_preview.text.is_empty()
 	var gap := minf(3.5, start.distance_to(goal) * .5) if walking_to_grill else 3.5
 	var used := 0
@@ -7825,6 +7826,16 @@ func _build_overlay() -> void:
 		_save_preferences()
 	)
 	pages[2].add_child(crashes)
+	var street_names := CheckButton.new()
+	street_names.name = "TurnStreetNames"
+	street_names.text = "Show street names with turn arrows"
+	street_names.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	street_names.button_pressed = show_turn_street
+	street_names.toggled.connect(func(enabled: bool):
+		show_turn_street = enabled
+		_save_preferences()
+	)
+	pages[2].add_child(street_names)
 	var red_lights := CheckButton.new()
 	red_lights.text = "Allow driving through red lights"
 	red_lights.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
@@ -8639,6 +8650,7 @@ func _load_preferences() -> void:
 	time_mode = clampi(int(config.get_value("world","daylight",2)),0,2)
 	_apply_calm_mode(config.get_value("accessibility","calm_mode",false) == true)
 	steady_player_lights = config.get_value("driving","steady_lights",false) == true
+	show_turn_street = config.get_value("driving","turn_street_names",false) == true
 	allow_red_lights = config.get_value("driving","allow_red_lights",false) == true
 	allow_crashes = config.get_value("driving","allow_crashes",true) == true
 	var gentle = config.get_value("driving","gentle",true)
@@ -8673,6 +8685,7 @@ func _save_preferences() -> void:
 	config.set_value("world","season",weather.season_setting)
 	config.set_value("world","weather",weather.weather_setting)
 	config.set_value("world","daylight",time_mode)
+	config.set_value("driving","turn_street_names",show_turn_street)
 	config.set_value("driving","allow_red_lights",allow_red_lights)
 	config.set_value("driving","allow_crashes",allow_crashes)
 	config.set_value("driving","gentle",gentle_driving)

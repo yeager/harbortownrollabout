@@ -1684,3 +1684,6 @@ msgstr "Leveranskvitton"
 
 msgid "Return to bay 711"
 msgstr "Tillbaka till plats 711"
+
+msgid "Show street names with turn arrows"
+msgstr "Visa gatunamn vid svängpilar"

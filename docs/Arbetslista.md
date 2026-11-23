@@ -124,7 +124,7 @@ Listan innehåller 100 jobb. En tom ruta är öppen. En punkt bockas av när bet
 
 ## Tillgänglighet och speltest
 
-- [ ] 91. Lägg till ett val att visa uppdragspilen med både riktning och gatunamn inför nästa sväng.
+- [x] 91. Under Körning kan spelaren välja gatunamn vid nästa svängpil. Kontrollerat för svängen från Depågatan till Stationsallén och efter omstart.
 - [ ] 92. Visa en bild av rätt dörr när spelaren står mellan två möjliga butiksentréer.
 - [x] 93. Visa stopp i förarhjälpen. Fordonssignalerna har tre runda linser i fast ordning: rött för stopp, orange för sakta in och grönt för kör.
 - [x] 94. Låt spelaren provlyssna på en kort replik direkt när talvolymen ändras i inställningarna.

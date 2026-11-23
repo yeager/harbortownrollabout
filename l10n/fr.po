@@ -1769,3 +1769,6 @@ msgstr "Reçus de livraison"
 
 msgid "Return to bay 711"
 msgstr "Retour à la place 711"
+
+msgid "Show street names with turn arrows"
+msgstr "Afficher le nom des rues avec les flèches de direction"

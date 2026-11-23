@@ -1683,3 +1683,6 @@ msgstr ""
 
 msgid "Return to bay 711"
 msgstr ""
+
+msgid "Show street names with turn arrows"
+msgstr ""

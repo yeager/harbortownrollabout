@@ -164,12 +164,29 @@ func driving_path(start: Vector2, goal: Vector2, heading: Vector2, wide_turns :=
 	remaining_lane = path(start, goal, heading, wide_turns)
 	return remaining_lane
 
+# Proper names are shared by all interface languages. Match the centreline,
+# since the driving path runs beside it in the vehicle's lane.
+const AVENUE_NAMES := {-82:"Norra kajgatan",-48:"Verkstadsgatan",0:"Storgatan",35:"Stationsallén",60:"Södra kajgatan"}
+const CROSS_STREET_NAMES := {-510:"Ändhållplatsvägen",-420:"Lindgatan",-330:"Vagnhallsgatan",-240:"Spårgatan",-150:"Mackvägen",-55:"Depågatan",0:"Torggatan",48:"Parkgatan",102:"Kajhusgatan",162:"Strandgatan"}
+
+func _street_name(point: Vector2, horizontal: bool) -> String:
+	var names := AVENUE_NAMES if horizontal else CROSS_STREET_NAMES
+	var axis := point.y if horizontal else point.x
+	var nearest: int = names.keys()[0]
+	for coordinate: int in names:
+		if absf(axis-coordinate) < absf(axis-nearest): nearest = coordinate
+	if horizontal and nearest in [-48,0] and point.x >= 87: return "Östra allén"
+	if horizontal and nearest == 0 and point.x >= 50: return "Kajgatan"
+	if not horizontal and nearest == 0 and point.y > 24: return "Torgets förlängning"
+	return names[nearest]
+
 # Read the straight approaches on either side of the sampled junction curves.
-func turn_preview(points: PackedVector2Array, heading: Vector2) -> String:
+func turn_preview(points: PackedVector2Array, heading: Vector2, show_street := false) -> String:
 	var incoming := heading.normalized()
 	var distance := 0.0
 	var turns := PackedStringArray()
 	var first_distance := 0.0
+	var first_street := ""
 	for i in range(1, points.size()):
 		var segment := points[i] - points[i-1]
 		var length := segment.length()
@@ -178,12 +195,16 @@ func turn_preview(points: PackedVector2Array, heading: Vector2) -> String:
 			var outgoing := segment / length
 			var angle := incoming.angle_to(outgoing)
 			if absf(angle) > PI*.32:
-				if turns.is_empty(): first_distance = distance
+				if turns.is_empty():
+					first_distance = distance
+					if show_street:
+						first_street = _street_name((points[i]+points[i-1])*.5,absf(outgoing.x)>.5)
 				turns.append("↶" if absf(angle) > PI*.78 else ("↱" if angle > 0 else "↰"))
 				if turns.size() == 2: break
 			incoming = outgoing
 		distance += length
 	if turns.is_empty() or first_distance > 35: return ""
+	if show_street: return turns[0]+"  "+first_street
 	if turns.size() == 1:
 		turns.insert(0, "↑")
 	return "   ›   ".join(turns)

@@ -1754,3 +1754,6 @@ msgstr "Leveringskvitteringer"
 
 msgid "Return to bay 711"
 msgstr "Tilbake til plass 711"
+
+msgid "Show street names with turn arrows"
+msgstr "Vis gatenavn ved svingpilene"
