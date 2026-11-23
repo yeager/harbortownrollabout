@@ -14,6 +14,9 @@ func check_route() -> void:
 		printerr("Refuse collection requires the long-vehicle route")
 		quit(1)
 		return
+	if not check_tram_junctions(game.navigator):
+		quit(1)
+		return
 	var initial_points: int = game.delivery_points
 	var initial_wallet: int = game.wallet
 	var launch_speeds: Array[float] = []
@@ -67,3 +70,16 @@ func check_route() -> void:
 		return
 	print("Refuse collection, unloading and payment passed.")
 	game._finish_quit()
+
+func check_tram_junctions(navigator) -> bool:
+	for heading: Vector2 in [Vector2.RIGHT, Vector2.LEFT, Vector2.UP, Vector2.DOWN]:
+		var junction := Vector2(-330, -48) if heading.y == 0 else Vector2(-420, 0)
+		var lane_offset := Vector2(-heading.y, heading.x) * 6.0
+		var pickup := junction - heading * 22 - lane_offset
+		for distance: float in [-2.0, -1.5, -1.0, 0.0, 1.0]:
+			var start := junction + heading * distance + lane_offset
+			var route: PackedVector2Array = navigator.path(start, pickup, heading, true)
+			if route.size() < 2 or not route[-1].is_equal_approx(pickup) or route[0].direction_to(route[1]).dot(heading) < .99:
+				printerr("Incorrect route to pickup behind truck at ", start, " facing ", heading)
+				return false
+	return true
