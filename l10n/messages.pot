@@ -1668,3 +1668,6 @@ msgstr ""
 
 msgid "Also use F3 to enter or leave vehicles"
 msgstr ""
+
+msgid "Next stop: %s"
+msgstr ""

@@ -1735,3 +1735,6 @@ msgstr "Lopeta F8-näppäimellä"
 
 msgid "Also use F3 to enter or leave vehicles"
 msgstr "Nouse ajoneuvoon tai poistu siitä myös F3-näppäimellä"
+
+msgid "Next stop: %s"
+msgstr "Seuraava pysäkki: %s"

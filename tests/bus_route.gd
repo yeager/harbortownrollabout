@@ -73,6 +73,10 @@ func check_route() -> void:
 			printerr("Phone instruction and route marker disagree at ", stops[stop_index])
 			quit(1)
 			return
+		if not game.next_bus_stop_board.is_visible_in_tree() or game.next_bus_stop_board.text != "Nästa hållplats: " + stops[stop_index]:
+			printerr("Interior display disagrees with the stop sign at ", stops[stop_index])
+			quit(1)
+			return
 		var destination := "74  SICKLA UDDE"
 		if game.bus_board.text != destination or game.rear_bus_board.text != destination:
 			printerr("Expected both destination displays to show ", destination)

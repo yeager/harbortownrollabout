@@ -1669,3 +1669,6 @@ msgstr "Avsluta med F8"
 
 msgid "Also use F3 to enter or leave vehicles"
 msgstr "Använd även F3 för att kliva i och ur fordon"
+
+msgid "Next stop: %s"
+msgstr "Nästa hållplats: %s"

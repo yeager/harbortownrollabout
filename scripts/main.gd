@@ -222,6 +222,7 @@ const WEST_STOPS := [Vector3(-205,0,2.8),Vector3(-460,0,-45.2)]
 const BUS_DESTINATION := "74  SICKLA UDDE"
 const BUS_STOPS := [0,SCHOOL,2,1,4,5]
 const BUS_MESSAGES := ["Collect passengers at the square.", "Drop off passengers at the school.", "Collect passengers at the marina.", "Drop off passengers at the clinic.", "Collect passengers at Västra torget.", "Drop off passengers at Sickla udde."]
+var next_bus_stop_board: Label3D
 var rear_bus_board: Label3D
 var seated_bus_riders: Node3D
 var bus_board: Label3D
@@ -5918,6 +5919,14 @@ func _fit_bus_interior() -> void:
 			glass.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
 			glass.albedo_color = Color(.40,.62,.68,.22)
 			cabin.set_surface_override_material(surface,glass)
+	var panel := _make_box("Interior stop display",Vector3(1.72,.30,.065),Vector3(0,2.60,3.54),Color("#172124"),false,vehicle_model)
+	next_bus_stop_board = Label3D.new()
+	next_bus_stop_board.rotation.y = PI
+	next_bus_stop_board.position.z = -.035
+	next_bus_stop_board.double_sided = false
+	next_bus_stop_board.outline_size = 0
+	next_bus_stop_board.modulate = Color("#ffd46c")
+	panel.add_child(next_bus_stop_board)
 	if not is_instance_valid(seated_bus_riders):
 		seated_bus_riders = Node3D.new()
 		add_child(seated_bus_riders)
@@ -6641,6 +6650,11 @@ func _update_bus_board() -> void:
 		bus_board.pixel_size = minf(1.62/pixels.x,.25/pixels.y)
 		rear_bus_board.pixel_size = bus_board.pixel_size
 		rear_bus_board.text = bus_board.text
+		next_bus_stop_board.visible = not free_drive
+		var stop: int = BUS_STOPS[bus_leg % BUS_STOPS.size()]
+		next_bus_stop_board.text = tr("Next stop: %s") % tr(BUS_STOP_NAMES[stop])
+		var size := font.get_string_size(next_bus_stop_board.text,HORIZONTAL_ALIGNMENT_LEFT,-1,next_bus_stop_board.font_size)
+		next_bus_stop_board.pixel_size = minf(1.61/size.x,.22/size.y)
 
 func _update_mission_marker() -> void:
 	_update_bus_board()

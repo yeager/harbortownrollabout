@@ -112,7 +112,7 @@ Listan innehåller 100 jobb. En tom ruta är öppen. En punkt bockas av när bet
 ## Trafik, fordon och resor
 
 - [ ] 81. Låt en bussresenär trycka på stoppknappen och tänd en synlig stoppskylt fram i bussen.
-- [ ] 82. Visa nästa hållplats inne i bussen när linje 74 lämnar en hållplats.
+- [x] 82. Visa nästa hållplats inne i bussen när linje 74 lämnar en hållplats.
 - [ ] 83. Markera platsen för barnvagnar inne i Tvärbanan och prova att en barnvagn kan komma dit från perrongen.
 - [ ] 84. Låt fotgängare invänta avstigande vid spårvagnsdörren innan de själva går ombord.
 - [ ] 85. Ge färjan en ombordstigningssignal som både syns och hörs innan avgång.

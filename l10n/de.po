@@ -1756,3 +1756,6 @@ msgstr "Mit F8 beenden"
 
 msgid "Also use F3 to enter or leave vehicles"
 msgstr "Auch mit F3 ein- und aussteigen"
+
+msgid "Next stop: %s"
+msgstr "Nächster Halt: %s"

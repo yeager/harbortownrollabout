@@ -1746,3 +1746,6 @@ msgstr "Salir con F8"
 
 msgid "Also use F3 to enter or leave vehicles"
 msgstr "Usar también F3 para subir o bajar de un vehículo"
+
+msgid "Next stop: %s"
+msgstr "Próxima parada: %s"
