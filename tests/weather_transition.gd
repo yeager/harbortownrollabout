@@ -154,6 +154,25 @@ func check_transition() -> void:
 		printerr("Seasonal tree remained on summer square")
 		quit(1)
 		return
+	var pole := game.midsummer_pole
+	var fountain := game.field_fountain
+	for season in [2, 3, 4, 1, 2]:
+		seasons.get_child(season).pressed.emit()
+		game._process(0)
+		var summer: bool = season == 2
+		if pole.visible != summer or game.roadside_solids.count(pole.obstacle) != int(summer):
+			printerr("Midsummer pole visibility or collision is wrong in season ", season)
+			quit(1)
+			return
+		if fountain.jets.is_empty() or fountain.covers.visible != (season == 4):
+			printerr("Fountain nozzles or winter covers are missing")
+			quit(1)
+			return
+		for jet in fountain.jets:
+			if jet.emitting != summer or jet.visible != summer:
+				printerr("Fountain spray is wrong in season ", season)
+				quit(1)
+				return
 	game.footstep.stop()
 	game.free()
 	weather.free()
