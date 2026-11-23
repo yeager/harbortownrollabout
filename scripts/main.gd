@@ -316,6 +316,7 @@ var mission_index := 0
 var refuse_pump := AudioStreamPlayer3D.new()
 var refuse_beacon: StandardMaterial3D
 var refuse_lift: Tween
+var curb_bay := Node3D.new()
 var refuse_bins: Array[Node3D] = []
 var vehicle_progress := {}
 
@@ -1357,6 +1358,8 @@ func _mission_destination() -> Vector3:
 		destination = _stop_curb(BUS_STOPS[bus_leg%BUS_STOPS.size()])
 	elif vehicle_index == RECOVERY:
 		destination = SERVICE_STOPS[recovery_leg%4]
+	if vehicle_index in [TAXI,REFUSE] and destination == TARGETS[1]:
+		destination.x = 2.35
 	destination.y = _surface_height(destination.x,destination.z)
 	return destination
 
@@ -3407,7 +3410,8 @@ func _build_depot() -> void:
 	for i in 2:
 		var bin := Node3D.new()
 		add_child(bin)
-		bin.position = TARGETS[i] + Vector3(2.8,0,2.8)
+		bin.position = _stop_pavement(i)
+		if i == 0: bin.position.z = 6.35
 		bin.position.y = _foot_height(bin.position.x, bin.position.z)
 		_make_box("Recycling bin",Vector3(.67,.84,.58),Vector3.UP*.51,Color("#245d48"),false,bin)
 		_make_box("Hinged lid",Vector3(.72,.08,.64),Vector3.UP*.97,Color("#74ab54"),false,bin)
@@ -5718,6 +5722,13 @@ func _build_target_marker() -> void:
 	ring.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	ring.material_override = _material(Color("#7fda9b"), 0.35, true)
 	mission_marker.add_child(ring)
+	curb_bay.name = "CurbBay"
+	mission_marker.add_child(curb_bay)
+	var stripe := _material(Color("#ffdf77"), .65, true)
+	# The long edge faces the pavement. The open side faces approaching traffic.
+	_make_box("Curb stripe",Vector3(6.8,.025,.16),Vector3(0,0,1.1),Color.WHITE,false,curb_bay).material_override = stripe
+	for side in [-1,1]:
+		_make_box("Bay end",Vector3(.16,.025,2.35),Vector3(side*3.32,0,0),Color.WHITE,false,curb_bay).material_override = stripe
 	var beacon := _make_box("Mission beacon", Vector3(0.32, 1.1, 0.32), Vector3(0, 0.62, 0), Color("#83dda0"), false, mission_marker)
 	beacon.material_override = _material(Color("#83dda0"), 0.25, true)
 	var label := Label3D.new()
@@ -5950,6 +5961,16 @@ func _update_mission_marker() -> void:
 	var zone := mission_marker.get_node("ArrivalZone") as MeshInstance3D
 	zone.scale = Vector3(_arrival_radius(),.4,_arrival_radius())
 	mission_marker.global_position = _mission_destination() + Vector3(0, 0.05, 0)
+	curb_bay.visible = not _needs_mission_vehicle() and vehicle_index in [REFUSE,TAXI,RECOVERY]
+	zone.visible = not curb_bay.visible
+	if curb_bay.visible:
+		var side := Vector3.BACK
+		if vehicle_index == RECOVERY:
+			if recovery_leg % 4 == 2: side = Vector3.FORWARD
+		else:
+			var stop := _taxi_stop() if vehicle_index == TAXI else _mission_stop()
+			side = _stop_pavement(stop) - _stop_curb(stop)
+		curb_bay.rotation.y = atan2(side.x,side.z)
 	var marker_label: Label3D = mission_marker.get_node("MissionLabel")
 	if _needs_mission_vehicle():
 		marker_label.text = tr("Return to your taxi" if vehicle_index == TAXI else "Return to your bus" if vehicle_index==BUS else "Return to your ice cream van" if vehicle_index == ICE_CREAM else "Return to your garbage truck" if vehicle_index == REFUSE else "Return to your recovery truck").to_upper()
