@@ -245,10 +245,27 @@ for side in (-1, 1):
     ):
         panel = box(name, (side*(.40+offset), vent_y, .387), size, finish, .007)
         panel.rotation_euler.z = side*math.atan(slope)
-    for row in range(5):
-        slat = box("Engine cooling louvre", (side*.421, vent_y, .34+row*.023),
-                   (.014,.31,.012), v.DARK, .004)
-        slat.rotation_euler.z = side*math.atan(slope)
+    # All wires share one mesh per panel to keep the grille cheap to draw.
+    wires = bpy.data.curves.new("Square wire grille", 'CURVE')
+    wires.dimensions = '3D'
+    wires.bevel_depth = .0013
+    wires.bevel_resolution = 0
+    wires.materials.append(v.METAL)
+    for vertical, count in ((True,13),(False,5)):
+        for index in range(-count,count+1):
+            offset = index*.012
+            spline = wires.splines.new('POLY')
+            spline.points.add(1)
+            for point, end in zip(spline.points,(-1,1)):
+                u,h = (offset,end*.060) if vertical else (end*.158,offset)
+                point.co = (side*(.422-u*slope),vent_y+u,.387+h,1)
+    grille = bpy.data.objects.new("Engine intake wire mesh",wires)
+    bpy.context.collection.objects.link(grille)
+    grille.parent = root
+    bpy.context.view_layer.objects.active = grille
+    bpy.ops.object.select_all(action='DESELECT')
+    grille.select_set(True)
+    bpy.ops.object.convert(target='MESH')
 tube("Exhaust downpipe",(.34,.24,.32),(.426,.34,.213),.020,v.METAL)
 tube("Exhaust inlet",(.426,.34,.213),(.426,.52,.198),.020,v.METAL)
 tube("Silencer",(.426,.51,.198),(.426,1.01,.202),.042,v.METAL)
