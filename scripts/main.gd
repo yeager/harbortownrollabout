@@ -951,6 +951,15 @@ func _sync_radio() -> void:
 		radio.stream_paused = false
 		if not radio.playing: _next_radio_track()
 
+# Gain offsets for tracks more than 1 LU from the song library's -16 LUFS target.
+const RADIO_GAIN_DB := {
+	"Hafenradio (DE).mp3": 4.3,
+	"Satamaradio (FI).mp3": 2.1,
+	"Radio del Puerto (ES).mp3": -2.0,
+	"The Splash Disco.mp3": -1.8,
+	"Regn på mitt plåttak (SV).mp3": -1.2,
+}
+
 func _next_radio_track() -> void:
 	if radio_tracks.is_empty() or not radio_enabled or paused: return
 	if radio_bag.is_empty():
@@ -968,6 +977,7 @@ func _next_radio_track() -> void:
 	song_cover.visible = song_cover.texture != null
 	song_card_seconds = 5.0
 	song_card.show()
+	radio.volume_db = -10.0 + float(RADIO_GAIN_DB.get(radio_track, 0.0))
 	radio.stream = load("res://audio/radio/" + radio_track)
 	radio.play()
 
@@ -6831,7 +6841,6 @@ func _build_ui() -> void:
 	next_song_button.pressed.connect(_next_radio_track)
 	radio.finished.connect(_next_radio_track)
 	radio.bus = &"Radio"
-	radio.volume_db=-10
 	add_child(radio)
 	_build_overlay()
 	_build_menu_footer()
