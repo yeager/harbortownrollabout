@@ -1726,3 +1726,9 @@ msgstr "Erilliset pelaajaprofiilit"
 
 msgid "Open the phone with F2"
 msgstr "Avaa puhelin F2-näppäimellä"
+
+msgid "Quit game · F8"
+msgstr "Lopeta peli · F8"
+
+msgid "Quit with F8"
+msgstr "Lopeta F8-näppäimellä"

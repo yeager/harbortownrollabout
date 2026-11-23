@@ -1747,3 +1747,9 @@ msgstr "Getrennte Spielerprofile"
 
 msgid "Open the phone with F2"
 msgstr "Telefon mit F2 öffnen"
+
+msgid "Quit game · F8"
+msgstr "Spiel beenden · F8"
+
+msgid "Quit with F8"
+msgstr "Mit F8 beenden"

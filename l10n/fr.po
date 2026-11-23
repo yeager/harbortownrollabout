@@ -1745,3 +1745,9 @@ msgstr "Profils séparés"
 
 msgid "Open the phone with F2"
 msgstr "Ouvrir le téléphone avec F2"
+
+msgid "Quit game · F8"
+msgstr "Quitter le jeu · F8"
+
+msgid "Quit with F8"
+msgstr "Quitter avec F8"

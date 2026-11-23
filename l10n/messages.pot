@@ -1659,3 +1659,9 @@ msgstr ""
 
 msgid "Open the phone with F2"
 msgstr ""
+
+msgid "Quit game · F8"
+msgstr ""
+
+msgid "Quit with F8"
+msgstr ""

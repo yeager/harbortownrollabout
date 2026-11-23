@@ -1730,3 +1730,9 @@ msgstr "Separate spillerprofiler"
 
 msgid "Open the phone with F2"
 msgstr "Åpne telefonen med F2"
+
+msgid "Quit game · F8"
+msgstr "Avslutt spillet · F8"
+
+msgid "Quit with F8"
+msgstr "Avslutt med F8"

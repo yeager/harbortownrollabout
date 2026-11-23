@@ -76,6 +76,7 @@ var greeting_number := 0
 const RADIO_KEYS := [[KEY_J, KEY_B, KEY_X], [KEY_N, KEY_M, KEY_Z]]
 const NUMBER_MOVEMENT := {KEY_W: KEY_8, KEY_A: KEY_4, KEY_S: KEY_5, KEY_D: KEY_6}
 var number_movement := false
+var quit_key := KEY_F10
 var recovery_key := KEY_R
 var jump_key := KEY_E
 var number_camera := false
@@ -751,7 +752,7 @@ func _finish_quit() -> void:
 	queue_free()
 
 func _dialog_quit_key(event: InputEvent, dialog: Window) -> void:
-	if event is InputEventKey and event.keycode == KEY_F10 and event.pressed and not event.echo:
+	if event is InputEventKey and event.keycode == quit_key and event.pressed and not event.echo:
 		dialog.set_input_as_handled()
 		_request_quit(dialog)
 
@@ -771,7 +772,7 @@ func _request_quit(parent_window: Window = null) -> void:
 	quit_dialog.get_cancel_button().grab_focus()
 
 func _input(event: InputEvent) -> void:
-	if event is InputEventKey and event.keycode == KEY_F10 and event.pressed and not event.echo:
+	if event is InputEventKey and event.keycode == quit_key and event.pressed and not event.echo:
 		get_viewport().set_input_as_handled()
 		_request_quit()
 		return
@@ -7071,7 +7072,7 @@ func _build_overlay() -> void:
 	menu_actions.add_child(settings_toggle)
 	menu_actions.add_child(start_button)
 	_sync_resume_button(menu_actions)
-	var quit_button := _button("Quit game · F10", 220)
+	var quit_button := _button("Quit game · F8" if quit_key == KEY_F8 else "Quit game · F10", 220)
 	menu_actions.add_child(quit_button)
 	quit_button.pressed.connect(_request_quit)
 	var dialog := AcceptDialog.new()
@@ -7151,6 +7152,16 @@ func _build_overlay() -> void:
 		_save_preferences()
 	)
 	pages[2].add_child(phone_key)
+	var quit_binding := CheckButton.new()
+	quit_binding.name = "QuitF8"
+	quit_binding.text = "Quit with F8"
+	quit_binding.button_pressed = quit_key == KEY_F8
+	quit_binding.toggled.connect(func(enabled: bool):
+		quit_key = KEY_F8 if enabled else KEY_F10
+		quit_button.text = "Quit game · F8" if enabled else "Quit game · F10"
+		_save_preferences()
+	)
+	pages[2].add_child(quit_binding)
 	var camera_keys := CheckButton.new()
 	camera_keys.name = "NumberCameraHeight"
 	camera_keys.text = "Adjust walking camera height with 9 and 3"
@@ -8032,6 +8043,7 @@ func _load_preferences() -> void:
 	var saved_favorites = config.get_value("gallery","favorites",PackedStringArray())
 	if saved_favorites is PackedStringArray: favorites = saved_favorites
 	number_camera = config.get_value("keyboard","number_camera",false) == true
+	quit_key = KEY_F8 if config.get_value("keyboard","quit_f8",false) == true else KEY_F10
 	phone.toggle_key = KEY_F2 if config.get_value("keyboard","phone_f2",false) == true else KEY_T
 	jump_key = KEY_0 if config.get_value("keyboard","zero_jump",false) == true else KEY_E
 	recovery_key = KEY_BACKSPACE if config.get_value("keyboard","backspace_recovery",false) == true else KEY_R
@@ -8088,6 +8100,7 @@ func _save_preferences() -> void:
 		config.set_value("keyboard","radio_%d" % i, radio_keys[i])
 	config.set_value("gallery","favorites",favorites)
 	config.set_value("keyboard","number_camera",number_camera)
+	config.set_value("keyboard","quit_f8",quit_key == KEY_F8)
 	config.set_value("keyboard","phone_f2",phone.toggle_key == KEY_F2)
 	config.set_value("keyboard","zero_jump",jump_key == KEY_0)
 	config.set_value("keyboard","backspace_recovery",recovery_key == KEY_BACKSPACE)

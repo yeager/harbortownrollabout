@@ -58,7 +58,7 @@ Click a vehicle picture, choose Axel or Alma, then select **Start driving**. Hol
 | Turn the radio on or off | J |
 | Skip to the next song, when available | N |
 | Pause | P |
-| Quit | F10, then confirm |
+| Quit | F10 (or F8 in Driving settings), then confirm |
 
 The radio switches on when you enter a vehicle. Swedish and English stations play songs. German, Spanish, French, Norwegian Bokmål and Finnish stations have a local announcement with music.
 
