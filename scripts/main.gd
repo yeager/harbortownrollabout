@@ -6010,10 +6010,15 @@ func _animate_steps(person: Node3D, distance: float, delta: float, pushing := fa
 	if gait == null:
 		gait = Gait.new(person, phase, _foot_height if person == walker else Callable())
 		person.set_meta("gait", gait)
-	var carrying := person == walker and mission_index in [1,2] and delivery_parcels.size() >= mission_index and walker.is_ancestor_of(delivery_parcels[mission_index-1])
+	var carried_box: Node3D
+	if person == walker:
+		if cake_box.get_parent() == walker:
+			carried_box = cake_box
+		elif mission_index in [1,2] and delivery_parcels.size() >= mission_index and walker.is_ancestor_of(delivery_parcels[mission_index-1]):
+			carried_box = delivery_parcels[mission_index-1]
 	var left_stance := gait.phase < 0.5
 	var tuck := sin(PI * walk_jump_left / WALK_JUMP_TIME) if person == walker else 0.0
-	gait.advance(distance / person.scale.y if tuck <= 0 else 0.0, delta, pushing or carrying, tuck)
+	gait.advance(distance / person.scale.y if tuck <= 0 else 0.0, delta, pushing or carried_box != null, tuck)
 	if pushing:
 		var right_grip: Vector3 = person.get_meta("aid_right_grip")
 		for i in 2:
@@ -6032,10 +6037,9 @@ func _animate_steps(person: Node3D, distance: float, delta: float, pushing := fa
 			footstep.volume_db = lerpf(-13.0, -9.0, impact)
 			footstep.pitch_scale = (0.94 if left_stance else 1.06) * lerpf(1.0, 0.94, impact)
 			footstep.play()
-		if carrying:
-			var parcel := delivery_parcels[mission_index-1]
+		if carried_box:
 			for i in 2:
-				gait.reach_with_hand(i, parcel.to_global(Vector3(-.24 if i == 0 else .24,.09,0)))
+				gait.reach_with_hand(i, carried_box.to_global(Vector3(-.24 if i == 0 else .24,.09,0)))
 
 func _snow_underfoot(point: Vector3) -> bool:
 	if weather.snow < .12 or walk_jump_left > 0 or shops.customer_is_indoors() or scooter.visible or ferry_passenger or tram_mode != 0:
