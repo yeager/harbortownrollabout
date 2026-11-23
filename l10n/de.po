@@ -1840,3 +1840,6 @@ msgstr "Bring den Mondhasen zur Theke im Kleiderladen."
 
 msgid "Thank you! Our moon rabbit is back!"
 msgstr "Danke! Unser Mondhase ist wieder da!"
+
+msgid "Also use F7 to pause or resume"
+msgstr "Auch mit F7 pausieren oder fortsetzen"

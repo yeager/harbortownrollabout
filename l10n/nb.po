@@ -1823,3 +1823,6 @@ msgstr "Ta med månekaninen til disken i klesbutikken."
 
 msgid "Thank you! Our moon rabbit is back!"
 msgstr "Takk! Månekaninen vår er tilbake!"
+
+msgid "Also use F7 to pause or resume"
+msgstr "Bruk også F7 til å sette på pause eller fortsette"

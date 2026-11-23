@@ -1819,3 +1819,6 @@ msgstr "Vie kuukani vaatekaupan tiskille."
 
 msgid "Thank you! Our moon rabbit is back!"
 msgstr "Kiitos! Kuukani on taas täällä!"
+
+msgid "Also use F7 to pause or resume"
+msgstr "Keskeytä tai jatka myös F7-näppäimellä"

@@ -1830,3 +1830,6 @@ msgstr "Lleva el conejo lunar al mostrador de la tienda de ropa."
 
 msgid "Thank you! Our moon rabbit is back!"
 msgstr "¡Gracias! ¡Nuestro conejo lunar ha vuelto!"
+
+msgid "Also use F7 to pause or resume"
+msgstr "Usar también F7 para pausar o continuar"

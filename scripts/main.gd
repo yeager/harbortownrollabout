@@ -83,6 +83,7 @@ const NUMBER_MOVEMENT := {KEY_W: KEY_8, KEY_A: KEY_4, KEY_S: KEY_5, KEY_D: KEY_6
 var number_movement := false
 var seat_f3 := false
 var camera_f6 := false
+var pause_f7 := false
 var horn_f4 := false
 var quit_key := KEY_F10
 var recovery_key := KEY_R
@@ -976,7 +977,8 @@ func _unhandled_key_input(event: InputEvent) -> void:
 					_change_seat()
 			KEY_C, KEY_F6:
 				if event.keycode == KEY_C or camera_f6: _toggle_camera_view()
-			KEY_ESCAPE, KEY_P:
+			KEY_ESCAPE, KEY_P, KEY_F7:
+				if event.keycode == KEY_F7 and not pause_f7: return
 				if event.keycode == KEY_ESCAPE and phone.handset.is_visible_in_tree():
 					phone.toggle()
 					get_viewport().set_input_as_handled()
@@ -8117,6 +8119,16 @@ func _build_overlay() -> void:
 		_refresh_ui()
 	)
 	pages[2].add_child(view_binding)
+	var pause_binding := CheckButton.new()
+	pause_binding.name = "PauseF7"
+	pause_binding.text = "Also use F7 to pause or resume"
+	pause_binding.button_pressed = pause_f7
+	pause_binding.toggled.connect(func(enabled: bool):
+		pause_f7 = enabled
+		_save_preferences()
+		_refresh_ui()
+	)
+	pages[2].add_child(pause_binding)
 	var quit_binding := CheckButton.new()
 	quit_binding.name = "QuitF8"
 	quit_binding.text = "Quit with F8"
@@ -9117,6 +9129,7 @@ func _load_preferences() -> void:
 	number_camera = config.get_value("keyboard","number_camera",false) == true
 	seat_f3 = config.get_value("keyboard","seat_f3",false) == true
 	horn_f4 = config.get_value("keyboard","horn_f4",false) == true
+	pause_f7 = config.get_value("keyboard","pause_f7",false) == true
 	camera_f6 = config.get_value("keyboard","camera_f6",false) == true
 	quit_key = KEY_F8 if config.get_value("keyboard","quit_f8",false) == true else KEY_F10
 	phone.toggle_key = KEY_F2 if config.get_value("keyboard","phone_f2",false) == true else KEY_T
@@ -9179,6 +9192,7 @@ func _save_preferences() -> void:
 	config.set_value("keyboard","number_camera",number_camera)
 	config.set_value("keyboard","seat_f3",seat_f3)
 	config.set_value("keyboard","horn_f4",horn_f4)
+	config.set_value("keyboard","pause_f7",pause_f7)
 	config.set_value("keyboard","camera_f6",camera_f6)
 	config.set_value("keyboard","quit_f8",quit_key == KEY_F8)
 	config.set_value("keyboard","phone_f2",phone.toggle_key == KEY_F2)
@@ -9377,7 +9391,8 @@ func _refresh_ui() -> void:
 		siren_button.text = "Engine sound ON" if sound_on else "Engine sound OFF"
 	else:
 		siren_button.text = "Siren ON" if sound_on else "Siren OFF"
-	pause_button.text = "Resume" if paused else "Pause"
+	pause_button.text = tr("Resume") if paused else tr("Pause")
+	if pause_f7: pause_button.text += " · F7"
 	if ferry_passenger:
 		mission_label.text = "On board Lotten"
 	elif tram_mode > 0:

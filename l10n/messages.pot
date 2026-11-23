@@ -1752,3 +1752,6 @@ msgstr ""
 
 msgid "Thank you! Our moon rabbit is back!"
 msgstr ""
+
+msgid "Also use F7 to pause or resume"
+msgstr ""

@@ -1838,3 +1838,6 @@ msgstr "Rapporte le lapin lunaire au comptoir du magasin de vêtements."
 
 msgid "Thank you! Our moon rabbit is back!"
 msgstr "Merci ! Notre lapin lunaire est de retour !"
+
+msgid "Also use F7 to pause or resume"
+msgstr "Utiliser aussi F7 pour mettre en pause ou reprendre"
