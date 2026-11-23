@@ -518,6 +518,7 @@ var boule_players: Array[Node3D] = []
 var boules: Array[MeshInstance3D] = []
 var boule_turn := 0
 var boule_clock := 0.0
+var boule_impact := AudioStreamPlayer3D.new()
 var boule_release := Vector3.ZERO
 var walker_data: Array[Dictionary] = []
 
@@ -5166,6 +5167,11 @@ func _build_pedestrians() -> void:
 	_build_boule_court()
 
 func _build_boule_court() -> void:
+	boule_impact.stream = preload("res://audio/boule_gravel.wav")
+	boule_impact.max_distance = 18
+	boule_impact.unit_size = 3
+	boule_impact.volume_db = -8
+	add_child(boule_impact)
 	var gravel := _make_box("Boule gravel", Vector3(3.8,.12,14), BOULE_CENTRE-Vector3.UP*.06, Color("#baa781"))
 	gravel.material_override = _noise_material(Color("#998465"), Color("#d7c7a1"), 38, .5)
 	for side in [-1,1]:
@@ -5226,6 +5232,10 @@ func _update_boule(delta: float) -> void:
 	else:
 		var flight := clampf((boule_clock-2.66)/1.22,0,1)
 		var landing := target+Vector3.BACK*.80
+		if boule_clock >= 3.88 and boule_clock-delta < 3.88:
+			boule_impact.position = landing
+			boule_impact.pitch_scale = [1.0,.95,1.06][boule_turn]
+			boule_impact.play()
 		ball.position = boule_release.lerp(landing,flight)+Vector3.UP*6.4*flight*(1-flight)
 		if flight == 1:
 			var roll := clampf((boule_clock-3.88)/.78,0,1)
