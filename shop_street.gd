@@ -422,6 +422,17 @@ func _hot_dog_stand(x: float) -> void:
 		part("Timber side wall",Vector3(x+side*2.27,1.45,44.5),Vector3(.18,2.75,3.8),cream,true)
 		part("Hatch jamb",Vector3(x+side*1.29,1.85,42.63),Vector3(.07,1.7,.13),steel)
 		part("Menu slate",Vector3(x+side*1.77,1.84,42.63),Vector3(.89,1.63,.12),Color("#25382e"),true)
+		var pane_x: float = x+side*.99
+		var pane := part("Sliding hatch glass",Vector3(pane_x,1.89,42.62),Vector3(.56,1.56,.023),Color.WHITE)
+		var glass := pane.material_override as StandardMaterial3D
+		glass.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+		glass.albedo_color = Color(.74,.88,.91,.23)
+		glass.roughness = .13
+		pane.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+		part("Sliding sash stile",Vector3(x+side*.70,1.89,42.62),Vector3(.035,1.58,.05),steel)
+		part("Sash pull",Vector3(x+side*.75,1.62,42.57),Vector3(.032,.16,.055),Color("#354448"))
+	for rail_y in [1.12,2.68]:
+		part("Hatch guide rail",Vector3(x,rail_y,42.62),Vector3(2.64,.042,.083),steel)
 	for i in 23:
 		part("Panel seam",Vector3(x+(i-11)*.20,.56,42.521),Vector3(.014,.87,.016),Color("#c6b591"))
 	part("Serving ledge",Vector3(x,1.06,42.55),Vector3(4.8,.10,.64),steel,true)
