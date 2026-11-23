@@ -3152,19 +3152,22 @@ func _pose_driver_arms() -> void:
 	for index in arms.size():
 		var shoulder: Node3D = arms[index]
 		var grip := cabin_wheel.to_global(Vector3.RIGHT * grip_radius * (-1 if index == 0 else 1))
-		var reach := road_driver.to_local(grip) - shoulder.position
-		# Bend the elbow down and slightly out, keeping the wrist on the rim.
-		var axis := reach.normalized()
-		var outward := Vector3(-.25 if index == 0 else .25,-1,0)
-		var bend := outward.slide(axis).normalized()
-		var half_reach := reach.length() * .5
-		var offset := sqrt(maxf(0.0, .37 * .37 - half_reach * half_reach))
-		var elbow := reach * .5 + bend * offset
-		var upper := shoulder.get_child(0) as MeshInstance3D
-		var lower := shoulder.get_node("Forearm") as MeshInstance3D
-		_fit_driver_sleeve(upper, Vector3.ZERO, elbow)
-		_fit_driver_sleeve(lower, elbow, reach)
-		shoulder.get_node("Hand").position = reach
+		_fit_driver_arm(shoulder,grip)
+
+func _fit_driver_arm(shoulder: Node3D, grip: Vector3) -> void:
+	var reach := road_driver.to_local(grip) - shoulder.position
+	# Bend the elbow down and slightly out, keeping the wrist on the rim.
+	var axis := reach.normalized()
+	var outward := Vector3(signf(shoulder.position.x)*.25,-1,0)
+	var bend := outward.slide(axis).normalized()
+	var half_reach := reach.length() * .5
+	var offset := sqrt(maxf(0.0, .37 * .37 - half_reach * half_reach))
+	var elbow := reach * .5 + bend * offset
+	var upper := shoulder.get_child(0) as MeshInstance3D
+	var lower := shoulder.get_node("Forearm") as MeshInstance3D
+	_fit_driver_sleeve(upper, Vector3.ZERO, elbow)
+	_fit_driver_sleeve(lower, elbow, reach)
+	shoulder.get_node("Hand").position = reach
 
 func _fit_driver_sleeve(sleeve: MeshInstance3D, start: Vector3, end: Vector3) -> void:
 	var segment := end - start
@@ -6827,6 +6830,11 @@ func _refresh_ui() -> void:
 		for leg in road_driver.get_meta("legs"):
 			leg.visible = vehicle_index not in [SNOWMOBILE,MOWER,PUCH_DAKOTA,FOOD_TRUCK,SHOPPER]
 		road_driver.visible = vehicle_index in [3,PORSCHE,SNOWMOBILE,XC60_POLICE,MINI_CABRIO,PUCH_DAKOTA,FOOD_TRUCK,MOWER,SHOPPER] and mode == "playing" and not walker.visible and not boating and tram_mode == 0 and not cockpit_view
+		if vehicle_index == SHOPPER and road_driver.visible:
+			var arms: Array = road_driver.get_meta("arms")
+			for grip in vehicle_model.find_children("Handle grip*", "MeshInstance3D", true, false):
+				var side := 0 if road_driver.to_local(grip.global_position).x < 0 else 1
+				_fit_driver_arm(arms[side],grip.global_position)
 	if skipper: skipper.visible = boating and mode == "playing"
 	if not is_instance_valid(mission_label): return
 	menu_footer.visible = mode == "menu"
