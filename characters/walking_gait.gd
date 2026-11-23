@@ -14,6 +14,7 @@ static var sleeve_mesh: ArrayMesh
 var actor: Node3D
 var ground_height: Callable
 var phase := 0.0
+var walking_backwards := false
 var weight := 0.0
 var lateral_shift := 0.0
 var wave_weight := 0.0
@@ -91,13 +92,15 @@ func _weight_mesh(source: Mesh, joint_y: float, blend: float) -> ArrayMesh:
 func advance(distance: float, delta: float, pushing: bool, tuck := 0.0) -> void:
 	if delta <= 0.0:
 		return
-	var pace := distance / delta
+	var pace := absf(distance) / delta
+	if not is_zero_approx(distance):
+		walking_backwards = distance < 0.0
 	var running := smoothstep(2.6, 5.8, pace) * weight if not pushing else 0.0
 	var sprint := smoothstep(3.4, 6.4, pace * actor.scale.y) * weight
 	# Running covers more ground between contacts while each planted foot
 	# remains within leg reach. Stride is measured between same-foot landings.
 	var stride := clampf(0.64 + pace * 0.41, 0.78, 1.57) + 1.55 * sprint
-	phase = fposmod(phase + distance / stride, 1.0)
+	phase = fposmod(phase + absf(distance) / stride, 1.0)
 	weight = move_toward(weight, minf(1.0, pace / 0.55), delta * 7.0)
 	# Critical damping gives the centre of mass inertia when a new foot takes the load.
 	var target_shift := -sin(TAU * phase) * .037 * weight
@@ -134,6 +137,9 @@ func advance(distance: float, delta: float, pushing: bool, tuck := 0.0) -> void:
 			foot.y += .16 * heel_recovery
 			foot.x -= .10 * heel_recovery
 			shoe_angle = lerpf(-.36, .20, smoothstep(0.0, .78, swing)) * weight - .36 * heel_recovery
+		if walking_backwards:
+			foot.x = -foot.x
+			shoe_angle = -shoe_angle
 		# Raise the ankle about the heel or forefoot while that end of the sole bears weight.
 		var sole_pivot := Vector3(0, -SOLE_HEIGHT, .075 if shoe_angle >= 0.0 else -.155)
 		var ankle_offset := sole_pivot - sole_pivot.rotated(Vector3.RIGHT, shoe_angle)

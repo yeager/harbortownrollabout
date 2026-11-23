@@ -3888,7 +3888,8 @@ func _walk(delta: float) -> void:
 	at_colour_bench = near_bench
 	walking_velocity = travel / maxf(delta,.00001)
 	listener.global_basis = walk_basis
-	_animate_steps(walker, 0.0 if landed else ground_distance, delta)
+	var signed_distance := -ground_distance if travel.dot(walk_basis.z) > 0 else ground_distance
+	_animate_steps(walker, 0.0 if landed else signed_distance, delta)
 	if landed:
 		var gait = walker.get_meta("gait")
 		var landed_in_snow := false
@@ -4506,13 +4507,13 @@ func _animate_steps(person: Node3D, distance: float, delta: float, pushing := fa
 			if person.has_meta("aid_grip_pitch"):
 				gait.palms[i].global_basis = person.global_basis * Basis(Vector3.RIGHT,float(person.get_meta("aid_grip_pitch"))) * gait.palm_rest[i].basis
 	if person == walker:
-		if left_stance != (gait.phase < 0.5) and distance > 0.0:
+		if left_stance != (gait.phase < 0.5) and not is_zero_approx(distance):
 			var shoe := gait.shoes[0 if gait.phase < .5 else 1]
 			var snowy := _snow_underfoot(shoe.global_position)
 			if snowy:
 				_stamp_snow_step(shoe, gait.phase < .5)
 			footstep.stream = SNOW_STEP if snowy else DRY_STEP
-			var impact := smoothstep(3.4, 6.4, distance / maxf(delta, .00001))
+			var impact := smoothstep(3.4, 6.4, absf(distance) / maxf(delta, .00001))
 			footstep.volume_db = lerpf(-13.0, -9.0, impact)
 			footstep.pitch_scale = (0.94 if left_stance else 1.06) * lerpf(1.0, 0.94, impact)
 			footstep.play()

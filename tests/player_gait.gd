@@ -91,6 +91,25 @@ func check_gait() -> void:
 				printerr("Unexpected foot contact at ", speed, " m/s for Alma=", alma)
 				quit(1)
 				return
+		var origin := player.position
+		var samples := 0
+		for frame in 150:
+			var previous_phase: float = gait.phase
+			var old_heel: Vector3 = gait.shoes[0].global_position
+			var distance := 1.4 / 120.0
+			player.global_position += player.global_basis.z.normalized() * distance
+			game._animate_steps(player, -distance, 1.0 / 120.0)
+			if frame > 30 and previous_phase > .14 and gait.phase < .34 and gait.phase > previous_phase:
+				samples += 1
+				if old_heel.distance_to(gait.shoes[0].global_position) > .001:
+					printerr("Backward stance foot slid on flat ground")
+					quit(1)
+					return
+		if samples < 5:
+			printerr("Backward walk never reached mid-stance")
+			quit(1)
+			return
+		player.position = origin
 		gait.ground_height = terrain
 	print("Axel and Alma transfer weight, maintain lateral foot placement and settle at rest.")
 	var aids_tested := 0
