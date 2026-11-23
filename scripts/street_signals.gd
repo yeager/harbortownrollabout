@@ -67,6 +67,13 @@ func _vehicle_head(mast: Node3D, east_west: bool) -> Dictionary:
 		var pos := Vector3(0,3.85-.31*j,.25)
 		get_parent()._make_box("Signal housing",Vector3(.316,.308,.24),pos-Vector3.BACK*.13,
 			Color("#191b1b"),false,mast)
+		get_parent()._make_box("Signal service cover", Vector3(.326,.296,.029),
+			pos-Vector3.BACK*.017, Color("#303332"), false, mast)
+		for height in [-.090, .090]:
+			get_parent()._make_box("Cover hinge", Vector3(.021,.044,.035),
+				pos+Vector3(.161,height,-.027), Color("#505552"), false, mast)
+		get_parent()._make_box("Cover latch", Vector3(.016,.045,.029),
+			pos+Vector3(-.162,0,-.018), Color("#454947"), false, mast)
 		var glass := lens(mast,pos,colors[j])
 		glass.material_override = get_parent()._material(colors[j].darkened(.79),.33)
 		var visor := MeshInstance3D.new()
