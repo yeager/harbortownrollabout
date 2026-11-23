@@ -1,21 +1,23 @@
-name: axels-spel
+name: harbortown
 arch: amd64
 platform: linux
 version: ${VERSION}
 maintainer: Daniel Nylander
 description: Harbor Town Rollabout family driving and exploration game
 homepage: https://github.com/yeager/harbortownrollabout
+depends:
+  - fontconfig
 contents:
-  - src: export/linux/axels-spel
-    dst: /usr/lib/axels-spel/axels-spel
+  - src: export/linux/harbortown
+    dst: /usr/lib/harbortown/harbortown
     file_info:
       mode: 0755
-  - src: export/linux/axels-spel.pck
-    dst: /usr/lib/axels-spel/axels-spel.pck
-  - src: /usr/lib/axels-spel/axels-spel
-    dst: /usr/bin/axels-spel
+  - src: export/linux/harbortown.pck
+    dst: /usr/lib/harbortown/harbortown.pck
+  - src: /usr/lib/harbortown/harbortown
+    dst: /usr/bin/harbortown
     type: symlink
-  - src: packaging/linux/axels-spel.desktop
-    dst: /usr/share/applications/axels-spel.desktop
+  - src: packaging/linux/harbortown.desktop
+    dst: /usr/share/applications/harbortown.desktop
   - src: branding/app-icon.png
-    dst: /usr/share/pixmaps/axels-spel.png
+    dst: /usr/share/pixmaps/harbortown.png

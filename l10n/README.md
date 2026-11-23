@@ -12,7 +12,7 @@ msginit --no-translator --locale=pl --input=l10n/messages.pot --output-file=l10n
 
 `msginit` väljer språkets pluralregel och skapar ett översättningsfält för varje form. Fyll i varje `msgstr`, även de numrerade fälten för exempelvis mynt och poäng. Behåll platshållare som `%s` och `%d`. Under `LANGUAGE_SELF_NAME` skriver du språkets namn på det egna språket. Det namnet visas på språkknappen.
 
-Lägg också till spelets översatta titel som `Name[pl]` och en kort beskrivning som `Comment[pl]` i `packaging/linux/axels-spel.desktop`. Språkkontrollen jämför programmenyns titel med spelets och kontrollerar att beskrivningen finns.
+Lägg också till spelets översatta titel som `GenericName[pl]` och en kort beskrivning som `Comment[pl]` i `packaging/linux/harbortown.desktop`. Språkkontrollen jämför programmenyns titel med spelets och kontrollerar att beskrivningen finns.
 
 Godot läser katalogerna vid spelstart. Engelska är källspråket. Lägg nya speltexter i katalogerna och mallen med samma engelska nyckel.
 

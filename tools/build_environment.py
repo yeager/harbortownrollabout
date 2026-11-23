@@ -1,4 +1,4 @@
-"""Build reusable Swedish town buildings and vegetation for Axels Utryckning."""
+"""Build reusable Swedish town buildings and vegetation for Harbor Town Rollabout."""
 import bpy
 import math
 import os

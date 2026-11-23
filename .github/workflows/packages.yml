@@ -68,10 +68,10 @@ jobs:
       - name: Export all platforms
         run: |
           mkdir -p export/{linux,windows,mac}
-          godot --headless --export-release Linux export/linux/axels-spel
-          godot --headless --export-release Windows export/windows/HarborTownRollabout.exe
-          godot --headless --export-release macOS "export/mac/Harbor Town Rollabout.zip"
-          (cd export/linux && ./axels-spel --headless --quit-after 360) 2>&1 | tee "$RUNNER_TEMP/game-startup.log"
+          godot --headless --export-release Linux export/linux/harbortown
+          godot --headless --export-release Windows export/windows/harbortown.exe
+          godot --headless --export-release macOS "export/mac/harbortown.zip"
+          (cd export/linux && ./harbortown --headless --quit-after 360) 2>&1 | tee "$RUNNER_TEMP/game-startup.log"
           if grep -E '^(SCRIPT )?ERROR:' "$RUNNER_TEMP/game-startup.log"; then exit 1; fi
       - uses: actions/upload-artifact@v4
         with:
@@ -95,12 +95,12 @@ jobs:
       - run: mkdir dist
       - if: runner.os == 'Linux'
         run: |
-          chmod +x export/linux/axels-spel
+          chmod +x export/linux/harbortown
           go install github.com/goreleaser/nfpm/v2/cmd/nfpm@v2.43.4
           for format in deb rpm; do
-            "$(go env GOPATH)/bin/nfpm" package -f packaging/linux/nfpm.yaml -p "$format" -t "dist/axels-spel-$VERSION-x86_64.$format"
+            "$(go env GOPATH)/bin/nfpm" package -f packaging/linux/nfpm.yaml -p "$format" -t "dist/harbortown-$VERSION-x86_64.$format"
           done
-          tar -czf "dist/harbortownrollabout-$VERSION-linux-x86_64.tar.gz" -C export/linux .
+          tar -czf "dist/harbortown-$VERSION-linux-x86_64.tar.gz" -C export/linux .
       - name: Launch packaged Linux game on Ubuntu 22.04 and Fedora 43
         if: runner.os == 'Linux'
         shell: bash
@@ -110,19 +110,20 @@ jobs:
             docker run --rm -v "$PWD/dist:/packages:ro" "$distro" bash -euc '
               set -o pipefail
               smoke() {
-                "$1" --headless --audio-driver Dummy --quit-after 30 2>&1 | tee /root/game-start.log
+                "$1" --headless --audio-driver Dummy --quit-after 360 2>&1 | tee /root/game-start.log
                 grep -q "Godot Engine" /root/game-start.log
                 if grep -Eq "^(SCRIPT )?ERROR:" /root/game-start.log; then exit 1; fi
               }
               if command -v dpkg >/dev/null; then
-                dpkg -i /packages/*.deb
-                smoke /usr/bin/axels-spel
+                apt-get update
+                apt-get install -y --no-install-recommends /packages/*.deb
+                smoke /usr/bin/harbortown
                 mkdir /root/portable
                 tar -xzf /packages/*.tar.gz -C /root/portable
-                smoke /root/portable/axels-spel
+                smoke /root/portable/harbortown
               else
-                rpm -i /packages/*.rpm
-                smoke /usr/bin/axels-spel
+                dnf -y --setopt=install_weak_deps=False install /packages/*.rpm
+                smoke /usr/bin/harbortown
               fi
             '
           done
@@ -135,22 +136,38 @@ jobs:
         if: runner.os == 'Windows'
         shell: pwsh
         run: |
-          $installer = Get-Item "dist/HarborTownRollabout-$env:VERSION-windows-x64.exe"
+          $installer = Get-Item "dist/harbortown-$env:VERSION-windows-x64.exe"
           $dir = Join-Path $env:RUNNER_TEMP 'installed-game'
           $setup = Start-Process $installer.FullName -ArgumentList "/VERYSILENT /SUPPRESSMSGBOXES /NORESTART /LANG=sv /DIR=`"$dir`"" -Wait -PassThru
           if ($setup.ExitCode -ne 0) { throw "Installer exited with $($setup.ExitCode)" }
           $log = Join-Path $env:RUNNER_TEMP 'windows-game.log'
-          $game = Start-Process (Join-Path $dir 'HarborTownRollabout.exe') -ArgumentList "--headless --quit-after 360 --log-file `"$log`"" -Wait -PassThru
+          $game = Start-Process (Join-Path $dir 'harbortown.exe') -ArgumentList "--headless --quit-after 360 --log-file `"$log`"" -Wait -PassThru
           if ($game.ExitCode -ne 0 -or (Select-String -Path $log -Pattern '^(SCRIPT )?ERROR:')) { throw 'Installed game failed to start cleanly' }
       - if: runner.os == 'macOS'
         run: |
           mkdir image
-          ditto -x -k "export/mac/Harbor Town Rollabout.zip" image
+          ditto -x -k "export/mac/harbortown.zip" image
           app=$(find image -maxdepth 1 -name '*.app' -print -quit)
+          original=$(/usr/libexec/PlistBuddy -c 'Print CFBundleExecutable' "$app/Contents/Info.plist")
+          if [[ "$original" != harbortown ]]; then
+            mv "$app/Contents/MacOS/$original" "$app/Contents/MacOS/harbortown"
+            if [[ -f "$app/Contents/Resources/$original.pck" ]]; then
+              mv "$app/Contents/Resources/$original.pck" "$app/Contents/Resources/harbortown.pck"
+            fi
+            /usr/libexec/PlistBuddy -c 'Set :CFBundleExecutable harbortown' "$app/Contents/Info.plist"
+          fi
+          if [[ "$app" != image/harbortown.app ]]; then mv "$app" image/harbortown.app; fi
+          app=image/harbortown.app
+          plutil -replace CFBundleName -string harbortown "$app/Contents/Info.plist"
+          plutil -replace CFBundleDisplayName -string harbortown "$app/Contents/Info.plist"
+          for strings in "$app"/Contents/Resources/*.lproj/InfoPlist.strings; do
+            [[ -f "$strings" ]] || continue
+            sed -i '' 's/^CFBundleDisplayName = .*;/CFBundleDisplayName = "harbortown";/' "$strings"
+          done
           codesign --force --deep --sign - "$app"
           codesign --verify --deep --strict "$app"
           ln -s /Applications image/Applications
-          hdiutil create -volname "Harbor Town Rollabout" -srcfolder image -format UDZO "dist/HarborTownRollabout-$VERSION-macOS.dmg"
+          hdiutil create -volname "Harbor Town Rollabout" -srcfolder image -format UDZO "dist/harbortown-$VERSION-macOS.dmg"
       - name: Mount the disk image and launch the universal app
         if: runner.os == 'macOS'
         run: |

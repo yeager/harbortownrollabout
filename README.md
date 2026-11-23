@@ -16,7 +16,7 @@ The [Linux preview](https://github.com/yeager/harbortownrollabout/releases/tag/v
 
 - [Debian or Ubuntu (.deb)](https://github.com/yeager/harbortownrollabout/releases/download/v0.1.3-preview.20261123/axels-spel_0.1.3-preview.20261123_amd64.deb)
 - [Fedora or another RPM-based distribution (.rpm)](https://github.com/yeager/harbortownrollabout/releases/download/v0.1.3-preview.20261123/axels-spel-0.1.3-preview.20261123-1.x86_64.rpm)
-- [Portable archive (.tar.gz)](https://github.com/yeager/harbortownrollabout/releases/download/v0.1.3-preview.20261123/harbortownrollabout-0.1.3-preview.20261123-linux-x86_64.tar.gz). Extract both files into one folder and run `./axels-spel` there.
+- [Portable archive (.tar.gz)](https://github.com/yeager/harbortownrollabout/releases/download/v0.1.3-preview.20261123/harbortownrollabout-0.1.3-preview.20261123-linux-x86_64.tar.gz). Extract both files into one folder and launch the executable there. New builds use `./harbortown`.
 
 For Windows and macOS, see **Play from source** below. The package workflow also targets a Windows x64 installer in seven languages and a universal macOS disk image.
 

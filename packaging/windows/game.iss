@@ -1,16 +1,16 @@
 [Setup]
 AppId=HarborTownRollabout
-AppName=Harbor Town Rollabout
+AppName=harbortown
 AppVersion={#GameVersion}
 AppPublisher=Daniel Nylander
-DefaultDirName={localappdata}\Programs\Harbor Town Rollabout
-DefaultGroupName=Harbor Town Rollabout
+DefaultDirName={localappdata}\Programs\harbortown
+DefaultGroupName=harbortown
 PrivilegesRequired=lowest
 ArchitecturesAllowed=x64compatible
 ArchitecturesInstallIn64BitMode=x64compatible
 OutputDir=..\..\dist
-OutputBaseFilename=HarborTownRollabout-{#GameVersion}-windows-x64
-UninstallDisplayIcon={app}\HarborTownRollabout.exe
+OutputBaseFilename=harbortown-{#GameVersion}-windows-x64
+UninstallDisplayIcon={app}\harbortown.exe
 WizardStyle=modern
 
 [Languages]
@@ -26,4 +26,4 @@ Name: "fi"; MessagesFile: "compiler:Languages\Finnish.isl"
 Source: "..\..\export\windows\*"; DestDir: "{app}"; Flags: recursesubdirs ignoreversion
 
 [Icons]
-Name: "{group}\Harbor Town Rollabout"; Filename: "{app}\HarborTownRollabout.exe"
+Name: "{group}\harbortown"; Filename: "{app}\harbortown.exe"

@@ -32,16 +32,16 @@ import subprocess
 
 desktop = configparser.ConfigParser(interpolation=None)
 desktop.optionxform = str
-with Path("../packaging/linux/axels-spel.desktop").open(encoding="utf-8") as stream:
+with Path("../packaging/linux/harbortown.desktop").open(encoding="utf-8") as stream:
     desktop.read_file(stream)
 entry = desktop["Desktop Entry"]
 source_title = "Harbor Town Rollabout"
-if entry.get("Name") != source_title or not entry.get("Comment", "").strip():
+if entry.get("Name") != "harbortown" or entry.get("GenericName") != source_title or not entry.get("Comment", "").strip():
     raise SystemExit("Check the English desktop name and description")
 for catalog in sorted(Path(".").glob("*.po")):
     compiled = subprocess.check_output(["msgfmt", "-o", "-", str(catalog)])
     title = gettext.GNUTranslations(io.BytesIO(compiled)).gettext(source_title)
-    if entry.get(f"Name[{catalog.stem}]") != title:
+    if entry.get(f"GenericName[{catalog.stem}]") != title:
         raise SystemExit(f"{catalog}: desktop name must match {title!r}")
     if not entry.get(f"Comment[{catalog.stem}]", "").strip():
         raise SystemExit(f"{catalog}: missing localized desktop description")
