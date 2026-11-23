@@ -1857,3 +1857,6 @@ msgstr "Lleva las cajas vacías hacia el oeste por Stationsallén hasta la plaza
 
 msgid "The ice cream depot received both empty crates."
 msgstr "Las dos cajas vacías han llegado al depósito de helados."
+
+msgid "Ice cream depot"
+msgstr "Depósito de helados"

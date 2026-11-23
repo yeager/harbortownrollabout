@@ -1780,3 +1780,6 @@ msgstr "Kör västerut på Stationsallén med tomlådorna till glassbilens parke
 
 msgid "The ice cream depot received both empty crates."
 msgstr "Glassdepån har fått båda tomlådorna."
+
+msgid "Ice cream depot"
+msgstr "Glassdepå"

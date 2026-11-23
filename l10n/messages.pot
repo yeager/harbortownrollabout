@@ -1779,3 +1779,6 @@ msgstr ""
 
 msgid "The ice cream depot received both empty crates."
 msgstr ""
+
+msgid "Ice cream depot"
+msgstr ""

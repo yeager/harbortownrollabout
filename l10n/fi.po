@@ -1846,3 +1846,6 @@ msgstr "Aja tyhjät laatikot Stationsallénia länteen jäätelöauton pysäköi
 
 msgid "The ice cream depot received both empty crates."
 msgstr "Molemmat tyhjät laatikot saapuivat jäätelövarastolle."
+
+msgid "Ice cream depot"
+msgstr "Jäätelövarasto"

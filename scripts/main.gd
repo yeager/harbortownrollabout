@@ -4012,6 +4012,14 @@ func _build_road_signs() -> void:
 			var x: float = zone[0] + direction * 6
 			var z := 5.1 * float(direction)
 			_speed_sign(Vector3(x,_surface_height(x,z),z), -direction * PI*.5, zone[1])
+	var ice_bay := _depot_bay(ICE_CREAM)
+	var post_position := Vector3(ice_bay.x,0,ice_bay.y+5.7)
+	post_position.y = _surface_height(post_position.x,post_position.z)
+	var depot_sign := _signpost(post_position,PI)
+	depot_sign.name = "IceCreamDepotSign"
+	_make_box("Depot sign border",Vector3(2.8,.68,.08),Vector3(0,2.62,.06),Color.WHITE,false,depot_sign)
+	_make_box("Depot sign face",Vector3(2.74,.62,.03),Vector3(0,2.62,.11),Color("#205786"),false,depot_sign)
+	_size_world_sign(_road_sign_text(depot_sign,"Ice cream depot",Vector3(0,2.62,.14),.006,Color.WHITE),2.55)
 	var rules := ["Ducks park free", "Hats on wheels only", "Save a spot for a snail", "Park with a smile", "Bananas need a ticket"]
 	for index in DISTRICT_PARKING.size():
 		var center: Vector2 = DISTRICT_PARKING[index][0]
