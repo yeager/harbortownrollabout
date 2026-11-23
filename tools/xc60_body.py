@@ -290,6 +290,14 @@ def build():
     for side in [-1,1]:
         def mirror(points):
             return [(side*x,z) for x,z in points]
+        # The outboard air pockets turn up toward the lamps at the bumper corners.
+        pocket = mirror([(.665,.704),(.716,.855),(.786,.887),(.822,.861),
+                         (.804,.698),(.754,.627),(.692,.631)])
+        face_patch("Corner intake recess",front,pocket,.024,trim)
+        face_line("Intake return lip",front,pocket[1:6],.036,.009,white)
+        for z in (.716,.766,.816):
+            face_line("Corner intake vane",front,mirror([(.717,z),(.757,z+.007),(.789,z+.016)]),
+                      .038,.006,black)
         outline_pts=mirror([(.479,1.115),(.53,1.155),(.71,1.16),(.773,1.143),(.795,1.119),
                             (.773,1.041),(.676,1.022),(.524,1.045),(.476,1.073)])
         face_patch("Headlight swept recess",front,outline_pts,.035,glass)
