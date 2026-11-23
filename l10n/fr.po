@@ -1808,3 +1808,9 @@ msgstr "Rapporte le thermos au joueur de pétanque en veste verte."
 
 msgid "Bring the umbrella to the passenger in the yellow jacket at Lotten’s landing."
 msgstr "Rapporte le parapluie au passager en veste jaune à l’embarcadère de Lotten."
+
+msgid "Can you match the order slip?"
+msgstr "Quelle pizza correspond au bon de commande ?"
+
+msgid "Order matched!"
+msgstr "C’est la bonne pizza !"

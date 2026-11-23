@@ -51,6 +51,9 @@ var serving_dish := Sprite3D.new()
 var serving_motion: Tween
 var kiosk_menu_signs: Array[Label3D] = []
 var grill_price_signs: Array[Label3D] = []
+var order_recipe := 0
+var order_slip := Sprite3D.new()
+var order_picture: TextureRect
 var pizza_price_signs: Array[Label3D] = []
 var awnings: Array[Node3D] = []
 var shop_sign_font := SystemFont.new()
@@ -61,7 +64,7 @@ var shop_card := PanelContainer.new()
 var panel := VBoxContainer.new()
 var first_product: Button
 var till_sound := AudioStreamPlayer.new()
-enum ReceiptKind { NONE, PURCHASE, SHORTFALL, SNACK }
+enum ReceiptKind { NONE, PURCHASE, SHORTFALL, SNACK, ORDER_MATCH }
 var receipt_kind := ReceiptKind.NONE
 var receipt_subject := ""
 var receipt_amount := 0
@@ -139,6 +142,11 @@ func _ready() -> void:
 
 		elif i == 2:
 			_pizzeria(x)
+			order_slip.position = Vector3(x+2.92,1.31,47.50)
+			order_slip.rotation.y = PI
+			order_slip.pixel_size = .014
+			add_child(order_slip)
+			_update_order_slip()
 			for recipe in MENUS[2].size():
 				_display_pizza(Vector3(x+(recipe-2)*1.04,1.09,47.59),recipe)
 
@@ -149,6 +157,16 @@ const PIZZA_TEXTURES := [
 	preload("res://branding/pizza-3.png"),
 	preload("res://branding/pizza-4.png"),
 ]
+
+func _update_order_slip() -> void:
+	var slip := AtlasTexture.new()
+	slip.atlas = preload("res://branding/pizza-order-slips.svg")
+	slip.region = Rect2(order_recipe*64,0,64,48)
+	order_slip.texture = slip
+	if is_instance_valid(order_picture):
+		order_picture.texture = slip
+		order_picture.tooltip_text = tr(PIZZA_TOPPINGS[order_recipe])
+		order_picture.accessibility_name = order_picture.tooltip_text
 
 func _display_pizza(center: Vector3, recipe: int) -> void:
 	part("Pizza board",center,Vector3(.91,.032,.88),Color("#b28658"))
@@ -294,6 +312,16 @@ func rebuild_menu() -> void:
 		keyboard_hint.text = "Tab to choose · Enter to buy or eat"
 	keyboard_hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	panel.add_child(keyboard_hint)
+	if inside == 2:
+		var prompt := Label.new()
+		prompt.text = "Can you match the order slip?"
+		prompt.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		panel.add_child(prompt)
+		order_picture = TextureRect.new()
+		order_picture.custom_minimum_size.y = 54
+		order_picture.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		panel.add_child(order_picture)
+		_update_order_slip()
 	for i in MENUS[inside].size():
 		var button:=Button.new()
 		button.custom_minimum_size.y=44
@@ -426,13 +454,19 @@ func purchase(shop: int, item: int) -> void:
 	receipt_kind = ReceiptKind.PURCHASE
 	receipt_subject = product
 	receipt_amount = cost
+	if shop == 2 and item == order_recipe:
+		order_recipe = (order_recipe+1) % MENUS[2].size()
+		_update_order_slip()
+		receipt_kind = ReceiptKind.ORDER_MATCH
 	_refresh_receipt()
 
 func _refresh_receipt() -> void:
 	receipt.visible = receipt_kind != ReceiptKind.NONE
 	match receipt_kind:
-		ReceiptKind.PURCHASE:
+		ReceiptKind.PURCHASE, ReceiptKind.ORDER_MATCH:
 			receipt.text = tr_n("%s · Paid %d coin. Thank you!", "%s · Paid %d coins. Thank you!", receipt_amount) % [tr(receipt_subject),receipt_amount]
+			if receipt_kind == ReceiptKind.ORDER_MATCH:
+				receipt.text += " " + tr("Order matched!")
 		ReceiptKind.SHORTFALL:
 			var missing := tr_n("You need %d more coin.", "You need %d more coins.", receipt_amount) % receipt_amount
 			receipt.text = missing+" "+tr("Complete a mission to earn coins.")

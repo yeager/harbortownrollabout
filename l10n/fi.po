@@ -1789,3 +1789,9 @@ msgstr "Vie termospullo takaisin vihreätakkiselle pelaajalle."
 
 msgid "Bring the umbrella to the passenger in the yellow jacket at Lotten’s landing."
 msgstr "Vie sateenvarjo keltatakkiselle matkustajalle Lottenin laiturille."
+
+msgid "Can you match the order slip?"
+msgstr "Mikä pizza vastaa tilauslappua?"
+
+msgid "Order matched!"
+msgstr "Oikea pizza!"

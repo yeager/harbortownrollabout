@@ -1800,3 +1800,9 @@ msgstr "Devuelve el termo al jugador de petanca de la chaqueta verde."
 
 msgid "Bring the umbrella to the passenger in the yellow jacket at Lotten’s landing."
 msgstr "Lleva el paraguas al pasajero de la chaqueta amarilla en el embarcadero de Lotten."
+
+msgid "Can you match the order slip?"
+msgstr "¿Qué pizza coincide con la comanda?"
+
+msgid "Order matched!"
+msgstr "¡Pizza correcta!"

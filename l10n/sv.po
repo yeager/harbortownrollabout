@@ -1723,3 +1723,9 @@ msgstr "Lämna tillbaka termosen till boulespelaren i grön jacka."
 
 msgid "Bring the umbrella to the passenger in the yellow jacket at Lotten’s landing."
 msgstr "Lämna paraplyet till resenären i gul jacka vid Lottens färjeläge."
+
+msgid "Can you match the order slip?"
+msgstr "Vilken pizza passar beställningslappen?"
+
+msgid "Order matched!"
+msgstr "Rätt pizza!"

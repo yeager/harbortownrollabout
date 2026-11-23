@@ -1810,3 +1810,9 @@ msgstr "Bring die Thermoskanne zum Boulespieler mit der grünen Jacke."
 
 msgid "Bring the umbrella to the passenger in the yellow jacket at Lotten’s landing."
 msgstr "Bring den Schirm zum Fahrgast mit der gelben Jacke am Fähranleger der Lotten."
+
+msgid "Can you match the order slip?"
+msgstr "Welche Pizza passt zum Bestellzettel?"
+
+msgid "Order matched!"
+msgstr "Die richtige Pizza!"

@@ -1722,3 +1722,9 @@ msgstr ""
 
 msgid "Bring the umbrella to the passenger in the yellow jacket at Lotten’s landing."
 msgstr ""
+
+msgid "Can you match the order slip?"
+msgstr ""
+
+msgid "Order matched!"
+msgstr ""
