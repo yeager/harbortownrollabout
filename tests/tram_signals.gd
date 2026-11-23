@@ -147,7 +147,7 @@ func check() -> void:
 	crossing.blocked_entry = true
 	game._drive(.1)
 	game._refresh_status()
-	if not game.waiting_for_clear_crossing or game.status_label.text != "■  " + game.tr("Wait until the crossing is clear."):
+	if not game.waiting_for_clear_crossing or game.status_label.text != game.tr("Wait until the crossing is clear."):
 		fail("Stopped driver was told to wait for a light that was already green")
 		return
 	crossing.stage = saved_stage
