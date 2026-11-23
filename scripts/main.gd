@@ -5172,7 +5172,7 @@ func _build_boule_court() -> void:
 	boule_impact.unit_size = 3
 	boule_impact.volume_db = -8
 	add_child(boule_impact)
-	var gravel := _make_box("Boule gravel", Vector3(3.8,.12,14), BOULE_CENTRE-Vector3.UP*.06, Color("#baa781"))
+	var gravel := _make_driving_surface("Boule gravel", Vector3(3.8,.12,14), BOULE_CENTRE-Vector3.UP*.06, Color("#baa781"))
 	gravel.material_override = _noise_material(Color("#998465"), Color("#d7c7a1"), 38, .5)
 	for side in [-1,1]:
 		_make_box("Court edging",Vector3(.10,.10,14),BOULE_CENTRE+Vector3(side*1.88,0,0),Color("#77644b"))

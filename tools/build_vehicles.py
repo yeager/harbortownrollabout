@@ -183,7 +183,7 @@ def text_obj(name, body, loc, size, mat, side=0, root=None, *, flat=False):
     return obj
 
 def pumper_running_gear(root,chassis):
-    for y in (-2.05,1.14,2.35):
+    for y in (-2.05,1.65):
         bpy.ops.mesh.primitive_cylinder_add(vertices=64,radius=.562,depth=3.0,
             location=(0,y,.51),rotation=(0,math.pi/2,0))
         cutter=bpy.context.object
@@ -855,16 +855,26 @@ def make_fire_engine():
     cube("Crew steering crossbar",(-.57,-2.37,1.902),(.32,.035,.045),DARK,.012,root)
     cube("Dispatch terminal casing",(.072,-2.53,1.935),(.31,.075,.212),BLACK,.016,root)
     cube("Dispatch terminal display",(.072,-2.487,1.94),(.275,.012,.168),GLASS_HI,.006,root)
+    shutter_finish = material("Satin silver shutter slats", (.76,.79,.80), .24, .42)
     for side in (-1,1):
-        for y in (-.26,.83,1.92):
-            cube("Locker gasket",(side*1.105,y,1.99),(.043,1.01,.94),BLACK,.032,root)
-            cube("Aluminium shutter",(side*1.14,y,1.99),(.04,.95,.86),METAL,.018,root)
-            for rib in range(10):
-                cube("Shutter slat",(side*1.163,y,1.61+rib*.082),(.015,.93,.012),DARK,0,root)
-            cube("Lift handle",(side*1.184,y,1.64),(.045,.27,.035),BLACK,.009,root)
-        for left,right in ((-2.74,-1.62),(-1.59,-.75),(-.69,2.86)):
-            cube("Fluorescent side stripe",(side*(1.169 if right<0 else 1.162),(left+right)/2,1.364),
-                 (.009,right-left,.123),PAINT_YELLOW,.003,root)
+        for y in (-.10,1.08,2.26):
+            low = 1.19 if y > 0 else .91
+            high = 2.47
+            cube("Locker gasket",(side*1.119,y,(high+low)/2),(.045,1.16,high-low),BLACK,.018,root)
+            cube("Roller shutter",(side*1.147,y,(high+low)/2),(.041,1.11,high-low-.045),shutter_finish,.015,root)
+            for row in range(2):
+                for col in range(4):
+                    finish = PAINT_YELLOW if (row+col)%2 else PAINT_RED
+                    cube("Locker reflective check",(side*1.171,y+(col-1.5)*.274,1.63+row*.155),
+                         (.007,.274,.155),finish,.001,root)
+            for rib in range(1,int((high-low)/.081)):
+                cube("Shutter seam",(side*1.176,y,low+rib*.081),(.006,1.10,.006),DARK,0,root)
+            cube("Locker lifting bar",(side*1.186,y,low+.075),(.045,.87,.033),METAL,.008,root)
+        for row in range(2):
+            for col in range(8):
+                y = -2.63+col*.246
+                finish = PAINT_YELLOW if (row+col)%2 else PAINT_RED
+                cube("Crew door reflective check",(side*1.176,y,1.31+row*.14),(.008,.238,.137),finish,.003,root)
         for start,end in ((-.75,.71),(1.57,1.92)):
             cube("High visibility lower trim",(side*1.164,(start+end)/2,.95),
                  (.018,end-start,.075),PAINT_YELLOW,.006,root)
@@ -921,19 +931,21 @@ def make_fire_engine():
             y=-2.983+.024*t*t+.26*(z-1.78)
             blade.append([(x,y+dy,z+dz) for dy,dz in ((-.010,0),(0,.009),(.009,0),(0,-.009))])
         profile_loft("Crew cab wiper blade",blade,RUBBER,root)
-    # Axle groups use a six-wheel fire engine stance.
+    # The pumper carries one front axle and one rear axle.
     pumper_running_gear(root,chassis)
     cube("Rear pump compartment",(0,2.75,1.81),(2.15,.46,1.22),PAINT_RED,.065,root)
-    cube("Pump panel gasket",(0,2.991,1.80),(1.64,.04,.89),BLACK,.044,root)
-    cube("Pump console",(0,3.017,1.80),(1.55,.023,.81),DARK,.035,root)
-    for x in (-.52,0,.52):
-        for name,radius,depth,finish in (("Outlet collar",.146,3.052,METAL),("Coupling cap",.112,3.086,BLACK),
-                                         ("Gauge bezel",.095,3.048,METAL),("Dial face",.077,3.069,PAINT_WHITE)):
-            height=1.61 if radius>.10 else 2.00
-            dial=cylinder(name,(x,depth,height),radius,.038,finish,axis_x=False,root=root)
-            dial.rotation_euler.x=math.pi/2
-        needle=cube("Gauge needle",(x+.012,3.09,2.016),(.009,.005,.085),BLACK,0,root)
-        needle.rotation_euler.y=.48
+    for side in (-1,1):
+        x = side*.51
+        cube("Rear shutter surround",(x,3.005,1.80),(.998,.08,1.57),BLACK,.025,root)
+        cube("Rear roller blind",(x,3.055,1.80),(.952,.03,1.51),shutter_finish,.014,root)
+        for row in range(2):
+            for col in range(4):
+                finish = PAINT_YELLOW if (row+col)%2 else PAINT_RED
+                cube("Rear reflective check",(x+(col-1.5)*.23,3.075,1.72+row*.145),
+                     (.23,.008,.145),finish,.001,root)
+        for rib in range(17):
+            cube("Rear shutter seam",(x,3.082,1.12+rib*.083),(.95,.008,.006),DARK,0,root)
+        cube("Rear shutter lifting bar",(x,3.105,1.12),(.84,.05,.035),METAL,.009,root)
     grille=[]
     for z,w,d in ((1.202,.568,-2.984),(1.229,.598,-3.005),
                   (1.34,.626,-3.017),(1.55,.673,-3.013),(1.685,.708,-3.004),
@@ -961,18 +973,7 @@ def make_fire_engine():
             bow=.027*(x/w)**2
             vane.append([(x,-3.025+bow+dy,z+dz) for dy,dz in
                          ((.023,-.018),(.002,-.014),(-.009,.003),(-.004,.014),(.024,.017))])
-        profile_loft("Swept radiator blade",vane,DARK,root)
-    cube("Pump instrument surround",(-.17,3.015,1.79),(.91,.12,.38),DARK,.034,root)
-    for x in [-.42,-.17,.08]:
-        for label,r,y,finish in [("Gauge ring",.093,3.081,METAL),("Gauge face",.079,3.096,PAINT_WHITE)]:
-            gauge=cylinder(label,(x,y,1.79),r,.019,finish,False,32,root)
-            gauge.rotation_euler.x=math.pi/2
-        needle=cube("Pressure needle",(x+.012,3.109,1.81),(.009,.011,.062),BLACK,.002,root)
-        needle.rotation_euler.y=.54
-    for x in (.710,.987):
-        cube("Rear access ladder stile",(x,3.101,1.844),(.036,.048,1.568),METAL,.012,root)
-    for i in range(6):
-        cube("Rear access step",(.849,3.106,1.159+i*.272),(.284,.064,.036),METAL,.008,root)
+        profile_loft("Swept radiator blade",vane,PAINT_YELLOW if z in (1.255,1.442,1.655) else DARK,root)
     for x in [-.56,.56]:
         cube("Beacon mounting foot",(x,-2.32,2.634),(.119,.191,.077),RUBBER,.018,root)
     layers=[]
@@ -1044,7 +1045,7 @@ def make_fire_engine():
         profile_loft("Cab amber signal",[
             light_ring(.865,1.335,w,h,d) for w,h,d in
             ((.384,.043,-3.013),(.377,.041,-3.023),(.356,.029,-3.028))],amber,root)
-        cube("Tail lamp", (x, 3.14, 1.08), (0.33, 0.08, 0.4), TAIL_LAMP, 0.07, root)
+        cube("Tail lamp", (side*1.075, 3.04, 1.43), (0.125, 0.08, 0.31), TAIL_LAMP, 0.07, root)
     bumper=[]
     for x in (-1.13,-1.11,-1.04,-.88,-.69,-.54,0,.54,.69,.88,1.04,1.11,1.13):
         u=abs(x)/1.13
@@ -1068,13 +1069,10 @@ def make_fire_engine():
         cube("Fog light seal",(side*.862,-3.071,.856),(.210,.042,.128),BLACK,.023,root)
         cube("Fog lens",(side*.862,-3.096,.856),(.164,.016,.077),GLASS_HI,.018,root)
     cube("Rear bumper",(0,3.1,.75),(2.33,.28,.19),DARK,.046,root)
-    for x in [-.67,.67]:
-        for label,r,y,depth,mat in [("Outlet flange",.129,3.015,.09,METAL),
-                                     ("Coupling gasket",.096,3.072,.044,DARK),
-                                     ("Outlet cap",.081,3.101,.038,METAL)]:
-            part=cylinder(label,(x,y,1.27),r,depth,mat,False,24,root)
-            part.rotation_euler.x=math.pi/2
-        cube("Outlet cap grip",(x,3.13,1.27),(.127,.025,.024),PAINT_RED,.008,root)
+    for side in (-1,1):
+        cube("Rear crew footboard",(side*.64,3.16,.68),(.88,.33,.065),METAL,.018,root)
+        for row in range(4):
+            cube("Footboard traction strip",(side*.64,3.05+row*.069,.718),(.83,.022,.009),DARK,.002,root)
     # Lengthen the equipment bay between axles without distorting the wheels.
     bpy.context.view_layer.update()
     for part in root.children:
@@ -1082,6 +1080,7 @@ def make_fire_engine():
         inverse=frame.inverted()
         for vertex in part.data.vertices:
             point=frame@vertex.co
+            point.z += .46 * max(0,min(1,(point.z-1.75)/.75))
             point.y+=.82*max(0,min(1,(point.y+1.44)/1.98))-.41
             vertex.co=inverse@point
     return root
