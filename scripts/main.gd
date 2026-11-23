@@ -6254,6 +6254,7 @@ func _build_overlay() -> void:
 	quit_button.pressed.connect(_request_quit)
 	var dialog := AcceptDialog.new()
 	dialog.name = "GameSettings"
+	dialog.wrap_controls = false
 	dialog.window_input.connect(_dialog_quit_key.bind(dialog))
 	dialog.title = tr("Settings")
 	dialog.ok_button_text = tr("Close settings")
@@ -6267,10 +6268,15 @@ func _build_overlay() -> void:
 		var page := VBoxContainer.new()
 		page.alignment = BoxContainer.ALIGNMENT_CENTER
 		page.add_theme_constant_override("separation",12)
-		tabs.add_child(page)
-		tabs.set_tab_title(page.get_index(),title)
+		var scroll := ScrollContainer.new()
+		scroll.follow_focus = true
+		tabs.add_child(scroll)
+		page.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		page.size_flags_vertical = Control.SIZE_EXPAND_FILL
+		scroll.add_child(page)
+		tabs.set_tab_title(scroll.get_index(),title)
 		if title == "Language":
-			tabs.set_tab_icon(page.get_index(), preload("res://branding/language-globe.svg"))
+			tabs.set_tab_icon(scroll.get_index(), preload("res://branding/language-globe.svg"))
 		pages.append(page)
 	var calm_toggle := CheckButton.new()
 	calm_toggle.name = "CalmMode"
@@ -6398,7 +6404,7 @@ func _build_overlay() -> void:
 	settings_toggle.pressed.connect(func():
 		dialog.title = tr("Settings")
 		dialog.ok_button_text = tr("Close settings")
-		dialog.popup_centered(Vector2i(640,280))
+		dialog.popup_centered_clamped(Vector2i(710, 530), .94)
 	)
 	dialog.visibility_changed.connect(func():
 		if not dialog.visible: settings_toggle.grab_focus()
