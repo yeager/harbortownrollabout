@@ -23,6 +23,8 @@ On a Mac, open **Apple menu → About This Mac** if you’re unsure which downlo
 
 Click a vehicle picture, choose Axel or Alma, then select **Start driving**. Hold **W** to move, steer with **A** and **D**, and press **S** to brake. The arrow keys work too. If you prefer the mouse, hold the left button to drive and move the mouse sideways to steer. **R** brings you back to a safe spot if you get stuck.
 
+At a traffic light, stop on red, slow down on orange and go on green. By default, the game helps you stop at the line. If you enable **Allow driving through red lights** in Driving settings, crossing on red brings up a reminder.
+
 ![Choosing a vehicle on the main menu](docs/screenshots/vehicle-selection.png)
 
 **Gentle driving** keeps most vehicles below 30 km/h. With it on, you can complete a pickup or delivery by stopping at the marker. Open the phone with **T** to read where to go next.
@@ -59,6 +61,7 @@ Click a vehicle picture, choose Axel or Alma, then select **Start driving**. Hol
 | --- | --- |
 | Get in or out of a vehicle | F (or enable F3 in Driving settings) |
 | Return to a safe spot if you get stuck on foot or in a vehicle | R |
+| Help at a mission stop | Space |
 | Jump on foot | E |
 | Raise or lower the camera on foot | Page Up or Page Down |
 | Open the phone | T |
@@ -69,7 +72,7 @@ Click a vehicle picture, choose Axel or Alma, then select **Start driving**. Hol
 
 Under **Settings → Driving**, you can choose Backspace for recovery, 0 for jumping, 9 and 3 for camera height, or F2 for the phone.
 
-To find the hot dog stand, open the phone and pick **6** on the town map. You can park nearby and follow the arrows on foot to the counter.
+In **Free exploration**, open **Town map** and choose a place by name or number. For the hot dog stand, choose **6**, park nearby and follow the arrows on foot to the counter.
 
 The radio switches on when you enter a vehicle. It plays songs in your chosen language. If there are none yet, it plays English songs.
 
