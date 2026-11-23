@@ -785,6 +785,36 @@ def make_volvo_xc60_police():
     return build()
 
 
+def rear_prismatic_lens(name, x, z, height, finish, root):
+    """Moulded lens with a shallow convex face and individual reflector facets."""
+    vertices, faces = [], []
+    columns, rows = 6, round(height / .019)
+    for row in range(rows + 1):
+        v = 2 * row / rows - 1
+        for column in range(columns + 1):
+            u = 2 * column / columns - 1
+            # Soften the outline where the lens meets the rubber gasket.
+            width = .0635 - .004 * abs(v) ** 8
+            vertices.append((x + width*u, 3.127 + .009*(1-u*u) + .003*(1-v*v),
+                             z + height*v/2))
+    for row in range(rows):
+        for column in range(columns):
+            a = row*(columns+1) + column
+            corners = (a, a+columns+1, a+columns+2, a+1)
+            center = [sum(vertices[i][axis] for i in corners)/4 for axis in range(3)]
+            center[1] += .003
+            tip = len(vertices)
+            vertices.append(center)
+            faces.extend((i, corners[(k+1)%4], tip) for k,i in enumerate(corners))
+    mesh = bpy.data.meshes.new(name)
+    mesh.from_pydata(vertices, [], faces)
+    mesh.update()
+    lens = bpy.data.objects.new(name, mesh)
+    bpy.context.collection.objects.link(lens)
+    lens.parent = root
+    mesh.materials.append(finish)
+
+
 def make_fire_engine():
     root = bpy.data.objects.new("Fire engine | Swedish Rescue Pumper", None)
     bpy.context.collection.objects.link(root)
@@ -1196,7 +1226,7 @@ def make_fire_engine():
                 ("Rear indicator lens",1.610,.105,amber),
                 ("Tail lamp",1.468,.167,TAIL_LAMP),
                 ("Reversing lens",1.319,.097,GLASS_HI)):
-            cube(label,(x,3.121,z),(.127,.031,height),finish,.010,root)
+            rear_prismatic_lens(label, x, z, height, finish, root)
     bumper=[]
     for x in (-1.13,-1.11,-1.04,-.88,-.69,-.54,0,.54,.69,.88,1.04,1.11,1.13):
         u=abs(x)/1.13
