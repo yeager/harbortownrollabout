@@ -479,9 +479,40 @@ func _hot_dog_stand(x: float) -> void:
 		bun.position = Vector3(x-.89+.25*i,1.18,43.11)
 		add_child(bun)
 	part("Grill hotplate",Vector3(x+.62,1.09,43.07),Vector3(1.22,.13,.70),Color("#484343"))
-	for i in 5:
-		var sausage := _turned("Grilled sausage",Vector3(x+.22+i*.19,1.21,43.07),.054,.054,.36,Color("#a75432"))
-		sausage.rotation.x = PI*.5
+	var frank := CapsuleMesh.new()
+	frank.radius = .049
+	frank.height = .36
+	frank.radial_segments = 16
+	frank.rings = 5
+	frank.material = get_parent()._material(Color("#ac5032"),.43)
+	for i in 6:
+		var sausage := MeshInstance3D.new()
+		sausage.mesh = frank
+		add_child(sausage)
+		if i < 5:
+			sausage.position = Vector3(x+.22+i*.19,1.204,43.07)
+			sausage.rotation.x = PI*.5
+		else:
+			sausage.position = Vector3(x+.03,1.20,42.39)
+			sausage.rotation.z = PI*.5
+	var tray := Vector3(x+.03,1.119,42.39)
+	part("Folded paper tray",tray,Vector3(.40,.018,.18),cream)
+	for side in [-1,1]:
+		var fold := part("Paper tray lip",tray+Vector3(0,.019,side*.095),Vector3(.40,.046,.009),cream)
+		fold.rotation.x = side*.32
+		var half_roll := MeshInstance3D.new()
+		half_roll.mesh = SphereMesh.new()
+		half_roll.position = tray+Vector3(0,.052,side*.046)
+		half_roll.scale = Vector3(.33,.103,.090)
+		half_roll.material_override = get_parent()._material(Color("#dfaa61"),.80)
+		add_child(half_roll)
+	var mustard_finish: StandardMaterial3D = get_parent()._material(Color("#f5c22b"),.5)
+	var previous := tray+Vector3(-.12,.129,0)
+	for step in range(1,17):
+		var t := step/16.0
+		var point := tray+Vector3(lerpf(-.12,.12,t),.129,.012*sin(t*TAU*2))
+		get_parent()._tube_between(self,previous,point,.006,mustard_finish)
+		previous = point
 	for i in 2:
 		var sauce := Color("#c9442e") if i == 0 else Color("#eabe36")
 		_turned("Condiment bottle",Vector3(x-.85+i*.16,1.25,42.49),.058,.062,.26,sauce)
