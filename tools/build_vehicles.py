@@ -997,6 +997,16 @@ def make_fire_engine():
         for rib in range(17):
             cube("Rear shutter seam",(x,3.142,1.12+rib*.083),(.95,.008,.006),DARK,0,root)
         shutter_hardware((x,3.130,1.045),(0,1),.952,1.51)
+    # Rear-facing work lights above the pump lockers, clear of the shutter tracks.
+    for side in (-1,1):
+        x = side*.99
+        cube("Rear work light bracket",(x,3.07,2.59),(.14,.13,.055),METAL,.012,root)
+        cube("Rear floodlight casing",(x,3.13,2.69),(.21,.12,.18),BLACK,.024,root)
+        cube("Rear floodlight glazing",(x,3.193,2.69),(.175,.012,.146),GLASS_HI,.015,root)
+        for row in (-1,0,1):
+            for column in (-1,0,1):
+                cube("Floodlight reflector",(x+column*.05,3.201,2.69+row*.04),
+                     (.033,.008,.023),PAINT_WHITE,.006,root)
     # Each strip is cast across the face, turning back towards the two front corners.
     def fascia(name, half_width, height, thickness, depth, corner_rise, finish):
         rings = []
