@@ -105,6 +105,7 @@ var time_mode := 0
 var day_phase := 0.0
 var santa: Node3D
 var santa_encounters := {}
+var midsummer_pole := preload("res://environment/midsummer_pole.gd").new()
 var christmas_spruce := preload("res://environment/christmas_spruce.gd").new()
 var last_night := -1.0
 var parked_door_offset := Vector3.ZERO
@@ -2821,6 +2822,8 @@ func _build_city_blocks() -> void:
 	_make_driving_surface("Square paving", Vector3(14, 0.24, 13), Vector3(30, -0.09, 16), Color("#cbbf9f"), true)
 	christmas_spruce.position = Vector3(30,.03,16)
 	add_child(christmas_spruce)
+	midsummer_pole.position = christmas_spruce.position
+	add_child(midsummer_pole)
 	for p in [Vector3(25, 0, 12), Vector3(35, 0, 12), Vector3(25, 0, 20), Vector3(35, 0, 20)]:
 		var granite := Color("#878782")
 		_make_roadside_solid("Planter base",Vector3(1.3,.29,1.3),p+Vector3.UP*.12,granite,true)
@@ -2999,6 +3002,7 @@ func _update_daylight(delta: float) -> void:
 			day_phase = fmod(day_phase+delta/360.0,1.0)
 	var night := 1.0 if time_mode == 1 else (smoothstep(-.4,.4,-cos(day_phase*TAU)) if time_mode == 2 else 0.0)
 	christmas_spruce.update_lights(weather.season == 4 and weather.snow > .02, night)
+	midsummer_pole.set_summer(weather.season == 2)
 	var cloud := weather.cloud_cover*(1.0-night)
 	city_sun.light_energy = lerpf(.73,.17,night)*(1.0-.52*cloud)
 	city_sun.shadow_opacity = 1.0-.48*cloud
