@@ -5470,7 +5470,7 @@ func _update_lost_umbrella(delta: float) -> void:
 		phone.receive(UMBRELLA_RETURN)
 	elif umbrella_stage == FootQuest.RETURNING and walker.position.distance_to(umbrella_owner.position)<1.8:
 		umbrella_stage = FootQuest.FINISHED
-		_reward_foot_quest(1)
+		_reward_foot_quest(6)
 	else: return
 	_place_umbrella()
 	canopy.scale = Vector3(.1,2.62,.1)
@@ -5572,7 +5572,7 @@ func _update_thermos() -> void:
 		FootQuest.RETURNING:
 			if not near_owner: return
 			thermos_stage = FootQuest.FINISHED
-			_reward_foot_quest(1)
+			_reward_foot_quest(7)
 	_place_thermos()
 	_refresh_dispatch()
 	_save_preferences()
@@ -8893,6 +8893,10 @@ func _load_player_progress(config: ConfigFile, section: String) -> void:
 				phone.delivery_receipts.append(receipt)
 	var saved_memories = config.get_value(section,"mission_memories",PackedStringArray())
 	mission_memories = saved_memories if saved_memories is PackedStringArray else PackedStringArray()
+	if umbrella_stage == FootQuest.FINISHED and not mission_memories.has("foot/6"):
+		mission_memories.append("foot/6")
+	if thermos_stage == FootQuest.FINISHED and not mission_memories.has("foot/7"):
+		mission_memories.append("foot/7")
 	var saved_stars = config.get_value(section, "stars", PackedStringArray())
 	collected_stars = PackedStringArray()
 	if saved_stars is PackedStringArray:

@@ -12,6 +12,9 @@ var receipt_menu := MenuButton.new()
 var receipt_dialog := AcceptDialog.new()
 var job_heading := Label.new()
 const FOOT_PICTURES := {
+	"Bring the umbrella to the passenger in the yellow jacket at Lotten’s landing.": 6,
+	"I lost my green flask after the boule match. Could you check by the bench?": 7,
+	"Bring the flask back to the boule player in the green jacket.": 7,
 	"Find the red shoe on the pavement.": 0,
 	"Bring the red shoe back to the neighbour.": 1,
 	"Find the cat with white paws.": 2,
