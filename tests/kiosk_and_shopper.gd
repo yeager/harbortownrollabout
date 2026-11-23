@@ -28,6 +28,16 @@ func check() -> void:
 	var shops = game.shops
 	game.walker.position = Vector3(shops.storefront_x(6),0,41.7)
 	shops.update_customer(true,game.walker.position,true)
+	for locale in ["sv","en"]:
+		TranslationServer.set_locale(locale)
+		await process_frame
+		for i in 4:
+			var coins: int = shops.PRICES[6][i]
+			var expected := ("%d mynt" if locale == "sv" else "%d coins") % coins
+			if shops.grill_price_signs[i].text != expected:
+				printerr("Incorrect hot dog board price: ",shops.grill_price_signs[i].text)
+				quit(1)
+				return
 	game.wallet = 26
 	game.purchases.clear()
 	for i in 4:

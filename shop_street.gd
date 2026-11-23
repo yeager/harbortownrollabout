@@ -36,6 +36,7 @@ const PIZZA_TOPPINGS := ["Mozzarella, tomato and carrot stars", "Popcorn, sweetc
 const SIGNS := ["KAFÉ BULLEN","SJÖKIOSKEN","PIZZERIA","GODISBODEN","SJÖSTADENS LIVS","MOMO & BORI"]
 const COLORS := ["#a86343","#427868","#b65f51","#927198","#355e4b","#375c68"]
 const FRONT_Z := 42.5
+var grill_price_signs: Array[Label3D] = []
 var pizza_price_signs: Array[Label3D] = []
 var awnings: Array[Node3D] = []
 var shop_sign_font := SystemFont.new()
@@ -437,8 +438,15 @@ func _hot_dog_stand(x: float) -> void:
 		_turned("Condiment bottle",Vector3(x-.85+i*.16,1.25,42.49),.058,.062,.26,sauce)
 		_turned("Bottle nozzle",Vector3(x-.85+i*.16,1.41,42.49),.036,.009,.08,cream)
 	for i in 4:
-		var ticket := _lettering(MENUS[6][i],Vector3(x+(-1.77 if i<2 else 1.77),2.01-.38*(i%2),42.55),.003,cream)
+		var ticket := _lettering(MENUS[6][i],Vector3(x+(-1.77 if i<2 else 1.77),2.18-.66*(i%2),42.55),.003,cream)
 		get_parent()._size_world_sign(ticket,.82)
+		var price := _lettering(_grill_price(i),ticket.position-Vector3.UP*.18,.003,Color("#ffcf74"))
+		get_parent()._size_world_sign(price,.82)
+		grill_price_signs.append(price)
+
+func _grill_price(item: int) -> String:
+	var coins: int = PRICES[6][item]
+	return tr_n("%d coin","%d coins",coins) % coins
 
 func _kiosk(x: float) -> void:
 	var ivory := Color("#fff1d9")
@@ -469,6 +477,9 @@ func _product_price(shop: int, item: int) -> String:
 
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_TRANSLATION_CHANGED and is_node_ready():
+		for i in grill_price_signs.size():
+			grill_price_signs[i].text = _grill_price(i)
+			get_parent()._fit_world_sign(grill_price_signs[i])
 		for sign_label in pizza_price_signs:
 			sign_label.text = _product_price(2, 0)
 			get_parent()._fit_world_sign(sign_label)
