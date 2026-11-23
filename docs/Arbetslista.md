@@ -77,7 +77,7 @@ Listan innehåller 100 jobb. En tom ruta är öppen. En punkt bockas av när bet
 - [x] 53. Forma frontens luftintag så att de smalnar av mot hörnen. Ta en jämförelsebild rakt framifrån.
 - [x] 54. Dela backspeglarna i huvudspegel och vidvinkelspegel med varsin spegelyta. Kontrollera silhuetten från sidan.
 - [ ] 55. Modellera blåljusrampens genomskinliga kåpa och separata lysdioder. Granska rampen både släckt och tänd.
-- [ ] 56. Ge utrustningsluckorna lås, grepp och ändskenor. Kontrollera att de sitter på själva luckorna i närbild.
+- [x] 56. Ge utrustningsluckorna lås, grepp och ändskenor. Kontrollera att de sitter på själva luckorna i närbild.
 - [ ] 57. Passa in de bakre fotstegen och dragkroken under jalusierna efter bakifrånbilden.
 - [ ] 58. Låt en sidolucka rullas upp när slangen hämtas och stängas när utrustningen lagts tillbaka.
 - [ ] 59. Gör en körbar port på brandstationen som öppnas för brandbilen och väntar tills hela bilen passerat.

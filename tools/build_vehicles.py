@@ -862,6 +862,23 @@ def make_fire_engine():
     cube("Dispatch terminal casing",(.072,-2.53,1.935),(.31,.075,.212),BLACK,.016,root)
     cube("Dispatch terminal display",(.072,-2.487,1.94),(.275,.012,.168),GLASS_HI,.006,root)
     shutter_finish = material("Satin silver shutter slats", (.76,.79,.80), .24, .42)
+    def shutter_hardware(center, outward, width, height):
+        # Local coordinates run along the slats, out from the face and upwards.
+        nx,ny=outward
+        def fitting(name, along, depth, up, span, thickness, rise, finish, bevel):
+            x,y,z=center
+            loc=(x+nx*depth-ny*along,y+ny*depth+nx*along,z+up)
+            dims=(thickness,span,rise) if nx else (span,thickness,rise)
+            return cube(name,loc,dims,finish,bevel,root)
+        for end in (-1,1):
+            fitting("Shutter guide rail",end*(width/2-.013),.007,height/2,
+                    .026,.026,height,METAL,.005)
+            fitting("Lift handle bracket",end*width*.36,.035,.086,
+                    .032,.077,.068,METAL,.009)
+        fitting("Shutter lift handle",0,.067,.088,width*.75,.028,.032,METAL,.010)
+        fitting("Shutter lock bezel",0,.012,.153,.074,.025,.064,DARK,.010)
+        fitting("Shutter lock barrel",0,.027,.153,.043,.009,.036,METAL,.004)
+        fitting("Shutter keyway",0,.032,.153,.007,.003,.020,BLACK,.001)
     for side in (-1,1):
         for y in (-.10,1.08,2.26):
             low = 1.19 if y > 0 else .91
@@ -875,7 +892,7 @@ def make_fire_engine():
                          (.007,.274,.155),finish,.001,root)
             for rib in range(1,int((high-low)/.081)):
                 cube("Shutter seam",(side*1.176,y,low+rib*.081),(.006,1.10,.006),DARK,0,root)
-            cube("Locker lifting bar",(side*1.186,y,low+.075),(.045,.87,.033),METAL,.008,root)
+            shutter_hardware((side*1.168,y,low+.023),(side,0),1.11,high-low-.046)
         for row in range(2):
             for col in range(8):
                 y = -2.63+col*.246
@@ -970,16 +987,16 @@ def make_fire_engine():
     cube("Rear pump compartment",(0,2.75,1.81),(2.15,.46,1.22),PAINT_RED,.065,root)
     for side in (-1,1):
         x = side*.51
-        cube("Rear shutter surround",(x,3.005,1.80),(.998,.08,1.57),BLACK,.025,root)
-        cube("Rear roller blind",(x,3.055,1.80),(.952,.03,1.51),shutter_finish,.014,root)
+        cube("Rear shutter surround",(x,3.065,1.80),(.998,.08,1.57),BLACK,.025,root)
+        cube("Rear roller blind",(x,3.115,1.80),(.952,.03,1.51),shutter_finish,.014,root)
         for row in range(2):
             for col in range(4):
                 finish = PAINT_YELLOW if (row+col)%2 else PAINT_RED
-                cube("Rear reflective check",(x+(col-1.5)*.23,3.075,1.72+row*.145),
+                cube("Rear reflective check",(x+(col-1.5)*.23,3.135,1.72+row*.145),
                      (.23,.008,.145),finish,.001,root)
         for rib in range(17):
-            cube("Rear shutter seam",(x,3.082,1.12+rib*.083),(.95,.008,.006),DARK,0,root)
-        cube("Rear shutter lifting bar",(x,3.105,1.12),(.84,.05,.035),METAL,.009,root)
+            cube("Rear shutter seam",(x,3.142,1.12+rib*.083),(.95,.008,.006),DARK,0,root)
+        shutter_hardware((x,3.130,1.045),(0,1),.952,1.51)
     # Each strip is cast across the face, turning back towards the two front corners.
     def fascia(name, half_width, height, thickness, depth, corner_rise, finish):
         rings = []
