@@ -4419,7 +4419,7 @@ func _walking_hint() -> String:
 		return tr("Walk or rest · Run again in %d s") % _rest_seconds()
 	if run_ready_hint_time > 0:
 		return tr("Ready to run again! Hold Shift and walk forward.")
-	return tr("{up}/{down} Walk · {left}/{right} Turn · Shift + {up} Run · F Enter · U Scooter") + "   ·   " + (tr("%s Jump") % OS.get_keycode_string(jump_key)) + "   ·   " + tr("9 Raise camera · 3 Lower camera" if number_camera else "PgUp Raise camera · PgDn Lower camera")
+	return tr("{up}/{down} Walk · {left}/{right} Turn · Shift + {up} Run · F Enter · U Scooter") + "   ·   " + (tr("%s Jump") % OS.get_keycode_string(jump_key)) + "   ·   " + tr("9 Raise camera · 3 Lower camera" if number_camera else "PgUp Raise camera · PgDn Lower camera") + "\n" + tr("Hold V and move the mouse to look around")
 
 func _walk(delta: float) -> void:
 	if shopper_boarding: return
