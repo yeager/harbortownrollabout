@@ -58,6 +58,8 @@ var road_finish: ShaderMaterial
 var apartment_lights: Array[StandardMaterial3D] = []
 var quay_stair_light: StandardMaterial3D
 var city_env: Environment
+var chimney_beacon: StandardMaterial3D
+var chimney_beacon_phase := 0.0
 var city_sun: DirectionalLight3D
 var city_fill: OmniLight3D
 var entrance_lights: Array[SpotLight3D] = []
@@ -3226,6 +3228,18 @@ func _build_new_blocks() -> void:
 		stack.material_override = _material(Color("#ad513c") if band % 2 == 0 else Color("#e4dacc"))
 		stack.position = p + Vector3(6, 6.25 + band * section.height, -2.8)
 		add_child(stack)
+	var beacon := MeshInstance3D.new()
+	beacon.name = "WorkshopChimneyBeacon"
+	var lens := SphereMesh.new()
+	lens.radius = .18
+	lens.height = .36
+	beacon.mesh = lens
+	beacon.position = p + Vector3(6,13.15,-2.8)
+	chimney_beacon = _material(Color("#551119"),.28)
+	chimney_beacon.emission = Color("#ff1310")
+	chimney_beacon.emission_energy_multiplier = 4.0
+	beacon.material_override = chimney_beacon
+	add_child(beacon)
 	# The recovery route approaches the workshop from the north.
 	for x in [-4.0,4.0]:
 		var lamp_mount := p+Vector3(x,3.94,-5.43)
@@ -3255,6 +3269,13 @@ func _update_daylight(delta: float) -> void:
 		if mode == "playing" and not paused:
 			day_phase = fmod(day_phase+delta/DAY_CYCLE_SECONDS,1.0)
 	var night := 1.0 if time_mode == 1 else (smoothstep(-.4,.4,-cos(day_phase*TAU)) if time_mode == 2 else 0.0)
+	if night >= .5:
+		if not paused:
+			chimney_beacon_phase = fmod(chimney_beacon_phase + delta, 2.0)
+		chimney_beacon.emission_enabled = chimney_beacon_phase < .5
+	else:
+		chimney_beacon_phase = 0.0
+		chimney_beacon.emission_enabled = false
 	christmas_spruce.update_lights(weather.season == 4 and weather.snow > .02, night)
 	midsummer_pole.set_summer(weather.season == 2)
 	field_fountain.set_season(weather.season)

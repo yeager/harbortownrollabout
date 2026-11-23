@@ -28,6 +28,8 @@ const SWEET_INGREDIENTS := [
 const MENUS := [["Cinnamon bun","Berry cordial"],["Ice cream","Hot dog"],["Margherita pizza", "Popcorn Party", "Pickle Carousel", "Banana Moon", "Berry Blizzard"],SWEETS,["Apple","Milk"],["Japanese haori jacket","Korean jeogori jacket","Red panda plush","Moon rabbit figurine"],["Hot dog","Moon mash dog","Pickle rocket","Crunchy onion comet"]]
 const SNACK_SHOPS := [1, 2, 3, 6]
 const PRODUCT_ICONS := {
+	0: preload("res://branding/cafe-products.svg"),
+	4: preload("res://branding/grocery-products.svg"),
 	6: preload("res://branding/grill-products.svg"),
 	2: preload("res://branding/pizza-products.png"),
 	3: preload("res://branding/sweet-products.png"),
@@ -350,8 +352,8 @@ func eat_snack(product: String) -> void:
 		first_product.grab_focus()
 
 func _product_icon(shop: int, item: int) -> Texture2D:
-	if shop == 1 and item == 1:
-		return _product_icon(6,0)
+	if shop == 1:
+		return _product_icon(3,4) if item == 0 else _product_icon(6,0)
 	if not PRODUCT_ICONS.has(shop): return null
 	var thumbnail := AtlasTexture.new()
 	thumbnail.atlas = PRODUCT_ICONS[shop]
