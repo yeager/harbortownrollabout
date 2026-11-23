@@ -5613,6 +5613,7 @@ func _update_courier_delivery() -> void:
 			_say(courier,COURIER_REQUEST,"courier_request")
 			phone.receive(COURIER_REQUEST)
 		FootQuest.SEARCHING:
+			if cake_stage == FootQuest.RETURNING: return
 			if shops.inside != 4 or walker.position.distance_to(courier_parcel.position) > 1.9: return
 			courier_stage = FootQuest.RETURNING
 			phone.receive(COURIER_RETURN)
@@ -5674,6 +5675,7 @@ func _update_birthday_delivery(delta: float) -> void:
 		return
 	if not walker.visible or ferry_passenger or tram_mode != 0: return
 	if cake_stage == FootQuest.WAITING and walker.position.distance_to(cake_box.position) < 1.3:
+		if courier_stage == FootQuest.RETURNING: return
 		cake_stage = FootQuest.RETURNING
 		phone.receive(CAKE_ROUTE)
 	elif cake_stage == FootQuest.RETURNING and walker.position.distance_to(birthday_host.position) < 1.8:
