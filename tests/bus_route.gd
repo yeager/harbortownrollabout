@@ -43,6 +43,10 @@ func check_route() -> void:
 			printerr("Passenger action picture did not follow the next stop")
 			quit(1)
 			return
+		if game.seated_bus_riders.get_child_count() != 2 or game.seated_bus_riders.is_visible_in_tree() != (leg % 2 == 1):
+			printerr("Wrong passenger count or visibility at stop ", leg)
+			quit(1)
+			return
 		if game._vehicle_payload() != (450.0 if leg % 2 else 0.0):
 			printerr("Incorrect passenger payload")
 			quit(1)

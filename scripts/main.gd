@@ -212,6 +212,7 @@ const WEST_STOPS := [Vector3(-205,0,2.8),Vector3(-460,0,-45.2)]
 const BUS_STOPS := [0,SCHOOL,2,1,4,5]
 const BUS_MESSAGES := ["Collect passengers at the square.", "Drop off passengers at the school.", "Collect passengers at the marina.", "Drop off passengers at the clinic.", "Collect passengers at Västra torget.", "Drop off passengers at Västerängen."]
 var rear_bus_board: Label3D
+var seated_bus_riders: Node3D
 var bus_board: Label3D
 const BUS_STOP_NAMES := ["THE SQUARE","HEALTH CENTRE","MARINA","HARBOR TOWN SCHOOL","VÄSTRA TORGET","VÄSTERÄNGEN"]
 var bus_leg := 0
@@ -5552,11 +5553,39 @@ func _advance_wipers(delta: float) -> void:
 	for pivot in wiper_pivots:
 		pivot.basis = Basis(Vector3(0,.77,.64).normalized(),sweep)
 
+func _fit_bus_interior() -> void:
+	var cabin := vehicle_model.find_child("Cabin",true,false) as MeshInstance3D
+	for surface in cabin.mesh.get_surface_count():
+		var finish := cabin.get_active_material(surface) as StandardMaterial3D
+		if finish.resource_name.begins_with("Smoked blue glazing"):
+			var glass := finish.duplicate() as StandardMaterial3D
+			glass.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+			glass.albedo_color = Color(.40,.62,.68,.22)
+			cabin.set_surface_override_material(surface,glass)
+	if not is_instance_valid(seated_bus_riders):
+		seated_bus_riders = Node3D.new()
+		add_child(seated_bus_riders)
+		for shirt in [Color("#724e74"),Color("#668d9c")]:
+			_make_walker("Bus rider",0,0,1,shirt,Color("#343c48"))
+			var rider: Node3D = walker_data.pop_back().actor
+			rider.reparent(seated_bus_riders,false)
+			rider.rotation.y = PI
+			rider.position = Vector3(-.78 if seated_bus_riders.get_child_count()==1 else .78, .90,1.1)
+			for leg: Node3D in rider.get_meta("legs"):
+				leg.rotation.x = 1.15
+	for side in [-1,1]:
+		_make_box("Passenger cushion",Vector3(.53,.13,.58),Vector3(side*.78,1.54,1.1),Color("#3f6378"),false,vehicle_model)
+		_make_box("Passenger backrest",Vector3(.53,.69,.11),Vector3(side*.78,1.91,.84),Color("#3f6378"),false,vehicle_model)
+	seated_bus_riders.reparent(vehicle_model,false)
+
 func _load_vehicle_model() -> void:
 	wiper_pivots.clear()
 	wiper_phase = 0.0
 	cockpit_view = false
 	if is_instance_valid(vehicle_model):
+		if is_instance_valid(seated_bus_riders) and seated_bus_riders.get_parent() == vehicle_model:
+			seated_bus_riders.reparent(self,false)
+			seated_bus_riders.hide()
 		vehicle_model.queue_free()
 	blue_light_meshes.clear()
 	red_light_meshes.clear()
@@ -5565,6 +5594,7 @@ func _load_vehicle_model() -> void:
 	bus_board = null
 	rear_bus_board = null
 	if vehicle_index == BUS:
+		_fit_bus_interior()
 		bus_board = Label3D.new()
 		bus_board.outline_size = 0
 		bus_board.modulate=Color("#ffbb47")
@@ -6236,6 +6266,7 @@ func _update_stop_label(label: Label3D) -> void:
 
 func _update_bus_board() -> void:
 	if is_instance_valid(bus_board):
+		seated_bus_riders.visible = not free_drive and bus_leg % 2 == 1
 		bus_board.text = tr("HARBOR TOWN") if free_drive else "502  " + tr(BUS_STOP_NAMES[BUS_STOPS[bus_leg % BUS_STOPS.size()]])
 		var font := ThemeDB.fallback_font
 		var pixels := font.get_string_size(bus_board.text,HORIZONTAL_ALIGNMENT_LEFT,-1,bus_board.font_size)
