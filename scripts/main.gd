@@ -842,6 +842,8 @@ func _save_checkpoint() -> void:
 			"recovery": recovery_leg, "taxi": taxi_leg, "bus": bus_leg,
 			"free_drive": free_drive, "progress": vehicle_progress.duplicate()
 		}
+		if practice_active:
+			road_checkpoint["practice"] = true
 		if free_drive and map_goal.is_finite():
 			road_checkpoint["map_goal"] = map_goal
 		if tram_mode != 0:
@@ -9137,6 +9139,7 @@ func _resume_road_checkpoint() -> void:
 	if boating:
 		launch.transform = road_checkpoint.launch_transform
 	ambulance.global_position = road_checkpoint.position
+	practice_active = road_checkpoint.get("practice", PRACTICE_YARD.has_point(Vector2(ambulance.position.x, ambulance.position.z)))
 	ambulance.rotation.y = road_checkpoint.heading
 	free_drive = road_checkpoint.free_drive
 	var saved_goal: Variant = road_checkpoint.get("map_goal")
@@ -9422,7 +9425,7 @@ func _valid_checkpoint(saved: Variant) -> bool:
 		if not vehicle is int or not step is int or step < 0 or step > TARGETS.size(): return false
 	if saved.has("walk_position") and not _checkpoint_fields(saved, {"walk_position": TYPE_VECTOR3, "walk_heading": TYPE_FLOAT, "door_offset": TYPE_VECTOR3}):
 		return false
-	var optional := {"boule_bench": TYPE_BOOL, "scooter": TYPE_BOOL, "exit_at_landing": TYPE_BOOL, "ferry_time": TYPE_FLOAT, "launch_transform": TYPE_TRANSFORM3D}
+	var optional := {"practice": TYPE_BOOL, "boule_bench": TYPE_BOOL, "scooter": TYPE_BOOL, "exit_at_landing": TYPE_BOOL, "ferry_time": TYPE_FLOAT, "launch_transform": TYPE_TRANSFORM3D}
 	for key in optional:
 		if saved.has(key) and not _checkpoint_fields(saved, {key: optional[key]}):
 			return false
