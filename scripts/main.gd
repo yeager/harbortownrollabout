@@ -89,6 +89,7 @@ var number_movement := false
 var seat_f3 := false
 var camera_f6 := false
 var pause_f7 := false
+var scooter_key := KEY_U
 var horn_f4 := false
 var quit_key := KEY_F10
 var recovery_key := KEY_R
@@ -1005,8 +1006,10 @@ func _unhandled_key_input(event: InputEvent) -> void:
 		if event.keycode == phone.toggle_key:
 			if phone.visible: phone.toggle()
 			return
+		if event.keycode == scooter_key:
+			_toggle_scooter()
+			return
 		match event.keycode:
-			KEY_U: _toggle_scooter()
 			KEY_H: _honk()
 			KEY_F4:
 				if horn_f4 and not event.alt_pressed: _honk()
@@ -4856,7 +4859,7 @@ func _walking_hint() -> String:
 		return tr("Walk or rest · Run again in %d s") % _rest_seconds()
 	if run_ready_hint_time > 0:
 		return tr("Ready to run again! Hold Shift and walk forward.")
-	return tr("{up}/{down} Walk · {left}/{right} Turn · Shift + {up} Run · F Enter · U Scooter") + "   ·   " + (tr("%s Jump") % OS.get_keycode_string(jump_key)) + "   ·   " + tr("9 Raise camera · 3 Lower camera" if number_camera else "PgUp Raise camera · PgDn Lower camera") + "\n" + tr("Hold V and move the mouse to look around")
+	return tr("{up}/{down} Walk · {left}/{right} Turn · Shift + {up} Run · F Enter · {scooter} Scooter").replace("{scooter}",OS.get_keycode_string(scooter_key)) + "   ·   " + (tr("%s Jump") % OS.get_keycode_string(jump_key)) + "   ·   " + tr("9 Raise camera · 3 Lower camera" if number_camera else "PgUp Raise camera · PgDn Lower camera") + "\n" + tr("Hold V and move the mouse to look around")
 
 func _walk(delta: float) -> void:
 	if boule_guest_turn or boule_seated: return
@@ -8424,6 +8427,16 @@ func _build_overlay() -> void:
 		_save_preferences()
 	)
 	pages[2].add_child(phone_key)
+	var scooter_binding := CheckButton.new()
+	scooter_binding.name = "ScooterF9"
+	scooter_binding.text = "Fold or unfold the scooter with F9"
+	scooter_binding.button_pressed = scooter_key == KEY_F9
+	scooter_binding.toggled.connect(func(enabled: bool):
+		scooter_key = KEY_F9 if enabled else KEY_U
+		_save_preferences()
+		_refresh_ui()
+	)
+	pages[2].add_child(scooter_binding)
 	var seat_binding := CheckButton.new()
 	seat_binding.name = "SeatF3"
 	seat_binding.text = "Also use F3 to enter or leave vehicles"
@@ -9475,6 +9488,7 @@ func _load_preferences() -> void:
 	var saved_favorites = config.get_value("gallery","favorites",PackedStringArray())
 	if saved_favorites is PackedStringArray: favorites = saved_favorites
 	number_camera = config.get_value("keyboard","number_camera",false) == true
+	scooter_key = KEY_F9 if config.get_value("keyboard","scooter_f9",false) == true else KEY_U
 	seat_f3 = config.get_value("keyboard","seat_f3",false) == true
 	horn_f4 = config.get_value("keyboard","horn_f4",false) == true
 	pause_f7 = config.get_value("keyboard","pause_f7",false) == true
@@ -9538,6 +9552,7 @@ func _save_preferences() -> void:
 		config.set_value("keyboard","radio_%d" % i, radio_keys[i])
 	config.set_value("gallery","favorites",favorites)
 	config.set_value("keyboard","number_camera",number_camera)
+	config.set_value("keyboard","scooter_f9",scooter_key == KEY_F9)
 	config.set_value("keyboard","seat_f3",seat_f3)
 	config.set_value("keyboard","horn_f4",horn_f4)
 	config.set_value("keyboard","pause_f7",pause_f7)
@@ -9814,7 +9829,8 @@ func _refresh_ui() -> void:
 		hints.text = "{up} / ↑  Drive     {left} {right} / ← →  Steer     {down} / ↓  Brake or reverse\nRelease to slow down   ·   Space to help   ·   P to pause"
 	var camera_hint := tr("Hold V and move the mouse to look around")
 	if walker.visible and tram_mode == 0 and not boating and not ferry_passenger and shops.inside < 0:
-		camera_hint = tr("{up} / ↑ Accelerate · {down} / ↓ Brake · {left} / {right} Steer · U Fold scooter") if scooter.visible else tr("U Unfold scooter") + "   ·   " + camera_hint
+		camera_hint = tr("{up} / ↑ Accelerate · {down} / ↓ Brake · {left} / {right} Steer · {scooter} Fold scooter") if scooter.visible else tr("{scooter} Unfold scooter") + "   ·   " + camera_hint
+		camera_hint = camera_hint.replace("{scooter}",OS.get_keycode_string(scooter_key))
 	hints.text = camera_hint if walker.visible and tram_mode == 0 and not boating else tr(hints.text) + "   ·   " + camera_hint
 	if operating_excavator:
 		hints.text = tr("Arrows or {up}{left}{down}{right}: drive and steer · Q/E: turn the cab · F: get out\nI/K: raise or lower the boom · Y/G: move the outer arm · O/L: tilt the bucket")

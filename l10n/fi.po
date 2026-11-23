@@ -844,11 +844,11 @@ msgstr "Etsi paikka, jossa on tilaa avata potkulauta."
 msgid "Fold scooter · F"
 msgstr "Taita potkulauta · F"
 
-msgid "U Unfold scooter"
-msgstr "U Avaa potkulauta"
+msgid "{scooter} Unfold scooter"
+msgstr "{scooter} Avaa potkulauta"
 
-msgid "{up} / ↑ Accelerate · {down} / ↓ Brake · {left} / {right} Steer · U Fold scooter"
-msgstr "{up} / ↑ Kiihdytä · {down} / ↓ Jarruta · {left} / {right} Ohjaa · U Taita potkulauta"
+msgid "{up} / ↑ Accelerate · {down} / ↓ Brake · {left} / {right} Steer · {scooter} Fold scooter"
+msgstr "{up} / ↑ Kiihdytä · {down} / ↓ Jarruta · {left} / {right} Ohjaa · {scooter} Taita potkulauta"
 
 #, c-format
 msgid "Electric scooter · %d km/h"
@@ -910,9 +910,9 @@ msgstr ""
 msgid "Walk or rest · Run again in %d s"
 msgstr "Kävele tai lepää · Voit taas juosta %d s kuluttua"
 
-msgid "{up}/{down} Walk · {left}/{right} Turn · Shift + {up} Run · F Enter · U Scooter"
+msgid "{up}/{down} Walk · {left}/{right} Turn · Shift + {up} Run · F Enter · {scooter} Scooter"
 msgstr ""
-"{up}/{down} Kävele · {left}/{right} Käänny · Shift + {up} Juokse · F Nouse kyytiin · U Potkulauta"
+"{up}/{down} Kävele · {left}/{right} Käänny · Shift + {up} Juokse · F Nouse kyytiin · {scooter} Potkulauta"
 
 msgid "PgUp Raise camera · PgDn Lower camera"
 msgstr "PgUp Nosta kameraa · PgDn Laske kameraa"
@@ -1855,3 +1855,6 @@ msgstr "Sekoitin kaksi pakettia. Voitko hakea raidallisen ruokakaupasta?"
 
 msgid "Bring the striped parcel back to the cyclist outside the café."
 msgstr "Vie raidallinen paketti pyörälähetille kahvilan eteen."
+
+msgid "Fold or unfold the scooter with F9"
+msgstr "Taita tai avaa potkulauta F9-näppäimellä"

@@ -804,11 +804,11 @@ msgstr "Hitta en fri yta för att fälla ut elsparkcykeln."
 msgid "Fold scooter · F"
 msgstr "Fäll ihop elsparkcykeln · F"
 
-msgid "U Unfold scooter"
-msgstr "U Fäll ut elsparkcykeln"
+msgid "{scooter} Unfold scooter"
+msgstr "{scooter} Fäll ut elsparkcykeln"
 
-msgid "{up} / ↑ Accelerate · {down} / ↓ Brake · {left} / {right} Steer · U Fold scooter"
-msgstr "{up} / ↑ Gasa · {down} / ↓ Bromsa · {left} / {right} Styr · U Fäll ihop"
+msgid "{up} / ↑ Accelerate · {down} / ↓ Brake · {left} / {right} Steer · {scooter} Fold scooter"
+msgstr "{up} / ↑ Gasa · {down} / ↓ Bromsa · {left} / {right} Styr · {scooter} Fäll ihop"
 
 #, c-format
 msgid "Electric scooter · %d km/h"
@@ -866,8 +866,8 @@ msgstr "Pilar eller {up}{left}{down}{right}: kör och styr · Q/E: snurra hytten
 msgid "Walk or rest · Run again in %d s"
 msgstr "Gå eller vila · Du kan springa igen om %d s"
 
-msgid "{up}/{down} Walk · {left}/{right} Turn · Shift + {up} Run · F Enter · U Scooter"
-msgstr "{up}/{down} Gå · {left}/{right} Vänd · Skift + {up} Spring · F Kliv in · U Sparkcykel"
+msgid "{up}/{down} Walk · {left}/{right} Turn · Shift + {up} Run · F Enter · {scooter} Scooter"
+msgstr "{up}/{down} Gå · {left}/{right} Vänd · Skift + {up} Spring · F Kliv in · {scooter} Sparkcykel"
 
 msgid "PgUp Raise camera · PgDn Lower camera"
 msgstr "PgUp Höj kameran · PgDn Sänk kameran"
@@ -1789,3 +1789,6 @@ msgstr "Jag blandade ihop två paket. Kan du hämta det randiga i mataffären?"
 
 msgid "Bring the striped parcel back to the cyclist outside the café."
 msgstr "Lämna det randiga paketet till cykelbudet utanför kaféet."
+
+msgid "Fold or unfold the scooter with F9"
+msgstr "Fäll ihop eller fäll ut elsparkcykeln med F9"

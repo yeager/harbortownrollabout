@@ -803,10 +803,10 @@ msgstr ""
 msgid "Fold scooter · F"
 msgstr ""
 
-msgid "U Unfold scooter"
+msgid "{scooter} Unfold scooter"
 msgstr ""
 
-msgid "{up} / ↑ Accelerate · {down} / ↓ Brake · {left} / {right} Steer · U Fold scooter"
+msgid "{up} / ↑ Accelerate · {down} / ↓ Brake · {left} / {right} Steer · {scooter} Fold scooter"
 msgstr ""
 
 #, c-format
@@ -865,7 +865,7 @@ msgstr ""
 msgid "Walk or rest · Run again in %d s"
 msgstr ""
 
-msgid "{up}/{down} Walk · {left}/{right} Turn · Shift + {up} Run · F Enter · U Scooter"
+msgid "{up}/{down} Walk · {left}/{right} Turn · Shift + {up} Run · F Enter · {scooter} Scooter"
 msgstr ""
 
 msgid "PgUp Raise camera · PgDn Lower camera"
@@ -1787,4 +1787,7 @@ msgid "I mixed up two parcels. Can you fetch the striped one from the grocery st
 msgstr ""
 
 msgid "Bring the striped parcel back to the cyclist outside the café."
+msgstr ""
+
+msgid "Fold or unfold the scooter with F9"
 msgstr ""

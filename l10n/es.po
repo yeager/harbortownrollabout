@@ -855,11 +855,11 @@ msgstr "Busca un sitio despejado para desplegar el patinete."
 msgid "Fold scooter · F"
 msgstr "Plegar el patinete · F"
 
-msgid "U Unfold scooter"
-msgstr "U Desplegar el patinete"
+msgid "{scooter} Unfold scooter"
+msgstr "{scooter} Desplegar el patinete"
 
-msgid "{up} / ↑ Accelerate · {down} / ↓ Brake · {left} / {right} Steer · U Fold scooter"
-msgstr "{up} / ↑ Acelera · {down} / ↓ Frena · {left} / {right} Gira · U Pliega el patinete"
+msgid "{up} / ↑ Accelerate · {down} / ↓ Brake · {left} / {right} Steer · {scooter} Fold scooter"
+msgstr "{up} / ↑ Acelera · {down} / ↓ Frena · {left} / {right} Gira · {scooter} Pliega el patinete"
 
 #, c-format
 msgid "Electric scooter · %d km/h"
@@ -921,8 +921,8 @@ msgstr ""
 msgid "Walk or rest · Run again in %d s"
 msgstr "Camina o descansa · Podrás correr en %d s"
 
-msgid "{up}/{down} Walk · {left}/{right} Turn · Shift + {up} Run · F Enter · U Scooter"
-msgstr "{up}/{down} Camina · {left}/{right} Gira · Shift + {up} Corre · F Sube · U Patinete"
+msgid "{up}/{down} Walk · {left}/{right} Turn · Shift + {up} Run · F Enter · {scooter} Scooter"
+msgstr "{up}/{down} Camina · {left}/{right} Gira · Shift + {up} Corre · F Sube · {scooter} Patinete"
 
 msgid "PgUp Raise camera · PgDn Lower camera"
 msgstr "Re Pág: sube la cámara · Av Pág: baja la cámara"
@@ -1866,3 +1866,6 @@ msgstr "He confundido dos paquetes. ¿Puedes recoger el de rayas en la tienda de
 
 msgid "Bring the striped parcel back to the cyclist outside the café."
 msgstr "Devuelve el paquete de rayas al ciclista que está delante de la cafetería."
+
+msgid "Fold or unfold the scooter with F9"
+msgstr "Plegar o desplegar el patinete con F9"

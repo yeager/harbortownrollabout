@@ -859,12 +859,12 @@ msgstr "Trouve un endroit dégagé pour déplier ta trottinette."
 msgid "Fold scooter · F"
 msgstr "Plier la trottinette · F"
 
-msgid "U Unfold scooter"
-msgstr "U Déplier la trottinette"
+msgid "{scooter} Unfold scooter"
+msgstr "{scooter} Déplier la trottinette"
 
-msgid "{up} / ↑ Accelerate · {down} / ↓ Brake · {left} / {right} Steer · U Fold scooter"
+msgid "{up} / ↑ Accelerate · {down} / ↓ Brake · {left} / {right} Steer · {scooter} Fold scooter"
 msgstr ""
-"{up} / ↑ Accélérer · {down} / ↓ Freiner · {left} / {right} Tourner · U Plier la trottinette"
+"{up} / ↑ Accélérer · {down} / ↓ Freiner · {left} / {right} Tourner · {scooter} Plier la trottinette"
 
 #, c-format
 msgid "Electric scooter · %d km/h"
@@ -926,9 +926,9 @@ msgstr ""
 msgid "Walk or rest · Run again in %d s"
 msgstr "Marche ou repose-toi · Tu pourras courir dans %d s"
 
-msgid "{up}/{down} Walk · {left}/{right} Turn · Shift + {up} Run · F Enter · U Scooter"
+msgid "{up}/{down} Walk · {left}/{right} Turn · Shift + {up} Run · F Enter · {scooter} Scooter"
 msgstr ""
-"{up}/{down} Marcher · {left}/{right} Tourner · Shift + {up} Courir · F Monter · U Trottinette"
+"{up}/{down} Marcher · {left}/{right} Tourner · Shift + {up} Courir · F Monter · {scooter} Trottinette"
 
 msgid "PgUp Raise camera · PgDn Lower camera"
 msgstr "PgUp Monter la caméra · PgDn Baisser la caméra"
@@ -1874,3 +1874,6 @@ msgstr "J’ai confondu deux colis. Peux-tu aller chercher le colis rayé à l�
 
 msgid "Bring the striped parcel back to the cyclist outside the café."
 msgstr "Rapporte le colis rayé au cycliste devant le café."
+
+msgid "Fold or unfold the scooter with F9"
+msgstr "Plier ou déplier la trottinette avec F9"

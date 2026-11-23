@@ -861,12 +861,12 @@ msgstr "Such dir einen freien Platz, um deinen Tretroller auszuklappen."
 msgid "Fold scooter · F"
 msgstr "Tretroller zusammenklappen · F"
 
-msgid "U Unfold scooter"
-msgstr "U Tretroller ausklappen"
+msgid "{scooter} Unfold scooter"
+msgstr "{scooter} Tretroller ausklappen"
 
-msgid "{up} / ↑ Accelerate · {down} / ↓ Brake · {left} / {right} Steer · U Fold scooter"
+msgid "{up} / ↑ Accelerate · {down} / ↓ Brake · {left} / {right} Steer · {scooter} Fold scooter"
 msgstr ""
-"{up} / ↑ Beschleunigen · {down} / ↓ Bremsen · {left} / {right} Lenken · U Roller einklappen"
+"{up} / ↑ Beschleunigen · {down} / ↓ Bremsen · {left} / {right} Lenken · {scooter} Roller einklappen"
 
 #, c-format
 msgid "Electric scooter · %d km/h"
@@ -928,8 +928,8 @@ msgstr ""
 msgid "Walk or rest · Run again in %d s"
 msgstr "Geh oder ruh dich aus · In %d s kannst du wieder rennen"
 
-msgid "{up}/{down} Walk · {left}/{right} Turn · Shift + {up} Run · F Enter · U Scooter"
-msgstr "{up}/{down} Gehen · {left}/{right} Drehen · Shift + {up} Rennen · F Einsteigen · U Roller"
+msgid "{up}/{down} Walk · {left}/{right} Turn · Shift + {up} Run · F Enter · {scooter} Scooter"
+msgstr "{up}/{down} Gehen · {left}/{right} Drehen · Shift + {up} Rennen · F Einsteigen · {scooter} Roller"
 
 msgid "PgUp Raise camera · PgDn Lower camera"
 msgstr "Bild ↑ Kamera höher · Bild ↓ Kamera tiefer"
@@ -1876,3 +1876,6 @@ msgstr "Ich habe zwei Pakete verwechselt. Holst du das gestreifte aus dem Lebens
 
 msgid "Bring the striped parcel back to the cyclist outside the café."
 msgstr "Bring das gestreifte Paket zum Fahrradkurier vor dem Café."
+
+msgid "Fold or unfold the scooter with F9"
+msgstr "Tretroller mit F9 ein- oder ausklappen"

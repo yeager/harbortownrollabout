@@ -848,12 +848,12 @@ msgstr "Finn et sted med god plass til å slå ut sparkesykkelen."
 msgid "Fold scooter · F"
 msgstr "Slå sammen sparkesykkelen · F"
 
-msgid "U Unfold scooter"
-msgstr "U Slå ut sparkesykkelen"
+msgid "{scooter} Unfold scooter"
+msgstr "{scooter} Slå ut sparkesykkelen"
 
-msgid "{up} / ↑ Accelerate · {down} / ↓ Brake · {left} / {right} Steer · U Fold scooter"
+msgid "{up} / ↑ Accelerate · {down} / ↓ Brake · {left} / {right} Steer · {scooter} Fold scooter"
 msgstr ""
-"{up} / ↑ Øk farten · {down} / ↓ Brems · {left} / {right} Styr · U Slå sammen sparkesykkelen"
+"{up} / ↑ Øk farten · {down} / ↓ Brems · {left} / {right} Styr · {scooter} Slå sammen sparkesykkelen"
 
 #, c-format
 msgid "Electric scooter · %d km/h"
@@ -915,8 +915,8 @@ msgstr ""
 msgid "Walk or rest · Run again in %d s"
 msgstr "Gå eller hvil · Du kan løpe igjen om %d s"
 
-msgid "{up}/{down} Walk · {left}/{right} Turn · Shift + {up} Run · F Enter · U Scooter"
-msgstr "{up}/{down} Gå · {left}/{right} Snu · Shift + {up} Løp · F Gå inn · U Sparkesykkel"
+msgid "{up}/{down} Walk · {left}/{right} Turn · Shift + {up} Run · F Enter · {scooter} Scooter"
+msgstr "{up}/{down} Gå · {left}/{right} Snu · Shift + {up} Løp · F Gå inn · {scooter} Sparkesykkel"
 
 msgid "PgUp Raise camera · PgDn Lower camera"
 msgstr "PgUp Hev kameraet · PgDn Senk kameraet"
@@ -1859,3 +1859,6 @@ msgstr "Jeg blandet sammen to pakker. Kan du hente den stripete i matbutikken?"
 
 msgid "Bring the striped parcel back to the cyclist outside the café."
 msgstr "Ta den stripete pakken tilbake til sykkelbudet utenfor kafeen."
+
+msgid "Fold or unfold the scooter with F9"
+msgstr "Slå sammen eller ut sparkesykkelen med F9"
