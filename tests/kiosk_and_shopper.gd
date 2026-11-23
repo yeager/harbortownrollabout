@@ -26,12 +26,23 @@ func check() -> void:
 		printerr("Entry shell did not swing diagonally")
 		quit(1)
 		return
+	var recover := InputEventKey.new()
+	recover.keycode = KEY_R
+	recover.pressed = true
+	var parked = game.parked_cars[game.SHOPPER]
+	var original_pose: Transform3D = parked.transform
+	game._unhandled_key_input(recover)
 	while game.shopper_boarding: await process_frame
-	if not game.walker.visible:
+	if not game.walker.visible or parked.transform != original_pose or game.message != "Back in a safe place." or not game._on_foot_clear(game.walker.position):
+		printerr("Recovery during exit must place the walker safely and leave the trike parked")
 		quit(1)
 		return
-	await game._change_seat()
-	if game.walker.visible or game.shopper_boarding:
+	game.walker.position = parked.to_global(game.parked_door_offset)
+	game.message = ""
+	game._change_seat()
+	game._unhandled_key_input(recover)
+	while game.shopper_boarding: await process_frame
+	if game.walker.visible or game.message != "Back in a safe place." or not is_zero_approx(game.speed):
 		printerr("Shopping trike entry failed")
 		quit(1)
 		return
