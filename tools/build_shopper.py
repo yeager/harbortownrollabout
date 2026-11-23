@@ -142,12 +142,12 @@ for side in (-1,1):
 def wiper_point(u, t):
     return Vector(screen_point(u, t)) + Vector((0, -.018, 0))
 
-pivot = wiper_point(.25, .08)
-blade_joint = wiper_point(-.12, .51)
-tube("Wiper spindle", screen_point(.25, .08), pivot, .018, v.METAL)
+pivot = wiper_point(-.58, 1.0)
+blade_joint = wiper_point(-.09, .65)
+tube("Wiper spindle", screen_point(-.58, 1.0), pivot, .018, v.METAL)
 tube("Wiper arm", pivot, blade_joint, .008, v.DARK)
-tube("Wiper blade lower", wiper_point(.06, .32), blade_joint, .011, v.BLACK)
-tube("Wiper blade upper", blade_joint, wiper_point(-.30, .70), .011, v.BLACK)
+tube("Wiper blade lower", wiper_point(.15, .45), blade_joint, .011, v.BLACK)
+tube("Wiper blade upper", blade_joint, wiper_point(-.33, .85), .011, v.BLACK)
 # The bonnet, windscreen and roof lift as one shell about the nose.
 moving_parts = set(root.children) - fixed_parts
 hinge = bpy.data.objects.new("EntryHinge",None)
