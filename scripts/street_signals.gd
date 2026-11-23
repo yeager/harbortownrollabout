@@ -61,6 +61,14 @@ func _vehicle_head(mast: Node3D, east_west: bool) -> Dictionary:
 	get_parent()._make_roadside_solid("Signal mast",Vector3(.12,3.7,.12),Vector3.UP*1.85,Color("#777e78"),false,mast)
 	if visor_mesh == null:
 		visor_mesh = _make_visor()
+	if hinge_mesh == null:
+		hinge_mesh = CylinderMesh.new()
+		hinge_mesh.top_radius = .014
+		hinge_mesh.bottom_radius = .014
+		hinge_mesh.height = .044
+		hinge_mesh.radial_segments = 12
+		hinge_mesh.rings = 0
+		hinge_mesh.material = get_parent()._material(Color("#505552"), .36)
 	var lamps: Array = []
 	var colors := [Color("#ff2622"),Color("#ffab16"),Color("#15d279")]
 	for j in 3:
@@ -70,8 +78,10 @@ func _vehicle_head(mast: Node3D, east_west: bool) -> Dictionary:
 		get_parent()._make_box("Signal service cover", Vector3(.326,.296,.029),
 			pos-Vector3.BACK*.017, Color("#303332"), false, mast)
 		for height in [-.090, .090]:
-			get_parent()._make_box("Cover hinge", Vector3(.021,.044,.035),
-				pos+Vector3(.161,height,-.027), Color("#505552"), false, mast)
+			var hinge := MeshInstance3D.new()
+			hinge.mesh = hinge_mesh
+			hinge.position = pos + Vector3(.163,height,-.027)
+			mast.add_child(hinge)
 		get_parent()._make_box("Cover latch", Vector3(.016,.045,.029),
 			pos+Vector3(-.162,0,-.018), Color("#454947"), false, mast)
 		var glass := lens(mast,pos,colors[j])
@@ -91,6 +101,7 @@ func _vehicle_head(mast: Node3D, east_west: bool) -> Dictionary:
 	return {"lamps":lamps,"east_west":east_west}
 
 var lit_finishes: Dictionary = {}
+var hinge_mesh: CylinderMesh
 var lens_mesh: SphereMesh
 var visor_mesh: ArrayMesh
 
