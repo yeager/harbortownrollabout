@@ -52,6 +52,8 @@ var grill_price_signs: Array[Label3D] = []
 var pizza_price_signs: Array[Label3D] = []
 var awnings: Array[Node3D] = []
 var shop_sign_font := SystemFont.new()
+var carried_toy := ""
+var toy_in_hand: Node3D
 var inside := -1
 var shop_card := PanelContainer.new()
 var panel := VBoxContainer.new()
@@ -381,6 +383,12 @@ func purchase(shop: int, item: int) -> void:
 		_serve_grill_order(item)
 	till_sound.play()
 	game.purchases[product]=int(game.purchases.get(product,0))+1
+	if shop == 5 and item in [0,1]:
+		game.boutique_jacket = product
+		game._apply_player_appearance()
+	if shop == 5 and item in [2,3]:
+		carried_toy = product
+		show_carried_toy()
 	refresh_basket()
 	game._save_preferences()
 	game._refresh_ui()
@@ -1083,7 +1091,26 @@ func _boutique(x: float) -> void:
 	part("Garment rail",Vector3(x-1.38,2.02,48.97),Vector3(2.28,.045,.045),maple)
 	_lettering("Momo & Bori",Vector3(x,2.47,49.28),.014,Color("#fff1dd"))
 
-func _boutique_toy(base: Vector3, rabbit: bool) -> void:
+func show_carried_toy() -> void:
+	if is_instance_valid(toy_in_hand):
+		toy_in_hand.hide()
+		toy_in_hand.queue_free()
+		toy_in_hand = null
+	var item: int = MENUS[5].find(carried_toy)
+	if item not in [2,3] or int(get_parent().purchases.get(carried_toy,0)) < 1:
+		return
+	var arm: Node3D = get_parent().walker.get_meta("arms")[0]
+	toy_in_hand = _boutique_toy(Vector3.ZERO,item == 3)
+	toy_in_hand.reparent(arm,false)
+	toy_in_hand.name = "MoonRabbit" if item == 3 else "RedPanda"
+	toy_in_hand.position = Vector3(-.085,-.85,-.095)
+	toy_in_hand.scale = Vector3.ONE * .8
+
+func _boutique_toy(base: Vector3, rabbit: bool) -> Node3D:
+	var toy := Node3D.new()
+	toy.name = "MoonRabbit" if rabbit else "RedPanda"
+	add_child(toy)
+	toy.position = base
 	var fur := Color("#eadbb7") if rabbit else Color("#b45b3d")
 	var dark := Color("#493334")
 	var cream := Color("#fff0d5")
@@ -1094,11 +1121,12 @@ func _boutique_toy(base: Vector3, rabbit: bool) -> void:
 		var piece := MeshInstance3D.new()
 		piece.mesh = sphere
 		piece.material_override = get_parent()._material(color,.48 if rabbit else .98)
-		piece.position = base+offset
+		piece.position = offset
 		piece.scale = size
-		add_child(piece)
+		toy.add_child(piece)
 	if rabbit:
-		_turned("Figure base",base+Vector3.UP*.023,.126,.126,.046,Color("#809bb0"))
+		var stand := _turned("Figure base",Vector3.UP*.023,.126,.126,.046,Color("#809bb0"))
+		stand.reparent(toy,false)
 	oval.call(Vector3(0,.15,0),Vector3(.21,.25,.18),fur)
 	oval.call(Vector3(0,.30,-.01),Vector3(.255,.21,.19),fur)
 	for side: float in [-1,1]:
@@ -1108,3 +1136,4 @@ func _boutique_toy(base: Vector3, rabbit: bool) -> void:
 		oval.call(Vector3(side*.052,.316,-.102),Vector3(.025,.027,.02),dark)
 		oval.call(Vector3(side*.065,.065,-.044),Vector3(.078,.073,.093),fur)
 	oval.call(Vector3(0,.274,-.108),Vector3(.038,.025,.025),dark)
+	return toy

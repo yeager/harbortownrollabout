@@ -406,6 +406,7 @@ var star_markers := {}
 var wallet := 0
 var wallet_label: Label
 var shops := preload("res://scripts/shop_street.gd").new()
+var boutique_jacket := ""
 var purchases := {}
 var happy_seconds := 0.0
 var phone := preload("res://scripts/mission_phone.gd").new()
@@ -3366,6 +3367,11 @@ func _build_lampposts() -> void:
 func _apply_player_appearance() -> void:
 	var colour := Color("#a85641") if play_as_alma else Color("#648faa")
 	if jacket_palette >= 0: colour = BENCH_COLOURS[jacket_palette]
+	var jacket_style: int = shops.MENUS[5].find(boutique_jacket)
+	if jacket_style in [0,1] and int(purchases.get(boutique_jacket,0)) > 0:
+		colour = Color("#467c75") if jacket_style == 0 else Color("#724467")
+	else:
+		jacket_style = -1
 	var jacket := _material(colour, .92, false, "cotton_jersey")
 	for figure: Node3D in [walker,skipper,road_driver]:
 		figure.scale = Vector3.ONE*(.88 if play_as_alma else 1.0)
@@ -3373,7 +3379,22 @@ func _apply_player_appearance() -> void:
 		figure.get_node("AxelPortrait").visible = not play_as_alma
 		figure.get_node("AlmaPortrait").visible = play_as_alma
 		figure.get_node("Hair").mesh = preload("res://characters/Bob.obj") if play_as_alma else preload("res://characters/Hair.obj")
-		figure.get_node("Jacket").material_override = jacket
+		var torso: MeshInstance3D = figure.get_node("Jacket")
+		torso.material_override = jacket
+		var trim := torso.get_node_or_null("BoutiqueLapels") as Node3D
+		if not trim and jacket_style >= 0:
+			trim = Node3D.new()
+			trim.name = "BoutiqueLapels"
+			torso.add_child(trim)
+			for side in [-1,1]:
+				_make_box("Woven lapel",Vector3(.036,.36,.022),Vector3(side*.063,.047,-.15),Color("#efd9af"),false,trim)
+			_make_box("Goreum tie",Vector3(.043,.13,.025),Vector3(.076,-.095,-.15),Color("#bc869d"),false,trim).rotation.z = -.4
+		if trim:
+			trim.visible = jacket_style >= 0
+			var angle := .42 if jacket_style == 1 else .13
+			trim.get_child(0).rotation.z = -angle
+			trim.get_child(1).rotation.z = angle
+			trim.get_child(2).visible = jacket_style == 1
 		wardrobe.set_colours(figure.get_node("Jacket/WeatherClothing"), colour)
 		for arm in figure.get_meta("arms"):
 			arm.get_child(0).material_override = jacket
@@ -3686,6 +3707,7 @@ func _build_depot() -> void:
 	_make_walker("Player on foot",0,0,1,Color("#648faa"),Color("#30414d"))
 	walker = walker_data.pop_back().actor
 	walker.add_child(scooter)
+	shops.show_carried_toy()
 	_make_walker("BMW driver",0,0,1,Color("#648faa"),Color("#30414d"))
 	road_driver = walker_data.pop_back().actor
 	road_driver.reparent(ambulance,false)
@@ -4311,6 +4333,7 @@ func _walk(delta: float) -> void:
 	walker.position = next
 	var near_bench := Vector2(next.x-30,next.z-20).length() < 1.2
 	if near_bench and not at_colour_bench:
+		boutique_jacket = ""
 		jacket_palette = (jacket_palette + 1) % BENCH_COLOURS.size()
 		_apply_player_appearance()
 	at_colour_bench = near_bench
@@ -7734,6 +7757,8 @@ func _load_preferences() -> void:
 		road_checkpoint = saved
 	play_as_alma=config.get_value("player","alma",false)==true
 	purchases=config.get_value("player","purchases",{})
+	boutique_jacket = config.get_value("player","boutique_jacket","")
+	shops.carried_toy = config.get_value("player","carried_toy","")
 	wallet=maxi(0,int(config.get_value("player","coins",0)))
 	foot_quest_points = maxi(0, int(config.get_value("player", "foot_quest_points", 0)))
 	delivery_points = maxi(0, int(config.get_value("player", "delivery_points", 0)))
@@ -7774,6 +7799,8 @@ func _save_preferences() -> void:
 	config.set_value("player", "foot_quest_points", foot_quest_points)
 	config.set_value("player", "delivery_points", delivery_points)
 	config.set_value("player","purchases",purchases)
+	config.set_value("player","boutique_jacket",boutique_jacket)
+	config.set_value("player","carried_toy",shops.carried_toy)
 	config.set_value("language", "locale", language_preference)
 	for channel: String in MIX_CHANNELS:
 		config.set_value("audio", channel.to_lower(), roundi(_channel_volume(channel)))
