@@ -4806,6 +4806,11 @@ func _at_boule_bench() -> bool:
 	return walker.visible and not scooter.visible and not ferry_passenger and tram_mode == 0 and not operating_excavator and (boule_seated or walker.position.distance_to(BOULE_BENCH) < 1.65)
 
 func _update_entry_button() -> void:
+	_set_entry_action()
+	if seat_f3 and not seat_button.disabled:
+		seat_button.text = tr(seat_button.text) + " / F3"
+
+func _set_entry_action() -> void:
 	if _at_boule_bench():
 		entry_marker.hide()
 		seat_button.disabled = false
@@ -4863,7 +4868,7 @@ func _update_entry_button() -> void:
 		entry_marker.global_position = car.to_global(Vector3(side * parked_sizes[nearest].x, 2.05, -parked_sizes[nearest].y * .27))
 		entry_marker.text = tr("{key} · Enter {vehicle}").format({"key": "F / F3" if seat_f3 else "F", "vehicle": tr(VEHICLE_NAMES_ALL[nearest])})
 	seat_button.disabled = nearest < 0
-	seat_button.text = tr("Enter %s") % tr(VEHICLE_NAMES_ALL[nearest]) if nearest >= 0 else tr("Walk to a vehicle")
+	seat_button.text = (tr("Enter %s") % tr(VEHICLE_NAMES_ALL[nearest])) + " · F" if nearest >= 0 else tr("Walk to a vehicle")
 
 func _build_ambulance() -> void:
 	ambulance = Node3D.new()
@@ -7931,6 +7936,7 @@ func _build_overlay() -> void:
 	seat_binding.toggled.connect(func(enabled: bool):
 		seat_f3 = enabled
 		_save_preferences()
+		_refresh_ui()
 	)
 	pages[2].add_child(seat_binding)
 	var horn_binding := CheckButton.new()
@@ -9250,7 +9256,7 @@ func _refresh_ui() -> void:
 	else:
 		seat_button.disabled = false
 		entry_marker.visible = false
-		seat_button.text = "Get out · F"
+		seat_button.text = tr("Get out · F") + (" / F3" if seat_f3 else "")
 	driving_controls.reverse_pedal = operating_excavator
 	driving_controls.show_wheel = tram_mode == 0 and not operating_excavator
 	driving_controls.visible = not show_overlay and (tram_mode == 2 or (tram_mode == 0 and (boating or not walker.visible)))
