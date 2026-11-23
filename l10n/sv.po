@@ -1654,3 +1654,6 @@ msgstr "Lägg varanens picknickfilt vid bänken på torget."
 
 msgid "Bring the ball back to the dog."
 msgstr "Ta tillbaka bollen till hunden."
+
+msgid "Separate profiles"
+msgstr "Separata spelarprofiler"

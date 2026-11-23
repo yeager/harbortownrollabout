@@ -1739,3 +1739,6 @@ msgstr "Étale la couverture du varan près du banc de la place."
 
 msgid "Bring the ball back to the dog."
 msgstr "Rapporte la balle au chien."
+
+msgid "Separate profiles"
+msgstr "Profils séparés"

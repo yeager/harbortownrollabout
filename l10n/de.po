@@ -1741,3 +1741,6 @@ msgstr "Lege die Picknickdecke des Warans neben die Bank auf dem Platz."
 
 msgid "Bring the ball back to the dog."
 msgstr "Bring dem Hund den Ball zurück."
+
+msgid "Separate profiles"
+msgstr "Getrennte Spielerprofile"

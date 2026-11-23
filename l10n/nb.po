@@ -1724,3 +1724,6 @@ msgstr "Legg varanens piknikteppe ved benken på torget."
 
 msgid "Bring the ball back to the dog."
 msgstr "Gi ballen tilbake til hunden."
+
+msgid "Separate profiles"
+msgstr "Separate spillerprofiler"

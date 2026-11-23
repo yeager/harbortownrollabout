@@ -399,6 +399,7 @@ var jacket_palette := -1
 var at_colour_bench := false
 const BENCH_COLOURS := [Color("#905bb9"), Color("#f1ab38"), Color("#399d83")]
 var play_as_alma := false
+var separate_profiles := false
 const STAR_SITES := {
 	"main_street": Vector2(-7, 2.35), "park": Vector2(49, 2.35),
 	"west_avenue": Vector2(-205, 2.35), "north_bridge": Vector2(71, -45.65),
@@ -7009,12 +7010,15 @@ func _build_overlay() -> void:
 			driver.add_theme_color_override("font_" + state + "_color", Color.WHITE)
 		driver.button_pressed = index == int(play_as_alma)
 		driver.pressed.connect(func():
-			play_as_alma = index == 1
-			_apply_player_appearance()
-			_save_preferences()
-			_refresh_ui()
+			_select_player_profile(index == 1, separate_profiles)
 		)
 		player_row.add_child(driver)
+	var profile_toggle := CheckButton.new()
+	profile_toggle.name = "SeparateProfiles"
+	profile_toggle.text = "Separate profiles"
+	profile_toggle.button_pressed = separate_profiles
+	profile_toggle.toggled.connect(func(enabled: bool): _select_player_profile(play_as_alma, enabled))
+	header.add_child(profile_toggle)
 	var settings_toggle := _button("Settings", 220)
 	settings_toggle.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	var menu_actions := HBoxContainer.new()
@@ -7029,14 +7033,7 @@ func _build_overlay() -> void:
 	)
 	menu_actions.add_child(settings_toggle)
 	menu_actions.add_child(start_button)
-	if not road_checkpoint.is_empty():
-		var resume := _button("Resume", 160)
-		resume.name = "ResumeCheckpoint"
-		menu_actions.add_child(resume)
-		resume.pressed.connect(_resume_road_checkpoint)
-		resume.visibility_changed.connect(func():
-			if mode != "menu" and resume.visible: resume.hide()
-		)
+	_sync_resume_button(menu_actions)
 	var quit_button := _button("Quit game · F10", 220)
 	menu_actions.add_child(quit_button)
 	quit_button.pressed.connect(_request_quit)
@@ -7902,6 +7899,50 @@ func _valid_checkpoint(saved: Variant) -> bool:
 		if saved.quests.shoe not in FootQuest.values() or saved.quests.cat not in FootQuest.values(): return false
 	return true
 
+func _sync_resume_button(menu_actions: Control) -> void:
+	var existing := menu_actions.get_node_or_null("ResumeCheckpoint")
+	if existing:
+		if road_checkpoint.is_empty():
+			menu_actions.remove_child(existing)
+			existing.queue_free()
+		return
+	if not road_checkpoint.is_empty():
+		var resume := _button("Resume", 160)
+		resume.name = "ResumeCheckpoint"
+		menu_actions.add_child(resume)
+		resume.pressed.connect(_resume_road_checkpoint)
+		resume.visibility_changed.connect(func():
+			if mode != "menu" and resume.visible: resume.hide()
+		)
+		menu_actions.move_child(resume, start_button.get_index()+1)
+
+func _profile_section() -> String:
+	if not separate_profiles: return "player"
+	return "alma_progress" if play_as_alma else "axel_progress"
+
+func _select_player_profile(alma: bool, separate: bool) -> void:
+	var previous := _profile_section()
+	_save_preferences()
+	play_as_alma = alma
+	separate_profiles = separate
+	if previous != _profile_section():
+		var config := ConfigFile.new()
+		config.load(SETTINGS_PATH)
+		_load_player_progress(config, _profile_section())
+		for marker: Node3D in star_markers.values():
+			marker.hide()
+			marker.queue_free()
+		star_markers.clear()
+		_build_stars()
+		for stamp in phone.memory_strip.get_children():
+			phone.memory_strip.remove_child(stamp)
+			stamp.queue_free()
+		shops.show_carried_toy()
+		_sync_resume_button(start_button.get_parent())
+	_apply_player_appearance()
+	_save_preferences()
+	_refresh_ui()
+
 func _load_player_progress(config: ConfigFile, section: String) -> void:
 	var saved = config.get_value(section, "road_checkpoint", {})
 	road_checkpoint = saved if _valid_checkpoint(saved) else {}
@@ -7950,7 +7991,8 @@ func _load_preferences() -> void:
 	extra_reading_time = config.get_value("accessibility", "extra_reading_time", false) == true
 	large_text = config.get_value("accessibility", "large_text", false) == true
 	play_as_alma = config.get_value("player","alma",false) == true
-	_load_player_progress(config, "player")
+	separate_profiles = config.get_value("player","separate_profiles",false) == true
+	_load_player_progress(config, _profile_section())
 	weather.season_setting = clampi(int(config.get_value("world","season",0)),0,4)
 	weather.weather_setting = clampi(int(config.get_value("world","weather",0)),0,4)
 	time_mode = clampi(int(config.get_value("world","daylight",2)),0,2)
@@ -7974,11 +8016,13 @@ func _load_preferences() -> void:
 
 func _save_preferences() -> void:
 	var config := ConfigFile.new()
+	config.load(SETTINGS_PATH)
 	var volume := 0.0 if AudioServer.is_bus_mute(0) else db_to_linear(AudioServer.get_bus_volume_db(0))*100
 	config.set_value("accessibility", "extra_reading_time", extra_reading_time)
 	config.set_value("accessibility", "large_text", large_text)
 	config.set_value("player","alma",play_as_alma)
-	_store_player_progress(config, "player")
+	config.set_value("player","separate_profiles",separate_profiles)
+	_store_player_progress(config, _profile_section())
 	config.set_value("language", "locale", language_preference)
 	for channel: String in MIX_CHANNELS:
 		config.set_value("audio", channel.to_lower(), roundi(_channel_volume(channel)))

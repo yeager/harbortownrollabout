@@ -1731,3 +1731,6 @@ msgstr "Pon la manta del varano junto al banco de la plaza."
 
 msgid "Bring the ball back to the dog."
 msgstr "Devuelve la pelota al perro."
+
+msgid "Separate profiles"
+msgstr "Perfiles separados"

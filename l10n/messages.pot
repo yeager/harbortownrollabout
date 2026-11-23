@@ -1653,3 +1653,6 @@ msgstr ""
 
 msgid "Bring the ball back to the dog."
 msgstr ""
+
+msgid "Separate profiles"
+msgstr ""

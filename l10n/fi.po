@@ -1720,3 +1720,6 @@ msgstr "Levitä varaanin piknikhuopa torin penkin viereen."
 
 msgid "Bring the ball back to the dog."
 msgstr "Vie pallo takaisin koiralle."
+
+msgid "Separate profiles"
+msgstr "Erilliset pelaajaprofiilit"
