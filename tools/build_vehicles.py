@@ -1175,11 +1175,39 @@ def make_fire_engine():
     cube("Reflective registration plate",(0,-3.170,.49),(.46,.010,.104),PAINT_WHITE,.007,root)
     plate = text_obj("Fleet registration","SJT 711",(-.192,-3.179,.457),.085,BLACK,root=root)
     plate.rotation_euler = (math.pi/2,0,0)
-    cube("Rear bumper",(0,3.1,.75),(2.33,.28,.19),DARK,.046,root)
+    cube("Rear step crossmember",(0,3.05,.81),(2.19,.16,.14),DARK,.022,root)
     for side in (-1,1):
-        cube("Rear crew footboard",(side*.64,3.16,.68),(.88,.33,.065),METAL,.018,root)
-        for row in range(4):
-            cube("Footboard traction strip",(side*.64,3.05+row*.069,.718),(.83,.022,.009),DARK,.002,root)
+        x=side*.65
+        for offset in (-.31,.31):
+            bracket=cube("Footboard support",(x+offset,3.18,.718),
+                         (.042,.37,.050),METAL,.006,root)
+            bracket.rotation_euler.x=-.40
+        # Open galvanized grating lets the ground show through the steps.
+        bars=[]
+        for edge in (-1,1):
+            bars.append(cube("Step channel",(x,3.30+edge*.148,.681),(.92,.020,.045),METAL,.007,root))
+        for i in range(23):
+            bars.append(cube("Step bearing bar",(x+(i-11)*.041,3.30,.683),
+                 (.012,.286,.038),METAL,.003,root))
+        for i in range(4):
+            bars.append(cube("Step cross rod",(x,3.20+i*.066,.693),(.91,.009,.012),METAL,.003,root))
+        bpy.ops.object.select_all(action="DESELECT")
+        for bar in bars:
+            bar.select_set(True)
+        bpy.context.view_layer.objects.active=bars[0]
+        bpy.ops.object.join()
+        bars[0].name="Galvanized rear footboard"
+    cube("Tow hitch flange",(0,3.143,.79),(.23,.065,.194),PAINT_RED,.014,root)
+    cube("Tow hitch drawbar",(0,3.255,.743),(.12,.246,.065),PAINT_RED,.015,root)
+    cylinder("Tow ball neck",(0,3.344,.800),.024,.099,METAL,False,24,root)
+    bpy.ops.mesh.primitive_uv_sphere_add(segments=24,ring_count=12,radius=.043,
+                                         location=(0,3.344,.856))
+    ball=bpy.context.object
+    ball.name="Tow ball"
+    ball.data.materials.append(METAL)
+    for polygon in ball.data.polygons:
+        polygon.use_smooth=True
+    attach(ball,root)
     # Lengthen the equipment bay between axles without distorting the wheels.
     bpy.context.view_layer.update()
     for part in root.children:
