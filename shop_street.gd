@@ -403,6 +403,18 @@ func _hot_dog_stand(x: float) -> void:
 	var cream := Color("#f3e2b9")
 	var red := Color("#a73b32")
 	var steel := Color("#82898a")
+	var patio_x := x-3.78
+	get_parent()._make_driving_surface("Grill patio",Vector3(2.56,.10,3.48),Vector3(patio_x,-.061,44.17),Color("#aa9c8c"),false,self)
+	var green := Color("#527b62")
+	for offset in [-.66,.66]:
+		part("Picnic trestle",Vector3(patio_x,.36,44.18+offset),Vector3(.15,.70,.10),steel,true)
+		part("Bench cross brace",Vector3(patio_x,.32,44.18+offset),Vector3(1.50,.09,.10),steel)
+	for plank in [-1,0,1]:
+		part("Table slat",Vector3(patio_x+plank*.21,.75,44.18),Vector3(.20,.08,1.81),green,true)
+	for side in [-1,1]:
+		part("Bench seat",Vector3(patio_x+side*.68,.43,44.18),Vector3(.32,.09,1.81),green,true)
+		for offset in [-.66,.66]:
+			part("Bench foot",Vector3(patio_x+side*.68,.195,44.18+offset),Vector3(.13,.39,.12),steel)
 	part("Kiosk plinth",Vector3(x,.10,44.5),Vector3(4.7,.22,3.9),steel,true)
 	part("Front wainscot",Vector3(x,.55,42.63),Vector3(4.7,.94,.20),cream,true)
 	part("Kitchen back wall",Vector3(x,1.45,46.34),Vector3(4.7,2.75,.18),cream,true)
