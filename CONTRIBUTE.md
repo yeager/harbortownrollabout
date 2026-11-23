@@ -10,7 +10,7 @@ You can offer lyrics, a translation someone can sing, or a recording. Pick a tun
 
 A single correction helps. If a button, a speech bubble or a driving instruction sounds odd in your language, tell us where you saw it, what it says and what you’d say instead. Short phrases that a child can understand when read aloud are especially helpful.
 
-To edit a translation, find your language’s `.po` file in [l10n](l10n/). Keep placeholders such as `%s` and `%d` so the game can insert names and numbers. New languages are welcome. The [localization guide](l10n/README.md) covers menus, logos, voices and radio tracks.
+To edit a translation, open the file for [Deutsch](l10n/de.po), [español](l10n/es.po), [français](l10n/fr.po), [norsk bokmål](l10n/nb.po), [suomi](l10n/fi.po) or [svenska](l10n/sv.po). Keep placeholders such as `%s` and `%d` so the game can insert names and numbers. New languages are welcome. The [localization guide](l10n/README.md) covers menus, logos, voices and radio tracks.
 
 ## Take a test drive
 
