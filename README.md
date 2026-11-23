@@ -12,7 +12,13 @@ Explore a 3D waterfront neighbourhood inspired by Hammarby Sjöstad in Stockholm
 
 ## Downloads
 
-[Game releases](https://github.com/yeager/harbortownrollabout/releases) provide a Windows x64 installer in seven languages, a universal macOS disk image, and Linux x86-64 DEB, RPM and portable tar.gz packages. The macOS build is ad-hoc signed and the Windows installer is unsigned.
+The [Linux preview](https://github.com/yeager/harbortownrollabout/releases/tag/v0.1.3-preview.20261123) runs on x86-64 systems with glibc 2.44 or newer. Choose a download for your system:
+
+- [Debian or Ubuntu (.deb)](https://github.com/yeager/harbortownrollabout/releases/download/v0.1.3-preview.20261123/axels-spel_0.1.3-preview.20261123_amd64.deb)
+- [Fedora or another RPM-based distribution (.rpm)](https://github.com/yeager/harbortownrollabout/releases/download/v0.1.3-preview.20261123/axels-spel-0.1.3-preview.20261123-1.x86_64.rpm)
+- [Portable archive (.tar.gz)](https://github.com/yeager/harbortownrollabout/releases/download/v0.1.3-preview.20261123/harbortownrollabout-0.1.3-preview.20261123-linux-x86_64.tar.gz). Extract both files into one folder and run `./axels-spel` there.
+
+For Windows and macOS, see **Play from source** below. The package workflow also targets a Windows x64 installer in seven languages and a universal macOS disk image.
 
 Pushing a version tag such as `v1.2.3` builds a release. Running **Game packages** manually builds a prerelease. The [DEB mirror](https://github.com/yeager/deb-repo/releases?q=harbortownrollabout) and [RPM mirror](https://github.com/yeager/rpm-repo/releases?q=harbortownrollabout) check hourly and copy their respective package and the portable archive into GitHub Releases.
 
