@@ -31,12 +31,12 @@ func check_displays(game: Node, locale: String) -> bool:
 			else:
 				prices.append(label)
 	var separator := "." if locale == "en" else ","
-	var expected := "1,69 €"
+	var expected := {"95":"1,69 €", "98":"1,79 €", "D":"1,65 €"}
 	match locale:
-		"en": expected = "£1.45"
-		"sv": expected = "17,90 kr"
-		"nb": expected = "19,90 kr"
-	if tower.get("95") != expected:
+		"en": expected = {"95":"£1.45", "98":"£1.55", "D":"£1.49"}
+		"sv": expected = {"95":"17,90 kr", "98":"18,90 kr", "D":"17,50 kr"}
+		"nb": expected = {"95":"19,90 kr", "98":"20,90 kr", "D":"19,50 kr"}
+	if tower != expected:
 		printerr("Incorrect local tariff in ",locale,": ",tower)
 		return false
 	if tower.size() != 3 or prices.size() != 24 or meters.size() != 8:
