@@ -27,6 +27,7 @@ const SWEET_INGREDIENTS := [
 ]
 const MENUS := [["Cinnamon bun","Berry cordial"],["Ice cream","Hot dog"],["Margherita pizza", "Popcorn Party", "Pickle Carousel", "Banana Moon", "Berry Blizzard"],SWEETS,["Apple","Milk"],["Japanese haori jacket","Korean jeogori jacket","Red panda plush","Moon rabbit figurine"],["Hot dog","Moon mash dog","Pickle rocket","Crunchy onion comet"]]
 const PRODUCT_ICONS := {
+	6: preload("res://branding/grill-products.svg"),
 	2: preload("res://branding/pizza-products.png"),
 	3: preload("res://branding/sweet-products.png"),
 	5: preload("res://branding/boutique-products.png"),
@@ -525,6 +526,15 @@ func _hot_dog_stand(x: float) -> void:
 		_turned("Condiment bottle",Vector3(x-.85+i*.16,1.25,42.49),.058,.062,.26,sauce)
 		_turned("Bottle nozzle",Vector3(x-.85+i*.16,1.41,42.49),.036,.009,.08,cream)
 	for i in 4:
+		var poster := Sprite3D.new()
+		poster.texture = PRODUCT_ICONS[6]
+		poster.region_enabled = true
+		poster.region_rect = Rect2(i*64,0,64,64)
+		poster.pixel_size = .010
+		poster.position = Vector3(x+(1.5-i)*.95,.57,42.50)
+		poster.rotation.y = PI
+		poster.shaded = true
+		add_child(poster)
 		var ticket := _lettering(MENUS[6][i],Vector3(x+(-1.77 if i<2 else 1.77),2.18-.66*(i%2),42.55),.003,cream)
 		get_parent()._size_world_sign(ticket,.82)
 		var price := _lettering(_grill_price(i),ticket.position-Vector3.UP*.18,.003,Color("#ffcf74"))
