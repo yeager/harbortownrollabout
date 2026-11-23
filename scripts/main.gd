@@ -540,6 +540,7 @@ var boule_guest_turn := false
 var boule_choices := VBoxContainer.new()
 var boule_aim := HSlider.new()
 var boule_throw_length := -1
+var boule_pause_focus: Control
 const BOULE_CENTRE := Vector3(94.9, 0, 69)
 var boule_players: Array[Node3D] = []
 var boules: Array[MeshInstance3D] = []
@@ -8431,6 +8432,10 @@ func _resume_road_checkpoint() -> void:
 	_refresh_ui()
 
 func _start_game() -> void:
+	boule_choices.hide()
+	boule_guest_turn = false
+	boule_join_requested = false
+	boule_pause_focus = null
 	reward_badge.hide()
 	map_goal = Vector3.INF
 	komodo.visible = pet_stages[1] == FootQuest.SEARCHING or randf() < .25
@@ -8579,6 +8584,10 @@ func _overlay_action() -> void:
 func _toggle_pause() -> void:
 	if mode != "playing": return
 	paused = not paused
+	if boule_guest_turn and boule_throw_length < 0:
+		if paused:
+			boule_pause_focus = get_viewport().gui_get_focus_owner()
+		boule_choices.visible = not paused
 	if paused:
 		horn.stop()
 		_end_skid()
@@ -8590,6 +8599,12 @@ func _toggle_pause() -> void:
 	_refresh_ui()
 	if paused:
 		start_button.grab_focus()
+	elif boule_choices.visible:
+		if is_instance_valid(boule_pause_focus) and boule_choices.is_ancestor_of(boule_pause_focus):
+			boule_pause_focus.grab_focus()
+		else:
+			boule_aim.grab_focus()
+		boule_pause_focus = null
 	else:
 		get_viewport().gui_release_focus()
 
