@@ -1858,3 +1858,12 @@ msgstr "Bäckerei"
 
 msgid "Bring the cake to the birthday table at the square."
 msgstr "Bring die Torte zum Geburtstagstisch auf dem Platz."
+
+msgid "Stop outside the ice cream kiosk to collect the empty crates."
+msgstr "Halte vor dem Eiskiosk und hole die leeren Kisten ab."
+
+msgid "Take the empty crates west along Stationsallén to the van’s parking bay."
+msgstr "Fahre mit den leeren Kisten auf der Stationsallén nach Westen zum Stellplatz des Eiswagens."
+
+msgid "The ice cream depot received both empty crates."
+msgstr "Beide leeren Kisten sind im Eisdepot angekommen."

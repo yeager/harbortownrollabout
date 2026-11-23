@@ -1848,3 +1848,12 @@ msgstr "Panadería"
 
 msgid "Bring the cake to the birthday table at the square."
 msgstr "Lleva la tarta a la mesa de cumpleaños en la plaza."
+
+msgid "Stop outside the ice cream kiosk to collect the empty crates."
+msgstr "Para frente al quiosco de helados para recoger las cajas vacías."
+
+msgid "Take the empty crates west along Stationsallén to the van’s parking bay."
+msgstr "Lleva las cajas vacías hacia el oeste por Stationsallén hasta la plaza de aparcamiento del camión de helados."
+
+msgid "The ice cream depot received both empty crates."
+msgstr "Las dos cajas vacías han llegado al depósito de helados."

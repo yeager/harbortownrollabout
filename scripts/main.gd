@@ -270,6 +270,12 @@ const SERVICE_MESSAGES := ["Collect the car with a smoking bonnet.","Take the ca
 var recovery_leg := 0
 enum FlourStage { AT_SQUARE, ON_TRUCK, AT_BAKERY }
 var flour_stage := FlourStage.AT_SQUARE
+enum CrateStage { AT_KIOSK, IN_VAN, AT_DEPOT }
+var crate_stage := CrateStage.AT_KIOSK
+var ice_crates := Node3D.new()
+const CRATE_PICKUP := "Stop outside the ice cream kiosk to collect the empty crates."
+const CRATE_RETURN := "Take the empty crates west along Stationsallén to the van’s parking bay."
+const CRATE_DONE := "The ice cream depot received both empty crates."
 var flour_sacks := Node3D.new()
 const FLOUR_CURB := Vector3(-15,0,-3)
 const FLOUR_PICKUP := "Stop the flatbed at the square in the morning to collect flour."
@@ -770,6 +776,7 @@ func _process(delta: float) -> void:
 		if vehicle_index == BUS and not free_drive and bus_leg % 2 == 1:
 			_update_bus_stop_request(delta)
 		_update_flour_delivery()
+		_update_crate_return()
 		_update_arrival(delta)
 		route_timer -= delta
 		if route_timer<=0:
@@ -1155,6 +1162,7 @@ func _parcel_load() -> Vector2:
 	return load
 
 func _vehicle_payload() -> float:
+	if vehicle_index == ICE_CREAM and crate_stage == CrateStage.IN_VAN: return 4.0
 	if vehicle_index in PARCEL_VEHICLES:
 		return _parcel_load().x
 	if vehicle_index == RECOVERY and free_drive and flour_stage == FlourStage.ON_TRUCK:
@@ -7037,6 +7045,26 @@ func _update_hazard_lights() -> void:
 	for lens in hazard_lenses:
 		lens.material_override = hazard_amber if lit else null
 
+func _sync_ice_crates() -> void:
+	if not ice_crates.is_inside_tree(): return
+	var bay := _depot_bay(ICE_CREAM)
+	ice_crates.visible = crate_stage != CrateStage.IN_VAN
+	ice_crates.position = Vector3(bay.x-2.1,.04,bay.y) if crate_stage == CrateStage.AT_DEPOT else Vector3(shops.storefront_x(1)+1,.04,41)
+
+func _update_crate_return() -> void:
+	if not free_drive or vehicle_index != ICE_CREAM or walker.visible or boating or operating_excavator or tram_mode != 0 or ferry_passenger or absf(speed) >= .12: return
+	var bay := _depot_bay(ICE_CREAM)
+	if crate_stage == CrateStage.AT_KIOSK and ambulance.position.distance_to(Vector3(shops.storefront_x(1),0,37.5)) < 3.2:
+		crate_stage = CrateStage.IN_VAN
+		phone.receive(CRATE_RETURN)
+	elif crate_stage == CrateStage.IN_VAN and ambulance.position.distance_to(Vector3(bay.x,0,bay.y)) < 3:
+		crate_stage = CrateStage.AT_DEPOT
+		phone.receive(CRATE_DONE)
+	else: return
+	_sync_ice_crates()
+	_refresh_dispatch()
+	_save_preferences()
+
 func _update_flour_delivery() -> void:
 	if not free_drive or vehicle_index != RECOVERY or walker.visible or absf(speed) >= .12: return
 	if flour_stage == FlourStage.AT_SQUARE:
@@ -7190,6 +7218,18 @@ func _build_target_marker() -> void:
 	for shirt in [Color("#668d9c"),Color("#b37056")]:
 		_make_walker("Bus passenger",0,0,1,shirt,Color("#343c48"))
 		bus_companions.append(walker_data.pop_back().actor)
+	add_child(ice_crates)
+	for i in 2:
+		var level := Vector3.UP*i*.26
+		var plastic := Color("#367ea1")
+		_make_box("Crate floor",Vector3(.54,.028,.38),level,plastic,false,ice_crates)
+		for side in [-1,1]:
+			for corner in [-1,1]:
+				_make_box("Crate corner",Vector3(.03,.25,.03),level+Vector3(side*.255,.125,corner*.175),plastic,false,ice_crates)
+			for rail in [.06,.15,.24]:
+				_make_box("Crate side",Vector3(.54,.036,.025),level+Vector3(0,rail,side*.178),plastic,false,ice_crates)
+				_make_box("Crate end",Vector3(.025,.036,.38),level+Vector3(side*.258,rail,0),plastic,false,ice_crates)
+	_sync_ice_crates()
 	add_child(flour_sacks)
 	for i in 3:
 		var bag := MeshInstance3D.new()
@@ -9200,6 +9240,8 @@ func _load_player_progress(config: ConfigFile, section: String) -> void:
 	boutique_jacket = config.get_value(section,"boutique_jacket","")
 	shops.carried_toy = config.get_value(section,"carried_toy","")
 	wallet=maxi(0,int(config.get_value(section,"coins",0)))
+	crate_stage = clampi(int(config.get_value(section,"crate_return",0)),0,CrateStage.AT_DEPOT)
+	_sync_ice_crates()
 	flour_stage = clampi(int(config.get_value(section,"flour",0)),0,FlourStage.AT_BAKERY)
 	_sync_flour_sacks()
 	cake_stage = config.get_value(section,"birthday_cake",FootQuest.WAITING)
@@ -9240,6 +9282,7 @@ func _store_player_progress(config: ConfigFile, section: String) -> void:
 	config.set_value(section,"delivery_receipts",phone.delivery_receipts)
 	config.set_value(section,"stars",collected_stars)
 	config.set_value(section,"thermos",thermos_stage)
+	config.set_value(section,"crate_return",crate_stage)
 	config.set_value(section,"flour",flour_stage)
 	config.set_value(section,"birthday_cake",cake_stage)
 	config.set_value(section,"figurine",figurine_stage)
@@ -9436,6 +9479,9 @@ func _refresh_dispatch() -> void:
 	if free_drive or mode!="playing" or mission_index>=TARGETS.size():
 		last_dispatch=""
 		phone.current_job=""
+		if free_drive and vehicle_index == ICE_CREAM and crate_stage != CrateStage.AT_DEPOT:
+			phone.current_job = CRATE_PICKUP if crate_stage == CrateStage.AT_KIOSK else CRATE_RETURN
+			phone.vehicle_action = phone.Action.DELIVER
 		if free_drive and vehicle_index == RECOVERY and flour_stage != FlourStage.AT_BAKERY:
 			phone.current_job = FLOUR_PICKUP if flour_stage == FlourStage.AT_SQUARE else FLOUR_ROUTE
 			phone.vehicle_action = phone.Action.DELIVER
