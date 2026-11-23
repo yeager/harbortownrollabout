@@ -7520,6 +7520,11 @@ func _build_overlay() -> void:
 		_save_preferences()
 	)
 	pages[2].add_child(red_lights)
+	var signal_help := Label.new()
+	signal_help.text = "Red: stop. Orange: slow down. Green: go."
+	signal_help.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	signal_help.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	pages[2].add_child(signal_help)
 	preview_sound_button = _button("Preview vehicle sound", 300)
 	preview_sound_button.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	preview_sound_button.pressed.connect(_preview_sound)

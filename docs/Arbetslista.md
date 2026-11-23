@@ -126,11 +126,11 @@ Listan innehåller 100 jobb. En tom ruta är öppen. En punkt bockas av när bet
 
 - [ ] 91. Lägg till ett val att visa uppdragspilen med både riktning och gatunamn inför nästa sväng.
 - [ ] 92. Visa en bild av rätt dörr när spelaren står mellan två möjliga butiksentréer.
-- [x] 93. Ge trafikljushjälpen olika symboler för stanna och kör så att instruktionen går att följa i gråskala.
+- [x] 93. Visa stopp i förarhjälpen. Fordonssignalerna har tre runda linser i fast ordning: rött för stopp, orange för sakta in och grönt för kör.
 - [x] 94. Låt spelaren provlyssna på en kort replik direkt när talvolymen ändras i inställningarna.
 - [ ] 95. Lägg till ett bildstöd som visar var en avslagen radio slås på från förarplatsen.
 - [ ] 96. Prova hela vägen från startmenyn till ett köp och tillbaka med enbart tangentbord. Rätta de fokussteg som fastnar.
-- [ ] 97. Kontrollera att alla sju språk ryms på leveranskvittot i liten fönsterstorlek och med stor text.
+- [x] 97. Kontrollera att alla sju språk ryms på leveranskvittot i liten fönsterstorlek och med stor text.
 - [ ] 98. Låt pausmenyn visa det senaste uppdragssteget med samma bild som i telefonen.
 - [ ] 99. Mät bildtider på kajen medan färjan passerar och tre personer spelar boule. Jämför dag och natt från samma plats.
 - [ ] 100. Spela igenom en leverans från början till slut med musik och trafik igång. Anteckna exakt var en replik blir svår att höra och justera mixen där.

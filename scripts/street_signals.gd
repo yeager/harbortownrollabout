@@ -58,22 +58,47 @@ func _build_street_crossing(center: Vector3) -> void:
 
 func _vehicle_head(mast: Node3D, east_west: bool) -> Dictionary:
 	get_parent()._make_roadside_solid("Signal mast",Vector3(.12,3.7,.12),Vector3.UP*1.85,Color("#777e78"),false,mast)
-	get_parent()._make_box("Signal head",Vector3(.44,1.04,.26),Vector3(0,3.54,.1),Color("#242d2b"),false,mast)
+	if visor_mesh == null:
+		visor_mesh = _make_visor()
 	var lamps: Array = []
+	var colors := [Color("#ff2622"),Color("#ffab16"),Color("#15d279")]
 	for j in 3:
-		var lamp := lens(mast,Vector3(0,3.85-.31*j,.25),[Color.RED,Color.ORANGE,Color.LIME_GREEN][j])
-		lamps.append(lamp)
-		if j != 1:
-			var symbol := Label3D.new()
-			symbol.name = "StopSymbol" if j == 0 else "GoSymbol"
-			symbol.text = "■" if j == 0 else "▶"
-			symbol.pixel_size = .0036
-			symbol.outline_size = 0
-			symbol.modulate = Color("#101010")
-			symbol.double_sided = false
-			symbol.position.z = .132
-			lamp.add_child(symbol)
+		var pos := Vector3(0,3.85-.31*j,.25)
+		get_parent()._make_box("Signal housing",Vector3(.316,.308,.24),pos-Vector3.BACK*.13,
+			Color("#191b1b"),false,mast)
+		var glass := lens(mast,pos,colors[j])
+		glass.material_override = get_parent()._material(colors[j].darkened(.79),.33)
+		var visor := MeshInstance3D.new()
+		visor.mesh = visor_mesh
+		mast.add_child(visor)
+		visor.position = pos
+		var lit := lens(mast,pos+Vector3.BACK*.002,colors[j])
+		var finish := lit.material_override as StandardMaterial3D
+		finish.emission_enabled = false
+		finish.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+		lamps.append(lit)
 	return {"lamps":lamps,"east_west":east_west}
+
+var visor_mesh: ArrayMesh
+
+func _make_visor() -> ArrayMesh:
+	var surface := SurfaceTool.new()
+	surface.begin(Mesh.PRIMITIVE_TRIANGLES)
+	var finish: StandardMaterial3D = get_parent()._material(Color("#17191a"),.48)
+	finish.cull_mode = BaseMaterial3D.CULL_DISABLED
+	surface.set_material(finish)
+	# The lower half has a shallow rim, the upper half shelters the lens.
+	for i in 48:
+		var corners := PackedVector3Array()
+		for angle in [TAU*i/48, TAU*(i+1)/48]:
+			var radial := Vector3(cos(angle),sin(angle),0)
+			var depth := .032+.14*smoothstep(-.25,.70,radial.y)
+			corners.append(radial*.139-Vector3.BACK*.012)
+			corners.append(radial*.137+Vector3.BACK*depth)
+		for index in [0,2,1,1,2,3]:
+			surface.set_normal(Vector3(corners[index].x,corners[index].y,0).normalized())
+			surface.add_vertex(corners[index])
+	return surface.commit()
 
 func _add_crossing(center: Vector3, east_west: bool, pavement_offset := 5.45) -> Array[Dictionary]:
 	var signals: Array[Dictionary] = []

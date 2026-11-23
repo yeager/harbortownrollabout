@@ -1741,3 +1741,6 @@ msgstr "Seuraava pysäkki: %s"
 
 msgid "Return to town"
 msgstr "Takaisin kaupunkiin"
+
+msgid "Red: stop. Orange: slow down. Green: go."
+msgstr "Punainen: pysähdy. Oranssi: hidasta. Vihreä: aja."

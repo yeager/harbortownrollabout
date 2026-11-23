@@ -1675,3 +1675,6 @@ msgstr "Nästa hållplats: %s"
 
 msgid "Return to town"
 msgstr "Tillbaka till staden"
+
+msgid "Red: stop. Orange: slow down. Green: go."
+msgstr "Rött: stanna. Orange: sakta in. Grönt: kör."

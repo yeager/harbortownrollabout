@@ -1760,3 +1760,6 @@ msgstr "Prochain arrêt : %s"
 
 msgid "Return to town"
 msgstr "Retour en ville"
+
+msgid "Red: stop. Orange: slow down. Green: go."
+msgstr "Rouge : arrête-toi. Orange : ralentis. Vert : avance."

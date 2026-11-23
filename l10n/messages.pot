@@ -1674,3 +1674,6 @@ msgstr ""
 
 msgid "Return to town"
 msgstr ""
+
+msgid "Red: stop. Orange: slow down. Green: go."
+msgstr ""
