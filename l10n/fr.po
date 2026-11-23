@@ -1763,3 +1763,6 @@ msgstr "Retour en ville"
 
 msgid "Red: stop. Orange: slow down. Green: go."
 msgstr "Rouge : arrête-toi. Orange : ralentis. Vert : avance."
+
+msgid "Delivery receipts"
+msgstr "Reçus de livraison"

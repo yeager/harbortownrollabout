@@ -1677,3 +1677,6 @@ msgstr ""
 
 msgid "Red: stop. Orange: slow down. Green: go."
 msgstr ""
+
+msgid "Delivery receipts"
+msgstr ""

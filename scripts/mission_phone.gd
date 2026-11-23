@@ -7,6 +7,9 @@ var large_text := false
 var recovery_hint := Label.new()
 var handset := PanelContainer.new()
 var messages: Array[String] = []
+var delivery_receipts := PackedStringArray()
+var receipt_menu := MenuButton.new()
+var receipt_dialog := AcceptDialog.new()
 var job_heading := Label.new()
 const FOOT_PICTURES := {
 	"Find the red shoe on the pavement.": 0,
@@ -34,6 +37,8 @@ var spoken_locale := ""
 var spoken_jobs := PackedStringArray()
 var take_job := Button.new()
 
+const CLINIC_RECEIPT := "The clinic received its parcel. You earned 10 points and 10 coins."
+const MARINA_RECEIPT := "The marina received the last parcel. You earned 10 points and 10 coins."
 const HISTORY_LIMIT := 32
 
 const SOCIAL := [
@@ -129,6 +134,22 @@ func _ready() -> void:
 	content.add_child(repeat_job)
 	job_voice.bus = &"Speech"
 	add_child(job_voice)
+	receipt_menu.text = "Delivery receipts"
+	content.add_child(receipt_menu)
+	add_child(receipt_dialog)
+	receipt_dialog.title = "Delivery receipts"
+	receipt_menu.about_to_popup.connect(func():
+		var menu := receipt_menu.get_popup()
+		menu.clear()
+		for i in range(delivery_receipts.size()-1,-1,-1):
+			var destination := "HEALTH CENTRE" if delivery_receipts[i] == CLINIC_RECEIPT else "MARINA"
+			menu.add_item("%d · %s" % [i+1,tr(destination)],i)
+	)
+	receipt_menu.get_popup().id_pressed.connect(func(id: int):
+		receipt_dialog.dialog_text = tr(delivery_receipts[id])
+		receipt_dialog.get_label().add_theme_font_size_override("font_size",22 if large_text else 16)
+		receipt_dialog.popup_centered()
+	)
 	content.add_child(history_scroll)
 	inbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	history_scroll.add_child(inbox)
@@ -247,6 +268,7 @@ func _show_action_rows(jobs: PackedStringArray) -> void:
 		action_rows.add_child(row)
 
 func refresh() -> void:
+	receipt_menu.visible = not delivery_receipts.is_empty()
 	open_button.text = tr("Close phone · %s" if handset.visible else "Phone · %s") % OS.get_keycode_string(toggle_key)
 	if unread>0: open_button.text+="  (%d)" % unread
 	var lines:=PackedStringArray()

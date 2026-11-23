@@ -1532,7 +1532,7 @@ func _delivery_receipt() -> String:
 	elif vehicle_index == ICE_CREAM:
 		return "Ice cream served! You earned 10 points and 10 coins."
 	elif _vehicle_tasks() == DELIVERY_TASKS:
-		return ["Two parcels collected at the square. You earned 10 points and 10 coins.", "The clinic received its parcel. You earned 10 points and 10 coins.", "The marina received the last parcel. You earned 10 points and 10 coins."][mission_index-1]
+		return ["Two parcels collected at the square. You earned 10 points and 10 coins.", phone.CLINIC_RECEIPT, phone.MARINA_RECEIPT][mission_index-1]
 	return "Thank you for helping! You earned 10 points and 10 coins."
 
 func _empty_refuse_bin(stop: int) -> void:
@@ -1650,7 +1650,10 @@ func _help_at_target(ice_choice := -1) -> void:
 		mission_index += 1
 		if vehicle_index == ICE_CREAM:
 			_honk()
-		phone.receive(_delivery_receipt())
+		var receipt := _delivery_receipt()
+		if receipt in [phone.CLINIC_RECEIPT, phone.MARINA_RECEIPT]:
+			phone.delivery_receipts.append(receipt)
+		phone.receive(receipt)
 		_reward_delivery(10)
 		speed = 0.0
 		message = "Mission complete. Well done!"
@@ -8263,6 +8266,12 @@ func _load_player_progress(config: ConfigFile, section: String) -> void:
 	wallet=maxi(0,int(config.get_value(section,"coins",0)))
 	foot_quest_points = maxi(0, int(config.get_value(section, "foot_quest_points", 0)))
 	delivery_points = maxi(0, int(config.get_value(section, "delivery_points", 0)))
+	var saved_receipts = config.get_value(section,"delivery_receipts",PackedStringArray())
+	phone.delivery_receipts.clear()
+	if saved_receipts is PackedStringArray:
+		for receipt in saved_receipts:
+			if receipt in [phone.CLINIC_RECEIPT,phone.MARINA_RECEIPT]:
+				phone.delivery_receipts.append(receipt)
 	var saved_memories = config.get_value(section,"mission_memories",PackedStringArray())
 	mission_memories = saved_memories if saved_memories is PackedStringArray else PackedStringArray()
 	var saved_stars = config.get_value(section, "stars", PackedStringArray())
@@ -8275,6 +8284,7 @@ func _store_player_progress(config: ConfigFile, section: String) -> void:
 	config.set_value(section, "road_checkpoint", road_checkpoint)
 	config.set_value(section,"coins",wallet)
 	config.set_value(section,"mission_memories",mission_memories)
+	config.set_value(section,"delivery_receipts",phone.delivery_receipts)
 	config.set_value(section,"stars",collected_stars)
 	config.set_value(section, "foot_quest_points", foot_quest_points)
 	config.set_value(section, "delivery_points", delivery_points)

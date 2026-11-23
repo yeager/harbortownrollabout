@@ -1744,3 +1744,6 @@ msgstr "Takaisin kaupunkiin"
 
 msgid "Red: stop. Orange: slow down. Green: go."
 msgstr "Punainen: pysähdy. Oranssi: hidasta. Vihreä: aja."
+
+msgid "Delivery receipts"
+msgstr "Toimituskuitit"
