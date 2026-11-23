@@ -45,7 +45,7 @@ De 50 förbättringarna från genomgången. En tom ruta är öppen. En punkt boc
 
 - [ ] 31. Betygsätt modeller mot jämförbara bilder av silhuett, proportioner, material, interiör och funktion.
   - Midsommarstång, jämförd med de tre inskickade fotografierna och en Godot-rendering från marknivå. Silhuett 96, proportioner 94, material/färg 90, detaljer 93, årstidsfunktion 100. Interiör ej tillämplig. Medel 95/100 efter att tvärslån och girlanderna fått nedhängande kvistar. Närbilden visar nu sågtandade blad och vikt mittnerv. Kransens kvistar och blommor är fortfarande mer regelbundna än på fotografiet.
-- [ ] 32. Granska Axel och Alma från sidan under en hel gångcykel och rätta anatomiska avvikelser.
+- [ ] 32. Granska Axel och Alma från sidan under en hel gångcykel och rätta anatomiska avvikelser. Sidovyer av båda figurerna vid åtta jämnt fördelade faser finns i [gångstudien](player-walk-side.png). Godots gångtest verifierar hälisättning, tåfrånskjut och kontakter under gång och löpning.
 - [x] 33. Kontrollera och förbättra handgrepp om ratt, styre, hundkoppel och kasse.
 - [x] 34. Animera shoppingmopedens sidoinsteg, kroppsvridning och fötter in under styret.
 - [x] 35. Låt hundkopplet slacka och sträckas gradvis när avståndet ändras.
