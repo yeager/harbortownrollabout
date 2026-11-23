@@ -126,4 +126,29 @@ for i in range(13):
 for x in (-.37,.37):
     rod("Mounting arm",(x,.02,.35),(x,.72,.64),.066,frame)
     rod("Hydraulic ram",(x,.05,.64),(x,.64,.52),.043,steel)
+# Rear trip springs sit between brackets welded to the mouldboard.
+for x in (-.99,-.78,.78,.99):
+    for z in (.29,.65):
+        box("Spring anchor",(x,.10,z),(.115,.22,.035),frame,.009)
+    coil = bpy.data.curves.new("Trip spring wire", 'CURVE')
+    coil.dimensions = '3D'
+    coil.bevel_depth = .009
+    coil.bevel_resolution = 2
+    helix = coil.splines.new('POLY')
+    helix.points.add(96)
+    for i, point in enumerate(helix.points):
+        t = i/96
+        angle = 8*math.tau*t
+        point.co = (x+.034*math.cos(angle),.16+.034*math.sin(angle),.30+.34*t,1)
+    coil.materials.append(steel)
+    bpy.context.collection.objects.link(bpy.data.objects.new("Trip spring",coil))
+
+lens = finish("Work lamp lens",(.92,.96,1),0,.24)
+shader = lens.node_tree.nodes.get("Principled BSDF")
+shader.inputs["Emission Color"].default_value = (.86,.94,1,1)
+shader.inputs["Emission Strength"].default_value = 1.6
+for x in (-1.28,1.28):
+    rod("Lamp stalk",(x,.02,.84),(x,.055,.98),.019,frame)
+    box("Work lamp housing",(x,.046,1.0),(.148,.086,.097),rubber,.018)
+    box("Work lamp diffuser",(x,-.001,1.0),(.118,.013,.072),lens,.006)
 export("tractor_snow_blade")
