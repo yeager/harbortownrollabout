@@ -541,6 +541,7 @@ var boule_seated := false
 var boule_guest_turn := false
 var boule_choices := VBoxContainer.new()
 var boule_aim := HSlider.new()
+var boule_throw_buttons := HBoxContainer.new()
 var boule_throw_length := -1
 var boule_pause_focus: Control
 const BOULE_CENTRE := Vector3(94.9, 0, 69)
@@ -894,6 +895,7 @@ func _notification(what: int) -> void:
 	if what == NOTIFICATION_TRANSLATION_CHANGED and is_node_ready():
 		if bubble_time > 0 and not speech_key.is_empty() and speech_locale != TranslationServer.get_locale():
 			_say(greeting.get_parent(), speech_key, speech_clip)
+		_translate_boule_controls()
 		renderer_choices.accessibility_name = tr("Graphics mode")
 		game_volume_slider.accessibility_name = tr("Game volume")
 		traffic_volume_slider.accessibility_name = tr("Traffic sirens")
@@ -4738,14 +4740,11 @@ func _build_boule_choices() -> void:
 		if boule_guest_turn:
 			walker.rotation.y = -atan2(offset,8)
 	)
-	var row := HBoxContainer.new()
-	boule_choices.add_child(row)
+	boule_choices.add_child(boule_throw_buttons)
 	for index in 3:
 		var button := Button.new()
 		button.custom_minimum_size = Vector2(76,54)
-		row.add_child(button)
-		button.tooltip_text = tr(["Short throw","Medium throw","Long throw"][index])
-		button.accessibility_name = button.tooltip_text
+		boule_throw_buttons.add_child(button)
 		button.draw.connect(func():
 			var span := 24.0+index*17
 			var points := PackedVector2Array()
@@ -4761,11 +4760,17 @@ func _build_boule_choices() -> void:
 				boule_choices.hide()
 		)
 	# Keep keyboard navigation on the four controls for the current throw.
-	var last_throw := row.get_child(-1) as Button
+	var last_throw := boule_throw_buttons.get_child(-1) as Button
 	last_throw.focus_next = last_throw.get_path_to(boule_aim)
 	boule_aim.focus_previous = boule_aim.get_path_to(last_throw)
-	boule_aim.accessibility_name = "Aim at the jack"
+	_translate_boule_controls()
 	boule_choices.hide()
+
+func _translate_boule_controls() -> void:
+	boule_aim.accessibility_name = tr("Aim at the jack")
+	for button: Button in boule_throw_buttons.get_children():
+		button.tooltip_text = tr(["Short throw","Medium throw","Long throw"][button.get_index()])
+		button.accessibility_name = button.tooltip_text
 
 func _near_boule_ring() -> bool:
 	return walker.visible and not scooter.visible and tram_mode == 0 and not ferry_passenger and not operating_excavator and walker.position.distance_to(BOULE_CENTRE+Vector3.BACK*4) < 3.2
