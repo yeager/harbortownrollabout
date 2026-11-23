@@ -1832,3 +1832,9 @@ msgstr "Espace poussettes"
 
 msgid "FIRE AND RESCUE"
 msgstr "SAPEURS-POMPIERS"
+
+msgid "Bring the moon rabbit to the clothing shop counter."
+msgstr "Rapporte le lapin lunaire au comptoir du magasin de vêtements."
+
+msgid "Thank you! Our moon rabbit is back!"
+msgstr "Merci ! Notre lapin lunaire est de retour !"

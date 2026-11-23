@@ -1834,3 +1834,9 @@ msgstr "Kinderwagenplatz"
 
 msgid "FIRE AND RESCUE"
 msgstr "FEUERWEHR"
+
+msgid "Bring the moon rabbit to the clothing shop counter."
+msgstr "Bring den Mondhasen zur Theke im Kleiderladen."
+
+msgid "Thank you! Our moon rabbit is back!"
+msgstr "Danke! Unser Mondhase ist wieder da!"

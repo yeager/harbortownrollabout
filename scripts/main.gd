@@ -551,6 +551,11 @@ const THERMOS_REQUEST := "I lost my green flask after the boule match. Could you
 const THERMOS_RETURN := "Bring the flask back to the boule player in the green jacket."
 const UMBRELLA_RETURN := "Bring the umbrella to the passenger in the yellow jacket at Lotten’s landing."
 var umbrella_stage := FootQuest.WAITING
+const FIGURINE_RETURN := "Bring the moon rabbit to the clothing shop counter."
+const FIGURINE_THANKS := "Thank you! Our moon rabbit is back!"
+var figurine_stage := FootQuest.WAITING
+var lost_figurine: Node3D
+var boutique_owner: Node3D
 var umbrella_owner: Node3D
 var umbrella := Node3D.new()
 var canopy := Node3D.new()
@@ -5510,7 +5515,39 @@ func _build_pedestrians() -> void:
 		walker_data.back().actor.position.y = _foot_height(start_x+27+i*4,pavement_z)
 
 	_build_lost_umbrella()
+	var boutique_x := shops.storefront_x(5)
+	_make_walker("Boutique owner",boutique_x,48.55,1,Color("#685284"),Color("#48515c"))
+	boutique_owner = walker_data.pop_back().actor
+	boutique_owner.rotation.y = 0
+	lost_figurine = shops._boutique_toy(Vector3.ZERO,true)
+	_place_lost_figurine()
 	_build_boule_court()
+
+func _place_lost_figurine() -> void:
+	if not is_instance_valid(lost_figurine): return
+	var holder: Node3D = shops
+	var position_in_holder := Vector3(shops.storefront_x(3),.025,40.8)
+	if figurine_stage == FootQuest.RETURNING:
+		holder = walker.get_meta("arms")[1].get_child(1)
+		position_in_holder = PALM_GRIP
+	elif figurine_stage == FootQuest.FINISHED:
+		position_in_holder = Vector3(shops.storefront_x(5)-.6,1.07,47.6)
+	if lost_figurine.get_parent() != holder:
+		lost_figurine.reparent(holder,false)
+	lost_figurine.position = position_in_holder
+
+func _update_lost_figurine() -> void:
+	if not walker.visible or ferry_passenger or tram_mode != 0: return
+	if figurine_stage == FootQuest.WAITING and walker.global_position.distance_to(lost_figurine.global_position) < 1.4:
+		figurine_stage = FootQuest.RETURNING
+		phone.receive(FIGURINE_RETURN)
+	elif figurine_stage == FootQuest.RETURNING and shops.inside == 5 and walker.position.distance_to(boutique_owner.position) < 2.4:
+		figurine_stage = FootQuest.FINISHED
+		_say(boutique_owner,FIGURINE_THANKS,"figurine_returned")
+	else: return
+	_place_lost_figurine()
+	_refresh_dispatch()
+	_save_preferences()
 
 func _build_lost_umbrella() -> void:
 	_make_walker("Waiting umbrella owner",54,-14,1,Color("#e8ae36"),Color("#454657"))
@@ -6343,6 +6380,7 @@ func _update_pedestrians(delta: float) -> void:
 	_update_shoe_quest(delta)
 	_update_thermos()
 	_update_lost_umbrella(delta)
+	_update_lost_figurine()
 	_update_cat_quest(delta)
 	_update_search_hints()
 	_update_pet_jobs()
@@ -9020,6 +9058,9 @@ func _load_player_progress(config: ConfigFile, section: String) -> void:
 	boutique_jacket = config.get_value(section,"boutique_jacket","")
 	shops.carried_toy = config.get_value(section,"carried_toy","")
 	wallet=maxi(0,int(config.get_value(section,"coins",0)))
+	figurine_stage = config.get_value(section,"figurine",FootQuest.WAITING)
+	if figurine_stage not in [FootQuest.RETURNING,FootQuest.FINISHED]: figurine_stage = FootQuest.WAITING
+	_place_lost_figurine()
 	umbrella_stage = config.get_value(section,"umbrella",FootQuest.WAITING)
 	if umbrella_stage not in [FootQuest.RETURNING,FootQuest.FINISHED]: umbrella_stage = FootQuest.WAITING
 	_place_umbrella()
@@ -9052,6 +9093,7 @@ func _store_player_progress(config: ConfigFile, section: String) -> void:
 	config.set_value(section,"delivery_receipts",phone.delivery_receipts)
 	config.set_value(section,"stars",collected_stars)
 	config.set_value(section,"thermos",thermos_stage)
+	config.set_value(section,"figurine",figurine_stage)
 	config.set_value(section,"umbrella",umbrella_stage)
 	config.set_value(section, "foot_quest_points", foot_quest_points)
 	config.set_value(section, "delivery_points", delivery_points)
@@ -9227,6 +9269,7 @@ func _refresh_dispatch() -> void:
 		for i in 2:
 			if pet_stages[i] == FootQuest.SEARCHING: phone.foot_jobs.append(PET_REQUESTS[i])
 		if pet_stages[0] == FootQuest.RETURNING: phone.foot_jobs.append("Bring the ball back to the dog.")
+		if figurine_stage == FootQuest.RETURNING: phone.foot_jobs.append(FIGURINE_RETURN)
 		if umbrella_stage == FootQuest.RETURNING: phone.foot_jobs.append(UMBRELLA_RETURN)
 		if thermos_stage == FootQuest.SEARCHING: phone.foot_jobs.append(THERMOS_REQUEST)
 		if thermos_stage == FootQuest.RETURNING: phone.foot_jobs.append(THERMOS_RETURN)

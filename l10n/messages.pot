@@ -1746,3 +1746,9 @@ msgstr ""
 
 msgid "FIRE AND RESCUE"
 msgstr ""
+
+msgid "Bring the moon rabbit to the clothing shop counter."
+msgstr ""
+
+msgid "Thank you! Our moon rabbit is back!"
+msgstr ""

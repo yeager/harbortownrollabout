@@ -1747,3 +1747,9 @@ msgstr "Barnvagnsplats"
 
 msgid "FIRE AND RESCUE"
 msgstr "RÄDDNINGSTJÄNSTEN"
+
+msgid "Bring the moon rabbit to the clothing shop counter."
+msgstr "Ta med månkaninen till disken i klädbutiken."
+
+msgid "Thank you! Our moon rabbit is back!"
+msgstr "Tack! Vår månkanin är tillbaka!"

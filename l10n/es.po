@@ -1824,3 +1824,9 @@ msgstr "Zona de carritos"
 
 msgid "FIRE AND RESCUE"
 msgstr "BOMBEROS"
+
+msgid "Bring the moon rabbit to the clothing shop counter."
+msgstr "Lleva el conejo lunar al mostrador de la tienda de ropa."
+
+msgid "Thank you! Our moon rabbit is back!"
+msgstr "¡Gracias! ¡Nuestro conejo lunar ha vuelto!"
