@@ -915,17 +915,29 @@ def make_fire_engine():
                            .100,PAINT_WHITE,-side,root)
         xs=[vertex.co.x for vertex in lettering.data.vertices]
         lettering.location.y-=side*(min(xs)+max(xs))*.5
-        for z in (1.94,2.34):
-            cube("Mirror support arm",(side*1.173,-2.615,z),(.210,.035,.033),BLACK,.011,root)
-        housing=[]
-        for z,w,d in [(1.912,.044,.034),(1.94,.084,.054),(2.03,.090,.067),
-                      (2.23,.096,.068),(2.35,.087,.059),(2.375,.061,.041)]:
-            housing.append([(side*(1.286+w*math.cos(i*math.tau/24)),
-                             -2.608+d*math.sin(i*math.tau/24),z) for i in range(24)])
-        profile_loft("Two-part mirror housing",housing,BLACK,root)
-        for z,h in [(2.211,.235),(2.028,.102)]:
-            cube("Mirror glass seal",(side*1.286,-2.556,z),(.155,.033,h+.019),RUBBER,.012,root)
-            cube("Mirror glass",(side*1.286,-2.534,z),(.140,.015,h),GLASS,.006,root)
+        for z in (1.93,2.36):
+            cube("Mirror bracket foot",(side*1.09,-2.56,z),(.085,.135,.084),RUBBER,.023,root)
+            bracket=cube("Swept mirror bracket",(side*1.22,-2.60,z),(.29,.048,.042),BLACK,.014,root)
+            bracket.rotation_euler.z=-side*.25
+        cube("Mirror carrier",(side*1.34,-2.64,2.15),(.046,.052,.49),BLACK,.016,root)
+        for label,z,w,h,tilt,bulge in (("Main",2.245,.213,.305,.035,.006),
+                                       ("Wide angle",1.987,.203,.145,.29,.017)):
+            # Convex glass and its lip share an outline, tilted towards the driver.
+            def mirror_ring(scale, depth):
+                ring=[]
+                for i in range(40):
+                    c=math.cos(math.tau*i/40)
+                    sn=math.sin(math.tau*i/40)
+                    x=w*.5*scale*math.copysign(abs(c)**.51,c)
+                    v=h*.5*scale*math.copysign(abs(sn)**.51,sn)
+                    y=depth+.17*x
+                    ring.append((side*(1.345+x),-2.635+y*math.cos(tilt)+v*math.sin(tilt),
+                                 z+v*math.cos(tilt)-y*math.sin(tilt)))
+                return ring
+            profile_loft(label+" mirror shell",[mirror_ring(k,d) for k,d in
+                         ((.60,-.084),(.90,-.074),(1,-.043),(1,.035),(.95,.048))],BLACK,root)
+            profile_loft(label+" mirror glass",[mirror_ring(k,d) for k,d in
+                         ((.88,.049),(.70,.050+bulge*.5),(.38,.050+bulge*.9),(.04,.050+bulge))],METAL,root)
         for y in (-1.65,-.833):
             cube("Crew door handle",(side*1.134,y,1.691),(.024,.120,.033),BLACK,.009,root)
         # Wiper blades parked along the lower sweep of the panoramic screen.
