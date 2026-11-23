@@ -36,6 +36,19 @@ func check_scooters() -> void:
 		if not grips_aligned(rider, game.scooter):
 			quit(1)
 			return
+		var saved_pose := rider.transform
+		game._save_checkpoint()
+		game.queue_free()
+		await process_frame
+		game = load("res://main.tscn").instantiate()
+		root.add_child(game)
+		game._resume_road_checkpoint()
+		game.traffic_data.clear()
+		rider = game.walker
+		if not game.scooter.visible or not rider.transform.is_equal_approx(saved_pose) or not grips_aligned(rider, game.scooter):
+			printerr("Mounted rider or deck height lost after restart")
+			quit(1)
+			return
 		var start := rider.position
 		for frame in 60:
 			game.scooter.ride(game,1.0,0.0,1.0/60.0)

@@ -1,0 +1,45 @@
+extends SceneTree
+
+func _initialize() -> void:
+	call_deferred("check_routes")
+
+func check_routes() -> void:
+	var scene := preload("res://main.tscn")
+	var game = scene.instantiate()
+	root.add_child(game)
+	for vehicle in [0, 1, 2, 3, game.XC60_POLICE, game.FARM_TRACTOR, game.FOOD_TRUCK, game.SNOWMOBILE]:
+		game._on_vehicle_selected(vehicle)
+		game.start_button.pressed.emit()
+		game.phone.take_job.pressed.emit()
+		var balance: int = game.wallet
+		var points: int = game.delivery_points
+		for step in game.TARGETS.size():
+			var target: Vector3 = game._mission_destination()
+			var instruction: String = game.phone.current_job
+			game._save_checkpoint()
+			game.queue_free()
+			await process_frame
+			game = scene.instantiate()
+			root.add_child(game)
+			game.find_child("ResumeCheckpoint", true, false).pressed.emit()
+			if game.vehicle_index != vehicle or game.mission_index != step or game._mission_destination() != target or game.phone.current_job != instruction:
+				printerr("Lost instruction or destination for vehicle ", vehicle, " step ", step)
+				quit(1)
+				return
+			game.ambulance.position = target
+			game._help_at_target()
+			if game.wallet != balance + 10 * (step + 1) or game.delivery_points != points + 10 * (step + 1):
+				printerr("Incorrect reward after restart for vehicle ", vehicle, " step ", step)
+				quit(1)
+				return
+		if game.mode != "complete":
+			printerr("Route did not finish for vehicle ", vehicle)
+			quit(1)
+			return
+		game._save_checkpoint()
+		game.queue_free()
+		await process_frame
+		game = scene.instantiate()
+		root.add_child(game)
+	print("Resumed and completed all 24 steps across eight mission vehicles.")
+	quit()

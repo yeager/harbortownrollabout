@@ -32,6 +32,17 @@ func check_crossings() -> void:
 			printerr("Passenger stepped off over open water from landing ", departure)
 			quit(1)
 			return
+		var deck_position: Vector3 = game.walker.position
+		game._save_checkpoint()
+		game.queue_free()
+		await process_frame
+		game = load("res://main.tscn").instantiate()
+		root.add_child(game)
+		game._resume_road_checkpoint()
+		if not game.ferry_passenger or not game.ferry_exit_requested or not game.walker.position.is_equal_approx(deck_position):
+			printerr("Lost passenger position or requested landing during restart")
+			quit(1)
+			return
 		game._update_moorings(19.0)
 		if game.ferry_passenger or game._near_ferry_landing() != 1 - departure:
 			printerr("Requested exit did not reach the opposite pier")

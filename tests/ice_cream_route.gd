@@ -15,7 +15,24 @@ func check_route() -> void:
 		return
 	game.phone.take_job.pressed.emit()
 	var starting_balance: int = game.wallet
+	var starting_points: int = game.delivery_points
 	for leg in game.ICE_STOPS.size():
+		if leg > 0:
+			game._save_checkpoint()
+			game.queue_free()
+			await process_frame
+			game = load("res://main.tscn").instantiate()
+			root.add_child(game)
+			var resume = game.find_child("ResumeCheckpoint", true, false)
+			if not resume:
+				printerr("Missing saved ice cream route")
+				quit(1)
+				return
+			resume.pressed.emit()
+			if game.mission_index != leg or game.delivery_points != starting_points + 10 * leg or game.wallet != starting_balance + 10 * leg:
+				printerr("Incorrect reward or next customer after reopening")
+				quit(1)
+				return
 		var curb: Vector3 = game._stop_curb(game.ICE_STOPS[leg])
 		if not game.passenger.visible or not game._mission_destination().is_equal_approx(Vector3(curb.x, game._surface_height(curb.x,curb.z), curb.z)):
 			printerr("Missing ice cream customer or incorrect stop ", leg)

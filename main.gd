@@ -363,6 +363,7 @@ var overlay_panel: PanelContainer
 var brand_logo := TextureRect.new()
 var title_label: Label
 var subtitle_label: Label
+var road_checkpoint := {}
 var start_button: Button
 var preview_sound_button: Button
 var light_button: Button
@@ -605,7 +606,47 @@ func _process(delta: float) -> void:
 	weather.position = camera.position + Vector3.UP*8
 	_refresh_status()
 
+func _save_checkpoint() -> void:
+	if mode == "complete":
+		road_checkpoint.clear()
+		_save_preferences()
+		return
+	if mode == "playing":
+		road_checkpoint.clear()
+		road_checkpoint = {
+			"vehicle": vehicle_index, "position": ambulance.global_position,
+			"heading": ambulance.rotation.y, "mission": mission_index,
+			"recovery": recovery_leg, "taxi": taxi_leg, "bus": bus_leg,
+			"free_drive": free_drive, "progress": vehicle_progress.duplicate()
+		}
+		if tram_mode != 0:
+			road_checkpoint["tram"] = {
+				"mode": tram_mode, "distance": tram.distance, "next_stop": tram.next_stop,
+				"dwell": tram.dwell, "parked": not ambulance.visible
+			}
+		elif operating_excavator:
+			road_checkpoint["excavator"] = {
+				"base": excavator.transform, "slew": cab_turntable.rotation.y,
+				"arm": Vector3(boom_joint.rotation.x, stick_joint.rotation.x, bucket_joint.rotation.x)
+			}
+		elif boating:
+			road_checkpoint["launch_transform"] = launch.transform
+		elif walker.visible:
+			road_checkpoint["walk_position"] = walker.position
+			road_checkpoint["walk_heading"] = walker.rotation.y
+			road_checkpoint["door_offset"] = parked_door_offset
+			road_checkpoint["scooter"] = scooter.visible
+			if ferry_passenger:
+				road_checkpoint["ferry_time"] = wave_time
+				road_checkpoint["exit_at_landing"] = ferry_exit_requested
+		road_checkpoint["quests"] = {
+			"shoe": shoe_quest, "cat": cat_quest, "shoe_owner": shoe_owner.position,
+			"cat_owner": cat_owner.position, "lost_cat": lost_cat.position
+		}
+		_save_preferences()
+
 func _finish_quit() -> void:
+	_save_checkpoint()
 	var tree := get_tree()
 	# Release the game's audio players before the audio server shuts down.
 	for player in find_children("*", "AudioStreamPlayer", true, false):
@@ -4827,6 +4868,13 @@ func _say(speaker: Node3D, phrase: String, clip: String) -> void:
 			greeting_voice.stream_paused = paused
 	greeting_timer = maxf(7.5, bubble_time)
 
+func _hold_lost_shoe() -> void:
+	var hand: Node3D = walker.get_meta("arms")[1].get_child(1)
+	lost_shoe.reparent(hand, false)
+	lost_shoe.scale = Vector3.ONE * .56
+	lost_shoe.rotation.x = -.85
+	lost_shoe.position = Vector3(.035,-.105,-.08)
+
 func _update_shoe_quest(delta: float) -> void:
 	if not walker.visible or shops.inside >= 0 or shoe_quest == FootQuest.FINISHED:
 		return
@@ -4852,11 +4900,7 @@ func _update_shoe_quest(delta: float) -> void:
 		FootQuest.SEARCHING:
 			if walker.position.distance_to(lost_shoe.position) < 1.6:
 				shoe_quest = FootQuest.RETURNING
-				var hand: Node3D = walker.get_meta("arms")[1].get_child(1)
-				lost_shoe.reparent(hand, false)
-				lost_shoe.scale = Vector3.ONE * .56
-				lost_shoe.rotation.x = -.85
-				lost_shoe.position = Vector3(.035,-.105,-.08)
+				_hold_lost_shoe()
 				star_chime.play()
 				_refresh_dispatch()
 				phone.receive("Bring the red shoe back to the neighbour.")
@@ -6106,6 +6150,14 @@ func _build_overlay() -> void:
 	box.add_child(menu_actions)
 	menu_actions.add_child(settings_toggle)
 	menu_actions.add_child(start_button)
+	if not road_checkpoint.is_empty():
+		var resume := _button("Resume", 160)
+		resume.name = "ResumeCheckpoint"
+		menu_actions.add_child(resume)
+		resume.pressed.connect(_resume_road_checkpoint)
+		resume.visibility_changed.connect(func():
+			if mode != "menu" and resume.visible: resume.hide()
+		)
 	var quit_button := _button("Quit game · F10", 220)
 	menu_actions.add_child(quit_button)
 	quit_button.pressed.connect(_request_quit)
@@ -6519,6 +6571,85 @@ func _starting_position() -> Vector3:
 			best_x = x
 	return Vector3(best_x, _surface_height(best_x, lane), lane)
 
+func _resume_road_checkpoint() -> void:
+	if mode != "menu" or road_checkpoint.is_empty():
+		return
+	_on_vehicle_selected(road_checkpoint.vehicle)
+	if road_checkpoint.has("tram"):
+		_select_gallery_activity(road_checkpoint.tram.mode + 1)
+	elif road_checkpoint.has("launch_transform"):
+		_select_gallery_activity(4)
+	elif road_checkpoint.has("excavator"):
+		var pose: Dictionary = road_checkpoint.excavator
+		excavator.transform = pose.base
+		cab_turntable.rotation.y = pose.slew
+		boom_joint.rotation.x = pose.arm.x
+		stick_joint.rotation.x = pose.arm.y
+		bucket_joint.rotation.x = pose.arm.z
+		building_bounds[excavator_wall] = _crawler_bounds()
+		start_in_excavator = true
+	_start_game()
+	if boating:
+		launch.transform = road_checkpoint.launch_transform
+	ambulance.global_position = road_checkpoint.position
+	ambulance.rotation.y = road_checkpoint.heading
+	free_drive = road_checkpoint.free_drive
+	mission_index = road_checkpoint.mission
+	recovery_leg = road_checkpoint.recovery
+	taxi_leg = road_checkpoint.taxi
+	bus_leg = road_checkpoint.bus
+	vehicle_progress = road_checkpoint.progress.duplicate()
+	if tram_mode != 0:
+		var trip: Dictionary = road_checkpoint.tram
+		tram.stop_at_station(posmod(trip.next_stop - 1, tram.stops.size()))
+		tram.distance = trip.distance
+		tram.dwell = trip.dwell
+		tram.place_sections()
+		tram.advance(0, tram_mode == 2, false, false)
+		if trip.parked:
+			parked_cars[vehicle_index].transform = ambulance.transform
+			parked_cars[vehicle_index].show()
+			ambulance.hide()
+		if tram_mode == 1:
+			listener.reparent(tram.sections[1], false)
+			listener.position = Vector3.UP * 1.6
+	if road_checkpoint.has("walk_position"):
+		parked_cars[vehicle_index].transform = ambulance.transform
+		parked_cars[vehicle_index].show()
+		ambulance.hide()
+		walker.position = road_checkpoint.walk_position
+		walker.rotation.y = road_checkpoint.walk_heading
+		walk_basis = walker.basis
+		parked_door_offset = road_checkpoint.door_offset
+		walker.show()
+		listener.reparent(walker, false)
+		listener.transform = Transform3D(Basis.IDENTITY, Vector3.UP * 1.6)
+		if road_checkpoint.has("ferry_time"):
+			ferry_passenger = true
+			ferry_exit_requested = road_checkpoint.get("exit_at_landing", false)
+			wave_time = road_checkpoint.ferry_time
+			_update_moorings(0)
+		elif road_checkpoint.get("scooter", false):
+			walker.position.y = _foot_height(walker.position.x, walker.position.z)
+			_toggle_scooter()
+	if road_checkpoint.has("quests"):
+		var quests: Dictionary = road_checkpoint.quests
+		shoe_quest = quests.shoe
+		cat_quest = quests.cat
+		shoe_owner.position = quests.shoe_owner
+		cat_owner.position = quests.cat_owner
+		lost_cat.position = quests.lost_cat
+		lost_shoe.visible = shoe_quest in [FootQuest.SEARCHING, FootQuest.RETURNING]
+		if shoe_quest == FootQuest.RETURNING:
+			_hold_lost_shoe()
+		socked_foot.visible = shoe_quest != FootQuest.FINISHED
+		returned_trainer.visible = shoe_quest == FootQuest.FINISHED
+	_sync_radio()
+
+	_update_mission_marker()
+	_update_camera(0.0, true)
+	_refresh_ui()
+
 func _start_game() -> void:
 	komodo.visible = randf() < .25
 	chat_pair.clear()
@@ -6673,6 +6804,48 @@ func _toggle_lights() -> void:
 	_update_emergency_lights()
 	_refresh_ui()
 
+func _checkpoint_fields(value: Variant, fields: Dictionary) -> bool:
+	if not value is Dictionary:
+		return false
+	for key in fields:
+		if not value.has(key) or typeof(value[key]) != fields[key]:
+			return false
+		match fields[key]:
+			TYPE_FLOAT:
+				if not is_finite(value[key]): return false
+			TYPE_VECTOR3, TYPE_TRANSFORM3D:
+				if not value[key].is_finite(): return false
+	return true
+
+func _valid_checkpoint(saved: Variant) -> bool:
+	if not _checkpoint_fields(saved, {"vehicle": TYPE_INT, "position": TYPE_VECTOR3, "heading": TYPE_FLOAT,
+			"mission": TYPE_INT, "recovery": TYPE_INT, "taxi": TYPE_INT, "bus": TYPE_INT,
+			"progress": TYPE_DICTIONARY, "free_drive": TYPE_BOOL}):
+		return false
+	if saved.vehicle < 0 or saved.vehicle >= VEHICLE_NAMES_ALL.size() or saved.mission < 0 or saved.mission > TARGETS.size():
+		return false
+	if saved.recovery < 0 or saved.taxi < 0 or saved.bus < 0:
+		return false
+	for vehicle in saved.progress:
+		var step = saved.progress[vehicle]
+		if not vehicle is int or not step is int or step < 0 or step > TARGETS.size(): return false
+	if saved.has("walk_position") and not _checkpoint_fields(saved, {"walk_position": TYPE_VECTOR3, "walk_heading": TYPE_FLOAT, "door_offset": TYPE_VECTOR3}):
+		return false
+	var optional := {"scooter": TYPE_BOOL, "exit_at_landing": TYPE_BOOL, "ferry_time": TYPE_FLOAT, "launch_transform": TYPE_TRANSFORM3D}
+	for key in optional:
+		if saved.has(key) and not _checkpoint_fields(saved, {key: optional[key]}):
+			return false
+	if saved.has("excavator") and not _checkpoint_fields(saved.excavator, {"base": TYPE_TRANSFORM3D, "slew": TYPE_FLOAT, "arm": TYPE_VECTOR3}):
+		return false
+	if saved.has("tram"):
+		if not _checkpoint_fields(saved.tram, {"mode": TYPE_INT, "distance": TYPE_FLOAT, "next_stop": TYPE_INT, "dwell": TYPE_FLOAT, "parked": TYPE_BOOL}) or saved.tram.mode not in [1, 2]:
+			return false
+	if saved.has("quests"):
+		if not _checkpoint_fields(saved.quests, {"shoe": TYPE_INT, "cat": TYPE_INT, "shoe_owner": TYPE_VECTOR3, "cat_owner": TYPE_VECTOR3, "lost_cat": TYPE_VECTOR3}):
+			return false
+		if saved.quests.shoe not in FootQuest.values() or saved.quests.cat not in FootQuest.values(): return false
+	return true
+
 func _load_preferences() -> void:
 	var config := ConfigFile.new()
 	var loaded := config.load(SETTINGS_PATH) == OK
@@ -6681,6 +6854,9 @@ func _load_preferences() -> void:
 	L10n.apply_language(language_preference)
 	if not loaded:
 		return
+	var saved = config.get_value("player", "road_checkpoint", {})
+	if _valid_checkpoint(saved):
+		road_checkpoint = saved
 	play_as_alma=config.get_value("player","alma",false)==true
 	purchases=config.get_value("player","purchases",{})
 	wallet=maxi(0,int(config.get_value("player","coins",0)))
@@ -6710,6 +6886,7 @@ func _load_preferences() -> void:
 func _save_preferences() -> void:
 	var config := ConfigFile.new()
 	var volume := 0.0 if AudioServer.is_bus_mute(0) else db_to_linear(AudioServer.get_bus_volume_db(0))*100
+	config.set_value("player", "road_checkpoint", road_checkpoint)
 	config.set_value("player","alma",play_as_alma)
 	config.set_value("player","coins",wallet)
 	config.set_value("player","stars",collected_stars)

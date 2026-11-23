@@ -20,6 +20,17 @@ func check_fare() -> void:
 		return
 	var dropoff: Vector3 = game._mission_destination()
 
+	game._save_checkpoint()
+	game.queue_free()
+	await process_frame
+	game = load("res://main.tscn").instantiate()
+	root.add_child(game)
+	game._resume_road_checkpoint()
+	if game._vehicle_payload() != 75.0 or game._mission_destination() != dropoff:
+		printerr("Lost current taxi fare after restart")
+		quit(1)
+		return
+
 	game.paused = true
 	game._on_vehicle_selected(game.BUS)
 	if game.phone.current_job != "Collect passengers at the square.":

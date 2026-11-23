@@ -137,4 +137,27 @@ func check() -> void:
 				quit(1)
 				return
 	print("Bought and ate every pizza and sweet through the shop buttons.")
+	game._process(0)
+	var saved_position: Vector3 = game.walker.position
+	game._save_checkpoint()
+	game.queue_free()
+	await process_frame
+	game = load("res://main.tscn").instantiate()
+	root.add_child(game)
+	game._resume_road_checkpoint()
+	game._process(0)
+	shops = game.shops
+	if shops.inside != 3 or not shops.first_product.has_focus() or not game.walker.position.is_equal_approx(saved_position):
+		printerr("Sweet shop resume: ", shops.inside, " focus ", shops.first_product.has_focus(), " position ",game.walker.position," expected ",saved_position," checkpoint ",game.road_checkpoint)
+		quit(1)
+		return
+	game.walker.position = Vector3(shops.storefront_x(3), 0, shops.FRONT_Z - 1)
+	game._process(0)
+	game.walker.position = game.parked_cars[game.SHOPPER].to_global(game.parked_door_offset)
+	await game._change_seat()
+	if shops.shop_card.visible or game.walker.visible or game.vehicle_index != game.SHOPPER:
+		printerr("Could not return to the parked trike after reopening the shop")
+		quit(1)
+		return
+	print("Resumed at the sweet counter and re-entered the parked trike.")
 	game._finish_quit()

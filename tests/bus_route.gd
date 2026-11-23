@@ -22,6 +22,20 @@ func check_route() -> void:
 	var stops := ["TORGET", "SJÖSTADSSKOLAN", "SMÅBÅTSHAMNEN", "VÅRDCENTRALEN", "VÄSTRA TORGET", "VÄSTERÄNGEN"]
 	var starting_balance: int = game.wallet
 	for leg in range(stops.size() + 1):
+		if leg == 1:
+			game._save_checkpoint()
+			game.queue_free()
+			await process_frame
+			game = load("res://main.tscn").instantiate()
+			root.add_child(game)
+			var resume = game.find_child("ResumeCheckpoint", true, false)
+			if not resume or not resume.is_visible_in_tree():
+				printerr("Missing resume button on the main menu")
+				quit(1)
+				return
+			resume.pressed.emit()
+			TranslationServer.set_locale("sv")
+			await process_frame
 		if game._vehicle_payload() != (450.0 if leg % 2 else 0.0):
 			printerr("Incorrect passenger payload")
 			quit(1)
@@ -55,8 +69,31 @@ func check_route() -> void:
 		printerr("Expected two signs at each of six stops")
 		quit(1)
 		return
+	game._save_checkpoint()
+	write_incomplete_checkpoint(game)
+	game.queue_free()
+	await process_frame
+	game = load("res://main.tscn").instantiate()
+	root.add_child(game)
+	if game.find_child("ResumeCheckpoint", true, false) or game.wallet != starting_balance + 45:
+		printerr("Incomplete checkpoint affected the menu or wallet")
+		quit(1)
+		return
+	game.start_button.pressed.emit()
+	if game.mode != "playing":
+		printerr("Fresh start unavailable after incomplete checkpoint")
+		quit(1)
+		return
 	game.queue_free()
 	await process_frame
 	await create_timer(.4).timeout
 	print("Both bus displays followed the six stops and three completed journeys paid once each.")
 	quit()
+
+func write_incomplete_checkpoint(game: Node) -> void:
+	var damaged: Dictionary = game.road_checkpoint.duplicate(true)
+	damaged["tram"] = {"mode": 1}
+	var config := ConfigFile.new()
+	config.load(game.SETTINGS_PATH)
+	config.set_value("player", "road_checkpoint", damaged)
+	config.save(game.SETTINGS_PATH)

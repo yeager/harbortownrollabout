@@ -21,6 +21,13 @@ func check_route() -> void:
 	var initial_wallet: int = game.wallet
 	var launch_speeds: Array[float] = []
 	for stop in 3:
+		if stop == 1:
+			game._save_checkpoint()
+			game.queue_free()
+			await process_frame
+			game = load("res://main.tscn").instantiate()
+			root.add_child(game)
+			game._resume_road_checkpoint()
 		game.ambulance.position = game._mission_destination()
 		if game._vehicle_payload() != stop * 400 or (stop < 2 and not game.refuse_bins[stop].visible):
 			printerr("Unexpected bin or payload at stop ", stop)
@@ -69,6 +76,15 @@ func check_route() -> void:
 		quit(1)
 		return
 	print("Refuse collection, unloading and payment passed.")
+	game._save_checkpoint()
+	game.queue_free()
+	await process_frame
+	game = load("res://main.tscn").instantiate()
+	root.add_child(game)
+	if not game.road_checkpoint.is_empty() or game.wallet != initial_wallet + 30:
+		printerr("Completed collection left a replayable paid delivery")
+		quit(1)
+		return
 	game._finish_quit()
 
 func check_tram_junctions(navigator) -> bool:

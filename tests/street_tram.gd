@@ -118,5 +118,24 @@ func verify() -> void:
 	if train.distance <= 16:
 		fail("Driver could not restart with clear track")
 		return
+	for role in [1, 2]:
+		world._select_gallery_activity(role + 1)
+		var saved_distance: float = train.distance
+		var destination: int = train.next_stop
+		world._save_checkpoint()
+		world.queue_free()
+		await process_frame
+		world = load("res://main.tscn").instantiate()
+		root.add_child(world)
+		world._resume_road_checkpoint()
+		train = world.tram
+		if world.tram_mode != role or not is_equal_approx(saved_distance, train.distance) or train.next_stop != destination:
+			fail("Lost tram trip after restart")
+			return
+		for frame in 60:
+			train.advance(.05, role == 2, role == 2, false)
+		if train.distance <= saved_distance:
+			fail("Resumed tram did not move")
+			return
 	print("Verified ", snappedf(length,.1), " m of at-grade track, opposing traffic lanes, four station stops, boarding, alighting and person protection.")
 	quit()

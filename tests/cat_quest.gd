@@ -29,6 +29,18 @@ func check_quest() -> void:
 			quit(1)
 			return
 	var waiting_position: Vector3 = game.lost_cat.position
+	var walk_position: Vector3 = game.walker.position
+	var car_position: Vector3 = game.ambulance.position
+	game._save_checkpoint()
+	game.queue_free()
+	await process_frame
+	game = load("res://main.tscn").instantiate()
+	root.add_child(game)
+	game._resume_road_checkpoint()
+	if not game.walker.visible or not game.walker.position.is_equal_approx(walk_position) or not game.parked_cars[game.vehicle_index].position.is_equal_approx(car_position):
+		printerr("Walk or parked car was not restored")
+		quit(1)
+		return
 	game.walker.position = game.cat_owner.position + Vector3.BACK * 12
 	for frame in 120:
 		game._update_cat_quest(1.0 / 60)
@@ -49,6 +61,27 @@ func check_quest() -> void:
 		quit(1)
 		return
 	if not await check_dialogue(game, "There you are, Socks! Thank you for bringing her home.", "cat_returned"):
+		quit(1)
+		return
+	game.walker.position = game.shoe_owner.position
+	game._update_shoe_quest(0)
+	game.walker.position = game.lost_shoe.position
+	game._update_shoe_quest(0)
+	game._save_checkpoint()
+	game.queue_free()
+	await process_frame
+	game = load("res://main.tscn").instantiate()
+	root.add_child(game)
+	game.find_child("ResumeCheckpoint", true, false).pressed.emit()
+	if not game.walker.is_ancestor_of(game.lost_shoe) or not game.lost_shoe.is_visible_in_tree():
+		printerr("Lost the shoe from the player's hand during restart")
+		quit(1)
+		return
+	game.walker.position = game.shoe_owner.position
+	game._update_shoe_quest(0)
+	game._update_shoe_quest(0)
+	if game.shoe_quest != game.FootQuest.FINISHED or not game.returned_trainer.visible or game.wallet != initial_wallet + 20:
+		printerr("Could not return the saved shoe for one reward")
 		quit(1)
 		return
 	game.queue_free()

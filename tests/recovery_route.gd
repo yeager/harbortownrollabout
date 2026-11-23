@@ -45,12 +45,37 @@ func check_route() -> void:
 				leg, game.recovery_leg, game.ambulance.position, game.speed, game.wallet, game.status_label.text])
 			quit(1)
 			return
+		if leg == 0:
+			var saved_position: Vector3 = game.ambulance.position
+			game._save_checkpoint()
+			game.queue_free()
+			await process_frame
+			game = load("res://main.tscn").instantiate()
+			root.add_child(game)
+			game._resume_road_checkpoint()
+			if game.free_drive or game.vehicle_index != game.RECOVERY or not game.ambulance.position.is_equal_approx(saved_position) or game.casualty.get_parent() != game.ambulance:
+				printerr("Loaded tow truck did not resume at pickup")
+				quit(1)
+				return
 		if not loading and not game.phone.messages.has("Recovery complete. You earned 20 points and 20 coins."):
 			printerr("Missing delivery receipt")
 			quit(1)
 			return
 	if game.phone.messages.count("Recovery complete. You earned 20 points and 20 coins.") != 2:
 		printerr("Expected one receipt per delivered car")
+		quit(1)
+		return
+	game.ambulance.position = game._mission_destination()
+	game.speed = 0
+	game._help_at_target()
+	game._save_checkpoint()
+	game.queue_free()
+	await process_frame
+	game = load("res://main.tscn").instantiate()
+	root.add_child(game)
+	game._resume_road_checkpoint()
+	if game.recovery_leg != 5 or game.casualty.get_parent() != game.ambulance:
+		printerr("Could not resume the next round with a car on the flatbed")
 		quit(1)
 		return
 	var expected_score: int = starting_points + 40 + game.foot_quest_points + game.collected_stars.size() * game.POINTS_PER_STAR
