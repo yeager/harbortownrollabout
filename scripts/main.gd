@@ -3433,6 +3433,42 @@ func _build_building(center: Vector3, size: Vector3, _color: Color, sign_text: S
 	add_child(model)
 	if sign_text == "Brandstationen":
 		_build_fire_station_bay(model)
+	elif sign_text == "Bageriet":
+		_build_bakery_cup(model)
+
+func _build_bakery_cup(model: Node3D) -> void:
+	var bracket := _make_box("Bakery sign arm",Vector3(.12,.15,2.8),Vector3(0,5.86,7.15),Color("#414544"),false,model)
+	_make_box("Hanging rod",Vector3(.06,.5,.06),Vector3(0,-.25,1.31),Color("#414544"),false,bracket)
+	var cup := MeshInstance3D.new()
+	cup.name = "Hanging coffee cup"
+	var bowl := CylinderMesh.new()
+	bowl.top_radius = .55
+	bowl.bottom_radius = .34
+	bowl.height = .76
+	var porcelain := _material(Color("#ffeed1"),.23)
+	bowl.material = porcelain
+	cup.mesh = bowl
+	bracket.add_child(cup)
+	cup.position = Vector3(0,-1.03,1.31)
+	cup.scale = Vector3.ONE*1.45
+	var handle := MeshInstance3D.new()
+	var loop_mesh := TorusMesh.new()
+	loop_mesh.inner_radius = .19
+	loop_mesh.outer_radius = .29
+	loop_mesh.material = porcelain
+	handle.mesh = loop_mesh
+	cup.add_child(handle)
+	handle.rotation.z = PI*.5
+	handle.position = Vector3(0,.01,.50)
+	var saucer := MeshInstance3D.new()
+	var dish := CylinderMesh.new()
+	dish.top_radius = .66
+	dish.bottom_radius = .51
+	dish.height = .10
+	dish.material = porcelain
+	saucer.mesh = dish
+	cup.add_child(saucer)
+	saucer.position.y = -.42
 
 func _build_fire_station_bay(model: Node3D) -> void:
 	for part: MeshInstance3D in model.find_children("*","MeshInstance3D",true,false):
