@@ -1781,3 +1781,15 @@ msgstr "Jouer à la pétanque · F"
 
 msgid "Cancel boule turn · F"
 msgstr "Annuler mon tour · F"
+
+msgid "Aim at the jack"
+msgstr "Viser le cochonnet"
+
+msgid "Short throw"
+msgstr "Lancer court"
+
+msgid "Medium throw"
+msgstr "Lancer moyen"
+
+msgid "Long throw"
+msgstr "Lancer long"

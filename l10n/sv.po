@@ -1696,3 +1696,15 @@ msgstr "Var med och spela boule · F"
 
 msgid "Cancel boule turn · F"
 msgstr "Avstå från kastet · F"
+
+msgid "Aim at the jack"
+msgstr "Sikta på lillen"
+
+msgid "Short throw"
+msgstr "Kort kast"
+
+msgid "Medium throw"
+msgstr "Mellanlångt kast"
+
+msgid "Long throw"
+msgstr "Långt kast"

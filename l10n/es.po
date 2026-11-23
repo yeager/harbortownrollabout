@@ -1773,3 +1773,15 @@ msgstr "Jugar a la petanca · F"
 
 msgid "Cancel boule turn · F"
 msgstr "Cancelar mi turno · F"
+
+msgid "Aim at the jack"
+msgstr "Apunta al boliche"
+
+msgid "Short throw"
+msgstr "Tiro corto"
+
+msgid "Medium throw"
+msgstr "Tiro medio"
+
+msgid "Long throw"
+msgstr "Tiro largo"

@@ -1695,3 +1695,15 @@ msgstr ""
 
 msgid "Cancel boule turn · F"
 msgstr ""
+
+msgid "Aim at the jack"
+msgstr ""
+
+msgid "Short throw"
+msgstr ""
+
+msgid "Medium throw"
+msgstr ""
+
+msgid "Long throw"
+msgstr ""

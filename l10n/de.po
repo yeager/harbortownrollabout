@@ -1783,3 +1783,15 @@ msgstr "Boule mitspielen · F"
 
 msgid "Cancel boule turn · F"
 msgstr "Wurf absagen · F"
+
+msgid "Aim at the jack"
+msgstr "Auf die Zielkugel zielen"
+
+msgid "Short throw"
+msgstr "Kurzer Wurf"
+
+msgid "Medium throw"
+msgstr "Mittlerer Wurf"
+
+msgid "Long throw"
+msgstr "Weiter Wurf"

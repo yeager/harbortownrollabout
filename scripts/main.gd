@@ -537,6 +537,9 @@ const SMALL_TALK := [
 ]
 var boule_join_requested := false
 var boule_guest_turn := false
+var boule_choices := VBoxContainer.new()
+var boule_aim := HSlider.new()
+var boule_throw_length := -1
 const BOULE_CENTRE := Vector3(94.9, 0, 69)
 var boule_players: Array[Node3D] = []
 var boules: Array[MeshInstance3D] = []
@@ -4709,6 +4712,48 @@ func _walk(delta: float) -> void:
 		footstep.play()
 	_update_entry_button()
 
+func _build_boule_choices() -> void:
+	ui.add_child(boule_choices)
+	boule_choices.set_anchors_and_offsets_preset(Control.PRESET_CENTER_TOP)
+	boule_choices.position += Vector2(-120,95)
+	boule_choices.custom_minimum_size.x = 240
+	var caption := Label.new()
+	caption.text = "Aim at the jack"
+	caption.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	boule_choices.add_child(caption)
+	boule_aim.min_value = -1.2
+	boule_aim.max_value = 1.2
+	boule_aim.step = .1
+	boule_aim.custom_minimum_size.y = 32
+	boule_choices.add_child(boule_aim)
+	boule_aim.value_changed.connect(func(offset: float):
+		if boule_guest_turn:
+			walker.rotation.y = -atan2(offset,8)
+	)
+	var row := HBoxContainer.new()
+	boule_choices.add_child(row)
+	for index in 3:
+		var button := Button.new()
+		button.custom_minimum_size = Vector2(76,54)
+		row.add_child(button)
+		button.tooltip_text = tr(["Short throw","Medium throw","Long throw"][index])
+		button.accessibility_name = button.tooltip_text
+		button.draw.connect(func():
+			var span := 24.0+index*17
+			var points := PackedVector2Array()
+			for sample in 17:
+				var t := sample/16.0
+				points.append(Vector2(8+span*t,39-(13+index*5)*4*t*(1-t)))
+			button.draw_polyline(points,Color.WHITE,2,true)
+			button.draw_circle(points[16],4,Color("#ffcf58"),true,-1,true)
+		)
+		button.pressed.connect(func():
+			if boule_guest_turn and not paused:
+				boule_throw_length = index
+				boule_choices.hide()
+		)
+	boule_choices.hide()
+
 func _near_boule_ring() -> bool:
 	return walker.visible and not scooter.visible and tram_mode == 0 and not ferry_passenger and not operating_excavator and walker.position.distance_to(BOULE_CENTRE+Vector3.BACK*4) < 3.2
 
@@ -5355,6 +5400,7 @@ func _build_boule_court() -> void:
 		player.rotation.y = 0
 		player.get_node("Hair").material_override = _material([Color("#bcbab0"),Color("#817970"),Color("#d3c8ae")][i])
 		boule_players.append(player)
+		_animate_steps(player,0,0)
 		var ball := _boule_ball(.044, Color("#b2b7b7"), true)
 		ball.hide()
 		boules.append(ball)
@@ -5387,6 +5433,7 @@ func _update_boule(delta: float) -> void:
 	if not _near_boule_ring() or mode != "playing":
 		boule_join_requested = false
 		boule_guest_turn = false
+		boule_choices.hide()
 	if boule_clock == 0 and boule_collector < 0 and boule_join_requested:
 		boule_guest_turn = true
 		boule_join_requested = false
@@ -5394,7 +5441,13 @@ func _update_boule(delta: float) -> void:
 		walker.rotation.y = 0
 		walk_basis = Basis.IDENTITY
 		walking_velocity = Vector3.ZERO
+		boule_throw_length = -1
+		boule_aim.value = 0
+		boule_choices.show()
+		boule_aim.grab_focus()
 		_update_entry_button()
+	if boule_guest_turn and boule_throw_length < 0:
+		return
 	boule_clock += delta
 	if boule_collector >= 0:
 		_collect_boule(delta)
@@ -5404,6 +5457,8 @@ func _update_boule(delta: float) -> void:
 	var hand: Node3D = arm.get_child(1)
 	var ball := boules[boule_turn]
 	var target := BOULE_CENTRE + Vector3([-.22,-.19,.12][boule_turn], .044, -4+[.35,.03,-.28][boule_turn])
+	if boule_guest_turn:
+		target = boule_jack.position + Vector3(boule_aim.value,.020,(1-boule_throw_length)*1.5)
 	var weight := smoothstep(0,1.4,boule_clock)*(1-smoothstep(4.5,6, boule_clock))
 	var previous := player.position
 	if not boule_guest_turn:
@@ -7279,6 +7334,7 @@ func _build_ui() -> void:
 	horn_button.offset_top = -82
 	horn_button.offset_bottom = -34
 	horn_button.pressed.connect(_honk)
+	_build_boule_choices()
 	seat_button = _button("Get out · F", 135)
 	ui.add_child(seat_button)
 	seat_button.set_anchors_and_offsets_preset(Control.PRESET_CENTER_RIGHT)

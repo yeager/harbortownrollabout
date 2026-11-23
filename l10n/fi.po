@@ -1762,3 +1762,15 @@ msgstr "Osallistu petankkiin · F"
 
 msgid "Cancel boule turn · F"
 msgstr "Peru heittovuoro · F"
+
+msgid "Aim at the jack"
+msgstr "Tähtää maalipalloon"
+
+msgid "Short throw"
+msgstr "Lyhyt heitto"
+
+msgid "Medium throw"
+msgstr "Keskipitkä heitto"
+
+msgid "Long throw"
+msgstr "Pitkä heitto"
