@@ -81,6 +81,7 @@ var recovery_key := KEY_R
 var jump_key := KEY_E
 var number_camera := false
 var radio_keys: Array[int] = [KEY_J, KEY_N]
+var driving_hints := Label.new()
 var large_text := false
 var extra_reading_time := false
 var greeting := Label3D.new()
@@ -4473,7 +4474,7 @@ func _walk(delta: float) -> void:
 			if winded: run_ready_hint_time = 3.0
 			winded = false
 	if _rest_seconds() != previous_rest or showed_ready != (run_ready_hint_time > 0):
-		ui.get_node("DrivingHints").text = _with_recovery_hint(_walking_hint())
+		driving_hints.text = _with_recovery_hint(_walking_hint())
 	walker.position = next
 	var near_bench := Vector2(next.x-30,next.z-20).length() < 1.2
 	if near_bench and not at_colour_bench:
@@ -5323,6 +5324,7 @@ func _make_walker(label: String, start_x: float, lane_z: float, direction: float
 	walker_data.append({"actor": person, "direction": direction, "speed": 1.15 + randf() * 0.45, "phase": randf() * TAU})
 
 func _apply_reading_size() -> void:
+	driving_hints.add_theme_font_size_override("font_size", 22 if large_text else 16)
 	shops.set_large_text(large_text)
 	phone.set_large_text(large_text)
 	greeting.pixel_size = .0042 if large_text else .003
@@ -6763,7 +6765,7 @@ func _build_ui() -> void:
 	seat_button.offset_left=-220
 	seat_button.offset_right=-22
 	seat_button.pressed.connect(_change_seat)
-	var help := Label.new()
+	var help := driving_hints
 	help.name = "DrivingHints"
 	help.text = "{up} / ↑  Drive     {left} {right} / ← →  Steer     {down} / ↓  Brake or reverse\nRelease to slow down   ·   Space to help   ·   P to pause"
 	help.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_WIDE)
@@ -6772,7 +6774,6 @@ func _build_ui() -> void:
 	help.offset_right = -12
 	help.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	help.grow_vertical = Control.GROW_DIRECTION_BEGIN
-	help.add_theme_font_size_override("font_size", 16)
 	help.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	help.add_theme_color_override("font_color", Color("#f5f1df"))
 	help.add_theme_color_override("font_shadow_color", Color(0,0,0,0.8))
@@ -8342,7 +8343,7 @@ func _refresh_ui() -> void:
 	driving_controls.reverse_pedal = operating_excavator
 	driving_controls.show_wheel = tram_mode == 0 and not operating_excavator
 	driving_controls.visible = not show_overlay and (tram_mode == 2 or (tram_mode == 0 and (boating or not walker.visible)))
-	var hints := ui.get_node("DrivingHints") as Label
+	var hints := driving_hints
 	hints.offset_right = -228 if driving_controls.visible else -12
 	hints.offset_left = 142 if driving_controls.visible and driving_controls.show_wheel else 12
 	hints.visible = not show_overlay and not shops.shop_card.is_visible_in_tree()
