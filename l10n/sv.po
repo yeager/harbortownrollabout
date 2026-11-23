@@ -1783,3 +1783,9 @@ msgstr "Glassdepån har fått båda tomlådorna."
 
 msgid "Ice cream depot"
 msgstr "Glassdepå"
+
+msgid "I mixed up two parcels. Can you fetch the striped one from the grocery store?"
+msgstr "Jag blandade ihop två paket. Kan du hämta det randiga i mataffären?"
+
+msgid "Bring the striped parcel back to the cyclist outside the café."
+msgstr "Lämna det randiga paketet till cykelbudet utanför kaféet."

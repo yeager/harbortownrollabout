@@ -100,7 +100,7 @@ Listan innehåller 100 jobb. En tom ruta är öppen. En punkt bockas av när bet
 
 - [x] 71. Ge bageriet en morgonleverans av mjöl. Visa säckarna först på flaket och sedan vid bageriets dörr.
 - [x] 72. Låt bageriet skicka en tårtkartong till ett kalas. Mottagaren ska öppna kartongen vid leverans.
-- [ ] 73. Lägg till ett cykelbud som ber spelaren hämta en förväxlad leverans hos rätt butik.
+- [x] 73. Lägg till ett cykelbud som ber spelaren hämta en förväxlad leverans hos rätt butik.
 - [x] 74. Låt spelaren välja en avslutad fraktkörning i telefonen och läsa leveranskvittot igen.
 - [x] 75. Gör ett tvåstoppsuppdrag med olika last till varje mottagare. Den andra lasten ska ligga kvar vid första stoppet.
 - [x] 76. Låt lastens tyngdpunkt ändras när en tung låda lossas från ena sidan. Provkör samma kurva före och efter.

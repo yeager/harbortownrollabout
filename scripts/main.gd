@@ -570,6 +570,11 @@ const FIGURINE_RETURN := "Bring the moon rabbit to the clothing shop counter."
 const FIGURINE_THANKS := "Thank you! Our moon rabbit is back!"
 var figurine_stage := FootQuest.WAITING
 var lost_figurine: Node3D
+const COURIER_REQUEST := "I mixed up two parcels. Can you fetch the striped one from the grocery store?"
+const COURIER_RETURN := "Bring the striped parcel back to the cyclist outside the café."
+var courier_stage := FootQuest.WAITING
+var courier := Node3D.new()
+var courier_parcel := Node3D.new()
 var boutique_owner: Node3D
 const CAKE_ROUTE := "Bring the cake to the birthday table at the square."
 var cake_stage := FootQuest.WAITING
@@ -800,6 +805,7 @@ func _process(delta: float) -> void:
 	var entrance_target := -1
 	if mode == "playing" and not paused and walker.visible and tram_mode == 0 and not ferry_passenger and not boating and not phone.handset.is_visible_in_tree():
 		if free_drive and map_goal == shops.grill_counter(): entrance_target = 6
+		elif courier_stage == FootQuest.SEARCHING and absf(walker.position.x-shops.storefront_x(4)) < 6.6: entrance_target = 4
 		elif figurine_stage == FootQuest.RETURNING: entrance_target = 5
 	shops.update_entrance_picture(entrance_target,walker.position)
 	shops.update_customer(walker.visible and not ferry_passenger and not boating and tram_mode==0,walker.position,mode=="playing" and not paused)
@@ -5565,6 +5571,7 @@ func _build_pedestrians() -> void:
 
 	_build_lost_umbrella()
 	_build_birthday_delivery()
+	_build_courier_delivery()
 	var boutique_x := shops.storefront_x(5)
 	_make_walker("Boutique owner",boutique_x,48.55,1,Color("#685284"),Color("#48515c"))
 	boutique_owner = walker_data.pop_back().actor
@@ -5572,6 +5579,50 @@ func _build_pedestrians() -> void:
 	lost_figurine = shops._boutique_toy(Vector3.ZERO,true)
 	_place_lost_figurine()
 	_build_boule_court()
+
+func _build_courier_delivery() -> void:
+	add_child(courier)
+	courier.position = Vector3(shops.storefront_x(0)+2.6,0,40.4)
+	courier.rotation.y = PI*.5
+	courier.add_child(preload("res://environment/cyklist.glb").instantiate())
+	add_child(courier_parcel)
+	_make_box("Courier parcel",Vector3(.38,.25,.28),Vector3.UP*.125,Color("#ca9862"),false,courier_parcel)
+	for x in [-.09,.09]:
+		_make_box("Parcel stripe",Vector3(.045,.252,.282),Vector3(x,.125,0),Color("#295870"),false,courier_parcel)
+	_place_courier_parcel()
+
+func _place_courier_parcel() -> void:
+	if not courier_parcel.is_inside_tree(): return
+	var holder: Node3D = self
+	var pos := Vector3(shops.storefront_x(4),1.07,47.6)
+	if courier_stage == FootQuest.RETURNING:
+		holder = walker
+		pos = Vector3(0,.98,-.38)
+	elif courier_stage == FootQuest.FINISHED:
+		holder = courier
+		pos = Vector3(0,.72,-.64)
+	if courier_parcel.get_parent() != holder: courier_parcel.reparent(holder,false)
+	courier_parcel.position = pos
+
+func _update_courier_delivery() -> void:
+	if not walker.visible or ferry_passenger or boating or tram_mode != 0: return
+	match courier_stage:
+		FootQuest.WAITING:
+			if walker.position.distance_to(courier.position) > 1.9: return
+			courier_stage = FootQuest.SEARCHING
+			_say(courier,COURIER_REQUEST,"courier_request")
+			phone.receive(COURIER_REQUEST)
+		FootQuest.SEARCHING:
+			if shops.inside != 4 or walker.position.distance_to(courier_parcel.position) > 1.9: return
+			courier_stage = FootQuest.RETURNING
+			phone.receive(COURIER_RETURN)
+		FootQuest.RETURNING:
+			if walker.position.distance_to(courier.position) > 1.9: return
+			courier_stage = FootQuest.FINISHED
+		_: return
+	_place_courier_parcel()
+	_refresh_dispatch()
+	_save_preferences()
 
 func _build_birthday_delivery() -> void:
 	_make_walker("Birthday host",33,18,1,Color("#418789"),Color("#614955"))
@@ -6044,7 +6095,9 @@ func _animate_steps(person: Node3D, distance: float, delta: float, pushing := fa
 		person.set_meta("gait", gait)
 	var carried_box: Node3D
 	if person == walker:
-		if cake_box.get_parent() == walker:
+		if courier_parcel.get_parent() == walker:
+			carried_box = courier_parcel
+		elif cake_box.get_parent() == walker:
 			carried_box = cake_box
 		elif mission_index in [1,2] and delivery_parcels.size() >= mission_index and walker.is_ancestor_of(delivery_parcels[mission_index-1]):
 			carried_box = delivery_parcels[mission_index-1]
@@ -6071,7 +6124,7 @@ func _animate_steps(person: Node3D, distance: float, delta: float, pushing := fa
 			footstep.play()
 		if carried_box:
 			for i in 2:
-				gait.reach_with_hand(i, carried_box.to_global(Vector3(-.24 if i == 0 else .24,.09,0)))
+				gait.reach_with_hand(i, carried_box.to_global(Vector3((-1 if i == 0 else 1)*(.19 if carried_box == courier_parcel else .24),.09,0)))
 
 func _snow_underfoot(point: Vector3) -> bool:
 	if weather.snow < .12 or walk_jump_left > 0 or shops.customer_is_indoors() or scooter.visible or ferry_passenger or tram_mode != 0:
@@ -6495,6 +6548,7 @@ func _update_pedestrians(delta: float) -> void:
 	_update_thermos()
 	_update_lost_umbrella(delta)
 	_update_lost_figurine()
+	_update_courier_delivery()
 	_update_birthday_delivery(delta)
 	_update_cat_quest(delta)
 	_update_search_hints()
@@ -9275,6 +9329,8 @@ func _load_player_progress(config: ConfigFile, section: String) -> void:
 	_sync_ice_crates()
 	flour_stage = clampi(int(config.get_value(section,"flour",0)),0,FlourStage.AT_BAKERY)
 	_sync_flour_sacks()
+	courier_stage = clampi(int(config.get_value(section,"courier",0)),0,FootQuest.FINISHED)
+	_place_courier_parcel()
 	cake_stage = config.get_value(section,"birthday_cake",FootQuest.WAITING)
 	if cake_stage not in [FootQuest.RETURNING,FootQuest.FINISHED]: cake_stage = FootQuest.WAITING
 	_place_cake_box()
@@ -9315,6 +9371,7 @@ func _store_player_progress(config: ConfigFile, section: String) -> void:
 	config.set_value(section,"thermos",thermos_stage)
 	config.set_value(section,"crate_return",crate_stage)
 	config.set_value(section,"flour",flour_stage)
+	config.set_value(section,"courier",courier_stage)
 	config.set_value(section,"birthday_cake",cake_stage)
 	config.set_value(section,"figurine",figurine_stage)
 	config.set_value(section,"umbrella",umbrella_stage)
@@ -9494,6 +9551,8 @@ func _refresh_dispatch() -> void:
 		for i in 2:
 			if pet_stages[i] == FootQuest.SEARCHING: phone.foot_jobs.append(PET_REQUESTS[i])
 		if pet_stages[0] == FootQuest.RETURNING: phone.foot_jobs.append("Bring the ball back to the dog.")
+		if courier_stage == FootQuest.SEARCHING: phone.foot_jobs.append(COURIER_REQUEST)
+		if courier_stage == FootQuest.RETURNING: phone.foot_jobs.append(COURIER_RETURN)
 		if cake_stage == FootQuest.RETURNING: phone.foot_jobs.append(CAKE_ROUTE)
 		if figurine_stage == FootQuest.RETURNING: phone.foot_jobs.append(FIGURINE_RETURN)
 		if umbrella_stage == FootQuest.RETURNING: phone.foot_jobs.append(UMBRELLA_RETURN)

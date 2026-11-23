@@ -29,11 +29,11 @@ Kör `tools/check_localizations.sh` från projektroten för att kontrollera alla
 
 | Språk | Inspelade repliker per språk | Fullängdslåtar per språk | Stationsrop med musik per språk |
 | --- | ---: | ---: | ---: |
-| Svenska | 17 | 12 | 0 |
-| Engelska | 17 | 8 | 0 |
-| Spanska, tyska, franska, norskt bokmål och finska | 17 | 0 | 1 |
+| Svenska | 18 | 12 | 0 |
+| Engelska | 18 | 8 | 0 |
+| Spanska, tyska, franska, norskt bokmål och finska | 18 | 0 | 1 |
 
-De 17 replikerna omfattar hälsningar, småprat och uppdragen med den borttappade skon, katten och månkaninen. Tomtens ”Ho ho ho” är en gemensam inspelning utöver de språkvisa replikerna.
+De 18 replikerna omfattar hälsningar, småprat och uppdragen med den borttappade skon, katten, månkaninen och cykelbudets paket. Tomtens ”Ho ho ho” är en gemensam inspelning utöver de språkvisa replikerna.
 
 Om både den regionala och grundspråkets låtlista saknas spelar radion engelska låtar. Stationsrop räknas inte som låtar. Vi söker hela låtar på dessa språk. [Så kan du bidra](../CONTRIBUTE.md).
 

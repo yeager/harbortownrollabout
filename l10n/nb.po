@@ -1853,3 +1853,9 @@ msgstr "Isdepotet har fått begge de tomme kassene."
 
 msgid "Ice cream depot"
 msgstr "Isdepot"
+
+msgid "I mixed up two parcels. Can you fetch the striped one from the grocery store?"
+msgstr "Jeg blandet sammen to pakker. Kan du hente den stripete i matbutikken?"
+
+msgid "Bring the striped parcel back to the cyclist outside the café."
+msgstr "Ta den stripete pakken tilbake til sykkelbudet utenfor kafeen."

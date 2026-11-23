@@ -1870,3 +1870,9 @@ msgstr "Beide leeren Kisten sind im Eisdepot angekommen."
 
 msgid "Ice cream depot"
 msgstr "Eisdepot"
+
+msgid "I mixed up two parcels. Can you fetch the striped one from the grocery store?"
+msgstr "Ich habe zwei Pakete verwechselt. Holst du das gestreifte aus dem Lebensmittelladen?"
+
+msgid "Bring the striped parcel back to the cyclist outside the café."
+msgstr "Bring das gestreifte Paket zum Fahrradkurier vor dem Café."

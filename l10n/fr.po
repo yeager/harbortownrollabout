@@ -1868,3 +1868,9 @@ msgstr "Les deux caisses vides sont arrivées au dépôt de glaces."
 
 msgid "Ice cream depot"
 msgstr "Dépôt de glaces"
+
+msgid "I mixed up two parcels. Can you fetch the striped one from the grocery store?"
+msgstr "J’ai confondu deux colis. Peux-tu aller chercher le colis rayé à l’épicerie ?"
+
+msgid "Bring the striped parcel back to the cyclist outside the café."
+msgstr "Rapporte le colis rayé au cycliste devant le café."
