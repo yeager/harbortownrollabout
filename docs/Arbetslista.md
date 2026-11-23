@@ -127,7 +127,7 @@ Listan innehåller 100 jobb. En tom ruta är öppen. En punkt bockas av när bet
 - [ ] 91. Lägg till ett val att visa uppdragspilen med både riktning och gatunamn inför nästa sväng.
 - [ ] 92. Visa en bild av rätt dörr när spelaren står mellan två möjliga butiksentréer.
 - [ ] 93. Ge trafikljushjälpen olika symboler för stanna och kör så att instruktionen går att följa i gråskala.
-- [ ] 94. Låt spelaren provlyssna på en kort replik direkt när talvolymen ändras i inställningarna.
+- [x] 94. Låt spelaren provlyssna på en kort replik direkt när talvolymen ändras i inställningarna.
 - [ ] 95. Lägg till ett bildstöd som visar var en avslagen radio slås på från förarplatsen.
 - [ ] 96. Prova hela vägen från startmenyn till ett köp och tillbaka med enbart tangentbord. Rätta de fokussteg som fastnar.
 - [ ] 97. Kontrollera att alla sju språk ryms på leveranskvittot i liten fönsterstorlek och med stor text.

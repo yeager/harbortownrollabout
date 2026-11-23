@@ -7550,6 +7550,27 @@ func _build_overlay() -> void:
 		slider.custom_minimum_size.x = 180
 		slider.step = 5
 		slider.value = radio_ducking if channel == "Lower radio during speech" else _channel_volume(channel)
+		if channel == "Speech":
+			var sample := AudioStreamPlayer.new()
+			sample.bus = &"Speech"
+			sample.volume_db = greeting_voice.volume_db
+			slider.add_child(sample)
+			dialog.visibility_changed.connect(func():
+				if not dialog.visible:
+					sample.stop()
+			)
+			slider.visibility_changed.connect(func():
+				if not slider.is_visible_in_tree():
+					sample.stop()
+			)
+			slider.value_changed.connect(func(percent: float):
+				if percent <= 0 or AudioServer.is_bus_mute(0) or not slider.is_visible_in_tree():
+					sample.stop()
+				elif not sample.playing:
+					sample.stream = L10n.media("res://audio/voices/%s_hello.wav", TranslationServer.get_locale())
+					if sample.stream:
+						sample.play()
+			)
 		slider.value_changed.connect(func(percent: float):
 			if channel == "Lower radio during speech":
 				_set_radio_ducking(percent)
