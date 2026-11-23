@@ -539,6 +539,7 @@ var boule_grounded: Array[bool] = []
 var boule_clink := AudioStreamPlayer3D.new()
 var boule_collector := -1
 var boule_pickup_spot := Vector3.ZERO
+var quay_windsock := Node3D.new()
 var boule_release := Vector3.ZERO
 var walker_data: Array[Dictionary] = []
 
@@ -2871,6 +2872,7 @@ func _build_marina() -> void:
 	saloon_glazing.emission_enabled = true
 	saloon_glazing.emission = Color("#ffcc8c")
 	windows.material_override = saloon_glazing
+	_build_quay_windsock()
 	var landing_boards := _deck_material(Color("#847968"))
 	var gangway_boards := _deck_material(Color("#9d8469"), true)
 	var granite := _material(Color("#b2a897"), .91, false, "mineral")
@@ -3037,8 +3039,35 @@ func _build_marina() -> void:
 			"heading":boat.rotation.y, "berth_z":z})
 	_update_moorings(0.0)
 
+func _build_quay_windsock() -> void:
+	var foot := Vector3(54.6,0,-16.5)
+	_make_roadside_solid("Windsock mast",Vector3(.085,3.8,.085),foot+Vector3.UP*1.9,Color("#798183"))
+	quay_windsock.name = "QuayWindsock"
+	quay_windsock.position = foot+Vector3.UP*3.76
+	add_child(quay_windsock)
+	_make_box("Swivel bracket",Vector3(.37,.045,.045),Vector3(.15,0,0),Color("#6d7777"),false,quay_windsock)
+	for stripe in 5:
+		var tube := CylinderMesh.new()
+		tube.bottom_radius = .25-.029*stripe
+		tube.top_radius = tube.bottom_radius-.029
+		tube.height = .32
+		tube.rings = 0
+		tube.radial_segments = 20
+		tube.cap_top = false
+		tube.cap_bottom = false
+		var fabric := MeshInstance3D.new()
+		fabric.mesh = tube
+		var tint := Color("#ee572b") if stripe%2 == 0 else Color("#fff4da")
+		var finish := _material(tint,.92,false,"cotton_jersey").duplicate() as StandardMaterial3D
+		finish.cull_mode = BaseMaterial3D.CULL_DISABLED
+		fabric.material_override = finish
+		fabric.rotation.z = -PI*.5-.14
+		fabric.position = Vector3(.32,0,0)+fabric.basis.y*(stripe+.5)*tube.height
+		quay_windsock.add_child(fabric)
+
 func _update_moorings(delta: float) -> void:
 	wave_time += delta
+	quay_windsock.rotation.y = -weather.wind_angle
 	_update_ferry_displays()
 	var heading := Vector2(-sin(launch.rotation.y),-cos(launch.rotation.y))
 	var course := heading*signf(launch_speed)

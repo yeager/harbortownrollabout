@@ -22,6 +22,8 @@ var season_age := 0.0
 var forecast_age := 0.0
 var intensity := Vector2.ZERO
 var cloud_cover := 0.0
+var wind_time := 0.0
+var wind_angle := atan2(.06,.12)
 var wet := 0.0
 var snow := 0.0
 var rain_particles: GPUParticles3D
@@ -96,6 +98,11 @@ func particles(flakes: bool) -> GPUParticles3D:
 	return emitter
 
 func tick(delta: float) -> void:
+	wind_time += delta
+	wind_angle = atan2(.06,.12) + .95*sin(wind_time*.029) + .24*sin(wind_time*.083)
+	var drift := Vector3(cos(wind_angle)*.135,-1,sin(wind_angle)*.135)
+	rain_particles.process_material.direction = drift
+	snow_particles.process_material.direction = drift
 	if season_setting == 0: season_age += delta
 	if weather_setting == 0: forecast_age += delta
 	if season_age >= 1800:

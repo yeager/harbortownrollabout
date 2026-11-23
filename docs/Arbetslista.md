@@ -116,7 +116,7 @@ Listan innehåller 100 jobb. En tom ruta är öppen. En punkt bockas av när bet
 - [ ] 83. Markera platsen för barnvagnar inne i Tvärbanan och prova att en barnvagn kan komma dit från perrongen.
 - [ ] 84. Låt fotgängare invänta avstigande vid spårvagnsdörren innan de själva går ombord.
 - [ ] 85. Ge färjan en ombordstigningssignal som både syns och hörs innan avgång.
-- [ ] 86. Sätt ut en vindstrut på kajen och låt den vrida sig när vindriktningen ändras.
+- [x] 86. En orangevit vindstrut på kajen följer samma vindriktning som regnet och snön. Riktningen kontrollerades under 40 simulerade sekunder och modellen granskades i spelet.
 - [ ] 87. Gör cykelns trampor rörliga och låt fötterna följa dem ett helt varv vid trampning.
 - [x] 88. Shoppingmopedens vindrutetorkare följer det välvda glaset vid nederbörd och återgår till viloläget när det blir torrt. Kontrollerat i 120 steg över ett helt svep och med en närbild i spelet.
 - [ ] 89. Låt spelaren spola av leran på ett fordon vid macken och se den rena lacken växa fram.
