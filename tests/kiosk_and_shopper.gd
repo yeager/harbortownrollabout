@@ -39,13 +39,13 @@ func check() -> void:
 	var shops = game.shops
 	game.walker.position = Vector3(shops.storefront_x(6),0,41.7)
 	shops.update_customer(true,game.walker.position,true)
-	var currencies := {"sv":"mynt","de":"Münzen","es":"monedas","fi":"kolikkoa","fr":"pièces","nb":"mynter","en":"coins"}
-	for locale in currencies:
+	const CURRENCIES := {"sv":"mynt","de":"Münzen","es":"monedas","fi":"kolikkoa","fr":"pièces","nb":"mynter","en":"coins"}
+	for locale: String in CURRENCIES.keys():
 		TranslationServer.set_locale(locale)
 		await process_frame
 		for i in 4:
 			var coins: int = shops.PRICES[6][i]
-			var expected := "%d %s" % [coins,currencies[locale]]
+			var expected := "%d %s" % [coins,CURRENCIES[locale]]
 			var dish: String = shops.MENUS[6][i]
 			var recipe: String = shops.GRILL_TOPPINGS[i]
 			var button: Button = shops.panel.get_child(shops.first_product.get_index()+i)
