@@ -508,6 +508,7 @@ var tree_count := 0
 var traffic_data: Array[Dictionary] = []
 const SETTINGS_PATH := L10n.SETTINGS_PATH
 var language_preference := ""
+var radio_track_gain_db := -10.0
 var radio_ducking := 100.0
 const MIX_CHANNELS := ["Speech", "Radio", "Engines"]
 var traffic_siren_volume := 100.0
@@ -760,6 +761,12 @@ func _process(delta: float) -> void:
 	water_finish.set_shader_parameter("rain",weather.intensity.x)
 	city_env.sky.sky_material.set_shader_parameter("overcast",weather.cloud_cover)
 	_update_daylight(delta)
+	if radio.playing:
+		# Hold music down across quiet syllables in a phone instruction.
+		var attenuation := 8.0 * radio_ducking / 100.0 if phone.job_voice.playing else 0.0
+		var target_gain := radio_track_gain_db - attenuation
+		var rate := 480.0 if radio.volume_db > target_gain else 16.0
+		radio.volume_db = move_toward(radio.volume_db,target_gain,rate*delta)
 	if not paused and message_timer > 0.0:
 		message_timer = maxf(0.0, message_timer - delta)
 	if mode == "playing" and not paused:
@@ -1108,7 +1115,8 @@ func _next_radio_track() -> void:
 	song_cover.visible = song_cover.texture != null
 	song_card_seconds = 5.0
 	song_card.show()
-	radio.volume_db = -10.0 + float(RADIO_GAIN_DB.get(radio_track, 0.0))
+	radio_track_gain_db = -10.0 + float(RADIO_GAIN_DB.get(radio_track, 0.0))
+	radio.volume_db = radio_track_gain_db - (8.0*radio_ducking/100.0 if phone.job_voice.playing else 0.0)
 	radio.stream = load("res://audio/radio/" + radio_track)
 	radio.play()
 
