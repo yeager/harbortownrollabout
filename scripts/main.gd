@@ -513,6 +513,12 @@ const SMALL_TALK := [
 	["Can AI dream?", "chat_ai", "Maybe it dreams of electric sheep!", "chat_dream"],
 	["What did the dog find?", "chat_dog", "A leaf worth a really good sniff!", "chat_sniff"],
 ]
+const BOULE_CENTRE := Vector3(94.9, 0, 69)
+var boule_players: Array[Node3D] = []
+var boules: Array[MeshInstance3D] = []
+var boule_turn := 0
+var boule_clock := 0.0
+var boule_release := Vector3.ZERO
 var walker_data: Array[Dictionary] = []
 
 func _reset_parked_controls() -> void:
@@ -3160,7 +3166,8 @@ func _build_building(center: Vector3, size: Vector3, _color: Color, sign_text: S
 func _build_trees() -> void:
 	for x in range(-40, 45, 8):
 		if absf(x) < 7: continue
-		_make_tree(Vector3(x, 0, -8.6), 0.95)
+		if x != -16: # Keep the bakery entrance clear.
+			_make_tree(Vector3(x, 0, -8.6), 0.95)
 		_make_tree(Vector3(x + 3.2, 0, 8.6), 0.82)
 	for z in range(-31, 22, 8):
 		if absf(z) < 7: continue
@@ -5156,6 +5163,77 @@ func _build_pedestrians() -> void:
 		walker_data.back().stretch = Vector2(start_x+9,start_x+81)
 		walker_data.back().actor.position.y = _foot_height(start_x+27+i*4,pavement_z)
 
+	_build_boule_court()
+
+func _build_boule_court() -> void:
+	var gravel := _make_box("Boule gravel", Vector3(3.8,.12,14), BOULE_CENTRE-Vector3.UP*.06, Color("#baa781"))
+	gravel.material_override = _noise_material(Color("#998465"), Color("#d7c7a1"), 38, .5)
+	for side in [-1,1]:
+		_make_box("Court edging",Vector3(.10,.10,14),BOULE_CENTRE+Vector3(side*1.88,0,0),Color("#77644b"))
+		_make_box("Court edging",Vector3(3.8,.10,.10),BOULE_CENTRE+Vector3(0,0,side*6.95),Color("#77644b"))
+	var ring := MeshInstance3D.new()
+	var torus := TorusMesh.new()
+	torus.inner_radius = .28
+	torus.outer_radius = .31
+	ring.mesh = torus
+	ring.position = BOULE_CENTRE+Vector3(0,.012,4)
+	ring.material_override = _material(Color("#bc402e"))
+	add_child(ring)
+	_boule_ball(.024, Color("#ffb73c"), false).position = BOULE_CENTRE+Vector3(0,.024,-4)
+	for i in 3:
+		var jacket: Color = [Color("#656f47"),Color("#45627c"),Color("#965a46")][i]
+		_make_walker("Boule player %d" % (i+1), 0, 0, 1, jacket, Color("#4e4942"))
+		var player: Node3D = walker_data.pop_back().actor
+		player.position = _boule_waiting_spot(i)
+		player.rotation.y = 0
+		player.get_node("Hair").material_override = _material([Color("#bcbab0"),Color("#817970"),Color("#d3c8ae")][i])
+		boule_players.append(player)
+		var ball := _boule_ball(.044, Color("#b2b7b7"), true)
+		ball.hide()
+		boules.append(ball)
+
+func _boule_ball(radius: float, tint: Color, steel: bool) -> MeshInstance3D:
+	var ball := MeshInstance3D.new()
+	var mesh := SphereMesh.new()
+	mesh.radius = radius
+	mesh.height = 2*radius
+	ball.mesh = mesh
+	var finish := _material(tint, .26 if steel else .72)
+	finish.metallic = .84 if steel else 0.0
+	ball.material_override = finish
+	add_child(ball)
+	return ball
+
+func _boule_waiting_spot(index: int) -> Vector3:
+	return BOULE_CENTRE + Vector3((index-1)*1.15,0,5.85)
+
+func _update_boule(delta: float) -> void:
+	boule_clock += delta
+	var player := boule_players[boule_turn]
+	var arm: Node3D = player.get_meta("arms")[1]
+	var hand: Node3D = arm.get_child(1)
+	var ball := boules[boule_turn]
+	var target := BOULE_CENTRE + Vector3([-.22,.32,.12][boule_turn], .044, -4+[.35,.03,-.28][boule_turn])
+	var weight := smoothstep(0,1.4,boule_clock)*(1-smoothstep(4.5,6, boule_clock))
+	var previous := player.position
+	player.position = _boule_waiting_spot(boule_turn).lerp(BOULE_CENTRE+Vector3(0,0,4),weight)
+	_animate_steps(player, previous.distance_to(player.position), delta)
+	arm.rotation.x = -.68*smoothstep(1.5,2.3,boule_clock)+1.75*smoothstep(2.3,2.66,boule_clock)-1.07*smoothstep(2.9,3.6,boule_clock)
+	if boule_clock < 2.66:
+		ball.show()
+		ball.position = hand.to_global(PALM_GRIP)
+		boule_release = ball.position
+	else:
+		var flight := clampf((boule_clock-2.66)/1.22,0,1)
+		var landing := target+Vector3.BACK*.80
+		ball.position = boule_release.lerp(landing,flight)+Vector3.UP*6.4*flight*(1-flight)
+		if flight == 1:
+			var roll := clampf((boule_clock-3.88)/.78,0,1)
+			ball.position = landing.lerp(target,roll*(2-roll))
+	if boule_clock >= 6.5:
+		boule_turn = (boule_turn+1)%boule_players.size()
+		boule_clock = 0
+
 func _equip_walker(scene: PackedScene, pace: float, stretch: Vector2, right_grip: Vector3) -> void:
 	var neighbour: Dictionary = walker_data.back()
 	var person: Node3D = neighbour.actor
@@ -5643,6 +5721,7 @@ func _update_search_hints() -> void:
 	shoe_trail.visible = shoe_hint.visible and shoe_hint.button_pressed
 
 func _update_pedestrians(delta: float) -> void:
+	_update_boule(delta)
 	_advance_crossing(delta)
 	greeting_timer = maxf(0,greeting_timer-delta)
 	bubble_time = maxf(0, bubble_time - delta)

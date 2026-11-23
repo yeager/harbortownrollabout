@@ -139,7 +139,8 @@ def build_bakery():
     for x in (-6.18, 6.18):
         box("White corner board", (x, -5.73, 3.12), (0.19, 0.12, 5.4), WHITE, 0.025, root)
     for x in (-4.1, 0, 4.1):
-        window(root, x, -5.79, 2.35, 1.65, 1.65)
+        if x != 0:
+            window(root, x, -5.79, 2.35, 1.65, 1.65)
         window(root, x, -5.79, 4.65, 1.45, 1.55)
     box("Bakery glazed door", (0, -5.9, 1.55), (1.3, 0.18, 2.5), WOOD, 0.06, root)
     box("Door glass", (0, -6.02, 1.85), (0.84, 0.05, 1.45), GLASS, 0.04, root)
