@@ -3446,6 +3446,22 @@ func _build_fire_station_bay(model: Node3D) -> void:
 	nameplate.material_override = fire_sign_face
 	var letters := _road_sign_text(nameplate,"FIRE AND RESCUE",Vector3(0,0,.078),.018,Color("#fff6dc"))
 	_size_world_sign(letters,7.85)
+	# A two-sided blade sign faces drivers approaching along the street.
+	var blade := _make_box("Fire station projecting sign",Vector3(.14,1.65,1.55),Vector3(5.8,5.9,8.10),Color("#682625"),false,model)
+	for height in [-.54,.54]:
+		_make_box("Sign wall bracket",Vector3(.12,.10,.58),Vector3(0,height,-.97),Color("#42474a"),false,blade)
+	var flame_outline := PackedVector2Array([Vector2(-.03,.66),Vector2(.04,.32),Vector2(.24,.13),
+		Vector2(.30,.31),Vector2(.49,-.05),Vector2(.45,-.36),Vector2(.24,-.54),
+		Vector2(-.06,-.60),Vector2(-.34,-.48),Vector2(-.49,-.26),Vector2(-.48,.03),
+		Vector2(-.31,.27),Vector2(-.27,.04),Vector2(-.15,.23)])
+	var flame := CSGPolygon3D.new()
+	flame.name = "Illuminated flame"
+	flame.polygon = flame_outline
+	flame.depth = .17
+	flame.rotation.y = PI*.5
+	flame.position.x = .085
+	flame.material = _material(Color("#ffb340"),.46,true)
+	blade.add_child(flame)
 	var facade := model.find_child("Red brick fire station",true,false) as MeshInstance3D
 	var foundation := model.find_child("Station foundation",true,false) as MeshInstance3D
 	var warning := model.find_child("Garage warning stripe",true,false) as MeshInstance3D
