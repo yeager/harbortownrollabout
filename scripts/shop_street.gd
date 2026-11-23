@@ -60,6 +60,10 @@ var shop_sign_font := SystemFont.new()
 var carried_toy := ""
 var toy_in_hand: Node3D
 var inside := -1
+var entrance_picture := TextureRect.new()
+var entrance_view := SubViewport.new()
+var entrance_camera := Camera3D.new()
+var pictured_shop := -1
 var shop_card := PanelContainer.new()
 var panel := VBoxContainer.new()
 var first_product: Button
@@ -238,6 +242,21 @@ func set_large_text(enabled: bool) -> void:
 		shop_card.offset_left = -362 if enabled else -302
 
 func build_menu(ui: CanvasLayer) -> void:
+	add_child(entrance_view)
+	entrance_view.size = Vector2i(320,180)
+	entrance_view.render_target_update_mode = SubViewport.UPDATE_DISABLED
+	entrance_view.add_child(entrance_camera)
+	entrance_camera.fov = 48
+	ui.add_child(entrance_picture)
+	entrance_picture.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	entrance_picture.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	entrance_picture.set_anchors_and_offsets_preset(Control.PRESET_TOP_RIGHT)
+	entrance_picture.offset_left = -238
+	entrance_picture.offset_right = -14
+	entrance_picture.offset_top = 106
+	entrance_picture.offset_bottom = 232
+	entrance_picture.texture = entrance_view.get_texture()
+	entrance_picture.hide()
 	ui.add_child(shop_card)
 	shop_card.set_anchors_and_offsets_preset(Control.PRESET_RIGHT_WIDE)
 	shop_card.offset_left = -362 if get_parent().large_text else -302
@@ -276,6 +295,23 @@ func at_grill_counter(pos: Vector3) -> bool:
 
 func customer_is_indoors() -> bool:
 	return inside >= 0 and inside != 6
+
+func update_entrance_picture(target: int, pos: Vector3) -> void:
+	var between := false
+	if target >= 0 and pos.z >= FRONT_Z-5 and pos.z <= FRONT_Z:
+		var offset := pos.x-storefront_x(target)
+		var neighbour := target + int(signf(offset))
+		between = neighbour >= 0 and neighbour < SHOPS.size() and absf(offset) >= 2.8 and absf(offset) <= 6.6
+	entrance_picture.visible = between
+	if not between:
+		pictured_shop = -1
+		return
+	if pictured_shop == target: return
+	pictured_shop = target
+	var doorway := Vector3(storefront_x(target),1.6,FRONT_Z)
+	entrance_camera.global_position = doorway + Vector3(0,.15,-7)
+	entrance_camera.look_at(doorway)
+	entrance_view.render_target_update_mode = SubViewport.UPDATE_ONCE
 
 func update_customer(foot: bool, pos: Vector3, active: bool) -> void:
 	var index:=-1

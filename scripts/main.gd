@@ -797,6 +797,11 @@ func _process(delta: float) -> void:
 	if lights_on and not (calm_mode or steady_player_lights) and mode == "playing" and not paused:
 		light_phase += delta * 3.2
 		_update_emergency_lights()
+	var entrance_target := -1
+	if mode == "playing" and not paused and walker.visible and tram_mode == 0 and not ferry_passenger and not boating and not phone.handset.is_visible_in_tree():
+		if free_drive and map_goal == shops.grill_counter(): entrance_target = 6
+		elif figurine_stage == FootQuest.RETURNING: entrance_target = 5
+	shops.update_entrance_picture(entrance_target,walker.position)
 	shops.update_customer(walker.visible and not ferry_passenger and not boating and tram_mode==0,walker.position,mode=="playing" and not paused)
 	weather.visible = not shops.customer_is_indoors() and tram_mode != 1
 	_update_camera(delta)
