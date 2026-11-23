@@ -822,6 +822,8 @@ func _product_price(shop: int, item: int) -> String:
 
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_TRANSLATION_CHANGED and is_node_ready():
+		if entrance_picture.visible:
+			entrance_view.render_target_update_mode = SubViewport.UPDATE_ONCE
 		_update_candy_letters.call_deferred()
 		for i in kiosk_menu_signs.size():
 			kiosk_menu_signs[i].text = _product_price(1,i)
