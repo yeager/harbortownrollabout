@@ -20,6 +20,8 @@ var sections: Array[Node3D] = []
 var gangways: Array[MeshInstance3D] = []
 var gangway_contour := _gangway_profile()
 var bellows_finish := StandardMaterial3D.new()
+const CAR_SPACING := 4.83
+var boarding_steps: Array[MeshInstance3D] = []
 var platform_door_leaves: Array[Node3D] = []
 var interior_displays: Array[Label3D] = []
 var next_stop_display: Label3D
@@ -180,6 +182,11 @@ func _ready() -> void:
 		# Stops lie on the straight portions with space for all three cars.
 		world._make_box("Island platform",Vector3(2.55,.34,17),Vector3(2.81,.12,4.5),Color("#c4bbaa"),false,station)
 		world._make_box("Tactile strip",Vector3(.18,.019,16.8),Vector3(1.69,.299,4.5),Color("#edce73"),false,station)
+		for car_index in 3:
+			var door_z := CAR_SPACING * car_index + .13
+			for side in [-1,1]:
+				var stripe := world._make_box("Boarding chevron",Vector3(.49,.014,.085),Vector3(2.13,.31,door_z+side*.13),Color("#ffdf57"),false,station) as MeshInstance3D
+				stripe.rotation.y = -side*.59
 		var toe := station.to_global(Vector3(2.81,0,-7))
 		var bottom: float = world._surface_height(toe.x,toe.z) - station.position.y
 		ramp_starts.append(bottom)
@@ -245,6 +252,8 @@ func _ready() -> void:
 		display.outline_size = 0
 		interior_displays.append(display)
 		car.add_child(preload("res://vehicles/tram_saloon.glb").instantiate())
+		var step := world._make_box("Boarding threshold",Vector3(.38,.045,.99),Vector3(1.07,.30,.13),Color("#ffdf57"),false,car) as MeshInstance3D
+		boarding_steps.append(step)
 		for s in [-1,1]:
 			for opening_direction in [-1,1]:
 				var leaf := Node3D.new()
@@ -463,6 +472,8 @@ func advance(delta: float, manual: bool, gas: bool, brake: bool) -> void:
 		if previous_dwell > 1.4 and dwell <= 1.4:
 			door_chime.play()
 		var opening := smoothstep(0,DOOR_TRAVEL_TIME,minf(STOP_DURATION-dwell,dwell))
+		for threshold in boarding_steps:
+			threshold.position.x = lerpf(1.07,1.40,opening)
 		for i in platform_door_leaves.size():
 			var direction := -1 if i%2==0 else 1
 			platform_door_leaves[i].position.z = .13+direction*(.26+.51*opening)
@@ -510,7 +521,7 @@ func stop_at_station(index: int) -> void:
 func place_sections() -> void:
 	var length := track.get_baked_length()
 	for i in sections.size():
-		var p := fposmod(distance-4.83*i,length)
+		var p := fposmod(distance-CAR_SPACING*i,length)
 		sections[i].position=track.sample_baked(p)
 		sections[i].look_at(track.sample_baked(fposmod(p+.2,length)))
 	for i in gangways.size():
