@@ -244,6 +244,13 @@ func build_menu(ui: CanvasLayer) -> void:
 	layout.add_child(receipt)
 	shop_card.hide()
 
+func grill_counter() -> Vector3:
+	return Vector3(storefront_x(SHOPS.find("Hot dog stand")), 0, FRONT_Z - 0.9)
+
+func at_grill_counter(pos: Vector3) -> bool:
+	var counter := grill_counter()
+	return absf(pos.x-counter.x) < 1.45 and pos.z > FRONT_Z-1.6 and pos.z < FRONT_Z-.15
+
 func customer_is_indoors() -> bool:
 	return inside >= 0 and inside != 6
 
@@ -252,7 +259,7 @@ func update_customer(foot: bool, pos: Vector3, active: bool) -> void:
 	if foot:
 		for i in SHOPS.size():
 			if i == 6:
-				if absf(pos.x-storefront_x(i)) < 1.45 and pos.z > FRONT_Z-1.6 and pos.z < FRONT_Z-.15:
+				if at_grill_counter(pos):
 					index=i
 				continue
 			if absf(pos.x-storefront_x(i))<4 and pos.z>FRONT_Z and pos.z<49.4:

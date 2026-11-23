@@ -6018,7 +6018,9 @@ func _update_route_arrows() -> void:
 	if (free_drive and map_goal == Vector3.INF) or (not free_drive and mission_index >= TARGETS.size()): return
 	var origin := walker.position if walker.visible else ambulance.position
 	var target := map_goal if free_drive else _mission_destination()
-	if free_drive and origin.distance_to(target) < _arrival_radius():
+	var walking_to_grill := free_drive and walker.visible and target == shops.grill_counter()
+	var arrived := shops.at_grill_counter(origin) if walking_to_grill else origin.distance_to(target) < _arrival_radius()
+	if free_drive and arrived:
 		map_goal = Vector3.INF
 		return
 	var start := Vector2(origin.x, origin.z)
@@ -6032,7 +6034,10 @@ func _update_route_arrows() -> void:
 	var goal := Vector2(target.x, target.z)
 	if walker.visible:
 		navigator.remaining_lane.clear()
-		points.append_array(navigator.path(start, goal))
+		if walking_to_grill and origin.z <= shops.FRONT_Z and start.distance_to(goal) <= 5.0:
+			points = PackedVector2Array([start, goal])
+		else:
+			points.append_array(navigator.path(start, goal))
 	else:
 		var forward := -ambulance.global_basis.z
 		var needs_wide_turns := vehicle_index in [2, RECOVERY, BUS, REFUSE]
@@ -6041,7 +6046,7 @@ func _update_route_arrows() -> void:
 	if not walker.visible and not paused and not boating and not operating_excavator:
 		turn_preview.text = navigator.turn_preview(points, car_forward)
 		turn_preview.visible = not turn_preview.text.is_empty()
-	var gap := 3.5
+	var gap := minf(3.5, start.distance_to(goal) * .5) if walking_to_grill else 3.5
 	var used := 0
 	for i in range(1,points.size()):
 		var segment := points[i]-points[i-1]
@@ -6834,7 +6839,7 @@ func _build_town_map() -> void:
 	dialog.add_child(body)
 	var chart := preload("res://scripts/town_map.gd").new()
 	body.add_child(chart)
-	var counter := Vector3(shops.storefront_x(shops.SHOPS.find("Hot dog stand")), 0, shops.FRONT_Z - 0.9)
+	var counter := shops.grill_counter()
 	chart.configure(navigator,PackedVector3Array([TARGETS[0],TARGETS[1],TARGETS[2],SCHOOL_CURB,STATION_DROP,counter]),MAP_NAMES)
 	var legend := HFlowContainer.new()
 	body.add_child(legend)
