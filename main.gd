@@ -285,6 +285,7 @@ var speed := 0.0
 var steering := 0.0
 var free_drive := true
 var mission_index := 0
+var refuse_pump := AudioStreamPlayer3D.new()
 var refuse_lift: Tween
 var refuse_bins: Array[Node3D] = []
 var vehicle_progress := {}
@@ -1301,7 +1302,9 @@ func _empty_refuse_bin(stop: int) -> void:
 	var rest_rotation := bin.rotation
 	bin.rotation.y = vehicle_model.global_rotation.y
 	refuse_lift = bin.create_tween().set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	refuse_pump.global_position = loading_edge
 	refuse_lift.tween_property(bin,"global_position",loading_edge,.65)
+	refuse_lift.tween_callback(refuse_pump.play)
 	refuse_lift.tween_property(bin,"global_position",loading_edge + Vector3.UP*1.9,.55)
 	refuse_lift.parallel().tween_property(bin,"rotation:x",deg_to_rad(145),.55)
 	refuse_lift.tween_interval(.18)
@@ -3293,6 +3296,10 @@ func _add_parked_moped_stand(body: Node3D) -> void:
 	_tube_between(stand, Vector3(-.10,.05,.205), Vector3(-.175,.065,.25), .007, steel)
 
 func _build_depot() -> void:
+	refuse_pump.stream = preload("res://audio/bin_lift.wav")
+	refuse_pump.volume_db = -8
+	refuse_pump.unit_size = 4
+	add_child(refuse_pump)
 	for i in 2:
 		var bin := Node3D.new()
 		add_child(bin)
