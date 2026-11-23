@@ -1087,16 +1087,33 @@ def make_fire_engine():
             ring.append((w*math.copysign(abs(c)**.40,c),
                          -2.32+d*math.copysign(abs(sn)**.40,sn),z))
         layers.append(ring)
-    profile_loft("Low profile beacon housing",layers,DARK,root)
+    profile_loft("Beacon mounting tray",layers[:3],DARK,root)
+    lens=material("Blue polycarbonate beacon cover",(.12,.35,.82),.08,.14)
+    next(node for node in lens.node_tree.nodes if node.type=="BSDF_PRINCIPLED").inputs["Alpha"].default_value=.25
+    lens.surface_render_method="BLENDED"
+    shell=[[(x*1.025,-2.32+(y+2.32)*1.19,z+.009) for x,y,z in ring]
+           for ring in layers[2:]]
+    profile_loft("Blue beacon lens",shell,lens,root)
     smoked_blue=material("Unlit blue LED optics",(.012,.063,.31),.18,.20)
     for side in [-1,1]:
+        lit_dies=[]
         for i in range(5):
             x=side*(.224+.125*i)
             for face in [-1,1]:
-                y=-2.32+face*(.143-.014*(abs(x)/.8)**4)
-                cube("Blue optic bezel",(x,y,2.749),(.118,.027,.077),smoked_blue,.011,root)
-                cube("FlashBlue_Left" if side<0 else "FlashRed_Right",
-                     (x,y+face*.018,2.750),(.098,.014,.049),BLUE_LAMP,.006,root)
+                y=-2.32+face*(.119-.010*(abs(x)/.8)**4)
+                cube("Blue optic bezel",(x,y,2.749),(.118,.025,.065),smoked_blue,.010,root)
+                for offset in (-.036,0,.036):
+                    loc=(x+offset,y+face*.014,2.750)
+                    cube("LED reflector",loc,(.027,.008,.036),METAL,.004,root)
+                    lit_dies.append(cube("LED emitter",(loc[0],loc[1]+face*.005,loc[2]),
+                                         (.021,.004,.028),BLUE_LAMP,.002,root))
+        # Switch all thirty dies on this half together in the game.
+        bpy.ops.object.select_all(action="DESELECT")
+        for die in lit_dies:
+            die.select_set(True)
+        bpy.context.view_layer.objects.active=lit_dies[0]
+        bpy.ops.object.join()
+        lit_dies[0].name="FlashBlue_Left" if side<0 else "FlashRed_Right"
     cube("Forward scene lamp surround",(0,-2.462,2.747),(.300,.025,.080),BLACK,.009,root)
     cube("Forward scene lamp diffuser",(0,-2.479,2.747),(.276,.014,.048),HEADLAMP,.006,root)
     for x in (-.82,.82):
