@@ -455,6 +455,7 @@ var moorings: Array[Dictionary] = []
 var street_signals := preload("res://scripts/street_signals.gd").new()
 var tram := preload("res://scripts/tram.gd").new()
 var boating := false
+var shopper_grip_points: Array[Vector3] = []
 var grip_radius := 0.0
 var road_driver: Node3D
 var skipper: Node3D
@@ -3472,10 +3473,13 @@ func _pose_driver_arms() -> void:
 	for index in arms.size():
 		var shoulder: Node3D = arms[index]
 		var grip := cabin_wheel.to_global(Vector3.RIGHT * grip_radius * (-1 if index == 0 else 1))
+		if not shopper_grip_points.is_empty():
+			grip = cabin_wheel.to_global(shopper_grip_points[index])
 		_fit_driver_arm(shoulder,grip)
 
 func _fit_driver_arm(shoulder: Node3D, grip: Vector3) -> void:
-	var reach := road_driver.to_local(grip) - shoulder.position
+	var hand: Node3D = shoulder.get_node("Hand")
+	var reach := shoulder.to_local(grip) - hand.basis * PALM_GRIP
 	# Bend the elbow down and slightly out, keeping the wrist on the rim.
 	var axis := reach.normalized()
 	var outward := Vector3(signf(shoulder.position.x)*.25,-1,0)
@@ -3487,7 +3491,7 @@ func _fit_driver_arm(shoulder: Node3D, grip: Vector3) -> void:
 	var lower := shoulder.get_node("Forearm") as MeshInstance3D
 	_fit_driver_sleeve(upper, Vector3.ZERO, elbow)
 	_fit_driver_sleeve(lower, elbow, reach)
-	shoulder.get_node("Hand").position = reach
+	hand.position = reach
 
 func _fit_driver_sleeve(sleeve: MeshInstance3D, start: Vector3, end: Vector3) -> void:
 	var segment := end - start
@@ -4784,9 +4788,30 @@ func _update_traffic(delta: float) -> void:
 		item.distance = fposmod(float(item.distance)+travel,item.route.get_baked_length())
 		_place_traffic(item)
 
+# Centre of the channel between the bent fingers and thumb in GrippingHand.obj.
+const PALM_GRIP := Vector3(-.024,-.027,0)
+
+func _make_grocery_bag(parent: Node3D) -> Node3D:
+	var bag := Node3D.new()
+	parent.add_child(bag)
+	var paper := Color("#bc8956")
+	_make_box("Paper grocery bag",Vector3(.23,.32,.30),Vector3.UP*.16,paper,false,bag)
+	for side in [-1,1]:
+		for end in [-1,1]:
+			_make_box("Loop side",Vector3(.016,.10,.016),Vector3(end*.060,.36,side*.096),paper,false,bag)
+		_make_box("Loop grip",Vector3(.136,.017,.016),Vector3(0,.410,side*.096),paper,false,bag)
+	var loaf := _make_box("Bread loaf",Vector3(.080,.22,.09),Vector3(-.046,.34,0),Color("#d9a252"),false,bag)
+	loaf.rotation.z = .15
+	_make_box("Milk carton",Vector3(.087,.13,.081),Vector3(.049,.34,-.034),Color("#e2f1ef"),false,bag)
+	return bag
+
 func _attach_pet(pet: Node3D) -> void:
 	var owner: Dictionary = walker_data.back()
-	pet.hand = owner.actor.get_meta("arms")[1].get_child(1)
+	var palm: MeshInstance3D = owner.actor.get_meta("arms")[1].get_child(1)
+	palm.mesh = preload("res://characters/GrippingHand.obj")
+	pet.hand = Node3D.new()
+	palm.add_child(pet.hand)
+	pet.hand.position = PALM_GRIP
 	owner.actor.add_child(pet)
 	owner.pet = pet
 	pet.advance(0.0)
@@ -4922,6 +4947,11 @@ func _build_pedestrians() -> void:
 	walker_data.back().actor.scale = Vector3.ONE*.72
 	_make_walker("Parent",10.9,6.42,1,Color("#876681"),Color("#424850"))
 	walker_data.back().speed = walker_data[-2].speed
+	var shopper_hand: MeshInstance3D = walker_data.back().actor.get_meta("arms")[1].get_child(1)
+	shopper_hand.mesh = preload("res://characters/GrippingHand.obj")
+	var shopping_bag := _make_grocery_bag(shopper_hand)
+	shopping_bag.rotation.y = PI*.5
+	shopping_bag.position = PALM_GRIP - shopping_bag.basis*Vector3(0,.410,-.096)
 	_make_walker("Scooter neighbour",-36.0,-7.22,1.0,Color("#c78653"),Color("#424957"))
 	var neighbour: Dictionary = walker_data.back()
 	var local_scooter := Scooter.new()
@@ -5702,6 +5732,7 @@ func _load_vehicle_model() -> void:
 	reverse_monitor = null
 	reverse_camera = null
 	cabin_wheel = null
+	shopper_grip_points.clear()
 	if vehicle_index == 3:
 		var arms := vehicle_model.find_children("Wiper arm*","MeshInstance3D",true,false)
 		var blades := vehicle_model.find_children("Windscreen wiper blade*","MeshInstance3D",true,false)
@@ -5850,7 +5881,9 @@ func _load_vehicle_model() -> void:
 		cabin_wheel.global_transform = Transform3D(ambulance.global_basis,bar.global_position)
 		cabin_wheel_rest_basis = cabin_wheel.basis
 		cabin_wheel_axis = -cabin_wheel.to_local(column.global_position).normalized()
-		grip_radius = absf(cabin_wheel.to_local(grips[0].global_position).x)
+		for grip: MeshInstance3D in grips:
+			shopper_grip_points.append(cabin_wheel.to_local(grip.to_global(grip.get_aabb().get_center())))
+		shopper_grip_points.sort_custom(func(a: Vector3,b: Vector3): return a.x < b.x)
 		bar.reparent(cabin_wheel)
 		for grip in grips: grip.reparent(cabin_wheel)
 	if vehicle_index == FOOD_TRUCK:
@@ -6076,17 +6109,7 @@ func _build_target_marker() -> void:
 		_make_walker("Bus passenger",0,0,1,shirt,Color("#343c48"))
 		bus_companions.append(walker_data.pop_back().actor)
 	for i in 2:
-		var bag := Node3D.new()
-		add_child(bag)
-		var paper := Color("#bc8956")
-		_make_box("Paper grocery bag",Vector3(.23,.32,.30),Vector3.UP*.16,paper,false,bag)
-		for side in [-1,1]:
-			for end in [-1,1]:
-				_make_box("Loop side",Vector3(.016,.10,.016),Vector3(end*.060,.36,side*.096),paper,false,bag)
-			_make_box("Loop grip",Vector3(.136,.017,.016),Vector3(0,.410,side*.096),paper,false,bag)
-		var loaf := _make_box("Bread loaf",Vector3(.080,.22,.09),Vector3(-.046,.34,0),Color("#d9a252"),false,bag)
-		loaf.rotation.z = .15
-		_make_box("Milk carton",Vector3(.087,.13,.081),Vector3(.049,.34,-.034),Color("#e2f1ef"),false,bag)
+		var bag := _make_grocery_bag(self)
 		grocery_bags.append(bag)
 		var parcel := Node3D.new()
 		parcel.name = "Delivery parcel %d" % (i+1)
@@ -6172,7 +6195,9 @@ func _build_target_marker() -> void:
 	for side in [-1,1]:
 		for size in [Vector3(.012,.14,.045),Vector3(.012,.045,.14)]:
 			_make_box("First aid symbol",size,Vector3(side*.122,0,0),Color("#eef0df"),false,medical_bag)
-	_make_box("Bag handle",Vector3(.045,.10,.14),Vector3(0,.18,0),Color("#253f40"),false,medical_bag)
+	for end in [-1,1]:
+		_make_box("Handle strap",Vector3(.021,.083,.018),Vector3(0,.19,end*.064),Color("#253f40"),false,medical_bag)
+	_make_box("Bag handle",Vector3(.024,.023,.146),Vector3(0,.226,0),Color("#253f40"),false,medical_bag)
 	mission_marker = Node3D.new()
 	add_child(mission_marker)
 	var ring := MeshInstance3D.new()
@@ -6453,8 +6478,17 @@ func _update_mission_marker() -> void:
 		medical_bag.visible = rescue and walker.visible
 	elif mission_index == TARGETS.size():
 		carrier = marina_recipient
+	if medical_bag.visible:
+		var palm: MeshInstance3D = carrier.get_meta("arms")[1].get_child(1)
+		carrier = palm
+		bag_position = PALM_GRIP - Vector3.UP*.226
 	if medical_bag.get_parent() != carrier:
+		var previous_palm := medical_bag.get_parent() as MeshInstance3D
+		if previous_palm:
+			previous_palm.mesh = preload("res://characters/RelaxedHand.obj")
 		medical_bag.reparent(carrier,false)
+		if medical_bag.visible:
+			(carrier as MeshInstance3D).mesh = preload("res://characters/GrippingHand.obj")
 	medical_bag.position = bag_position
 	if free_drive or mission_index >= TARGETS.size():
 		mission_marker.visible = false
