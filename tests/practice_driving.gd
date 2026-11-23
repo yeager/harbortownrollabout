@@ -29,7 +29,12 @@ func verify() -> void:
 		printerr("Practice car did not brake and reverse")
 		quit(1)
 		return
+	game.ambulance.position.z = game.PRACTICE_YARD.end.y + 1
 	game._recover_position()
+	if game.ambulance.position != start:
+		printerr("Mower displaced beyond the course did not recover at its start")
+		quit(1)
+		return
 	game._change_seat()
 	if not game.walker.visible or game._play_bounds(game.walker.position) != game.PRACTICE_YARD:
 		printerr("Could not get out inside practice yard")

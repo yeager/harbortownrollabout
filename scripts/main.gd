@@ -92,6 +92,7 @@ var pause_f7 := false
 var scooter_key := KEY_U
 var horn_f4 := false
 var quit_key := KEY_F10
+var practice_active := false
 var recovery_key := KEY_R
 var jump_key := KEY_E
 var number_camera := false
@@ -2912,6 +2913,7 @@ func _build_high_bridge(z: float, asphalt: Color) -> void:
 		var mid := Vector3((x0+x1)*.5, (_bridge_rise(x0)+_bridge_rise(x1))*.5-.02, z)
 		var normal := Vector3.UP.rotated(Vector3.BACK,angle)
 		var deck := _make_box("Norra brobanan",Vector3(length,.56,11.6),mid-normal*.28,asphalt)
+		deck.add_to_group("north_bridge_deck")
 		deck.rotation.z = angle
 		deck.material_override = road_finish
 		for side in [-1,1]:
@@ -9048,7 +9050,7 @@ func _recover_position() -> void:
 	_refresh_status()
 
 func _play_bounds(point: Vector3) -> Rect2:
-	return PRACTICE_YARD if PRACTICE_YARD.has_point(Vector2(point.x, point.z)) else CITY_INTERIOR
+	return PRACTICE_YARD if practice_active or PRACTICE_YARD.has_point(Vector2(point.x, point.z)) else CITY_INTERIOR
 
 func _build_practice_yard() -> void:
 	var center := PRACTICE_YARD.get_center()
@@ -9069,6 +9071,7 @@ func _start_practice() -> void:
 	if boating or tram_mode != 0 or start_in_excavator:
 		_on_vehicle_selected(3)
 	_start_game()
+	practice_active = true
 	ambulance.position = PRACTICE_START
 	_refresh_ui()
 	_update_camera(0, true)
@@ -9076,6 +9079,7 @@ func _start_practice() -> void:
 func _leave_practice() -> void:
 	if shopper_boarding or not leave_practice_button.visible: return
 	if not _recover_road_vehicle(): return
+	practice_active = false
 	if walker.visible:
 		parked_cars[vehicle_index].transform = ambulance.transform
 		walker.position = ambulance.to_global(parked_door_offset)
@@ -9207,6 +9211,7 @@ func _resume_road_checkpoint() -> void:
 	_refresh_ui()
 
 func _start_game() -> void:
+	practice_active = false
 	boule_seated = false
 	boule_choices.hide()
 	boule_guest_turn = false

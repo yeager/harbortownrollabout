@@ -18,10 +18,14 @@ func verify_city() -> void:
 func check_geometry(game) -> void:
 	var route = preload("res://scripts/street_route.gd").new()
 	var asphalt: Array[Rect2] = []
+	var bridge_sections: Array[Rect2] = []
 	for child in game.get_children():
 		if child is MeshInstance3D and child.material_override == game.road_finish:
+			if child.name == "Practice asphalt": continue # The separate training course has no street connection.
 			var bounds: AABB = child.transform * child.get_aabb()
 			asphalt.append(Rect2(bounds.position.x, bounds.position.z, bounds.size.x, bounds.size.z))
+			if child.is_in_group("north_bridge_deck"):
+				bridge_sections.append(asphalt.back())
 	# The station entrance crosses the pavement into a yard, outside the street graph.
 	var driveway_mesh: MeshInstance3D = game.get_node("Station driveway")
 	var yard_mesh: MeshInstance3D = game.get_node("Station forecourt")
@@ -53,6 +57,7 @@ func check_geometry(game) -> void:
 	# Also check actual asphalt for street ends missing from the navigation graph.
 	for rect in asphalt:
 		var axis := Vector2.RIGHT if rect.size.x >= rect.size.y else Vector2.DOWN
+		if rect in bridge_sections: axis = Vector2.RIGHT
 		for sign_value in [-1, 1]:
 			var tip := rect.get_center() + rect.size * axis * .5 * float(sign_value)
 			var nearest: Vector2i = route._nearest(tip)
