@@ -1775,8 +1775,8 @@ msgstr "Bär tårtan till kalasbordet på torget."
 msgid "Stop outside the ice cream kiosk to collect the empty crates."
 msgstr "Stanna utanför glasskiosken och hämta de tomma lådorna."
 
-msgid "Take the empty crates west along Stationsallén to the van’s parking bay."
-msgstr "Kör västerut på Stationsallén med tomlådorna till glassbilens parkeringsruta."
+msgid "Drive west along Stationsallén. Park by the blue “Ice cream depot” sign."
+msgstr "Kör västerut på Stationsallén. Parkera vid den blå skylten ”Glassdepå”."
 
 msgid "The ice cream depot received both empty crates."
 msgstr "Glassdepån har fått båda tomlådorna."

@@ -276,7 +276,7 @@ enum CrateStage { AT_KIOSK, IN_VAN, AT_DEPOT }
 var crate_stage := CrateStage.AT_KIOSK
 var ice_crates := Node3D.new()
 const CRATE_PICKUP := "Stop outside the ice cream kiosk to collect the empty crates."
-const CRATE_RETURN := "Take the empty crates west along Stationsallén to the van’s parking bay."
+const CRATE_RETURN := "Drive west along Stationsallén. Park by the blue “Ice cream depot” sign."
 const CRATE_DONE := "The ice cream depot received both empty crates."
 var flour_sacks := Node3D.new()
 const FLOUR_CURB := Vector3(-15,0,-3)

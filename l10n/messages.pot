@@ -1774,7 +1774,7 @@ msgstr ""
 msgid "Stop outside the ice cream kiosk to collect the empty crates."
 msgstr ""
 
-msgid "Take the empty crates west along Stationsallén to the van’s parking bay."
+msgid "Drive west along Stationsallén. Park by the blue “Ice cream depot” sign."
 msgstr ""
 
 msgid "The ice cream depot received both empty crates."

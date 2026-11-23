@@ -1841,8 +1841,8 @@ msgstr "Vie kakku torin syntymäpäiväpöytään."
 msgid "Stop outside the ice cream kiosk to collect the empty crates."
 msgstr "Pysähdy jäätelökioskin eteen hakemaan tyhjät laatikot."
 
-msgid "Take the empty crates west along Stationsallén to the van’s parking bay."
-msgstr "Aja tyhjät laatikot Stationsallénia länteen jäätelöauton pysäköintipaikalle."
+msgid "Drive west along Stationsallén. Park by the blue “Ice cream depot” sign."
+msgstr "Aja Stationsallénia länteen. Pysäköi sinisen ”Jäätelövarasto”-kyltin kohdalle."
 
 msgid "The ice cream depot received both empty crates."
 msgstr "Molemmat tyhjät laatikot saapuivat jäätelövarastolle."
