@@ -149,10 +149,15 @@ box("Tail lamp",(0,1.16,.43),(.14,.035,.06),v.TAIL_LAMP)
 v.export_vehicle(root,"shopping_trike.glb")
 if os.getenv("SHOPPER_PORTRAIT"):
     scene=bpy.context.scene
-    scene.render.engine='BLENDER_WORKBENCH'
-    scene.display.shading.color_type='MATERIAL'
-    scene.display.shading.show_shadows=True
-    scene.display.shading.show_cavity=True
+    scene.render.engine = 'CYCLES'
+    scene.cycles.samples = 24
+    scene.cycles.use_denoising = True
+    for position, power, size in [((2,-4,5),420,4),((-3,-1,3),260,3),((1,3,4),350,3)]:
+        bpy.ops.object.light_add(type='AREA', location=position)
+        lamp = bpy.context.object
+        lamp.rotation_euler = (Vector((0,0,.7))-lamp.location).to_track_quat('-Z','Y').to_euler()
+        lamp.data.energy = power
+        lamp.data.size = size
     scene.render.film_transparent=True
     bpy.ops.object.camera_add(location=(4,-3.9,2.3))
     camera=bpy.context.object
