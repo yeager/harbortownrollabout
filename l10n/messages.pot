@@ -865,7 +865,7 @@ msgstr ""
 msgid "Walk or rest · Run again in %d s"
 msgstr ""
 
-msgid "{up}/{down} Walk · {left}/{right} Turn · Shift + {up} Run · {seat} Enter · {scooter} Scooter"
+msgid "{up}/{down} Walk · {left}/{right} Turn · {run} + {up} Run · {seat} Enter · {scooter} Scooter"
 msgstr ""
 
 msgid "PgUp Raise camera · PgDn Lower camera"
@@ -900,7 +900,7 @@ msgstr ""
 msgid "Next song · %s"
 msgstr ""
 
-msgid "Ready to run again! Hold Shift and walk forward."
+msgid "Ready to run again! Hold {run} and walk forward."
 msgstr ""
 
 msgid "SUV"
@@ -1796,4 +1796,10 @@ msgid "Drive to the bakery. Look for the coffee cup above the door. Drop off the
 msgstr ""
 
 msgid "Practice course"
+msgstr ""
+
+msgid "Shift"
+msgstr ""
+
+msgid "Run with Ctrl"
 msgstr ""

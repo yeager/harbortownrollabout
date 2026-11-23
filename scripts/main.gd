@@ -96,6 +96,7 @@ var practice_active := false
 var recovery_key := KEY_R
 var jump_key := KEY_E
 var number_camera := false
+var ctrl_run := false
 var radio_keys: Array[int] = [KEY_J, KEY_N]
 var driving_hints := Label.new()
 var large_text := false
@@ -4936,9 +4937,10 @@ func _recovery_hint() -> String:
 func _walking_hint() -> String:
 	if winded:
 		return tr("Walk or rest · Run again in %d s") % _rest_seconds()
+	var run_key := "Ctrl" if ctrl_run else tr("Shift")
 	if run_ready_hint_time > 0:
-		return tr("Ready to run again! Hold Shift and walk forward.")
-	return tr("{up}/{down} Walk · {left}/{right} Turn · Shift + {up} Run · {seat} Enter · {scooter} Scooter").replace("{scooter}",OS.get_keycode_string(scooter_key)) + "   ·   " + (tr("%s Jump") % OS.get_keycode_string(jump_key)) + "   ·   " + tr("9 Raise camera · 3 Lower camera" if number_camera else "PgUp Raise camera · PgDn Lower camera") + "\n" + tr("Hold V and move the mouse to look around")
+		return tr("Ready to run again! Hold {run} and walk forward.").replace("{run}",run_key)
+	return tr("{up}/{down} Walk · {left}/{right} Turn · {run} + {up} Run · {seat} Enter · {scooter} Scooter").replace("{run}",run_key).replace("{scooter}",OS.get_keycode_string(scooter_key)) + "   ·   " + (tr("%s Jump") % OS.get_keycode_string(jump_key)) + "   ·   " + tr("9 Raise camera · 3 Lower camera" if number_camera else "PgUp Raise camera · PgDn Lower camera") + "\n" + tr("Hold V and move the mouse to look around")
 
 func _walk(delta: float) -> void:
 	if boule_guest_turn or boule_seated: return
@@ -4956,7 +4958,7 @@ func _walk(delta: float) -> void:
 		walk_camera_height = clampf(walk_camera_height + height_input*delta*2.0,-1.5,3.5)
 	walker.rotate_y(-clampf(keys.x,-1,1)*2.5*delta)
 	walk_basis = Basis(Vector3.UP,walker.rotation.y)
-	var running := Input.is_key_pressed(KEY_SHIFT) and not winded and keys.y < 0
+	var running := Input.is_key_pressed(KEY_CTRL if ctrl_run else KEY_SHIFT) and not winded and keys.y < 0
 	var desired := walk_basis.z * clampf(keys.y,-1,1) * (Gait.RUN_SPEED if running else Gait.WALK_SPEED)
 	desired.y = 0
 	var horizontal := Vector3(walking_velocity.x,0,walking_velocity.z)
@@ -8496,6 +8498,16 @@ func _build_overlay() -> void:
 		_refresh_ui()
 	)
 	pages[2].add_child(jump)
+	var run := CheckButton.new()
+	run.name = "CtrlRun"
+	run.text = "Run with Ctrl"
+	run.button_pressed = ctrl_run
+	run.toggled.connect(func(enabled: bool):
+		ctrl_run = enabled
+		_save_preferences()
+		_refresh_ui()
+	)
+	pages[2].add_child(run)
 	var phone_key := CheckButton.new()
 	phone_key.name = "PhoneF2"
 	phone_key.text = "Open the phone with F2"
@@ -9617,6 +9629,7 @@ func _load_preferences() -> void:
 		if code in RADIO_KEYS[i]: radio_keys[i] = code
 	var saved_favorites = config.get_value("gallery","favorites",PackedStringArray())
 	if saved_favorites is PackedStringArray: favorites = saved_favorites
+	ctrl_run = config.get_value("keyboard","ctrl_run",false) == true
 	number_camera = config.get_value("keyboard","number_camera",false) == true
 	scooter_key = KEY_F9 if config.get_value("keyboard","scooter_f9",false) == true else KEY_U
 	seat_f3 = config.get_value("keyboard","seat_f3",false) == true
@@ -9681,6 +9694,7 @@ func _save_preferences() -> void:
 	for i in RADIO_KEYS.size():
 		config.set_value("keyboard","radio_%d" % i, radio_keys[i])
 	config.set_value("gallery","favorites",favorites)
+	config.set_value("keyboard","ctrl_run",ctrl_run)
 	config.set_value("keyboard","number_camera",number_camera)
 	config.set_value("keyboard","scooter_f9",scooter_key == KEY_F9)
 	config.set_value("keyboard","seat_f3",seat_f3)

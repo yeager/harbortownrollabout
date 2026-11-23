@@ -928,8 +928,8 @@ msgstr ""
 msgid "Walk or rest · Run again in %d s"
 msgstr "Geh oder ruh dich aus · In %d s kannst du wieder rennen"
 
-msgid "{up}/{down} Walk · {left}/{right} Turn · Shift + {up} Run · {seat} Enter · {scooter} Scooter"
-msgstr "{up}/{down} Gehen · {left}/{right} Drehen · Shift + {up} Rennen · {seat} Einsteigen · {scooter} Roller"
+msgid "{up}/{down} Walk · {left}/{right} Turn · {run} + {up} Run · {seat} Enter · {scooter} Scooter"
+msgstr "{up}/{down} Gehen · {left}/{right} Drehen · {run} + {up} Rennen · {seat} Einsteigen · {scooter} Roller"
 
 msgid "PgUp Raise camera · PgDn Lower camera"
 msgstr "Bild ↑ Kamera höher · Bild ↓ Kamera tiefer"
@@ -962,8 +962,8 @@ msgstr "Radio einschalten · %s"
 msgid "Next song · %s"
 msgstr "Nächstes Lied · %s"
 
-msgid "Ready to run again! Hold Shift and walk forward."
-msgstr "Du kannst wieder rennen! Halte Shift gedrückt und geh vorwärts."
+msgid "Ready to run again! Hold {run} and walk forward."
+msgstr "Du kannst wieder rennen! Halte {run} gedrückt und geh vorwärts."
 
 msgid "SUV"
 msgstr "SUV"
@@ -1885,3 +1885,9 @@ msgstr "Fahr zur Bäckerei. Schau nach der Kaffeetasse über der Tür. Lade dort
 
 msgid "Practice course"
 msgstr "Übungsplatz"
+
+msgid "Shift"
+msgstr "Umschalt"
+
+msgid "Run with Ctrl"
+msgstr "Mit Strg rennen"

@@ -910,9 +910,9 @@ msgstr ""
 msgid "Walk or rest · Run again in %d s"
 msgstr "Kävele tai lepää · Voit taas juosta %d s kuluttua"
 
-msgid "{up}/{down} Walk · {left}/{right} Turn · Shift + {up} Run · {seat} Enter · {scooter} Scooter"
+msgid "{up}/{down} Walk · {left}/{right} Turn · {run} + {up} Run · {seat} Enter · {scooter} Scooter"
 msgstr ""
-"{up}/{down} Kävele · {left}/{right} Käänny · Shift + {up} Juokse · {seat} Nouse kyytiin · {scooter} Potkulauta"
+"{up}/{down} Kävele · {left}/{right} Käänny · {run} + {up} Juokse · {seat} Nouse kyytiin · {scooter} Potkulauta"
 
 msgid "PgUp Raise camera · PgDn Lower camera"
 msgstr "PgUp Nosta kameraa · PgDn Laske kameraa"
@@ -945,8 +945,8 @@ msgstr "Kytke radio päälle · %s"
 msgid "Next song · %s"
 msgstr "Seuraava kappale · %s"
 
-msgid "Ready to run again! Hold Shift and walk forward."
-msgstr "Voit taas juosta! Pidä Shift pohjassa ja kävele eteenpäin."
+msgid "Ready to run again! Hold {run} and walk forward."
+msgstr "Voit taas juosta! Pidä {run} pohjassa ja kävele eteenpäin."
 
 msgid "SUV"
 msgstr "Katumaasturi"
@@ -1864,3 +1864,9 @@ msgstr "Aja leipomoon. Etsi kahvikuppi oven yläpuolelta. Vie jauhot sinne."
 
 msgid "Practice course"
 msgstr "Harjoittelurata"
+
+msgid "Shift"
+msgstr "Vaihto"
+
+msgid "Run with Ctrl"
+msgstr "Juokse Ctrl-näppäimellä"

@@ -915,8 +915,8 @@ msgstr ""
 msgid "Walk or rest · Run again in %d s"
 msgstr "Gå eller hvil · Du kan løpe igjen om %d s"
 
-msgid "{up}/{down} Walk · {left}/{right} Turn · Shift + {up} Run · {seat} Enter · {scooter} Scooter"
-msgstr "{up}/{down} Gå · {left}/{right} Snu · Shift + {up} Løp · {seat} Gå inn · {scooter} Sparkesykkel"
+msgid "{up}/{down} Walk · {left}/{right} Turn · {run} + {up} Run · {seat} Enter · {scooter} Scooter"
+msgstr "{up}/{down} Gå · {left}/{right} Snu · {run} + {up} Løp · {seat} Gå inn · {scooter} Sparkesykkel"
 
 msgid "PgUp Raise camera · PgDn Lower camera"
 msgstr "PgUp Hev kameraet · PgDn Senk kameraet"
@@ -949,8 +949,8 @@ msgstr "Slå på radioen · %s"
 msgid "Next song · %s"
 msgstr "Neste sang · %s"
 
-msgid "Ready to run again! Hold Shift and walk forward."
-msgstr "Du kan løpe igjen! Hold inne Shift og gå framover."
+msgid "Ready to run again! Hold {run} and walk forward."
+msgstr "Du kan løpe igjen! Hold inne {run} og gå framover."
 
 msgid "SUV"
 msgstr "SUV"
@@ -1868,3 +1868,9 @@ msgstr "Kjør til bakeriet. Se etter kaffekoppen over døra. Lever melet der."
 
 msgid "Practice course"
 msgstr "Øvingsbanen"
+
+msgid "Shift"
+msgstr "Shift"
+
+msgid "Run with Ctrl"
+msgstr "Løp med Ctrl"
