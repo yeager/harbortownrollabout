@@ -4189,6 +4189,12 @@ func _build_depot() -> void:
 				_make_box("Parking stripe",Vector3(.10,.025,7.8),body.position+Vector3(side*2.35,.014,0),Color("#deddd1")).material_override = marking_finish
 	_make_walker("Player on foot",0,0,1,Color("#648faa"),Color("#30414d"))
 	walker = walker_data.pop_back().actor
+	# Restore quest props once both the recipients and the player's hands exist.
+	_place_courier_parcel()
+	_place_cake_box()
+	_place_lost_figurine()
+	_place_umbrella()
+	_place_thermos()
 	walker.add_child(scooter)
 	shops.show_carried_toy()
 	_make_walker("BMW driver",0,0,1,Color("#648faa"),Color("#30414d"))
@@ -5577,7 +5583,6 @@ func _build_pedestrians() -> void:
 	boutique_owner = walker_data.pop_back().actor
 	boutique_owner.rotation.y = 0
 	lost_figurine = shops._boutique_toy(Vector3.ZERO,true)
-	_place_lost_figurine()
 	_build_boule_court()
 
 func _build_courier_delivery() -> void:
@@ -5589,7 +5594,6 @@ func _build_courier_delivery() -> void:
 	_make_box("Courier parcel",Vector3(.38,.25,.28),Vector3.UP*.125,Color("#ca9862"),false,courier_parcel)
 	for x in [-.09,.09]:
 		_make_box("Parcel stripe",Vector3(.045,.252,.282),Vector3(x,.125,0),Color("#295870"),false,courier_parcel)
-	_place_courier_parcel()
 
 func _place_courier_parcel() -> void:
 	if not courier_parcel.is_inside_tree(): return
@@ -5653,7 +5657,6 @@ func _build_birthday_delivery() -> void:
 		var berry := shops._turned("Raspberry",Vector3.ZERO,.017,.012,.022,Color("#ac2348"))
 		berry.reparent(cake_box,false)
 		berry.position = Vector3(.15*cos(angle),.148,.15*sin(angle))
-	_place_cake_box()
 
 func _place_cake_box() -> void:
 	if not cake_box.is_inside_tree(): return
@@ -5738,7 +5741,6 @@ func _build_lost_umbrella() -> void:
 		panel.mesh = mesh.commit()
 		canopy.add_child(panel)
 		_tube_between(canopy,a*.45+Vector3.DOWN*.10,a*.64+Vector3.DOWN*.28,.008,_material(Color("#6c2637")))
-	_place_umbrella()
 
 func _place_umbrella() -> void:
 	if not umbrella.is_inside_tree(): return
@@ -5844,7 +5846,6 @@ func _build_boule_court() -> void:
 	_tube_between(thermos,Vector3.UP*.012,Vector3.UP*.245,.052,_material(Color("#257559"),.35))
 	_tube_between(thermos,Vector3.ZERO,Vector3.UP*.02,.053,steel)
 	_tube_between(thermos,Vector3.UP*.245,Vector3.UP*.30,.050,steel)
-	_place_thermos()
 
 func _place_thermos() -> void:
 	if not thermos.is_inside_tree(): return
