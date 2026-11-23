@@ -76,6 +76,12 @@ Land vehicles slow down at the quay edge in both directions. The two road bridge
 
 The double-ended passenger ferry **Lotten** runs between two landings in the canal. Walk onto either landing and press **F** or select **Board Lotten** when the ferry is alongside. The ferry follows its own route. Look around with the mouse during the crossing. Press **F** underway to request the next landing, or press it again to stay aboard. You can also step ashore with **F** during a stop. Its editable Blender model is in `source_blender/Lotten.blend`.
 
+## Refuse collection and shopping trike
+
+In the source build, choose the green **Refuse truck** and open the phone with **T** to accept the collection round. Stop at the square and the clinic to empty the bins, then unload at the marina. Each stop earns 10 points and 10 coins. The truck takes longer to accelerate as the load grows.
+
+For a small vehicle, choose the red **Shopping trike**. It has two front wheels that steer, a single rear wheel and a wire basket behind the seat.
+
 ## Taxi and horns
 
 Choose the **Taxi** picture and press **Start driving**. Open the phone with **T** and accept the assignment to pick up a passenger. Follow the green arrows along the streets and over a bridge when needed. Stop at the marker to board or drop off your fare. Gentle driving handles boarding automatically. The next fare appears after drop-off.
