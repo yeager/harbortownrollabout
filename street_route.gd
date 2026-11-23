@@ -24,16 +24,20 @@ func _init() -> void:
 
 func _nearest(point: Vector2, heading := Vector2.ZERO) -> Vector2i:
 	var best := INF
+	var best_alignment := 0.0
 	var result := edges[0]
 	for edge in edges:
 		var snap := Geometry2D.get_closest_point_to_segment(point,graph.get_point_position(edge.x),graph.get_point_position(edge.y))
 		var cost := snap.distance_squared_to(point)
+		var alignment := 0.0
 		if not heading.is_zero_approx():
 			# Inside a junction the crossing centreline can be closer than our own lane.
 			var axis := graph.get_point_position(edge.x).direction_to(graph.get_point_position(edge.y))
-			cost += TRAM_LANE_OFFSET * TRAM_LANE_OFFSET * (1.0 - absf(axis.dot(heading)))
-		if cost < best:
+			alignment = absf(axis.dot(heading))
+			cost += TRAM_LANE_OFFSET * TRAM_LANE_OFFSET * (1.0 - alignment)
+		if cost < best or (cost == best and alignment > best_alignment):
 			best = cost
+			best_alignment = alignment
 			result=edge
 	return result
 
