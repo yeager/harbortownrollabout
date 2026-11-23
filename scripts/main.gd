@@ -2640,8 +2640,8 @@ func _add_entry_light(lamp_position: Vector3, lens_size: Vector3, reach: float) 
 	return light
 
 func _bridge_rise(x: float) -> float:
-	return HIGH_BRIDGE_RISE * clampf(minf(inverse_lerp(HIGH_BRIDGE_X[0], HIGH_BRIDGE_X[1], x),
-		inverse_lerp(HIGH_BRIDGE_X[3], HIGH_BRIDGE_X[2], x)), 0, 1)
+	return HIGH_BRIDGE_RISE * smoothstep(0.0, 1.0, minf(inverse_lerp(HIGH_BRIDGE_X[0], HIGH_BRIDGE_X[1], x),
+		inverse_lerp(HIGH_BRIDGE_X[3], HIGH_BRIDGE_X[2], x)))
 
 func _align_model_to_bridge(actor: Node3D, model: Node3D, wheelbase: float) -> void:
 	var pos := actor.position
@@ -2662,9 +2662,16 @@ func _align_model_to_bridge(actor: Node3D, model: Node3D, wheelbase: float) -> v
 func _build_high_bridge(z: float, asphalt: Color) -> void:
 	var metal := _material(Color("#43565a"), .42, false, "brushed")
 	metal.metallic = .65
+	var sections: Array[float] = [HIGH_BRIDGE_X[0]]
 	for i in HIGH_BRIDGE_X.size()-1:
-		var x0: float = HIGH_BRIDGE_X[i]
-		var x1: float = HIGH_BRIDGE_X[i+1]
+		var start: float = HIGH_BRIDGE_X[i]
+		var end: float = HIGH_BRIDGE_X[i+1]
+		var count := 1 if i == 1 else ceili((end-start) / 1.25)
+		for step in range(1, count+1):
+			sections.append(lerpf(start, end, float(step)/count))
+	for i in sections.size()-1:
+		var x0 := sections[i]
+		var x1 := sections[i+1]
 		var rise := _bridge_rise(x1) - _bridge_rise(x0)
 		var angle := atan2(rise, x1-x0)
 		var length := Vector2(x1-x0,rise).length()
@@ -2696,8 +2703,15 @@ func _build_quay_lane_markings() -> void:
 		for x in range(first, 165, 6):
 			if absi(x - 102) < 7 or absi(x - 162) < 7:
 				continue
-			var slope := atan2(_bridge_rise(x+.1)-_bridge_rise(x-.1), .2) if z == -48.0 else 0.0
-			dashes.append(Transform3D(Basis(Vector3.BACK,slope), Vector3(x, _surface_height(x,z)+0.014, z)))
+			var pieces := 6 if z == -48.0 and x+1.5 >= HIGH_BRIDGE_X[0] and x-1.5 <= HIGH_BRIDGE_X[3] else 1
+			for piece in pieces:
+				var left := x-1.5 + 3.0*piece/pieces
+				var right := left + 3.0/pieces
+				var rise := _surface_height(right,z)-_surface_height(left,z)
+				var slope := atan2(rise,right-left)
+				var basis := Basis(Vector3.BACK,slope).scaled_local(Vector3(Vector2(right-left,rise).length()/3,1,1))
+				var center := Vector3((left+right)*.5, _surface_height(left,z)+rise*.5+.032,z)
+				dashes.append(Transform3D(basis, center))
 		# M2 through the quay and bridge approaches: one metre painted, two clear.
 		for x in range(first, 161, 3):
 			if absi(x-102) < 7 or absi(x-162) < 7:
