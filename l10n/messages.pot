@@ -516,7 +516,7 @@ msgid "Enter to buy"
 msgstr ""
 
 #, c-format
-msgid "F · Enter %s"
+msgid "{key} · Enter {vehicle}"
 msgstr ""
 
 #, c-format

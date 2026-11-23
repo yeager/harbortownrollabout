@@ -543,8 +543,8 @@ msgid "Enter to buy"
 msgstr "Osta Enterillä"
 
 #, c-format
-msgid "F · Enter %s"
-msgstr "F · Nouse kyytiin (%s)"
+msgid "{key} · Enter {vehicle}"
+msgstr "{key} · Nouse kyytiin ({vehicle})"
 
 #, c-format
 msgid "Well done, %s!"

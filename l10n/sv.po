@@ -517,8 +517,8 @@ msgid "Enter to buy"
 msgstr "Enter för att köpa"
 
 #, c-format
-msgid "F · Enter %s"
-msgstr "%s · Tryck F för att kliva in"
+msgid "{key} · Enter {vehicle}"
+msgstr "{vehicle} · Tryck {key} för att kliva in"
 
 #, c-format
 msgid "Well done, %s!"

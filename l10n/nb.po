@@ -546,8 +546,8 @@ msgid "Enter to buy"
 msgstr "Enter for å kjøpe"
 
 #, c-format
-msgid "F · Enter %s"
-msgstr "F · Gå inn i kjøretøyet (%s)"
+msgid "{key} · Enter {vehicle}"
+msgstr "{key} · Gå inn i kjøretøyet ({vehicle})"
 
 #, c-format
 msgid "Well done, %s!"
