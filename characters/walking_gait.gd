@@ -107,7 +107,8 @@ func advance(distance: float, delta: float, pushing: bool, tuck := 0.0) -> void:
 	if pushing:
 		shoulder_yaw *= .2
 	jacket.rotation.y = shoulder_yaw
-	var reach := stride * STANCE * 0.5 * weight
+	var stance := lerpf(STANCE, .40, smoothstep(3.4, 6.4, pace * actor.scale.y) * weight)
+	var reach := stride * stance * 0.5 * weight
 	var feet: Array[Vector2] = []
 	var shoe_angles := PackedFloat32Array()
 	var hip_y := SOLE_HEIGHT + THIGH + SHIN - 0.002
@@ -115,13 +116,14 @@ func advance(distance: float, delta: float, pushing: bool, tuck := 0.0) -> void:
 		var cycle := fposmod(phase + 0.5 * i, 1.0)
 		var foot := Vector2.ZERO # Forward distance and clearance above ground
 		var shoe_angle: float
-		if cycle < STANCE:
-			var heel_lift := 1.0 - smoothstep(0.0, .13, cycle)
-			var toe_off := smoothstep(.35, STANCE, cycle)
+		if cycle < stance:
+			var support := cycle / stance
+			var heel_lift := 1.0 - smoothstep(0.0, .13 / STANCE, support)
+			var toe_off := smoothstep(.35 / STANCE, 1.0, support)
 			shoe_angle = (.20 * heel_lift - .36 * toe_off) * weight
-			foot.x = lerpf(reach, -reach, cycle / STANCE)
+			foot.x = lerpf(reach, -reach, support)
 		else:
-			var swing := (cycle - STANCE) / (1.0 - STANCE)
+			var swing := (cycle - stance) / (1.0 - stance)
 			foot.x = lerpf(-reach, reach, smoothstep(0.0, 1.0, swing))
 			foot.y = sin(PI * swing) * (0.085 + 0.025 * pace) * weight
 			# During a run the heel folds up early, before the knee drives forward.
