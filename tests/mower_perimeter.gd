@@ -35,5 +35,22 @@ func check_perimeter() -> void:
 					printerr("Mower did not reach and stop at perimeter: ",outward,reverse,end,limit,game.speed)
 					quit(1)
 					return
+			# Park parallel with the first-choice exit facing out of bounds.
+			game.ambulance.rotation.y = atan2(-outward.y, outward.x)
+			var side_extent: Vector2 = game._player_extent()
+			var parking_spot := bounds.get_center() + outward * (bounds.size * .5 - side_extent)
+			game.ambulance.position = Vector3(parking_spot.x, game._surface_height(parking_spot.x, parking_spot.y), parking_spot.y)
+			game.speed = 0
+			game._change_seat()
+			var foot: Vector3 = game.walker.position
+			if not game.walker.visible or not bounds.grow(-.25).has_point(Vector2(foot.x,foot.z)) or outward.dot(Vector2(foot.x,foot.z)-parking_spot) >= 0:
+				printerr("No safe inward exit from mower: ",bounds,outward,foot)
+				quit(1)
+				return
+			game._change_seat()
+			if game.walker.visible or game.vehicle_index != game.MOWER:
+				printerr("Could not get back onto the mower")
+				quit(1)
+				return
 	print("Mower stopped inside all four edges, forward and in reverse, in both play areas.")
 	quit()
