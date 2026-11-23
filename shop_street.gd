@@ -422,8 +422,13 @@ func _hot_dog_stand(x: float) -> void:
 	sign_label.outline_modulate = tomato
 	get_parent()._size_world_sign(sign_label,2.95)
 	var emblem := Vector3(x+1.53,3.4,42.03)
-	_neon_outline(emblem,PackedVector2Array([Vector2(-.47,-.06),Vector2(-.36,-.17),Vector2(.18,-.11),Vector2(.43,.02),Vector2(.48,.13)]),amber)
-	_neon_outline(emblem,PackedVector2Array([Vector2(-.42,.04),Vector2(-.45,.10),Vector2(-.39,.15),Vector2(-.03,.14),Vector2(.28,.23),Vector2(.39,.22),Vector2(.42,.16),Vector2(.35,.11),Vector2(.01,.02),Vector2(-.42,.04)]),tomato)
+	_bent_neon_tube(emblem,PackedVector2Array([Vector2(-.47,-.06),Vector2(-.36,-.17),Vector2(.18,-.11),Vector2(.43,.02),Vector2(.48,.13)]),amber)
+	_bent_neon_tube(emblem,PackedVector2Array([Vector2(-.42,.04),Vector2(-.45,.10),Vector2(-.39,.15),Vector2(-.03,.14),Vector2(.28,.23),Vector2(.39,.22),Vector2(.42,.16),Vector2(.35,.11),Vector2(.01,.02),Vector2(-.42,.04)]),tomato)
+	var mustard := PackedVector2Array()
+	for i in 33:
+		var t := i/32.0
+		mustard.append(Vector2(lerpf(-.34,.33,t),.081+.066*t+.021*sin(TAU*2.5*t)))
+	_bent_neon_tube(emblem-Vector3.BACK*.014,mustard,Color("#ffd53d"),.009)
 	for dx in [-1.40,1.40]:
 		part("Hatch lamp housing",Vector3(x+dx,2.77,42.05),Vector3(.78,.075,.18),steel)
 		var diffuser := part("Hatch lamp diffuser",Vector3(x+dx,2.72,42.05),Vector3(.71,.045,.14),cream)
@@ -563,6 +568,33 @@ func _grocery(x: float) -> void:
 		var cx := x-2.2+carton*.29
 		part("Milk carton",Vector3(cx,1.29,47.69),Vector3(.20,.42,.19),ivory)
 		part("Carton label",Vector3(cx,1.26,47.58),Vector3(.18,.12,.025),Color("#679fc3"))
+
+func _bent_neon_tube(center: Vector3, points: PackedVector2Array, hue: Color, radius := .021) -> void:
+	var path := PackedVector2Array([points[0]])
+	for i in range(1,points.size()):
+		path.append(points[i-1].lerp(points[i],.25))
+		path.append(points[i-1].lerp(points[i],.75))
+	path.append(points[-1])
+	var surface := SurfaceTool.new()
+	surface.begin(Mesh.PRIMITIVE_TRIANGLES)
+	const SIDES := 8
+	for i in path.size():
+		var tangent := (path[mini(i+1,path.size()-1)]-path[maxi(i-1,0)]).normalized()
+		for j in SIDES:
+			var angle := TAU*j/SIDES
+			var normal := Vector3(-tangent.y*cos(angle),tangent.x*cos(angle),sin(angle))
+			surface.set_normal(normal)
+			surface.add_vertex(Vector3(path[i].x,path[i].y,0)+radius*normal)
+			if i > 0:
+				var a := (i-1)*SIDES+j
+				var b := (i-1)*SIDES+(j+1)%SIDES
+				for index in [a,a+SIDES,b,b,a+SIDES,b+SIDES]:
+					surface.add_index(index)
+	var tube := MeshInstance3D.new()
+	tube.mesh = surface.commit()
+	tube.material_override = get_parent()._material(hue,.26,true)
+	tube.position = center
+	add_child(tube)
 
 func _neon_outline(center: Vector3, points: PackedVector2Array, hue: Color) -> void:
 	var finish: Material = get_parent()._material(hue,.32,true)
