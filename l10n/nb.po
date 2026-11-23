@@ -1539,11 +1539,11 @@ msgstr "Pizzeria"
 msgid "Garbage truck"
 msgstr "Søppelbil"
 
-msgid "Collect bins at the square"
-msgstr "Hent søppeldunkene på torget"
+msgid "Empty the blue paper bin at the square"
+msgstr "Tøm den blå papirdunken på torget"
 
-msgid "Collect bins at the clinic"
-msgstr "Hent søppeldunkene ved helsesenteret"
+msgid "Empty the green glass bin at the clinic"
+msgstr "Tøm den grønne glassdunken ved helsesenteret"
 
 msgid "Unload recycling at the marina"
 msgstr "Lever gjenvinningsavfallet i småbåthavna"

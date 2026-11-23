@@ -1535,11 +1535,11 @@ msgstr "Pizzeria"
 msgid "Garbage truck"
 msgstr "Jäteauto"
 
-msgid "Collect bins at the square"
-msgstr "Tyhjennä torin jäteastiat"
+msgid "Empty the blue paper bin at the square"
+msgstr "Tyhjennä torin sininen paperiastia"
 
-msgid "Collect bins at the clinic"
-msgstr "Tyhjennä terveyskeskuksen jäteastiat"
+msgid "Empty the green glass bin at the clinic"
+msgstr "Tyhjennä terveyskeskuksen vihreä lasiastia"
 
 msgid "Unload recycling at the marina"
 msgstr "Pura kierrätyskuorma venesatamassa"

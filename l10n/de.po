@@ -1556,11 +1556,11 @@ msgstr "Pizzeria"
 msgid "Garbage truck"
 msgstr "Müllwagen"
 
-msgid "Collect bins at the square"
-msgstr "Leere die Tonnen am Platz"
+msgid "Empty the blue paper bin at the square"
+msgstr "Leere die blaue Papiertonne auf dem Platz"
 
-msgid "Collect bins at the clinic"
-msgstr "Leere die Tonnen am Ärztehaus"
+msgid "Empty the green glass bin at the clinic"
+msgstr "Leere die grüne Glastonne am Ärztehaus"
 
 msgid "Unload recycling at the marina"
 msgstr "Lade das Wertstoffgut am Hafen ab"

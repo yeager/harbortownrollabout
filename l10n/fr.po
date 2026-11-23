@@ -1554,11 +1554,11 @@ msgstr "Pizzeria"
 msgid "Garbage truck"
 msgstr "Camion-poubelle"
 
-msgid "Collect bins at the square"
-msgstr "Ramasse les bacs sur la place"
+msgid "Empty the blue paper bin at the square"
+msgstr "Vide le bac bleu à papier sur la place"
 
-msgid "Collect bins at the clinic"
-msgstr "Ramasse les bacs au dispensaire"
+msgid "Empty the green glass bin at the clinic"
+msgstr "Vide le bac vert à verre au dispensaire"
 
 msgid "Unload recycling at the marina"
 msgstr "Dépose les déchets recyclables au port"

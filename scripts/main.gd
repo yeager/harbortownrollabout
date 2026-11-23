@@ -343,7 +343,7 @@ func _vehicle_tasks() -> Array:
 		1, XC60_POLICE: return PATROL_TASKS
 		2: return FIRE_TASKS
 		FARM_TRACTOR: return ["Collect seedlings at the square", "Deliver herbs to the clinic garden", "Bring flowers to the marina"]
-		REFUSE: return ["Collect bins at the square", "Collect bins at the clinic", "Unload recycling at the marina"]
+		REFUSE: return ["Empty the blue paper bin at the square", "Empty the green glass bin at the clinic", "Unload recycling at the marina"]
 		FOOD_TRUCK: return ["Pick up soup ingredients at the square", "Serve lunch to the clinic staff", "Serve soup to the boat crews"]
 		SNOWMOBILE: return SLED_TASKS
 		ICE_CREAM: return ["Serve ice cream at the square", "Serve ice cream outside the school", "Serve ice cream at the marina"]
@@ -3460,6 +3460,25 @@ func _add_parked_moped_stand(body: Node3D) -> void:
 	_tube_between(stand, Vector3(-.095,.095,.19), Vector3(.095,.095,.19), .009, steel)
 	_tube_between(stand, Vector3(-.10,.05,.205), Vector3(-.175,.065,.25), .007, steel)
 
+func _add_recycling_labels(bin: Node3D, paper: bool) -> void:
+	var ink := Color("#154063") if paper else Color("#165038")
+	for side in 4:
+		var face := Node3D.new()
+		bin.add_child(face)
+		face.rotation.y = side * PI / 2
+		face.position = face.basis.z * (.292 if side % 2 == 0 else .337) + Vector3.UP * .58
+		_make_box("Sorting label",Vector3(.44,.45,.009),Vector3.ZERO,Color("#fffbe9"),false,face)
+		if paper:
+			_make_box("Stack of paper",Vector3(.24,.29,.01),Vector3(-.018,-.012,.010),ink,false,face)
+			_make_box("Top sheet",Vector3(.24,.29,.01),Vector3(.012,.018,.018),ink.lightened(.15),false,face)
+			for line in 3:
+				_make_box("Print line",Vector3(.16,.018,.006),Vector3(.012,.095-line*.062,.027),Color.WHITE,false,face)
+		else:
+			_make_box("Bottle body",Vector3(.145,.20,.012),Vector3(0,-.05,.012),ink,false,face)
+			_make_box("Bottle shoulder",Vector3(.115,.038,.012),Vector3(0,.065,.012),ink,false,face)
+			_make_box("Bottle neck",Vector3(.066,.10,.012),Vector3(0,.118,.012),ink,false,face)
+			_make_box("Bottle lip",Vector3(.09,.021,.012),Vector3(0,.172,.012),ink,false,face)
+
 func _build_depot() -> void:
 	refuse_pump.stream = preload("res://audio/bin_lift.wav")
 	refuse_pump.volume_db = -8
@@ -3471,8 +3490,9 @@ func _build_depot() -> void:
 		bin.position = _stop_pavement(i)
 		if i == 0: bin.position.z = 6.35
 		bin.position.y = _foot_height(bin.position.x, bin.position.z)
-		_make_box("Recycling bin",Vector3(.67,.84,.58),Vector3.UP*.51,Color("#245d48"),false,bin)
-		_make_box("Hinged lid",Vector3(.72,.08,.64),Vector3.UP*.97,Color("#74ab54"),false,bin)
+		_make_box("Recycling bin",Vector3(.67,.84,.58),Vector3.UP*.51,Color("#20548a") if i == 0 else Color("#245d48"),false,bin)
+		_make_box("Hinged lid",Vector3(.72,.08,.64),Vector3.UP*.97,Color("#509be3") if i == 0 else Color("#74ab54"),false,bin)
+		_add_recycling_labels(bin,i == 0)
 		for side in [-1,1]:
 			_make_box("Bin wheel",Vector3(.08,.16,.16),Vector3(side*.29,.09,.21),Color("#242a29"),false,bin)
 		refuse_bins.append(bin)

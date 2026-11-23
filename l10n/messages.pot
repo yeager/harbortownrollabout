@@ -1468,10 +1468,10 @@ msgstr ""
 msgid "Garbage truck"
 msgstr ""
 
-msgid "Collect bins at the square"
+msgid "Empty the blue paper bin at the square"
 msgstr ""
 
-msgid "Collect bins at the clinic"
+msgid "Empty the green glass bin at the clinic"
 msgstr ""
 
 msgid "Unload recycling at the marina"

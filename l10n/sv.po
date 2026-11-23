@@ -1469,11 +1469,11 @@ msgstr "Pizzeria"
 msgid "Garbage truck"
 msgstr "Sopbil"
 
-msgid "Collect bins at the square"
-msgstr "Hämta sopkärlen på torget"
+msgid "Empty the blue paper bin at the square"
+msgstr "Töm det blå papperskärlet på torget"
 
-msgid "Collect bins at the clinic"
-msgstr "Hämta sopkärlen vid vårdcentralen"
+msgid "Empty the green glass bin at the clinic"
+msgstr "Töm det gröna glaskärlet vid vårdcentralen"
 
 msgid "Unload recycling at the marina"
 msgstr "Lämna återvinningen i småbåtshamnen"
