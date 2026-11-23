@@ -114,7 +114,13 @@ for side in [-1,1]:
     fascia_patch("Marker light",x-.058,x+.058,.881,.909,.013,.019,lamp)
 fascia_patch("Route indicator surround",-.76,.76,2.235,2.446,.078,.010,seal)
 fascia_patch("Amber matrix panel",-.694,.694,2.256,2.424,.050,.017,glass)
-fascia_patch("Lower service hatch",-.48,.48,.525,.70,.035,.005,blue)
+# Follow the rounded skirt with a replaceable rubbing strip and a flush access door.
+fascia_patch("Skirt rubbing strip",-.99,.99,.419,.471,.022,.009,seal)
+fascia_patch("Access door gasket",-.488,.488,.518,.708,.042,.007,seal)
+fascia_patch("Lower service hatch",-.48,.48,.525,.70,.035,.012,blue)
+for x in (-.39,.39):
+    fascia_patch("Recessed quarter-turn latch",x-.017,x+.017,.643,.677,.016,.016,silver)
+    fascia_patch("Latch slot",x-.009,x+.009,.658,.662,.0015,.019,seal)
 def screen_point(x,z):
     return Vector((x,surface_y(x,z)+.018,z))
 
