@@ -537,6 +537,8 @@ var boule_impact := AudioStreamPlayer3D.new()
 var boule_velocity: Array[Vector3] = []
 var boule_grounded: Array[bool] = []
 var boule_clink := AudioStreamPlayer3D.new()
+var boule_collector := -1
+var boule_pickup_spot := Vector3.ZERO
 var boule_release := Vector3.ZERO
 var walker_data: Array[Dictionary] = []
 
@@ -5291,6 +5293,9 @@ func _boule_waiting_spot(index: int) -> Vector3:
 
 func _update_boule(delta: float) -> void:
 	boule_clock += delta
+	if boule_collector >= 0:
+		_collect_boule(delta)
+		return
 	var player := boule_players[boule_turn]
 	var arm: Node3D = player.get_meta("arms")[1]
 	var hand: Node3D = arm.get_child(1)
@@ -5327,7 +5332,41 @@ func _update_boule(delta: float) -> void:
 	if boule_clock >= (10.0 if final_throw else 6.5):
 		for ring in boule_result_rings:
 			ring.hide()
+		if final_throw:
+			boule_collector = 0
+			boule_pickup_spot = boules[0].position
 		boule_turn = (boule_turn+1)%boule_players.size()
+		boule_clock = 0
+
+func _collect_boule(delta: float) -> void:
+	var player := boule_players[boule_collector]
+	var ball := boules[boule_collector]
+	var home := _boule_waiting_spot(boule_collector)
+	var stop := Vector3(boule_pickup_spot.x-.24,home.y,boule_pickup_spot.z+.40)
+	var returning := boule_clock >= 7
+	var previous := player.position
+	var fraction := smoothstep(0,6,boule_clock)*(1-smoothstep(8,14,boule_clock))
+	player.position = home.lerp(stop,fraction)
+	var heading := stop-home
+	var yaw := atan2(-heading.x,-heading.z)
+	player.rotation.y = (yaw + PI*smoothstep(7.3,8,boule_clock))*(1-smoothstep(14,14.5,boule_clock))
+	var crouch := smoothstep(6,6.9,boule_clock)*(1-smoothstep(7,7.7,boule_clock))
+	var gait: Gait = player.get_meta("gait")
+	gait.advance(previous.distance_to(player.position),delta,false,0,crouch)
+	var palm := gait.palms[1]
+	if crouch > 0:
+		gait.reach_with_hand(1,palm.global_position.lerp(boule_pickup_spot,crouch))
+	if returning:
+		boule_grounded[boule_collector] = false
+		ball.position = palm.to_global(PALM_GRIP)
+	if boule_clock >= 14.5:
+		player.rotation.y = 0
+		ball.position = palm.to_global(PALM_GRIP)
+		boule_collector += 1
+		if boule_collector < boules.size():
+			boule_pickup_spot = boules[boule_collector].position
+		else:
+			boule_collector = -1
 		boule_clock = 0
 
 func _show_boule_result() -> void:

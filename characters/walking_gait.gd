@@ -31,6 +31,7 @@ var jacket: Node3D
 var legs: Array
 var arms: Array
 var upper_body: Dictionary = {}
+var upright_bases: Dictionary = {}
 var knees: Array[Skeleton3D] = []
 var shoes: Array[Node3D] = []
 
@@ -104,7 +105,10 @@ func _weight_mesh(source: Mesh, joint_y: float, blend: float, support_knee := fa
 		result.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
 	return result
 
-func advance(distance: float, delta: float, pushing: bool, tuck := 0.0) -> void:
+func advance(distance: float, delta: float, pushing: bool, tuck := 0.0, crouch := 0.0) -> void:
+	for part: Node3D in upright_bases:
+		part.basis = upright_bases[part]
+	upright_bases.clear()
 	if delta <= 0.0:
 		return
 	var pace := absf(distance) / delta
@@ -185,10 +189,17 @@ func advance(distance: float, delta: float, pushing: bool, tuck := 0.0) -> void:
 		foot.x += offset.z
 		feet.append(foot)
 		hip_y = minf(hip_y, SOLE_HEIGHT + foot.y + sqrt(maxf(0.0, (THIGH + SHIN) ** 2 - foot.x ** 2 - offset.x ** 2)) - 0.002)
+	hip_y -= .46*crouch
 	for child: Node3D in upper_body:
 		var rest: Vector3 = upper_body[child]
 		if child in arms:
 			rest = rest.rotated(Vector3.UP, shoulder_yaw)
+		if crouch > 0 and child != pelvis:
+			var lean := Basis(Vector3.RIGHT,-.95*crouch)
+			rest = Vector3.UP*HIP_HEIGHT + lean*(rest-Vector3.UP*HIP_HEIGHT)
+			if child not in arms:
+				upright_bases[child] = child.basis
+				child.basis = lean*child.basis
 		child.position = rest + Vector3(lateral_shift, hip_y - HIP_HEIGHT, 0)
 	for i in 2:
 		var foot := feet[i]
