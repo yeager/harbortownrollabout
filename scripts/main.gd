@@ -3869,7 +3869,8 @@ func _build_depot() -> void:
 			smile.add_child(corner)
 		smile.hide()
 	for leg: Node3D in road_driver.get_meta("legs"):
-		leg.rotation.x = 1.35
+		leg.hide()
+	_build_driving_legs("CarLegs",Vector3(.16,.77,-.35),Vector3(.15,.40,-.55))
 	_build_driving_legs("RidingLegs",Vector3(.46,.55,-.30),Vector3(.48,.18,-.19))
 	for alma in [false,true]:
 		var scale_y := .78 * (.88 if alma else 1.0)
@@ -8308,8 +8309,7 @@ func _refresh_ui() -> void:
 		road_driver.get_node("AxelShopperLegs").visible = vehicle_index == SHOPPER and not play_as_alma
 		road_driver.get_node("AlmaCabLegs").visible = vehicle_index == FOOD_TRUCK and play_as_alma
 		road_driver.get_node("AxelCabLegs").visible = vehicle_index == FOOD_TRUCK and not play_as_alma
-		for leg in road_driver.get_meta("legs"):
-			leg.visible = vehicle_index not in [SNOWMOBILE,MOWER,PUCH_DAKOTA,FOOD_TRUCK,SHOPPER]
+		road_driver.get_node("CarLegs").visible = vehicle_index in [3,PORSCHE,XC60_POLICE,MINI_CABRIO]
 		road_driver.visible = vehicle_index in [3,PORSCHE,SNOWMOBILE,XC60_POLICE,MINI_CABRIO,PUCH_DAKOTA,FOOD_TRUCK,MOWER,SHOPPER] and mode == "playing" and not walker.visible and not boating and tram_mode == 0 and not cockpit_view
 		if vehicle_index == SHOPPER and cabin_wheel:
 			_pose_driver_arms()
