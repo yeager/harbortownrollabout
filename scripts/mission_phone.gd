@@ -1,6 +1,8 @@
 extends VBoxContainer
 
 var open_button := Button.new()
+var title := Label.new()
+var large_text := false
 var handset := PanelContainer.new()
 var messages: Array[String] = []
 var job_heading := Label.new()
@@ -89,7 +91,6 @@ func _ready() -> void:
 	_add_phone_detail(body, Vector2(62, 3))
 	var content := VBoxContainer.new()
 	screen.add_child(content)
-	var title := Label.new()
 	title.text = "Messages"
 	title.add_theme_font_size_override("font_size", 22)
 	title.add_theme_color_override("font_color", Color("#12594f"))
@@ -123,9 +124,23 @@ func _ready() -> void:
 	content.add_child(history_scroll)
 	inbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	history_scroll.add_child(inbox)
+	set_large_text(large_text)
 	handset.hide()
 	handset.visibility_changed.connect(_on_visibility_changed)
 	refresh()
+
+func set_large_text(enabled: bool) -> void:
+	large_text = enabled
+	var reading_theme := Theme.new()
+	if enabled:
+		for control in ["Label", "Button"]:
+			reading_theme.set_font_size("font_size", control, 22)
+	theme = reading_theme
+	title.add_theme_font_size_override("font_size", 30 if enabled else 22)
+	job_heading.add_theme_font_size_override("font_size", 25 if enabled else 18)
+	inbox.add_theme_font_size_override("font_size", 22 if enabled else 16)
+	handset.custom_minimum_size = Vector2(370, 550) if enabled else Vector2(248, 350)
+	reset_size()
 
 func _add_phone_detail(body: VBoxContainer, dimensions: Vector2) -> void:
 	var detail := ColorRect.new()

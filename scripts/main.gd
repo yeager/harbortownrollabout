@@ -4853,6 +4853,7 @@ func _make_walker(label: String, start_x: float, lane_z: float, direction: float
 
 func _apply_reading_size() -> void:
 	shops.set_large_text(large_text)
+	phone.set_large_text(large_text)
 	greeting.pixel_size = .0042 if large_text else .003
 	bubble_back.pixel_size = greeting.pixel_size
 
