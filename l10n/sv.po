@@ -1528,3 +1528,6 @@ msgstr "SJÖSTADENS PIZZERIA"
 
 msgid "Say again"
 msgstr "Säg igen"
+
+msgid "Practice driving"
+msgstr "Övningskör"

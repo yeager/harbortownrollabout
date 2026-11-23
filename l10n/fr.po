@@ -1613,3 +1613,6 @@ msgstr "PIZZERIA DU PORT"
 
 msgid "Say again"
 msgstr "Réécouter"
+
+msgid "Practice driving"
+msgstr "S’entraîner à conduire"

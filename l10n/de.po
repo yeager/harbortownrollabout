@@ -1615,3 +1615,6 @@ msgstr "HAFENPIZZERIA"
 
 msgid "Say again"
 msgstr "Noch einmal anhören"
+
+msgid "Practice driving"
+msgstr "Fahren üben"

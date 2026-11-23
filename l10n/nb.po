@@ -1598,3 +1598,6 @@ msgstr "HAVNEPIZZERIAEN"
 
 msgid "Say again"
 msgstr "Si det igjen"
+
+msgid "Practice driving"
+msgstr "Øvelseskjør"

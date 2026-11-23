@@ -1527,3 +1527,6 @@ msgstr ""
 
 msgid "Say again"
 msgstr ""
+
+msgid "Practice driving"
+msgstr ""

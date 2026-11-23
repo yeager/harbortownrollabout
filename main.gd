@@ -19,6 +19,8 @@ const Mass := preload("res://vehicles/mass.gd")
 const Gait := preload("res://characters/walking_gait.gd")
 const ROAD_HALF := 4.8
 # Inside faces of the continuous perimeter wall, in world X/Z.
+const PRACTICE_YARD := Rect2(-130, 89, 64, 40)
+const PRACTICE_START := Vector3(-119, 0, 109)
 const CITY_INTERIOR := Rect2(-520, -92, 690, 172)
 const VEHICLE_NAMES := ["Ambulance", "Police car", "Fire engine"]
 const VEHICLE_SCENES := ["res://vehicles/ambulance.glb", "res://vehicles/polisbil.glb", "res://vehicles/brandbil.glb"]
@@ -1138,8 +1140,9 @@ func _drive(delta: float) -> void:
 		struck_vehicle.speed = 0.0
 	var destination := ambulance.position + step
 	var pos := destination
-	pos.x = clampf(pos.x, CITY_INTERIOR.position.x + extent.x, CITY_INTERIOR.end.x - extent.x)
-	pos.z = clampf(pos.z, CITY_INTERIOR.position.y + extent.y, CITY_INTERIOR.end.y - extent.y)
+	var bounds := _play_bounds(ambulance.position)
+	pos.x = clampf(pos.x, bounds.position.x + extent.x, bounds.end.x - extent.x)
+	pos.z = clampf(pos.z, bounds.position.y + extent.y, bounds.end.y - extent.y)
 	if not pos.is_equal_approx(destination):
 		speed = 0.0
 	pos.y = _surface_height(pos.x, pos.z)
@@ -1714,6 +1717,7 @@ func _build_west_district() -> void:
 	for i in strokes.size():
 		markings.multimesh.set_instance_transform(i,strokes[i])
 	add_child(markings)
+	_build_practice_yard()
 	_make_driving_surface("West district ground", Vector3(460,.3,CITY_INTERIOR.size.y), Vector3(-290,-.35,CITY_INTERIOR.get_center().y), Color.WHITE).material_override = soil_finish
 	for z in junction_z:
 		_make_driving_surface("West avenue", Vector3(455,.12,9.6), Vector3(-282.5,-.08,z), Color.WHITE).material_override = road_finish
@@ -3572,7 +3576,7 @@ func _feet_supported(p: Vector3) -> bool:
 func _on_foot_clear(p: Vector3) -> bool:
 	if is_instance_valid(workshop_car) and workshop_car.visible and WORKSHOP_CAR_BOUNDS.grow(.2).has_point(p): return false
 	if is_instance_valid(casualty) and casualty.visible and casualty.get_parent()==self and AABB(casualty.position-Vector3(2.35,1,1.1),Vector3(4.7,3,2.2)).has_point(p): return false
-	if not CITY_INTERIOR.grow(-.25).has_point(Vector2(p.x,p.z)):
+	if not _play_bounds(walker.position if walker.visible else ambulance.position).grow(-.25).has_point(Vector2(p.x,p.z)):
 		return false
 	for body in tram.car_bounds():
 		if body.grow(.22).has_point(p+Vector3.UP): return false
@@ -6148,6 +6152,13 @@ func _build_overlay() -> void:
 	var menu_actions := HBoxContainer.new()
 	menu_actions.alignment = BoxContainer.ALIGNMENT_CENTER
 	box.add_child(menu_actions)
+	var practice_button := _button("Practice driving", 165)
+	practice_button.name = "PracticeDriving"
+	box.add_child(practice_button)
+	practice_button.pressed.connect(_start_practice)
+	practice_button.visibility_changed.connect(func():
+		if mode != "menu" and practice_button.visible: practice_button.hide()
+	)
 	menu_actions.add_child(settings_toggle)
 	menu_actions.add_child(start_button)
 	if not road_checkpoint.is_empty():
@@ -6505,7 +6516,16 @@ func _recover_position() -> void:
 	walk_jump_left = 0
 	bridge_jump_left = 0
 	var success := true
-	if tram_mode > 0:
+	var actor := walker if walker.visible else ambulance
+	if _play_bounds(actor.position) == PRACTICE_YARD:
+		if walker.visible:
+			walker.position = parked_cars[vehicle_index].to_global(parked_door_offset)
+			walker.position.y = _foot_height(walker.position.x, walker.position.z)
+			walking_velocity = Vector3.ZERO
+		else:
+			ambulance.position = PRACTICE_START
+			ambulance.rotation.y = -PI * .5
+	elif tram_mode > 0:
 		tram.stop_at_station(0)
 	elif boating:
 		launch.transform = Transform3D(Basis.IDENTITY, LAUNCH_BERTH)
@@ -6554,6 +6574,29 @@ func _recover_position() -> void:
 	message = "Back in a safe place." if success else "No clear spot yet. Try again in a moment."
 	message_timer = 4
 	_refresh_status()
+
+func _play_bounds(point: Vector3) -> Rect2:
+	return PRACTICE_YARD if PRACTICE_YARD.has_point(Vector2(point.x, point.z)) else CITY_INTERIOR
+
+func _build_practice_yard() -> void:
+	var center := PRACTICE_YARD.get_center()
+	_make_driving_surface("Practice asphalt", Vector3(64,.2,40), Vector3(center.x,-.1,center.y), Color("#595e61"))
+	for z in [90,128]:
+		_make_box("Course edge", Vector3(62,.02,.14), Vector3(center.x,.01,z), Color.WHITE)
+	for x in [-129,-67]:
+		_make_box("Course edge", Vector3(.14,.02,38), Vector3(x,.01,center.y), Color.WHITE)
+	for x in range(-120,-72,6):
+		_make_box("Lane marking", Vector3(3,.02,.16), Vector3(x,.01,112), Color.WHITE)
+	for z in [105,115]:
+		_make_box("Stop line", Vector3(.4,.02,5), Vector3(-75,.01,z), Color.WHITE)
+
+func _start_practice() -> void:
+	if mode != "menu": return
+	if boating or tram_mode != 0 or start_in_excavator:
+		_on_vehicle_selected(3)
+	_start_game()
+	ambulance.position = PRACTICE_START
+	_update_camera(0, true)
 
 func _starting_position() -> Vector3:
 	var best_x := -35.0

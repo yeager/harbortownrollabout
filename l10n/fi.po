@@ -1594,3 +1594,6 @@ msgstr "SATAMAN PIZZERIA"
 
 msgid "Say again"
 msgstr "Kuuntele uudelleen"
+
+msgid "Practice driving"
+msgstr "Harjoittele ajamista"

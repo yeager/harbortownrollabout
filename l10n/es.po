@@ -1605,3 +1605,6 @@ msgstr "PIZZERÍA DEL PUERTO"
 
 msgid "Say again"
 msgstr "Volver a escuchar"
+
+msgid "Practice driving"
+msgstr "Practicar la conducción"
