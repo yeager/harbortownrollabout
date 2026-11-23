@@ -1610,3 +1610,6 @@ msgstr "ÉPICERIE DU PORT"
 
 msgid "HARBOR TOWN PIZZERIA"
 msgstr "PIZZERIA DU PORT"
+
+msgid "Say again"
+msgstr "Réécouter"

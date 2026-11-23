@@ -1525,3 +1525,6 @@ msgstr "SJÖSTADENS LIVS"
 
 msgid "HARBOR TOWN PIZZERIA"
 msgstr "SJÖSTADENS PIZZERIA"
+
+msgid "Say again"
+msgstr "Säg igen"

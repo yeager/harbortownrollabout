@@ -1591,3 +1591,6 @@ msgstr "SATAMAKAUPPA"
 
 msgid "HARBOR TOWN PIZZERIA"
 msgstr "SATAMAN PIZZERIA"
+
+msgid "Say again"
+msgstr "Kuuntele uudelleen"

@@ -11,6 +11,10 @@ var message_tone := AudioStreamPlayer.new()
 var unread := 0
 var current_job := ""
 var foot_jobs := PackedStringArray()
+var repeat_job := Button.new()
+var job_voice := AudioStreamPlayer.new()
+var spoken_locale := ""
+var spoken_jobs := PackedStringArray()
 var take_job := Button.new()
 
 const HISTORY_LIMIT := 32
@@ -98,6 +102,13 @@ func _ready() -> void:
 	content.add_child(star_progress)
 	content.add_child(take_job)
 	content.add_child(job_heading)
+	repeat_job.text = "Say again"
+	repeat_job.icon = preload("res://branding/repeat-job.svg")
+	repeat_job.custom_minimum_size.y = 44
+	repeat_job.pressed.connect(_repeat_instruction)
+	content.add_child(repeat_job)
+	job_voice.bus = &"Speech"
+	add_child(job_voice)
 	content.add_child(history_scroll)
 	inbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	history_scroll.add_child(inbox)
@@ -113,7 +124,22 @@ func _add_phone_detail(body: VBoxContainer, dimensions: Vector2) -> void:
 	detail.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	body.add_child(detail)
 
+func _repeat_instruction() -> void:
+	var playlist := AudioStreamPlaylist.new()
+	playlist.loop = false
+	spoken_locale = TranslationServer.get_locale()
+	var jobs := _active_jobs()
+	spoken_jobs = jobs.duplicate()
+	playlist.stream_count = jobs.size()
+	for i in jobs.size():
+		var path := "res://audio/dispatch/%s_%s.ogg" % [spoken_locale.get_slice("_", 0), jobs[i].md5_text()]
+		if not ResourceLoader.exists(path): return
+		playlist.set_list_stream(i, load(path))
+	job_voice.stream = playlist
+	job_voice.play()
+
 func _on_visibility_changed() -> void:
+	if not handset.is_visible_in_tree(): job_voice.stop()
 	if handset.is_visible_in_tree():
 		unread=0
 		history_scroll.scroll_vertical = 0
@@ -164,6 +190,9 @@ func refresh() -> void:
 	var lines:=PackedStringArray()
 	var active := _active_jobs()
 	job_heading.visible = not active.is_empty()
+	repeat_job.visible = job_heading.visible
+	if job_voice.playing and (active != spoken_jobs or spoken_locale != TranslationServer.get_locale()):
+		job_voice.stop()
 	var headings := PackedStringArray()
 	for job in active: headings.append(tr(job))
 	var heading := tr("Current jobs") if active.size() > 1 else tr("Current job")

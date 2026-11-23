@@ -1595,3 +1595,6 @@ msgstr "HAVNEBUTIKKEN"
 
 msgid "HARBOR TOWN PIZZERIA"
 msgstr "HAVNEPIZZERIAEN"
+
+msgid "Say again"
+msgstr "Si det igjen"
