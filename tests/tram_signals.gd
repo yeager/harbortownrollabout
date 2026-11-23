@@ -25,10 +25,13 @@ func check() -> void:
 	for zebra in lights.street_crosswalks:
 		for side in [-1,1]:
 			var axis: Vector3 = zebra.axis * side
-			var curb: Vector3 = zebra.center + axis*4.1
+			var curb: Vector3 = zebra.center + axis*(zebra.curb_distance+.1)
 			lights.phase = (zebra.walk_phase+1)%6
 			if lights.pedestrian_may_enter(curb,curb-axis*.2) or not lights.pedestrian_may_enter(curb-axis*.2,curb):
 				fail("Pedestrian red must block entry and allow exit")
+				return
+			if not lights.pedestrian_may_enter(curb-axis*.2,curb-axis*.6):
+				fail("Pedestrian already crossing stopped on red")
 				return
 			lights.phase = zebra.walk_phase
 			if not lights.pedestrian_may_enter(curb,curb-axis*.2):

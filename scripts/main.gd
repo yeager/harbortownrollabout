@@ -5782,12 +5782,12 @@ func _equip_walker(scene: PackedScene, pace: float, stretch: Vector2, right_grip
 func _advance_crossing(delta: float) -> void:
 	crossing_wait = maxf(0,crossing_wait-delta)
 	var step := 0.0
-	if crossing_wait <= 0.0 and (absf(crossing_pedestrian.position.z)<6.31 or street_signals.phase==3):
+	if crossing_wait <= 0.0:
 		step = minf(delta*1.25,absf(6.32*crossing_direction-crossing_pedestrian.position.z))*crossing_direction
 		var next := crossing_pedestrian.position+Vector3.BACK*step
 		var car_offset := ambulance.to_local(next)
 		var player_blocks := ambulance.visible and absf(car_offset.x)<player_half_size.x+.4 and absf(car_offset.z)<player_half_size.y+.4
-		if player_blocks or _near_parked_vehicle(next,.4):
+		if player_blocks or _near_parked_vehicle(next,.4) or not street_signals.pedestrian_may_enter(crossing_pedestrian.position,next):
 			step = 0.0
 		for item in traffic_data:
 			var offset: Vector3 = item.actor.to_local(next)
@@ -6299,10 +6299,6 @@ func _update_pedestrians(delta: float) -> void:
 			item.direction = -direction
 		var local := ambulance.to_local(next)
 		var blocked := ambulance.visible and absf(local.x) < player_half_size.x+.4 and local.z > -front_reach-.4 and local.z < rear_reach+.4
-		# Wait at the kerb on red. People already crossing continue to the pavement.
-		var enters_crossing := absf(person.position.x)>=5.15 and absf(next.x)<5.15
-		if absf(absf(next.z)-6.35)<1.05 and enters_crossing and street_signals.phase!=0:
-			blocked = true
 		blocked = blocked or not street_signals.pedestrian_may_enter(person.position,next) or _near_parked_vehicle(next,.4)
 		if item.get("pushing",false):
 			var front := next-person.basis.z*.88

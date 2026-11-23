@@ -39,9 +39,9 @@ func _ready() -> void:
 	_build_street_crossing(SHOP_CROSSING)
 	for center: Vector3 in EAST_CROSSINGS:
 		_build_street_crossing(center)
-	heads.append_array(_street_crosswalk(Vector3(CROSSING_X,0,0),false))
+	heads.append_array(_street_crosswalk(Vector3(CROSSING_X,0,0),false,6.31))
 	for z in [-6.35,6.35]:
-		heads.append_array(_street_crosswalk(Vector3(0,0,z),true))
+		heads.append_array(_street_crosswalk(Vector3(0,0,z),true,5.15))
 	_build_tram_crossings()
 	advance(0)
 
@@ -101,9 +101,9 @@ func _make_visor() -> ArrayMesh:
 			surface.add_vertex(corners[index])
 	return surface.commit()
 
-func _street_crosswalk(center: Vector3, east_west: bool) -> Array[Dictionary]:
+func _street_crosswalk(center: Vector3, east_west: bool, curb_distance := 4.0) -> Array[Dictionary]:
 	street_crosswalks.append({"center":center, "axis":Vector3.RIGHT if east_west else Vector3.BACK,
-		"walk_phase":0 if east_west else 3})
+		"walk_phase":0 if east_west else 3, "curb_distance":curb_distance})
 	return _add_crossing(center,east_west)
 
 func _add_crossing(center: Vector3, east_west: bool, pavement_offset := 5.45) -> Array[Dictionary]:
@@ -312,7 +312,7 @@ func pedestrian_may_enter(from: Vector3, to: Vector3) -> bool:
 		var start := from - Vector3(zebra.center)
 		var end := to - Vector3(zebra.center)
 		if absf(end.dot(axis.cross(Vector3.UP))) > 1.45: continue
-		if absf(start.dot(axis)) >= 4.0 and absf(end.dot(axis)) < 4.0: return false
+		if absf(start.dot(axis)) >= zebra.curb_distance and absf(end.dot(axis)) < zebra.curb_distance: return false
 	for c in tram_crossings:
 		if _walk_green(c): continue
 		var dest := to-Vector3(c.center)
