@@ -26,6 +26,7 @@ const SWEET_INGREDIENTS := [
 	"Chocolate buttons with crispy rice bubbles",
 ]
 const MENUS := [["Cinnamon bun","Berry cordial"],["Ice cream","Hot dog"],["Margherita pizza", "Popcorn Party", "Pickle Carousel", "Banana Moon", "Berry Blizzard"],SWEETS,["Apple","Milk"],["Japanese haori jacket","Korean jeogori jacket","Red panda plush","Moon rabbit figurine"],["Hot dog","Moon mash dog","Pickle rocket","Crunchy onion comet"]]
+const SNACK_SHOPS := [1, 2, 3, 6]
 const PRODUCT_ICONS := {
 	6: preload("res://branding/grill-products.svg"),
 	2: preload("res://branding/pizza-products.png"),
@@ -264,7 +265,7 @@ func rebuild_menu() -> void:
 	panel.add_child(title)
 	var keyboard_hint := Label.new()
 	keyboard_hint.text = "Tab to choose · Enter to buy" if MENUS[inside].size()>1 else "Enter to buy"
-	if inside in [1,6]:
+	if inside in SNACK_SHOPS:
 		keyboard_hint.text = "Tab to choose · Enter to buy or eat"
 	keyboard_hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	panel.add_child(keyboard_hint)
@@ -292,7 +293,7 @@ func rebuild_menu() -> void:
 	basket = Label.new()
 	basket.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	panel.add_child(basket)
-	if inside in [1,6]:
+	if inside in SNACK_SHOPS:
 		for i in MENUS[inside].size():
 			var product: String = MENUS[inside][i]
 			var purchase_button := panel.get_child(first_product.get_index()+i) as Button
@@ -316,7 +317,7 @@ func rebuild_menu() -> void:
 
 func eat_snack(product: String) -> void:
 	var game = get_parent()
-	if inside not in [1,6] or not shop_card.is_visible_in_tree() or not game.walker.visible or game.paused: return
+	if inside not in SNACK_SHOPS or not shop_card.is_visible_in_tree() or not game.walker.visible or game.paused: return
 	if not product in MENUS[inside] or int(game.purchases.get(product, 0)) <= 0: return
 	var restore_focus: bool = snack_buttons[product].has_focus() and game.purchases[product] == 1
 	game.purchases[product] -= 1

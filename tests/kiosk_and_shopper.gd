@@ -104,4 +104,23 @@ func check() -> void:
 			return
 	print("All four kiosk meals could be eaten once.")
 	print("Diagonal shopper exit and re-entry, kiosk hatch, four purchases and insufficient funds passed.")
+	for shop in [2, 3]:
+		game.walker.position = Vector3(shops.storefront_x(shop), 0, 44)
+		shops.update_customer(true, game.walker.position, true)
+		for i in shops.MENUS[shop].size():
+			var product: String = shops.MENUS[shop][i]
+			game.wallet = shops.PRICES[shop][i]
+			var buy: Button = shops.panel.get_child(shops.first_product.get_index()+i)
+			buy.pressed.emit()
+			var eat: Button = shops.snack_buttons[product]
+			if not eat.is_visible_in_tree() or buy.icon == null or eat.icon != buy.icon:
+				printerr("Missing matching snack button for ", product)
+				quit(1)
+				return
+			eat.pressed.emit()
+			if eat.visible or game.purchases[product] != 0 or game.wallet != 0:
+				printerr("Failed to consume purchased ", product)
+				quit(1)
+				return
+	print("Bought and ate every pizza and sweet through the shop buttons.")
 	game._finish_quit()
