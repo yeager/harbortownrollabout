@@ -76,6 +76,29 @@ tube("Steering column",(0,-.27,.58),(0,-.13,.85),.022,v.DARK)
 tube("Handlebar",(-.25,-.13,.85),(.25,-.13,.85),.017,v.METAL)
 for side in (-1,1):
     tube("Handle grip",(side*.18,-.13,.85),(side*.255,-.13,.85),.024,v.BLACK)
+# Fixed fibreglass arches leave clearance for the tyres at full steering lock.
+for side in (-1, 1):
+    vertices = []
+    faces = []
+    for step in range(25):
+        angle = math.radians(-12 + step * 204 / 24)
+        for x, radius in ((.29,.29), (.49,.29), (.54,.274), (.54,.249)):
+            vertices.append((side*x, -.72-radius*math.cos(angle), .227+radius*math.sin(angle)))
+        if step:
+            for strip in range(3):
+                i = (step-1)*4+strip
+                face = (i,i+1,i+5,i+4)
+                faces.append(face if side > 0 else face[::-1])
+    mesh = bpy.data.meshes.new("Rolled wheel arch")
+    mesh.from_pydata(vertices, [], faces)
+    mesh.materials.append(red)
+    arch = bpy.data.objects.new("Front mudguard", mesh)
+    bpy.context.collection.objects.link(arch)
+    arch.parent = root
+    for face in mesh.polygons:
+        face.use_smooth = True
+    shell = arch.modifiers.new("Pressed lip", 'SOLIDIFY')
+    shell.thickness = .006
 for x,y in ((-.429,-.72),(.429,-.72),(0,.89)):
     v.cylinder("Performance tire",(x,y,.227),.227,.13,v.RUBBER,True,40,root)
     for side in (-1,1):
