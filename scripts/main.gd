@@ -776,8 +776,9 @@ func _notification(what: int) -> void:
 		for tile: Button in vehicle_selector.get_children():
 			tile.accessibility_name = tr(tile.text)
 			tile.get_node("Favorite").accessibility_name = tr("Favorite vehicles") + " · " + tr(tile.text)
-		category_tabs.get_child(-1).tooltip_text = tr("Favorite vehicles")
-		category_tabs.get_child(-1).accessibility_name = tr("Favorite vehicles")
+		if category_tabs.get_child_count() > 0:
+			category_tabs.get_child(-1).tooltip_text = tr("Favorite vehicles")
+			category_tabs.get_child(-1).accessibility_name = tr("Favorite vehicles")
 		for label in station_readouts:
 			label.text = _station_readout_text(station_readouts[label])
 		for poster: Label3D in get_tree().get_nodes_in_group("fitted_world_signs"):
