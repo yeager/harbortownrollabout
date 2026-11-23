@@ -5547,7 +5547,7 @@ func _build_birthday_delivery() -> void:
 	birthday_host.rotation.y = 0
 	_animate_steps(birthday_host,0,0)
 	var top := Vector3(33,.84,17.4)
-	_make_box("Birthday table",Vector3(1.4,.08,.75),top,Color("#a1cdb7"),false)
+	_make_roadside_solid("Birthday table",Vector3(1.4,.08,.75),top,Color("#a1cdb7"),false)
 	for x in [-.55,.55]:
 		for z in [-.26,.26]:
 			_make_box("Table leg",Vector3(.06,.8,.06),top+Vector3(x,-.44,z),Color("#885936"),false)
