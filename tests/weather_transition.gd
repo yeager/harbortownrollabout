@@ -82,6 +82,22 @@ func check_transition() -> void:
 		printerr("Winter steps should crunch and leave footprints")
 		quit(1)
 		return
+	var marks_before_plough := game.sole_marks.visible_instance_count
+	var strip := Transform3D(Basis.IDENTITY, game.walker.position + Vector3.FORWARD)
+	game.ground_work.sweep(strip, strip.translated(Vector3.BACK*2), Vector3.LEFT, Vector3.RIGHT, false)
+	for i in 24:
+		game._animate_steps(game.walker, .08, .033)
+	if game.footstep.stream != game.DRY_STEP or game.sole_marks.visible_instance_count != marks_before_plough:
+		printerr("Walking on ploughed ground should sound dry and leave no new prints")
+		quit(1)
+		return
+	game.walker.position.x += 3
+	for i in 24:
+		game._animate_steps(game.walker, .08, .033)
+	if game.footstep.stream != game.SNOW_STEP or game.sole_marks.visible_instance_count <= marks_before_plough:
+		printerr("Stepping off the ploughed strip should restore crunch and footprints")
+		quit(1)
+		return
 	game.snow_marks.visible_instance_count = 1
 	game.snow_cursor = 1
 	seasons.get_child(2).pressed.emit()
