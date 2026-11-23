@@ -97,12 +97,26 @@ func check() -> void:
 		return
 	for product in shops.MENUS[6]:
 		var eat: Button = shops.snack_buttons[product]
-		eat.pressed.emit()
+		if product == shops.MENUS[6][0]:
+			eat.grab_focus()
+		if not eat.has_focus():
+			printerr("Keyboard focus skipped ", product)
+			quit(1)
+			return
+		for pressed in [true, false]:
+			var enter := InputEventKey.new()
+			enter.keycode = KEY_ENTER
+			enter.pressed = pressed
+			root.push_input(enter)
 		if game.purchases[product] != 0 or eat.visible or game.wallet != 0 or game.happy_seconds <= 0:
 			printerr("Failed to eat one serving of ",product)
 			quit(1)
 			return
-	print("All four kiosk meals could be eaten once.")
+	if not shops.first_product.has_focus():
+		printerr("Keyboard focus lost after the final serving")
+		quit(1)
+		return
+	print("Enter consumed all four meals and focus returned to the menu.")
 	print("Diagonal shopper exit and re-entry, kiosk hatch, four purchases and insufficient funds passed.")
 	for shop in [2, 3]:
 		game.walker.position = Vector3(shops.storefront_x(shop), 0, 44)
