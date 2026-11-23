@@ -375,6 +375,15 @@ func refresh_basket() -> void:
 	var purchases: Dictionary = get_parent().purchases
 	for product in snack_buttons:
 		snack_buttons[product].visible = int(purchases.get(product,0)) > 0
+	# Keep Tab and Shift+Tab on the counter, including newly available snacks.
+	var choices: Array[Button] = []
+	for control in panel.get_children():
+		if control is Button and control.visible:
+			choices.append(control)
+	for i in choices.size():
+		var choice := choices[i]
+		choice.focus_previous = choice.get_path_to(choices[posmod(i-1, choices.size())])
+		choice.focus_next = choice.get_path_to(choices[(i+1) % choices.size()])
 	var listed: Array[String] = []
 	for shop in MENUS.size():
 		for item in MENUS[shop].size():

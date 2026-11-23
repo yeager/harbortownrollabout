@@ -129,7 +129,7 @@ Listan innehåller 100 jobb. En tom ruta är öppen. En punkt bockas av när bet
 - [x] 93. Visa stopp i förarhjälpen. Fordonssignalerna har tre runda linser i fast ordning: rött för stopp, orange för sakta in och grönt för kör.
 - [x] 94. Låt spelaren provlyssna på en kort replik direkt när talvolymen ändras i inställningarna.
 - [x] 95. En radiobild på knappen ”Slå på radion” visar var radion startas från förarplatsen. Kontrollerat med en renderad svensk knapp och med radiotestet som startar uppspelningen genom knappen.
-- [ ] 96. Prova hela vägen från startmenyn till ett köp och tillbaka med enbart tangentbord. Rätta de fokussteg som fastnar.
+- [ ] 96. Prova hela vägen från startmenyn till ett köp och tillbaka med enbart tangentbord. Rätta de fokussteg som fastnar. Start, urstigning, Tab och Skift+Tab runt pizzamenyn samt köp med Enter har verifierats i Godot. Gångsträckorna till och från butiken återstår.
 - [x] 97. Kontrollera att alla sju språk ryms på leveranskvittot i liten fönsterstorlek och med stor text.
 - [x] 98. Låt pausmenyn visa det senaste uppdragssteget med samma bild som i telefonen.
 - [x] 99. Mät bildtider på kajen medan färjan passerar och tre personer spelar boule. Jämför dag och natt från samma plats. Godot 4.7 dev5, OpenGL Compatibility med llvmpipe, 800 × 600, kamera (98, 3, 83) riktad mot (91, 1, 60). Efter fyra uppvärmningsbilder mättes 30 bildintervall per läge under den första spelarens kast medan Lotten gick från södra kajen. Dag: median 5,00 s, 95:e percentil 5,27 s. Natt: 4,85 s respektive 5,16 s. Avser mjukvarurendering.
