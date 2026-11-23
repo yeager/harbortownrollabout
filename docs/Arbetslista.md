@@ -61,7 +61,7 @@ De 50 förbättringarna från genomgången. En tom ruta är öppen. En punkt boc
 - [ ] 42. Lägg till lokala stationsrop och musik för spanska, tyska, franska, norska och finska.
 - [x] 43. Visa en tydlig låtbild och titel när radion byter låt.
 - [x] 44. Visa påskägg, uppdragsminnen och inköp som bilder i en samling. Alla butiksvaror har en produktbild vid köp och i köplistan. Telefonen visar en stjärnrad med en fast plats för var och en av stadens åtta gömda stjärnor. Belönade uppdragsmoment ger sparade bildminnen i telefonen. Telefonen visar också en bild per köpt vara, även efter att den ätits upp.
-- [ ] 45. Erbjud gemensamma eller separata spelarprofiler, plånböcker och samlingar.
+- [ ] 45. Erbjud gemensamma eller separata spelarprofiler, plånböcker och samlingar. Sparlogiken kan nu läsa och skriva framsteg per profil. Separata saldon och samlingar har verifierats i Godot. Valet i menyn återstår.
 - [x] 46. Visa med bilder vad som gav poäng och mynt efter uppdraget.
 - [ ] 47. Bygg och provstarta Linux-paket på en äldre stödd distribution än dagens glibc 2.44-krav.
 - [ ] 48. Publicera provstartade Windows- och Mac-paket med direkta nedladdningslänkar. Senaste byggjobbet stoppades av GitHubs betalnings- eller utgiftsgräns.

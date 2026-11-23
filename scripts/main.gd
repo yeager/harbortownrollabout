@@ -7902,6 +7902,34 @@ func _valid_checkpoint(saved: Variant) -> bool:
 		if saved.quests.shoe not in FootQuest.values() or saved.quests.cat not in FootQuest.values(): return false
 	return true
 
+func _load_player_progress(config: ConfigFile, section: String) -> void:
+	var saved = config.get_value(section, "road_checkpoint", {})
+	road_checkpoint = saved if _valid_checkpoint(saved) else {}
+	purchases=config.get_value(section,"purchases",{})
+	boutique_jacket = config.get_value(section,"boutique_jacket","")
+	shops.carried_toy = config.get_value(section,"carried_toy","")
+	wallet=maxi(0,int(config.get_value(section,"coins",0)))
+	foot_quest_points = maxi(0, int(config.get_value(section, "foot_quest_points", 0)))
+	delivery_points = maxi(0, int(config.get_value(section, "delivery_points", 0)))
+	var saved_memories = config.get_value(section,"mission_memories",PackedStringArray())
+	mission_memories = saved_memories if saved_memories is PackedStringArray else PackedStringArray()
+	var saved_stars = config.get_value(section, "stars", PackedStringArray())
+	collected_stars = PackedStringArray()
+	if saved_stars is PackedStringArray:
+		for id in saved_stars:
+			if STAR_SITES.has(id) and not collected_stars.has(id): collected_stars.append(id)
+
+func _store_player_progress(config: ConfigFile, section: String) -> void:
+	config.set_value(section, "road_checkpoint", road_checkpoint)
+	config.set_value(section,"coins",wallet)
+	config.set_value(section,"mission_memories",mission_memories)
+	config.set_value(section,"stars",collected_stars)
+	config.set_value(section, "foot_quest_points", foot_quest_points)
+	config.set_value(section, "delivery_points", delivery_points)
+	config.set_value(section,"purchases",purchases)
+	config.set_value(section,"boutique_jacket",boutique_jacket)
+	config.set_value(section,"carried_toy",shops.carried_toy)
+
 func _load_preferences() -> void:
 	var config := ConfigFile.new()
 	var loaded := config.load(SETTINGS_PATH) == OK
@@ -7921,22 +7949,8 @@ func _load_preferences() -> void:
 	number_movement = config.get_value("keyboard","number_movement",false) == true
 	extra_reading_time = config.get_value("accessibility", "extra_reading_time", false) == true
 	large_text = config.get_value("accessibility", "large_text", false) == true
-	var saved = config.get_value("player", "road_checkpoint", {})
-	if _valid_checkpoint(saved):
-		road_checkpoint = saved
-	play_as_alma=config.get_value("player","alma",false)==true
-	purchases=config.get_value("player","purchases",{})
-	boutique_jacket = config.get_value("player","boutique_jacket","")
-	shops.carried_toy = config.get_value("player","carried_toy","")
-	wallet=maxi(0,int(config.get_value("player","coins",0)))
-	foot_quest_points = maxi(0, int(config.get_value("player", "foot_quest_points", 0)))
-	delivery_points = maxi(0, int(config.get_value("player", "delivery_points", 0)))
-	var saved_memories = config.get_value("player","mission_memories",PackedStringArray())
-	if saved_memories is PackedStringArray: mission_memories = saved_memories
-	var saved_stars = config.get_value("player", "stars", PackedStringArray())
-	if saved_stars is PackedStringArray:
-		for id in saved_stars:
-			if STAR_SITES.has(id) and not collected_stars.has(id): collected_stars.append(id)
+	play_as_alma = config.get_value("player","alma",false) == true
+	_load_player_progress(config, "player")
 	weather.season_setting = clampi(int(config.get_value("world","season",0)),0,4)
 	weather.weather_setting = clampi(int(config.get_value("world","weather",0)),0,4)
 	time_mode = clampi(int(config.get_value("world","daylight",2)),0,2)
@@ -7963,16 +7977,8 @@ func _save_preferences() -> void:
 	var volume := 0.0 if AudioServer.is_bus_mute(0) else db_to_linear(AudioServer.get_bus_volume_db(0))*100
 	config.set_value("accessibility", "extra_reading_time", extra_reading_time)
 	config.set_value("accessibility", "large_text", large_text)
-	config.set_value("player", "road_checkpoint", road_checkpoint)
 	config.set_value("player","alma",play_as_alma)
-	config.set_value("player","coins",wallet)
-	config.set_value("player","mission_memories",mission_memories)
-	config.set_value("player","stars",collected_stars)
-	config.set_value("player", "foot_quest_points", foot_quest_points)
-	config.set_value("player", "delivery_points", delivery_points)
-	config.set_value("player","purchases",purchases)
-	config.set_value("player","boutique_jacket",boutique_jacket)
-	config.set_value("player","carried_toy",shops.carried_toy)
+	_store_player_progress(config, "player")
 	config.set_value("language", "locale", language_preference)
 	for channel: String in MIX_CHANNELS:
 		config.set_value("audio", channel.to_lower(), roundi(_channel_volume(channel)))
