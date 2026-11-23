@@ -6826,6 +6826,7 @@ func _build_ui() -> void:
 func _build_town_map() -> void:
 	var dialog := AcceptDialog.new()
 	dialog.name = "TownMap"
+	dialog.window_input.connect(_dialog_quit_key.bind(dialog))
 	dialog.exclusive = true
 	dialog.transient = true
 	add_child(dialog)
