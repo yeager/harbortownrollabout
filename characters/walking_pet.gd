@@ -46,9 +46,10 @@ func rod(parent: Node3D, a: Vector3, b: Vector3, r1: float, r2: float, finish: M
 func update_lead() -> void:
 	var a := to_local(hand.global_position)
 	var b := collar_ring.position
+	var sag := .32 * (1.0 - smoothstep(.65, 1.35, a.distance_to(b)))
 	var prev := a
 	for i in lead.size():
 		var t := float(i+1)/lead.size()
-		var point := a.lerp(b,t) + Vector3.DOWN*(.15*4*t*(1-t))
+		var point := a.lerp(b,t) + Vector3.DOWN*(sag*4*t*(1-t))
 		stick(lead[i],prev,point)
 		prev = point

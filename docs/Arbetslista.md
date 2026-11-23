@@ -48,7 +48,7 @@ De 50 förbättringarna från genomgången. En tom ruta är öppen. En punkt boc
 - [ ] 32. Granska Axel och Alma från sidan under en hel gångcykel och rätta anatomiska avvikelser.
 - [ ] 33. Kontrollera och förbättra handgrepp om ratt, styre, hundkoppel och kasse.
 - [ ] 34. Animera shoppingmopedens sidoinsteg, kroppsvridning och fötter in under styret.
-- [ ] 35. Låt hundkopplet slacka och sträckas gradvis när avståndet ändras.
+- [x] 35. Låt hundkopplet slacka och sträckas gradvis när avståndet ändras.
 - [ ] 36. Ge komodovaranen låg gång, växelvisa steg och följande svans i svängar.
 - [ ] 37. Visa bussens passagerare och förändringen i kupén vid hållplatserna.
 - [ ] 38. Lägg till en kioskförsäljare som räcker fram den beställda rätten.

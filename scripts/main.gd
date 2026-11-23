@@ -116,6 +116,7 @@ var time_mode := 0
 var day_phase := 0.0
 var santa: Node3D
 var santa_encounters := {}
+var field_fountain := preload("res://environment/field_fountain.gd").new()
 var midsummer_pole := preload("res://environment/midsummer_pole.gd").new()
 var christmas_spruce := preload("res://environment/christmas_spruce.gd").new()
 var last_night := -1.0
@@ -1683,6 +1684,7 @@ func _build_world() -> void:
 	_build_traffic()
 	_build_pedestrians()
 	_build_depot()
+	_plant_park_edges()
 	_build_target_marker()
 	_build_camera()
 	add_child(tram)
@@ -2974,6 +2976,9 @@ func _build_city_blocks() -> void:
 	add_child(christmas_spruce)
 	midsummer_pole.position = christmas_spruce.position
 	add_child(midsummer_pole)
+	field_fountain.position = Vector3(41,-.18,45)
+	add_child(field_fountain)
+	_make_driving_surface("Fountain foundation",Vector3(10,.08,10),field_fountain.position,Color("#809480"),true)
 	for p in [Vector3(25, 0, 12), Vector3(35, 0, 12), Vector3(25, 0, 20), Vector3(35, 0, 20)]:
 		var granite := Color("#878782")
 		_make_roadside_solid("Planter base",Vector3(1.3,.29,1.3),p+Vector3.UP*.12,granite,true)
@@ -3033,6 +3038,44 @@ func _build_trees() -> void:
 		tree_pit.position = center + Vector3.UP * 0.028
 		add_child(tree_pit)
 		_make_tree(center, 0.79 + 0.13 * sin(z), TREE_SCENES[2 if tree_count % 2 else 0])
+
+func _plant_park_edges() -> void:
+	var foliage := ShaderMaterial.new()
+	foliage.shader = preload("res://environment/foliage.gdshader")
+	foliage.set_shader_parameter("leaf_grain", preload("res://art/surfaces/leaf.png"))
+	foliage.set_shader_parameter("leaf_color", Color("#55763d"))
+	var crown := SphereMesh.new()
+	crown.radial_segments = 10
+	crown.rings = 5
+	crown.material = foliage
+	var planted := 0
+	for z in [43,64,73,34,56]:
+		for x in [-46,-33,-17,17,30,46]:
+			var footprint := AABB(Vector3(x-2,-.3,z-2), Vector3(4,6,4))
+			var clear := true
+			for bounds in building_bounds + roadside_solids + driving_surfaces:
+				if bounds.end.y > -.19 and footprint.intersects(bounds):
+					clear = false
+					break
+			for trunk in trunks:
+				if Vector2(x-trunk.x,z-trunk.z).length_squared() < 16:
+					clear = false
+			if not clear: continue
+			if planted % 3 == 0:
+				_make_tree(Vector3(x,0,z), .75 + .06*(planted%5))
+			else:
+				var shrub := Node3D.new()
+				shrub.name = "ParkShrub%d" % planted
+				add_child(shrub)
+				shrub.position = Vector3(x,-.2,z)
+				shrub.rotation.y = planted*2.4
+				for offset in [-1,0,1]:
+					var lobe := MeshInstance3D.new()
+					lobe.mesh = crown
+					lobe.scale = Vector3(1.25,1.45-.45*abs(offset),1.2)
+					lobe.position = Vector3(offset*.49,lobe.scale.y*.42,offset*offset*.18)
+					shrub.add_child(lobe)
+			planted += 1
 
 var foliage_finishes := {}
 var distant_tree_meshes := {}
@@ -3153,6 +3196,7 @@ func _update_daylight(delta: float) -> void:
 	var night := 1.0 if time_mode == 1 else (smoothstep(-.4,.4,-cos(day_phase*TAU)) if time_mode == 2 else 0.0)
 	christmas_spruce.update_lights(weather.season == 4 and weather.snow > .02, night)
 	midsummer_pole.set_summer(weather.season == 2)
+	field_fountain.set_season(weather.season)
 	var cloud := weather.cloud_cover*(1.0-night)
 	city_sun.light_energy = lerpf(.73,.17,night)*(1.0-.52*cloud)
 	city_sun.shadow_opacity = 1.0-.48*cloud
