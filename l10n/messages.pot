@@ -1794,3 +1794,6 @@ msgstr ""
 
 msgid "Drive to the bakery. Look for the coffee cup above the door. Drop off the flour there."
 msgstr ""
+
+msgid "Practice course"
+msgstr ""

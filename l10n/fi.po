@@ -1861,3 +1861,6 @@ msgstr "Taita tai avaa potkulauta F9-näppäimellä"
 
 msgid "Drive to the bakery. Look for the coffee cup above the door. Drop off the flour there."
 msgstr "Aja leipomoon. Etsi kahvikuppi oven yläpuolelta. Vie jauhot sinne."
+
+msgid "Practice course"
+msgstr "Harjoittelurata"

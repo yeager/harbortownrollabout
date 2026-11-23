@@ -1880,3 +1880,6 @@ msgstr "Plier ou déplier la trottinette avec F9"
 
 msgid "Drive to the bakery. Look for the coffee cup above the door. Drop off the flour there."
 msgstr "Va à la boulangerie. Cherche la tasse de café au-dessus de la porte. Dépose la farine là-bas."
+
+msgid "Practice course"
+msgstr "Piste d’entraînement"

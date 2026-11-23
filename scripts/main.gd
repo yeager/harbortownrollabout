@@ -9894,7 +9894,7 @@ func _refresh_ui() -> void:
 	elif boating:
 		mission_label.text = "Drive the motorboat"
 	elif free_drive:
-		mission_label.text = "Free exploration"
+		mission_label.text = "Practice course" if practice_active else "Free exploration"
 	elif vehicle_index==RECOVERY:
 		mission_label.text=tr(SERVICE_MESSAGES[recovery_leg%4])
 	elif vehicle_index==BUS:

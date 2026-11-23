@@ -1882,3 +1882,6 @@ msgstr "Tretroller mit F9 ein- oder ausklappen"
 
 msgid "Drive to the bakery. Look for the coffee cup above the door. Drop off the flour there."
 msgstr "Fahr zur Bäckerei. Schau nach der Kaffeetasse über der Tür. Lade dort das Mehl ab."
+
+msgid "Practice course"
+msgstr "Übungsplatz"

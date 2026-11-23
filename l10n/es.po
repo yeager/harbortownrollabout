@@ -1872,3 +1872,6 @@ msgstr "Plegar o desplegar el patinete con F9"
 
 msgid "Drive to the bakery. Look for the coffee cup above the door. Drop off the flour there."
 msgstr "Ve a la panadería. Busca la taza de café que hay encima de la puerta. Deja allí la harina."
+
+msgid "Practice course"
+msgstr "Circuito de prácticas"
