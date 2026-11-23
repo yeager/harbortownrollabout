@@ -494,6 +494,22 @@ func _hot_dog_stand(x: float) -> void:
 		bun.position = Vector3(x-.89+.25*i,1.18,43.11)
 		add_child(bun)
 	part("Grill hotplate",Vector3(x+.62,1.09,43.07),Vector3(1.22,.13,.70),Color("#484343"))
+	var roller_mesh := CylinderMesh.new()
+	roller_mesh.top_radius = .042
+	roller_mesh.bottom_radius = .042
+	roller_mesh.height = 1.07
+	roller_mesh.radial_segments = 16
+	var roller_finish: StandardMaterial3D = get_parent()._material(steel,.29)
+	roller_finish.metallic = .77
+	roller_mesh.material = roller_finish
+	for row in 6:
+		var roller := MeshInstance3D.new()
+		roller.mesh = roller_mesh
+		roller.rotation.z = PI*.5
+		roller.position = Vector3(x+.62,1.186,42.82+row*.10)
+		add_child(roller)
+	for side in [-1,1]:
+		part("Roller bearing cover",Vector3(x+.62+side*.555,1.17,43.07),Vector3(.063,.14,.65),steel)
 	var frank := CapsuleMesh.new()
 	frank.radius = .049
 	frank.height = .36
@@ -505,8 +521,8 @@ func _hot_dog_stand(x: float) -> void:
 		sausage.mesh = frank
 		add_child(sausage)
 		if i < 5:
-			sausage.position = Vector3(x+.22+i*.19,1.204,43.07)
-			sausage.rotation.x = PI*.5
+			sausage.position = Vector3(x+.62+(.22 if i%2 else -.22),1.262,42.87+i*.10)
+			sausage.rotation.z = PI*.5
 		else:
 			sausage.position = Vector3(x+.03,1.20,42.39)
 			sausage.rotation.z = PI*.5
