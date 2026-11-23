@@ -231,6 +231,11 @@ const SERVICE_STOPS := [Vector3(18,0,2.35), STATION_DROP, Vector3(126,0,-2.35), 
 const SERVICE_MESSAGES := ["Collect the car with a smoking bonnet.","Take the car to the petrol station.","Collect the car with a missing wheel.","Take the car to the petrol station."]
 var recovery_leg := 0
 const WORKSHOP_CAR_BOUNDS := AABB(STATION_PARKING - Vector3(2.1,1,.86),Vector3(4.2,3,1.72))
+var workshop_wheel: Node3D
+var wheel_rest: Vector3
+var workshop_smoke: CPUParticles3D
+var workshop_tool := Node3D.new()
+var repair_tween: Tween
 var workshop_car: Node3D
 var casualty: Node3D
 var hazard_lenses: Array[MeshInstance3D] = []
@@ -1485,6 +1490,7 @@ func _help_at_target() -> void:
 			recovery_leg+=1
 			parked_at_target=0
 			if recovery_leg%2==0:
+				_repair_at_workshop(recovery_leg % 4 == 0)
 				_reward_delivery(20)
 				message = "Recovery complete. You earned 20 points and 20 coins."
 				phone.receive(message)
@@ -5679,6 +5685,27 @@ func _sync_recovery() -> void:
 	_update_hazard_lights()
 	bonnet_smoke.emitting=active and recovery_leg%4==0
 
+func _repair_at_workshop(replace_wheel: bool) -> void:
+	if repair_tween:
+		repair_tween.kill()
+	workshop_car.position = STATION_PARKING
+	workshop_wheel.position = wheel_rest
+	workshop_tool.visible = not replace_wheel
+	workshop_smoke.emitting = not replace_wheel
+	repair_tween = workshop_car.create_tween().set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	if replace_wheel:
+		var side := signf(workshop_car.to_local(workshop_wheel.global_position).x)
+		workshop_wheel.position.x += side * 1.3
+		repair_tween.tween_property(workshop_car,"position:y",STATION_PARKING.y+.35,.6)
+		repair_tween.tween_property(workshop_wheel,"position",wheel_rest,1.3)
+		repair_tween.tween_property(workshop_car,"position:y",STATION_PARKING.y,.6)
+	else:
+		for stroke in 3:
+			repair_tween.tween_property(workshop_tool,"rotation:z",.55,.32)
+			repair_tween.tween_property(workshop_tool,"rotation:z",-.28,.32)
+		repair_tween.tween_callback(workshop_smoke.set.bind("emitting",false))
+		repair_tween.tween_callback(workshop_tool.hide)
+
 func _build_target_marker() -> void:
 	var roadside_model := preload("res://vehicles/traffic_bmw_silver.glb")
 	workshop_car=roadside_model.instantiate()
@@ -5729,6 +5756,19 @@ func _build_target_marker() -> void:
 	puff.material=haze
 	bonnet_smoke.mesh=puff
 	casualty.add_child(bonnet_smoke)
+	workshop_smoke = bonnet_smoke.duplicate()
+	workshop_car.add_child(workshop_smoke)
+	workshop_smoke.emitting = false
+	workshop_wheel = _rig_wheels(workshop_car)[0]
+	wheel_rest = workshop_wheel.position
+	workshop_car.add_child(workshop_tool)
+	workshop_tool.position = Vector3(.42,1.12,1.65)
+	var chrome := Color("#bfced2")
+	_make_box("Spanner handle",Vector3(.09,.55,.07),Vector3.UP*.31,chrome,false,workshop_tool)
+	_make_box("Spanner jaw",Vector3(.24,.09,.09),Vector3.UP*.58,chrome,false,workshop_tool)
+	for side in [-1,1]:
+		_make_box("Spanner prong",Vector3(.065,.14,.09),Vector3(side*.09,.66,0),chrome,false,workshop_tool)
+	workshop_tool.hide()
 	for i in 24:
 		var arrow := Node3D.new()
 		add_child(arrow)
