@@ -275,7 +275,7 @@ func update_star_album(sites: Dictionary, collected: PackedStringArray) -> void:
 		stamp.text = "★" if found else "☆"
 		stamp.add_theme_color_override("font_color", Color("#87520c") if found else Color("#516963"))
 
-func update_mission_album(sheets: Dictionary, memories: PackedStringArray) -> void:
+func update_mission_album(sheets: Dictionary, memories: PackedStringArray, shops, purchases: Dictionary) -> void:
 	for id in memories:
 		var parts := id.split("/")
 		if parts.size() != 2 or not sheets.has(parts[0]) or not parts[1].is_valid_int(): continue
@@ -291,4 +291,22 @@ func update_mission_album(sheets: Dictionary, memories: PackedStringArray) -> vo
 		stamp.name = stamp_name
 		stamp.texture = picture
 		memory_strip.add_child(stamp)
+	# Purchased snacks keep their entry after the last serving is eaten.
+	for product: String in purchases:
+		var stamp_name := "Purchase_" + product.validate_node_name()
+		var stamp := memory_strip.get_node_or_null(stamp_name) as TextureRect
+		if not stamp:
+			for shop in shops.MENUS.size():
+				var item: int = shops.MENUS[shop].find(product)
+				if item < 0: continue
+				stamp = TextureRect.new()
+				stamp.name = stamp_name
+				stamp.texture = shops._product_icon(shop,item)
+				stamp.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+				stamp.custom_minimum_size = Vector2(48,48)
+				memory_strip.add_child(stamp)
+				break
+		if stamp:
+			stamp.tooltip_text = tr(product)
+			stamp.accessibility_name = tr(product)
 	memory_scroll.visible = memory_strip.get_child_count() > 0

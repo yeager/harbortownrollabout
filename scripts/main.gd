@@ -8163,7 +8163,7 @@ func _refresh_ui() -> void:
 	_refresh_dispatch()
 	_sync_radio()
 	phone.update_star_album(STAR_SITES, collected_stars)
-	phone.update_mission_album(MEMORY_SHEETS, mission_memories)
+	phone.update_mission_album(MEMORY_SHEETS, mission_memories, shops, purchases)
 	var remaining := STAR_SITES.size() - collected_stars.size()
 	if remaining == 0:
 		phone.star_progress.text = tr("★ All stars found!")
