@@ -4846,10 +4846,14 @@ func _movement_pressed(default_key: Key, physical := false) -> bool:
 	return Input.is_physical_key_pressed(default_key) if physical else Input.is_key_pressed(default_key)
 
 func _movement_hint(text: String) -> String:
-	return text.format({"up":"8","left":"4","down":"5","right":"6"} if number_movement else {"up":"W","left":"A","down":"S","right":"D"})
+	var keys := {"up":"8","left":"4","down":"5","right":"6"} if number_movement else {"up":"W","left":"A","down":"S","right":"D"}
+	keys["seat"] = "F / F3" if seat_f3 else "F"
+	keys["horn"] = "H / F4" if horn_f4 else "H"
+	keys["pause"] = "P / F7" if pause_f7 else "P"
+	return text.format(keys)
 
 func _with_recovery_hint(controls: String) -> String:
-	return _movement_hint(controls).replace("{seat}", "F / F3" if seat_f3 else "F") + "   ·   " + _recovery_hint()
+	return _movement_hint(controls) + "   ·   " + _recovery_hint()
 
 func _recovery_hint() -> String:
 	return tr("Stuck? Press %s") % OS.get_keycode_string(recovery_key)
@@ -8014,7 +8018,7 @@ func _build_ui() -> void:
 	seat_button.pressed.connect(_change_seat)
 	var help := driving_hints
 	help.name = "DrivingHints"
-	help.text = "{up} / ↑  Drive     {left} {right} / ← →  Steer     {down} / ↓  Brake or reverse\nRelease to slow down   ·   Space to help   ·   P to pause"
+	help.text = "{up} / ↑  Drive     {left} {right} / ← →  Steer     {down} / ↓  Brake or reverse\nRelease to slow down   ·   Space to help   ·   {pause} to pause"
 	help.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_WIDE)
 	help.offset_top = -50
 	help.offset_left = 12
@@ -9818,15 +9822,15 @@ func _refresh_ui() -> void:
 	hints.offset_left = 142 if driving_controls.visible and driving_controls.show_wheel else 12
 	hints.visible = not show_overlay and not shops.shop_card.is_visible_in_tree()
 	if tram_mode == 1:
-		hints.text = "Passenger ride · P to pause"
+		hints.text = "Passenger ride · {pause} to pause"
 	elif tram_mode == 2:
 		hints.text = "{up} / ↑ Accelerate · {down} / ↓ Brake · Automatic station stops"
 	elif boating:
-		hints.text = "{up} / ↑ Throttle · {left} {right} / ← → Steer · {down} / ↓ Slow or reverse · H Horn · P Pause"
+		hints.text = "{up} / ↑ Throttle · {left} {right} / ← → Steer · {down} / ↓ Slow or reverse · {horn} Horn · {pause} Pause"
 	elif free_drive:
-		hints.text = "{up} / ↑ Drive   ·   {left} {right} / ← → Steer   ·   {down} / ↓ Brake or reverse   ·   {seat} Get out   ·   P Pause"
+		hints.text = "{up} / ↑ Drive   ·   {left} {right} / ← → Steer   ·   {down} / ↓ Brake or reverse   ·   {seat} Get out   ·   {pause} Pause"
 	else:
-		hints.text = "{up} / ↑  Drive     {left} {right} / ← →  Steer     {down} / ↓  Brake or reverse\nRelease to slow down   ·   Space to help   ·   P to pause"
+		hints.text = "{up} / ↑  Drive     {left} {right} / ← →  Steer     {down} / ↓  Brake or reverse\nRelease to slow down   ·   Space to help   ·   {pause} to pause"
 	var camera_hint := tr("Hold V and move the mouse to look around")
 	if walker.visible and tram_mode == 0 and not boating and not ferry_passenger and shops.inside < 0:
 		camera_hint = tr("{up} / ↑ Accelerate · {down} / ↓ Brake · {left} / {right} Steer · {scooter} Fold scooter") if scooter.visible else tr("{scooter} Unfold scooter") + "   ·   " + camera_hint
@@ -9967,7 +9971,7 @@ func _refresh_status() -> void:
 	elif waiting_for_signal and mode=="playing" and not paused and not walker.visible and not boating:
 		status_label.text = tr("Wait until the crossing is clear." if waiting_for_clear_crossing else "Waiting for a green light")
 	elif walker.visible and not boating and not paused:
-		status_label.text = _movement_hint(tr("Walk with {up}{left}{down}{right} or arrows · F to enter a vehicle"))
+		status_label.text = _movement_hint(tr("Walk with {up}{left}{down}{right} or arrows · {seat} to enter a vehicle"))
 	else:
 		var current_speed := launch_speed if boating else crawler_speed if operating_excavator else speed
 		status_label.text = tr("Speed  %02d km/h") % roundi(absf(current_speed) * 3.6)

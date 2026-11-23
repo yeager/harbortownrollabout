@@ -67,7 +67,7 @@ msgstr ""
 msgid "Pause"
 msgstr ""
 
-msgid "{up} / ↑  Drive     {left} {right} / ← →  Steer     {down} / ↓  Brake or reverse\nRelease to slow down   ·   Space to help   ·   P to pause"
+msgid "{up} / ↑  Drive     {left} {right} / ← →  Steer     {down} / ↓  Brake or reverse\nRelease to slow down   ·   Space to help   ·   {pause} to pause"
 msgstr ""
 
 msgid "Start a gentle drive"
@@ -190,7 +190,7 @@ msgstr ""
 msgid "Stop first to get out."
 msgstr ""
 
-msgid "Walk with {up}{left}{down}{right} or arrows · F to enter a vehicle"
+msgid "Walk with {up}{left}{down}{right} or arrows · {seat} to enter a vehicle"
 msgstr ""
 
 msgid "Time · Day"
@@ -220,7 +220,7 @@ msgstr ""
 msgid "Explore on foot or by vehicle. Stop at the depot to change vehicles."
 msgstr ""
 
-msgid "{up} / ↑ Drive   ·   {left} {right} / ← → Steer   ·   {down} / ↓ Brake or reverse   ·   {seat} Get out   ·   P Pause"
+msgid "{up} / ↑ Drive   ·   {left} {right} / ← → Steer   ·   {down} / ↓ Brake or reverse   ·   {seat} Get out   ·   {pause} Pause"
 msgstr ""
 
 msgid "Continue walking"
@@ -325,7 +325,7 @@ msgstr ""
 msgid "Drive the motorboat"
 msgstr ""
 
-msgid "{up} / ↑ Throttle · {left} {right} / ← → Steer · {down} / ↓ Slow or reverse · H Horn · P Pause"
+msgid "{up} / ↑ Throttle · {left} {right} / ← → Steer · {down} / ↓ Slow or reverse · {horn} Horn · {pause} Pause"
 msgstr ""
 
 #, c-format
@@ -440,7 +440,7 @@ msgstr ""
 msgid "Recovery complete. You earned 20 points and 20 coins."
 msgstr ""
 
-msgid "Passenger ride · P to pause"
+msgid "Passenger ride · {pause} to pause"
 msgstr ""
 
 msgid "{up} / ↑ Accelerate · {down} / ↓ Brake · Automatic station stops"

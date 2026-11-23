@@ -68,8 +68,8 @@ msgstr "Motorljud AV"
 msgid "Pause"
 msgstr "Paus"
 
-msgid "{up} / ↑  Drive     {left} {right} / ← →  Steer     {down} / ↓  Brake or reverse\nRelease to slow down   ·   Space to help   ·   P to pause"
-msgstr "{up} / ↑  Gasa     {left} {right} / ← →  Styr     {down} / ↓  Bromsa eller backa\nSläpp gasen för att sakta ner   ·   Mellanslag för att hjälpa   ·   P för paus"
+msgid "{up} / ↑  Drive     {left} {right} / ← →  Steer     {down} / ↓  Brake or reverse\nRelease to slow down   ·   Space to help   ·   {pause} to pause"
+msgstr "{up} / ↑  Gasa     {left} {right} / ← →  Styr     {down} / ↓  Bromsa eller backa\nSläpp gasen för att sakta ner   ·   Mellanslag för att hjälpa   ·   {pause} för paus"
 
 msgid "Start a gentle drive"
 msgstr "Starta lugn runda"
@@ -191,8 +191,8 @@ msgstr "Gå till ett fordon"
 msgid "Stop first to get out."
 msgstr "Stanna först för att kliva ur."
 
-msgid "Walk with {up}{left}{down}{right} or arrows · F to enter a vehicle"
-msgstr "Gå med {up}{left}{down}{right} eller pilarna · F för att kliva in"
+msgid "Walk with {up}{left}{down}{right} or arrows · {seat} to enter a vehicle"
+msgstr "Gå med {up}{left}{down}{right} eller pilarna · {seat} för att kliva in"
 
 msgid "Time · Day"
 msgstr "Tid · Dag"
@@ -221,8 +221,8 @@ msgstr "Fri utforskning"
 msgid "Explore on foot or by vehicle. Stop at the depot to change vehicles."
 msgstr "Utforska till fots eller med ett fordon. Stanna vid depån för att byta fordon."
 
-msgid "{up} / ↑ Drive   ·   {left} {right} / ← → Steer   ·   {down} / ↓ Brake or reverse   ·   {seat} Get out   ·   P Pause"
-msgstr "{up} / ↑ Gasa   ·   {left} {right} / ← → Styr   ·   {down} / ↓ Bromsa eller backa   ·   {seat} Kliv ur   ·   P Paus"
+msgid "{up} / ↑ Drive   ·   {left} {right} / ← → Steer   ·   {down} / ↓ Brake or reverse   ·   {seat} Get out   ·   {pause} Pause"
+msgstr "{up} / ↑ Gasa   ·   {left} {right} / ← → Styr   ·   {down} / ↓ Bromsa eller backa   ·   {seat} Kliv ur   ·   {pause} Paus"
 
 msgid "Continue walking"
 msgstr "Fortsätt gå"
@@ -326,8 +326,8 @@ msgstr "Tack för skjutsen!"
 msgid "Drive the motorboat"
 msgstr "Kör motorbåten"
 
-msgid "{up} / ↑ Throttle · {left} {right} / ← → Steer · {down} / ↓ Slow or reverse · H Horn · P Pause"
-msgstr "{up} / ↑ Gasa · {left} {right} / ← → Styr · {down} / ↓ Sakta in eller backa · H Tuta · P Paus"
+msgid "{up} / ↑ Throttle · {left} {right} / ← → Steer · {down} / ↓ Slow or reverse · {horn} Horn · {pause} Pause"
+msgstr "{up} / ↑ Gasa · {left} {right} / ← → Styr · {down} / ↓ Sakta in eller backa · {horn} Tuta · {pause} Paus"
 
 #, c-format
 msgid "%d coin"
@@ -441,8 +441,8 @@ msgstr "Hämta bilen som tappat ett hjul."
 msgid "Recovery complete. You earned 20 points and 20 coins."
 msgstr "Bärgningen är klar. Du fick 20 poäng och 20 mynt."
 
-msgid "Passenger ride · P to pause"
-msgstr "Du åker med · P för paus"
+msgid "Passenger ride · {pause} to pause"
+msgstr "Du åker med · {pause} för paus"
 
 msgid "{up} / ↑ Accelerate · {down} / ↓ Brake · Automatic station stops"
 msgstr "{up} / ↑ Gasa · {down} / ↓ Bromsa · Vagnen stannar själv vid hållplatserna"
