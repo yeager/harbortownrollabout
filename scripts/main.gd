@@ -3875,10 +3875,18 @@ func _build_lampposts() -> void:
 		for side_street_z in [-34,-14,17]:
 			var verge := 9.8 if block_x in [tram.WEST,tram.EAST] else 5.65
 			sites.append(Vector3(block_x-verge,0,side_street_z))
+	var course_lamps: Array[Vector3] = []
+	for x in [-121,-99,-77]:
+		for z in [PRACTICE_YARD.position.y-1, PRACTICE_YARD.end.y+1]:
+			course_lamps.append(Vector3(x,0,z))
+	sites.append_array(course_lamps)
 	for p in sites:
+		var on_course := p in course_lamps
 		p.y = _surface_height(p.x,p.z)
 		var street := navigator.closest_street_point(Vector2(p.x, p.z))
 		var inward := Vector3(street.x - p.x, 0, street.y - p.z).normalized()
+		if on_course:
+			inward = Vector3.BACK if p.z < PRACTICE_YARD.get_center().y else Vector3.FORWARD
 		_make_roadside_solid("Lamp post", Vector3(0.16, 4.5, 0.16), p + Vector3(0,2.25,0), Color("#45524e"), false)
 		var arm := _make_box("Lamp arm", Vector3(.13, .13, .85), p + Vector3.UP * 4.35 + inward * .34, Color("#45524e"), false)
 		arm.rotation.y = atan2(inward.x, inward.z)
