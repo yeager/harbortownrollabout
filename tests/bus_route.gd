@@ -19,7 +19,7 @@ func check_route() -> void:
 	game.phone.take_job.pressed.emit()
 	TranslationServer.set_locale("sv")
 	await process_frame
-	var stops := ["TORGET", "SJÖSTADSSKOLAN", "SMÅBÅTSHAMNEN", "VÅRDCENTRALEN", "VÄSTRA TORGET", "VÄSTERÄNGEN"]
+	var stops := ["TORGET", "SJÖSTADSSKOLAN", "SMÅBÅTSHAMNEN", "VÅRDCENTRALEN", "VÄSTRA TORGET", "SICKLA UDDE"]
 	var starting_balance: int = game.wallet
 	for leg in range(stops.size() + 1):
 		if leg == 1:
@@ -51,7 +51,7 @@ func check_route() -> void:
 			printerr("Incorrect passenger payload")
 			quit(1)
 			return
-		var destination := "502  " + str(stops[leg % stops.size()])
+		var destination := "74  SICKLA UDDE"
 		if game.bus_board.text != destination or game.rear_bus_board.text != destination:
 			printerr("Expected both destination displays to show ", destination)
 			quit(1)
@@ -66,13 +66,13 @@ func check_route() -> void:
 			game._update_arrival(game.HELP_DURATION)
 	TranslationServer.set_locale("en")
 	await process_frame
-	if game.bus_board.text != "502  THE SQUARE" or game.rear_bus_board.text != game.bus_board.text:
+	if game.bus_board.text != "74  SICKLA UDDE" or game.rear_bus_board.text != game.bus_board.text:
 		printerr("Changing language did not update the bus displays")
 		quit(1)
 		return
 	var labels := get_nodes_in_group("bus_stop_labels")
 	for label in labels:
-		if label.text != "502\n" + str(label.get_meta("stop_name")):
+		if label.text != "74  SICKLA UDDE\n" + str(label.get_meta("stop_name")):
 			printerr("Changing language did not update the stop sign")
 			quit(1)
 			return

@@ -209,12 +209,13 @@ var meadow_sign: Label3D
 const SCHOOL_GATE := Vector3(136,0,7)
 const TAXI_STOPS := [0,2, 0,SCHOOL, 1,0, SCHOOL,1, 2,1]
 const WEST_STOPS := [Vector3(-205,0,2.8),Vector3(-460,0,-45.2)]
+const BUS_DESTINATION := "74  SICKLA UDDE"
 const BUS_STOPS := [0,SCHOOL,2,1,4,5]
-const BUS_MESSAGES := ["Collect passengers at the square.", "Drop off passengers at the school.", "Collect passengers at the marina.", "Drop off passengers at the clinic.", "Collect passengers at Västra torget.", "Drop off passengers at Västerängen."]
+const BUS_MESSAGES := ["Collect passengers at the square.", "Drop off passengers at the school.", "Collect passengers at the marina.", "Drop off passengers at the clinic.", "Collect passengers at Västra torget.", "Drop off passengers at Sickla udde."]
 var rear_bus_board: Label3D
 var seated_bus_riders: Node3D
 var bus_board: Label3D
-const BUS_STOP_NAMES := ["THE SQUARE","HEALTH CENTRE","MARINA","HARBOR TOWN SCHOOL","VÄSTRA TORGET","VÄSTERÄNGEN"]
+const BUS_STOP_NAMES := ["THE SQUARE","HEALTH CENTRE","MARINA","HARBOR TOWN SCHOOL","VÄSTRA TORGET","SICKLA UDDE"]
 var bus_leg := 0
 const TAXI := 4
 const HORNS := ["ambulance","police","fire","bmw","taxi","recovery", "m3_e30", "volvo240", "saab96", "model_s", "city_bus","snowmobile", "police", "porsche", "icecream", "bmw", "saab96", "bmw", "volvo240", "bmw", "recovery", "recovery", "bmw", "saab96", "recovery", "saab96"]
@@ -6259,15 +6260,15 @@ func _place_taxi_passenger(person: Node3D, stop: int) -> void:
 
 func _update_stop_label(label: Label3D) -> void:
 	var stop_name := tr(label.get_meta("stop_name"))
-	label.text = "502\n" + stop_name
+	label.text = BUS_DESTINATION + "\n" + stop_name
 	var font := ThemeDB.fallback_font
-	var width := font.get_string_size(stop_name, HORIZONTAL_ALIGNMENT_LEFT, -1, label.font_size).x
+	var width := maxf(font.get_string_size(stop_name,HORIZONTAL_ALIGNMENT_LEFT,-1,label.font_size).x,font.get_string_size(BUS_DESTINATION,HORIZONTAL_ALIGNMENT_LEFT,-1,label.font_size).x)
 	label.pixel_size = minf(.004, 1.43 / maxf(width, 1.0))
 
 func _update_bus_board() -> void:
 	if is_instance_valid(bus_board):
 		seated_bus_riders.visible = not free_drive and bus_leg % 2 == 1
-		bus_board.text = tr("HARBOR TOWN") if free_drive else "502  " + tr(BUS_STOP_NAMES[BUS_STOPS[bus_leg % BUS_STOPS.size()]])
+		bus_board.text = BUS_DESTINATION
 		var font := ThemeDB.fallback_font
 		var pixels := font.get_string_size(bus_board.text,HORIZONTAL_ALIGNMENT_LEFT,-1,bus_board.font_size)
 		# Leave a margin inside the narrower of the two destination panels.

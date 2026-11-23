@@ -607,8 +607,8 @@ msgstr "Radio av · J"
 msgid "City bus"
 msgstr "Bybuss"
 
-msgid "Bus route 502"
-msgstr "Busslinje 502"
+msgid "Bus route 74"
+msgstr "Busslinje 74"
 
 msgid "Collect passengers at the square."
 msgstr "Hent passasjerene på torget."
@@ -673,8 +673,8 @@ msgstr "Snøskuter"
 msgid "Collect passengers at Västra torget."
 msgstr "Hent passasjerene på Västra torget."
 
-msgid "Drop off passengers at Västerängen."
-msgstr "Slipp av passasjerene ved Västerängen."
+msgid "Drop off passengers at Sickla udde."
+msgstr "Slipp av passasjerene ved Sickla udde."
 
 msgid "↑  Café · Snack kiosk"
 msgstr "↑  Kafé · Kiosk"

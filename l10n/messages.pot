@@ -577,7 +577,7 @@ msgstr ""
 msgid "City bus"
 msgstr ""
 
-msgid "Bus route 502"
+msgid "Bus route 74"
 msgstr ""
 
 msgid "Collect passengers at the square."
@@ -643,7 +643,7 @@ msgstr ""
 msgid "Collect passengers at Västra torget."
 msgstr ""
 
-msgid "Drop off passengers at Västerängen."
+msgid "Drop off passengers at Sickla udde."
 msgstr ""
 
 msgid "↑  Café · Snack kiosk"

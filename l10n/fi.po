@@ -604,8 +604,8 @@ msgstr "Radio pois päältä · J"
 msgid "City bus"
 msgstr "Kaupunkibussi"
 
-msgid "Bus route 502"
-msgstr "Bussilinja 502"
+msgid "Bus route 74"
+msgstr "Bussilinja 74"
 
 msgid "Collect passengers at the square."
 msgstr "Hae matkustajat torilta."
@@ -671,8 +671,8 @@ msgstr "Moottorikelkka"
 msgid "Collect passengers at Västra torget."
 msgstr "Hae matkustajat Västra torgetin pysäkiltä."
 
-msgid "Drop off passengers at Västerängen."
-msgstr "Jätä matkustajat Västerängenin pysäkille."
+msgid "Drop off passengers at Sickla udde."
+msgstr "Jätä matkustajat Sickla udden pysäkille."
 
 msgid "↑  Café · Snack kiosk"
 msgstr "↑  Kahvila · Kioski"

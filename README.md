@@ -126,7 +126,7 @@ On foot outdoors, press **U** to unfold the scooter on clear ground. **W / Up** 
 
 ## School trips, buses and passenger cars
 
-Choose **City bus** and start **Bus route 502** to pick up passengers at the square and drop them off at Sjöstadsskolan. The next service runs from the marina to the clinic. Stop at the marker to serve each stop in gentle mode, or press Space while stationary in manual mode. Each completed journey pays 15 coins.
+Choose **City bus** and start **Bus route 74** to pick up passengers at the square and drop them off at Sjöstadsskolan. The next service runs from the marina to the clinic. Stop at the marker to serve each stop in gentle mode, or press Space while stationary in manual mode. Each completed journey pays 15 coins.
 
 The taxi rotation also includes a pupil travelling from the square to school and a pupil waiting outside school for a ride to the clinic. Follow the arrows to the yellow **TAXI** sign outside Sjöstadsskolan. With gentle driving enabled, stop at the marker for about a second to let the pupil board or get out. Read the next request on the phone.
 
@@ -158,7 +158,7 @@ The main scene passed a four-frame startup check with each renderer on Linux usi
 In full-speed driving mode, road vehicles can reach twice their former top speed. Gentle driving retains its 30 km/h limit for ordinary vehicles. The western district adds connected street loops, bringing the playable boundary to 690 × 151 metres.
 The snowmobile is available in the vehicle selector and at the depot. It uses the same driving and braking controls as the cars.
 Off-road, the snowmobile can go faster as snow accumulates. Gentle driving still caps it at 30 km/h.
-Bus route 502 serves six stops, including a passenger pickup at Västra torget and a drop-off at Västerängen.
+Bus route 74 serves six stops, including a passenger pickup at Västra torget and a drop-off at the Sickla udde terminus.
 You can also hold the left mouse button directly on either on-screen pedal. Release it anywhere to let the pedal up.
 
 Police patrols, fire safety checks, ambulance calls, taxi fares, towing and bus routes depend on your vehicle. Personal cars deliver parcels and the snowmobile delivers blankets. Switching vehicles during a session preserves your place in each vehicle's jobs. The phone also receives occasional family texts during play.
