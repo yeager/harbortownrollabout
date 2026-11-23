@@ -44,6 +44,9 @@ var grill_neon_light: OmniLight3D
 var grill_neon_phase := 0.0
 var grill_neon_lit := true
 var candy_letters: Array[Label3D] = []
+var serving_arm: Node3D
+var serving_dish := Sprite3D.new()
+var serving_motion: Tween
 var kiosk_menu_signs: Array[Label3D] = []
 var grill_price_signs: Array[Label3D] = []
 var pizza_price_signs: Array[Label3D] = []
@@ -374,6 +377,8 @@ func purchase(shop: int, item: int) -> void:
 		return
 	var product:String=MENUS[shop][item]
 	game.wallet-=cost
+	if shop == 6:
+		_serve_grill_order(item)
 	till_sound.play()
 	game.purchases[product]=int(game.purchases.get(product,0))+1
 	refresh_basket()
@@ -424,7 +429,37 @@ func _turned(label_text: String, pos: Vector3, lower: float, upper: float, heigh
 	add_child(piece)
 	return piece
 
+func _staff_grill_hatch(x: float) -> void:
+	var game := get_parent()
+	game._make_walker("Grill cook",0,0,1,Color("#e6dfc9"),Color("#42484c"))
+	var cook: Node3D = game.walker_data.pop_back().actor
+	cook.reparent(self,false)
+	cook.position = Vector3(x,.21,42.96)
+	cook.rotation.y = 0
+	serving_arm = cook.get_meta("arms")[1]
+	serving_arm.add_child(serving_dish)
+	serving_dish.position = Vector3(0,-.70,-.075)
+	serving_dish.pixel_size = .005
+	serving_dish.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+	serving_dish.hide()
+
+func _serve_grill_order(item: int) -> void:
+	if serving_motion:
+		serving_motion.kill()
+	var picture := AtlasTexture.new()
+	picture.atlas = PRODUCT_ICONS[6]
+	picture.region = Rect2(item*64,0,64,64)
+	serving_dish.texture = picture
+	serving_motion = create_tween()
+	serving_arm.rotation.x = .55
+	serving_dish.show()
+	serving_motion.tween_property(serving_arm,"rotation:x",1.5,.35).set_trans(Tween.TRANS_SINE)
+	serving_motion.tween_interval(.9)
+	serving_motion.tween_callback(serving_dish.hide)
+	serving_motion.tween_property(serving_arm,"rotation:x",0.0,.4)
+
 func _hot_dog_stand(x: float) -> void:
+	_staff_grill_hatch(x)
 	var cream := Color("#f3e2b9")
 	var red := Color("#a73b32")
 	var steel := Color("#82898a")

@@ -89,6 +89,10 @@ func check() -> void:
 	game.purchases.clear()
 	for i in 4:
 		shops.purchase(6,i)
+		if not shops.serving_dish.is_visible_in_tree() or shops.serving_dish.texture.region.position.x != i*64:
+			printerr("Cook is holding the wrong dish")
+			quit(1)
+			return
 		if game.purchases.get(shops.MENUS[6][i]) != 1:
 			printerr("Kitchen order failed")
 			quit(1)
@@ -96,7 +100,12 @@ func check() -> void:
 	if game.wallet != 0:
 		quit(1)
 		return
+	await create_timer(1.85).timeout
 	shops.purchase(6,0)
+	if shops.serving_dish.visible or not is_zero_approx(shops.serving_arm.rotation.x):
+		printerr("Failed purchase triggered a handover")
+		quit(1)
+		return
 	if game.purchases["Hot dog"] != 1:
 		quit(1)
 		return
