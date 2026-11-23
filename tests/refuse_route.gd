@@ -9,6 +9,11 @@ func check_route() -> void:
 	game.vehicle_selector.get_child(game.REFUSE).pressed.emit()
 	game.start_button.pressed.emit()
 	game.phone.take_job.pressed.emit()
+	game._update_route_arrows()
+	if not game.navigator.cached_wide_turns:
+		printerr("Refuse collection requires the long-vehicle route")
+		quit(1)
+		return
 	var initial_points: int = game.delivery_points
 	var initial_wallet: int = game.wallet
 	var launch_speeds: Array[float] = []

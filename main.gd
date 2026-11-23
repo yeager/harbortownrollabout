@@ -5386,7 +5386,7 @@ func _update_route_arrows() -> void:
 		points.append_array(navigator.path(start, goal))
 	else:
 		var forward := -ambulance.global_basis.z
-		var needs_wide_turns := vehicle_index in [2, RECOVERY, BUS]
+		var needs_wide_turns := vehicle_index in [2, RECOVERY, BUS, REFUSE]
 		points = navigator.driving_path(start, goal, Vector2(forward.x, forward.z).normalized(), needs_wide_turns)
 	var car_forward := Vector2(-ambulance.global_basis.z.x, -ambulance.global_basis.z.z).normalized()
 	var gap := 3.5
