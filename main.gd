@@ -927,7 +927,13 @@ func _drive(delta: float) -> void:
 		cabin_wheel.basis = cabin_wheel_rest_basis * Basis(cabin_wheel_axis,-steering*angle)
 		_pose_driver_arms()
 	for knuckle in front_knuckles:
-		knuckle.rotation.y = -steering * deg_to_rad(33.0)
+		var wheel_angle := steering * deg_to_rad(33.0)
+		if vehicle_index == SHOPPER:
+			# Both front tyres trace circles around the same point on the rear axle.
+			var side_offset := ambulance.to_local(knuckle.global_position).x
+			var tangent := tan(wheel_angle)
+			wheel_angle = atan2(1.61 * tangent, 1.61 - side_offset * tangent)
+		knuckle.rotation.y = -wheel_angle
 	driving_controls.set_controls(steering, throttle > 0, brake_held, throttle < 0 and not brake_held)
 	var wheelbase: float = [3.7, 2.75, 4.1, 2.975, 2.85, 4.0, 2.56, 2.64, 2.46, 2.96, 6.06, 1.65, 2.865, 2.457, 3.81, 2.495, 1.14, 3.37, 2.84, 3.1, 3.2, 2.61, 3.8, 1.01, 4.52, 1.61][vehicle_index]
 	var yaw_rate := speed * tan(steering * deg_to_rad(33.0)) / wheelbase

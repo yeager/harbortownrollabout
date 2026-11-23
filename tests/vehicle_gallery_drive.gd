@@ -44,6 +44,22 @@ func check_gallery() -> void:
 			printerr("Menu driving failed for ",tile.text," distance=",travel," turn=",turn)
 			quit(1)
 			return
+		if index == game.SHOPPER:
+			if game.player_wheels.size() != 3 or game.front_knuckles.size() != 2 or game.rear_tire_contacts.size() != 1:
+				printerr("Shopping trike axle layout changed")
+				quit(1)
+				return
+			for joint in game.front_knuckles:
+				var inside: bool = game.ambulance.to_local(joint.global_position).x > 0
+				if (absf(joint.rotation.y) > game.steering * deg_to_rad(33.0)) != inside:
+					printerr("Shopping trike inner and outer steering angles disagree")
+					quit(1)
+					return
+			for wheel in game.player_wheels:
+				if is_zero_approx(wheel.rotation.x):
+					printerr("Stationary shopping trike wheel while driving")
+					quit(1)
+					return
 		game.ambulance.transform = start
 		game.speed = 0.0
 		Input.action_press("ui_down")
