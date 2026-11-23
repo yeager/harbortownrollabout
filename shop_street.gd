@@ -578,6 +578,19 @@ func _sweet_shop(x: float) -> void:
 			var twist := _turned("Sweet wrapper",Vector3(cx+edge*.17,3.04,41.91),.11,.03,.13,palette[1])
 			twist.rotation.z = edge*PI*.5
 		part("Dark display plinth",Vector3(x+side*2.54,.30,42.34),Vector3(3.22,.60,.23),frame)
+		for slot in 5:
+			# The street-facing side looks along +Z, so its left edge is +X.
+			var product := slot if side == 1 else 5 + slot
+			var decal := Sprite3D.new()
+			decal.name = "Window " + SWEETS[product]
+			decal.texture = PRODUCT_ICONS[3]
+			decal.hframes = SWEETS.size()
+			decal.frame = product
+			decal.pixel_size = .0078
+			decal.position = Vector3(x + side*2.54 + (2-slot)*.59, .36, 42.20)
+			decal.rotation.y = PI
+			decal.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+			add_child(decal)
 		for edge in [-1,1]:
 			part("Bronze shopfront frame",Vector3(x+side*2.54+edge*1.57,1.49,42.37),Vector3(.07,2.45,.15),frame)
 		part("Window top rail",Vector3(x+side*2.54,2.67,42.36),Vector3(3.20,.085,.14),frame)
