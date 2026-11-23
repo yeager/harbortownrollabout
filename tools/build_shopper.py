@@ -39,7 +39,8 @@ def panel_section(y, width, bottom, shoulder, crown):
         (.72,.99),(.94,.92),(1,.77),(1,.14),(.93,0)]]
 
 v.mesh_from_rings("Pressed chassis",[(-1.15,.37,.19,.46,.52),(-.94,.47,.17,.53,.59),
-    (-.42,.46,.21,.53,.58),(.63,.40,.23,.52,.55),(1.16,.37,.24,.48,.51)],red,root,.018,panel_section)
+    (-.42,.46,.21,.53,.58),(.42,.425,.22,.52,.56),(.78,.385,.23,.51,.54),
+    (1.02,.345,.24,.50,.525),(1.16,.315,.25,.48,.51)],red,root,.018,panel_section)
 v.mesh_from_rings("Tilting wedge front",[(-1.18,.37,.42,.54,.65),(-1.06,.44,.44,.57,.69),
     (-.46,.47,.51,.80,.92),(-.25,.43,.54,.85,.95)],red,root,.015,panel_section)
 nose_lamp("Chrome headlight bezel",-1.185,.58,.101,.045,v.METAL)
@@ -214,19 +215,30 @@ for x,y in ((-.429,-.72),(.429,-.72),(0,.89)):
         wheel_surface("Wheel hub",(x,y,.227),rim_profile,v.METAL,side)
         v.cylinder("Center cap",(x+side*.080,y,.227),.031,.017,v.DARK,True,32,root)
 # Tapered wire basket on the rear deck.
-for z,w,front,rear in ((.55,.30,.53,1.05),(.72,.36,.49,1.12)):
-    corners=[(-w,front,z),(w,front,z),(w,rear,z),(-w,rear,z)]
+for z,w,front,rear in ((.55,.30,.53,1.05),(.72,.345,.49,1.12)):
+    rear_width = w-.055
+    corners=[(-w,front,z),(w,front,z),(rear_width,rear,z),(-rear_width,rear,z)]
     for i in range(4): tube("Basket rim",corners[i],corners[(i+1)%4],.010,v.METAL)
 for side in (-1,1):
     for i in range(7):
         t=i/6
-        tube("Basket wire",(side*.30,.53+.52*t,.55),(side*.36,.49+.63*t,.72),.005,v.METAL)
-for i in range(-3,4):
-    tube("Basket floor",(i*.095,.53,.55),(i*.095,1.05,.55),.006,v.METAL)
+        tube("Basket wire",(side*(.30-.055*t),.53+.52*t,.55),(side*(.345-.055*t),.49+.63*t,.72),.005,v.METAL)
+# The deck itself forms the basket floor, leaving the two air intakes visible.
+for y, z in ((.53,.559),(.78,.549)):
+    v.cylinder("Deck vent bezel",(0,y,z),.094,.012,v.METAL,False,40,root)
+    v.cylinder("Deck vent recess",(0,y,z+.008),.085,.009,v.BLACK,False,40,root)
+    for row in range(-5,6):
+        offset = row*.015
+        chord = math.sqrt(.084**2-offset**2)
+        tube("Deck grille wire",(offset,y-chord,z+.014),(offset,y+chord,z+.014),.002,v.METAL)
+        tube("Deck grille wire",(-chord,y+offset,z+.016),(chord,y+offset,z+.016),.002,v.METAL)
+for side in (-1,1):
+    tube("Grab handle mount",(side*.14,1.115,.52),(side*.13,1.155,.595),.014,v.BLACK)
+tube("Rear grab handle",(-.13,1.155,.595),(.13,1.155,.595),.016,v.BLACK)
 # The rear side panels taper inward. Seat the engine vents flush on that slope.
 for side in (-1, 1):
     vent_y = .65
-    slope = (.40 - .37) / (1.16 - .63)
+    slope = (.425 - .385) / (.78 - .42)
     for name, offset, size, finish in (
         ("Service vent surround", .004, (.018,.35,.145), v.METAL),
         ("Recess behind cooling slots", .013, (.014,.326,.124), v.BLACK),
