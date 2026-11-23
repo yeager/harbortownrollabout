@@ -994,8 +994,23 @@ def make_fire_engine():
                 finish = PAINT_YELLOW if (row+col)%2 else PAINT_RED
                 cube("Rear reflective check",(x+(col-1.5)*.23,3.135,1.72+row*.145),
                      (.23,.008,.145),finish,.001,root)
-        for rib in range(17):
-            cube("Rear shutter seam",(x,3.142,1.12+rib*.083),(.95,.008,.006),DARK,0,root)
+        # A shallow folded lip catches light along each aluminium slat.
+        # Run the profile through both reflective rows as on the full-size shutter.
+        verts, faces = [], []
+        for rib in range(1, 35):
+            z = 1.045 + rib * 1.51 / 35
+            face = len(verts)
+            for depth, height in ((3.140, z-.002), (3.143, z), (3.140, z+.002)):
+                verts.extend(((x-.474, depth, height), (x+.474, depth, height)))
+            faces.extend(((face, face+2, face+3, face+1),
+                          (face+2, face+4, face+5, face+3)))
+        mesh = bpy.data.meshes.new("Rolled shutter lips")
+        mesh.from_pydata(verts, [], faces)
+        mesh.update()
+        lips = bpy.data.objects.new("Rear shutter slat lips", mesh)
+        bpy.context.collection.objects.link(lips)
+        lips.parent = root
+        lips.data.materials.append(shutter_finish)
         shutter_hardware((x,3.130,1.045),(0,1),.952,1.51)
     # Rear-facing work lights above the pump lockers, clear of the shutter tracks.
     for side in (-1,1):
