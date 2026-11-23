@@ -535,6 +535,8 @@ const SMALL_TALK := [
 	["Can AI dream?", "chat_ai", "Maybe it dreams of electric sheep!", "chat_dream"],
 	["What did the dog find?", "chat_dog", "A leaf worth a really good sniff!", "chat_sniff"],
 ]
+var boule_join_requested := false
+var boule_guest_turn := false
 const BOULE_CENTRE := Vector3(94.9, 0, 69)
 var boule_players: Array[Node3D] = []
 var boules: Array[MeshInstance3D] = []
@@ -4425,6 +4427,11 @@ func _change_seat() -> void:
 		_toggle_scooter()
 		return
 	if boating or mode != "playing" or paused: return
+	if _near_boule_ring():
+		if not boule_guest_turn:
+			boule_join_requested = not boule_join_requested
+			_update_entry_button()
+		return
 	if operating_excavator or (_near_excavator() and tram_mode == 0 and not ferry_passenger):
 		if operating_excavator:
 			var landed := false
@@ -4624,6 +4631,7 @@ func _walking_hint() -> String:
 	return tr("{up}/{down} Walk · {left}/{right} Turn · Shift + {up} Run · F Enter · U Scooter") + "   ·   " + (tr("%s Jump") % OS.get_keycode_string(jump_key)) + "   ·   " + tr("9 Raise camera · 3 Lower camera" if number_camera else "PgUp Raise camera · PgDn Lower camera") + "\n" + tr("Hold V and move the mouse to look around")
 
 func _walk(delta: float) -> void:
+	if boule_guest_turn: return
 	if shopper_boarding: return
 	var keys := Input.get_vector("ui_left","ui_right","ui_up","ui_down")
 	keys += Vector2(int(_movement_pressed(KEY_D))-int(_movement_pressed(KEY_A)),int(_movement_pressed(KEY_S))-int(_movement_pressed(KEY_W)))
@@ -4701,7 +4709,15 @@ func _walk(delta: float) -> void:
 		footstep.play()
 	_update_entry_button()
 
+func _near_boule_ring() -> bool:
+	return walker.visible and not scooter.visible and tram_mode == 0 and not ferry_passenger and not operating_excavator and walker.position.distance_to(BOULE_CENTRE+Vector3.BACK*4) < 3.2
+
 func _update_entry_button() -> void:
+	if _near_boule_ring():
+		entry_marker.hide()
+		seat_button.disabled = boule_guest_turn
+		seat_button.text = "Cancel boule turn · F" if boule_join_requested else "Join the boule round · F"
+		return
 	if scooter.visible:
 		entry_marker.visible = false
 		seat_button.disabled = false
@@ -5368,18 +5384,30 @@ func _boule_waiting_spot(index: int) -> Vector3:
 	return BOULE_CENTRE + Vector3((index-1)*1.15,0,5.85)
 
 func _update_boule(delta: float) -> void:
+	if not _near_boule_ring() or mode != "playing":
+		boule_join_requested = false
+		boule_guest_turn = false
+	if boule_clock == 0 and boule_collector < 0 and boule_join_requested:
+		boule_guest_turn = true
+		boule_join_requested = false
+		walker.position = BOULE_CENTRE+Vector3.BACK*4
+		walker.rotation.y = 0
+		walk_basis = Basis.IDENTITY
+		walking_velocity = Vector3.ZERO
+		_update_entry_button()
 	boule_clock += delta
 	if boule_collector >= 0:
 		_collect_boule(delta)
 		return
-	var player := boule_players[boule_turn]
+	var player := walker if boule_guest_turn else boule_players[boule_turn]
 	var arm: Node3D = player.get_meta("arms")[1]
 	var hand: Node3D = arm.get_child(1)
 	var ball := boules[boule_turn]
 	var target := BOULE_CENTRE + Vector3([-.22,-.19,.12][boule_turn], .044, -4+[.35,.03,-.28][boule_turn])
 	var weight := smoothstep(0,1.4,boule_clock)*(1-smoothstep(4.5,6, boule_clock))
 	var previous := player.position
-	player.position = _boule_waiting_spot(boule_turn).lerp(BOULE_CENTRE+Vector3(0,0,4),weight)
+	if not boule_guest_turn:
+		player.position = _boule_waiting_spot(boule_turn).lerp(BOULE_CENTRE+Vector3(0,0,4),weight)
 	_animate_steps(player, previous.distance_to(player.position), delta)
 	arm.rotation.x = -.68*smoothstep(1.5,2.3,boule_clock)+1.75*smoothstep(2.3,2.66,boule_clock)-1.07*smoothstep(2.9,3.6,boule_clock)
 	if boule_clock < 2.66:
@@ -5406,6 +5434,10 @@ func _update_boule(delta: float) -> void:
 	if final_throw and boule_clock >= 5 and boule_clock-delta < 5:
 		_show_boule_result()
 	if boule_clock >= (10.0 if final_throw else 6.5):
+		if boule_guest_turn:
+			boule_guest_turn = false
+			walker.position = BOULE_CENTRE+Vector3(2.4,0,4)
+			_update_entry_button()
 		for ring in boule_result_rings:
 			ring.hide()
 		if final_throw:

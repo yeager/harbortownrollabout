@@ -1689,3 +1689,9 @@ msgstr ""
 
 msgid "Also use F4 to sound the horn"
 msgstr ""
+
+msgid "Join the boule round · F"
+msgstr ""
+
+msgid "Cancel boule turn · F"
+msgstr ""

@@ -1690,3 +1690,9 @@ msgstr "Visa gatunamn vid svängpilar"
 
 msgid "Also use F4 to sound the horn"
 msgstr "Tuta även med F4"
+
+msgid "Join the boule round · F"
+msgstr "Var med och spela boule · F"
+
+msgid "Cancel boule turn · F"
+msgstr "Avstå från kastet · F"

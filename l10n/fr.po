@@ -1775,3 +1775,9 @@ msgstr "Afficher le nom des rues avec les flèches de direction"
 
 msgid "Also use F4 to sound the horn"
 msgstr "Klaxonner aussi avec F4"
+
+msgid "Join the boule round · F"
+msgstr "Jouer à la pétanque · F"
+
+msgid "Cancel boule turn · F"
+msgstr "Annuler mon tour · F"

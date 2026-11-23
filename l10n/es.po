@@ -1767,3 +1767,9 @@ msgstr "Mostrar el nombre de la calle junto a las flechas de giro"
 
 msgid "Also use F4 to sound the horn"
 msgstr "Tocar el claxon también con F4"
+
+msgid "Join the boule round · F"
+msgstr "Jugar a la petanca · F"
+
+msgid "Cancel boule turn · F"
+msgstr "Cancelar mi turno · F"

@@ -1777,3 +1777,9 @@ msgstr "Straßennamen bei Abbiegepfeilen anzeigen"
 
 msgid "Also use F4 to sound the horn"
 msgstr "Auch mit F4 hupen"
+
+msgid "Join the boule round · F"
+msgstr "Boule mitspielen · F"
+
+msgid "Cancel boule turn · F"
+msgstr "Wurf absagen · F"

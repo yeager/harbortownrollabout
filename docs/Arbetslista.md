@@ -85,7 +85,7 @@ Listan innehåller 100 jobb. En tom ruta är öppen. En punkt bockas av när bet
 
 ## Boule och strandpromenad
 
-- [ ] 61. Låt spelaren tacka ja till en omgång boule och ta plats i kastringen.
+- [x] 61. Låt spelaren tacka ja till en omgång boule och ta plats i kastringen. F vid kastringen anmäler spelaren till nästa kast. Anmälan, avbokning, placering i ringen, kast och återgång till gång har provats i Godot.
 - [ ] 62. Låt spelaren sikta på lillen och välja mellan ett kort, ett mellanlångt och ett långt kast med bilder.
 - [x] 63. Andra spelarens klot kan träffa det första snett och sätta det i rullning. I Godot flyttades det träffade klotet 28 cm och båda stannade med 35 cm mellan centrum. Kontrollerat med tidssteg på både 1/60 och 1/10 sekund.
 - [x] 64. Efter tredje kastet visas en gul ring i fem sekunder runt klotet närmast lillen. Kontrollerat med en hel omgång, 0,1 mm skillnad och delad förstaplats vid exakt lika avstånd.

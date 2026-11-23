@@ -1756,3 +1756,9 @@ msgstr "Näytä kadunnimet kääntymisnuolten vieressä"
 
 msgid "Also use F4 to sound the horn"
 msgstr "Soita äänimerkkiä myös F4-näppäimellä"
+
+msgid "Join the boule round · F"
+msgstr "Osallistu petankkiin · F"
+
+msgid "Cancel boule turn · F"
+msgstr "Peru heittovuoro · F"
