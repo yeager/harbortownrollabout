@@ -26,6 +26,11 @@ const SWEET_INGREDIENTS := [
 	"Chocolate buttons with crispy rice bubbles",
 ]
 const MENUS := [["Cinnamon bun","Berry cordial"],["Ice cream","Hot dog"],["Margherita pizza", "Popcorn Party", "Pickle Carousel", "Banana Moon", "Berry Blizzard"],SWEETS,["Apple","Milk"],["Japanese haori jacket","Korean jeogori jacket","Red panda plush","Moon rabbit figurine"]]
+const PRODUCT_ICONS := {
+	2: preload("res://branding/pizza-products.png"),
+	3: preload("res://branding/sweet-products.png"),
+	5: preload("res://branding/boutique-products.png"),
+}
 const PRICES := [[3,2],[4,5],[8,7,8,9,10],[4,3,2,4,5,4,6,3,3,4],[2,4],[9,9,5,4]]
 const PIZZA_TOPPINGS := ["Mozzarella, tomato and carrot stars", "Popcorn, sweetcorn and cheese", "Pickle wheels and crispy onions", "Banana moons and coconut snow", "Blueberries, vanilla cream and raspberry swirls"]
 const SIGNS := ["KAFÉ BULLEN","SJÖKIOSKEN","PIZZERIA","GODISBODEN","SJÖSTADENS LIVS","MOMO & BORI"]
@@ -244,9 +249,9 @@ func rebuild_menu() -> void:
 	for i in MENUS[inside].size():
 		var button:=Button.new()
 		button.custom_minimum_size.y=44
-		if inside == 5 or inside == 2:
+		if PRODUCT_ICONS.has(inside):
 			var thumbnail := AtlasTexture.new()
-			thumbnail.atlas = preload("res://branding/pizza-products.png") if inside == 2 else preload("res://branding/boutique-products.png")
+			thumbnail.atlas = PRODUCT_ICONS[inside]
 			thumbnail.region = Rect2(i*64,0,64,64)
 			button.icon = thumbnail
 			button.add_theme_constant_override("icon_max_width",44)
