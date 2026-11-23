@@ -562,6 +562,7 @@ func _process(delta: float) -> void:
 		var before := star_actor.global_position
 		_update_patrol(delta)
 		street_signals.advance(delta)
+		shops.advance_grill_sign(delta)
 		var tram_gas := mouse_gas or Input.is_physical_key_pressed(KEY_W) or Input.is_key_pressed(KEY_UP)
 		var tram_brake := mouse_brake or brake_pedal_held or Input.is_physical_key_pressed(KEY_S) or Input.is_key_pressed(KEY_DOWN)
 		tram.advance(delta, tram_mode == 2, tram_gas, tram_brake)

@@ -36,6 +36,9 @@ const PIZZA_TOPPINGS := ["Mozzarella, tomato and carrot stars", "Popcorn, sweetc
 const SIGNS := ["KAFÉ BULLEN","SJÖKIOSKEN","PIZZERIA","GODISBODEN","SJÖSTADENS LIVS","MOMO & BORI"]
 const COLORS := ["#a86343","#427868","#b65f51","#927198","#355e4b","#375c68"]
 const FRONT_Z := 42.5
+var grill_neon_finishes: Array[StandardMaterial3D] = []
+var grill_neon_phase := 0.0
+var grill_neon_lit := true
 var grill_price_signs: Array[Label3D] = []
 var pizza_price_signs: Array[Label3D] = []
 var awnings: Array[Node3D] = []
@@ -592,9 +595,20 @@ func _bent_neon_tube(center: Vector3, points: PackedVector2Array, hue: Color, ra
 					surface.add_index(index)
 	var tube := MeshInstance3D.new()
 	tube.mesh = surface.commit()
-	tube.material_override = get_parent()._material(hue,.26,true)
+	var finish: StandardMaterial3D = get_parent()._material(hue,.26,true)
+	tube.material_override = finish
+	grill_neon_finishes.append(finish)
 	tube.position = center
 	add_child(tube)
+
+func advance_grill_sign(delta: float) -> void:
+	grill_neon_phase = fmod(grill_neon_phase+delta,3.6)
+	var lit := grill_neon_phase < 2.8
+	if lit == grill_neon_lit: return
+	grill_neon_lit = lit
+	for finish in grill_neon_finishes:
+		finish.emission_enabled = lit
+		finish.albedo_color = finish.emission if lit else finish.emission.darkened(.86)
 
 func _neon_outline(center: Vector3, points: PackedVector2Array, hue: Color) -> void:
 	var finish: Material = get_parent()._material(hue,.32,true)

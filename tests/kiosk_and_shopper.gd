@@ -6,6 +6,17 @@ func _initialize() -> void:
 func check() -> void:
 	var game = load("res://main.tscn").instantiate()
 	root.add_child(game)
+	var sign_shop = game.shops
+	for interval in [2.9,.8]:
+		sign_shop.advance_grill_sign(interval)
+		if sign_shop.grill_neon_finishes.size() != 3:
+			quit(1)
+			return
+		for finish in sign_shop.grill_neon_finishes:
+			if finish.emission_enabled != (interval < 1):
+				printerr("Neon korv failed its blink cycle")
+				quit(1)
+				return
 	game.vehicle_selector.get_child(game.SHOPPER).pressed.emit()
 	game.start_button.pressed.emit()
 	var hinge = game.vehicle_model.find_child("EntryHinge",true,false)
