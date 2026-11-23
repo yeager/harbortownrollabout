@@ -502,6 +502,8 @@ var saloon_glazing: StandardMaterial3D
 const FERRY_LANDINGS := [-72.0, -12.0]
 const HIGH_BRIDGE_X := [51.5, 65.0, 78.0, 98.0]
 const HIGH_BRIDGE_RISE := 5.85
+var ferry_boarding_lamps: Array[MeshInstance3D] = []
+var ferry_boarding_chime := AudioStreamPlayer3D.new()
 var ferry_displays: Array[Label3D] = []
 var ferry_display_second := -1
 var ferry_display_locale := ""
@@ -2873,11 +2875,21 @@ func _build_marina() -> void:
 	saloon_glazing.emission = Color("#ffcc8c")
 	windows.material_override = saloon_glazing
 	_build_quay_windsock()
+	ferry_boarding_chime.stream = preload("res://audio/ferry_boarding.wav")
+	ferry_boarding_chime.max_distance = 32
+	ferry_boarding_chime.unit_size = 5
+	ferry_boarding_chime.volume_db = -7
+	add_child(ferry_boarding_chime)
 	var landing_boards := _deck_material(Color("#847968"))
 	var gangway_boards := _deck_material(Color("#9d8469"), true)
 	var granite := _material(Color("#b2a897"), .91, false, "mineral")
 	for landing_z in FERRY_LANDINGS:
 		var sign_base := Vector3(54.55,0,landing_z+1.35)
+		var lamp_pos := sign_base + Vector3.UP*2.54
+		_make_box("Boarding beacon base",Vector3(.28,.20,.28),lamp_pos,Color("#263b42"))
+		var lens := _make_box("Boarding beacon",Vector3(.23,.23,.23),lamp_pos+Vector3.UP*.20,Color("#57ff96"))
+		lens.material_override = _material(Color("#57ff96"),.32,true)
+		ferry_boarding_lamps.append(lens)
 		_make_roadside_solid("Landing signpost",Vector3(.07,2.35,.07),sign_base+Vector3.UP*.98,Color("#646e70"))
 		_make_box("Ferry stop sign",Vector3(.09,.78,2.40),sign_base+Vector3.UP*2.05,Color("#12385b"))
 		# Both landings have a bridge in the +Z direction, at -48 and 0.
@@ -3067,6 +3079,13 @@ func _build_quay_windsock() -> void:
 
 func _update_moorings(delta: float) -> void:
 	wave_time += delta
+	var stop := _ferry_stop()
+	var signal_on := stop >= 0 and fmod(wave_time,29.0) >= 2.0
+	for i in ferry_boarding_lamps.size():
+		ferry_boarding_lamps[i].visible = signal_on and i == stop
+	if signal_on and delta > 0 and floori((wave_time-2.0)/29.0) > floori((wave_time-delta-2.0)/29.0):
+		ferry_boarding_chime.position = ferry_boarding_lamps[stop].position
+		ferry_boarding_chime.play()
 	quay_windsock.rotation.y = -weather.wind_angle
 	_update_ferry_displays()
 	var heading := Vector2(-sin(launch.rotation.y),-cos(launch.rotation.y))

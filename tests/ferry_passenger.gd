@@ -19,6 +19,24 @@ func check_crossings() -> void:
 			return
 	var original_scale: Vector3 = game.walker.scale
 	for departure in game.FERRY_LANDINGS.size():
+		game.wave_time = departure*29.0 + 1.9
+		game._update_moorings(.2)
+		var lamp = game.ferry_boarding_lamps[departure]
+		if not lamp.visible or game.ferry_boarding_lamps[1-departure].visible or not game.ferry_boarding_chime.playing or game.ferry_boarding_chime.position != lamp.position:
+			printerr("Missing local boarding signal before departure ",departure)
+			quit(1)
+			return
+		game.ferry_boarding_chime.stop()
+		game._update_moorings(.5)
+		if not lamp.visible or game.ferry_boarding_chime.playing:
+			printerr("Boarding signal repeated its chime")
+			quit(1)
+			return
+		game._update_moorings(2.5)
+		if lamp.visible:
+			printerr("Boarding beacon still lit after departure")
+			quit(1)
+			return
 		var quay_z: float = game.FERRY_LANDINGS[departure]
 		game.walker.position = Vector3(64.9, game._foot_height(64.9, quay_z), quay_z)
 		game.wave_time = departure * 29.0 + 1.0

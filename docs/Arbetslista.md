@@ -115,7 +115,7 @@ Listan innehåller 100 jobb. En tom ruta är öppen. En punkt bockas av när bet
 - [x] 82. Visa nästa hållplats inne i bussen när linje 74 lämnar en hållplats.
 - [ ] 83. Markera platsen för barnvagnar inne i Tvärbanan och prova att en barnvagn kan komma dit från perrongen.
 - [ ] 84. Låt fotgängare invänta avstigande vid spårvagnsdörren innan de själva går ombord.
-- [ ] 85. Ge färjan en ombordstigningssignal som både syns och hörs innan avgång.
+- [x] 85. Tre sekunder före Lottens avgång tänds en grön lampa ovanför påstigningsskylten och två toner hörs en gång vid det aktuella färjeläget. Båda avgångarna verifieras i tests/ferry_passenger.gd.
 - [x] 86. En orangevit vindstrut på kajen följer samma vindriktning som regnet och snön. Riktningen kontrollerades under 40 simulerade sekunder och modellen granskades i spelet.
 - [ ] 87. Gör cykelns trampor rörliga och låt fötterna följa dem ett helt varv vid trampning.
 - [x] 88. Shoppingmopedens vindrutetorkare följer det välvda glaset vid nederbörd och återgår till viloläget när det blir torrt. Kontrollerat i 120 steg över ett helt svep och med en närbild i spelet.
