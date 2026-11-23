@@ -273,6 +273,8 @@ var requested_ice := TextureRect.new()
 var flavour_choices := GridContainer.new()
 var ice_flavours: Array[AtlasTexture] = []
 var grocery_bags: Array[Node3D] = []
+const PARCEL_MASS_KG := [32.0, 9.0]
+const PARCEL_SPACING := .50
 const PARCEL_VEHICLES := [3,6,7,8,9,PORSCHE,MINI_CABRIO]
 var carried_parcel_leg := -1
 var delivery_parcels: Array[Node3D] = []
@@ -1053,7 +1055,19 @@ func _drive_launch(delta: float) -> void:
 func _walk_pedal_pressed() -> bool:
 	return Input.is_action_pressed("ui_up") or Input.is_action_pressed("ui_down") or _movement_pressed(KEY_W) or _movement_pressed(KEY_S)
 
+func _parcel_load() -> Vector2:
+	# Total mass and its lateral first moment about the vehicle centreline.
+	var load := Vector2.ZERO
+	for i in delivery_parcels.size():
+		var parcel := delivery_parcels[i]
+		if parcel.visible and parcel.get_parent() == ambulance:
+			var mass: float = PARCEL_MASS_KG[i]
+			load += Vector2(mass,mass*parcel.position.x)
+	return load
+
 func _vehicle_payload() -> float:
+	if vehicle_index in PARCEL_VEHICLES:
+		return _parcel_load().x
 	if vehicle_index == RECOVERY and casualty.visible and casualty.get_parent() == ambulance:
 		return 1380.0
 	if not free_drive and vehicle_index == TAXI and taxi_leg % 2 == 1:
@@ -1133,7 +1147,14 @@ func _drive(delta: float) -> void:
 	var wheelbase: float = [3.7, 2.75, 4.1, 2.975, 2.85, 4.0, 2.56, 2.64, 2.46, 2.96, 6.06, 1.65, 2.865, 2.457, 3.81, 2.495, 1.14, 3.37, 2.84, 3.1, 3.2, 2.61, 3.8, 1.01, 4.52, 1.61][vehicle_index]
 	var yaw_rate := speed * tan(steering * deg_to_rad(33.0)) / wheelbase
 	# Limit lateral acceleration at speed while retaining tight parking turns.
-	var max_yaw_rate := 8.0 / maxf(absf(speed), 1.0)
+	var lateral_limit := 8.0
+	if load_mass > 0 and vehicle_index in PARCEL_VEHICLES:
+		var center_offset := _parcel_load().y / (empty_mass + load_mass)
+		var half_track := player_half_size.x * .85
+		# A turn loads the outside wheels. Roof freight also raises the centre of mass.
+		var cg_height := (.60*empty_mass + parcel_mounts[vehicle_index].y*load_mass) / (empty_mass + load_mass)
+		lateral_limit *= (.60/cg_height) * (1.0 + signf(yaw_rate*speed)*center_offset/half_track)
+	var max_yaw_rate := lateral_limit / maxf(absf(speed), 1.0)
 	var previous_extent := _player_extent()
 	ambulance.rotate_y(-clampf(yaw_rate, -max_yaw_rate, max_yaw_rate) * delta)
 	var extent := _player_extent()
@@ -6743,7 +6764,7 @@ func _update_mission_marker() -> void:
 		if carried:
 			parcel.position = Vector3(0,-.16,-.40)
 		elif onboard:
-			parcel.position = parcel_mounts[vehicle_index] + Vector3((i-.5)*.5,0,0)
+			parcel.position = parcel_mounts[vehicle_index] + Vector3((i-.5)*PARCEL_SPACING,0,0)
 		elif parcel.visible:
 			var stop := WALK_TARGETS[i+1] if delivered else WALK_TARGETS[0]
 			parcel.position = stop + Vector3(.45+i*.51,0,.68)
