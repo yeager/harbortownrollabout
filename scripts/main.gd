@@ -236,6 +236,8 @@ const WEST_STOPS := [Vector3(-205,0,2.8),Vector3(-460,0,-45.2)]
 const BUS_DESTINATION := "74  SICKLA UDDE"
 const BUS_STOPS := [0,SCHOOL,2,1,4,5]
 const BUS_MESSAGES := ["Collect passengers at the square.", "Drop off passengers at the school.", "Collect passengers at the marina.", "Drop off passengers at the clinic.", "Collect passengers at Västra torget.", "Drop off passengers at Sickla udde."]
+var bus_merge_time := 0.0
+var bus_departure_lamps: Array[MeshInstance3D] = []
 var bus_stop_request: Label3D
 var bus_request_arm: Node3D
 var bus_press_time := 0.0
@@ -1706,6 +1708,7 @@ func _help_at_target(ice_choice := -1) -> void:
 	if vehicle_index == BUS:
 		if _at_target() and absf(speed)<.2:
 			bus_leg += 1
+			bus_merge_time = 6.0
 			parked_at_target = 0
 			message = "Passengers on board." if bus_leg%2 else "Bus journey complete. You earned 15 points and 15 coins."
 			if bus_leg%2==0:
@@ -5273,6 +5276,11 @@ func _player_extent() -> Vector2:
 		heading.z * player_half_size.y + heading.x * player_half_size.x)
 
 func _update_traffic(delta: float) -> void:
+	if vehicle_index != BUS or walker.visible or free_drive:
+		bus_merge_time = 0
+	bus_merge_time = maxf(0,bus_merge_time-delta)
+	for lamp in bus_departure_lamps:
+		lamp.visible = bus_merge_time > 0 and traffic_light_mode != 2 and (calm_mode or traffic_light_mode == 1 or fmod(6.0-bus_merge_time,.8)<.4)
 	var weather_pace := 1.0-.12*weather.wet-.23*weather.snow
 	var player_size := _player_extent()
 	for item in traffic_data:
@@ -5288,6 +5296,9 @@ func _update_traffic(delta: float) -> void:
 			clearance=minf(clearance,_traffic_gap(item,casualty.position,Vector2(2.1,.9)))
 		if ambulance.visible:
 			clearance=minf(clearance,_traffic_gap(item,ambulance.position,player_size))
+			if bus_merge_time > 0 and actor.basis.z.dot(ambulance.basis.z) > .85 and ambulance.to_local(actor.position).z > player_half_size.y:
+				var merge_center := ambulance.position-ambulance.basis.x*2.0
+				clearance=minf(clearance,_traffic_gap(item,merge_center,player_size)-3.0)
 		for i in parked_cars.size():
 			if not parked_cars[i].visible: continue
 			var bounds := _parked_bounds(i)
@@ -6724,6 +6735,8 @@ func _update_bus_stop_request(delta: float) -> void:
 
 
 func _load_vehicle_model() -> void:
+	bus_merge_time = 0
+	bus_departure_lamps.clear()
 	wiper_pivots.clear()
 	shopper_wiper_parts.clear()
 	wiper_phase = 0.0
@@ -6745,6 +6758,11 @@ func _load_vehicle_model() -> void:
 	rear_bus_board = null
 	if vehicle_index == BUS:
 		_fit_bus_interior()
+		for end in [-1,1]:
+			var lamp := _make_box("Left departure indicator",Vector3(.19,.12,.09),Vector3(1.04,.96,end*5.29),Color("#ff9d17"),false,vehicle_model)
+			lamp.material_override = _material(Color("#ff9d17"),.25,true)
+			lamp.hide()
+			bus_departure_lamps.append(lamp)
 		bus_board = Label3D.new()
 		bus_board.outline_size = 0
 		bus_board.modulate=Color("#ffbb47")

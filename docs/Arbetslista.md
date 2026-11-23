@@ -120,7 +120,7 @@ Listan innehåller 100 jobb. En tom ruta är öppen. En punkt bockas av när bet
 - [x] 87. Båda cyklisternas trampor roterar med färdsträckan. Knäna böjs och skorna följer varsin pedal ett helt varv. Kontakten med tramporna kontrollerades i 100 steg per cyklist i Godot.
 - [x] 88. Shoppingmopedens vindrutetorkare följer det välvda glaset vid nederbörd och återgår till viloläget när det blir torrt. Kontrollerat i 120 steg över ett helt svep och med en närbild i spelet.
 - [ ] 89. Låt spelaren spola av leran på ett fordon vid macken och se den rena lacken växa fram.
-- [ ] 90. Låt ett trafikfordon lämna lucka åt en buss som blinkar ut från hållplatsen. Prova även med kö bakom bussen.
+- [x] 90. Låt ett trafikfordon lämna lucka åt en buss som blinkar ut från hållplatsen. Prova även med kö bakom bussen.
 
 ## Tillgänglighet och speltest
 
