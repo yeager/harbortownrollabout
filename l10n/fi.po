@@ -1633,3 +1633,9 @@ msgstr "Palaa turvalliseen paikkaan askelpalauttimella"
 
 msgid "Jump with 0"
 msgstr "Hyppää näppäimellä 0"
+
+msgid "9 Raise camera · 3 Lower camera"
+msgstr "9 Nosta kameraa · 3 Laske kameraa"
+
+msgid "Adjust walking camera height with 9 and 3"
+msgstr "Säädä kameran korkeutta kävellessä näppäimillä 9 ja 3"

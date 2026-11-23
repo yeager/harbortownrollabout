@@ -1567,3 +1567,9 @@ msgstr "Använd Backspace för att återgå till en säker plats"
 
 msgid "Jump with 0"
 msgstr "Hoppa med 0"
+
+msgid "9 Raise camera · 3 Lower camera"
+msgstr "9 Höj kameran · 3 Sänk kameran"
+
+msgid "Adjust walking camera height with 9 and 3"
+msgstr "Justera kamerahöjden till fots med 9 och 3"

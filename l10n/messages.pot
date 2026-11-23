@@ -1566,3 +1566,9 @@ msgstr ""
 
 msgid "Jump with 0"
 msgstr ""
+
+msgid "9 Raise camera · 3 Lower camera"
+msgstr ""
+
+msgid "Adjust walking camera height with 9 and 3"
+msgstr ""

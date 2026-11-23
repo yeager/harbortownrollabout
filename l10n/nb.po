@@ -1637,3 +1637,9 @@ msgstr "Bruk rettetasten for å komme tilbake til et trygt sted"
 
 msgid "Jump with 0"
 msgstr "Hopp med 0"
+
+msgid "9 Raise camera · 3 Lower camera"
+msgstr "9 Hev kameraet · 3 Senk kameraet"
+
+msgid "Adjust walking camera height with 9 and 3"
+msgstr "Juster kamerahøyden til fots med 9 og 3"

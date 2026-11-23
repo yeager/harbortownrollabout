@@ -76,6 +76,7 @@ const NUMBER_MOVEMENT := {KEY_W: KEY_8, KEY_A: KEY_4, KEY_S: KEY_5, KEY_D: KEY_6
 var number_movement := false
 var recovery_key := KEY_R
 var jump_key := KEY_E
+var number_camera := false
 var radio_keys: Array[int] = [KEY_J, KEY_N]
 var large_text := false
 var extra_reading_time := false
@@ -4035,7 +4036,7 @@ func _walking_hint() -> String:
 		return tr("Walk or rest · Run again in %d s") % _rest_seconds()
 	if run_ready_hint_time > 0:
 		return tr("Ready to run again! Hold Shift and walk forward.")
-	return tr("{up}/{down} Walk · {left}/{right} Turn · Shift + {up} Run · F Enter · U Scooter") + "   ·   " + (tr("%s Jump") % OS.get_keycode_string(jump_key)) + "   ·   " + tr("PgUp Raise camera · PgDn Lower camera")
+	return tr("{up}/{down} Walk · {left}/{right} Turn · Shift + {up} Run · F Enter · U Scooter") + "   ·   " + (tr("%s Jump") % OS.get_keycode_string(jump_key)) + "   ·   " + tr("9 Raise camera · 3 Lower camera" if number_camera else "PgUp Raise camera · PgDn Lower camera")
 
 func _walk(delta: float) -> void:
 	if shopper_boarding: return
@@ -4048,7 +4049,7 @@ func _walk(delta: float) -> void:
 		scooter.ride(self,-clampf(keys.y,-1,1),clampf(keys.x,-1,1),delta)
 		return
 	if _can_capture_camera():
-		var height_input := int(Input.is_key_pressed(KEY_PAGEUP)) - int(Input.is_key_pressed(KEY_PAGEDOWN))
+		var height_input := int(Input.is_key_pressed(KEY_9 if number_camera else KEY_PAGEUP)) - int(Input.is_key_pressed(KEY_3 if number_camera else KEY_PAGEDOWN))
 		walk_camera_height = clampf(walk_camera_height + height_input*delta*2.0,-1.5,3.5)
 	walker.rotate_y(-clampf(keys.x,-1,1)*2.5*delta)
 	walk_basis = Basis(Vector3.UP,walker.rotation.y)
@@ -6312,6 +6313,16 @@ func _build_overlay() -> void:
 		_refresh_ui()
 	)
 	pages[2].add_child(jump)
+	var camera_keys := CheckButton.new()
+	camera_keys.name = "NumberCameraHeight"
+	camera_keys.text = "Adjust walking camera height with 9 and 3"
+	camera_keys.button_pressed = number_camera
+	camera_keys.toggled.connect(func(enabled: bool):
+		number_camera = enabled
+		_save_preferences()
+		_refresh_ui()
+	)
+	pages[2].add_child(camera_keys)
 	var reading_size := CheckButton.new()
 	reading_size.name = "LargeText"
 	reading_size.text = "Larger text"
@@ -7083,6 +7094,7 @@ func _load_preferences() -> void:
 	for i in RADIO_KEYS.size():
 		var code = config.get_value("keyboard","radio_%d" % i,radio_keys[i])
 		if code in RADIO_KEYS[i]: radio_keys[i] = code
+	number_camera = config.get_value("keyboard","number_camera",false) == true
 	jump_key = KEY_0 if config.get_value("keyboard","zero_jump",false) == true else KEY_E
 	recovery_key = KEY_BACKSPACE if config.get_value("keyboard","backspace_recovery",false) == true else KEY_R
 	number_movement = config.get_value("keyboard","number_movement",false) == true
@@ -7148,6 +7160,7 @@ func _save_preferences() -> void:
 	config.set_value("traffic","lights",traffic_light_mode)
 	for i in RADIO_KEYS.size():
 		config.set_value("keyboard","radio_%d" % i, radio_keys[i])
+	config.set_value("keyboard","number_camera",number_camera)
 	config.set_value("keyboard","zero_jump",jump_key == KEY_0)
 	config.set_value("keyboard","backspace_recovery",recovery_key == KEY_BACKSPACE)
 	config.set_value("keyboard","number_movement",number_movement)

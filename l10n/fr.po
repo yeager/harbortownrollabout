@@ -1652,3 +1652,9 @@ msgstr "Revenir en lieu sûr avec Retour arrière"
 
 msgid "Jump with 0"
 msgstr "Sauter avec 0"
+
+msgid "9 Raise camera · 3 Lower camera"
+msgstr "9 Monter la caméra · 3 Baisser la caméra"
+
+msgid "Adjust walking camera height with 9 and 3"
+msgstr "Régler la hauteur de la caméra à pied avec 9 et 3"
