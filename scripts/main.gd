@@ -5280,7 +5280,7 @@ func _update_traffic(delta: float) -> void:
 		bus_merge_time = 0
 	bus_merge_time = maxf(0,bus_merge_time-delta)
 	for lamp in bus_departure_lamps:
-		lamp.visible = bus_merge_time > 0 and traffic_light_mode != 2 and (calm_mode or traffic_light_mode == 1 or fmod(6.0-bus_merge_time,.8)<.4)
+		lamp.visible = bus_merge_time > 0 and (calm_mode or steady_player_lights or fmod(6.0-bus_merge_time,.8)<.4)
 	var weather_pace := 1.0-.12*weather.wet-.23*weather.snow
 	var player_size := _player_extent()
 	for item in traffic_data:
