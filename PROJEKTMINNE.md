@@ -403,3 +403,16 @@ Jämförelse mellan referensfotot av pumpen och [pump 3 och 4 i spelvyn](docs/sj
 | Exteriöra detaljer | 94 | Tre öppna fack med mörka bakstycken och ljusa mellanväggar omger munstyckena. Slangarna har genomföringar och serviceluckan har ett runt lås med nyckelhål. Pumphusets hörn är fortfarande kantigare än på fotot. |
 
 Mitt visuella helhetsbetyg är **95/100** avrundat, med lika vikt för de tre delarna. Bedömningen gäller utsidan som syns i referensfotot.
+
+### Shoppingmopedens modellbedömning
+
+Visuell uppskattning utifrån användarens foton och modellens menybild, sedd snett framifrån. Varje del väger lika.
+
+| Del | Betyg av 100 | Iakttagelse |
+| --- | ---: | --- |
+| Silhuett | 85 | Kilnosen och det öppna insteget känns igen. Taket behöver mer av förebildens svepta överhäng. |
+| Färg och yta | 84 | Röd kaross och svart vinyl följer fotona. Däcksidor och lampglas saknar ytstruktur. |
+| Förarplats | 83 | Ljus keder markerar ryggstödets rundade kant. Sits och rygg har jämnare stoppning än på fotot. |
+| Exteriördetaljer | 86 | Trådkorg, avgasrör, ventilationsgaller och torkare syns. Navkapslarna behöver en djupare pressad profil. |
+
+Helhetsbetyg **85/100** avrundat.

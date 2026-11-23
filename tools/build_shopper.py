@@ -81,6 +81,16 @@ tube("Wiper blade upper", blade_joint, wiper_point(-.30, .70), .011, v.BLACK)
 box("Seat cushion",(0,.18,.595),(.61,.42,.093),vinyl,.044)
 back=box("Upright seat back",(0,.395,.82),(.60,.074,.48),vinyl,.034)
 back.rotation_euler.x=-.12
+# Contrasting welt sewn around the face of the original vinyl backrest.
+welt = v.material("Ivory seat piping", (.72,.62,.44), 0,.52)
+outline = []
+for cx, cz, start in ((.255,.195,0),(-.255,.195,90),(-.255,-.195,180),(.255,-.195,270)):
+    for step in range(6):
+        angle = math.radians(start+step*18)
+        outline.append(Vector((cx+.035*math.cos(angle), -.037, cz+.035*math.sin(angle))))
+for i, point in enumerate(outline):
+    tube("Backrest welt", back.location+back.rotation_euler.to_matrix()@point,
+         back.location+back.rotation_euler.to_matrix()@outline[(i+1)%len(outline)], .0045, welt)
 tube("Steering column",(0,-.27,.58),(0,-.13,.85),.022,v.DARK)
 tube("Handlebar",(-.25,-.13,.85),(.25,-.13,.85),.017,v.METAL)
 for side in (-1,1):
