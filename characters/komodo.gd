@@ -3,12 +3,14 @@ extends "res://characters/walking_pet.gd"
 var legs: Array[Node3D] = []
 var tail_skin: ShaderMaterial
 var tongue := Node3D.new()
+var trailing_heading := 0.0
 var phase := 0.0
 
 const BODY_BOUNDS := AABB(Vector3(-.38,0,-1.08), Vector3(.76,.65,2.70))
 
 func _ready() -> void:
 	name = "KomodoDragon"
+	trailing_heading = global_rotation.y
 	position = Vector3(.83,0,-.34)
 	var scales := ShaderMaterial.new()
 	scales.shader = preload("res://characters/komodo_scales.gdshader")
@@ -91,17 +93,28 @@ func _build_tail(scales: ShaderMaterial) -> void:
 	var tail := MeshInstance3D.new()
 	tail.name = "TaperedTail"
 	tail.mesh = surface.commit()
-	tail.custom_aabb = tail.mesh.get_aabb().grow(.32)
+	tail.custom_aabb = tail.mesh.get_aabb().grow(.75)
 	tail_skin = scales.duplicate() as ShaderMaterial
 	tail_skin.set_shader_parameter("tail_sway",true)
 	tail.material_override = tail_skin
 	add_child(tail)
 	tail.position = Vector3(0,.31,.37)
 
+func _process(delta: float) -> void:
+	var heading := global_rotation.y
+	if not is_visible_in_tree():
+		trailing_heading = heading
+		return
+	trailing_heading = lerp_angle(trailing_heading,heading,1.0-exp(-4.5*delta))
+	var bend := clampf(angle_difference(heading,trailing_heading),-.95,.95)
+	tail_skin.set_shader_parameter("turn_bend",bend)
+
 func advance(distance: float) -> void:
 	phase = fmod(phase + distance*7.4,TAU*4)
 	for i in legs.size():
 		var step := sin(phase+(PI if i in [1,2] else 0.0)) if distance > 0 else 0.0
+		var lift := maxf(0.0,cos(phase+(PI if i in [1,2] else 0.0))) if distance > 0 else 0.0
+		legs[i].position.y = .325 + .045*lift
 		legs[i].rotation.x = step*.23
 		legs[i].rotation.y = step*.16
 	tail_skin.set_shader_parameter("phase",phase*.5)

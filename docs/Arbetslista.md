@@ -49,7 +49,7 @@ De 50 förbättringarna från genomgången. En tom ruta är öppen. En punkt boc
 - [ ] 33. Kontrollera och förbättra handgrepp om ratt, styre, hundkoppel och kasse.
 - [ ] 34. Animera shoppingmopedens sidoinsteg, kroppsvridning och fötter in under styret.
 - [x] 35. Låt hundkopplet slacka och sträckas gradvis när avståndet ändras.
-- [ ] 36. Ge komodovaranen låg gång, växelvisa steg och följande svans i svängar.
+- [x] 36. Ge komodovaranen låg gång, växelvisa steg och följande svans i svängar.
 - [ ] 37. Visa bussens passagerare och förändringen i kupén vid hållplatserna.
 - [ ] 38. Lägg till en kioskförsäljare som räcker fram den beställda rätten.
 - [ ] 39. Låt spelaren bära, använda eller ställa fram varor från klädbutiken.

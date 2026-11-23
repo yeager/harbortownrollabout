@@ -1,13 +1,14 @@
 shader_type spatial;
 uniform bool tail_sway = false;
+uniform float turn_bend = 0.;
 uniform float phase = 0.;
 varying float facing_up;
 void vertex() {
 	if (tail_sway) {
 		float t = UV.y;
 		float wave = phase - 2.8*t;
-		VERTEX.x += t*t*(.11+.19*sin(wave));
-		float slope = (2.*t*(.11+.19*sin(wave))-.532*t*t*cos(wave))/1.23;
+		VERTEX.x += t*t*(.55*turn_bend+.19*sin(wave));
+		float slope = (2.*t*(.55*turn_bend+.19*sin(wave))-.532*t*t*cos(wave))/1.23;
 		NORMAL = normalize(vec3(NORMAL.xy, NORMAL.z - slope*NORMAL.x));
 	}
 	facing_up = normalize(MODEL_NORMAL_MATRIX * NORMAL).y;
