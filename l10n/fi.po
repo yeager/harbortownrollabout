@@ -1525,3 +1525,9 @@ msgstr "Maissikierteitä ja makeita paprikasuomuja"
 
 msgid "Chocolate buttons with crispy rice bubbles"
 msgstr "Suklaanappeja ja rapeita riisikuplia"
+
+msgid "Kiosk"
+msgstr "Kioski"
+
+msgid "Pizzeria"
+msgstr "Pizzeria"

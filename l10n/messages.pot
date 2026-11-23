@@ -1458,3 +1458,9 @@ msgstr ""
 
 msgid "Chocolate buttons with crispy rice bubbles"
 msgstr ""
+
+msgid "Kiosk"
+msgstr ""
+
+msgid "Pizzeria"
+msgstr ""

@@ -1544,3 +1544,9 @@ msgstr "Torsades de maïs aux écailles de paprika doux"
 
 msgid "Chocolate buttons with crispy rice bubbles"
 msgstr "Palets de chocolat aux bulles de riz croustillant"
+
+msgid "Kiosk"
+msgstr "Kiosque"
+
+msgid "Pizzeria"
+msgstr "Pizzeria"

@@ -1546,3 +1546,9 @@ msgstr "Maisspiralen mit Schuppen aus edelsüßer Paprika"
 
 msgid "Chocolate buttons with crispy rice bubbles"
 msgstr "Schokotaler mit knusprigen Reisblasen"
+
+msgid "Kiosk"
+msgstr "Kiosk"
+
+msgid "Pizzeria"
+msgstr "Pizzeria"

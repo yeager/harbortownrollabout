@@ -1536,3 +1536,9 @@ msgstr "Espirales de maíz con escamas de pimentón dulce"
 
 msgid "Chocolate buttons with crispy rice bubbles"
 msgstr "Botones de chocolate con burbujas de arroz crujiente"
+
+msgid "Kiosk"
+msgstr "Quiosco"
+
+msgid "Pizzeria"
+msgstr "Pizzería"

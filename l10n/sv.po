@@ -1459,3 +1459,9 @@ msgstr "Majsskruvar med fjäll av söt paprika"
 
 msgid "Chocolate buttons with crispy rice bubbles"
 msgstr "Chokladknappar med knapriga risbubblor"
+
+msgid "Kiosk"
+msgstr "Kiosk"
+
+msgid "Pizzeria"
+msgstr "Pizzeria"
