@@ -880,7 +880,12 @@ def make_fire_engine():
             for col in range(8):
                 y = -2.63+col*.246
                 finish = PAINT_YELLOW if (row+col)%2 else PAINT_RED
-                cube("Crew door reflective check",(side*1.176,y,1.31+row*.14),(.008,.238,.137),finish,.003,root)
+                for front,rear in ((-2.735,-1.623),(-1.597,-.755)):
+                    start=max(front+.009,y-.119)
+                    end=min(rear-.009,y+.119)
+                    if end>start:
+                        cube("Crew door reflective check",(side*1.176,(start+end)/2,1.31+row*.14),
+                             (.008,end-start,.137),finish,.003,root)
         for start,end in ((-.75,.71),(1.57,1.92)):
             cube("High visibility lower trim",(side*1.164,(start+end)/2,.95),
                  (.018,end-start,.075),PAINT_YELLOW,.006,root)
@@ -897,7 +902,20 @@ def make_fire_engine():
                 courses.append([(side*x,y,z) for x,y in
                     ((1.093,front+inset),(d-.005,front+inset),(d,front+inset+.022),
                      (d,rear-inset-.022),(d-.005,rear-inset),(1.093,rear-inset))])
-            profile_loft("Pressed crew door panel",courses,PAINT_RED,root)
+            panel=profile_loft("Pressed crew door panel",courses,PAINT_RED,root)
+            handle_y=rear-.147
+            pocket=cube("Handle pocket former",(side*1.134,handle_y,1.656),
+                        (.050,.202,.095),None,.021)
+            cut=panel.modifiers.new("Stamped handle recess","BOOLEAN")
+            cut.operation="DIFFERENCE"
+            cut.object=pocket
+            bpy.context.view_layer.objects.active=panel
+            bpy.ops.object.modifier_apply(modifier=cut.name)
+            bpy.data.objects.remove(pocket,do_unlink=True)
+            cube("Door handle cup",(side*1.109,handle_y,1.656),(.005,.181,.078),BLACK,.002,root)
+            for end in (-1,1):
+                cube("Latch pivot",(side*1.117,handle_y+end*.069,1.67),(.017,.022,.023),DARK,.004,root)
+            cube("Recessed latch grip",(side*1.123,handle_y,1.67),(.013,.150,.023),DARK,.006,root)
         # Recess the entry behind the front wheel and expose the step treads.
         recess=cube("Entry recess tool",(side*1.175,-1.088,.792),(.337,.650,.600),None,.044)
         cut=chassis.modifiers.new("Crew entry recess","BOOLEAN")
@@ -911,8 +929,8 @@ def make_fire_engine():
             cube("Crew entry tread",(side*d,-1.088,z),(.201,.600,.042),METAL,.012,root)
             for i in range(6):
                 cube("Tread grip",(side*d,-1.32+i*.093,z+.022),(.163,.028,.009),DARK,.004,root)
-        lettering=text_obj("Cab identity","RÄDDNINGSTJÄNST",(side*1.137,-2.12,1.585),
-                           .100,PAINT_WHITE,-side,root)
+        lettering=text_obj("Cab identity","RÄDDNINGSTJÄNST",(side*1.137,-2.245,1.585),
+                           .079,PAINT_WHITE,-side,root)
         xs=[vertex.co.x for vertex in lettering.data.vertices]
         lettering.location.y-=side*(min(xs)+max(xs))*.5
         for z in (1.93,2.36):
@@ -938,8 +956,6 @@ def make_fire_engine():
                          ((.60,-.084),(.90,-.074),(1,-.043),(1,.035),(.95,.048))],BLACK,root)
             profile_loft(label+" mirror glass",[mirror_ring(k,d) for k,d in
                          ((.88,.049),(.70,.050+bulge*.5),(.38,.050+bulge*.9),(.04,.050+bulge))],METAL,root)
-        for y in (-1.65,-.833):
-            cube("Crew door handle",(side*1.134,y,1.691),(.024,.120,.033),BLACK,.009,root)
         # Wiper blades parked along the lower sweep of the panoramic screen.
         blade=[]
         for i in range(9):

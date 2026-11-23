@@ -73,7 +73,7 @@ Listan innehåller 100 jobb. En tom ruta är öppen. En punkt bockas av när bet
 ## Brandbilen och stationen
 
 - [x] 51. Forma dubbelhyttens nedre fönsterkant efter sidobilden. Jämför båda dörrarna från passagerarsidan i spelet.
-- [ ] 52. Bygg in dörrhandtagen i fördjupningar och låt springan mellan dörrarna synas genom reflexmönstret.
+- [x] 52. Bygg in dörrhandtagen i fördjupningar och låt springan mellan dörrarna synas genom reflexmönstret.
 - [x] 53. Forma frontens luftintag så att de smalnar av mot hörnen. Ta en jämförelsebild rakt framifrån.
 - [x] 54. Dela backspeglarna i huvudspegel och vidvinkelspegel med varsin spegelyta. Kontrollera silhuetten från sidan.
 - [ ] 55. Modellera blåljusrampens genomskinliga kåpa och separata lysdioder. Granska rampen både släckt och tänd.
