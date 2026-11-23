@@ -1058,6 +1058,13 @@ def make_fire_engine():
     for z in (.795,.849):
         cube("Lower intake grille",(0,-3.154,z),(1.014,.018,.015),DARK,.006,root)
     for side in (-1,1):
+        # A recessed foothold below each lamp gives the crew access to the windscreen.
+        x = side*.84
+        cube("Cab bumper foothold recess",(x,-3.063,1.127),(.35,.105,.131),RUBBER,.032,root)
+        cube("Cab bumper step lip",(x,-3.105,1.073),(.365,.116,.027),METAL,.011,root)
+        for rib in range(5):
+            cube("Step tread ridge",(x+(rib-2)*.061,-3.114,1.088),
+                 (.018,.071,.009),DARK,.003,root)
         cube("Fog light seal",(side*.862,-3.071,.856),(.210,.042,.128),BLACK,.023,root)
         cube("Fog lens",(side*.862,-3.096,.856),(.164,.016,.077),GLASS_HI,.018,root)
     cube("Rear bumper",(0,3.1,.75),(2.33,.28,.19),DARK,.046,root)
