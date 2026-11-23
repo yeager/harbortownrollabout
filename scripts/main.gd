@@ -410,6 +410,8 @@ var delivery_points := 0
 var collected_stars := PackedStringArray()
 var star_markers := {}
 var wallet := 0
+var reward_badge := Button.new()
+var reward_seconds := 0.0
 var wallet_label: Label
 var shops := preload("res://scripts/shop_street.gd").new()
 var boutique_jacket := ""
@@ -586,6 +588,9 @@ func _recover_unsupported_dlss_setting() -> void:
 	push_warning("Saved DLSS setting is unsupported by this Godot build or active video adapter; restored standard Forward+ scaling.")
 
 func _process(delta: float) -> void:
+	if reward_badge.visible and reward_seconds > 0:
+		reward_seconds = maxf(0,reward_seconds-delta)
+		if reward_seconds == 0 or mode == "menu": reward_badge.hide()
 	if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED and not _can_capture_camera():
 		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	if mode == "playing" and not paused:
@@ -1515,7 +1520,19 @@ func _empty_refuse_bin(stop: int) -> void:
 	refuse_lift.tween_property(bin,"global_position",curb,.65)
 	refuse_lift.parallel().tween_property(bin,"rotation",rest_rotation,.65)
 
+func _show_mission_reward(atlas: Texture2D, cell: int, points: int, coins: int) -> void:
+	var picture := AtlasTexture.new()
+	picture.atlas = atlas
+	picture.region = Rect2(cell*48,0,48,48)
+	reward_badge.icon = picture
+	reward_badge.text = "+" + tr_n("★ %d point","★ %d points",points) % points + "   +" + tr_n("%d coin","%d coins",coins) % coins
+	reward_badge.reset_size()
+	reward_badge.move_to_front()
+	reward_badge.show()
+	reward_seconds = 4.0
+
 func _reward_delivery(amount: int) -> void:
+	_show_mission_reward(preload("res://branding/vehicle-job-actions.svg"),phone.vehicle_action,amount,amount)
 	wallet += amount
 	delivery_points += amount
 	_save_preferences()
@@ -5259,7 +5276,7 @@ func _update_shoe_quest(delta: float) -> void:
 				socked_foot.hide()
 				returned_trainer.show()
 				_say(shoe_owner, "My shoe! Now I won’t have to hop home. Thank you!", "shoe_returned")
-				_reward_foot_quest()
+				_reward_foot_quest(1)
 
 const CAT_PAVEMENT := Vector2(-36, -8)
 
@@ -5307,9 +5324,10 @@ func _update_cat_quest(delta: float) -> void:
 			if reunited:
 				cat_quest = FootQuest.FINISHED
 				_say(cat_owner, "There you are, Socks! Thank you for bringing her home.", "cat_returned")
-				_reward_foot_quest()
+				_reward_foot_quest(3)
 
-func _reward_foot_quest() -> void:
+func _reward_foot_quest(cell: int) -> void:
+	_show_mission_reward(preload("res://branding/foot-job-actions.svg"),cell,POINTS_PER_FOOT_QUEST,10)
 	wallet += 10
 	foot_quest_points += POINTS_PER_FOOT_QUEST
 	phone.receive("Thank you for helping! You earned 10 points and 10 coins.")
@@ -5411,11 +5429,11 @@ func _update_pet_jobs() -> void:
 				else:
 					lizard_mat.show()
 					pet_stages[i] = FootQuest.FINISHED
-					_reward_foot_quest()
+					_reward_foot_quest(5)
 			FootQuest.RETURNING:
 				if not near_owner: continue
 				pet_stages[i] = FootQuest.FINISHED
-				_reward_foot_quest()
+				_reward_foot_quest(4)
 		_refresh_dispatch()
 
 func _update_search_hints() -> void:
@@ -6507,6 +6525,15 @@ func _build_ui() -> void:
 	turn_preview.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	turn_preview.hide()
 	add_child(ui)
+	ui.add_child(reward_badge)
+	reward_badge.set_anchors_and_offsets_preset(Control.PRESET_CENTER_TOP)
+	reward_badge.grow_horizontal = Control.GROW_DIRECTION_BOTH
+	reward_badge.offset_top = 160
+	reward_badge.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	reward_badge.focus_mode = Control.FOCUS_NONE
+	reward_badge.add_theme_font_size_override("font_size",22)
+	reward_badge.add_theme_stylebox_override("normal",_style(Color("#203c38"),12))
+	reward_badge.hide()
 	_build_song_card()
 	_build_ice_order()
 	var top := PanelContainer.new()
@@ -7563,6 +7590,7 @@ func _resume_road_checkpoint() -> void:
 	_refresh_ui()
 
 func _start_game() -> void:
+	reward_badge.hide()
 	map_goal = Vector3.INF
 	komodo.visible = pet_stages[1] == FootQuest.SEARCHING or randf() < .25
 	chat_pair.clear()

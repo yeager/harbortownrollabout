@@ -51,6 +51,12 @@ func check_route() -> void:
 			printerr("Incorrect passenger payload")
 			quit(1)
 			return
+		if leg > 0 and leg % 2 == 0:
+			var badge: Button = game.reward_badge
+			if not badge.is_visible_in_tree() or badge.icon.region.position.x != game.phone.Action.ALIGHT * 48 or not badge.text.contains("15 mynt"):
+				printerr("Bus reward must show the completed drop-off and its fare")
+				quit(1)
+				return
 		var destination := "74  SICKLA UDDE"
 		if game.bus_board.text != destination or game.rear_bus_board.text != destination:
 			printerr("Expected both destination displays to show ", destination)
