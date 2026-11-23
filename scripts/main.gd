@@ -538,6 +538,11 @@ const SMALL_TALK := [
 var boule_join_requested := false
 const BOULE_BENCH := BOULE_CENTRE + Vector3(3.3,0,0)
 var boule_seated := false
+const THERMOS_REQUEST := "I lost my green flask after the boule match. Could you check by the bench?"
+const THERMOS_RETURN := "Bring the flask back to the boule player in the green jacket."
+var thermos_stage := FootQuest.WAITING
+var boule_match_finished := false
+var thermos := Node3D.new()
 var boule_guest_turn := false
 var boule_choices := VBoxContainer.new()
 var boule_aim := HSlider.new()
@@ -5463,6 +5468,44 @@ func _build_boule_court() -> void:
 		boule_grounded.append(false)
 		boule_velocity.append(Vector3.ZERO)
 
+	add_child(thermos)
+	var steel := _material(Color("#b8bfba"),.25)
+	_tube_between(thermos,Vector3.UP*.012,Vector3.UP*.245,.052,_material(Color("#257559"),.35))
+	_tube_between(thermos,Vector3.ZERO,Vector3.UP*.02,.053,steel)
+	_tube_between(thermos,Vector3.UP*.245,Vector3.UP*.30,.050,steel)
+	_place_thermos()
+
+func _place_thermos() -> void:
+	if not thermos.is_inside_tree(): return
+	var holder: Node3D = self
+	if thermos_stage == FootQuest.RETURNING:
+		holder = walker.get_meta("arms")[0].get_child(1)
+	elif thermos_stage == FootQuest.FINISHED:
+		holder = boule_players[0].get_meta("arms")[0].get_child(1)
+	if thermos.get_parent() != holder:
+		thermos.reparent(holder,false)
+	thermos.position = BOULE_BENCH+Vector3(.15,0,-1.15) if holder == self else PALM_GRIP-Vector3.UP*.12
+
+func _update_thermos() -> void:
+	if not walker.visible or boule_guest_turn or boule_seated or thermos_stage == FootQuest.FINISHED: return
+	var near_owner := walker.position.distance_to(boule_players[0].position)<2
+	match thermos_stage:
+		FootQuest.WAITING:
+			if not boule_match_finished or not near_owner: return
+			thermos_stage = FootQuest.SEARCHING
+			phone.receive(THERMOS_REQUEST)
+		FootQuest.SEARCHING:
+			if walker.position.distance_to(thermos.global_position)>1.3: return
+			thermos_stage = FootQuest.RETURNING
+			phone.receive(THERMOS_RETURN)
+		FootQuest.RETURNING:
+			if not near_owner: return
+			thermos_stage = FootQuest.FINISHED
+			_reward_foot_quest(1)
+	_place_thermos()
+	_refresh_dispatch()
+	_save_preferences()
+
 func _boule_ball(radius: float, tint: Color, steel: bool) -> MeshInstance3D:
 	var ball := MeshInstance3D.new()
 	var mesh := SphereMesh.new()
@@ -5582,6 +5625,7 @@ func _collect_boule(delta: float) -> void:
 		boule_clock = 0
 
 func _show_boule_result() -> void:
+	boule_match_finished = true
 	var distances := PackedFloat64Array()
 	for ball in boules:
 		distances.append(ball.position.distance_squared_to(boule_jack.position))
@@ -6126,6 +6170,7 @@ func _update_pedestrians(delta: float) -> void:
 	var shoe_owner_x := shoe_owner.position.x
 	var cat_owner_x := cat_owner.position.x
 	_update_shoe_quest(delta)
+	_update_thermos()
 	_update_cat_quest(delta)
 	_update_search_hints()
 	_update_pet_jobs()
@@ -8761,6 +8806,8 @@ func _load_player_progress(config: ConfigFile, section: String) -> void:
 	boutique_jacket = config.get_value(section,"boutique_jacket","")
 	shops.carried_toy = config.get_value(section,"carried_toy","")
 	wallet=maxi(0,int(config.get_value(section,"coins",0)))
+	thermos_stage = clampi(int(config.get_value(section,"thermos",FootQuest.WAITING)),FootQuest.WAITING,FootQuest.FINISHED)
+	_place_thermos()
 	foot_quest_points = maxi(0, int(config.get_value(section, "foot_quest_points", 0)))
 	delivery_points = maxi(0, int(config.get_value(section, "delivery_points", 0)))
 	var saved_receipts = config.get_value(section,"delivery_receipts",PackedStringArray())
@@ -8783,6 +8830,7 @@ func _store_player_progress(config: ConfigFile, section: String) -> void:
 	config.set_value(section,"mission_memories",mission_memories)
 	config.set_value(section,"delivery_receipts",phone.delivery_receipts)
 	config.set_value(section,"stars",collected_stars)
+	config.set_value(section,"thermos",thermos_stage)
 	config.set_value(section, "foot_quest_points", foot_quest_points)
 	config.set_value(section, "delivery_points", delivery_points)
 	config.set_value(section,"purchases",purchases)
@@ -8955,6 +9003,8 @@ func _refresh_dispatch() -> void:
 		for i in 2:
 			if pet_stages[i] == FootQuest.SEARCHING: phone.foot_jobs.append(PET_REQUESTS[i])
 		if pet_stages[0] == FootQuest.RETURNING: phone.foot_jobs.append("Bring the ball back to the dog.")
+		if thermos_stage == FootQuest.SEARCHING: phone.foot_jobs.append(THERMOS_REQUEST)
+		if thermos_stage == FootQuest.RETURNING: phone.foot_jobs.append(THERMOS_RETURN)
 		if shoe_quest == FootQuest.SEARCHING: phone.foot_jobs.append("Find the red shoe on the pavement.")
 		if shoe_quest == FootQuest.RETURNING: phone.foot_jobs.append("Bring the red shoe back to the neighbour.")
 		if cat_quest == FootQuest.SEARCHING: phone.foot_jobs.append("Find the cat with white paws.")

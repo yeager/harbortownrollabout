@@ -1714,3 +1714,9 @@ msgstr "Se på boule från bänken · F"
 
 msgid "Stand up · F"
 msgstr "Res dig · F"
+
+msgid "I lost my green flask after the boule match. Could you check by the bench?"
+msgstr "Jag tappade min gröna termos efter boulematchen. Kan du titta vid bänken?"
+
+msgid "Bring the flask back to the boule player in the green jacket."
+msgstr "Lämna tillbaka termosen till boulespelaren i grön jacka."

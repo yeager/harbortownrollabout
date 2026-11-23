@@ -93,7 +93,7 @@ Listan innehåller 100 jobb. En tom ruta är öppen. En punkt bockas av när bet
 - [x] 66. Kontakt mellan två rullande eller stillaliggande bouleklot ger ett kort metalliskt klick vid träffpunkten. Grusljudet spelas vid nedslaget. Uppspelningen av klicket verifierades under andra spelarens kast.
 - [x] 67. Ge boulebanan en sittbänk där spelaren kan sätta sig, följa omgången och resa sig igen. Provad i Godot med ett helt kast från bänken och uppstigning på fri mark.
 - [x] 68. Båda färjelägena har dubbelsidiga vägvisare under Lottens hållplatsskylt. Ett räfflat klot, en gul lille och en pil visar vägen mot närmaste bro på vägen till boulebanan. Pilarnas riktning är kontrollerad från båda sidor.
-- [ ] 69. Gör ett uppdrag där en granne behöver hjälp att hitta sin termos efter boulematchen.
+- [x] 69. Gör ett uppdrag där en granne behöver hjälp att hitta sin termos efter boulematchen. Efter matchen ber spelaren i grön jacka om hjälp via telefonen. Hämtning vid bänken, överlämning och en engångsbelöning har verifierats i Godot.
 - [ ] 70. Låt spelaren lämna tillbaka ett upphittat paraply vid färjeläget och se ägaren fälla upp det när det regnar.
 
 ## Leveranser och stadens butiker

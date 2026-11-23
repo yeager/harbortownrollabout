@@ -1791,3 +1791,9 @@ msgstr "Ver la petanca desde el banco · F"
 
 msgid "Stand up · F"
 msgstr "Levantarse · F"
+
+msgid "I lost my green flask after the boule match. Could you check by the bench?"
+msgstr "Perdí mi termo verde después de la partida de petanca. ¿Puedes mirar junto al banco?"
+
+msgid "Bring the flask back to the boule player in the green jacket."
+msgstr "Devuelve el termo al jugador de petanca de la chaqueta verde."

@@ -1801,3 +1801,9 @@ msgstr "Boule von der Bank aus ansehen · F"
 
 msgid "Stand up · F"
 msgstr "Aufstehen · F"
+
+msgid "I lost my green flask after the boule match. Could you check by the bench?"
+msgstr "Nach dem Boulespiel habe ich meine grüne Thermoskanne verloren. Schaust du bei der Bank nach?"
+
+msgid "Bring the flask back to the boule player in the green jacket."
+msgstr "Bring die Thermoskanne zum Boulespieler mit der grünen Jacke."
