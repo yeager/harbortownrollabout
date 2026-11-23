@@ -122,6 +122,7 @@ func advance(distance: float, delta: float, pushing: bool, tuck := 0.0) -> void:
 	var stance := lerpf(STANCE, .30, sprint)
 	var reach := stride * stance * 0.5 * weight
 	var feet: Array[Vector2] = []
+	var hip_offsets: Array[Vector3] = []
 	var shoe_angles := PackedFloat32Array()
 	var hip_y := SOLE_HEIGHT + THIGH + SHIN - 0.002
 	for i in 2:
@@ -163,8 +164,14 @@ func advance(distance: float, delta: float, pushing: bool, tuck := 0.0) -> void:
 				var ground := (float(ground_height.call(point.x, point.z)) - actor.global_position.y) / actor.scale.y
 				elevation = maxf(elevation, ground - (SOLE_HEIGHT + ankle_offset.y + sole.y))
 			foot.y += clampf(elevation, -0.22, 0.22)
+		var hip_rest := Vector3.RIGHT * hip_centres[i]
+		var offset := hip_rest.rotated(Vector3.UP, pelvis.rotation.y) - hip_rest
+		offset.x += lateral_shift
+		hip_offsets.append(offset)
+		# Solve from the rotating hip to the original ground-space ankle target.
+		foot.x += offset.z
 		feet.append(foot)
-		hip_y = minf(hip_y, SOLE_HEIGHT + foot.y + sqrt(maxf(0.0, (THIGH + SHIN) ** 2 - foot.x ** 2 - lateral_shift ** 2)) - 0.002)
+		hip_y = minf(hip_y, SOLE_HEIGHT + foot.y + sqrt(maxf(0.0, (THIGH + SHIN) ** 2 - foot.x ** 2 - offset.x ** 2)) - 0.002)
 	for child: Node3D in upper_body:
 		var rest: Vector3 = upper_body[child]
 		if child in arms:
@@ -173,13 +180,12 @@ func advance(distance: float, delta: float, pushing: bool, tuck := 0.0) -> void:
 	for i in 2:
 		var foot := feet[i]
 		var down := hip_y - SOLE_HEIGHT - foot.y
-		var lateral_angle := atan2(-lateral_shift, down)
-		down = Vector2(down, lateral_shift).length()
+		var lateral_angle := atan2(-hip_offsets[i].x, down)
+		down = Vector2(down, hip_offsets[i].x).length()
 		var length := Vector2(down, foot.x).length()
 		var thigh_angle := atan2(foot.x, down) + acos(clampf((THIGH ** 2 + length ** 2 - SHIN ** 2) / (2.0 * THIGH * length), -1.0, 1.0))
 		var bend := acos(clampf((length ** 2 - THIGH ** 2 - SHIN ** 2) / (2.0 * THIGH * SHIN), -1.0, 1.0))
-		legs[i].position.x = hip_centres[i] + lateral_shift
-		legs[i].position.y = hip_y
+		legs[i].position = Vector3(hip_centres[i], hip_y, 0) + hip_offsets[i]
 		legs[i].basis = Basis(Vector3.BACK, lateral_angle) * Basis(Vector3.RIGHT, thigh_angle)
 		knees[i].set_bone_pose_rotation(1, Quaternion(Vector3.RIGHT, -bend))
 		var shin := Vector3.DOWN * SHIN
