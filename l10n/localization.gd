@@ -28,10 +28,16 @@ static func media(pattern: String, locale: String) -> Resource:
 			return load(path)
 	return null
 
+# These recordings are station announcements rather than songs.
+const STATION_ANNOUNCEMENTS := [
+	"Hafenradio (DE).mp3", "Radio del Puerto (ES).mp3", "Radio du Port (FR).mp3",
+	"Havneradioen (NB).mp3", "Satamaradio (FI).mp3",
+]
+
 static func radio_tracks(locale: String) -> PackedStringArray:
 	var by_locale := {}
 	for file in ResourceLoader.list_directory("res://audio/radio"):
-		if file.get_extension() != "mp3": continue
+		if file.get_extension() != "mp3" or file in STATION_ANNOUNCEMENTS: continue
 		var name := file.get_basename()
 		var suffix := name.rfind(" (")
 		var code := SOURCE
@@ -41,7 +47,7 @@ static func radio_tracks(locale: String) -> PackedStringArray:
 		by_locale[code].append(file)
 	for variant in variants(locale):
 		if by_locale.has(variant): return PackedStringArray(by_locale[variant])
-	return PackedStringArray()
+	return PackedStringArray(by_locale.get(SOURCE, []))
 
 const SETTINGS_PATH := "user://preferences.cfg"
 

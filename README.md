@@ -66,7 +66,7 @@ Under **Settings → Driving**, you can choose Backspace for recovery, 0 for jum
 
 To find the hot dog stand, open the phone and pick **6** on the town map. You can park nearby and follow the arrows on foot to the counter.
 
-The radio switches on when you enter a vehicle. Swedish and English stations play songs. German, Spanish, French, Norwegian Bokmål and Finnish stations have a local announcement with music.
+The radio switches on when you enter a vehicle. It plays songs in your chosen language. If there are none yet, it plays English songs.
 
 The game starts in your system language and falls back to English. To change it, open **Settings** and select the globe. You can also change the weather and season there.
 

@@ -35,6 +35,6 @@ Kör `tools/check_localizations.sh` från projektroten för att kontrollera alla
 
 De 16 replikerna omfattar hälsningar, småprat och uppdragen med den borttappade skon och katten. Tomtens ”Ho ho ho” är en gemensam inspelning utöver de språkvisa replikerna.
 
-På spanska, tyska, franska, norskt bokmål och finska spelar fordonsradion ett stationsrop med musik. Vi söker hela låtar på dessa språk. [Så kan du bidra](../CONTRIBUTE.md).
+Om både den regionala och grundspråkets låtlista saknas spelar radion engelska låtar. Stationsrop räknas inte som låtar. Vi söker hela låtar på dessa språk. [Så kan du bidra](../CONTRIBUTE.md).
 
 De syntetiserade rösterna använder Piper-modellerna Thorsten (tyska), DaveFX (spanska), Harri (finska), Talesyntese (norska) och SIWIS (franska), alla i medium-version. Den franska rösten bygger på SIWIS French Speech Synthesis Database med licensen [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). [SIWIS-dataset](https://datashare.is.ed.ac.uk/handle/10283/2353) · [Pipers röstmodeller](https://huggingface.co/rhasspy/piper-voices)

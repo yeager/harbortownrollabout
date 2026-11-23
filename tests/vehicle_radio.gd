@@ -46,6 +46,16 @@ func _process(_delta: float) -> bool:
 		"locale":
 			var locale: String = LOCALES[locale_index]
 			tracks = game.L10n.radio_tracks(locale)
+			var local_recordings := PackedStringArray()
+			for file in ResourceLoader.list_directory("res://audio/radio"):
+				if file.ends_with(" (%s).mp3" % locale.to_upper()) and file not in game.L10n.STATION_ANNOUNCEMENTS:
+					local_recordings.append(file)
+			if locale != "en" and local_recordings.is_empty() and tracks != game.L10n.radio_tracks("en"):
+				fail("Missing English song fallback for " + locale)
+				return false
+			if not local_recordings.is_empty() and tracks != local_recordings:
+				fail("Local songs lost priority for " + locale)
+				return false
 			if tracks.is_empty():
 				if game.radio.playing or game.radio.stream != null or not game.radio_button.disabled or game.next_song_button.visible:
 					fail("Radio retained a different language in " + locale)
