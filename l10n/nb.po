@@ -1814,3 +1814,6 @@ msgstr "Stopper"
 
 msgid "Stroller space"
 msgstr "Barnevognplass"
+
+msgid "FIRE AND RESCUE"
+msgstr "BRANN OG REDNING"

@@ -3326,6 +3326,10 @@ func _build_fire_station_bay(model: Node3D) -> void:
 		var title := String(part.name)
 		if title in ["Station foundation","Red brick fire station"] or (absf(part.position.x)<2 and (title.begins_with("Garage") or title.begins_with("Roller door"))):
 			part.hide()
+	model.find_child("Fire house sign",true,false).hide()
+	var nameplate := _make_box("Fire station nameplate",Vector3(8.2,.82,.14),Vector3(0,7.83,6.98),Color("#472022"),false,model)
+	var letters := _road_sign_text(nameplate,"FIRE AND RESCUE",Vector3(0,0,.078),.018,Color("#fff6dc"))
+	_size_world_sign(letters,7.85)
 	var facade := model.find_child("Red brick fire station",true,false) as MeshInstance3D
 	var foundation := model.find_child("Station foundation",true,false) as MeshInstance3D
 	var warning := model.find_child("Garage warning stripe",true,false) as MeshInstance3D

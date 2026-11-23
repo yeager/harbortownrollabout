@@ -1810,3 +1810,6 @@ msgstr "Pysähtyy"
 
 msgid "Stroller space"
 msgstr "Lastenvaunupaikka"
+
+msgid "FIRE AND RESCUE"
+msgstr "PELASTUSLAITOS"

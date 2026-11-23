@@ -1744,3 +1744,6 @@ msgstr "Stannar"
 
 msgid "Stroller space"
 msgstr "Barnvagnsplats"
+
+msgid "FIRE AND RESCUE"
+msgstr "RÄDDNINGSTJÄNSTEN"

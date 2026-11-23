@@ -1831,3 +1831,6 @@ msgstr "Wagen hält"
 
 msgid "Stroller space"
 msgstr "Kinderwagenplatz"
+
+msgid "FIRE AND RESCUE"
+msgstr "FEUERWEHR"

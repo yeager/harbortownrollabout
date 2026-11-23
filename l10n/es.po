@@ -1821,3 +1821,6 @@ msgstr "Parada solicitada"
 
 msgid "Stroller space"
 msgstr "Zona de carritos"
+
+msgid "FIRE AND RESCUE"
+msgstr "BOMBEROS"

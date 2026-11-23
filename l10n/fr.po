@@ -1829,3 +1829,6 @@ msgstr "Arrêt demandé"
 
 msgid "Stroller space"
 msgstr "Espace poussettes"
+
+msgid "FIRE AND RESCUE"
+msgstr "SAPEURS-POMPIERS"
