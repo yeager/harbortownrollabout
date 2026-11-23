@@ -1331,8 +1331,8 @@ msgstr "Sjöstadsglass"
 msgid "Boarding"
 msgstr "Påstigning"
 
-msgid "E Jump"
-msgstr "E Hoppa"
+msgid "%s Jump"
+msgstr "%s Hoppa"
 
 msgid "Ride-on mower"
 msgstr "Åkgräsklippare"
@@ -1564,3 +1564,6 @@ msgstr "Styr med 8, 4, 5, 6"
 
 msgid "Use Backspace to return to a safe place"
 msgstr "Använd Backspace för att återgå till en säker plats"
+
+msgid "Jump with 0"
+msgstr "Hoppa med 0"

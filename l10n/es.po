@@ -1408,8 +1408,8 @@ msgstr "Helados del Puerto"
 msgid "Boarding"
 msgstr "Embarque"
 
-msgid "E Jump"
-msgstr "E Saltar"
+msgid "%s Jump"
+msgstr "%s Saltar"
 
 msgid "Ride-on mower"
 msgstr "Cortacésped con asiento"
@@ -1641,3 +1641,6 @@ msgstr "Moverse con 8, 4, 5, 6"
 
 msgid "Use Backspace to return to a safe place"
 msgstr "Volver a un lugar seguro con Retroceso"
+
+msgid "Jump with 0"
+msgstr "Saltar con 0"

@@ -75,6 +75,7 @@ const RADIO_KEYS := [[KEY_J, KEY_B, KEY_X], [KEY_N, KEY_M, KEY_Z]]
 const NUMBER_MOVEMENT := {KEY_W: KEY_8, KEY_A: KEY_4, KEY_S: KEY_5, KEY_D: KEY_6}
 var number_movement := false
 var recovery_key := KEY_R
+var jump_key := KEY_E
 var radio_keys: Array[int] = [KEY_J, KEY_N]
 var large_text := false
 var extra_reading_time := false
@@ -780,6 +781,10 @@ func _notification(what: int) -> void:
 
 func _unhandled_key_input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed and not event.echo:
+		if event.keycode == jump_key:
+			if mode == "playing" and not paused and walker.visible and not scooter.visible and not ferry_passenger and tram_mode == 0 and not operating_excavator and not boating and not phone.handset.is_visible_in_tree() and walk_jump_left <= 0:
+				walk_jump_left = WALK_JUMP_TIME
+			return
 		if event.keycode == recovery_key and mode == "playing" and not paused:
 			_recover_position()
 			return
@@ -793,9 +798,6 @@ func _unhandled_key_input(event: InputEvent) -> void:
 			KEY_T:
 				if phone.visible: phone.toggle()
 			KEY_U: _toggle_scooter()
-			KEY_E:
-				if mode == "playing" and not paused and walker.visible and not scooter.visible and not ferry_passenger and tram_mode == 0 and not operating_excavator and not boating and not phone.handset.is_visible_in_tree() and walk_jump_left <= 0:
-					walk_jump_left = WALK_JUMP_TIME
 			KEY_H: _honk()
 			KEY_F:
 				if not phone.handset.is_visible_in_tree(): _change_seat()
@@ -4033,7 +4035,7 @@ func _walking_hint() -> String:
 		return tr("Walk or rest · Run again in %d s") % _rest_seconds()
 	if run_ready_hint_time > 0:
 		return tr("Ready to run again! Hold Shift and walk forward.")
-	return tr("{up}/{down} Walk · {left}/{right} Turn · Shift + {up} Run · F Enter · U Scooter") + "   ·   " + tr("E Jump") + "   ·   " + tr("PgUp Raise camera · PgDn Lower camera")
+	return tr("{up}/{down} Walk · {left}/{right} Turn · Shift + {up} Run · F Enter · U Scooter") + "   ·   " + (tr("%s Jump") % OS.get_keycode_string(jump_key)) + "   ·   " + tr("PgUp Raise camera · PgDn Lower camera")
 
 func _walk(delta: float) -> void:
 	if shopper_boarding: return
@@ -6300,6 +6302,16 @@ func _build_overlay() -> void:
 		_refresh_ui()
 	)
 	pages[2].add_child(recovery)
+	var jump := CheckButton.new()
+	jump.name = "ZeroJump"
+	jump.text = "Jump with 0"
+	jump.button_pressed = jump_key == KEY_0
+	jump.toggled.connect(func(enabled: bool):
+		jump_key = KEY_0 if enabled else KEY_E
+		_save_preferences()
+		_refresh_ui()
+	)
+	pages[2].add_child(jump)
 	var reading_size := CheckButton.new()
 	reading_size.name = "LargeText"
 	reading_size.text = "Larger text"
@@ -7071,6 +7083,7 @@ func _load_preferences() -> void:
 	for i in RADIO_KEYS.size():
 		var code = config.get_value("keyboard","radio_%d" % i,radio_keys[i])
 		if code in RADIO_KEYS[i]: radio_keys[i] = code
+	jump_key = KEY_0 if config.get_value("keyboard","zero_jump",false) == true else KEY_E
 	recovery_key = KEY_BACKSPACE if config.get_value("keyboard","backspace_recovery",false) == true else KEY_R
 	number_movement = config.get_value("keyboard","number_movement",false) == true
 	extra_reading_time = config.get_value("accessibility", "extra_reading_time", false) == true
@@ -7135,6 +7148,7 @@ func _save_preferences() -> void:
 	config.set_value("traffic","lights",traffic_light_mode)
 	for i in RADIO_KEYS.size():
 		config.set_value("keyboard","radio_%d" % i, radio_keys[i])
+	config.set_value("keyboard","zero_jump",jump_key == KEY_0)
 	config.set_value("keyboard","backspace_recovery",recovery_key == KEY_BACKSPACE)
 	config.set_value("keyboard","number_movement",number_movement)
 	config.set_value("accessibility","calm_mode",calm_mode)

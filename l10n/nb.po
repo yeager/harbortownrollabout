@@ -1401,8 +1401,8 @@ msgstr "Havnebyens iskrem"
 msgid "Boarding"
 msgstr "Ombordstigning"
 
-msgid "E Jump"
-msgstr "E Hopp"
+msgid "%s Jump"
+msgstr "%s Hopp"
 
 msgid "Ride-on mower"
 msgstr "Plentraktor"
@@ -1634,3 +1634,6 @@ msgstr "Styr med 8, 4, 5, 6"
 
 msgid "Use Backspace to return to a safe place"
 msgstr "Bruk rettetasten for å komme tilbake til et trygt sted"
+
+msgid "Jump with 0"
+msgstr "Hopp med 0"

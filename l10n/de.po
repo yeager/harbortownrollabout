@@ -1418,8 +1418,8 @@ msgstr "Hafenstadt-Eis"
 msgid "Boarding"
 msgstr "Einstieg"
 
-msgid "E Jump"
-msgstr "E Springen"
+msgid "%s Jump"
+msgstr "%s Springen"
 
 msgid "Ride-on mower"
 msgstr "Aufsitzmäher"
@@ -1651,3 +1651,6 @@ msgstr "Mit 8, 4, 5, 6 steuern"
 
 msgid "Use Backspace to return to a safe place"
 msgstr "Mit der Rücktaste an einen sicheren Ort zurückkehren"
+
+msgid "Jump with 0"
+msgstr "Mit 0 springen"
