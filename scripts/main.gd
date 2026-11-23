@@ -8995,9 +8995,21 @@ func _recover_position() -> void:
 	var actor := walker if walker.visible else ambulance
 	if _play_bounds(actor.position) == PRACTICE_YARD:
 		if walker.visible:
-			walker.position = parked_cars[vehicle_index].to_global(parked_door_offset)
-			walker.position.y = _foot_height(walker.position.x, walker.position.z)
-			walking_velocity = Vector3.ZERO
+			success = false
+			var door := parked_cars[vehicle_index].to_global(parked_door_offset)
+			for site: Vector3 in [door, PRACTICE_START + Vector3.BACK * 3, PRACTICE_START + Vector3.FORWARD * 3]:
+				site.y = _foot_height(site.x, site.z)
+				if not PRACTICE_YARD.has_point(Vector2(site.x, site.z)): continue
+				if scooter.visible:
+					if not scooter.can_stand(self, site, walker.rotation.y, walker.scale.y): continue
+					site.y += Scooter.DECK_HEIGHT * walker.scale.y
+					scooter.speed = 0
+					scooter.yaw_input = 0
+				elif not _on_foot_clear(site): continue
+				walker.position = site
+				walking_velocity = Vector3.ZERO
+				success = true
+				break
 		else:
 			ambulance.position = PRACTICE_START
 			ambulance.rotation.y = -PI * .5
