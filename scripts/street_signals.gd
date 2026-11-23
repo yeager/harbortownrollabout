@@ -84,6 +84,7 @@ func _vehicle_head(mast: Node3D, east_west: bool) -> Dictionary:
 	return {"lamps":lamps,"east_west":east_west}
 
 var lit_finishes: Dictionary = {}
+var lens_mesh: SphereMesh
 var visor_mesh: ArrayMesh
 
 func _make_visor() -> ArrayMesh:
@@ -158,10 +159,13 @@ func _add_crossing_light(mast: Node3D, center: Vector3) -> void:
 
 func lens(parent: Node3D, pos: Vector3, color: Color) -> MeshInstance3D:
 	var lamp := MeshInstance3D.new()
-	var globe := SphereMesh.new()
-	globe.radius=.126
-	globe.height=.252
-	lamp.mesh=globe
+	if lens_mesh == null:
+		lens_mesh = SphereMesh.new()
+		lens_mesh.radius = .126
+		lens_mesh.height = .252
+		lens_mesh.radial_segments = 32
+		lens_mesh.rings = 12
+	lamp.mesh = lens_mesh
 	parent.add_child(lamp)
 	lamp.position=pos
 	lamp.scale.z=.3
