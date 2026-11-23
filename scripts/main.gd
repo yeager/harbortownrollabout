@@ -9228,9 +9228,19 @@ func _resume_road_checkpoint() -> void:
 	_start_game()
 	if boating:
 		launch.transform = road_checkpoint.launch_transform
-	ambulance.global_position = road_checkpoint.position
-	practice_active = road_checkpoint.get("practice", PRACTICE_YARD.has_point(Vector2(ambulance.position.x, ambulance.position.z)))
-	ambulance.rotation.y = road_checkpoint.heading
+	var saved_position: Vector3 = road_checkpoint.position
+	var saved_point := Vector2(saved_position.x, saved_position.z)
+	practice_active = road_checkpoint.get("practice", PRACTICE_YARD.has_point(saved_point))
+	var bounds := PRACTICE_YARD if practice_active else CITY_INTERIOR
+	if bounds.has_point(saved_point):
+		ambulance.global_position = saved_position
+		ambulance.rotation.y = road_checkpoint.heading
+	elif practice_active:
+		ambulance.position = PRACTICE_START
+		ambulance.rotation.y = -PI * .5
+	else:
+		# If every recovery spot is occupied, keep the normal starting pose.
+		_recover_road_vehicle()
 	free_drive = road_checkpoint.free_drive
 	var saved_goal: Variant = road_checkpoint.get("map_goal")
 	if free_drive and saved_goal is Vector3 and saved_goal.is_finite():
