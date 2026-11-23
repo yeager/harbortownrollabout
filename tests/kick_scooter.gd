@@ -33,6 +33,9 @@ func check_scooters() -> void:
 			printerr("Expected a visible mounted rider")
 			quit(1)
 			return
+		if not grips_aligned(rider, game.scooter):
+			quit(1)
+			return
 		var start := rider.position
 		for frame in 60:
 			game.scooter.ride(game,1.0,0.0,1.0/60.0)
@@ -104,8 +107,25 @@ func check_scooters() -> void:
 			var start: Vector3 = item.actor.position
 			game._update_pedestrians(.2)
 			if start.distance_to(item.actor.position) > .1 and item.scooter.is_visible_in_tree():
+				if not grips_aligned(item.actor, item.scooter):
+					quit(1)
+					return
 				print("Both playable riders and the scooter neighbour passed.")
 				game._finish_quit()
 				return
 	printerr("Missing travelling scooter neighbour")
 	quit(1)
+
+func grips_aligned(rider: Node3D, scooter: Node3D) -> bool:
+	var handles := scooter.find_children("Handle grip*", "MeshInstance3D", true, false)
+	if handles.size() != 2:
+		printerr("Expected two handlebar grips in the scooter model")
+		return false
+	for grip: MeshInstance3D in handles:
+		var centre := grip.to_global(grip.get_aabb().get_center())
+		var side := 0 if rider.to_local(centre).x < 0 else 1
+		var palm: Node3D = rider.get_meta("gait").palms[side]
+		if palm.global_position.distance_to(centre) > .005:
+			printerr("Scooter rider missed handlebar grip ", grip.name)
+			return false
+	return true

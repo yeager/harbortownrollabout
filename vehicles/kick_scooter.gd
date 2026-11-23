@@ -5,6 +5,7 @@ const WHEELBASE := .96
 const MAX_SPEED := 5.55 # 20 km/h
 var speed := 0.0
 var yaw_input := 0.0
+var grips: Array[Node3D] = []
 var wheels: Array[Node3D] = []
 var palm_stance: Array[Transform3D] = []
 var elbow_stance: Array[Quaternion] = []
@@ -14,6 +15,8 @@ func _ready() -> void:
 	add_child(preload("res://vehicles/electric_kick_scooter.glb").instantiate())
 	for part in ["FrontWheel","RearWheel"]:
 		wheels.append(find_child(part,true,false))
+	grips.assign(find_children("Handle grip*", "MeshInstance3D", true, false))
+	grips.sort_custom(func(a: Node3D,b: Node3D): return to_local(a.global_position).x < to_local(b.global_position).x)
 	position.y = -DECK_HEIGHT
 	hide()
 
@@ -32,7 +35,7 @@ func mount(rider: Node3D) -> void:
 		legs[i].position.z += side*.11
 		palm_stance.append(gait.palms[i].transform)
 		elbow_stance.append(gait.elbows[i].get_bone_pose_rotation(1))
-		gait.reach_with_hand(i,to_global(Vector3(side*.226,1.275,-.387)))
+		gait.reach_with_hand(i,grips[i].global_position)
 	rider.position.y += DECK_HEIGHT*rider.scale.y
 	speed = 0
 	yaw_input = 0
