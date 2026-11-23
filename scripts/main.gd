@@ -2396,6 +2396,8 @@ func _build_waterfront() -> void:
 	water.code = """
 	shader_type spatial;
 	uniform float rain = 0.0;
+	uniform vec4 bridge_limits;
+	uniform float bridge_rise;
 	uniform vec3 ferry_center;
 	uniform float ferry_motion;
 	uniform vec2 wake_origin;
@@ -2454,6 +2456,18 @@ func _build_waterfront() -> void:
 			*smoothstep(.0,.20,hit.x)*(1.-smoothstep(1.35-.75*bow_taper,1.49-.75*bow_taper,hit.x));
 		float grazing = pow(1.-clamp(dot(-incoming,wave_normal),0.,1.),2.);
 		ALBEDO = mix(ALBEDO,vec3(.52,.60,.59),hull*grazing*(1.-dusk)*.60);
+		// The near fascia of the canal bridge interrupts the reflected sky.
+		float bridge_edge_z = -48. + 5.8 * sign(p.y + 48.);
+		float bridge_t = (bridge_edge_z-p.y)/(abs(ray.z)>.001 ? ray.z : .001);
+		float bridge_x = p.x+ray.x*bridge_t;
+		float ramp = min((bridge_x-bridge_limits.x)/(bridge_limits.y-bridge_limits.x),
+			(bridge_limits.w-bridge_x)/(bridge_limits.w-bridge_limits.z));
+		float deck_y = bridge_rise*smoothstep(0.,1.,ramp)-.02;
+		float below_deck = deck_y-(-.99+ray.y*bridge_t);
+		float blur = clamp(fwidth(below_deck),.04,.36);
+		float fascia = smoothstep(-blur,blur,below_deck)*(1.-smoothstep(.56-blur,.56+blur,below_deck));
+		fascia *= float(bridge_t>0. && ramp>0.)*(1.-smoothstep(35.,100.,bridge_t));
+		ALBEDO = mix(ALBEDO,vec3(.014,.021,.024),fascia*grazing*(1.-foam)*.85);
 		// Daylight reflected in the saloon windows breaks into strips across the ripples.
 		vec3 pane_tint = mix(vec3(.055,.095,.11),vec3(.23,.34,.39),clamp(ray.y*2.,0.,1.));
 		ALBEDO = mix(ALBEDO,pane_tint,reflection*grazing*(1.-dusk)*(1.-foam)*.75);
@@ -2475,6 +2489,8 @@ func _build_waterfront() -> void:
 	}
 	"""
 	water_finish.shader = water
+	water_finish.set_shader_parameter("bridge_limits", Vector4(HIGH_BRIDGE_X[0], HIGH_BRIDGE_X[1], HIGH_BRIDGE_X[2], HIGH_BRIDGE_X[3]))
+	water_finish.set_shader_parameter("bridge_rise", HIGH_BRIDGE_RISE)
 	canal.material_override = water_finish
 	for bank in [55.0,87.0]:
 		_make_box("Kajmur", Vector3(.5,1.5,174), Vector3(bank,-.86,-6), Color("#807b70"))
