@@ -1751,3 +1751,6 @@ msgstr "Rødt: stopp. Oransje: senk farten. Grønt: kjør."
 
 msgid "Delivery receipts"
 msgstr "Leveringskvitteringer"
+
+msgid "Return to bay 711"
+msgstr "Tilbake til plass 711"

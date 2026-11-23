@@ -1681,3 +1681,6 @@ msgstr "Rött: stanna. Orange: sakta in. Grönt: kör."
 
 msgid "Delivery receipts"
 msgstr "Leveranskvitton"
+
+msgid "Return to bay 711"
+msgstr "Tillbaka till plats 711"

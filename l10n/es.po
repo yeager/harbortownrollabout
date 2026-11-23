@@ -1758,3 +1758,6 @@ msgstr "Rojo: para. Naranja: reduce la velocidad. Verde: avanza."
 
 msgid "Delivery receipts"
 msgstr "Recibos de entrega"
+
+msgid "Return to bay 711"
+msgstr "Volver a la plaza 711"

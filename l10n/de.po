@@ -1768,3 +1768,6 @@ msgstr "Rot: anhalten. Orange: langsamer fahren. Grün: fahren."
 
 msgid "Delivery receipts"
 msgstr "Lieferbelege"
+
+msgid "Return to bay 711"
+msgstr "Zurück zu Stellplatz 711"

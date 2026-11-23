@@ -1747,3 +1747,6 @@ msgstr "Punainen: pysähdy. Oranssi: hidasta. Vihreä: aja."
 
 msgid "Delivery receipts"
 msgstr "Toimituskuitit"
+
+msgid "Return to bay 711"
+msgstr "Takaisin paikalle 711"

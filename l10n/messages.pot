@@ -1680,3 +1680,6 @@ msgstr ""
 
 msgid "Delivery receipts"
 msgstr ""
+
+msgid "Return to bay 711"
+msgstr ""

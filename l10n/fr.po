@@ -1766,3 +1766,6 @@ msgstr "Rouge : arrête-toi. Orange : ralentis. Vert : avance."
 
 msgid "Delivery receipts"
 msgstr "Reçus de livraison"
+
+msgid "Return to bay 711"
+msgstr "Retour à la place 711"

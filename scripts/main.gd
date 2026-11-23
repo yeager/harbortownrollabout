@@ -367,6 +367,8 @@ var mission_index := 0
 const FireLocker := preload("res://scripts/fire_locker.gd")
 var driven_fire_locker: FireLocker
 var parked_fire_locker: FireLocker
+const FIRE_RETURN_BAY := Vector3(-37,-.13,15)
+var fire_bay_button: Button
 var practice_hose := Node3D.new()
 var practice_spray := CPUParticles3D.new()
 var hose_seconds := 0.0
@@ -3281,7 +3283,9 @@ func _build_trees() -> void:
 		if absf(x) < 7: continue
 		if x != -16: # Keep the bakery entrance clear.
 			_make_tree(Vector3(x, 0, -8.6), 0.95)
-		_make_tree(Vector3(x + 3.2, 0, 8.6), 0.82)
+		var tree_x: float = x + 3.2
+		if absf(tree_x-FIRE_RETURN_BAY.x)<2.2: tree_x -= 3.0
+		_make_tree(Vector3(tree_x, 0, 8.6), 0.82)
 	for z in range(-31, 22, 8):
 		if absf(z) < 7: continue
 		_make_tree(Vector3(-8.6, 0, z), 0.92)
@@ -3769,6 +3773,7 @@ func _depot_bay(i: int) -> Vector2:
 		if slot >= 0:
 			var center: Vector2 = lot[0]
 			return center + Vector2((slot - 1) * 6, 0)
+	if i == 2: return Vector2(FIRE_RETURN_BAY.x,FIRE_RETURN_BAY.z)
 	if i == WHEEL_LOADER: return Vector2(-101,47)
 	if i == SHOPPER: return Vector2(-67,60)
 	if i == REFUSE: return Vector2(-101,56)
@@ -3998,6 +4003,12 @@ func _build_depot() -> void:
 		elif i == BUS:
 			for side in [-1,1]:
 				_make_box("Bus bay stripe",Vector3(.10,.025,11.6),body.position+Vector3(side*2.3,.014,0),Color("#deddd1")).material_override = marking_finish
+		elif i == 2:
+			for side in [-1,1]:
+				_make_box("Fire bay sideline",Vector3(.13,.025,9.8),body.position+Vector3(side*2.15,.02,0),Color.WHITE).material_override = marking_finish
+			_make_box("Fire bay rear line",Vector3(4.43,.025,.13),body.position+Vector3(0,.02,4.9),Color.WHITE).material_override = marking_finish
+			var number := _road_sign_text(self,"711",body.position+Vector3(0,.045,-4.3),.022,Color.WHITE)
+			number.rotation = Vector3(-PI*.5,PI,0)
 		elif i == RECOVERY:
 			for side in [-1,1]:
 				_make_box("Recovery bay stripe",Vector3(.1,.025,9.3),body.position+Vector3(side*2.5,.014,.45),Color("#deddd1")).material_override = marking_finish
@@ -7541,6 +7552,16 @@ func _build_overlay() -> void:
 	var practice_button := _button("Practice driving", 165)
 	practice_button.name = "PracticeDriving"
 	box.add_child(practice_button)
+	fire_bay_button = _button("Return to bay 711",220)
+	box.add_child(fire_bay_button)
+	fire_bay_button.pressed.connect(func():
+		mode = "playing"
+		free_drive = true
+		map_goal = FIRE_RETURN_BAY
+		_update_mission_marker()
+		_update_route_arrows()
+		_refresh_ui()
+	)
 	practice_button.pressed.connect(_start_practice)
 	practice_button.visibility_changed.connect(func():
 		if mode != "menu" and practice_button.visible: practice_button.hide()
@@ -8854,6 +8875,7 @@ func _refresh_ui() -> void:
 		mission_label.text = tr("MISSION %d / %d   ·   %s") % [mission_index + 1, TARGET_NAMES.size(), tr(_vehicle_tasks()[_mission_stop()])]
 	else:
 		mission_label.text = "ALL MISSIONS COMPLETE"
+	fire_bay_button.visible = mode == "complete" and vehicle_index == 2
 	var show_overlay := mode == "menu" or mode == "complete" or paused
 	if show_overlay or vehicle_index != ICE_CREAM: ice_order.hide()
 	ui.get_node("DrivingHeader").visible = mode != "menu"
