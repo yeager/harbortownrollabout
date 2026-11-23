@@ -1,0 +1,123 @@
+name: Game packages
+on:
+  push:
+    tags: ['v[0-9]*']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  export:
+    runs-on: ubuntu-24.04
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+      tag: ${{ steps.version.outputs.tag }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: version
+        shell: bash
+        run: |
+          if [[ "$GITHUB_REF_TYPE" == tag ]]; then
+            version=${GITHUB_REF_NAME#v}
+            [[ $version =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]
+          else
+            base=$(sed -n 's/^config.version="\(.*\)"/\1/p' project.godot)
+            version="$base-ci.$GITHUB_RUN_NUMBER"
+          fi
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          echo "tag=v$version" >> "$GITHUB_OUTPUT"
+      - name: Install Godot and matching templates
+        working-directory: ${{ runner.temp }}
+        run: |
+          base=https://github.com/godotengine/godot-builds/releases/download/4.7-dev5/Godot_v4.7-dev5
+          curl -fLsS --retry 3 "${base}_linux.x86_64.zip" -o editor.zip
+          curl -fLsS --retry 3 "${base}_export_templates.tpz" -o templates.zip
+          echo '6ba71dd954b7d67a7d988b059df66ce053c32df48c918aeac8bb7e8e90598d6f  editor.zip' | sha256sum -c
+          echo 'deb8774a04196eac7130beb5a11188e8715d1b1bd902a8573b9311a93a0031f5  templates.zip' | sha256sum -c
+          unzip -q editor.zip
+          mv Godot*_linux.x86_64 godot
+          echo "$PWD" >> "$GITHUB_PATH"
+          unzip -q templates.zip 'templates/linux_release.x86_64' 'templates/windows_release_x86_64.exe' 'templates/macos.zip' 'templates/version.txt'
+          dir="$HOME/.local/share/godot/export_templates/$(tr -d '\r\n' < templates/version.txt)"
+          mkdir -p "$dir"
+          mv templates/* "$dir/"
+      - name: Import game and export all platforms
+        run: |
+          mkdir -p export/{linux,windows,mac}
+          godot --headless --editor --import
+          godot --headless --export-release Linux export/linux/axels-spel
+          godot --headless --export-release Windows export/windows/HarborTownRollabout.exe
+          godot --headless --export-release macOS "export/mac/Harbor Town Rollabout.zip"
+          export/linux/axels-spel --headless --quit-after 10
+      - uses: actions/upload-artifact@v4
+        with:
+          name: exports
+          path: export/
+  package:
+    needs: export
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, windows-2022, macos-latest]
+    runs-on: ${{ matrix.os }}
+    env:
+      VERSION: ${{ needs.export.outputs.version }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: exports
+          path: export
+      - run: mkdir dist
+      - if: runner.os == 'Linux'
+        run: |
+          chmod +x export/linux/axels-spel
+          go install github.com/goreleaser/nfpm/v2/cmd/nfpm@v2.43.4
+          for format in deb rpm; do
+            "$(go env GOPATH)/bin/nfpm" package -f packaging/linux/nfpm.yaml -p "$format" -t dist/
+          done
+          tar -czf "dist/harbortownrollabout-$VERSION-linux-x86_64.tar.gz" -C export/linux .
+      - if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          & "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe" "/DGameVersion=$env:VERSION" packaging/windows/game.iss
+          exit $LASTEXITCODE
+      - if: runner.os == 'macOS'
+        run: |
+          mkdir image
+          ditto -x -k "export/mac/Harbor Town Rollabout.zip" image
+          app=$(find image -maxdepth 1 -name '*.app' -print -quit)
+          codesign --force --deep --sign - "$app"
+          codesign --verify --deep --strict "$app"
+          ln -s /Applications image/Applications
+          hdiutil create -volname "Harbor Town Rollabout" -srcfolder image -format UDZO "dist/HarborTownRollabout-$VERSION-macOS.dmg"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: package-${{ runner.os }}
+          path: dist/*
+          if-no-files-found: error
+  release:
+    needs: [export, package]
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+      TAG: ${{ needs.export.outputs.tag }}
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: package-*
+          merge-multiple: true
+          path: dist
+      - name: Publish five installers and checksums
+        working-directory: dist
+        run: |
+          for ext in exe dmg deb rpm tar.gz; do test "$(find . -maxdepth 1 -name "*.$ext" | wc -l)" -eq 1; done
+          sha256sum * > SHA256SUMS
+          args=()
+          if [[ "$TAG" == *-ci.* ]]; then args+=(--prerelease); fi
+          if ! gh release view "$TAG" -R "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            gh release create "$TAG" --draft --target "$GITHUB_SHA" -R "$GITHUB_REPOSITORY" --title "$TAG" --generate-notes "${args[@]}"
+          fi
+          gh release upload "$TAG" -R "$GITHUB_REPOSITORY" --clobber ./*
+          gh release edit "$TAG" -R "$GITHUB_REPOSITORY" --draft=false

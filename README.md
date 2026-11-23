@@ -1,12 +1,20 @@
 # Harbor Town Rollabout
 
+![Harbor Town Rollabout game logo](branding/rollabout-en.png)
+
 **Full rulle i Sjöstaden** is the Swedish title of this family driving and exploration game by Daniel Nylander.
 
 Explore a 3D waterfront neighbourhood inspired by Hammarby Sjöstad in Stockholm. Choose Axel or Alma and drive through town, cross the canal by motorboat or ride the tram. Your vehicle determines the jobs you receive, from emergency calls and school taxi trips to roadside recovery. You can also explore at your own pace.
 
-## Linux packages
+![Vehicle selection in the English main menu](docs/screenshots/vehicle-selection.png)
 
-The [0.1.3 release in the original repository](https://github.com/yeager/axels-emergency-vehicles/releases/tag/v0.1.3) includes an amd64 DEB, an x86_64 RPM and a SHA256SUMS file. These packages contain the earlier 0.1.3 build. To play the newer changes on this repository’s main branch, follow the source instructions below.
+![Driving an ambulance through Harbor Town](docs/screenshots/driving.png)
+
+## Downloads
+
+[Game releases](https://github.com/yeager/harbortownrollabout/releases) provide a Windows x64 installer in seven languages, a universal macOS disk image, and Linux x86-64 DEB, RPM and portable tar.gz packages. The macOS build is ad-hoc signed and the Windows installer is unsigned.
+
+Pushing a version tag such as `v1.2.3` builds a release. Running **Game packages** manually builds a prerelease. The [DEB mirror](https://github.com/yeager/deb-repo/releases?q=harbortownrollabout) and [RPM mirror](https://github.com/yeager/rpm-repo/releases?q=harbortownrollabout) check hourly and copy their respective package and the portable archive into GitHub Releases.
 
 ## Play from source
 
