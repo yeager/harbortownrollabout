@@ -1,6 +1,6 @@
 # Arbetslista för Full rulle i Sjöstaden
 
-De 50 förbättringarna från genomgången. En tom ruta är öppen. En punkt bockas av när beteendet är verifierat. Delresultat och beroenden står vid respektive punkt.
+Listan innehåller 100 jobb. En tom ruta är öppen. En punkt bockas av när beteendet är verifierat. Delresultat och beroenden står vid respektive punkt.
 
 ## Att kunna spela själv
 
@@ -69,3 +69,68 @@ De 50 förbättringarna från genomgången. En tom ruta är öppen. En punkt boc
 - [ ] 48. Publicera provstartade Windows- och Mac-paket med direkta nedladdningslänkar. Windows x64, Mac Intel och Mac Apple Silicon har publicerats som ZIP-filer med direktlänkar i README. SHA-256 verifierad för varje arkiv. Provstart i Windows och macOS återstår.
 - [x] 49. Mät bildtider under en reproducerbar färd förbi macken med kvällsljus, trafik och regn. Mätt med `tools/station_frame_times.gd` i Godot 4.7 dev, Compatibility, Radeon Renoir, 1920 × 1080. Efter uppvärmning mättes 240 bilder över 48 meter med tio trafikfordon. Median 40,14 ms, 95:e percentilen 51,09 ms och längst 76,77 ms. Den körningen avslutades normalt. Vissa upprepningar kraschade, även vid avslut.
 - [ ] 50. Speltesta med barn utan muntlig vägledning. Observera val av favoritbil, korvköp och återgång till bilen. Kräver en medverkande familj.
+
+## Brandbilen och stationen
+
+- [ ] 51. Forma dubbelhyttens nedre fönsterkant efter sidobilden. Jämför båda dörrarna från passagerarsidan i spelet.
+- [ ] 52. Bygg in dörrhandtagen i fördjupningar och låt springan mellan dörrarna synas genom reflexmönstret.
+- [ ] 53. Forma frontens luftintag så att de smalnar av mot hörnen. Ta en jämförelsebild rakt framifrån.
+- [ ] 54. Dela backspeglarna i huvudspegel och vidvinkelspegel med varsin spegelyta. Kontrollera silhuetten från sidan.
+- [ ] 55. Modellera blåljusrampens genomskinliga kåpa och separata lysdioder. Granska rampen både släckt och tänd.
+- [ ] 56. Ge utrustningsluckorna lås, grepp och ändskenor. Kontrollera att de sitter på själva luckorna i närbild.
+- [ ] 57. Passa in de bakre fotstegen och dragkroken under jalusierna efter bakifrånbilden.
+- [ ] 58. Låt en sidolucka rullas upp när slangen hämtas och stängas när utrustningen lagts tillbaka.
+- [ ] 59. Gör en körbar port på brandstationen som öppnas för brandbilen och väntar tills hela bilen passerat.
+- [ ] 60. Ordna en markerad uppställningsplats där brandbilen kan backa in efter avslutat uppdrag.
+
+## Boule och strandpromenad
+
+- [ ] 61. Låt spelaren tacka ja till en omgång boule och ta plats i kastringen.
+- [ ] 62. Låt spelaren sikta på lillen och välja mellan ett kort, ett mellanlångt och ett långt kast med bilder.
+- [ ] 63. Låt ett kastat klot kunna knuffa ett annat klot. Kontrollera var båda stannar efter träffen.
+- [ ] 64. Visa vilket klot som ligger närmast lillen efter omgången, även när två ligger nästan lika nära.
+- [ ] 65. Animera hur boulespelarna hämtar sina klot innan nästa omgång börjar.
+- [ ] 66. Lägg till ett distinkt metalliskt klick när två bouleklot träffar varandra.
+- [ ] 67. Ge boulebanan en sittbänk där spelaren kan sätta sig, följa omgången och resa sig igen.
+- [ ] 68. Sätt upp vägvisare från färjelägena till boulebanan med en bild av ett klot och lillen.
+- [ ] 69. Gör ett uppdrag där en granne behöver hjälp att hitta sin termos efter boulematchen.
+- [ ] 70. Låt spelaren lämna tillbaka ett upphittat paraply vid färjeläget och se ägaren fälla upp det när det regnar.
+
+## Leveranser och stadens butiker
+
+- [ ] 71. Ge bageriet en morgonleverans av mjöl. Visa säckarna först på flaket och sedan vid bageriets dörr.
+- [ ] 72. Låt bageriet skicka en tårtkartong till ett kalas. Mottagaren ska öppna kartongen vid leverans.
+- [ ] 73. Lägg till ett cykelbud som ber spelaren hämta en förväxlad leverans hos rätt butik.
+- [ ] 74. Låt spelaren välja en avslutad fraktkörning i telefonen och läsa leveranskvittot igen.
+- [ ] 75. Gör ett tvåstoppsuppdrag med olika last till varje mottagare. Den andra lasten ska ligga kvar vid första stoppet.
+- [ ] 76. Låt lastens tyngdpunkt ändras när en tung låda lossas från ena sidan. Provkör samma kurva före och efter.
+- [ ] 77. Låt spelaren köra tomma glasslådor från kiosken tillbaka till glassbilens depå.
+- [ ] 78. Ge pizzerians disk en beställningslapp med bilder av ingredienser som spelaren kan matcha.
+- [ ] 79. Låt godisbutikens kund välja en påse med två sorter och visa båda sorterna när påsen lämnas över.
+- [ ] 80. Lägg till en borttappad samlarfigur som kan återlämnas i klädbutiken mot ett tack i en pratbubbla.
+
+## Trafik, fordon och resor
+
+- [ ] 81. Låt en bussresenär trycka på stoppknappen och tänd en synlig stoppskylt fram i bussen.
+- [ ] 82. Visa nästa hållplats inne i bussen när linje 74 lämnar en hållplats.
+- [ ] 83. Markera platsen för barnvagnar inne i Tvärbanan och prova att en barnvagn kan komma dit från perrongen.
+- [ ] 84. Låt fotgängare invänta avstigande vid spårvagnsdörren innan de själva går ombord.
+- [ ] 85. Ge färjan en ombordstigningssignal som både syns och hörs innan avgång.
+- [ ] 86. Sätt ut en vindstrut på kajen och låt den vrida sig när vindriktningen ändras.
+- [ ] 87. Gör cykelns trampor rörliga och låt fötterna följa dem ett helt varv vid trampning.
+- [ ] 88. Ge shoppingmopedens vindrutetorkare ett svep som håller sig inom glasets kanter.
+- [ ] 89. Låt spelaren spola av leran på ett fordon vid macken och se den rena lacken växa fram.
+- [ ] 90. Låt ett trafikfordon lämna lucka åt en buss som blinkar ut från hållplatsen. Prova även med kö bakom bussen.
+
+## Tillgänglighet och speltest
+
+- [ ] 91. Lägg till ett val att visa uppdragspilen med både riktning och gatunamn inför nästa sväng.
+- [ ] 92. Visa en bild av rätt dörr när spelaren står mellan två möjliga butiksentréer.
+- [ ] 93. Ge trafikljushjälpen olika symboler för stanna och kör så att instruktionen går att följa i gråskala.
+- [ ] 94. Låt spelaren provlyssna på en kort replik direkt när talvolymen ändras i inställningarna.
+- [ ] 95. Lägg till ett bildstöd som visar var en avslagen radio slås på från förarplatsen.
+- [ ] 96. Prova hela vägen från startmenyn till ett köp och tillbaka med enbart tangentbord. Rätta de fokussteg som fastnar.
+- [ ] 97. Kontrollera att alla sju språk ryms på leveranskvittot i liten fönsterstorlek och med stor text.
+- [ ] 98. Låt pausmenyn visa det senaste uppdragssteget med samma bild som i telefonen.
+- [ ] 99. Mät bildtider på kajen medan färjan passerar och tre personer spelar boule. Jämför dag och natt från samma plats.
+- [ ] 100. Spela igenom en leverans från början till slut med musik och trafik igång. Anteckna exakt var en replik blir svår att höra och justera mixen där.
