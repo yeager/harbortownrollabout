@@ -7940,6 +7940,7 @@ func _build_overlay() -> void:
 	horn_binding.toggled.connect(func(enabled: bool):
 		horn_f4 = enabled
 		_save_preferences()
+		_refresh_ui()
 	)
 	pages[2].add_child(horn_binding)
 	var view_binding := CheckButton.new()
@@ -9235,7 +9236,12 @@ func _refresh_ui() -> void:
 		camera_caption = tr("Outside view · C") if excavator_work_view else tr("Bucket view · C")
 	camera_button.text = camera_caption + (" / F6" if camera_f6 else "")
 	horn_button.visible = not show_overlay and (tram_mode==2 or (tram_mode==0 and (boating or not walker.visible)))
-	horn_button.text = "Tram bell · H" if tram_mode==2 else tr("Ice cream chime · H") if vehicle_index == ICE_CREAM and not boating else "Horn · H"
+	var horn_caption := tr("Horn · H")
+	if tram_mode == 2:
+		horn_caption = tr("Tram bell · H")
+	elif vehicle_index == ICE_CREAM and not boating:
+		horn_caption = tr("Ice cream chime · H")
+	horn_button.text = horn_caption + (" / F4" if horn_f4 else "")
 	seat_button.visible = not show_overlay and not boating
 	light_button.visible = tram_mode == 0 and not boating and not walker.visible and (vehicle_index < 3 or vehicle_index in [XC60_POLICE, FARM_TRACTOR])
 	siren_button.visible = tram_mode == 0 and not boating and not walker.visible
