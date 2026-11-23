@@ -70,10 +70,10 @@ msgstr "Tauko"
 
 msgid ""
 "{up} / ↑  Drive     {left} {right} / ← →  Steer     {down} / ↓  Brake or reverse\n"
-"Release to slow down   ·   Space to help   ·   {pause} to pause"
+"Release to slow down   ·   {help} to help   ·   {pause} to pause"
 msgstr ""
 "{up} / ↑  Aja     {left} {right} / ← →  Ohjaa     {down} / ↓  Jarruta tai peruuta\n"
-"Hidasta päästämällä irti   ·   Auta välilyönnillä   ·   {pause} keskeyttää pelin"
+"Hidasta päästämällä irti   ·   Auta painamalla näppäintä {help}   ·   {pause} keskeyttää pelin"
 
 msgid "Start a gentle drive"
 msgstr "Lähde rauhalliselle ajelulle"
@@ -251,8 +251,8 @@ msgstr "Kävele pysäköidyn ajoneuvon luo, niin pääset kyytiin."
 msgid "Stand here to help"
 msgstr "Seiso täällä auttaaksesi."
 
-msgid "Press Space to help"
-msgstr "Paina tilaa auttaaksesi"
+msgid "Press {help} to help"
+msgstr "Auta painamalla näppäintä {help}"
 
 msgid "My vehicle · Flashing"
 msgstr "Oma ajoneuvo · Vilkkuva sinivalo"
@@ -565,11 +565,11 @@ msgstr "Autoa nostetaan lavalle…"
 msgid "Unloading the car …"
 msgstr "Autoa lasketaan lavalta…"
 
-msgid "Press Space to load the car."
-msgstr "Nosta auto lavalle painamalla välilyöntiä."
+msgid "Press {help} to load the car."
+msgstr "Nosta auto lavalle painamalla näppäintä {help}."
 
-msgid "Press Space to unload the car."
-msgstr "Laske auto lavalta painamalla välilyöntiä."
+msgid "Press {help} to unload the car."
+msgstr "Laske auto lavalta painamalla näppäintä {help}."
 
 msgid "Stop for your passenger."
 msgstr "Pysähdy matkustajan kohdalle."
@@ -583,11 +583,11 @@ msgstr "Matkustaja nousee kyytiin…"
 msgid "Your passenger is getting out …"
 msgstr "Matkustaja poistuu kyydistä…"
 
-msgid "Press Space to pick up your passenger."
-msgstr "Paina välilyöntiä, niin matkustaja pääsee kyytiin."
+msgid "Press {help} to pick up your passenger."
+msgstr "Paina näppäintä {help}, niin matkustaja pääsee kyytiin."
 
-msgid "Press Space to let your passenger out."
-msgstr "Paina välilyöntiä, niin matkustaja pääsee pois kyydistä."
+msgid "Press {help} to let your passenger out."
+msgstr "Paina näppäintä {help}, niin matkustaja pääsee pois kyydistä."
 
 msgid "Return to your taxi"
 msgstr "Palaa taksille"
@@ -1876,3 +1876,9 @@ msgstr "Ctrl"
 
 msgid "Help at mission stops with Insert"
 msgstr "Auta tehtäväkohteissa Insert-näppäimellä"
+
+msgid "Space"
+msgstr "Välilyönti"
+
+msgid "Insert"
+msgstr "Insert"

@@ -70,10 +70,10 @@ msgstr "Pause"
 
 msgid ""
 "{up} / ↑  Drive     {left} {right} / ← →  Steer     {down} / ↓  Brake or reverse\n"
-"Release to slow down   ·   Space to help   ·   {pause} to pause"
+"Release to slow down   ·   {help} to help   ·   {pause} to pause"
 msgstr ""
 "{up} / ↑  Kjør     {left} {right} / ← →  Styr     {down} / ↓  Brems eller rygg\n"
-"Slipp for å senke farten   ·   Mellomrom for å hjelpe   ·   {pause} for pause"
+"Slipp for å senke farten   ·   {help} for å hjelpe   ·   {pause} for pause"
 
 msgid "Start a gentle drive"
 msgstr "Start en rolig kjøretur"
@@ -251,8 +251,8 @@ msgstr "Gå bort til et parkert kjøretøy for å sette deg inn."
 msgid "Stand here to help"
 msgstr "Stå her for å hjelpe"
 
-msgid "Press Space to help"
-msgstr "Trykk på plass for å hjelpe"
+msgid "Press {help} to help"
+msgstr "Trykk på {help} for å hjelpe"
 
 msgid "My vehicle · Flashing"
 msgstr "Mitt kjøretøy · Blinkende blålys"
@@ -568,11 +568,11 @@ msgstr "Bilen lastes på …"
 msgid "Unloading the car …"
 msgstr "Bilen losses …"
 
-msgid "Press Space to load the car."
-msgstr "Trykk på mellomrom for å laste bilen på planet."
+msgid "Press {help} to load the car."
+msgstr "Trykk på {help} for å laste bilen på planet."
 
-msgid "Press Space to unload the car."
-msgstr "Trykk på mellomrom for å losse bilen."
+msgid "Press {help} to unload the car."
+msgstr "Trykk på {help} for å losse bilen."
 
 msgid "Stop for your passenger."
 msgstr "Stopp ved passasjeren din."
@@ -586,11 +586,11 @@ msgstr "Passasjeren setter seg inn …"
 msgid "Your passenger is getting out …"
 msgstr "Passasjeren går ut …"
 
-msgid "Press Space to pick up your passenger."
-msgstr "Trykk på mellomromstasten for å slippe passasjeren inn."
+msgid "Press {help} to pick up your passenger."
+msgstr "Trykk på {help} for å slippe passasjeren inn."
 
-msgid "Press Space to let your passenger out."
-msgstr "Trykk på mellomromstasten for å slippe passasjeren ut."
+msgid "Press {help} to let your passenger out."
+msgstr "Trykk på {help} for å slippe passasjeren ut."
 
 msgid "Return to your taxi"
 msgstr "Tilbake til drosjen din"
@@ -1880,3 +1880,9 @@ msgstr "Ctrl"
 
 msgid "Help at mission stops with Insert"
 msgstr "Hjelp til ved oppdragsmål med Insert"
+
+msgid "Space"
+msgstr "Mellomrom"
+
+msgid "Insert"
+msgstr "Insert"

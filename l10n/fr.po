@@ -70,10 +70,10 @@ msgstr "Pause"
 
 msgid ""
 "{up} / ↑  Drive     {left} {right} / ← →  Steer     {down} / ↓  Brake or reverse\n"
-"Release to slow down   ·   Space to help   ·   {pause} to pause"
+"Release to slow down   ·   {help} to help   ·   {pause} to pause"
 msgstr ""
 "{up} / ↑  Avancer     {left} {right} / ← →  Tourner     {down} / ↓  Freiner ou reculer\n"
-"Relâche pour ralentir   ·   Espace pour aider   ·   {pause} pour la pause"
+"Relâche pour ralentir   ·   {help} pour aider   ·   {pause} pour la pause"
 
 msgid "Start a gentle drive"
 msgstr "Partir en balade"
@@ -251,8 +251,8 @@ msgstr "Approche-toi d’un véhicule garé pour monter à bord."
 msgid "Stand here to help"
 msgstr "Reste ici pour aider"
 
-msgid "Press Space to help"
-msgstr "Appuie sur Espace pour aider"
+msgid "Press {help} to help"
+msgstr "Appuie sur {help} pour aider"
 
 msgid "My vehicle · Flashing"
 msgstr "Mon véhicule · Gyrophares clignotants"
@@ -574,11 +574,11 @@ msgstr "Chargement de la voiture…"
 msgid "Unloading the car …"
 msgstr "Déchargement de la voiture…"
 
-msgid "Press Space to load the car."
-msgstr "Appuie sur la barre d’espace pour charger la voiture."
+msgid "Press {help} to load the car."
+msgstr "Appuie sur {help} pour charger la voiture."
 
-msgid "Press Space to unload the car."
-msgstr "Appuie sur la barre d’espace pour décharger la voiture."
+msgid "Press {help} to unload the car."
+msgstr "Appuie sur {help} pour décharger la voiture."
 
 msgid "Stop for your passenger."
 msgstr "Arrête-toi près de ton passager."
@@ -592,11 +592,11 @@ msgstr "Ton passager monte…"
 msgid "Your passenger is getting out …"
 msgstr "Ton passager descend…"
 
-msgid "Press Space to pick up your passenger."
-msgstr "Appuie sur la barre d’espace pour faire monter ton passager."
+msgid "Press {help} to pick up your passenger."
+msgstr "Appuie sur {help} pour faire monter ton passager."
 
-msgid "Press Space to let your passenger out."
-msgstr "Appuie sur la barre d’espace pour faire descendre ton passager."
+msgid "Press {help} to let your passenger out."
+msgstr "Appuie sur {help} pour faire descendre ton passager."
 
 msgid "Return to your taxi"
 msgstr "Retourne à ton taxi"
@@ -1895,3 +1895,9 @@ msgstr "Ctrl"
 
 msgid "Help at mission stops with Insert"
 msgstr "Aider aux étapes de la mission avec Inser"
+
+msgid "Space"
+msgstr "Espace"
+
+msgid "Insert"
+msgstr "Inser"

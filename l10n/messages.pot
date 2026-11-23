@@ -67,7 +67,7 @@ msgstr ""
 msgid "Pause"
 msgstr ""
 
-msgid "{up} / ↑  Drive     {left} {right} / ← →  Steer     {down} / ↓  Brake or reverse\nRelease to slow down   ·   Space to help   ·   {pause} to pause"
+msgid "{up} / ↑  Drive     {left} {right} / ← →  Steer     {down} / ↓  Brake or reverse\nRelease to slow down   ·   {help} to help   ·   {pause} to pause"
 msgstr ""
 
 msgid "Start a gentle drive"
@@ -232,7 +232,7 @@ msgstr ""
 msgid "Stand here to help"
 msgstr ""
 
-msgid "Press Space to help"
+msgid "Press {help} to help"
 msgstr ""
 
 msgid "My vehicle · Flashing"
@@ -538,10 +538,10 @@ msgstr ""
 msgid "Unloading the car …"
 msgstr ""
 
-msgid "Press Space to load the car."
+msgid "Press {help} to load the car."
 msgstr ""
 
-msgid "Press Space to unload the car."
+msgid "Press {help} to unload the car."
 msgstr ""
 
 msgid "Stop for your passenger."
@@ -556,10 +556,10 @@ msgstr ""
 msgid "Your passenger is getting out …"
 msgstr ""
 
-msgid "Press Space to pick up your passenger."
+msgid "Press {help} to pick up your passenger."
 msgstr ""
 
-msgid "Press Space to let your passenger out."
+msgid "Press {help} to let your passenger out."
 msgstr ""
 
 msgid "Return to your taxi"
@@ -1808,4 +1808,10 @@ msgid "Ctrl"
 msgstr ""
 
 msgid "Help at mission stops with Insert"
+msgstr ""
+
+msgid "Space"
+msgstr ""
+
+msgid "Insert"
 msgstr ""

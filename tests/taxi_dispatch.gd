@@ -55,6 +55,14 @@ func check_fare() -> void:
 		return
 
 	game.ambulance.position = dropoff
+	TranslationServer.set_locale("sv")
+	game.message_timer = 0
+	game.gentle_driving = false
+	game._refresh_ui()
+	if not game.driving_hints.text.contains("Insert för att hjälpa") or game.status_label.text != "Tryck på Insert för att släppa av passageraren.":
+		printerr("Unexpected Swedish driving or drop-off hint: ", game.status_label.text, " / ", game.driving_hints.text)
+		quit(1)
+		return
 	help_key.keycode = KEY_INSERT
 	game._unhandled_key_input(help_key)
 	if game.wallet != initial_wallet + 15:

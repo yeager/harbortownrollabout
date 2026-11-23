@@ -4928,6 +4928,7 @@ func _movement_hint(text: String) -> String:
 	keys["seat"] = "F / F3" if seat_f3 else "F"
 	keys["horn"] = "H / F4" if horn_f4 else "H"
 	keys["pause"] = "P / F7" if pause_f7 else "P"
+	keys["help"] = tr("Insert") if insert_help else tr("Space")
 	return text.format(keys)
 
 func _with_recovery_hint(controls: String) -> String:
@@ -8097,7 +8098,7 @@ func _build_ui() -> void:
 	seat_button.pressed.connect(_change_seat)
 	var help := driving_hints
 	help.name = "DrivingHints"
-	help.text = "{up} / ↑  Drive     {left} {right} / ← →  Steer     {down} / ↓  Brake or reverse\nRelease to slow down   ·   Space to help   ·   {pause} to pause"
+	help.text = "{up} / ↑  Drive     {left} {right} / ← →  Steer     {down} / ↓  Brake or reverse\nRelease to slow down   ·   {help} to help   ·   {pause} to pause"
 	help.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_WIDE)
 	help.offset_top = -50
 	help.offset_left = 12
@@ -8517,6 +8518,7 @@ func _build_overlay() -> void:
 	help.toggled.connect(func(enabled: bool):
 		insert_help = enabled
 		_save_preferences()
+		_refresh_ui()
 	)
 	pages[2].add_child(help)
 	var phone_key := CheckButton.new()
@@ -9983,7 +9985,7 @@ func _refresh_ui() -> void:
 	elif free_drive:
 		hints.text = "{up} / ↑ Drive   ·   {left} {right} / ← → Steer   ·   {down} / ↓ Brake or reverse   ·   {seat} Get out   ·   {pause} Pause"
 	else:
-		hints.text = "{up} / ↑  Drive     {left} {right} / ← →  Steer     {down} / ↓  Brake or reverse\nRelease to slow down   ·   Space to help   ·   {pause} to pause"
+		hints.text = "{up} / ↑  Drive     {left} {right} / ← →  Steer     {down} / ↓  Brake or reverse\nRelease to slow down   ·   {help} to help   ·   {pause} to pause"
 	var camera_hint := tr("Hold V and move the mouse to look around")
 	if walker.visible and tram_mode == 0 and not boating and not ferry_passenger and shops.inside < 0:
 		camera_hint = tr("{up} / ↑ Accelerate · {down} / ↓ Brake · {left} / {right} Steer · {scooter} Fold scooter") if scooter.visible else tr("{scooter} Unfold scooter") + "   ·   " + camera_hint
@@ -10099,7 +10101,7 @@ func _refresh_status() -> void:
 	elif message_timer > 0 and message != "":
 		status_label.text = message
 	elif mode == "playing" and not paused and walker.visible and _at_target():
-		status_label.text = "Stand here to help" if gentle_driving else "Press Space to help"
+		status_label.text = "Stand here to help" if gentle_driving else _movement_hint(tr("Press {help} to help"))
 	elif mode == "playing" and not paused and _at_target():
 		if vehicle_index == RECOVERY:
 			var loading := recovery_leg % 2 == 0
@@ -10108,7 +10110,7 @@ func _refresh_status() -> void:
 			elif gentle_driving:
 				status_label.text = "Loading the car …" if loading else "Unloading the car …"
 			else:
-				status_label.text = "Press Space to load the car." if loading else "Press Space to unload the car."
+				status_label.text = _movement_hint(tr("Press {help} to load the car.")) if loading else _movement_hint(tr("Press {help} to unload the car."))
 		elif vehicle_index == TAXI:
 			var pickup := taxi_leg % 2 == 0
 			if absf(speed) >= .12:
@@ -10116,11 +10118,11 @@ func _refresh_status() -> void:
 			elif gentle_driving:
 				status_label.text = "Your passenger is getting in …" if pickup else "Your passenger is getting out …"
 			else:
-				status_label.text = "Press Space to pick up your passenger." if pickup else "Press Space to let your passenger out."
+				status_label.text = _movement_hint(tr("Press {help} to pick up your passenger.")) if pickup else _movement_hint(tr("Press {help} to let your passenger out."))
 		elif absf(speed) >= .12:
 			status_label.text = "Stop here to help."
 		else:
-			status_label.text = "Helping …" if gentle_driving else "Press Space to help"
+			status_label.text = "Helping …" if gentle_driving else _movement_hint(tr("Press {help} to help"))
 	elif waiting_for_signal and mode=="playing" and not paused and not walker.visible and not boating:
 		status_label.text = tr("Wait until the crossing is clear." if waiting_for_clear_crossing else "Waiting for a green light")
 	elif walker.visible and not boating and not paused:

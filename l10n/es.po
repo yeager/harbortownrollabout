@@ -70,10 +70,10 @@ msgstr "Pausa"
 
 msgid ""
 "{up} / ↑  Drive     {left} {right} / ← →  Steer     {down} / ↓  Brake or reverse\n"
-"Release to slow down   ·   Space to help   ·   {pause} to pause"
+"Release to slow down   ·   {help} to help   ·   {pause} to pause"
 msgstr ""
 "{up} / ↑  Avanza     {left} {right} / ← →  Gira     {down} / ↓  Frena o da marcha atrás\n"
-"Suelta para ir más despacio   ·   Espacio para ayudar   ·   {pause} para pausar"
+"Suelta para ir más d{help}   ·   {help} para ayudar   ·   {pause} para pausar"
 
 msgid "Start a gentle drive"
 msgstr "Dar un paseo tranquilo"
@@ -251,8 +251,8 @@ msgstr "Acércate a un vehículo aparcado para subir."
 msgid "Stand here to help"
 msgstr "Quédate aquí para ayudar"
 
-msgid "Press Space to help"
-msgstr "Espacio de prensa para ayudar"
+msgid "Press {help} to help"
+msgstr "Pulsa {help} para ayudar"
 
 msgid "My vehicle · Flashing"
 msgstr "Mi vehículo · Luz azul intermitente"
@@ -574,11 +574,11 @@ msgstr "Subiendo el coche…"
 msgid "Unloading the car …"
 msgstr "Bajando el coche…"
 
-msgid "Press Space to load the car."
-msgstr "Pulsa la barra espaciadora para subir el coche a la grúa."
+msgid "Press {help} to load the car."
+msgstr "Pulsa {help} para subir el coche a la grúa."
 
-msgid "Press Space to unload the car."
-msgstr "Pulsa la barra espaciadora para bajar el coche de la grúa."
+msgid "Press {help} to unload the car."
+msgstr "Pulsa {help} para bajar el coche de la grúa."
 
 msgid "Stop for your passenger."
 msgstr "Para junto a tu pasajero."
@@ -592,11 +592,11 @@ msgstr "Tu pasajero está subiendo…"
 msgid "Your passenger is getting out …"
 msgstr "Tu pasajero está bajando…"
 
-msgid "Press Space to pick up your passenger."
-msgstr "Pulsa la barra espaciadora para que suba tu pasajero."
+msgid "Press {help} to pick up your passenger."
+msgstr "Pulsa {help} para que suba tu pasajero."
 
-msgid "Press Space to let your passenger out."
-msgstr "Pulsa la barra espaciadora para que baje tu pasajero."
+msgid "Press {help} to let your passenger out."
+msgstr "Pulsa {help} para que baje tu pasajero."
 
 msgid "Return to your taxi"
 msgstr "Regresa a tu taxi"
@@ -1887,3 +1887,9 @@ msgstr "Ctrl"
 
 msgid "Help at mission stops with Insert"
 msgstr "Ayudar en las paradas de la misión con Insert"
+
+msgid "Space"
+msgstr "Espacio"
+
+msgid "Insert"
+msgstr "Insert"
