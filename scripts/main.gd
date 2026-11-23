@@ -5985,8 +5985,9 @@ func _load_vehicle_model() -> void:
 			arm.reparent(pivot)
 			blades[i].reparent(pivot)
 			wiper_pivots.append(pivot)
-	if vehicle_index in [3, PORSCHE, MOWER]:
+	if vehicle_index in [2, 3, PORSCHE, MOWER]:
 		var rim_name := "Steering wheel" if vehicle_index == MOWER else "Steering wheel rim*"
+		if vehicle_index == 2: rim_name = "Crew cab steering rim*"
 		var rim := vehicle_model.find_child(rim_name,true,false) as MeshInstance3D
 		if rim:
 			cabin_wheel = Node3D.new()
@@ -6014,6 +6015,9 @@ func _load_vehicle_model() -> void:
 			var spoke_name := "Wheel spoke*" if vehicle_index == MOWER else "*steering spoke*"
 			for part in vehicle_model.find_children(spoke_name, "MeshInstance3D",true,false) + vehicle_model.find_children("Steering wheel*", "MeshInstance3D",true,false):
 				part.reparent(cabin_wheel)
+			if vehicle_index == 2:
+				rim.reparent(cabin_wheel)
+				vehicle_model.find_child("Crew steering crossbar*",true,false).reparent(cabin_wheel)
 
 	if vehicle_index in [3, PORSCHE]:
 		var screen := vehicle_model.find_child("Curved instrument screen*",true,false) as MeshInstance3D
@@ -6076,10 +6080,10 @@ func _load_vehicle_model() -> void:
 					tractor_beacon.emission = Color("#ff9a15")
 					body.set_surface_override_material(surface, tractor_beacon)
 	var beam_origins: Array[Vector3] = []
-	if vehicle_index in [SNOWMOBILE, PORSCHE, FARM_TRACTOR, SHOPPER, REFUSE]:
-		var lens_pattern: String = {PORSCHE:"Headlight lens*", SNOWMOBILE:"Headlight strip*", FARM_TRACTOR:"Projector lens*", SHOPPER:"Headlight lens*", REFUSE:"Headlight lens*"}[vehicle_index]
+	if vehicle_index in [2, SNOWMOBILE, PORSCHE, FARM_TRACTOR, SHOPPER, REFUSE]:
+		var lens_pattern: String = {2:"Swept transparent headlamp cover*", PORSCHE:"Headlight lens*", SNOWMOBILE:"Headlight strip*", FARM_TRACTOR:"Projector lens*", SHOPPER:"Headlight lens*", REFUSE:"Headlight lens*"}[vehicle_index]
 		for lens: MeshInstance3D in vehicle_model.find_children(lens_pattern, "MeshInstance3D", true, false):
-			if vehicle_index != SNOWMOBILE:
+			if vehicle_index not in [2, SNOWMOBILE]:
 				if not projector_finish:
 					projector_finish = lens.get_active_material(0).duplicate() as StandardMaterial3D
 					if vehicle_index == SHOPPER:
@@ -8425,6 +8429,8 @@ func _refresh_ui() -> void:
 		var on_moped := vehicle_index == PUCH_DAKOTA
 		road_driver.scale = Vector3.ONE * (.88 if play_as_alma else 1.0) * (1.0 if on_moped else .78)
 		road_driver.position = Vector3(0,.82-.77*road_driver.scale.y,.18) if vehicle_index==SNOWMOBILE else Vector3(-.32,.88-.87*road_driver.scale.y,-.04)
+		if vehicle_index == 2:
+			road_driver.position = Vector3(.57,1.69-.87*road_driver.scale.y,-2.53)
 		if vehicle_index == FOOD_TRUCK:
 			road_driver.position = Vector3(-.46,1.505-.87*road_driver.scale.y,-1.39)
 		if vehicle_index == MOWER:
@@ -8447,9 +8453,9 @@ func _refresh_ui() -> void:
 		road_driver.get_node("AxelShopperLegs").visible = vehicle_index == SHOPPER and not play_as_alma
 		road_driver.get_node("AlmaCabLegs").visible = vehicle_index == FOOD_TRUCK and play_as_alma
 		road_driver.get_node("AxelCabLegs").visible = vehicle_index == FOOD_TRUCK and not play_as_alma
-		road_driver.get_node("CarLegs").visible = vehicle_index in [3,PORSCHE,XC60_POLICE,MINI_CABRIO]
-		road_driver.visible = vehicle_index in [3,PORSCHE,SNOWMOBILE,XC60_POLICE,MINI_CABRIO,PUCH_DAKOTA,FOOD_TRUCK,MOWER,SHOPPER] and mode == "playing" and not walker.visible and not boating and tram_mode == 0 and not cockpit_view
-		if vehicle_index == SHOPPER and cabin_wheel:
+		road_driver.get_node("CarLegs").visible = vehicle_index in [2,3,PORSCHE,XC60_POLICE,MINI_CABRIO]
+		road_driver.visible = vehicle_index in [2,3,PORSCHE,SNOWMOBILE,XC60_POLICE,MINI_CABRIO,PUCH_DAKOTA,FOOD_TRUCK,MOWER,SHOPPER] and mode == "playing" and not walker.visible and not boating and tram_mode == 0 and not cockpit_view
+		if vehicle_index in [2,SHOPPER] and cabin_wheel:
 			_pose_driver_arms()
 	if skipper: skipper.visible = boating and mode == "playing"
 	if not is_instance_valid(mission_label): return

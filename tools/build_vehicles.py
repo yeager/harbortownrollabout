@@ -827,7 +827,7 @@ def make_fire_engine():
     mesh.from_pydata(vertices,[],faces)
     truck_glass=material("Laminated panoramic truck glass",(.072,.126,.136),.11,.15)
     shader=next(node for node in truck_glass.node_tree.nodes if node.type=="BSDF_PRINCIPLED")
-    shader.inputs["Alpha"].default_value=.48
+    shader.inputs["Alpha"].default_value=.70
     for finish in (PAINT_RED,truck_glass,RUBBER):
         mesh.materials.append(finish)
     mesh.polygons.foreach_set("material_index",finishes)
@@ -946,34 +946,56 @@ def make_fire_engine():
         for rib in range(17):
             cube("Rear shutter seam",(x,3.082,1.12+rib*.083),(.95,.008,.006),DARK,0,root)
         cube("Rear shutter lifting bar",(x,3.105,1.12),(.84,.05,.035),METAL,.009,root)
-    grille=[]
-    for z,w,d in ((1.202,.568,-2.984),(1.229,.598,-3.005),
-                  (1.34,.626,-3.017),(1.55,.673,-3.013),(1.685,.708,-3.004),
-                  (1.720,.695,-2.998)):
-        grille.append([(x*w,d+dy,z) for x,dy in
-                      ((-1,.063),(-1,.025),(-.94,.009),(-.52,.002),
-                       (0,0),(.52,.002),(.94,.009),(1,.025),(1,.063))])
-    profile_loft("Tapered grille recess",grille,RUBBER,root)
-    # Narrow cooling fins follow the front bow behind the five horizontal vanes.
-    fins=[]
-    for i in range(-17,18):
-        x=i*.034
-        z0=1.234+max(0,abs(x)-.50)*1.9
-        y=-3.021+.020*(x/.62)**2
-        fins.append(cube("Radiator cooling fin",(x,y,(z0+1.695)/2),
-                         (.009,.014,1.695-z0),DARK,.002,root))
-    bpy.ops.object.select_all(action="DESELECT")
-    for fin in fins:
-        fin.select_set(True)
-    bpy.context.view_layer.objects.active=fins[0]
-    bpy.ops.object.join()
-    for z,w in ((1.255,.565),(1.343,.594),(1.442,.615),(1.549,.640),(1.655,.665)):
-        vane=[]
-        for x in (-w,-.81*w,0,.81*w,w):
-            bow=.027*(x/w)**2
-            vane.append([(x,-3.025+bow+dy,z+dz) for dy,dz in
-                         ((.023,-.018),(.002,-.014),(-.009,.003),(-.004,.014),(.024,.017))])
-        profile_loft("Swept radiator blade",vane,PAINT_YELLOW if z in (1.255,1.442,1.655) else DARK,root)
+    # Each strip is cast across the face, turning back towards the two front corners.
+    def fascia(name, half_width, height, thickness, depth, corner_rise, finish):
+        rings = []
+        for i in range(33):
+            t = i / 16 - 1
+            u = abs(t)
+            x = t * half_width
+            y = depth + .055*u*u + .14*u**6
+            z = height + corner_rise * u**3
+            rings.append([(x,y+dy,z+dz*thickness) for dy,dz in
+                          ((.11,-.45),(.024,-.50),(0,-.38),(-.009,.12),
+                           (.003,.38),(.026,.50),(.11,.42))])
+        return profile_loft(name,rings,finish,root)
+
+    # Raised shoulders sweep from the windscreen corners into the lamp aprons.
+    for side in (-1,1):
+        cheek = []
+        for z,inner,outer,depth in (
+            (.78,.65,1.065,-3.098),(.85,.62,1.095,-3.122),
+            (1.08,.66,1.105,-3.115),(1.18,.72,1.102,-3.093),
+            (1.39,.80,1.103,-3.070),(1.54,.85,1.10,-3.048),
+            (1.67,.92,1.09,-3.014),(1.74,1.00,1.075,-2.964)):
+            cheek.append([(side*x,depth+dy,z) for x,dy in (
+                (inner,.12),(inner,.022),(inner+.016,.003),
+                (inner+(outer-inner)*.65,.018),(outer-.016,.056),
+                (outer,.094),(outer,.24),(inner,.24))])
+        profile_loft("Sculpted cab corner apron",cheek,PAINT_RED,root)
+        seal = []
+        for z,w,y in ((1.78,1.099,-2.937),(2.04,1.09,-2.873),(2.425,1.06,-2.765)):
+            seal.append([(side*w*x,y+dy,z) for x,dy in
+                         ((.91,.014),(.94,.033),(.978,.079),(.994,.128),
+                          (.985,.145),(.95,.075),(.91,.045))])
+        profile_loft("Wraparound windshield perimeter",seal,RUBBER,root)
+    fascia("Windshield scuttle",1.075,1.79,.085,-3.015,.025,RUBBER)
+    fascia("Cab brow over windshield",1.05,2.465,.08,-2.84,.012,BLACK)
+    fascia("Reflective eyebrow",1.035,2.512,.030,-2.828,.012,PAINT_YELLOW)
+    fascia("Upper cab pressing",1.09,1.64,.25,-3.065,.085,PAINT_RED)
+    for z,width,depth in ((1.37,.80,-3.086),(1.124,.73,-3.115)):
+        fascia("Recessed cooling aperture",width,z,.19,depth,.06,RUBBER)
+        fascia("Intake lower reflective lip",width*.99,z-.082,.032,depth-.018,.06,PAINT_YELLOW)
+        for offset in (-.035,.011,.055):
+            fascia("Perforated grille rail",width*.94,z+offset,.012,depth-.012,.06,DARK)
+    for side in (-1,1):
+        fascia_x = side*.91
+        pod = cube("Upper corner marker housing",(fascia_x,-2.984,1.675),(.31,.11,.12),BLACK,.043,root)
+        pod.rotation_euler.y = -side*.16
+        strip = cube("Upper corner running lamp",(fascia_x,-3.045,1.684),(.22,.012,.029),HEADLAMP,.009,root)
+        strip.rotation_euler.y = -side*.16
+    badge = text_obj("Rescue unit marking","711",(-.105,-3.088,1.606),.125,PAINT_WHITE,root=root)
+    badge.rotation_euler = (math.pi/2,0,0)
     for x in [-.56,.56]:
         cube("Beacon mounting foot",(x,-2.32,2.634),(.119,.191,.077),RUBBER,.018,root)
     layers=[]
@@ -1025,8 +1047,8 @@ def make_fire_engine():
                 angle=i*math.tau/32
                 c,sn=math.cos(angle),math.sin(angle)
                 u=cx+.5*w*math.copysign(abs(c)**.48,c)
-                z=cz+.5*h*math.copysign(abs(sn)**.48,sn)
-                ring.append((side*u,depth+.080*((u-.63)/.48)**2,z))
+                z=cz-.445+.5*h*math.copysign(abs(sn)**.48,sn)
+                ring.append((side*u,depth-.103+.080*((u-.63)/.48)**2,z))
             return ring
         shell=[light_ring(.866,1.424,w,h,d) for w,h,d in
                ((.480,.291,-2.914),(.478,.288,-2.982),(.463,.273,-3.012))]
@@ -1050,13 +1072,13 @@ def make_fire_engine():
     for x in (-1.13,-1.11,-1.04,-.88,-.69,-.54,0,.54,.69,.88,1.04,1.11,1.13):
         u=abs(x)/1.13
         setback=.031*u*u+.235*u**7
-        low=.626+.095*u**5
+        low=.355+.115*u**5
         bumper.append([(x,-3.115+setback+dy,z) for dy,z in
                        ((.265,low+.029),(.064,low),(.015,low+.025),(-.012,low+.078),
                         (-.018,.934),(-.007,1.013),(.021,1.052),(.060,1.062),(.264,1.030))])
     profile_loft("Wraparound crew cab bumper",bumper,PAINT_RED,root)
-    cube("Lower intake shadow",(0,-3.134,.833),(1.098,.034,.189),RUBBER,.036,root)
-    for z in (.795,.849):
+    cube("Lower intake shadow",(0,-3.134,.720),(1.098,.034,.152),RUBBER,.036,root)
+    for z in (.687,.743):
         cube("Lower intake grille",(0,-3.154,z),(1.014,.018,.015),DARK,.006,root)
     for side in (-1,1):
         # A recessed foothold below each lamp gives the crew access to the windscreen.
@@ -1066,8 +1088,12 @@ def make_fire_engine():
         for rib in range(5):
             cube("Step tread ridge",(x+(rib-2)*.061,-3.114,1.088),
                  (.018,.071,.009),DARK,.003,root)
-        cube("Fog light seal",(side*.862,-3.071,.856),(.210,.042,.128),BLACK,.023,root)
-        cube("Fog lens",(side*.862,-3.096,.856),(.164,.016,.077),GLASS_HI,.018,root)
+        cube("Fog light seal",(side*.862,-3.076,.606),(.210,.042,.128),BLACK,.023,root)
+        cube("Fog lens",(side*.862,-3.101,.606),(.164,.016,.077),GLASS_HI,.018,root)
+    cube("Number plate plinth",(0,-3.147,.49),(.49,.035,.13),BLACK,.014,root)
+    cube("Reflective registration plate",(0,-3.170,.49),(.46,.010,.104),PAINT_WHITE,.007,root)
+    plate = text_obj("Fleet registration","SJT 711",(-.192,-3.179,.457),.085,BLACK,root=root)
+    plate.rotation_euler = (math.pi/2,0,0)
     cube("Rear bumper",(0,3.1,.75),(2.33,.28,.19),DARK,.046,root)
     for side in (-1,1):
         cube("Rear crew footboard",(side*.64,3.16,.68),(.88,.33,.065),METAL,.018,root)

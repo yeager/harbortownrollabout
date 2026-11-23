@@ -44,8 +44,8 @@ func check_gallery() -> void:
 			printerr("Menu driving failed for ",tile.text," distance=",travel," turn=",turn)
 			quit(1)
 			return
-		if index in [game.SHOPPER, game.REFUSE]:
-			var lenses: Array = game.vehicle_model.find_children("Headlight lens*", "MeshInstance3D", true, false)
+		if index in [2, game.SHOPPER, game.REFUSE]:
+			var lenses: Array = game.vehicle_model.find_children("Swept transparent headlamp cover*" if index == 2 else "Headlight lens*", "MeshInstance3D", true, false)
 			if lenses.size() != (1 if index == game.SHOPPER else 2) or lenses.size() != game.headlights.size():
 				printerr("Headlight count differs from vehicle body")
 				quit(1)
