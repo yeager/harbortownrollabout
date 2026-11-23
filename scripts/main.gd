@@ -9080,6 +9080,34 @@ func _build_practice_yard() -> void:
 	for z in [105,115]:
 		_make_box("Stop line", Vector3(.4,.02,5), Vector3(-75,.01,z), Color.WHITE)
 
+	var cone := Node3D.new()
+	cone.name = "Practice cone"
+	add_child(cone)
+	_make_box("Weighted foot", Vector3(.44,.045,.44), Vector3.UP*.0225, Color("#292925"), false, cone)
+	var orange := _material(Color("#ff610d"),.54)
+	var white := _material(Color("#fff4de"),.31)
+	var levels := [Vector2(.045,.18), Vector2(.29,.117), Vector2(.42,.083), Vector2(.66,.022)]
+	for i in levels.size()-1:
+		var band := CylinderMesh.new()
+		band.bottom_radius = levels[i].y
+		band.top_radius = levels[i+1].y
+		band.height = levels[i+1].x-levels[i].x
+		band.radial_segments = 20
+		band.rings = 0
+		band.material = white if i == 1 else orange
+		var shell := MeshInstance3D.new()
+		shell.mesh = band
+		shell.position.y = (levels[i].x+levels[i+1].x)*.5
+		cone.add_child(shell)
+	cone.position = Vector3(-129.5,0,89.5)
+	for x in [-129.5,-114,-98,-82,-66.5]:
+		for z in [89.5,128.5]:
+			var spot := Vector3(x,0,z)
+			if spot == cone.position: continue
+			var copy := cone.duplicate() as Node3D
+			add_child(copy)
+			copy.position = spot
+
 func _start_practice() -> void:
 	if mode != "menu": return
 	if boating or tram_mode != 0 or start_in_excavator:
