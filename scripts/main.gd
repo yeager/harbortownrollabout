@@ -714,7 +714,7 @@ func _process(delta: float) -> void:
 	if not paused or not practice_hose.visible:
 		var hose_out := vehicle_index == 2 and practice_hose.visible
 		if is_instance_valid(driven_fire_locker):
-			driven_fire_locker.advance(delta,hose_out)
+			driven_fire_locker.advance(delta,hose_out,not walker.visible and speed < -.01)
 		parked_fire_locker.advance(delta,hose_out and walker.visible)
 	if mode == "playing" and not paused:
 		if happy_seconds > 0:

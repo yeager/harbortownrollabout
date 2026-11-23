@@ -1,5 +1,7 @@
 extends Node3D
 
+var work_lights: Array[SpotLight3D] = []
+var reflector_finish := StandardMaterial3D.new()
 var panel: MeshInstance3D
 var fittings: Array[MeshInstance3D] = []
 var closed_height := 0.0
@@ -9,6 +11,22 @@ func fit(model: Node3D) -> void:
 	panel = model.find_child("Roller shutter",true,false)
 	var carrier := panel.get_parent()
 	carrier.add_child(self)
+	reflector_finish.albedo_color = Color("#e9edf0")
+	reflector_finish.roughness = .23
+	reflector_finish.emission = Color("#ffefd2")
+	for reflector in model.find_children("Floodlight reflector*","MeshInstance3D",true,false):
+		reflector.material_override = reflector_finish
+	for lens: MeshInstance3D in model.find_children("Rear floodlight glazing*","MeshInstance3D",true,false):
+		var lamp := SpotLight3D.new()
+		carrier.add_child(lamp)
+		lamp.position = lens.transform * lens.get_aabb().get_center() + Vector3.FORWARD*.04
+		lamp.rotation_degrees.x = -35
+		lamp.spot_angle = 40
+		lamp.spot_range = 9
+		lamp.light_energy = 3
+		lamp.light_color = reflector_finish.emission
+		lamp.hide()
+		work_lights.append(lamp)
 	closed_height = -2.0*panel.get_aabb().position.y # The mesh origin is halfway up the closed blind.
 	for part in carrier.get_children():
 		if not part is MeshInstance3D: continue
@@ -35,7 +53,11 @@ func fit(model: Node3D) -> void:
 		coil.position = Vector3(-1.151,1.64,panel.position.z)
 		add_child(coil)
 
-func advance(delta: float, opening: bool) -> void:
+func advance(delta: float, opening: bool, reversing := false) -> void:
+	var active := opening or reversing
+	if reflector_finish.emission_enabled != active:
+		reflector_finish.emission_enabled = active
+		for lamp in work_lights: lamp.visible = active
 	var next := move_toward(lift,closed_height-.055 if opening else 0.0,delta*1.6)
 	if next == lift: return
 	lift = next
