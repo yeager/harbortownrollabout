@@ -1545,3 +1545,6 @@ msgstr ""
 
 msgid "Engines"
 msgstr ""
+
+msgid "Lower radio during speech"
+msgstr ""

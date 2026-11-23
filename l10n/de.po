@@ -1633,3 +1633,6 @@ msgstr "Radio"
 
 msgid "Engines"
 msgstr "Motoren"
+
+msgid "Lower radio during speech"
+msgstr "Radio beim Sprechen absenken"

@@ -1612,3 +1612,6 @@ msgstr "Radio"
 
 msgid "Engines"
 msgstr "Moottorit"
+
+msgid "Lower radio during speech"
+msgstr "Vaimenna radiota puheen aikana"

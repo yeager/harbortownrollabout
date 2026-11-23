@@ -11,7 +11,7 @@ De 50 förbättringarna från genomgången. En tom ruta är öppen. En punkt boc
 - [x] 05. Valbar textstorlek för pratbubblor, telefon och butiker utan avklippta knappar. Pratbubblor kan förstoras 40 procent i språkinställningarna. Text och bakgrund följs åt och valet har verifierats efter omstart. Butikernas textstorlek har också verifierats vid köp. Även telefonens rubriker, meddelanden och knappar följer valet. Telefonlayouten har kontrollerats på alla sju språk.
 - [x] 06. Valbar längre lästid för pratbubblor under Inställningar → Språk. Kattuppdragets svenska replik fick 10,4 sekunder mot normalt 5,2. Sparat val verifierat efter omstart.
 - [x] 07. Separata volymreglage för tal, radio och motorer. Kontrollerade i Godot med radion avstängd, tal på 35 procent och motorer på 80 procent efter omstart.
-- [ ] 08. Mjuk och justerbar dämpning av radion under tal. Ljudmixern har redan en kompressor styrd av talet.
+- [x] 08. Mjuk och justerbar dämpning av radion under tal. Separat radiokompressor med 500 ms återgång. Reglagets ytterlägen, mellanläge och sparade val verifierade i Godot.
 - [ ] 09. Samlat lugnt läge med stadiga varningsljus, lugnare ljud och stilla neon.
 - [ ] 10. Tangentbindningar som spelaren kan ändra.
 

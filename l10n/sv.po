@@ -1546,3 +1546,6 @@ msgstr "Radio"
 
 msgid "Engines"
 msgstr "Motorer"
+
+msgid "Lower radio during speech"
+msgstr "Sänk radion under tal"

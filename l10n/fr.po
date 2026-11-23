@@ -1631,3 +1631,6 @@ msgstr "Radio"
 
 msgid "Engines"
 msgstr "Moteurs"
+
+msgid "Lower radio during speech"
+msgstr "Atténuer la radio pendant les dialogues"

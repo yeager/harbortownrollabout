@@ -387,6 +387,7 @@ var tree_count := 0
 var traffic_data: Array[Dictionary] = []
 const SETTINGS_PATH := L10n.SETTINGS_PATH
 var language_preference := ""
+var radio_ducking := 100.0
 const MIX_CHANNELS := ["Speech", "Radio", "Engines"]
 var traffic_siren_volume := 100.0
 var traffic_light_mode := 0
@@ -6421,7 +6422,7 @@ func _build_overlay() -> void:
 	)
 	volume_row.add_child(traffic_volume)
 	pages[1].add_child(volume_row)
-	for channel: String in MIX_CHANNELS:
+	for channel: String in MIX_CHANNELS + ["Lower radio during speech"]:
 		var row := HBoxContainer.new()
 		row.alignment = BoxContainer.ALIGNMENT_CENTER
 		var caption := Label.new()
@@ -6433,9 +6434,12 @@ func _build_overlay() -> void:
 		slider.accessibility_name = channel
 		slider.custom_minimum_size.x = 180
 		slider.step = 5
-		slider.value = _channel_volume(channel)
+		slider.value = radio_ducking if channel == "Lower radio during speech" else _channel_volume(channel)
 		slider.value_changed.connect(func(percent: float):
-			_apply_channel_volume(channel, percent)
+			if channel == "Lower radio during speech":
+				_set_radio_ducking(percent)
+			else:
+				_apply_channel_volume(channel, percent)
 			_save_preferences()
 		)
 		row.add_child(slider)
@@ -7017,6 +7021,7 @@ func _load_preferences() -> void:
 		traffic_light_mode = clampi(mode_value,0,2)
 	for channel: String in MIX_CHANNELS:
 		_apply_channel_volume(channel, float(config.get_value("audio",channel.to_lower(),100)))
+	_set_radio_ducking(float(config.get_value("audio","radio_ducking",100)))
 	traffic_siren_volume = clampf(float(config.get_value("audio","traffic_sirens",100)),0,100)
 	var volume_value = config.get_value("audio","volume",100)
 	if volume_value is float or volume_value is int:
@@ -7038,6 +7043,7 @@ func _save_preferences() -> void:
 	for channel: String in MIX_CHANNELS:
 		config.set_value("audio", channel.to_lower(), roundi(_channel_volume(channel)))
 	config.set_value("audio","volume",roundi(volume))
+	config.set_value("audio","radio_ducking",roundi(radio_ducking))
 	config.set_value("audio","traffic_sirens",roundi(traffic_siren_volume))
 	config.set_value("world","season",weather.season_setting)
 	config.set_value("world","weather",weather.weather_setting)
@@ -7060,6 +7066,12 @@ func _set_handling(index: int) -> void:
 func _set_traffic_light_mode(index: int) -> void:
 	traffic_light_mode = index
 	_save_preferences()
+
+func _set_radio_ducking(percent: float) -> void:
+	radio_ducking = clampf(percent, 0, 100)
+	var index := AudioServer.get_bus_index("Radio")
+	var compressor := AudioServer.get_bus_effect(index, 0) as AudioEffectCompressor
+	compressor.mix = radio_ducking / 100.0
 
 func _channel_volume(channel: String) -> float:
 	var index := AudioServer.get_bus_index(channel)
