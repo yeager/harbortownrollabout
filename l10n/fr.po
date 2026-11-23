@@ -1751,3 +1751,6 @@ msgstr "Quitter le jeu · F8"
 
 msgid "Quit with F8"
 msgstr "Quitter avec F8"
+
+msgid "Also use F3 to enter or leave vehicles"
+msgstr "Utiliser aussi F3 pour monter dans un véhicule ou en descendre"

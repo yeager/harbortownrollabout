@@ -52,7 +52,7 @@ Click a vehicle picture, choose Axel or Alma, then select **Start driving**. Hol
 
 | To do this | Press |
 | --- | --- |
-| Get in or out of a vehicle | F |
+| Get in or out of a vehicle | F (or enable F3 in Driving settings) |
 | Return to a safe spot if you get stuck on foot or in a vehicle | R |
 | Jump on foot | E |
 | Raise or lower the camera on foot | Page Up or Page Down |

@@ -1732,3 +1732,6 @@ msgstr "Lopeta peli · F8"
 
 msgid "Quit with F8"
 msgstr "Lopeta F8-näppäimellä"
+
+msgid "Also use F3 to enter or leave vehicles"
+msgstr "Nouse ajoneuvoon tai poistu siitä myös F3-näppäimellä"

@@ -1665,3 +1665,6 @@ msgstr ""
 
 msgid "Quit with F8"
 msgstr ""
+
+msgid "Also use F3 to enter or leave vehicles"
+msgstr ""
