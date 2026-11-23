@@ -65,5 +65,5 @@ De 50 förbättringarna från genomgången. En tom ruta är öppen. En punkt boc
 - [ ] 46. Visa med bilder vad som gav poäng och mynt efter uppdraget.
 - [ ] 47. Bygg och provstarta Linux-paket på en äldre stödd distribution än dagens glibc 2.44-krav.
 - [ ] 48. Publicera provstartade Windows- och Mac-paket med direkta nedladdningslänkar. Senaste byggjobbet stoppades av GitHubs betalnings- eller utgiftsgräns.
-- [ ] 49. Mät bildtider under en reproducerbar färd förbi macken med kvällsljus, trafik och regn.
+- [x] 49. Mät bildtider under en reproducerbar färd förbi macken med kvällsljus, trafik och regn. Mätt med `tools/station_frame_times.gd` i Godot 4.7 dev, Compatibility, Radeon Renoir, 1920 × 1080. Efter uppvärmning mättes 240 bilder över 48 meter med tio trafikfordon. Median 40,14 ms, 95:e percentilen 51,09 ms och längst 76,77 ms. Den körningen avslutades normalt. Vissa upprepningar kraschade, även vid avslut.
 - [ ] 50. Speltesta med barn utan muntlig vägledning. Observera val av favoritbil, korvköp och återgång till bilen. Kräver en medverkande familj.
