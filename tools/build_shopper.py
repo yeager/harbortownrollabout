@@ -145,6 +145,10 @@ for y in (.59,.93):
     box("Exhaust hanger",(.414,y,.256),(.023,.027,.086),v.DARK,.004)
 tube("Exhaust outlet",(.426,1.01,.202),(.426,1.12,.194),.022,v.METAL)
 tube("Dark outlet bore",(.426,1.12,.194),(.426,1.121,.194),.016,v.BLACK)
+# A trailing rubber flap hangs from the deck behind the single rear tyre.
+flap = box("Rear mud flap", (0,1.147,.203), (.216,.018,.211), v.RUBBER, .008)
+flap.rotation_euler.x = math.radians(13)
+box("Mud flap retaining strip", (0,1.132,.293), (.215,.025,.028), v.METAL, .004)
 box("Tail lamp",(0,1.16,.43),(.14,.035,.06),v.TAIL_LAMP)
 v.export_vehicle(root,"shopping_trike.glb")
 if os.getenv("SHOPPER_PORTRAIT"):
