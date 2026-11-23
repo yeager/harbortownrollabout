@@ -5920,6 +5920,8 @@ func _load_vehicle_model() -> void:
 			if vehicle_index != SNOWMOBILE:
 				if not projector_finish:
 					projector_finish = lens.get_active_material(0).duplicate() as StandardMaterial3D
+					if vehicle_index == SHOPPER:
+						projector_finish.vertex_color_use_as_albedo = true
 					projector_finish.emission_enabled = true
 					projector_finish.emission = Color("#fff0d9")
 					projector_finish.emission_energy_multiplier = 3.0*maxf(last_night,0)

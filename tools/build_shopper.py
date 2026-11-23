@@ -85,7 +85,20 @@ for row in range(rows):
     faces.append((tip-rows-1+row,tip,tip-rows+row))
 mesh = bpy.data.meshes.new("Fluted glass reflector lens")
 mesh.from_pydata(vertices, [], faces)
-mesh.materials.append(v.material("Fluted headlamp glass",(.79,.83,.81),.28,.17))
+mesh.materials.append(v.material("Fluted headlamp glass",(.46,.53,.52),.38,.20))
+# Alternating reflector highlights remain readable when the flutes are subpixel.
+reflection = mesh.color_attributes.new(name="Reflector",type="FLOAT_COLOR",domain="POINT")
+for vertex, sample in zip(mesh.vertices, reflection.data):
+    u = vertex.co.x / lens_radius
+    height = (vertex.co.z-.58) / lens_radius
+    ridge = .5 + .5*math.cos(math.pi*8*u)
+    centre = max(0.0,1-u*u-height*height)
+    tone = .25 + .30*ridge + .15*centre
+    sample.color = (tone,tone,tone,1)
+shader = mesh.materials[0].node_tree
+color = shader.nodes.new("ShaderNodeVertexColor")
+color.layer_name = reflection.name
+shader.links.new(color.outputs["Color"],next(n for n in shader.nodes if n.type=="BSDF_PRINCIPLED").inputs["Base Color"])
 lens = bpy.data.objects.new("Headlight lens",mesh)
 bpy.context.collection.objects.link(lens)
 lens.parent = root
