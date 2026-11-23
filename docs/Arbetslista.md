@@ -118,7 +118,7 @@ Listan innehåller 100 jobb. En tom ruta är öppen. En punkt bockas av när bet
 - [ ] 85. Ge färjan en ombordstigningssignal som både syns och hörs innan avgång.
 - [ ] 86. Sätt ut en vindstrut på kajen och låt den vrida sig när vindriktningen ändras.
 - [ ] 87. Gör cykelns trampor rörliga och låt fötterna följa dem ett helt varv vid trampning.
-- [ ] 88. Ge shoppingmopedens vindrutetorkare ett svep som håller sig inom glasets kanter.
+- [x] 88. Shoppingmopedens vindrutetorkare följer det välvda glaset vid nederbörd och återgår till viloläget när det blir torrt. Kontrollerat i 120 steg över ett helt svep och med en närbild i spelet.
 - [ ] 89. Låt spelaren spola av leran på ett fordon vid macken och se den rena lacken växa fram.
 - [ ] 90. Låt ett trafikfordon lämna lucka åt en buss som blinkar ut från hållplatsen. Prova även med kö bakom bussen.
 

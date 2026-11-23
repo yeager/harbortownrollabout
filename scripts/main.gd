@@ -108,6 +108,12 @@ var speech_locale := ""
 var bubble_time := 0.0
 var greeting_voice := AudioStreamPlayer.new()
 var wiper_pivots: Array[Node3D] = []
+const SHOPPER_WIPER_SEGMENTS := [
+	[Vector2(-.58,1), Vector2(-.09,.65)], # Spindle to blade joint
+	[Vector2(.15,.45), Vector2(-.09,.65)], # Lower rubber strip
+	[Vector2(-.09,.65), Vector2(-.33,.85)] # Upper rubber strip
+]
+var shopper_wiper_parts: Array[MeshInstance3D] = []
 var wiper_phase := 0.0
 var cockpit_look := Vector2.ZERO
 var orbit_angle := 0.0
@@ -5933,7 +5939,7 @@ func _set_rear_lights(lens: StandardMaterial3D, braking: bool) -> void:
 			centre.emission_energy_multiplier = 2.4
 
 func _advance_wipers(delta: float) -> void:
-	if wiper_pivots.is_empty(): return
+	if wiper_pivots.is_empty() and shopper_wiper_parts.is_empty(): return
 	var precipitation := maxf(weather.intensity.x,weather.intensity.y)
 	if precipitation < .06 and is_zero_approx(wiper_phase): return
 	var next_phase := wiper_phase + delta*lerpf(2.0,5.4,precipitation)
@@ -5941,6 +5947,33 @@ func _advance_wipers(delta: float) -> void:
 	var sweep := .64*(1.0-cos(wiper_phase))
 	for pivot in wiper_pivots:
 		pivot.basis = Basis(Vector3(0,.77,.64).normalized(),sweep)
+
+	# Follow the Shopper's curved acrylic in the opening shell's local space.
+	if not shopper_wiper_parts.is_empty():
+		var angle := -.46*(1.0-cos(wiper_phase))
+		for i in shopper_wiper_parts.size():
+			var a: Vector2 = SHOPPER_WIPER_SEGMENTS[i][0]
+			var b: Vector2 = SHOPPER_WIPER_SEGMENTS[i][1]
+			var part := shopper_wiper_parts[i]
+			var rest: Transform3D = part.get_meta("parked_transform")
+			var rest_start := _shopper_screen_point(a,0)
+			var rest_end := _shopper_screen_point(b,0)
+			var original := rest_end-rest_start
+			var start := _shopper_screen_point(a,angle)
+			var end := _shopper_screen_point(b,angle)
+			var axis := end-start
+			part.basis = Basis(Quaternion(original.normalized(),axis.normalized())) * rest.basis
+			part.basis.y *= axis.length()/original.length()
+			part.position = rest.origin + (start+end-rest_start-rest_end)*.5
+
+func _shopper_screen_point(uv: Vector2, angle: float) -> Vector3:
+	# Rotate in metres on the sloping pane, then project onto build_shopper.py's surface.
+	var spindle := Vector2(-.58,1)
+	var dimensions := Vector2(.405,.687)
+	var projected := spindle + ((uv-spindle)*dimensions).rotated(angle)/dimensions
+	var u := projected.x
+	var t := projected.y
+	return Vector3(u*(.418-.026*t), .916+.603*t-.018*u*u, .448-.33*t-.09*u*u)
 
 func _fit_bus_interior() -> void:
 	var cabin := vehicle_model.find_child("Cabin",true,false) as MeshInstance3D
@@ -5977,6 +6010,7 @@ func _fit_bus_interior() -> void:
 
 func _load_vehicle_model() -> void:
 	wiper_pivots.clear()
+	shopper_wiper_parts.clear()
 	wiper_phase = 0.0
 	cockpit_view = false
 	if is_instance_valid(vehicle_model):
@@ -6014,6 +6048,11 @@ func _load_vehicle_model() -> void:
 	reverse_camera = null
 	cabin_wheel = null
 	shopper_grip_points.clear()
+	if vehicle_index == SHOPPER:
+		for part_name in ["Wiper arm","Wiper blade lower","Wiper blade upper"]:
+			var part := vehicle_model.find_child(part_name,true,false) as MeshInstance3D
+			part.set_meta("parked_transform",part.transform)
+			shopper_wiper_parts.append(part)
 	if vehicle_index == 3:
 		var arms := vehicle_model.find_children("Wiper arm*","MeshInstance3D",true,false)
 		var blades := vehicle_model.find_children("Windscreen wiper blade*","MeshInstance3D",true,false)

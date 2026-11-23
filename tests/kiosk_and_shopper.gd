@@ -24,6 +24,32 @@ func check() -> void:
 	game.vehicle_selector.get_child(game.SHOPPER).pressed.emit()
 	game.start_button.pressed.emit()
 	var hinge = game.vehicle_model.find_child("EntryHinge",true,false)
+	# Inspect both ends of each imported rod throughout a complete wet sweep.
+	var parked_arm: Transform3D = game.shopper_wiper_parts[0].transform
+	game.weather.intensity = Vector2(1,0)
+	for frame in 120:
+		game._advance_wipers(TAU/5.4/120)
+		for part: MeshInstance3D in game.shopper_wiper_parts:
+			var bounds := part.get_aabb()
+			for y: float in [bounds.position.y,bounds.end.y]:
+				var point: Vector3 = hinge.transform * part.transform * Vector3(0,y,0)
+				var t := (point.y-.916)/.603
+				var u := point.x/(.418-.026*t)
+				t += .018*u*u/.603
+				if absf(u)>1.001 or t < -.001 or t > 1.001 or absf(point.z-(.448-.33*t-.09*u*u))>.003:
+					printerr("Wiper leaves the windscreen: ",point)
+					quit(1)
+					return
+		if frame == 59 and parked_arm.origin.distance_to(game.shopper_wiper_parts[0].position)<.08:
+			printerr("Wiper failed to sweep")
+			quit(1)
+			return
+	game.weather.intensity = Vector2.ZERO
+	game._advance_wipers(4)
+	if not parked_arm.is_equal_approx(game.shopper_wiper_parts[0].transform):
+		printerr("Wiper failed to park")
+		quit(1)
+		return
 	game._change_seat()
 	await create_timer(.28).timeout
 	if not game.shopper_boarding or absf(hinge.rotation.x)<.01 or absf(hinge.rotation.z)<.01:
