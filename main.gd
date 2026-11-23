@@ -874,6 +874,10 @@ func _walk_pedal_pressed() -> bool:
 func _vehicle_payload() -> float:
 	if vehicle_index == RECOVERY and casualty.visible and casualty.get_parent() == ambulance:
 		return 1380.0
+	if not free_drive and vehicle_index == TAXI and taxi_leg % 2 == 1:
+		return 35.0 if _school_fare(taxi_leg) else 75.0
+	if not free_drive and vehicle_index == BUS and bus_leg % 2 == 1:
+		return 6 * 75.0
 	if vehicle_index == REFUSE and not free_drive and mission_index < 3:
 		return mission_index * 400.0
 	return 0.0

@@ -14,6 +14,10 @@ func check_fare() -> void:
 	var initial_wallet: int = game.wallet
 	game.ambulance.position = game._mission_destination()
 	game._help_at_target()
+	if game._vehicle_payload() != 75.0:
+		printerr("Incorrect passenger payload")
+		quit(1)
+		return
 	var dropoff: Vector3 = game._mission_destination()
 
 	game.paused = true
@@ -36,6 +40,13 @@ func check_fare() -> void:
 		printerr("Expected one fare payment and the next school pickup")
 		quit(1)
 		return
+	for expected_load in [35.0, 0.0]:
+		game.ambulance.position = game._mission_destination()
+		game._help_at_target()
+		if game._vehicle_payload() != expected_load:
+			printerr("Incorrect school fare payload at leg ", game.taxi_leg)
+			quit(1)
+			return
 	game.queue_free()
 	await process_frame
 	await process_frame

@@ -22,6 +22,10 @@ func check_route() -> void:
 	var stops := ["TORGET", "SJÖSTADSSKOLAN", "SMÅBÅTSHAMNEN", "VÅRDCENTRALEN", "VÄSTRA TORGET", "VÄSTERÄNGEN"]
 	var starting_balance: int = game.wallet
 	for leg in range(stops.size() + 1):
+		if game._vehicle_payload() != (450.0 if leg % 2 else 0.0):
+			printerr("Incorrect passenger payload")
+			quit(1)
+			return
 		var destination := "502  " + str(stops[leg % stops.size()])
 		if game.bus_board.text != destination or game.rear_bus_board.text != destination:
 			printerr("Expected both destination displays to show ", destination)
