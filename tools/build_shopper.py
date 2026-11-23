@@ -175,34 +175,43 @@ for side in (-1, 1):
         face.use_smooth = True
     shell = arch.modifiers.new("Pressed lip", 'SOLIDIFY')
     shell.thickness = .006
+def wheel_surface(name, center, profile, material, side=1):
+    segments = 48
+    vertices = []
+    faces = []
+    for ring, (radius, depth) in enumerate(profile):
+        for index in range(segments):
+            angle = math.tau*index/segments
+            vertices.append((side*depth,radius*math.cos(angle),radius*math.sin(angle)))
+            if ring:
+                a = (ring-1)*segments+index
+                b = (ring-1)*segments+(index+1)%segments
+                face = (a,b,b+segments,a+segments)
+                faces.append(face if side > 0 else face[::-1])
+    mesh = bpy.data.meshes.new(name)
+    mesh.from_pydata(vertices, [], faces)
+    mesh.materials.append(material)
+    wheel_part = bpy.data.objects.new(name, mesh)
+    bpy.context.collection.objects.link(wheel_part)
+    wheel_part.parent = root
+    wheel_part.location = center
+    for polygon in mesh.polygons:
+        polygon.use_smooth = True
+
+# Section from the centre of the tread to the bead at the steel rim.
+shoulder = [(.227,.005),(.223,.006),(.223,.008),(.227,.009),
+            (.226,.021),(.221,.023),(.221,.025),(.225,.027),
+            (.223,.039),(.218,.041),(.218,.043),(.222,.045),
+            (.218,.053),(.209,.060),(.195,.065),(.177,.069),
+            (.153,.068),(.135,.064),(.131,.059)]
+rubber_profile = [(r,-d) for r,d in reversed(shoulder)] + shoulder
+rim_profile = [(.138,.064),(.138,.075),(.133,.079),(.128,.076),(.124,.070),
+               (.115,.068),(.110,.071),(.104,.072),(.086,.070),(.062,.065),
+               (.048,.066),(.038,.076),(.030,.079)]
 for x,y in ((-.429,-.72),(.429,-.72),(0,.89)):
-    v.cylinder("Performance tire",(x,y,.227),.227,.13,v.RUBBER,True,40,root)
+    wheel_surface("Performance tire",(x,y,.227),rubber_profile,v.RUBBER)
     for side in (-1,1):
-        # Spin the radial section of the pressed disc, rolled lip and recessed dish.
-        profile = [(.138,.064),(.138,.075),(.133,.079),(.128,.076),(.124,.070),
-                   (.115,.068),(.110,.071),(.104,.072),(.086,.070),(.062,.065),
-                   (.048,.066),(.038,.076),(.030,.079)]
-        segments = 48
-        vertices = []
-        faces = []
-        for ring, (radius, depth) in enumerate(profile):
-            for index in range(segments):
-                angle = math.tau*index/segments
-                vertices.append((side*depth,radius*math.cos(angle),radius*math.sin(angle)))
-                if ring:
-                    a = (ring-1)*segments+index
-                    b = (ring-1)*segments+(index+1)%segments
-                    face = (a,b,b+segments,a+segments)
-                    faces.append(face if side > 0 else face[::-1])
-        mesh = bpy.data.meshes.new("Pressed rim section")
-        mesh.from_pydata(vertices, [], faces)
-        mesh.materials.append(v.METAL)
-        rim = bpy.data.objects.new("Wheel hub",mesh)
-        bpy.context.collection.objects.link(rim)
-        rim.parent = root
-        rim.location = (x,y,.227)
-        for polygon in mesh.polygons:
-            polygon.use_smooth = True
+        wheel_surface("Wheel hub",(x,y,.227),rim_profile,v.METAL,side)
         v.cylinder("Center cap",(x+side*.080,y,.227),.031,.017,v.DARK,True,32,root)
 # Tapered wire basket on the rear deck.
 for z,w,front,rear in ((.55,.30,.53,1.05),(.72,.36,.49,1.12)):
