@@ -41,6 +41,7 @@ const FRONT_Z := 42.5
 var grill_neon_finishes: Array[StandardMaterial3D] = []
 var grill_neon_phase := 0.0
 var grill_neon_lit := true
+var kiosk_menu_signs: Array[Label3D] = []
 var grill_price_signs: Array[Label3D] = []
 var pizza_price_signs: Array[Label3D] = []
 var awnings: Array[Node3D] = []
@@ -556,7 +557,10 @@ func _kiosk(x: float) -> void:
 	part("Hatch ledge",Vector3(x-2.52,1.06,42.16),Vector3(3.18,.12,.62),ivory)
 	part("Enamel menu frame",Vector3(x+2.8,1.66,42.34),Vector3(1.78,1.24,.12),ivory)
 	part("Menu board",Vector3(x+2.8,1.66,42.26),Vector3(1.65,1.12,.06),Color("#244338"))
-	_lettering("ICE CREAM  4\nHOT DOG  5",Vector3(x+2.8,1.68,42.21),.0044,ivory)
+	for i in MENUS[1].size():
+		var row := _lettering(_product_price(1,i),Vector3(x+2.8,1.89-.40*i,42.21),.0044,ivory)
+		get_parent()._size_world_sign(row,1.52)
+		kiosk_menu_signs.append(row)
 	_turned("Wafer cone sign",Vector3(x-3.38,3.51,42.31),.035,.29,.74,Color("#cb914f"))
 	var scoop := SphereMesh.new()
 	scoop.radius = .32
@@ -574,6 +578,9 @@ func _product_price(shop: int, item: int) -> String:
 
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_TRANSLATION_CHANGED and is_node_ready():
+		for i in kiosk_menu_signs.size():
+			kiosk_menu_signs[i].text = _product_price(1,i)
+			get_parent()._fit_world_sign(kiosk_menu_signs[i])
 		for i in grill_price_signs.size():
 			grill_price_signs[i].text = _grill_price(i)
 			get_parent()._fit_world_sign(grill_price_signs[i])
