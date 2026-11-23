@@ -265,6 +265,7 @@ var cockpit_view := false
 var camera_button: Button
 var camera: Camera3D
 var navigator := preload("res://scripts/street_route.gd").new()
+var turn_preview := Label.new()
 var route_arrows: Array[Node3D] = []
 var route_timer := 0.0
 var medical_bag := Node3D.new()
@@ -5515,6 +5516,7 @@ func _find_light_meshes(node: Node) -> void:
 		_find_light_meshes(child)
 
 func _update_route_arrows() -> void:
+	turn_preview.hide()
 	for arrow in route_arrows: arrow.visible = false
 	if free_drive or ferry_passenger or tram_mode != 0 or mode!="playing" or mission_index>=TARGETS.size(): return
 	var origin := walker.position if walker.visible else ambulance.position
@@ -5536,6 +5538,9 @@ func _update_route_arrows() -> void:
 		var needs_wide_turns := vehicle_index in [2, RECOVERY, BUS, REFUSE]
 		points = navigator.driving_path(start, goal, Vector2(forward.x, forward.z).normalized(), needs_wide_turns)
 	var car_forward := Vector2(-ambulance.global_basis.z.x, -ambulance.global_basis.z.z).normalized()
+	if not walker.visible and not paused and not boating and not operating_excavator:
+		turn_preview.text = navigator.turn_preview(points, car_forward)
+		turn_preview.visible = not turn_preview.text.is_empty()
 	var gap := 3.5
 	var used := 0
 	for i in range(1,points.size()):
@@ -5989,6 +5994,14 @@ func _update_emergency_lights() -> void:
 
 func _build_ui() -> void:
 	ui = CanvasLayer.new()
+	ui.add_child(turn_preview)
+	turn_preview.set_anchors_and_offsets_preset(Control.PRESET_CENTER_TOP)
+	turn_preview.grow_horizontal = Control.GROW_DIRECTION_BOTH
+	turn_preview.offset_top = 100
+	turn_preview.add_theme_font_size_override("font_size",32)
+	turn_preview.add_theme_constant_override("outline_size",6)
+	turn_preview.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	turn_preview.hide()
 	add_child(ui)
 	var top := PanelContainer.new()
 	top.name = "DrivingHeader"
@@ -7517,6 +7530,7 @@ func _refresh_ui() -> void:
 	hints.text = _with_recovery_hint(hints.text)
 	if show_overlay:
 		_release_mouse_pedals()
+	if show_overlay: turn_preview.hide()
 	overlay.visible = show_overlay
 	overlay_panel.visible = show_overlay
 	vehicle_selector.visible = mode == "menu" or (show_overlay and not walker.visible and not boating and tram_mode == 0)

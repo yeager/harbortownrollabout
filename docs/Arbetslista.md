@@ -20,7 +20,7 @@ De 50 förbättringarna från genomgången. En tom ruta är öppen. En punkt boc
 - [x] 11. Fordonsgalleri med fem bildkategorier och Alla fordon. Alla 29 fordonsbilder verifierade i exakt en kategori vardera och tillgängliga igen under Alla fordon.
 - [x] 12. Markera och hitta favoritfordon med stjärnor. Sparade favoriter, filtrering, avmarkering och start av motorbåten verifierade i Godot.
 - [x] 13. Gul, tresidig stoppmarkering vid sophämtning, taxiresor och bärgning. Placering och riktning kontrollerade för tre sopbilsstopp, tio taxisteg och fyra bärgningssteg.
-- [ ] 14. Förvarna med två symboler om nästa vägval vid komplicerade korsningar.
+- [x] 14. Två vägvalssymboler inför korsningar längs den aktuella körrutten. Vänster, höger, U-sväng och två svängar i följd kontrollerade på navigatorns avrundade körfält i Godot.
 - [ ] 15. Översiktskarta med klickbara landmärken och vägledning under friåkning.
 - [ ] 16. Mjuka kollisioner där båda fordonens massa och rörelseriktning påverkar utfallet.
 - [ ] 17. Tydlig tröskel och markering vid den användbara spårvagnsdörren.

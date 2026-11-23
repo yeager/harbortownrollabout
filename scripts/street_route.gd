@@ -163,3 +163,27 @@ func driving_path(start: Vector2, goal: Vector2, heading: Vector2, wide_turns :=
 	cached_wide_turns = wide_turns
 	remaining_lane = path(start, goal, heading, wide_turns)
 	return remaining_lane
+
+# Read the straight approaches on either side of the sampled junction curves.
+func turn_preview(points: PackedVector2Array, heading: Vector2) -> String:
+	var incoming := heading.normalized()
+	var distance := 0.0
+	var turns := PackedStringArray()
+	var first_distance := 0.0
+	for i in range(1, points.size()):
+		var segment := points[i] - points[i-1]
+		var length := segment.length()
+		if distance > 75: break
+		if length >= 3 and minf(absf(segment.x),absf(segment.y)) < .02:
+			var outgoing := segment / length
+			var angle := incoming.angle_to(outgoing)
+			if absf(angle) > PI*.32:
+				if turns.is_empty(): first_distance = distance
+				turns.append("↶" if absf(angle) > PI*.78 else ("↱" if angle > 0 else "↰"))
+				if turns.size() == 2: break
+			incoming = outgoing
+		distance += length
+	if turns.is_empty() or first_distance > 35: return ""
+	if turns.size() == 1:
+		turns.insert(0, "↑")
+	return "   ›   ".join(turns)
