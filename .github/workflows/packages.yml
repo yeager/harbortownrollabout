@@ -1,7 +1,7 @@
 name: Game packages
 on:
   push:
-    tags: ['v[0-9]*']
+    tags: ['v[0-9]+.[0-9]+.[0-9]+']
   workflow_dispatch:
 permissions:
   contents: read
@@ -74,7 +74,7 @@ jobs:
           chmod +x export/linux/axels-spel
           go install github.com/goreleaser/nfpm/v2/cmd/nfpm@v2.43.4
           for format in deb rpm; do
-            "$(go env GOPATH)/bin/nfpm" package -f packaging/linux/nfpm.yaml -p "$format" -t dist/
+            "$(go env GOPATH)/bin/nfpm" package -f packaging/linux/nfpm.yaml -p "$format" -t "dist/axels-spel-$VERSION-x86_64.$format"
           done
           tar -czf "dist/harbortownrollabout-$VERSION-linux-x86_64.tar.gz" -C export/linux .
       - if: runner.os == 'Windows'
