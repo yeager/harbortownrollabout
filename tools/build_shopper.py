@@ -62,9 +62,32 @@ for t in (0,1):
     for i in range(-10,10):
         tube("Window seal",screen_point(i/10,t),screen_point((i+1)/10,t),.012,v.BLACK)
 v.mesh_from_rings("Overhanging canopy",[(-.12,.39,1.495,1.52,1.55),(.02,.425,1.50,1.55,1.57),
-    (.38,.435,1.53,1.56,1.59)],red,root,.012,panel_section)
+    (.29,.428,1.54,1.57,1.59),(.49,.405,1.577,1.59,1.604)],red,root,.012,panel_section)
 for side in (-1,1):
-    tube("Swept canopy pillar",screen_point(side,0),screen_point(side,1),.037,red)
+    # Front edge follows the screen. The trailing edge flares into the roof.
+    pillar_rings = []
+    for t, depth in ((0,.10),(.25,.092),(.58,.087),(.78,.10),(.90,.15),(.97,.24),(1,.31)):
+        x,y,z = screen_point(side,t)
+        pillar_rings.append([(x+side*dx,y+dy,z+dz) for dx,dy,dz in
+                             ((-.012,0,0),(.018,0,0),(.018,depth,.026*t),(-.012,depth,.026*t))])
+    faces = [(0,3,2,1)]
+    for row in range(len(pillar_rings)-1):
+        for corner in range(4):
+            a = row*4+corner
+            b = row*4+(corner+1)%4
+            faces.append((a,b,b+4,a+4))
+    faces.append((24,25,26,27))
+    pillar_mesh = bpy.data.meshes.new("Moulded screen surround")
+    pillar_mesh.from_pydata([point for ring in pillar_rings for point in ring], [],
+                            [face if side > 0 else face[::-1] for face in faces])
+    pillar_mesh.materials.append(red)
+    pillar = bpy.data.objects.new("Swept canopy pillar",pillar_mesh)
+    bpy.context.collection.objects.link(pillar)
+    pillar.parent = root
+    edge = pillar.modifiers.new("Rounded moulding", 'BEVEL')
+    edge.width = .007
+    edge.segments = 3
+    tube("Side window seal",screen_point(side,0),screen_point(side,1),.012,v.BLACK)
     tube("Mirror stem",(side*.40,-.42,.91),(side*.51,-.43,1.05),.009,v.METAL)
     box("Wing mirror",(side*.51,-.43,1.07),(.094,.034,.07),v.METAL)
     box("Turn signal",(side*.46,-.46,.80),(.024,.085,.046),amber,.008)
