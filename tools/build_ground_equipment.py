@@ -80,7 +80,30 @@ for x in (-.14,.14):
 for x in (-.29,.29):
     disc("Cutting deck",(x,-1.04,.164),.36,.145,frame)
     rod("Lift arm",(x,-.56,.32),(x,-1.05,.21),.028,steel)
-    disc("Gauge wheel",(x*1.8,-1.31,.095),.095,.08,rubber,(1,0,0))
+    wheel_x = x*1.8
+    disc("Gauge wheel",(wheel_x,-1.31,.095),.095,.08,rubber,(1,0,0))
+    disc("Gauge wheel axle",(wheel_x,-1.31,.095),.023,.123,steel,(1,0,0))
+    for cheek in (-.051,.051):
+        rod("Caster fork",(wheel_x+cheek,-1.31,.095),(wheel_x+cheek,-1.26,.215),.014,frame)
+    box("Caster yoke",(wheel_x,-1.26,.215),(.13,.061,.032),frame,.009)
+    disc("Swivel bearing",(wheel_x,-1.26,.241),.031,.039,steel)
+    rod("Caster mount",(wheel_x,-1.26,.256),(x,-1.12,.225),.021,frame)
+
+# The front guard wraps around the blade housing and returns to its side mounts.
+guard = bpy.data.curves.new("Tubular deck bumper", 'CURVE')
+guard.dimensions = '3D'
+guard.bevel_depth = .018
+guard.bevel_resolution = 3
+guard.use_fill_caps = True
+rail = guard.splines.new('BEZIER')
+path = [(-.60,-1.07,.20),(-.59,-1.30,.18),(-.48,-1.40,.145),
+        (0,-1.42,.145),(.48,-1.40,.145),(.59,-1.30,.18),(.60,-1.07,.20)]
+rail.bezier_points.add(len(path)-1)
+for point, position in zip(rail.bezier_points,path):
+    point.co = position
+    point.handle_left_type = point.handle_right_type = 'AUTO'
+guard.materials.append(frame)
+bpy.context.collection.objects.link(bpy.data.objects.new("Front deck guard",guard))
 box("Belt guard",(0,-1.04,.252),(.74,.42,.115),paint,.05)
 export("ride_on_mower")
 
