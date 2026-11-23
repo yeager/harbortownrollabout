@@ -39,14 +39,29 @@ func add_person(torso: MeshInstance3D, shirt: Color) -> void:
 	# The clothing meshes use the face centre as their tailoring origin.
 	layers.position = Vector3(0,.505,-.003)
 	torso.add_child(layers)
-	var wool := _fabric(shirt.darkened(.35), .96)
-	var shell := _fabric(shirt.lerp(Color("#ddb460"), .5), .57)
-	_piece(layers, "Scarf", scarf_mesh, wool)
-	_piece(layers, "Knit cap", hat_mesh, wool)
-	_piece(layers, "Rain hat", rain_mesh, shell)
-	_piece(layers, "Storm collar", rain_collar, shell)
+	_piece(layers, "Scarf", scarf_mesh)
+	_piece(layers, "Knit cap", hat_mesh)
+	_piece(layers, "Rain hat", rain_mesh)
+	_piece(layers, "Storm collar", rain_collar)
+	set_colours(layers, shirt)
+	var summer_cap := torso.get_parent().find_child("SummerCap", true, false) as MeshInstance3D
+	if summer_cap:
+		for surface in summer_cap.mesh.get_surface_count():
+			var original := summer_cap.mesh.surface_get_material(surface) as StandardMaterial3D
+			if original and original.resource_name == "Raspberry cotton":
+				summer_cap.set_surface_override_material(surface, _fabric(original.albedo_color, .88, "denim_fabric_04"))
+		layers.set_meta("summer_cap", summer_cap)
 	garments.append(layers)
 	_dress(layers, current)
+
+func set_colours(layers: Node3D, shirt: Color) -> void:
+	var wool := _fabric(shirt.darkened(.35), .96, "wool_boucle")
+	var shell := _fabric(shirt.lerp(Color("#ddb460"), .5), .45, "denim_fabric_04")
+	shell.uv2_scale = Vector3.ONE * 10.0
+	for piece in ["Scarf", "Knit cap"]:
+		layers.get_node(piece).material_override = wool
+	for piece in ["Rain hat", "Storm collar"]:
+		layers.get_node(piece).material_override = shell
 
 func update(season: int, intensity: Vector2) -> void:
 	var next := Outfit.LIGHT
@@ -63,26 +78,28 @@ func update(season: int, intensity: Vector2) -> void:
 		_dress(layers, current)
 
 func _dress(layers: Node3D, outfit: int) -> void:
+	if layers.has_meta("summer_cap"):
+		layers.get_meta("summer_cap").visible = outfit not in [Outfit.WINTER, Outfit.RAIN, Outfit.SLUSH]
 	layers.get_node("Scarf").visible = outfit in [Outfit.SCARF, Outfit.WINTER, Outfit.SLUSH]
 	layers.get_node("Knit cap").visible = outfit == Outfit.WINTER
 	layers.get_node("Rain hat").visible = outfit in [Outfit.RAIN, Outfit.SLUSH]
 	layers.get_node("Storm collar").visible = outfit in [Outfit.RAIN, Outfit.SLUSH]
 
-func _fabric(colour: Color, roughness: float) -> StandardMaterial3D:
+func _fabric(colour: Color, roughness: float, fabric: String) -> StandardMaterial3D:
 	var key := Vector2i(colour.to_rgba32(), roundi(roughness*100))
 	if not fabrics.has(key):
 		var finish := StandardMaterial3D.new()
 		finish.cull_mode = BaseMaterial3D.CULL_DISABLED
 		finish.albedo_color = colour
 		finish.roughness = roughness
+		preload("res://art/surfaces/model_finish.gd").apply(finish, fabric)
 		fabrics[key] = finish
 	return fabrics[key]
 
-func _piece(parent: Node3D, label: String, mesh: Mesh, finish: Material) -> void:
+func _piece(parent: Node3D, label: String, mesh: Mesh) -> void:
 	var piece := MeshInstance3D.new()
 	piece.name = label
 	piece.mesh = mesh
-	piece.material_override = finish
 	parent.add_child(piece)
 
 func _sew(profile: Array, ribbed := false, slope := 0.0) -> ArrayMesh:

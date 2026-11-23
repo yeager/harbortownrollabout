@@ -4,10 +4,13 @@ config_version=5
 [application]
 config/project_settings_override="user://graphics.cfg"
 config/name="Harbor Town Rollabout"
+config/icon="res://branding/app-icon.png"
 config/version="0.1.3"
 config/custom_user_dir_name="godot/app_userdata/Axels Utryckning"
 config/use_custom_user_dir=true
-run/main_scene="res://main.tscn"
+boot_splash/show_image=false
+boot_splash/bg_color=Color(0.045, 0.095, 0.14, 1)
+run/main_scene="res://branding/splash.tscn"
 run/max_fps=60
 config/features=PackedStringArray("4.3", "GL Compatibility")
 config/description="En lugn och vänlig utryckningsrunda för Axel."

@@ -27,12 +27,6 @@ def disc(name, pos, radius, depth, mat):
     return v.cylinder(name, pos, radius, depth, mat, root=root)
 
 
-def front_text(name, text, pos, size, mat, rear=False):
-    obj = v.text_obj(name, text, pos, size, mat, root=root)
-    obj.rotation_euler = (math.pi / 2, 0, math.pi if rear else 0)
-    return obj
-
-
 def window(name, vertices):
     mesh = bpy.data.meshes.new(name)
     mesh.from_pydata(vertices, [], [(0, 1, 2, 3), (3, 2, 1, 0)])
@@ -76,23 +70,63 @@ for side in (-1,1):
         box("Flush latch",(s*1.111,y+.40,1.56),(.035,.055,.14),v.METAL)
         for off in (-.34,.34):
             box("Insulated hinge",(s*1.11,y+off,2.12),(.03,.13,.046),v.METAL)
-    v.text_obj("Route lettering","SJÖSTADSGLASS",(s*1.076,1.25-s*.97,2.29),.26,ink,side=-s,root=root)
     speaker = disc("Roof loudspeaker", (s*.61,-.93,2.65),.145,.22,v.DARK)
     speaker.rotation_euler = (math.pi/2,0,0)
     cap = disc("Speaker grille", (s*.61,-1.047,2.65),.112,.018,v.BLACK)
     cap.rotation_euler = speaker.rotation_euler
     box("Tail lamp",(s*.80,2.99,.96),(.35,.06,.13),v.TAIL_LAMP)
 box("Roof lightbox",(0,-.91,2.67),(1.03,.23,.28),v.PAINT_WHITE)
-front_text("Illuminated roof board","GLASS",( -.32,-1.035,2.60),.21,ink)
 box("Rear menu surround",(0,2.979,1.81),(1.78,.05,1.33),v.METAL)
 box("Illustrated menu",(0,3.01,1.81),(1.69,.025,1.24),v.PAINT_WHITE)
-front_text("Menu title","VÅRA GLASSAR",(.68,3.036,2.16),.18,ink,True)
-for row in range(2):
-    for col,flavour in enumerate((pink,mint,cream,pink,mint)):
-        x = -.63+col*.315
-        z = 1.55+row*.38
-        box("Beech lolly stick",(x,3.032,z-.15),(.035,.025,.10),cream)
-        box("Menu ice lolly",(x,3.053,z),(.12,.045,.21),flavour,.045)
+berry = v.material("Blueberry violet", (.34,.09,.80))
+lemon = v.material("Lemon yellow", (1,.73,.035))
+melon = v.material("Watermelon coral", (1,.13,.18))
+for index, finish in enumerate((pink,mint,berry,lemon,melon,blue)):
+    x = .55 - index%3*.55
+    z = 1.94 - (index//3)*.47
+    box("Menu card",(x,3.035,z-.04),(.52,.016,.445),cream,.015)
+    def sweet(name, dx, dz, width, height, material, y=3.09):
+        bpy.ops.mesh.primitive_uv_sphere_add(segments=16, ring_count=8, location=(x+dx,y,z+dz))
+        part = bpy.context.object
+        part.name = name
+        part.scale = (width,.025,height)
+        part.parent = root
+        part.data.materials.append(material)
+
+    if index == 0:
+        bpy.ops.mesh.primitive_cone_add(vertices=18,radius1=.008,radius2=.084,depth=.15,location=(x,3.07,z))
+        cone = bpy.context.object
+        cone.parent = root
+        cone.data.materials.append(lemon)
+        sweet("Berry scoop",0,.095,.105,.072,pink)
+        sweet("Cherry",.043,.157,.027,.026,melon)
+        continue
+    box("Wooden stick",(x,3.052,z-.047),(.032,.018,.098),v.material("Beech",(.74,.47,.23)),.009)
+    if index == 2:
+        for dx,dz in ((-.052,.045),(.053,.045),(0,.119)):
+            sweet("Hiccup bubble",dx,dz,.064,.06,berry)
+    elif index == 4:
+        for row in range(9):
+            width = .22-.022*row
+            box("Melon slice",(x,3.075,z+.017*row),(width,.05,.022),melon if row else mint,.006)
+        for dx,dz in ((-.05,.04),(.034,.052),(0,.092)):
+            sweet("Melon seed",dx,dz,.008,.013,ink,3.10)
+    else:
+        box("Fruit ice",(x,3.066,z+.068),(.16,.055,.195),finish,.035)
+        if index == 1:
+            for sign in (-1,1):
+                sweet("Mint ear",sign*.081,.143,.036,.025,mint)
+                sweet("Eye",sign*.037,.095,.009,.01,ink,3.102)
+            sweet("Muzzle",0,.043,.048,.025,pink,3.104)
+        elif index == 3:
+            for sign in (-1,1):
+                fin=box("Rocket fin",(x+sign*.077,3.067,z+.008),(.04,.045,.085),melon,.009)
+                fin.rotation_euler.y=sign*.38
+            sweet("Porthole",0,.098,.034,.034,blue,3.101)
+        else:
+            for angle in (0,math.pi/3,-math.pi/3):
+                ray=box("Snow crystal",(x,3.101,z+.071),(.015,.012,.13),v.PAINT_WHITE,.004)
+                ray.rotation_euler.y=angle
 box("Folding sales shelf",(0,3.05,1.09),(1.36,.22,.07),v.METAL)
 v.export_vehicle(root, "ice_cream_van.glb")
 bpy.ops.wm.save_as_mainfile(filepath=str(Path(v.SOURCE_DIR) / "IceCreamVan.blend"))

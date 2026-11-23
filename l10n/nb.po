@@ -6,7 +6,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 msgid "Harbor Town Rollabout"
-msgstr "Harbor Town Rollabout"
+msgstr "Full fart i Havnebyen"
 
 msgid "Emergency Vehicles"
 msgstr "Nødkjøretøy"
@@ -59,11 +59,11 @@ msgstr "Sirene av"
 msgid "Siren ON"
 msgstr "Sirene på"
 
-msgid "Engine ON"
-msgstr "Motor på"
+msgid "Engine sound ON"
+msgstr "Motorlyd på"
 
-msgid "Engine OFF"
-msgstr "Motor av"
+msgid "Engine sound OFF"
+msgstr "Motorlyd av"
 
 msgid "Pause"
 msgstr "Pause"
@@ -216,7 +216,7 @@ msgid "Time · Day and night"
 msgstr "Tid på døgnet · Dag og natt"
 
 msgid "Vehicle depot"
-msgstr "Kjøretøy depot"
+msgstr "Kjøretøydepot"
 
 msgid "Both doors are blocked. Park where there is more room."
 msgstr "Begge dørene er sperret. Parker et sted med bedre plass."
@@ -399,11 +399,11 @@ msgstr "En ambulansearbeider venter ved klinikken. Kjør dit og hent personen."
 msgid "Please bring the first-aid supplies to the marina."
 msgstr "Ta med førstehjelpsforsyningene til marinaen."
 
-msgid "Fare complete. You earned 15 coins."
-msgstr "Turen er ferdig! Du tjente 15 mynter."
+msgid "Fare complete. You earned 15 points and 15 coins."
+msgstr "Turen er ferdig! Du tjente 15 poeng og 15 mynter."
 
-msgid "Thank you for helping! You earned 10 coins."
-msgstr "Takk for hjelpen! Du fikk 10 mynter."
+msgid "Thank you for helping! You earned 10 points and 10 coins."
+msgstr "Takk for hjelpen! Du fikk 10 poeng og 10 mynter."
 
 msgid "Café"
 msgstr "Kafé"
@@ -430,8 +430,10 @@ msgid "Pick and mix"
 msgstr "Smågodt"
 
 #, c-format
-msgid "%s · %d coins"
-msgstr "%s · %d mynter"
+msgid "%s · %d coin"
+msgid_plural "%s · %d coins"
+msgstr[0] "%s · %d mynt"
+msgstr[1] "%s · %d mynter"
 
 #, c-format
 msgid "You need %d more coin."
@@ -440,14 +442,16 @@ msgstr[0] "Du mangler %d mynt."
 msgstr[1] "Du mangler %d mynter."
 
 #, c-format
-msgid "%s · Paid %d coins. Thank you!"
-msgstr "%s · Du betalte %d mynter. Takk!"
+msgid "%s · Paid %d coin. Thank you!"
+msgid_plural "%s · Paid %d coins. Thank you!"
+msgstr[0] "%s · Du betalte %d mynt. Takk!"
+msgstr[1] "%s · Du betalte %d mynter. Takk!"
 
 msgid "Recovery truck"
 msgstr "Bergingsbil"
 
 msgid "Collect the car with a smoking bonnet."
-msgstr "Hent bilen som ryker fra panseret."
+msgstr "Hent bilen det ryker fra under panseret."
 
 msgid "Take the car to the workshop."
 msgstr "Frakt bilen til verkstedet."
@@ -455,8 +459,8 @@ msgstr "Frakt bilen til verkstedet."
 msgid "Collect the car with a missing wheel."
 msgstr "Hent bilen som mangler et hjul."
 
-msgid "Recovery complete. You earned 20 coins."
-msgstr "Bilen er levert! Du fikk 20 mynter."
+msgid "Recovery complete. You earned 20 points and 20 coins."
+msgstr "Bilen er levert! Du fikk 20 poeng og 20 mynter."
 
 msgid "Passenger ride · P to pause"
 msgstr "Du er passasjer · P for pause"
@@ -503,12 +507,8 @@ msgstr "%s × %d"
 msgid "Waiting for a green light"
 msgstr "Venter på grønt lys"
 
-msgid ""
-"Steer with A and D or the arrow keys. Hold the left mouse button for "
-"throttle. Hold the right to slow down, then reverse."
-msgstr ""
-"Styre med A og D eller piltastene. Hold venstre museknapp for trottle. Hold "
-"høyre for å bremse ned, og deretter reversere."
+msgid "Hold left to speed up or right to slow down and reverse. Move the mouse sideways to steer, or use A/D or the arrow keys."
+msgstr "Hold venstre museknapp inne for å gi gass eller høyre for å bremse og rygge. Styr ved å bevege musa sidelengs, med A/D eller med piltastene."
 
 msgid "Start boating"
 msgstr "Start båtturen"
@@ -534,7 +534,7 @@ msgid "Pick up a passenger at the square and drive them to the marina."
 msgstr "Hent passasjeren på torget og kjør til småbåthavna."
 
 msgid "Collect the car with a smoking bonnet and take it to the workshop."
-msgstr "Hent bilen som ryker fra panseret, og frakt den til verkstedet."
+msgstr "Hent bilen det ryker fra under panseret, og kjør den til verkstedet."
 
 msgid "Complete a mission to earn coins."
 msgstr "Fullfør et oppdrag for å tjene mynter."
@@ -553,8 +553,8 @@ msgstr "F · Gå inn i kjøretøyet (%s)"
 msgid "Well done, %s!"
 msgstr "Godt gjort, %s!"
 
-msgid "First-aid supplies delivered to the marina. You earned 10 coins."
-msgstr "Du har levert førstehjelpsutstyret i småbåthavna. Du fikk 10 mynter."
+msgid "First-aid supplies delivered to the marina. You earned 10 points and 10 coins."
+msgstr "Du har levert førstehjelpsutstyret i småbåthavna. Du fikk 10 poeng og 10 mynter."
 
 msgid "Stop here to load the car."
 msgstr "Stopp her for å laste bilen på planet."
@@ -625,8 +625,8 @@ msgstr "Slipp av passasjerene ved klinikken."
 msgid "Passengers on board."
 msgstr "Passasjerene er om bord."
 
-msgid "Bus journey complete. You earned 15 coins."
-msgstr "Bussturen er ferdig! Du fikk 15 mynter."
+msgid "Bus journey complete. You earned 15 points and 15 coins."
+msgstr "Bussturen er ferdig! Du fikk 15 poeng og 15 mynter."
 
 msgid "A pupil is waiting at the square."
 msgstr "En elev venter på torget."
@@ -638,10 +638,10 @@ msgid "A pupil is waiting at school."
 msgstr "En elev venter ved skolen."
 
 msgid "Pick up the pupil"
-msgstr "Ta opp eleven"
+msgstr "Hent eleven"
 
 msgid "Drop off the pupil"
-msgstr "Legg av elev"
+msgstr "Slipp av eleven"
 
 msgid "Return to your bus"
 msgstr "Gå tilbake til bussen din"
@@ -697,10 +697,10 @@ msgid "Check the clinic entrance"
 msgstr "Sjekk klinikkens inngang"
 
 msgid "Patrol the marina"
-msgstr "Patrol marinaen"
+msgstr "Patruljer marinaen"
 
 msgid "Check the hydrant at the square"
-msgstr "Sjekk hydranten på plassen"
+msgstr "Sjekk brannhydranten på torget"
 
 msgid "Meet the fire safety team at the clinic"
 msgstr "Møt brannvernlaget ved klinikken"
@@ -709,16 +709,16 @@ msgid "Check the rescue equipment at the marina"
 msgstr "Sjekk redningsutstyret i småbåthavna"
 
 msgid "Collect parcels at the square"
-msgstr "Samle pakker på plassen"
+msgstr "Hent pakkene på torget"
 
 msgid "Deliver a parcel to the clinic"
-msgstr "Levere pakke til klinikken"
+msgstr "Lever en pakke til klinikken"
 
 msgid "Deliver the last parcel to the marina"
 msgstr "Lever den siste pakken til marinaen"
 
 msgid "Collect warm blankets at the square"
-msgstr "Samle varme tepper på plassen"
+msgstr "Hent varme tepper på torget"
 
 msgid "Bring blankets to the clinic"
 msgstr "Ta med tepper til klinikken"
@@ -812,14 +812,14 @@ msgstr "Gå av ved neste brygge · F"
 msgid "Stay on board · F"
 msgstr "Bli om bord · F"
 
-msgid "Two parcels collected at the square. You earned 10 coins."
-msgstr "Du hentet to pakker på torget. Du fikk 10 mynter."
+msgid "Two parcels collected at the square. You earned 10 points and 10 coins."
+msgstr "Du hentet to pakker på torget. Du fikk 10 poeng og 10 mynter."
 
-msgid "The clinic received its parcel. You earned 10 coins."
-msgstr "Klinikken har fått pakken sin. Du fikk 10 mynter."
+msgid "The clinic received its parcel. You earned 10 points and 10 coins."
+msgstr "Klinikken har fått pakken sin. Du fikk 10 poeng og 10 mynter."
 
-msgid "The marina received the last parcel. You earned 10 coins."
-msgstr "Den siste pakken er levert i småbåthavna. Du fikk 10 mynter."
+msgid "The marina received the last parcel. You earned 10 points and 10 coins."
+msgstr "Den siste pakken er levert i småbåthavna. Du fikk 10 poeng og 10 mynter."
 
 #, c-format
 msgid "Stepping ashore in %d s"
@@ -843,7 +843,7 @@ msgstr ""
 "Mamma"
 
 msgid "Find clear ground to unfold the scooter."
-msgstr "Finn klar grunn til å utfolde Scooter."
+msgstr "Finn et sted med god plass til å slå ut sparkesykkelen."
 
 msgid "Fold scooter · F"
 msgstr "Slå sammen sparkesykkelen · F"
@@ -871,8 +871,8 @@ msgstr "Server is utenfor skolen"
 msgid "Serve ice cream at the marina"
 msgstr "Server is i småbåthavna"
 
-msgid "Ice cream served! You earned 10 coins."
-msgstr "Isen er servert! Du fikk 10 mynter."
+msgid "Ice cream served! You earned 10 points and 10 coins."
+msgstr "Isen er servert! Du fikk 10 poeng og 10 mynter."
 
 msgid "Return to your ice cream van"
 msgstr "Gå tilbake til isbilen din"
@@ -925,7 +925,7 @@ msgid "Operate the excavator in the equipment yard."
 msgstr "Bruk gravemaskinen i utstyrsgården."
 
 msgid "Start excavating"
-msgstr "Begynn å utgrave"
+msgstr "Begynn å grave"
 
 msgid "Motorboat"
 msgstr "Motorbåt"
@@ -1036,16 +1036,16 @@ msgid "Find the cat with white paws."
 msgstr "Finn katten med de hvite potene."
 
 msgid "Collect seedlings at the square"
-msgstr "Samle frøplanter på plassen"
+msgstr "Hent småplantene på torget"
 
 msgid "Deliver herbs to the clinic garden"
-msgstr "Lever urter til klinikken hage"
+msgstr "Lever urtene til hagen ved klinikken"
 
 msgid "Bring flowers to the marina"
 msgstr "Ta med blomster til marinaen"
 
 msgid "Pick up soup ingredients at the square"
-msgstr "Plukk opp suppe ingredienser på plassen"
+msgstr "Hent ingrediensene til suppa på torget"
 
 msgid "Serve lunch to the clinic staff"
 msgstr "Server lunsj til klinikkens ansatte"
@@ -1155,13 +1155,13 @@ msgid "No songs available in this language yet."
 msgstr "Det finnes ingen sanger på dette språket ennå."
 
 msgid "HARBOR FUEL"
-msgstr "HARBOR FUEL"
+msgstr "HAVNESTASJONEN"
 
 msgid "Harbor Fuel  →"
-msgstr "Harbor Fuel  →"
+msgstr "Havnestasjonen  →"
 
 msgid "←  Harbor Fuel"
-msgstr "←  Harbor Fuel"
+msgstr "←  Havnestasjonen"
 
 msgid "Tow drop-off"
 msgstr "Levering av biler"
@@ -1323,3 +1323,209 @@ msgstr "Oppdragene dine"
 
 msgid "Hold left mouse to drive forward or right mouse to reverse."
 msgstr "Hold venstre museknapp inne for å kjøre framover eller høyre for å rygge."
+
+msgctxt "decimal separator"
+msgid "."
+msgstr ","
+
+msgid "Meow!"
+msgstr "Mjau!"
+
+msgid "Graphics mode"
+msgstr "Grafikkmodus"
+
+msgid "Compatibility (OpenGL)"
+msgstr "Kompatibilitet (OpenGL)"
+
+msgid "Mobile"
+msgstr "Mobil"
+
+msgid "MENU"
+msgstr "MENY"
+
+msgid "BURGERS"
+msgstr "BURGERE"
+
+msgid "FRIES"
+msgstr "POMMES FRITES"
+
+msgid "SODA"
+msgstr "BRUS"
+
+msgid "SPECIAL"
+msgstr "DAGENS"
+
+msgid "DOUBLE"
+msgstr "DOBBEL"
+
+msgid "WITH CHEESE"
+msgstr "MED OST"
+
+msgid "Wait until the crossing is clear."
+msgstr "Vent til krysset er klart."
+
+#, c-format
+msgid "%d km/h"
+msgstr "%d km/t"
+
+msgid "Hold the left or right mouse button and move the mouse sideways to steer."
+msgstr "Hold inne venstre eller høyre museknapp og beveg musa til siden for å styre."
+
+msgid "Hold left to accelerate or right to brake. To reverse, stop, release and hold right again."
+msgstr "Hold venstre museknapp inne for å gi gass eller høyre for å bremse. For å rygge må du stoppe, slippe høyre knapp og holde den inne igjen."
+
+msgid "Our ice creams"
+msgstr "Isene våre"
+
+msgid "Berry Boing"
+msgstr "Bærsprett"
+
+msgid "Minty Moo"
+msgstr "Myntemø"
+
+msgid "Purple Hiccup"
+msgstr "Lilla hikke"
+
+msgid "Lemon Comet"
+msgstr "Sitronkometen"
+
+msgid "Melon Wiggle"
+msgstr "Vinglemelon"
+
+msgid "Blue Blizzard"
+msgstr "Blå snøstorm"
+
+msgid "Harbor Town Ice Cream"
+msgstr "Havnebyens iskrem"
+
+msgid "Boarding"
+msgstr "Ombordstigning"
+
+msgid "E Jump"
+msgstr "E Hopp"
+
+msgid "Ride-on mower"
+msgstr "Plentraktor"
+
+msgid "System language"
+msgstr "Systemspråk"
+
+msgid "Did you feel a raindrop?"
+msgstr "Kjente du en regndråpe?"
+
+msgid "My boots vote for puddles!"
+msgstr "Støvlene mine stemmer for sølepytter!"
+
+msgid "Which ice cream would you pick?"
+msgstr "Hvilken is ville du valgt?"
+
+msgid "Blueberry, with a cherry on top!"
+msgstr "Blåbær, med et kirsebær på toppen!"
+
+msgid "Can AI dream?"
+msgstr "Kan KI drømme?"
+
+msgid "Maybe it dreams of electric sheep!"
+msgstr "Kanskje den drømmer om elektriske sauer!"
+
+msgid "What did the dog find?"
+msgstr "Hva fant hunden?"
+
+msgid "A leaf worth a really good sniff!"
+msgstr "Et blad som lukter skikkelig spennende!"
+
+msgid "Japanese haori jacket"
+msgstr "Japansk haorijakke"
+
+msgid "Korean jeogori jacket"
+msgstr "Koreansk jeogorijakke"
+
+msgid "Red panda plush"
+msgstr "Rød panda i plysj"
+
+msgid "Moon rabbit figurine"
+msgstr "Måneharefigur"
+
+msgid "Popcorn Party"
+msgstr "Popkornfesten"
+
+msgid "Pickle Carousel"
+msgstr "Agurkkarusellen"
+
+msgid "Banana Moon"
+msgstr "Bananmånen"
+
+msgid "Berry Blizzard"
+msgstr "Bærstormen"
+
+msgid "Mozzarella, tomato and carrot stars"
+msgstr "Mozzarella, tomat og gulrotstjerner"
+
+msgid "Popcorn, sweetcorn and cheese"
+msgstr "Popkorn, mais og ost"
+
+msgid "Pickle wheels and crispy onions"
+msgstr "Sylteagurkhjul og sprøstekt løk"
+
+msgid "Banana moons and coconut snow"
+msgstr "Bananmåner og kokossnø"
+
+msgid "Blueberries, vanilla cream and raspberry swirls"
+msgstr "Blåbær, vaniljekrem og bringebærvirvler"
+
+msgid "Frog choir"
+msgstr "Froskekoret"
+
+msgid "Sour shoelaces"
+msgstr "Sure skolisser"
+
+msgid "Rocket fudge"
+msgstr "Rakettkaramell"
+
+msgid "Cloud cone"
+msgstr "Skykjeksen"
+
+msgid "Penguin pop"
+msgstr "Pingvinpinnen"
+
+msgid "Lunar sundae"
+msgstr "Månebegeret"
+
+msgid "Dill disco popcorn"
+msgstr "Dilldiscopopkorn"
+
+msgid "Dragon curls"
+msgstr "Drageskruer"
+
+msgid "Chocolate puddles"
+msgstr "Sjokoladepytter"
+
+msgid "Gummy boots and raspberry raindrops"
+msgstr "Geléstøvler og bringebærregndråper"
+
+msgid "Pear jelly frogs with fizzy lime dust"
+msgstr "Pærefrosker med brusende limepulver"
+
+msgid "Apple laces with lemon sugar"
+msgstr "Eplesnører med sitronsukker"
+
+msgid "Caramel with popping strawberry sparks"
+msgstr "Karamell med knitrende jordbærgnister"
+
+msgid "Vanilla ice cream with cotton candy clouds"
+msgstr "Vaniljeis med sukkerspinnskyer"
+
+msgid "Licorice ice cream with a mango beak"
+msgstr "Lakrisis med mangonebb"
+
+msgid "Blueberry ice cream with biscuit craters"
+msgstr "Blåbæris med kjekskratre"
+
+msgid "Popcorn with dill and crunchy cheese stars"
+msgstr "Popkorn med dill og sprø ostestjerner"
+
+msgid "Corn twists with sweet paprika scales"
+msgstr "Maisskruer med skjell av søt paprika"
+
+msgid "Chocolate buttons with crispy rice bubbles"
+msgstr "Sjokoladeknapper med sprø risbobler"

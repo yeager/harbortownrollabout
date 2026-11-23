@@ -1,6 +1,10 @@
-# Lägg till ett språk
+# Språk i spelet
 
-Skapa en ny katalog från projektroten med GNU gettext. Följande exempel lägger till polska. Byt ut `pl` mot språkkoden för det nya språket.
+Spelet följer systemspråket vid första start. Om språket saknar stöd används engelska. Öppna **Inställningar**, välj fliken med jordgloben och tryck på språkets namn. Du kan välja Deutsch, English, Español, Français, Norsk bokmål, Suomi eller Svenska. Valet gäller direkt och sparas till nästa gång du spelar. Välj **Systemspråk** för att följa enhetens språk igen.
+
+## Lägg till ett språk
+
+Skapa en ny översättningsfil från projektroten med GNU gettext. Följande exempel lägger till polska. Byt ut `pl` mot språkkoden för det nya språket.
 
 ```sh
 msginit --no-translator --locale=pl --input=l10n/messages.pot --output-file=l10n/pl.po
@@ -8,16 +12,18 @@ msginit --no-translator --locale=pl --input=l10n/messages.pot --output-file=l10n
 
 `msginit` väljer språkets pluralregel och skapar ett översättningsfält för varje form. Fyll i varje `msgstr`, även de numrerade fälten för exempelvis mynt och poäng. Behåll platshållare som `%s` och `%d`. Under `LANGUAGE_SELF_NAME` skriver du språkets namn på det egna språket. Det namnet visas på språkknappen.
 
+Lägg också till spelets översatta titel som `Name[pl]` och en kort beskrivning som `Comment[pl]` i `packaging/linux/axels-spel.desktop`. Språkkontrollen jämför programmenyns titel med spelets och kontrollerar att beskrivningen finns.
+
 Godot läser katalogerna vid spelstart. Engelska är källspråket. Lägg nya speltexter i katalogerna och mallen med samma engelska nyckel.
 
 ## Bilder och ljud
 
-- En språkknapp kan få en bild i `branding/language-fi.svg`. Logotypen kan läggas i `branding/rollabout-fi.png`. Om bilden saknas och språket använder den engelska titeln visas den engelska logotypen. Övriga titlar visas som text tills en egen logotyp finns.
-- Repliker använder `audio/voices/fi_<replik>.wav` med samma filnamn efter språkprefixet som de engelska rösterna. Pratbubblan fungerar även utan inspelning.
-- Radiolåtar använder `audio/radio/Låtnamn (FI).mp3`. Engelska låtar kan även ha filnamn utan språkkod. Regionala språk som `sv_FI` kan använda egna resurser och därefter grundspråkets.
+- En språkknapp kan få en bild i `branding/language-pl.svg`. Översätt speltiteln under `Harbor Town Rollabout` och lägg logotypen med samma titel i `branding/rollabout-pl.png`. Startskärmen och huvudmenyn använder samma bild. För en regional variant försöker spelet först läsa variantens logotyp, sedan grundspråkets och sist den engelska.
+- Repliker använder `audio/voices/pl_<replik>.wav` med samma filnamn efter språkprefixet som de engelska rösterna. Pratbubblan fungerar även utan inspelning.
+- Radiolåtar använder `audio/radio/Låtnamn (PL).mp3`. Engelska låtar kan även ha filnamn utan språkkod. Regionala språk som `sv_FI` kan använda egna resurser och därefter grundspråkets.
 - Exportera med alla projektresurser så att även dynamiskt upptäckta kataloger och media följer med.
 
-Kör `tools/check_localizations.sh` från projektroten för att kontrollera alla språk. Kontrollen hittar saknade översättningar i förhållande till mallen och fel i markerade formatsträngar.
+Kör `tools/check_localizations.sh` från projektroten för att kontrollera alla språk. Kontrollen hittar saknade översättningar i förhållande till mallen, fel i markerade formatsträngar och saknade spellogotyper.
 
 ### Ljud som ingår i spelet
 

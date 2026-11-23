@@ -9,14 +9,25 @@ func check_quest() -> void:
 	game._start_game()
 	game.walker.show()
 	var initial_wallet: int = game.wallet
+	var initial_points: int = game.foot_quest_points
 	# Linger just ahead of the neighbour until she reaches the pavement's end.
 	for frame in 900:
 		game.walker.position = game.cat_owner.position + Vector3.RIGHT * 3
 		game._update_cat_quest(1.0 / 60)
 	game.walker.position = game.cat_owner.position
 	game._update_cat_quest(1.0 / 60)
+	if not await check_dialogue(game, "Can you find my cat? Look for white paws along this pavement.", "lost_cat"):
+		quit(1)
+		return
 	game.walker.position = game.lost_cat.position
 	game._update_cat_quest(1.0 / 60)
+	for locale in ["fi", "sv", "de", "es", "nb", "fr", "en"]:
+		TranslationServer.set_locale(locale)
+		await process_frame
+		if game.greeting.get_parent() != game.lost_cat or game.greeting.text != game.tr("Meow!") or not game.greeting.visible:
+			printerr("Missing cat caption in ", locale)
+			quit(1)
+			return
 	var waiting_position: Vector3 = game.lost_cat.position
 	game.walker.position = game.cat_owner.position + Vector3.BACK * 12
 	for frame in 120:
@@ -32,22 +43,30 @@ func check_quest() -> void:
 		printerr("Expected a reunion and one ten-coin reward.")
 		quit(1)
 		return
-	var reunion := "There you are, Socks! Thank you for bringing her home."
-	for locale in ["de", "es", "fi", "fr", "nb", "sv", "en"]:
-		TranslationServer.set_locale(locale)
-		await process_frame
-		var clip = game.greeting_voice.stream
-		var expected_path := "res://audio/voices/%s_cat_returned.wav" % locale
-		if clip == null or clip.resource_path != expected_path or not game.greeting_voice.playing:
-			printerr("Missing spoken reunion in ", locale)
-			quit(1)
-			return
-		if game.greeting.text.replace("\n", " ") != game.tr(reunion) or not game.greeting.visible:
-			printerr("Reunion speech bubble did not follow the voice in ", locale)
-			quit(1)
-			return
+	var saved := ConfigFile.new()
+	if saved.load(game.SETTINGS_PATH) != OK or saved.get_value("player","coins",-1) != initial_wallet + 10 or saved.get_value("player","foot_quest_points",-1) != initial_points + 10 or game.foot_quest_points != initial_points + 10:
+		printerr("Expected the ten coins and ten points to be awarded once and saved.")
+		quit(1)
+		return
+	if not await check_dialogue(game, "There you are, Socks! Thank you for bringing her home.", "cat_returned"):
+		quit(1)
+		return
 	game.queue_free()
 	await process_frame
 	await create_timer(.4).timeout
 	print("Cat waited during the detour, reunited with the neighbour and paid once.")
 	quit()
+
+func check_dialogue(game: Node, phrase: String, clip_name: String) -> bool:
+	for locale in ["de", "es", "fi", "fr", "nb", "sv", "en"]:
+		TranslationServer.set_locale(locale)
+		await process_frame
+		var clip = game.greeting_voice.stream
+		var expected_path := "res://audio/voices/%s_%s.wav" % [locale, clip_name]
+		if clip == null or clip.resource_path != expected_path or not game.greeting_voice.playing:
+			printerr("Missing spoken quest dialogue in ", locale)
+			return false
+		if game.greeting.text.replace("\n", " ") != game.tr(phrase) or not game.greeting.visible:
+			printerr("Quest speech bubble did not follow the voice in ", locale)
+			return false
+	return true

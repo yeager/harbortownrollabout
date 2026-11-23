@@ -87,7 +87,7 @@ func _weight_mesh(source: Mesh, joint_y: float, blend: float) -> ArrayMesh:
 		result.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
 	return result
 
-func advance(distance: float, delta: float, pushing: bool) -> void:
+func advance(distance: float, delta: float, pushing: bool, tuck := 0.0) -> void:
 	if delta <= 0.0:
 		return
 	var pace := distance / delta
@@ -128,7 +128,10 @@ func advance(distance: float, delta: float, pushing: bool) -> void:
 		var ankle_offset := sole_pivot - sole_pivot.rotated(Vector3.RIGHT, shoe_angle)
 		foot += Vector2(-ankle_offset.z, ankle_offset.y)
 		shoe_angles.append(shoe_angle)
-		if ground_height.is_valid():
+		if tuck > 0.0:
+			foot.y += .145 * tuck
+			foot.x += .065 * tuck
+		elif ground_height.is_valid():
 			# A shoe can straddle two treads. Check both ends of the pitched sole.
 			var elevation := -INF
 			for sole_z: float in [.075, -.155]:
@@ -161,10 +164,10 @@ func advance(distance: float, delta: float, pushing: bool) -> void:
 		shoes[i].position += legs[i].basis.inverse() * (Vector3.FORWARD * 0.025)
 		shoes[i].basis = legs[i].basis.inverse() * Basis(Vector3.RIGHT, shoe_angles[i])
 		if not pushing:
-			arms[i].rotation.x = -foot.x * 1.05
+			arms[i].rotation.x = -foot.x * 1.05 + .40 * tuck
 			# Leave room for the resting thumb beside the jacket and thigh.
 			arms[i].rotation.z = signf(hip_centres[i]) * .10
-		var flex := .15 + weight * (.18 - foot.x * .52)
+		var flex := .15 + .32 * tuck + weight * (.18 - foot.x * .52)
 		if pushing:
 			flex = .12
 		var elbow_rotation := Basis(Vector3.RIGHT, flex)

@@ -21,10 +21,12 @@ func _gable(finish: Material, center: Vector3, width: float, rise: float, depth:
 	shape.size = Vector3(width,rise,depth)
 	_add(finish,shape,Transform3D(Basis.IDENTITY,center))
 
-func _finish(color: String, roughness := .84) -> StandardMaterial3D:
+func _finish(color: String, roughness := .84, surface := "mineral") -> StandardMaterial3D:
 	var mat := StandardMaterial3D.new()
 	mat.albedo_color = Color(color)
 	mat.roughness = roughness
+	if not surface.is_empty():
+		preload("res://art/surfaces/model_finish.gd").apply(mat, surface)
 	return mat
 
 func _window(at: Vector3, frame: Material, stone: Material, glass: Material, elaborate: bool) -> void:
@@ -71,12 +73,12 @@ func build(floors: int, atlas: bool, facade: Color, night_glass: Material) -> vo
 	plaster.albedo_color = facade
 	var stone := _finish("#d4c6a7" if atlas else "#d6b997")
 	var plinth := _finish("#847c70")
-	var wood := _finish("#59443a" if atlas else "#485249")
-	var door := _finish("#384f47" if atlas else "#704335")
-	var brass := _finish("#a18a55",.39)
+	var wood := _finish("#59443a" if atlas else "#485249", .61, "wood")
+	var door := _finish("#384f47" if atlas else "#704335", .50, "wood")
+	var brass := _finish("#a18a55", .39, "brushed")
 	brass.metallic = .62
 	var slate := _finish("#42494a" if atlas else "#643f37",.52)
-	var pane := _finish("#526770",.20)
+	var pane := _finish("#526770", .20, "")
 	pane.metallic = .35
 	var brick := _finish("#8e5644")
 	var cornice := floors*2.8
@@ -146,7 +148,7 @@ func build(floors: int, atlas: bool, facade: Color, night_glass: Material) -> vo
 	pipe.height = 1.0
 	pipe.top_radius = .065
 	pipe.bottom_radius = .065
-	var metal := _finish("#575953",.44)
+	var metal := _finish("#575953", .44, "brushed")
 	metal.metallic = .56
 	for side in [-1,1]:
 		var eave: float = side*5.19

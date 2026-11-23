@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 128" width="64" height="128">
+  <defs><clipPath id="sole"><path d="M31 3C47 2 59 15 59 37Q60 52 49 69C39 84 52 96 48 111Q45 126 29 125Q12 124 11 110L10 82Q10 73 6 59C-1 33 6 7 31 3Z"/></clipPath></defs>
+  <g clip-path="url(#sole)" fill="#81949e">
+    <rect width="64" height="128" opacity=".45"/>
+    <path d="M0 8L32 21 64 7M0 23L32 36 64 22M0 38L32 51 64 37M0 53L32 66 64 52M0 69L32 80 64 68M0 94L32 103 64 93M0 109L32 118 64 108M0 124L32 133 64 123" fill="none" stroke="#697e89" stroke-width="8"/>
+  </g>
+</svg>

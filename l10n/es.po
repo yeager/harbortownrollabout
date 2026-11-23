@@ -6,7 +6,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 msgid "Harbor Town Rollabout"
-msgstr "Harbor Town Rollabout"
+msgstr "A toda marcha por el puerto"
 
 msgid "Emergency Vehicles"
 msgstr "Vehículos de emergencia"
@@ -59,11 +59,11 @@ msgstr "Sirena apagada"
 msgid "Siren ON"
 msgstr "Sirena encendida"
 
-msgid "Engine ON"
-msgstr "Motor encendido"
+msgid "Engine sound ON"
+msgstr "Sonido del motor activado"
 
-msgid "Engine OFF"
-msgstr "Motor apagado"
+msgid "Engine sound OFF"
+msgstr "Sonido del motor desactivado"
 
 msgid "Pause"
 msgstr "Pausa"
@@ -315,7 +315,7 @@ msgid "Snow"
 msgstr "Nieve"
 
 msgid "Slush"
-msgstr "Nieve derretida"
+msgstr "Aguanieve"
 
 msgid "Hello!"
 msgstr "¡Hola!"
@@ -399,11 +399,11 @@ msgstr "Hay un sanitario esperando en la clínica. Ve a recogerlo."
 msgid "Please bring the first-aid supplies to the marina."
 msgstr "Por favor, traiga los primeros auxilios al puerto deportivo."
 
-msgid "Fare complete. You earned 15 coins."
-msgstr "¡Viaje completado! Has ganado 15 monedas."
+msgid "Fare complete. You earned 15 points and 15 coins."
+msgstr "¡Viaje completado! Has ganado 15 puntos y 15 monedas."
 
-msgid "Thank you for helping! You earned 10 coins."
-msgstr "¡Gracias por ayudar! Has ganado 10 monedas."
+msgid "Thank you for helping! You earned 10 points and 10 coins."
+msgstr "¡Gracias por ayudar! Has ganado 10 puntos y 10 monedas."
 
 msgid "Café"
 msgstr "Café"
@@ -430,8 +430,10 @@ msgid "Pick and mix"
 msgstr "Golosinas a granel"
 
 #, c-format
-msgid "%s · %d coins"
-msgstr "%s · %d monedas"
+msgid "%s · %d coin"
+msgid_plural "%s · %d coins"
+msgstr[0] "%s · %d moneda"
+msgstr[1] "%s · %d monedas"
 
 #, c-format
 msgid "You need %d more coin."
@@ -440,8 +442,10 @@ msgstr[0] "Te falta %d moneda."
 msgstr[1] "Te faltan %d monedas."
 
 #, c-format
-msgid "%s · Paid %d coins. Thank you!"
-msgstr "%s · Has pagado %d monedas. ¡Gracias!"
+msgid "%s · Paid %d coin. Thank you!"
+msgid_plural "%s · Paid %d coins. Thank you!"
+msgstr[0] "%s · Has pagado %d moneda. ¡Gracias!"
+msgstr[1] "%s · Has pagado %d monedas. ¡Gracias!"
 
 msgid "Recovery truck"
 msgstr "Grúa"
@@ -455,8 +459,8 @@ msgstr "Lleva el coche al taller."
 msgid "Collect the car with a missing wheel."
 msgstr "Recoge el coche al que le falta una rueda."
 
-msgid "Recovery complete. You earned 20 coins."
-msgstr "¡Coche entregado! Has ganado 20 monedas."
+msgid "Recovery complete. You earned 20 points and 20 coins."
+msgstr "¡Coche entregado! Has ganado 20 puntos y 20 monedas."
 
 msgid "Passenger ride · P to pause"
 msgstr "Vas de pasajero · P para pausar"
@@ -506,12 +510,8 @@ msgstr "%s × %d"
 msgid "Waiting for a green light"
 msgstr "Esperando a que el semáforo se ponga verde"
 
-msgid ""
-"Steer with A and D or the arrow keys. Hold the left mouse button for "
-"throttle. Hold the right to slow down, then reverse."
-msgstr ""
-"Cargador con A y D o las teclas de flecha. Sostenga el botón izquierdo del "
-"ratón para el acelerador. Sostenga la derecha para frenar, y luego revertir."
+msgid "Hold left to speed up or right to slow down and reverse. Move the mouse sideways to steer, or use A/D or the arrow keys."
+msgstr "Mantén pulsado el botón izquierdo para acelerar o el derecho para frenar y dar marcha atrás. Para girar, mueve el ratón hacia los lados o usa A/D o las flechas."
 
 msgid "Start boating"
 msgstr "Empezar el paseo en barco"
@@ -520,7 +520,7 @@ msgid "Continue boating"
 msgstr "Seguir navegando"
 
 msgid "The tram drives itself and stops at each platform."
-msgstr "El tranvía se conduce a sí mismo y se detiene en cada plataforma."
+msgstr "El tranvía circula solo y se detiene en cada parada."
 
 msgid ""
 "Control the speed. The tram follows the rails and stops at each platform."
@@ -557,10 +557,10 @@ msgstr "F · Subir al vehículo (%s)"
 msgid "Well done, %s!"
 msgstr "Bien hecho, %s!"
 
-msgid "First-aid supplies delivered to the marina. You earned 10 coins."
+msgid "First-aid supplies delivered to the marina. You earned 10 points and 10 coins."
 msgstr ""
 "¡Has entregado el material de primeros auxilios en el puerto deportivo! Has "
-"ganado 10 monedas."
+"ganado 10 puntos y 10 monedas."
 
 msgid "Stop here to load the car."
 msgstr "Para aquí para subir el coche a la grúa."
@@ -575,10 +575,10 @@ msgid "Unloading the car …"
 msgstr "Bajando el coche…"
 
 msgid "Press Space to load the car."
-msgstr "Pulsa la barra espaciadora para subir el coche."
+msgstr "Pulsa la barra espaciadora para subir el coche a la grúa."
 
 msgid "Press Space to unload the car."
-msgstr "Pulsa la barra espaciadora para bajar el coche."
+msgstr "Pulsa la barra espaciadora para bajar el coche de la grúa."
 
 msgid "Stop for your passenger."
 msgstr "Para junto a tu pasajero."
@@ -631,23 +631,23 @@ msgstr "Deja a los pasajeros en la clínica."
 msgid "Passengers on board."
 msgstr "Los pasajeros ya están a bordo."
 
-msgid "Bus journey complete. You earned 15 coins."
-msgstr "¡Has terminado el recorrido! Has ganado 15 monedas."
+msgid "Bus journey complete. You earned 15 points and 15 coins."
+msgstr "¡Has terminado el recorrido! Has ganado 15 puntos y 15 monedas."
 
 msgid "A pupil is waiting at the square."
 msgstr "Hay un estudiante esperando en la plaza."
 
 msgid "Please take me to school."
-msgstr "Por favor llévame a la escuela."
+msgstr "Por favor, llévame a la escuela."
 
 msgid "A pupil is waiting at school."
 msgstr "Hay un estudiante esperando en la escuela."
 
 msgid "Pick up the pupil"
-msgstr "Recoge la pupila"
+msgstr "Recoge al estudiante"
 
 msgid "Drop off the pupil"
-msgstr "Suelta al alumno."
+msgstr "Deja al estudiante en su destino"
 
 msgid "Return to your bus"
 msgstr "Regresa a tu autobús"
@@ -707,7 +707,7 @@ msgid "Patrol the marina"
 msgstr "Patrulla el puerto deportivo"
 
 msgid "Check the hydrant at the square"
-msgstr "Compruebe el hidratante en la plaza"
+msgstr "Revisa la boca de incendios de la plaza"
 
 msgid "Meet the fire safety team at the clinic"
 msgstr "Reúnete con el equipo de prevención de incendios en la clínica"
@@ -716,22 +716,22 @@ msgid "Check the rescue equipment at the marina"
 msgstr "Revisa el equipo de rescate en el puerto deportivo"
 
 msgid "Collect parcels at the square"
-msgstr "Recoger paquetes en la plaza"
+msgstr "Recoge los paquetes en la plaza"
 
 msgid "Deliver a parcel to the clinic"
-msgstr "Entregar un paquete a la clínica"
+msgstr "Entrega un paquete en la clínica"
 
 msgid "Deliver the last parcel to the marina"
 msgstr "Entrega el último paquete al puerto deportivo"
 
 msgid "Collect warm blankets at the square"
-msgstr "Recoger mantas calientes en la plaza"
+msgstr "Recoge las mantas de abrigo en la plaza"
 
 msgid "Bring blankets to the clinic"
-msgstr "Trae mantas a la clínica"
+msgstr "Lleva las mantas a la clínica"
 
 msgid "Bring blankets to the marina"
-msgstr "Trae mantas al puerto deportivo"
+msgstr "Lleva las mantas al puerto deportivo"
 
 msgid "Have you done your homework? — Mum"
 msgstr "¿Has hecho los deberes? — Mamá"
@@ -818,15 +818,15 @@ msgstr "Bajar en el próximo muelle · F"
 msgid "Stay on board · F"
 msgstr "Seguir a bordo · F"
 
-msgid "Two parcels collected at the square. You earned 10 coins."
-msgstr "Has recogido dos paquetes en la plaza. Has ganado 10 monedas."
+msgid "Two parcels collected at the square. You earned 10 points and 10 coins."
+msgstr "Has recogido dos paquetes en la plaza. Has ganado 10 puntos y 10 monedas."
 
-msgid "The clinic received its parcel. You earned 10 coins."
-msgstr "La clínica ya tiene su paquete. ¡Has ganado 10 monedas!"
+msgid "The clinic received its parcel. You earned 10 points and 10 coins."
+msgstr "La clínica ya tiene su paquete. ¡Has ganado 10 puntos y 10 monedas!"
 
-msgid "The marina received the last parcel. You earned 10 coins."
+msgid "The marina received the last parcel. You earned 10 points and 10 coins."
 msgstr ""
-"El último paquete ha llegado al puerto deportivo. Has ganado 10 monedas."
+"El último paquete ha llegado al puerto deportivo. Has ganado 10 puntos y 10 monedas."
 
 #, c-format
 msgid "Stepping ashore in %d s"
@@ -850,7 +850,7 @@ msgstr ""
 "separado. — Mamá"
 
 msgid "Find clear ground to unfold the scooter."
-msgstr "Encuentra un terreno claro para desenvolver el scooter."
+msgstr "Busca un sitio despejado para desplegar el patinete."
 
 msgid "Fold scooter · F"
 msgstr "Plegar el patinete · F"
@@ -877,8 +877,8 @@ msgstr "Sirve helados delante de la escuela"
 msgid "Serve ice cream at the marina"
 msgstr "Sirve helados en el puerto deportivo"
 
-msgid "Ice cream served! You earned 10 coins."
-msgstr "¡Has servido el helado! Has ganado 10 monedas."
+msgid "Ice cream served! You earned 10 points and 10 coins."
+msgstr "¡Has servido el helado! Has ganado 10 puntos y 10 monedas."
 
 msgid "Return to your ice cream van"
 msgstr "Vuelve a tu furgoneta de helados"
@@ -925,13 +925,13 @@ msgid "W/S Walk · A/D Turn · Shift + W Run · F Enter · U Scooter"
 msgstr "W/S Camina · A/D Gira · Shift + W Corre · F Sube · U Patinete"
 
 msgid "PgUp Raise camera · PgDn Lower camera"
-msgstr "PgUp Sube la cámara · PgDn Baja la cámara"
+msgstr "Re Pág: sube la cámara · Av Pág: baja la cámara"
 
 msgid "Operate the excavator in the equipment yard."
 msgstr "Opera la excavadora en el patio del equipo."
 
 msgid "Start excavating"
-msgstr "Inicio de excavación"
+msgstr "Empezar a excavar"
 
 msgid "Motorboat"
 msgstr "Lancha motora"
@@ -1043,22 +1043,22 @@ msgid "Find the cat with white paws."
 msgstr "Busca a la gata de las patitas blancas."
 
 msgid "Collect seedlings at the square"
-msgstr "Recoger plántulas en la plaza"
+msgstr "Recoge las plantitas en la plaza"
 
 msgid "Deliver herbs to the clinic garden"
 msgstr "Entrega hierbas al jardín de la clínica"
 
 msgid "Bring flowers to the marina"
-msgstr "Trae flores al puerto"
+msgstr "Lleva las flores al puerto deportivo"
 
 msgid "Pick up soup ingredients at the square"
-msgstr "Recoger ingredientes de sopa en la plaza"
+msgstr "Recoge los ingredientes para la sopa en la plaza"
 
 msgid "Serve lunch to the clinic staff"
-msgstr "Almuerzo al personal de la clínica"
+msgstr "Sirve el almuerzo al personal de la clínica"
 
 msgid "Serve soup to the boat crews"
-msgstr "Servir sopa a los tripulantes del barco"
+msgstr "Sirve la sopa a las tripulaciones de los barcos"
 
 msgid "Back in a safe place."
 msgstr "Ya estás en un lugar seguro."
@@ -1104,7 +1104,7 @@ msgid "Park with a smile"
 msgstr "Aparca con una sonrisa"
 
 msgid "Bananas need a ticket"
-msgstr "Los plátanos pagan aparcamiento"
+msgstr "Los plátanos necesitan tique"
 
 msgid "LANGUAGE_SELF_NAME"
 msgstr "Español"
@@ -1162,13 +1162,13 @@ msgid "No songs available in this language yet."
 msgstr "Todavía no hay canciones en este idioma."
 
 msgid "HARBOR FUEL"
-msgstr "HARBOR FUEL"
+msgstr "GASOLINERA DEL PUERTO"
 
 msgid "Harbor Fuel  →"
-msgstr "Harbor Fuel  →"
+msgstr "Gasolinera del Puerto  →"
 
 msgid "←  Harbor Fuel"
-msgstr "←  Harbor Fuel"
+msgstr "←  Gasolinera del Puerto"
 
 msgid "Tow drop-off"
 msgstr "Entrega de vehículos"
@@ -1330,3 +1330,209 @@ msgstr "Misiones actuales"
 
 msgid "Hold left mouse to drive forward or right mouse to reverse."
 msgstr "Mantén pulsado el botón izquierdo del ratón para avanzar o el derecho para retroceder."
+
+msgctxt "decimal separator"
+msgid "."
+msgstr ","
+
+msgid "Meow!"
+msgstr "¡Miau!"
+
+msgid "Graphics mode"
+msgstr "Modo gráfico"
+
+msgid "Compatibility (OpenGL)"
+msgstr "Compatibilidad (OpenGL)"
+
+msgid "Mobile"
+msgstr "Móvil"
+
+msgid "MENU"
+msgstr "MENÚ"
+
+msgid "BURGERS"
+msgstr "HAMBURGUESAS"
+
+msgid "FRIES"
+msgstr "PATATAS FRITAS"
+
+msgid "SODA"
+msgstr "REFRESCOS"
+
+msgid "SPECIAL"
+msgstr "ESPECIAL"
+
+msgid "DOUBLE"
+msgstr "DOBLE"
+
+msgid "WITH CHEESE"
+msgstr "CON QUESO"
+
+msgid "Wait until the crossing is clear."
+msgstr "Espera a que el cruce esté despejado."
+
+#, c-format
+msgid "%d km/h"
+msgstr "%d km/h"
+
+msgid "Hold the left or right mouse button and move the mouse sideways to steer."
+msgstr "Mantén pulsado el botón izquierdo o derecho y mueve el ratón hacia los lados para girar."
+
+msgid "Hold left to accelerate or right to brake. To reverse, stop, release and hold right again."
+msgstr "Mantén pulsado el botón izquierdo para acelerar o el derecho para frenar. Para dar marcha atrás, detente, suelta el derecho y vuelve a mantenerlo pulsado."
+
+msgid "Our ice creams"
+msgstr "Nuestros helados"
+
+msgid "Berry Boing"
+msgstr "Baya saltarina"
+
+msgid "Minty Moo"
+msgstr "Muu de menta"
+
+msgid "Purple Hiccup"
+msgstr "Hipo morado"
+
+msgid "Lemon Comet"
+msgstr "Cometa de limón"
+
+msgid "Melon Wiggle"
+msgstr "Melón bailarín"
+
+msgid "Blue Blizzard"
+msgstr "Ventisca azul"
+
+msgid "Harbor Town Ice Cream"
+msgstr "Helados del Puerto"
+
+msgid "Boarding"
+msgstr "Embarque"
+
+msgid "E Jump"
+msgstr "E Saltar"
+
+msgid "Ride-on mower"
+msgstr "Cortacésped con asiento"
+
+msgid "System language"
+msgstr "Idioma del sistema"
+
+msgid "Did you feel a raindrop?"
+msgstr "¿Has sentido una gota de lluvia?"
+
+msgid "My boots vote for puddles!"
+msgstr "¡Mis botas votan por los charcos!"
+
+msgid "Which ice cream would you pick?"
+msgstr "¿Qué helado elegirías?"
+
+msgid "Blueberry, with a cherry on top!"
+msgstr "¡De arándanos, con una cereza encima!"
+
+msgid "Can AI dream?"
+msgstr "¿Puede soñar la inteligencia artificial?"
+
+msgid "Maybe it dreams of electric sheep!"
+msgstr "¡Quizá sueñe con ovejas eléctricas!"
+
+msgid "What did the dog find?"
+msgstr "¿Qué ha encontrado el perro?"
+
+msgid "A leaf worth a really good sniff!"
+msgstr "¡Una hoja que huele de maravilla!"
+
+msgid "Japanese haori jacket"
+msgstr "Chaqueta haori japonesa"
+
+msgid "Korean jeogori jacket"
+msgstr "Chaqueta jeogori coreana"
+
+msgid "Red panda plush"
+msgstr "Panda rojo de peluche"
+
+msgid "Moon rabbit figurine"
+msgstr "Figura de conejo lunar"
+
+msgid "Popcorn Party"
+msgstr "Fiesta de palomitas"
+
+msgid "Pickle Carousel"
+msgstr "Carrusel de pepinillos"
+
+msgid "Banana Moon"
+msgstr "Luna de plátano"
+
+msgid "Berry Blizzard"
+msgstr "Tormenta de bayas"
+
+msgid "Mozzarella, tomato and carrot stars"
+msgstr "Mozzarella, tomate y estrellas de zanahoria"
+
+msgid "Popcorn, sweetcorn and cheese"
+msgstr "Palomitas, maíz dulce y queso"
+
+msgid "Pickle wheels and crispy onions"
+msgstr "Ruedas de pepinillo y cebolla crujiente"
+
+msgid "Banana moons and coconut snow"
+msgstr "Lunas de plátano y nieve de coco"
+
+msgid "Blueberries, vanilla cream and raspberry swirls"
+msgstr "Arándanos, crema de vainilla y espirales de frambuesa"
+
+msgid "Frog choir"
+msgstr "Coro de ranas"
+
+msgid "Sour shoelaces"
+msgstr "Cordones ácidos"
+
+msgid "Rocket fudge"
+msgstr "Caramelo cohete"
+
+msgid "Cloud cone"
+msgstr "Cucurucho de nubes"
+
+msgid "Penguin pop"
+msgstr "Polo pingüino"
+
+msgid "Lunar sundae"
+msgstr "Copa lunar"
+
+msgid "Dill disco popcorn"
+msgstr "Palomitas disco con eneldo"
+
+msgid "Dragon curls"
+msgstr "Espirales de dragón"
+
+msgid "Chocolate puddles"
+msgstr "Charcos de chocolate"
+
+msgid "Gummy boots and raspberry raindrops"
+msgstr "Botas de gominola y gotas de frambuesa"
+
+msgid "Pear jelly frogs with fizzy lime dust"
+msgstr "Ranas de gominola de pera con polvo efervescente de lima"
+
+msgid "Apple laces with lemon sugar"
+msgstr "Cordones de manzana con azúcar de limón"
+
+msgid "Caramel with popping strawberry sparks"
+msgstr "Caramelo con chispas de fresa explosivas"
+
+msgid "Vanilla ice cream with cotton candy clouds"
+msgstr "Helado de vainilla con nubes de algodón de azúcar"
+
+msgid "Licorice ice cream with a mango beak"
+msgstr "Helado de regaliz con pico de mango"
+
+msgid "Blueberry ice cream with biscuit craters"
+msgstr "Helado de arándanos con cráteres de galleta"
+
+msgid "Popcorn with dill and crunchy cheese stars"
+msgstr "Palomitas con eneldo y estrellas crujientes de queso"
+
+msgid "Corn twists with sweet paprika scales"
+msgstr "Espirales de maíz con escamas de pimentón dulce"
+
+msgid "Chocolate buttons with crispy rice bubbles"
+msgstr "Botones de chocolate con burbujas de arroz crujiente"

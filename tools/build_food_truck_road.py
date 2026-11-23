@@ -12,14 +12,39 @@ def box(name,pos,dims,mat,bevel):
     return v.cube(name,pos,dims,mat,bevel,root)
 
 root = bpy.data.objects["Kajens burgare"]
-road_red = bpy.data.materials["Cherry lacquer"]
+shutter_finish = bpy.data.materials["Charcoal enamel"]
 for part in list(root.children):
-    if part.name.startswith(("Raised red hatch","Hatch end trim","Hatch drip edge","Gas spring",
-                             "Chrome piston","Upper strut bracket","Strut bracket","Service sill")):
+    if part.name.startswith(("Raised red hatch","Hatch exterior skin","Hatch end trim","Hatch drip edge","Gas spring",
+                             "Chrome piston","Upper strut bracket","Strut bracket","Service sill",
+                             "Drink can","Rolled can lid","Can pull tab","Can label stripe",
+                             "Counter award","Hatch spotlight","Takeaway carton","Squeeze bottle","Tapered sauce spout")):
         bpy.data.objects.remove(part,do_unlink=True)
-box("Latched service shutter",(1.20,1.19,2.02),(.055,3.94,1.59),road_red,.025)
+box("Latched service shutter",(1.20,1.19,2.02),(.055,3.94,1.59),shutter_finish,.025)
+for z in (1.24, 2.80):
+    box("Shutter edge rail",(1.229,1.19,z),(.019,3.94,.035),v.METAL,.006)
+for y in (-.76,3.14):
+    box("Shutter end rail",(1.229,y,2.02),(.019,.035,1.53),v.METAL,.006)
+# Three flat silhouettes form the burger printed on the closed hatch.
+bun = [(0,-.02),(.03,.10),(.10,.21),(.23,.29),(.40,.32),
+       (.57,.29),(.70,.21),(.77,.10),(.80,-.02)]
+filling = [(0,-.12),(.11,-.08),(.21,-.13),(.34,-.08),(.50,-.14),
+           (.63,-.09),(.80,-.12),(.78,-.19),(.02,-.19)]
+base = [(.02,-.23),(.78,-.23),(.73,-.31),(.64,-.34),(.16,-.34),(.07,-.31)]
+for name, outline in [("Crown",bun),("Filling",filling),("Heel",base)]:
+    mesh = bpy.data.meshes.new("Burger print " + name)
+    mesh.from_pydata([(1.229,.79+y,2.11+z) for y,z in outline], [],
+                     [list(reversed(range(len(outline))))])
+    decal = bpy.data.objects.new(mesh.name,mesh)
+    bpy.context.collection.objects.link(decal)
+    decal.parent = root
+    mesh.materials.append(v.PAINT_WHITE)
 for y in [-.64,3.02]:
     box("Recessed shutter catch",(1.233,y,1.30),(.016,.115,.055),v.DARK,.008)
+    box("Catch lever",(1.245,y,1.30),(.015,.074,.017),v.METAL,.004)
+for y in (-.43,.38,1.19,2.0,2.81):
+    box("Shutter hinge leaf",(1.234,y,2.771),(.012,.14,.043),v.METAL,.004)
+    barrel = v.cylinder("Shutter hinge barrel",(1.25,y,2.803),.018,.15,v.METAL,False,16,root)
+    barrel.rotation_euler.x = 1.5707963
 wheel_parts = [part for part in root.children if part.name.startswith(
     ("Tyre","Pressed steel rim","Hub cap","Rim vent","Hex wheel bolt"))]
 bpy.context.view_layer.update()
@@ -33,5 +58,21 @@ for tyre in [part for part in wheel_parts if part.name.startswith("Tyre")]:
     bpy.context.view_layer.objects.active = tyre
     bpy.ops.object.join()
     tyre.name = "All terrain tire"
+# Keep the rotating wheel assembly separate from the fixed steering column.
+pivot = bpy.data.objects.new("SteeringPivot", None)
+bpy.context.collection.objects.link(pivot)
+pivot.parent = root
+pivot.location = bpy.data.objects["Steering rim"].location
+bpy.context.view_layer.update()
+for part in list(root.children):
+    if part.name.startswith(("Steering rim", "Steering spoke", "Horn pad")):
+        world = part.matrix_world.copy()
+        part.parent = pivot
+        part.matrix_world = world
+reverse_glass = v.material("Reverse lamp clear lens",(.80,.86,.89),.12,.2)
+for side in (-1,1):
+    housing_x = side*.91
+    box("Backlight bezel",(housing_x-side*.17,3.185,.94),(.12,.068,.12),v.DARK,.014)
+    box("Reversing lens",(housing_x-side*.17,3.225,.94),(.093,.024,.09),reverse_glass,.012)
 v.export_vehicle(root,"food_truck_road.glb")
 

@@ -3,6 +3,9 @@ shader_type spatial;
 uniform float wet = 0.0;
 uniform float snow_cover = 0.0;
 
+uniform sampler2D work_map : hint_default_black, filter_linear, repeat_disable;
+uniform vec4 work_bounds = vec4(0.,0.,1.,1.);
+
 varying vec2 paving_position;
 
 void vertex() {
@@ -22,6 +25,7 @@ void fragment() {
 	vec3 granite = vec3(0.34, 0.32, 0.30) * (1.0 + detail * (tone - 0.5) * 0.20);
 	ALBEDO = mix(granite, vec3(0.13, 0.12, 0.11), joint * detail);
 	float snow = clamp(snow_cover * (0.88 + 0.12 * detail * tone) + joint * detail * snow_cover * 0.25, 0.0, 1.0);
+	snow *= 1.0-texture(work_map,(paving_position-work_bounds.xy)/work_bounds.zw).r;
 	ALBEDO *= 1.0 - wet * 0.38;
 	ALBEDO = mix(ALBEDO, vec3(0.73, 0.81, 0.85), snow);
 	ROUGHNESS = mix(mix(0.94, 0.32, wet), 0.88, snow);

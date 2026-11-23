@@ -69,7 +69,19 @@ func path(start: Vector2, goal: Vector2, heading := Vector2.ZERO, wide_turns := 
 		graph.remove_point(id)
 	if driving:
 		points = _lane_path(points)
-	points.append(goal)
+		if wide_turns and points.size() >= 2:
+			var corner := points[-1]
+			var approach := points[-2].direction_to(corner)
+			var departure := corner.direction_to(goal)
+			if absf(approach.dot(departure)) < .01 and corner.distance_to(goal) > 6:
+				var radius := minf(3.5, points[-2].distance_to(corner)*.5)
+				var entry := corner - approach*radius
+				var exit := corner + departure*radius
+				points[-1] = entry
+				for part in range(1, 6):
+					points.append(entry.bezier_interpolate(entry.lerp(corner, 2.0/3.0), exit.lerp(corner, 2.0/3.0), exit, part/5.0))
+	if points.is_empty() or not points[-1].is_equal_approx(goal):
+		points.append(goal)
 	return points
 
 func _lane_path(centres: PackedVector2Array) -> PackedVector2Array:
@@ -104,7 +116,7 @@ func _lane_path(centres: PackedVector2Array) -> PackedVector2Array:
 					lane.append(entry.bezier_interpolate(entry.lerp(corner, 2.0/3.0), exit.lerp(corner, 2.0/3.0), exit, part/5.0))
 			else:
 				lane.append(a + offset)
-		else:
+		elif lane.is_empty() or not lane[-1].is_equal_approx(a + offset):
 			lane.append(a + offset)
 		lane.append(b + offset)
 		previous = direction

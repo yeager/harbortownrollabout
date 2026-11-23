@@ -66,6 +66,23 @@ func check_contact() -> void:
 			printerr("Assisted driving failed to approach and stop")
 			quit(1)
 			return
+	game.traffic_data.clear()
+	for owner in [game.shoe_owner, game.cat_owner]:
+		var original: Vector3 = owner.position
+		owner.position = start + Vector3.RIGHT * 6
+		for crashes in [true, false]:
+			game.allow_crashes = crashes
+			game.ambulance.position = start
+			game.speed = 3
+			game.mouse_gas = true
+			for frame in 180:
+				game._drive(1.0 / 60.0)
+			var gap: float = owner.position.x - game.ambulance.position.x - game.front_reach
+			if gap < .6 or gap > .8 or absf(game.speed) > .01:
+				printerr("Vehicle failed to stop for ", owner.name, " with gap ", gap)
+				quit(1)
+				return
+		owner.position = original
 	game.queue_free()
 	await process_frame
 	await create_timer(.4).timeout

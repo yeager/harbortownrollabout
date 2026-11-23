@@ -7,6 +7,25 @@ func _initialize() -> void:
 func check_gallery() -> void:
 	var game = load("res://main.tscn").instantiate()
 	root.add_child(game)
+	var expected_tiles: int = game.VEHICLE_NAMES_ALL.size() + game.EXTRA_GALLERY_NAMES.size()
+	if game.vehicle_selector.get_child_count() != expected_tiles:
+		printerr("Missing vehicle picture buttons")
+		quit(1)
+		return
+	var thumbnails := {}
+	var atlas_image := preload("res://vehicles/menu_thumbnails.png").get_image()
+	for tile: Button in game.vehicle_selector.get_children():
+		var picture := tile.icon as AtlasTexture
+		if not picture or picture.atlas != preload("res://vehicles/menu_thumbnails.png") or thumbnails.has(picture.region):
+			printerr("Missing or reused picture on ", tile.text)
+			quit(1)
+			return
+		var image := atlas_image.get_region(Rect2i(picture.region))
+		if image.get_used_rect().has_area() == false:
+			printerr("Empty vehicle picture on ", tile.text)
+			quit(1)
+			return
+		thumbnails[picture.region] = true
 	for index in game.VEHICLE_NAMES_ALL.size():
 		game.mode = "menu"
 		var tile: Button = game.vehicle_selector.get_child(index)
@@ -37,7 +56,14 @@ func check_gallery() -> void:
 			quit(1)
 			return
 	print("All ",game.VEHICLE_NAMES_ALL.size()," road vehicles started, moved, steered and reversed from the picture menu.")
-	game.queue_free()
-	await process_frame
-	await create_timer(.4).timeout
-	quit()
+	for extra in game.EXTRA_GALLERY_NAMES.size():
+		game.mode = "menu"
+		var tile: Button = game.vehicle_selector.get_child(game.VEHICLE_NAMES_ALL.size() + extra)
+		tile.pressed.emit()
+		game.start_button.pressed.emit()
+		if not tile.button_pressed or game.mode != "playing" or game.operating_excavator != (extra == 0) or (game.tram_mode == 2) != (extra == 1) or game.boating != (extra == 2):
+			printerr("Wrong activity after selecting ", tile.text)
+			quit(1)
+			return
+	print("All three special vehicle pictures launched their driving activities.")
+	game._finish_quit()

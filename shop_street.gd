@@ -1,10 +1,35 @@
 extends Node3D
 
-const SHOPS := ["Café", "Kiosk", "Pizzeria", "Sweet shop","Grocery store"]
-const MENUS := [["Cinnamon bun","Berry cordial"],["Ice cream","Hot dog"],["Margherita pizza"],["Pick and mix"],["Apple","Milk"]]
-const PRICES := [[3,2],[4,5],[8],[4],[2,4]]
-const SIGNS := ["KAFÉ BULLEN","SJÖKIOSKEN","PIZZERIA","GODISBODEN","SJÖSTADENS LIVS"]
-const COLORS := ["#a86343","#427868","#b65f51","#927198","#355e4b"]
+const SHOPS := ["Café", "Kiosk", "Pizzeria", "Sweet shop","Grocery store","Momo & Bori"]
+const SWEETS := [
+	"Pick and mix",
+	"Frog choir",
+	"Sour shoelaces",
+	"Rocket fudge",
+	"Cloud cone",
+	"Penguin pop",
+	"Lunar sundae",
+	"Dill disco popcorn",
+	"Dragon curls",
+	"Chocolate puddles",
+]
+const SWEET_INGREDIENTS := [
+	"Gummy boots and raspberry raindrops",
+	"Pear jelly frogs with fizzy lime dust",
+	"Apple laces with lemon sugar",
+	"Caramel with popping strawberry sparks",
+	"Vanilla ice cream with cotton candy clouds",
+	"Licorice ice cream with a mango beak",
+	"Blueberry ice cream with biscuit craters",
+	"Popcorn with dill and crunchy cheese stars",
+	"Corn twists with sweet paprika scales",
+	"Chocolate buttons with crispy rice bubbles",
+]
+const MENUS := [["Cinnamon bun","Berry cordial"],["Ice cream","Hot dog"],["Margherita pizza", "Popcorn Party", "Pickle Carousel", "Banana Moon", "Berry Blizzard"],SWEETS,["Apple","Milk"],["Japanese haori jacket","Korean jeogori jacket","Red panda plush","Moon rabbit figurine"]]
+const PRICES := [[3,2],[4,5],[8,7,8,9,10],[4,3,2,4,5,4,6,3,3,4],[2,4],[9,9,5,4]]
+const PIZZA_TOPPINGS := ["Mozzarella, tomato and carrot stars", "Popcorn, sweetcorn and cheese", "Pickle wheels and crispy onions", "Banana moons and coconut snow", "Blueberries, vanilla cream and raspberry swirls"]
+const SIGNS := ["KAFÉ BULLEN","SJÖKIOSKEN","PIZZERIA","GODISBODEN","SJÖSTADENS LIVS","MOMO & BORI"]
+const COLORS := ["#a86343","#427868","#b65f51","#927198","#355e4b","#375c68"]
 const FRONT_Z := 42.5
 var awnings: Array[Node3D] = []
 var shop_sign_font := SystemFont.new()
@@ -39,17 +64,17 @@ func _ready() -> void:
 	shop_sign_font.font_weight = 800
 	var street_width := storefront_x(SHOPS.size()-1)-storefront_x(0)+8.7
 	var street_center := .5*(storefront_x(0)+storefront_x(SHOPS.size()-1))
-	var pavement := part("Shop pavement",Vector3(street_center,-.07,40.65),Vector3(street_width,.12,3.7),Color("#bcb3a6"))
+	var pavement: MeshInstance3D = get_parent()._make_driving_surface("Shop pavement",Vector3(street_width,.12,3.7),Vector3(street_center,-.07,40.65),Color("#bcb3a6"),false,self)
 	pavement.material_override = get_parent().sidewalk_finish
 	for i in SHOPS.size():
 		var x:=storefront_x(i)
 		var color:=Color(COLORS[i])
 		var cream:=Color("#e9debf")
-		part("Shop floor",Vector3(x,-.12,46),Vector3(8.4,.2,7),Color("#eee6da") if i == 3 else Color("#ad9274"))
+		get_parent()._make_driving_surface("Shop floor",Vector3(8.4,.2,7),Vector3(x,-.12,46),Color("#eee6da") if i == 3 else Color("#ad9274"),false,self)
 		for side in [-1,1]:
 			part("Party wall",Vector3(x+side*4.13,1.6,46),Vector3(.18,3.4,7),color,true)
 			var pane := part("Shop window",Vector3(x+side*2.55,1.65,FRONT_Z),Vector3(3.2,2.65,.15),Color("#668b91"),true)
-			if i in [1,2,3,4]:
+			if i in [1,2,3,4,5]:
 				var glass := pane.material_override as StandardMaterial3D
 				glass.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
 				glass.albedo_color = Color(.65,.84,.84,.16)
@@ -66,7 +91,7 @@ func _ready() -> void:
 		if i != 3:
 			part("Counter",Vector3(x,.48,47.8),Vector3(5.7,1,1),color,true)
 			part("Worktop",Vector3(x,1.02,47.8),Vector3(5.9,.10,1.1),cream)
-		if i not in [2,3]:
+		if i not in [2,3,5]:
 			for shelf in [1.55,2.18]:
 				part("Display shelf",Vector3(x,shelf,49.1),Vector3(6,.09,.45),cream)
 				for jar in 8:
@@ -77,6 +102,8 @@ func _ready() -> void:
 			_kiosk(x)
 		elif i == 3:
 			_sweet_shop(x)
+		elif i == 5:
+			_boutique(x)
 		elif i == 4:
 			_grocery(x)
 		elif i == 0:
@@ -84,9 +111,18 @@ func _ready() -> void:
 
 		elif i == 2:
 			_pizzeria(x)
-			_display_margherita(Vector3(x,1.09,47.65))
+			for recipe in MENUS[2].size():
+				_display_pizza(Vector3(x+(recipe-2)*1.04,1.09,47.59),recipe)
 
-func _display_margherita(center: Vector3) -> void:
+const PIZZA_TEXTURES := [
+	preload("res://branding/pizza-0.png"),
+	preload("res://branding/pizza-1.png"),
+	preload("res://branding/pizza-2.png"),
+	preload("res://branding/pizza-3.png"),
+	preload("res://branding/pizza-4.png"),
+]
+
+func _display_pizza(center: Vector3, recipe: int) -> void:
 	part("Pizza board",center,Vector3(.91,.032,.88),Color("#b28658"))
 	var crust := CylinderMesh.new()
 	crust.top_radius=.39
@@ -94,32 +130,21 @@ func _display_margherita(center: Vector3) -> void:
 	crust.height=.047
 	crust.material=get_parent()._material(Color("#cc9554"),.87)
 	var pizza := MeshInstance3D.new()
-	pizza.name="Margherita"
+	pizza.name=MENUS[2][recipe]
 	pizza.mesh=crust
 	pizza.position=center+Vector3.UP*.04
 	add_child(pizza)
-	var sauce := CylinderMesh.new()
-	sauce.top_radius=.35
-	sauce.bottom_radius=.35
-	sauce.height=.008
-	sauce.material=get_parent()._material(Color("#aa4326"),.62)
-	var tomato := MeshInstance3D.new()
-	tomato.mesh=sauce
-	tomato.position.y=.027
-	pizza.add_child(tomato)
-	var cheese := SphereMesh.new()
-	cheese.radius=.077
-	cheese.height=.023
-	cheese.material=get_parent()._material(Color("#f2dfac"),.57)
-	for i in 7:
-		var topping := MeshInstance3D.new()
-		topping.mesh=cheese
-		var angle := i*2.4
-		var radius := .105*sqrt(float(i))
-		topping.position=Vector3(cos(angle)*radius,.034,sin(angle)*radius)
-		topping.scale.x=1.2
-		topping.rotation.y=angle
-		pizza.add_child(topping)
+	var face := PlaneMesh.new()
+	face.size = Vector2(.80,.80)
+	var finish := StandardMaterial3D.new()
+	finish.albedo_texture = PIZZA_TEXTURES[recipe]
+	finish.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA_SCISSOR
+	finish.roughness = .74
+	face.material = finish
+	var surface := MeshInstance3D.new()
+	surface.mesh = face
+	surface.position.y = .024
+	pizza.add_child(surface)
 
 func _display_cinnamon_buns(center: Vector3) -> void:
 	part("Bakery tray",center,Vector3(1.35,.035,.76),Color("#605859"))
@@ -165,12 +190,20 @@ func build_menu(ui: CanvasLayer) -> void:
 	for side in [SIDE_LEFT,SIDE_TOP,SIDE_RIGHT,SIDE_BOTTOM]:
 		finish.set_content_margin(side,14)
 	shop_card.add_theme_stylebox_override("panel",finish)
+	var layout := VBoxContainer.new()
+	shop_card.add_child(layout)
+	balance = Label.new()
+	layout.add_child(balance)
 	var scroll := ScrollContainer.new()
+	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	scroll.follow_focus = true
-	shop_card.add_child(scroll)
+	layout.add_child(scroll)
 	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	scroll.add_child(panel)
+	receipt = Label.new()
+	receipt.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	layout.add_child(receipt)
 	shop_card.hide()
 
 func update_customer(foot: bool, pos: Vector3, active: bool) -> void:
@@ -202,8 +235,6 @@ func rebuild_menu() -> void:
 	var title:=Label.new()
 	title.text=tr(SHOPS[inside])
 	panel.add_child(title)
-	balance = Label.new()
-	panel.add_child(balance)
 	var keyboard_hint := Label.new()
 	keyboard_hint.text = "Tab to choose · Enter to buy" if MENUS[inside].size()>1 else "Enter to buy"
 	if inside == 1:
@@ -213,14 +244,22 @@ func rebuild_menu() -> void:
 	for i in MENUS[inside].size():
 		var button:=Button.new()
 		button.custom_minimum_size.y=44
+		if inside == 5 or inside == 2:
+			var thumbnail := AtlasTexture.new()
+			thumbnail.atlas = preload("res://branding/pizza-products.png") if inside == 2 else preload("res://branding/boutique-products.png")
+			thumbnail.region = Rect2(i*64,0,64,64)
+			button.icon = thumbnail
+			button.add_theme_constant_override("icon_max_width",44)
 		button.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		button.text=tr("%s · %d coins") % [tr(MENUS[inside][i]),PRICES[inside][i]]
+		var price: int = PRICES[inside][i]
+		button.text = tr_n("%s · %d coin", "%s · %d coins", price) % [tr(MENUS[inside][i]), price]
+		if inside == 2:
+			button.text += "\n" + tr(PIZZA_TOPPINGS[i])
+		elif inside == 3:
+			button.text += "\n" + tr(SWEET_INGREDIENTS[i])
 		button.pressed.connect(purchase.bind(inside,i))
 		panel.add_child(button)
 		if i==0: first_product=button
-	receipt=Label.new()
-	receipt.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
-	panel.add_child(receipt)
 	_refresh_receipt()
 	basket = Label.new()
 	basket.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -296,9 +335,10 @@ func purchase(shop: int, item: int) -> void:
 	_refresh_receipt()
 
 func _refresh_receipt() -> void:
+	receipt.visible = receipt_kind != ReceiptKind.NONE
 	match receipt_kind:
 		ReceiptKind.PURCHASE:
-			receipt.text = tr("%s · Paid %d coins. Thank you!") % [tr(receipt_subject),receipt_amount]
+			receipt.text = tr_n("%s · Paid %d coin. Thank you!", "%s · Paid %d coins. Thank you!", receipt_amount) % [tr(receipt_subject),receipt_amount]
 		ReceiptKind.SHORTFALL:
 			var missing := tr_n("You need %d more coin.", "You need %d more coins.", receipt_amount) % receipt_amount
 			receipt.text = missing+" "+tr("Complete a mission to earn coins.")
@@ -486,9 +526,11 @@ func _pizzeria_front(x: float) -> void:
 		var window_text := "PIZZERIA" if side == 1 else "WOOD-FIRED PIZZA"
 		var script := _lettering(window_text,Vector3(cx,1.68,42.35),.0081,Color("#fff1ce"))
 		script.font = shop_sign_font
+		get_parent()._size_world_sign(script,2.9)
 		part("Window menu strip",Vector3(cx,1.04,42.32),Vector3(2.97,.22,.027),wine)
 		var menu_text := "MARGHERITA  ·  8 COINS" if side == 1 else "EAT IN  ·  TAKEAWAY"
-		_lettering(menu_text,Vector3(cx,1.04,42.29),.0048,Color("#fff3d5"))
+		var menu_strip := _lettering(menu_text,Vector3(cx,1.04,42.29),.0048,Color("#fff3d5"))
+		get_parent()._size_world_sign(menu_strip,2.9)
 	for edge in [-1,1]:
 		part("Recessed door jamb",Vector3(x+edge*.90,1.30,42.53),Vector3(.087,2.60,.22),timber)
 	part("Door lintel",Vector3(x,2.57,42.53),Vector3(1.88,.12,.22),timber)
@@ -621,7 +663,9 @@ func _candy_bank(origin: Vector3, columns: int, tiers: int, shapes: Array[Array]
 			part("Flavour ticket",Vector3(cx,height-.032,z-.166),Vector3(.30,.065,.012),charcoal)
 			var flavours := ["Raspberry","Lemon","Apple","Liquorice","Vanilla","Strawberry","Orange","Grape"]
 			var ticket := _lettering(flavours[flavour],Vector3(cx,height-.032,z-.174),.00135,Color.WHITE)
+			get_parent()._size_world_sign(ticket,.28)
 			ticket.visibility_range_end = 5.0
+			get_parent()._size_world_sign(ticket,.28)
 
 func _stamp_meshes(label_text: String, mesh: Mesh, poses: Array, colors: PackedColorArray) -> void:
 	var batch := MultiMesh.new()
@@ -666,3 +710,65 @@ func _open_glass_door(x: float, trim: Color) -> void:
 		part("Door stile",center+Vector3(0,0,edge*.58),Vector3(.060,2.40,.052),trim)
 		part("Door rail",center+Vector3(0,edge*1.17,0),Vector3(.060,.066,1.21),trim)
 	part("Pull handle",center+Vector3(-.081,-.16,.38),Vector3(.035,.37,.035),Color("#c5c2b9"))
+
+func _boutique(x: float) -> void:
+	var maple := Color("#c99e76")
+	var plum := Color("#724467")
+	var jade := Color("#467c75")
+	_open_glass_door(x, maple)
+	for side: float in [-1,1]:
+		var center := Vector3(x+side*2.6,.66,43.18)
+		part("Window plinth",center,Vector3(2.36,.18,.81),maple,true)
+		_shop_light(center+Vector3(0,1.95,.12),Color("#ffe4be"),.85)
+	# Haori with open front and broad sleeves; short jeogori with crossed collar and goreum ties.
+	for i in 4:
+		var korean := i%2 == 1
+		var pos := Vector3(x-2.6+(i%2-.5)*1.04,1.22,43.2) if i < 2 else Vector3(x-1.9+(i%2)*1.04,1.58,48.92)
+		var cloth := plum if korean else jade
+		var trim := Color("#f2dbae")
+		var length := .46 if korean else .71
+		part("Garment stand",pos+Vector3(0,-.19,.08),Vector3(.05,.53,.05),maple)
+		part("Jacket back",pos,Vector3(.46,length,.14),cloth)
+		for side: float in [-1,1]:
+			var sleeve := part("Wide sleeve",pos+Vector3(side*.31,length*.23,0),Vector3(.23,.30,.18),cloth)
+			sleeve.rotation.z = side*.19
+			var lapel := part("Woven lapel",pos+Vector3(side*(.059 if korean else .078),.025,-.083),Vector3(.040,length*.9,.025),trim)
+			lapel.rotation.z = side*(.48 if korean else .13)
+		if korean:
+			var tie := part("Ribbon tie",pos+Vector3(.112,-.074,-.11),Vector3(.045,.18,.024),plum.lightened(.46))
+			tie.rotation.z = -.40
+	for i in 8:
+		var window := i < 4
+		var pos := Vector3(x+2.60+(i%4-1.5)*.47,.76,43.14) if window else Vector3(x+.59+(i%4)*.65,1.09,47.59)
+		if i%2 == 0:
+			_boutique_toy(pos,false)
+		else:
+			_boutique_toy(pos,true)
+	part("Garment rail",Vector3(x-1.38,2.02,48.97),Vector3(2.28,.045,.045),maple)
+	_lettering("Momo & Bori",Vector3(x,2.47,49.28),.014,Color("#fff1dd"))
+
+func _boutique_toy(base: Vector3, rabbit: bool) -> void:
+	var fur := Color("#eadbb7") if rabbit else Color("#b45b3d")
+	var dark := Color("#493334")
+	var cream := Color("#fff0d5")
+	var sphere := SphereMesh.new()
+	sphere.radial_segments = 16
+	sphere.rings = 8
+	var oval := func(offset: Vector3, size: Vector3, color: Color):
+		var piece := MeshInstance3D.new()
+		piece.mesh = sphere
+		piece.material_override = get_parent()._material(color,.48 if rabbit else .98)
+		piece.position = base+offset
+		piece.scale = size
+		add_child(piece)
+	if rabbit:
+		_turned("Figure base",base+Vector3.UP*.023,.126,.126,.046,Color("#809bb0"))
+	oval.call(Vector3(0,.15,0),Vector3(.21,.25,.18),fur)
+	oval.call(Vector3(0,.30,-.01),Vector3(.255,.21,.19),fur)
+	for side: float in [-1,1]:
+		oval.call(Vector3(side*.071,.415 if rabbit else .386,-.006),Vector3(.064,.17 if rabbit else .083,.052),fur)
+		if not rabbit:
+			oval.call(Vector3(side*.067,.30,-.087),Vector3(.097,.059,.039),cream)
+		oval.call(Vector3(side*.052,.316,-.102),Vector3(.025,.027,.02),dark)
+		oval.call(Vector3(side*.065,.065,-.044),Vector3(.078,.073,.093),fur)
+	oval.call(Vector3(0,.274,-.108),Vector3(.038,.025,.025),dark)

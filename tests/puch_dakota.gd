@@ -36,6 +36,10 @@ func check_dakota() -> void:
 		for frame in 45:
 			game._drive(1.0/60)
 		game.mouse_gas = false
+		if not is_instance_valid(game.moped_speed_needle) or not is_equal_approx(game.moped_speed_needle.rotation.y, deg_to_rad(-252.0) * game.speed * 3.6 / 40.0):
+			printerr("Speedometer did not follow the moped speed")
+			quit(1)
+			return
 		if game.speed < 1 or start.distance_to(game.ambulance.position) < .35 or absf(game.player_wheels[0].rotation.x) < .05:
 			printerr("Dakota did not move with visible wheel rotation")
 			quit(1)
@@ -54,7 +58,7 @@ func check_dakota() -> void:
 		game.mouse_brake = true
 		for frame in 30:
 			game._drive(1.0/60)
-		if not is_zero_approx(game.speed):
+		if not is_zero_approx(game.speed) or not is_zero_approx(game.moped_speed_needle.rotation.y):
 			printerr("Dakota failed to stop while braking")
 			quit(1)
 			return

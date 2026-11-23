@@ -64,7 +64,4 @@ func check_gait() -> void:
 				return
 		gait.ground_height = terrain
 	print("Axel and Alma transfer weight, maintain lateral foot placement and settle at rest.")
-	game.queue_free()
-	await process_frame
-	await create_timer(.4).timeout
-	quit()
+	game._finish_quit()

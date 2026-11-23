@@ -42,3 +42,19 @@ static func radio_tracks(locale: String) -> PackedStringArray:
 	for variant in variants(locale):
 		if by_locale.has(variant): return PackedStringArray(by_locale[variant])
 	return PackedStringArray()
+
+const SETTINGS_PATH := "user://preferences.cfg"
+
+static func apply_language(preference: String, system_locale := OS.get_locale()) -> void:
+	var available := locales()
+	for choice in [preference, system_locale]:
+		if str(choice).strip_edges().is_empty(): continue
+		for candidate in variants(str(choice).strip_edges()):
+			if candidate in available:
+				TranslationServer.set_locale(candidate)
+				return
+	TranslationServer.set_locale(SOURCE)
+
+static func logo(locale: String) -> Texture2D:
+	var localized := media("res://branding/rollabout-%s.png", locale) as Texture2D
+	return localized if localized else preload("res://branding/rollabout-en.png")

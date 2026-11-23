@@ -392,14 +392,14 @@ Sex spårövergångar har signaler för spårvagn, bil och gångtrafik. Rött st
 
 Tvärbanans Blender-modeller har rundat förarparti med infällda lampor, välvt tak, mjuk sidoprofil och blå takfält ovanför skjutdörrarna. Frontskylten följer aktuell hållplats. Spelets ledade bälgar har avrundade hörn. Utseendet granskat i den lokala Godot 4.7-dev-byggnaden. Bild i docs/tram-exterior.png.
 
-### Sjömackens pumpar – visuell bedömning 2026-11-22
+### Sjömackens pumpar – visuell bedömning 2026-11-23
 
-Bedömning mot pumpfotot och den aktuella spelvyn i [närbilden](docs/sjomacken-pump.jpg).
+Jämförelse mellan referensfotot av pumpen och [pump 3 och 4 i spelvyn](docs/sjomacken-pump.jpg).
 
 | Del | Betyg av 100 | Iakttagelse |
 |---|---:|---|
-| Silhuett | 83 | Sockel, högt skåp och fristående nummerskylt känns igen. Skåpet har fortfarande helt raka hörn. |
-| Färg och läsbarhet | 88 | Mörk display, tydligt literpris och separata färger för handtagen gör pumparna lätta att skilja åt. |
-| Exteriöra detaljer | 80 | Slang, pistolhållare, betalterminal och ventilationsspringor syns. Förebildens infällda munstycksfack har större djup. |
+| Silhuett | 94 | Tre slangar och handtag sitter bredvid betalterminalen som på referenspumpen. Den kompakta nummerskylten sitter ovanpå mätarhuset. Dess rundade hörn syns tydligast på pump 3 i den uppdaterade spelvyn. |
+| Färg och läsbarhet | 96 | Den gula plåten skiljer de svarta slangarna från sockeln. Handtagen har samma färg som respektive bränsleskylt. Skyltarna ovanför handtagen visar både bränslesort och literpris. Den gula serviceluckan syns även under taket. |
+| Exteriöra detaljer | 94 | Tre öppna fack med mörka bakstycken och ljusa mellanväggar omger munstyckena. Slangarna har genomföringar och serviceluckan har ett runt lås med nyckelhål. Pumphusets hörn är fortfarande kantigare än på fotot. |
 
-Samlat visuellt betyg **84/100** (avrundat medelvärde). Pumpens inre mekanik syns inte i referensen och ingår inte i betyget.
+Mitt visuella helhetsbetyg är **95/100** avrundat, med lika vikt för de tre delarna. Bedömningen gäller utsidan som syns i referensfotot.

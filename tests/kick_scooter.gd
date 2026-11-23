@@ -61,6 +61,33 @@ func check_scooters() -> void:
 			printerr("Both wheels should stop on the bridge")
 			quit(1)
 			return
+		game.roadside_solids.append(AABB(Vector3(19,-1,5.8),Vector3(2,4,2)))
+		game.scooter.speed = 3
+		game.scooter.yaw_input = .5
+		game._recover_position()
+		game.roadside_solids.pop_back()
+		var recovered := rider.position
+		var alternate := Vector2(recovered.x, recovered.z)
+		if alternate.distance_to(Vector2(-23,-6.8)) > .01 and alternate.distance_to(Vector2(90,-24)) > .01:
+			printerr("Mounted recovery must select a free alternate landing")
+			quit(1)
+			return
+		game.scooter.ride(game,0,0,1.0/60.0)
+		if not game.scooter.visible or game.scooter.speed != 0 or game.scooter.yaw_input != 0 or not rider.position.is_equal_approx(recovered):
+			printerr("Mounted recovery must leave the rider stationary at deck height")
+			quit(1)
+			return
+		for tick in 39:
+			game._process(.1)
+		if game.status_label.text != "Back in a safe place.":
+			printerr("Recovery confirmation disappeared before four seconds")
+			quit(1)
+			return
+		game._process(.11)
+		if game.status_label.text != game.tr("Electric scooter · %d km/h") % 0:
+			printerr("Scooter speed did not return after the recovery confirmation")
+			quit(1)
+			return
 		game._change_seat()
 		if game.scooter.visible or absf(rider.position.y-game._foot_height(rider.position.x,rider.position.z))>.001:
 			printerr("Dismount should leave the player on safe ground")
@@ -77,6 +104,9 @@ func check_scooters() -> void:
 			var start: Vector3 = item.actor.position
 			game._update_pedestrians(.2)
 			if start.distance_to(item.actor.position) > .1 and item.scooter.is_visible_in_tree():
+				game.queue_free()
+				await game.tree_exited
+				await create_timer(.2).timeout
 				print("Both playable riders and the scooter neighbour passed.")
 				quit()
 				return

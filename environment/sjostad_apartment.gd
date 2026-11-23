@@ -15,10 +15,11 @@ func _box(finish: Material, pos: Vector3, size: Vector3, angle := 0.0) -> void:
 	var transform := Transform3D(Basis(Vector3.RIGHT,angle).scaled_local(size),pos)
 	batches[finish].append_from(unit_box,0,transform)
 
-func _finish(color: String, roughness := .80) -> StandardMaterial3D:
+func _finish(color: String, surface := "mineral", roughness := .80) -> StandardMaterial3D:
 	var finish := StandardMaterial3D.new()
 	finish.albedo_color = Color(color)
 	finish.roughness = roughness
+	preload("res://art/surfaces/model_finish.gd").apply(finish, surface)
 	return finish
 
 func _glaze(glazing: BaseMaterial3D, pos: Vector3, size: Vector3) -> void:
@@ -70,12 +71,14 @@ func build(floors: int, variant: int, window_batches: Array, glazing: BaseMateri
 	unit_box.size = Vector3.ONE
 	var height := floors*2.8
 	var ivory := _finish("#f0eadd")
-	var surround := _finish("#c9975b")
+	var surround := _finish("#c9975b", "wood", .56)
 	var accent := _finish(["#bb6549","#4b5355","#cdac77"][variant%3])
 	var end_volume := accent if variant%3<2 else ivory
-	var rail := _finish("#5c6665",.31)
+	var rail := _finish("#5c6665", "brushed", .31)
+	rail.metallic = .72
 	var slab := _finish("#d6d4bf")
-	var parapet := _finish("#afb2a9")
+	var parapet := _finish("#afb2a9", "brushed", .46)
+	parapet.metallic = .55
 	# Rear mass and two wings leave a full-height glazed slot at the canal face.
 	_box(ivory,Vector3(.76,height*.5-.16,0),Vector3(12.48,height,10))
 	# Projecting coloured end wing continues around the corner onto the inland face.

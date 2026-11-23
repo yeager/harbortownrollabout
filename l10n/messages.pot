@@ -58,10 +58,10 @@ msgstr ""
 msgid "Siren ON"
 msgstr ""
 
-msgid "Engine ON"
+msgid "Engine sound ON"
 msgstr ""
 
-msgid "Engine OFF"
+msgid "Engine sound OFF"
 msgstr ""
 
 msgid "Pause"
@@ -377,10 +377,10 @@ msgstr ""
 msgid "Please bring the first-aid supplies to the marina."
 msgstr ""
 
-msgid "Fare complete. You earned 15 coins."
+msgid "Fare complete. You earned 15 points and 15 coins."
 msgstr ""
 
-msgid "Thank you for helping! You earned 10 coins."
+msgid "Thank you for helping! You earned 10 points and 10 coins."
 msgstr ""
 
 msgid "Café"
@@ -408,8 +408,10 @@ msgid "Pick and mix"
 msgstr ""
 
 #, c-format
-msgid "%s · %d coins"
-msgstr ""
+msgid "%s · %d coin"
+msgid_plural "%s · %d coins"
+msgstr[0] ""
+msgstr[1] ""
 
 #, c-format
 msgid "You need %d more coin."
@@ -418,8 +420,10 @@ msgstr[0] ""
 msgstr[1] ""
 
 #, c-format
-msgid "%s · Paid %d coins. Thank you!"
-msgstr ""
+msgid "%s · Paid %d coin. Thank you!"
+msgid_plural "%s · Paid %d coins. Thank you!"
+msgstr[0] ""
+msgstr[1] ""
 
 msgid "Recovery truck"
 msgstr ""
@@ -433,7 +437,7 @@ msgstr ""
 msgid "Collect the car with a missing wheel."
 msgstr ""
 
-msgid "Recovery complete. You earned 20 coins."
+msgid "Recovery complete. You earned 20 points and 20 coins."
 msgstr ""
 
 msgid "Passenger ride · P to pause"
@@ -475,7 +479,7 @@ msgstr ""
 msgid "Waiting for a green light"
 msgstr ""
 
-msgid "Steer with A and D or the arrow keys. Hold the left mouse button for throttle. Hold the right to slow down, then reverse."
+msgid "Hold left to speed up or right to slow down and reverse. Move the mouse sideways to steer, or use A/D or the arrow keys."
 msgstr ""
 
 msgid "Start boating"
@@ -519,7 +523,7 @@ msgstr ""
 msgid "Well done, %s!"
 msgstr ""
 
-msgid "First-aid supplies delivered to the marina. You earned 10 coins."
+msgid "First-aid supplies delivered to the marina. You earned 10 points and 10 coins."
 msgstr ""
 
 msgid "Stop here to load the car."
@@ -591,7 +595,7 @@ msgstr ""
 msgid "Passengers on board."
 msgstr ""
 
-msgid "Bus journey complete. You earned 15 coins."
+msgid "Bus journey complete. You earned 15 points and 15 coins."
 msgstr ""
 
 msgid "A pupil is waiting at the square."
@@ -771,13 +775,13 @@ msgstr ""
 msgid "Stay on board · F"
 msgstr ""
 
-msgid "Two parcels collected at the square. You earned 10 coins."
+msgid "Two parcels collected at the square. You earned 10 points and 10 coins."
 msgstr ""
 
-msgid "The clinic received its parcel. You earned 10 coins."
+msgid "The clinic received its parcel. You earned 10 points and 10 coins."
 msgstr ""
 
-msgid "The marina received the last parcel. You earned 10 coins."
+msgid "The marina received the last parcel. You earned 10 points and 10 coins."
 msgstr ""
 
 #, c-format
@@ -821,7 +825,7 @@ msgstr ""
 msgid "Serve ice cream at the marina"
 msgstr ""
 
-msgid "Ice cream served! You earned 10 coins."
+msgid "Ice cream served! You earned 10 points and 10 coins."
 msgstr ""
 
 msgid "Return to your ice cream van"
@@ -1247,4 +1251,210 @@ msgid "Current jobs"
 msgstr ""
 
 msgid "Hold left mouse to drive forward or right mouse to reverse."
+msgstr ""
+
+msgctxt "decimal separator"
+msgid "."
+msgstr ""
+
+msgid "Meow!"
+msgstr ""
+
+msgid "Graphics mode"
+msgstr ""
+
+msgid "Compatibility (OpenGL)"
+msgstr ""
+
+msgid "Mobile"
+msgstr ""
+
+msgid "MENU"
+msgstr ""
+
+msgid "BURGERS"
+msgstr ""
+
+msgid "FRIES"
+msgstr ""
+
+msgid "SODA"
+msgstr ""
+
+msgid "SPECIAL"
+msgstr ""
+
+msgid "DOUBLE"
+msgstr ""
+
+msgid "WITH CHEESE"
+msgstr ""
+
+msgid "Wait until the crossing is clear."
+msgstr ""
+
+#, c-format
+msgid "%d km/h"
+msgstr ""
+
+msgid "Hold the left or right mouse button and move the mouse sideways to steer."
+msgstr ""
+
+msgid "Hold left to accelerate or right to brake. To reverse, stop, release and hold right again."
+msgstr ""
+
+msgid "Our ice creams"
+msgstr ""
+
+msgid "Berry Boing"
+msgstr ""
+
+msgid "Minty Moo"
+msgstr ""
+
+msgid "Purple Hiccup"
+msgstr ""
+
+msgid "Lemon Comet"
+msgstr ""
+
+msgid "Melon Wiggle"
+msgstr ""
+
+msgid "Blue Blizzard"
+msgstr ""
+
+msgid "Harbor Town Ice Cream"
+msgstr ""
+
+msgid "Boarding"
+msgstr ""
+
+msgid "E Jump"
+msgstr ""
+
+msgid "Ride-on mower"
+msgstr ""
+
+msgid "System language"
+msgstr ""
+
+msgid "Did you feel a raindrop?"
+msgstr ""
+
+msgid "My boots vote for puddles!"
+msgstr ""
+
+msgid "Which ice cream would you pick?"
+msgstr ""
+
+msgid "Blueberry, with a cherry on top!"
+msgstr ""
+
+msgid "Can AI dream?"
+msgstr ""
+
+msgid "Maybe it dreams of electric sheep!"
+msgstr ""
+
+msgid "What did the dog find?"
+msgstr ""
+
+msgid "A leaf worth a really good sniff!"
+msgstr ""
+
+msgid "Japanese haori jacket"
+msgstr ""
+
+msgid "Korean jeogori jacket"
+msgstr ""
+
+msgid "Red panda plush"
+msgstr ""
+
+msgid "Moon rabbit figurine"
+msgstr ""
+
+msgid "Popcorn Party"
+msgstr ""
+
+msgid "Pickle Carousel"
+msgstr ""
+
+msgid "Banana Moon"
+msgstr ""
+
+msgid "Berry Blizzard"
+msgstr ""
+
+msgid "Mozzarella, tomato and carrot stars"
+msgstr ""
+
+msgid "Popcorn, sweetcorn and cheese"
+msgstr ""
+
+msgid "Pickle wheels and crispy onions"
+msgstr ""
+
+msgid "Banana moons and coconut snow"
+msgstr ""
+
+msgid "Blueberries, vanilla cream and raspberry swirls"
+msgstr ""
+
+msgid "Frog choir"
+msgstr ""
+
+msgid "Sour shoelaces"
+msgstr ""
+
+msgid "Rocket fudge"
+msgstr ""
+
+msgid "Cloud cone"
+msgstr ""
+
+msgid "Penguin pop"
+msgstr ""
+
+msgid "Lunar sundae"
+msgstr ""
+
+msgid "Dill disco popcorn"
+msgstr ""
+
+msgid "Dragon curls"
+msgstr ""
+
+msgid "Chocolate puddles"
+msgstr ""
+
+msgid "Gummy boots and raspberry raindrops"
+msgstr ""
+
+msgid "Pear jelly frogs with fizzy lime dust"
+msgstr ""
+
+msgid "Apple laces with lemon sugar"
+msgstr ""
+
+msgid "Caramel with popping strawberry sparks"
+msgstr ""
+
+msgid "Vanilla ice cream with cotton candy clouds"
+msgstr ""
+
+msgid "Licorice ice cream with a mango beak"
+msgstr ""
+
+msgid "Blueberry ice cream with biscuit craters"
+msgstr ""
+
+msgid "Popcorn with dill and crunchy cheese stars"
+msgstr ""
+
+msgid "Corn twists with sweet paprika scales"
+msgstr ""
+
+msgid "Chocolate buttons with crispy rice bubbles"
 msgstr ""

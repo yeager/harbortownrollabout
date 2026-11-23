@@ -23,6 +23,22 @@ func check() -> void:
 		fail("Stop line extended beyond the crossing")
 		return
 	lights.advance(0)
+	# Sample two cycles so a red interval crossing the timer wrap is measured too.
+	var red_seconds := [0.0, 0.0]
+	var longest_red := [0.0, 0.0]
+	for tick in 320:
+		lights.advance(.1)
+		for direction in 2:
+			if lights.heads[direction].lamps[0].visible:
+				red_seconds[direction] += .1
+				longest_red[direction] = maxf(longest_red[direction], red_seconds[direction])
+			else:
+				red_seconds[direction] = 0.0
+	for seconds: float in longest_red:
+		if seconds <= 0.0 or seconds > 10.001:
+			fail("Unexpected red-light duration: %f seconds" % seconds)
+			return
+	print("Longest central red per direction: ", longest_red)
 	if lights.tram_crossings.size()!=6:
 		fail("Missing crossing signals")
 		return
@@ -39,9 +55,44 @@ func check() -> void:
 							fail("Signal lamp disagrees with phase")
 							return
 			for head in c.pedestrians:
-				if head.figures[1].visible!=(stage==lights.Stage.WALK) or head.figures[0].visible==head.figures[1].visible:
+				var walk_stage: int = lights.Stage.SIDE_STREET if c.center.is_equal_approx(Vector3(train.EAST,0,0)) else lights.Stage.WALK
+				if head.figures[1].visible!=(stage==walk_stage) or head.figures[0].visible==head.figures[1].visible:
 					fail("Pedestrian phases conflict")
 					return
+	# Isolate a stop line away from the town traffic. A long rear overhang
+	# must not count as an equally long nose while the driver waits at red.
+	var isolated := {"center": Vector3(400, 0, 400), "tangent": Vector3.FORWARD}
+	var original_pose: Transform3D = game.ambulance.transform
+	var original_front: float = game.front_reach
+	var original_rear: float = game.rear_reach
+	var original_size: Vector2 = game.player_half_size
+	game.front_reach = 1.5
+	game.rear_reach = 5.5
+	game.player_half_size = Vector2(1.2, 5.5)
+	game.ambulance.transform = Transform3D(Basis.IDENTITY, isolated.center + Vector3.BACK * (lights.BOULEVARD_LINE + game.front_reach))
+	if lights._junction_occupied(isolated):
+		fail("A vehicle behind the stop line held the crossing at red")
+		return
+	game.ambulance.position.z -= 4
+	if not lights._junction_occupied(isolated):
+		fail("A vehicle entering the crossing was missed")
+		return
+	game.ambulance.transform = original_pose
+	game.front_reach = original_front
+	game.rear_reach = original_rear
+	game.player_half_size = original_size
+	var parked: Node3D = game.parked_cars[game.vehicle_index]
+	var original_parking := parked.transform
+	parked.position = isolated.center
+	parked.show()
+	if not lights._junction_occupied(isolated):
+		fail("A parked vehicle in the crossing was missed")
+		return
+	parked.hide()
+	if lights._junction_occupied(isolated):
+		fail("Hidden parking model held the crossing at red")
+		return
+	parked.transform = original_parking
 	var crossing: Dictionary = lights.tram_crossings.back()
 	for manual in [false,true]:
 		crossing.stage=lights.Stage.SIDE_STREET
@@ -91,6 +142,16 @@ func check() -> void:
 	if absf(car_gap)>.25 or absf(game.speed)>.05:
 		fail("Player car failed to stop at red, gap %f" % car_gap)
 		return
+	var saved_stage: int = crossing.stage
+	crossing.stage = lights.Stage.SIDE_STREET
+	crossing.blocked_entry = true
+	game._drive(.1)
+	game._refresh_status()
+	if not game.waiting_for_clear_crossing or game.status_label.text != "Wait until the crossing is clear.":
+		fail("Stopped driver was told to wait for a light that was already green")
+		return
+	crossing.stage = saved_stage
+	crossing.blocked_entry = false
 	game.allow_red_lights = true
 	for i in 20: game._drive(.1)
 	if (Vector3(crossing.center)-game.ambulance.position).dot(axis) >= lights.SIDE_LINE+game.front_reach or game.message != "Red light! Stop at the line and wait for green.":
@@ -148,6 +209,30 @@ func check() -> void:
 	if crossing.stage != lights.Stage.CLEAR_SIDE:
 		fail("Granted pedestrians green while street traffic occupied the crossing")
 		return
+	# Keep a pedestrian waiting outside the roadway so a walk phase is requested.
+	var saved_center: Vector3 = crossing.center
+	var saved_actor := traffic_actor.transform
+	var saved_walker: Transform3D = game.walker.transform
+	var walker_visible: bool = game.walker.visible
+	crossing.center += Vector3(900,0,0)
+	user += Vector3(900,0,0)
+	traffic_actor.position = crossing.center
+	game.walker.show()
+	game.walker.position = user + axis*10
+	for tick in 10:
+		lights.advance_tram_crossings(.1)
+	if crossing.stage != lights.Stage.WALK or crossing.pedestrians[0].figures[1].visible or lights.pedestrian_may_enter(user+axis*8.75,user+axis*8.65):
+		fail("Occupied zebra displayed green or allowed entry during the walk phase")
+		return
+	traffic_actor.position += axis*40
+	lights.advance_tram_crossings(.1)
+	if not crossing.pedestrians[0].figures[1].visible or not lights.pedestrian_may_enter(user+axis*8.75,user+axis*8.65):
+		fail("Cleared zebra did not show green and release the waiting pedestrian")
+		return
+	crossing.center = saved_center
+	traffic_actor.transform = saved_actor
+	game.walker.transform = saved_walker
+	game.walker.visible = walker_visible
 	# A pedestrian on the station crossing stops its lane. Moving to the far
 	# pavement must release the queue even while the person remains nearby.
 	var station: Node3D = train.stations[1]
@@ -176,6 +261,20 @@ func check() -> void:
 	if following.speed < 1 or lead.offset < stopped_at+5:
 		fail("Pedestrian on opposite pavement held the station queue")
 		return
+	var red_intervals := {}
+	var longest_tram_red := 0.0
+	for tick in 320:
+		lights.advance_tram_crossings(.1)
+		for c in lights.tram_crossings:
+			for group in ["boulevard", "side"]:
+				var lamp: Node3D = c[group][0].lamps[0]
+				var duration := float(red_intervals.get(lamp, 0.0)) + .1 if lamp.visible else 0.0
+				red_intervals[lamp] = duration
+				longest_tram_red = maxf(longest_tram_red, duration)
+	if longest_tram_red <= 0.0 or longest_tram_red > 10.001:
+		fail("Unexpected red-light duration at tram junction: %f" % longest_tram_red)
+		return
+	print("Longest tram junction red: ", longest_tram_red)
 	finish.call_deferred(game)
 
 func finish(game: Node) -> void:

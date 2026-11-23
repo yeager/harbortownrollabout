@@ -28,10 +28,15 @@ def sculpt(name, sections):
     bpy.context.view_layer.objects.active = obj
     for face in mesh.polygons:
         face.use_smooth = True
+    if name == "Trainer":
+        for label in ("Outsole", "Canvas"):
+            mesh.materials.append(bpy.data.materials.new(label))
+        for face in mesh.polygons:
+            face.material_index = int(face.center.z > -.032)
     smooth = obj.modifiers.new("Tailored contours", 'SUBSURF')
     smooth.levels = 2
     bpy.ops.wm.obj_export(filepath=str(root / 'characters' / (name + '.obj')),
-                          export_selected_objects=True, export_materials=False)
+                          export_selected_objects=True, export_materials=(name == "Trainer"))
 
 sculpt("Jacket", [(-.36,.167,.119,0),(-.35,.184,.128,0),(-.31,.189,.132,0),
                   (-.18,.167,.125,0),(.03,.19,.135,.008),(.19,.216,.138,0),

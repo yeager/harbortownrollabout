@@ -319,9 +319,20 @@ for i in range(-3,4):
 cylinder("Speedometer bezel",(0,-.49,.863),.033,.012,chrome,axis_x=False)
 cylinder("Speedometer dial",(0,-.49,.870),.029,.003,dark,axis_x=False)
 for i in range(9):
-    a=pi*(.80+i*.175)
-    tube("Dial graduation",[(r*cos(a),-.49+r*sin(a),.872) for r in [.021,.026]],.0012,cream)
-tube("Speed needle",[(0,-.49,.874),(-.017,-.478,.874)],.0017,red)
+    a=pi*(.20-i*.175)
+    tube("Dial graduation",[(r*cos(a),-.49+r*sin(a),.872) for r in [.0145,.018]],.00075,cream)
+    if i % 2 == 0:
+        font = bpy.data.curves.new("Dial numeral", "FONT")
+        font.body = str(i*5)
+        font.align_x = font.align_y = "CENTER"
+        font.size = .0065
+        numeral = bpy.data.objects.new("Dial numeral " + font.body, font)
+        bpy.context.collection.objects.link(numeral)
+        numeral.location = (.023*cos(a),-.49+.023*sin(a),.872)
+        numeral.rotation_euler.z = pi
+        font.materials.append(cream)
+needle = tube("SpeedNeedle",[(0,0,0),(.016*cos(.20*pi),.016*sin(.20*pi),0)],.0011,red)
+needle.location = (0,-.49,.874)
 cylinder("Steering clamp",(0,-.391,.843),.036,.053,chrome,axis_x=False)
 for side in [-1,1]:
     tube("Swept chrome handlebar",[(0,-.395,.868),(side*.108,-.394,.875),
@@ -335,6 +346,20 @@ for side in [-1,1]:
                         (side*.31,-.366,.964)],.0056,chrome)
     tube("Brake cable",[(side*.213,-.382,.973),(side*.143,-.506,.880),
                         (side*.053,-.482,.810),(side*.063,-.461,.670)],.0036,rubber)
+# A single period-style round mirror on the left lever perch.
+cylinder("Mirror stem locknut", (.219,-.373,.986), .011,.014,chrome,axis_x=False,vertices=6)
+tube("Bent mirror stem",[(.219,-.373,.987),(.224,-.389,1.043),
+                         (.268,-.412,1.104),(.285,-.418,1.118)],.005,chrome)
+oval("Mirror swivel",(.285,-.418,1.118),(.010,.010,.010),dark)
+mirror_center = Vector((.285,-.416,1.151))
+mirror_normal = Vector((-.28,.94,.19)).normalized()
+for name,offset,dimensions,finish in [
+    ("Pressed mirror shell",0,(.049,.013,.049),chrome),
+    ("Mirror edge seal",.009,(.046,.006,.046),rubber),
+    ("Silvered mirror glass",.013,(.043,.003,.043),chrome),
+]:
+    shell = oval(name,mirror_center + mirror_normal*offset,dimensions,finish)
+    shell.rotation_euler = Vector((0,1,0)).rotation_difference(mirror_normal).to_euler()
 tube("Front brake cable",[(.063,-.461,.670),(.078,-.472,.535),(.078,-.54,.324)],.0035,rubber)
 tube("Kickstart lever",[(.127,.015,.373),(.149,.083,.392),(.16,.122,.485)],.008,chrome)
 cylinder("Kickstart tread",(.180,.122,.484),.011,.048,rubber,vertices=16)
@@ -358,7 +383,7 @@ bpy.context.preferences.filepaths.save_version=0
 bpy.ops.wm.save_as_mainfile(filepath=str(PROJECT/"source_blender/PuchDakota.blend"),compress=True)
 groups={}
 for obj in list(bpy.context.scene.objects):
-    if obj.type=="MESH":
+    if obj.type=="MESH" and obj.name != "SpeedNeedle":
         groups.setdefault(obj.get("wheel_batch",obj.data.materials[0].name),[]).append(obj)
 for name,parts in groups.items():
     bpy.ops.object.select_all(action="DESELECT")

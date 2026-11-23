@@ -7,7 +7,8 @@ var phase := -1
 # Boulevard and tram share a phase. Crossing traffic and pedestrians each have
 # their own green, separated by amber and all-red clearance intervals.
 enum Stage { BOULEVARD, BOULEVARD_AMBER, CLEAR_BOULEVARD, SIDE_STREET, SIDE_AMBER, CLEAR_SIDE, WALK, CLEAR_WALK }
-const STAGE_SECONDS := [3.0,0.8,0.4,3.0,0.8,0.4,3.0,0.4]
+const STAGE_SECONDS := [2.6,0.8,0.4,2.6,0.8,0.4,1.8,0.4]
+const MAX_EXTRA_CLEARANCE := .8
 const BOULEVARD_LINE := 10.0
 const SIDE_LINE := 10.5
 const ZEBRA_OFFSET := 6.3
@@ -138,6 +139,7 @@ func _build_tram_crossings() -> void:
 		var across := pose.basis.x
 		var zebra := center + tangent * ZEBRA_OFFSET
 		var crossing := {"center":center,"tangent":tangent,"across":across,"offset":offset,
+			"parallel_walk":center.is_equal_approx(Vector3(train.EAST,0,0)),
 			"stage":Stage.BOULEVARD,"timer":fmod(offset*.1,STAGE_SECONDS[0]),"boulevard":[],"side":[],
 			"pedestrians":_add_crossing(zebra,absf(across.x)>.9,9.15)}
 		for stripe in range(-9,10):
@@ -177,8 +179,12 @@ func _show_crossing(crossing: Dictionary) -> void:
 		for head in crossing[group]:
 			for i in 3: head.lamps[i].visible = i==color
 	for head in crossing.pedestrians:
-		head.figures[0].visible = stage!=Stage.WALK
-		head.figures[1].visible = stage==Stage.WALK
+		head.figures[0].visible = not _walk_green(crossing)
+		head.figures[1].visible = _walk_green(crossing)
+
+func _walk_green(crossing: Dictionary) -> bool:
+	# The east zebra lies beside the side street and runs parallel to its lanes.
+	return not crossing.get("blocked_entry", false) and crossing.stage == (Stage.SIDE_STREET if crossing.parallel_walk else Stage.WALK)
 
 func _junction_occupied(crossing: Dictionary) -> bool:
 	var world := get_parent()
@@ -191,31 +197,60 @@ func _junction_occupied(crossing: Dictionary) -> bool:
 		var half_size := Vector3(item.width, 1.2, item.length)
 		var footprint := actor.transform * AABB(Vector3(-half_size.x, -.2, -half_size.z), half_size * 2)
 		if zone.intersects(footprint): return true
+	for i in world.parked_cars.size():
+		if world.parked_cars[i].visible and zone.intersects(world._parked_bounds(i)):
+			return true
 	if world.ambulance.visible:
-		var ext: Vector2 = world._player_extent()
-		var player_car := AABB(world.ambulance.position-Vector3(ext.x,.2,ext.y),Vector3(ext.x*2,3,ext.y*2))
+		var half_width: float = world.player_half_size.x
+		var local_body := AABB(Vector3(-half_width, -.2, -world.front_reach),
+			Vector3(2 * half_width, 3, world.front_reach + world.rear_reach))
+		var player_car: AABB = world.ambulance.transform * local_body
 		if zone.intersects(player_car): return true
 	if world.walker.visible and zone.has_point(world.walker.position): return true
 	for item in world.walker_data:
 		if zone.has_point(item.actor.position): return true
 	return false
 
+func _pedestrian_near_crosswalk(crossing: Dictionary) -> bool:
+	var world := get_parent()
+	var zebra: Vector3 = crossing.center + crossing.tangent * ZEBRA_OFFSET
+	var basis := Basis.looking_at(crossing.tangent)
+	# Include both waiting pavements and the full zebra crossing.
+	var approach := Transform3D(basis,zebra) * AABB(Vector3(-13,-1,-2.4),Vector3(26,4,4.8))
+	if world.walker.visible and approach.has_point(world.walker.position): return true
+	for item in world.walker_data:
+		if approach.has_point(item.actor.position): return true
+	return false
+
 func advance_tram_crossings(delta: float) -> void:
 	for crossing in tram_crossings:
+		if crossing.get("blocked_entry", false) and not _junction_occupied(crossing):
+			crossing.blocked_entry = false
+			_show_crossing(crossing)
 		crossing.timer += delta
 		var duration: float = STAGE_SECONDS[crossing.stage]
+		if crossing.parallel_walk and crossing.stage == Stage.BOULEVARD:
+			duration = 2.0
 		if crossing.timer < duration: continue
 		if crossing.stage in [Stage.CLEAR_BOULEVARD, Stage.CLEAR_SIDE, Stage.CLEAR_WALK] and _junction_occupied(crossing):
-			crossing.timer = duration
-			continue
+			crossing.clearance_wait = float(crossing.get("clearance_wait", 0.0)) + delta
+			if crossing.clearance_wait < MAX_EXTRA_CLEARANCE:
+				crossing.timer = duration
+				continue
+			# Resume the signal cycle but keep approaching traffic at its line
+			# until the vehicle or pedestrian already inside has cleared it.
+			crossing.blocked_entry = true
+		crossing.clearance_wait = 0.0
 		crossing.timer = minf(crossing.timer - duration, delta)
 		crossing.stage = (int(crossing.stage)+1)%STAGE_SECONDS.size()
+		if crossing.stage == Stage.WALK and (crossing.parallel_walk or not _pedestrian_near_crosswalk(crossing)):
+			crossing.stage = Stage.BOULEVARD
 		_show_crossing(crossing)
 
 func tram_clearance(distance: float, length: float) -> float:
 	var nearest := INF
 	for crossing in tram_crossings:
-		if crossing.stage==Stage.BOULEVARD: continue
+		if crossing.stage==Stage.BOULEVARD and not crossing.get("blocked_entry", false): continue
 		# Once the cab passes its line, let the whole articulated train clear it.
 		var gap: float = fposmod(float(crossing.offset)-distance,length)-BOULEVARD_LINE-get_parent().tram.CAB_REACH
 		if gap >= -.001: nearest = minf(nearest,maxf(0,gap))
@@ -223,21 +258,22 @@ func tram_clearance(distance: float, length: float) -> float:
 
 func pedestrian_may_enter(from: Vector3, to: Vector3) -> bool:
 	for c in tram_crossings:
-		if c.stage==Stage.WALK: continue
+		if _walk_green(c): continue
 		var dest := to-Vector3(c.center)
 		if absf(dest.dot(c.tangent)-ZEBRA_OFFSET)>1.45: continue
 		var start := (from-Vector3(c.center)).dot(c.across)
 		if absf(start)>=8.7 and absf(dest.dot(c.across))<8.7: return false
 	return true
 
-func red_clearance(pos: Vector3, heading: Vector3, half_length: float, red_only := false) -> float:
+func red_clearance(pos: Vector3, heading: Vector3, half_length: float, red_only := false, signals_only := false) -> float:
 	var nearest := _central_clearance(pos,heading,half_length,red_only)
 	for crossing in tram_crossings:
 		var tangent: Vector3 = crossing.tangent
 		var across: Vector3 = crossing.across
 		var along := absf(heading.dot(tangent)) >= absf(heading.dot(across))
 		var green := Stage.BOULEVARD if along else Stage.SIDE_STREET
-		if crossing.stage==green or (red_only and crossing.stage==green+1): continue
+		if crossing.stage==green and (signals_only or red_only or not crossing.get("blocked_entry", false)): continue
+		if red_only and crossing.stage==green+1: continue
 		var axis := tangent if along else across
 		var gap := _line_clearance(pos,heading,half_length,crossing.center,axis,
 			BOULEVARD_LINE if along else SIDE_LINE,8.45 if along else 4.85)

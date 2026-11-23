@@ -1,19 +1,21 @@
 # Harbor Town Rollabout
 
+**Full rulle i Sjöstaden** is the Swedish title of this family driving and exploration game by Daniel Nylander.
+
 Explore a 3D waterfront neighbourhood inspired by Hammarby Sjöstad in Stockholm. Choose Axel or Alma and drive through town, cross the canal by motorboat or ride the tram. Your vehicle determines the jobs you receive, from emergency calls and school taxi trips to roadside recovery. You can also explore at your own pace.
 
 ## Play
 
-Open `project.godot` in Godot 4.6 and press **F5**. Select a vehicle and choose **Start driving**.
+Clone this repository, then open `project.godot` in Godot 4.7 dev and press **F5**. Select a vehicle and choose **Start driving**.
 
 On first launch, the game uses your system language if supported, with English as the fallback. To switch languages, open **Settings** and select the tab with the globe. Choose **Deutsch**, **English**, **Español**, **Français**, **Norsk bokmål**, **Suomi** or **Svenska**. The game switches immediately and remembers your choice next time.
 
 | Action | Control |
 | --- | --- |
 | Accelerate | W, Up arrow or left mouse button |
-| Steer | A/D or Left/Right arrows |
+| Steer | A/D, Left/Right arrows, or move the mouse sideways while holding the accelerator or brake mouse button |
 | Brake | S, Down arrow or right mouse button |
-| Reverse | Stop, release the brake, then press S or Down again |
+| Reverse | Stop, release the brake, then press S, Down or the right mouse button again |
 | Help at a mission marker | Space |
 | Leave or enter a parked vehicle | F |
 | Open or close the phone | T |
@@ -31,7 +33,7 @@ Godot loads the playable world from `main.tscn`. Vehicle meshes are in `vehicles
 
 ## Tvärbanan
 
-The tram runs at street level through the western district on a 685 m loop with four stops. Traffic runs in opposite directions on either side of the tracks. At the six crossings, red signals hold the tram and road traffic while pedestrians have a green walking figure. Walk onto a platform and press **F** when the doors open to board. Press **F** at a stop to get off. You can also select **Ride the tram** in the activity menu. Select **Drive the tram** to control its speed with W and S or the arrow keys. Steering follows the rails, and the tram stops at each platform for six seconds. The lead car carries a Swedish notice beside a blue door.
+The tram runs at street level through the western district on a 685 m loop with four stops. Traffic runs in opposite directions on either side of the tracks. At the six crossings, red signals hold the tram and road traffic while pedestrians have a green walking figure. Walk onto a platform and press **F** when the doors open to board. Press **F** at a stop to get off. To drive the tram yourself, choose the **Tram** picture on the start menu and press **Drive the tram**. Use W and S or the arrow keys to control its speed. Steering follows the rails, and the tram stops at each platform for six seconds. The lead car carries a Swedish notice beside a blue door.
 Passengers look out from the middle carriage. Hold the middle mouse button and drag to look around. The amber display above the aisle shows the next stop.
 
 ![Passenger view inside the tram](docs/tram-interior.png)
@@ -42,7 +44,7 @@ In **Settings**, you can choose the season and weather independently. For exampl
 
 Clouds gather before rain or snow starts. Manual weather changes follow the same gradual transitions. Switch back to Automatic during a shower and it continues until the next forecast. Spring and autumn can bring slush, which leaves both water and snow on the ground. Wet and snowy roads increase braking distance. Daylight includes a visible sun aligned with the light casting the street shadows.
 
-Hold **V** and move the mouse for continuous camera control. Release **V** to use the pointer again. You can also hold the middle mouse button and drag to orbit the exterior camera or look around from the SUV driver’s seat. Returning to the driver’s seat with **C** centres the view. On foot, nearby neighbours greet you in the selected language. Greetings and the lost-cat and lost-shoe conversations appear in speech bubbles and use bundled voice clips in English, Swedish, Spanish, German, French, Norwegian Bokmål and Finnish.
+Hold **V** and move the mouse for continuous camera control. Release **V** to use the pointer again. You can also hold the middle mouse button and drag to orbit the exterior camera or look around in first person. On the SUV, classic moped and food truck, press **C** to switch between the chase camera and the driver’s view. The moped’s speedometer shows your speed in km/h. Switching back to the driver’s view centres the camera. On foot, nearby neighbours greet you in the selected language. Greetings and the lost-cat and lost-shoe conversations appear in speech bubbles and use bundled voice clips in English, Swedish, Spanish, German, French, Norwegian Bokmål and Finnish.
 
 The central junction has phased traffic lights and red and green pedestrian figures beside the crossing. Traffic waits for its green phase. The player's vehicle also slows as it approaches a red signal, pedestrians in its path or a queue.
 
@@ -52,7 +54,7 @@ The double-ended passenger ferry **Lotten** runs between two landings in the can
 
 ## Taxi and horns
 
-Choose **Taxi** and start the mission activity to pick up a passenger. Follow the green arrows along the streets and over a bridge when needed. Stop at the marker to board or drop off your fare. Gentle driving handles boarding automatically. The next fare appears after drop-off.
+Choose the **Taxi** picture and press **Start driving**. Open the phone with **T** and accept the assignment to pick up a passenger. Follow the green arrows along the streets and over a bridge when needed. Stop at the marker to board or drop off your fare. Gentle driving handles boarding automatically. The next fare appears after drop-off.
 
 Press **H** or click **Horn** while driving. The ambulance, police car, fire engine, SUV and taxi each have their own horn.
 
@@ -112,7 +114,7 @@ Open **Settings → Graphics** to choose Compatibility, Mobile, Forward+, or For
 
 ### Linux launch options
 
-Run one of the following from the project directory with Godot 4.6 installed. The launcher checks `godot4`, then `godot`, then the locally installed Godot 4.6.3 binary. Set `GODOT_BIN` to the path of a specific Godot 4 executable, including a custom build.
+Run one of the following from the project directory with Godot 4 installed. The launcher prefers the local custom engine when available, then checks `godot4`, `godot`, and the local 4.6.3 fallback. Set `GODOT_BIN` to the path of a specific Godot 4 executable, including a custom build.
 
 | Command | Graphics |
 | --- | --- |

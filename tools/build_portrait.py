@@ -206,6 +206,7 @@ def build_portrait(root, alma=False):
         frame_tube("Arched bridge",[(-.012,front_y,.022),(0,front_y+.003,.028),
                                      (.012,front_y,.022)],.0032)
 
+        before_cap = set(portrait.objects)
         canvas = material("Raspberry cotton", (.69,.045,.22))
         stitching = material("Rose seam", (.40,.029,.105))
         def cap_point(t,a):
@@ -230,6 +231,14 @@ def build_portrait(root, alma=False):
         brim = mesh("Curved cap brim",verts,faces,canvas)
         brim.modifiers.new("Bound brim edge","SOLIDIFY").thickness=.003
 
+        cap_parts = set(portrait.objects) - before_cap
+        bpy.ops.object.select_all(action="DESELECT")
+        for part in cap_parts:
+            part.select_set(True)
+        bpy.context.view_layer.objects.active = crown
+        bpy.ops.object.join()
+        crown.name = "SummerCap"
+
         hair_tones = [material("Chestnut lock", (.084,.040,.019)),
                       material("Brown lock", (.066,.032,.017)),
                       material("Sunlit lock", (.113,.058,.027))]
@@ -253,10 +262,12 @@ def build_portrait(root, alma=False):
             tail.data.materials[0] = hair_tones[0]
     bpy.ops.object.select_all(action='DESELECT')
     for obj in portrait.objects:
-        obj.select_set(obj not in (head,hair,bob))
+        obj.select_set(obj not in (head,hair,bob) and (not alma or obj != crown))
     bpy.context.view_layer.objects.active = next(obj for obj in portrait.objects if obj.select_get())
     bpy.ops.object.join()
     bpy.context.object.name = 'Facial features'
+    if alma:
+        crown.select_set(True)
     bpy.ops.export_scene.gltf(filepath=str(root/'characters'/('AlmaPortrait.glb' if alma else 'Portrait.glb')),
                               export_format='GLB',use_selection=True)
 

@@ -39,11 +39,11 @@ func check_route() -> void:
 			printerr("Missing payout or van chime")
 			quit(1)
 			return
-	if game.mode != "complete" or game.passenger.visible:
+	var receipt: String = game.tr("Ice cream served! You earned 10 points and 10 coins.")
+	if game.mode != "complete" or game.passenger.visible or not game.subtitle_label.text.ends_with(receipt):
 		printerr("Ice cream route did not finish")
 		quit(1)
 		return
-	game.queue_free()
-	await process_frame
 	print("Three ice cream customers served, three payouts and the van chime verified.")
-	quit()
+	game._request_quit()
+	game.quit_dialog.confirmed.emit()

@@ -1,0 +1,24 @@
+[Desktop Entry]
+Type=Application
+Name=Harbor Town Rollabout
+Name[sv]=Full rulle i Sjöstaden
+Name[de]=Volle Fahrt in der Hafenstadt
+Name[es]=A toda marcha por el puerto
+Name[fr]=En route au port !
+Name[nb]=Full fart i Havnebyen
+Name[no]=Full fart i Havnebyen
+Name[fi]=Vauhtia satamakaupungissa
+Comment=Explore the waterfront on foot or behind the wheel with Axel and Alma
+Comment[sv]=Utforska Sjöstaden till fots eller bakom ratten med Axel och Alma
+Comment[de]=Erkunde mit Axel und Alma die Hafenstadt zu Fuß oder am Steuer
+Comment[es]=Explora el puerto a pie o al volante con Axel y Alma
+Comment[fr]=Explore le port à pied ou au volant avec Axel et Alma
+Comment[nb]=Utforsk havnebyen til fots eller bak rattet med Axel og Alma
+Comment[no]=Utforsk havnebyen til fots eller bak rattet med Axel og Alma
+Comment[fi]=Tutki satamakaupunkia Axelin ja Alman kanssa jalan tai ratin takana
+Exec=axels-spel
+Icon=axels-spel
+Terminal=false
+Categories=Game;Simulation;
+StartupWMClass=Harbor Town Rollabout
+StartupNotify=true

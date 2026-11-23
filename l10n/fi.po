@@ -6,7 +6,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 msgid "Harbor Town Rollabout"
-msgstr "Harbor Town Rollabout"
+msgstr "Vauhtia satamakaupungissa"
 
 msgid "Emergency Vehicles"
 msgstr "Hätäajoneuvot"
@@ -59,11 +59,11 @@ msgstr "Sireeni pois päältä"
 msgid "Siren ON"
 msgstr "Sireeni päällä"
 
-msgid "Engine ON"
-msgstr "Moottori käynnissä"
+msgid "Engine sound ON"
+msgstr "Moottoriääni päällä"
 
-msgid "Engine OFF"
-msgstr "Moottori sammutettu"
+msgid "Engine sound OFF"
+msgstr "Moottoriääni pois"
 
 msgid "Pause"
 msgstr "Tauko"
@@ -216,7 +216,7 @@ msgid "Time · Day and night"
 msgstr "Vuorokaudenaika · Päivä ja yö"
 
 msgid "Vehicle depot"
-msgstr "Ajoneuvon varikko"
+msgstr "Ajoneuvovarikko"
 
 msgid "Both doors are blocked. Park where there is more room."
 msgstr ""
@@ -399,11 +399,11 @@ msgstr "Ensihoitaja odottaa klinikalla. Käy hakemassa hänet."
 msgid "Please bring the first-aid supplies to the marina."
 msgstr "Viekää ensiaputarvikkeet satamaan."
 
-msgid "Fare complete. You earned 15 coins."
-msgstr "Kyyti on perillä! Ansaitsit 15 kolikkoa."
+msgid "Fare complete. You earned 15 points and 15 coins."
+msgstr "Kyyti on perillä! Ansaitsit 15 pistettä ja 15 kolikkoa."
 
-msgid "Thank you for helping! You earned 10 coins."
-msgstr "Kiitos avusta! Sait 10 kolikkoa."
+msgid "Thank you for helping! You earned 10 points and 10 coins."
+msgstr "Kiitos avusta! Sait 10 pistettä ja 10 kolikkoa."
 
 msgid "Café"
 msgstr "Kahvila"
@@ -430,8 +430,10 @@ msgid "Pick and mix"
 msgstr "Irtokarkit"
 
 #, c-format
-msgid "%s · %d coins"
-msgstr "%s · %d kolikkoa"
+msgid "%s · %d coin"
+msgid_plural "%s · %d coins"
+msgstr[0] "%s · %d kolikko"
+msgstr[1] "%s · %d kolikkoa"
 
 #, c-format
 msgid "You need %d more coin."
@@ -440,8 +442,10 @@ msgstr[0] "Tarvitset vielä %d kolikon."
 msgstr[1] "Tarvitset vielä %d kolikkoa."
 
 #, c-format
-msgid "%s · Paid %d coins. Thank you!"
-msgstr "%s · Maksoit %d kolikkoa. Kiitos!"
+msgid "%s · Paid %d coin. Thank you!"
+msgid_plural "%s · Paid %d coins. Thank you!"
+msgstr[0] "%s · Maksoit %d kolikon. Kiitos!"
+msgstr[1] "%s · Maksoit %d kolikkoa. Kiitos!"
 
 msgid "Recovery truck"
 msgstr "Hinausauto"
@@ -455,8 +459,8 @@ msgstr "Vie auto korjaamolle."
 msgid "Collect the car with a missing wheel."
 msgstr "Hae auto, josta puuttuu pyörä."
 
-msgid "Recovery complete. You earned 20 coins."
-msgstr "Auto on perillä! Sait 20 kolikkoa."
+msgid "Recovery complete. You earned 20 points and 20 coins."
+msgstr "Auto on perillä! Sait 20 pistettä ja 20 kolikkoa."
 
 msgid "Passenger ride · P to pause"
 msgstr "Olet kyydissä · P pitää tauon"
@@ -501,12 +505,8 @@ msgstr "%s × %d"
 msgid "Waiting for a green light"
 msgstr "Odotetaan vihreää valoa"
 
-msgid ""
-"Steer with A and D or the arrow keys. Hold the left mouse button for "
-"throttle. Hold the right to slow down, then reverse."
-msgstr ""
-"Ohjaa A sekä D tai nuolinäppäimillä. Pidä vasenta hiiren painiketta kaasua. "
-"Pidä oikeaa hidastaa, sitten peruuttaa."
+msgid "Hold left to speed up or right to slow down and reverse. Move the mouse sideways to steer, or use A/D or the arrow keys."
+msgstr "Pidä hiiren vasenta painiketta pohjassa, kun haluat kiihdyttää. Oikealla painikkeella hidastat ja peruutat. Ohjaa liikuttamalla hiirtä sivulle tai käyttämällä A- ja D-näppäimiä tai nuolinäppäimiä."
 
 msgid "Start boating"
 msgstr "Lähde veneilemään"
@@ -515,7 +515,7 @@ msgid "Continue boating"
 msgstr "Jatka veneilyä"
 
 msgid "The tram drives itself and stops at each platform."
-msgstr "Raitiovaunu ajaa itse ja pysähtyy jokaisella laiturilla."
+msgstr "Raitiovaunu kulkee itsestään ja pysähtyy jokaisella pysäkillä."
 
 msgid ""
 "Control the speed. The tram follows the rails and stops at each platform."
@@ -550,8 +550,8 @@ msgstr "F · Nouse kyytiin (%s)"
 msgid "Well done, %s!"
 msgstr "Hienoa. %s!"
 
-msgid "First-aid supplies delivered to the marina. You earned 10 coins."
-msgstr "Toimitit ensiaputarvikkeet venesatamaan. Ansaitsit 10 kolikkoa."
+msgid "First-aid supplies delivered to the marina. You earned 10 points and 10 coins."
+msgstr "Toimitit ensiaputarvikkeet venesatamaan. Ansaitsit 10 pistettä ja 10 kolikkoa."
 
 msgid "Stop here to load the car."
 msgstr "Pysähdy tähän, niin auton voi nostaa lavalle."
@@ -622,8 +622,8 @@ msgstr "Jätä matkustajat klinikalle."
 msgid "Passengers on board."
 msgstr "Matkustajat ovat kyydissä."
 
-msgid "Bus journey complete. You earned 15 coins."
-msgstr "Bussimatka on ohi! Ansaitsit 15 kolikkoa."
+msgid "Bus journey complete. You earned 15 points and 15 coins."
+msgstr "Bussimatka on ohi! Ansaitsit 15 pistettä ja 15 kolikkoa."
 
 msgid "A pupil is waiting at the square."
 msgstr "Oppilas odottaa torilla."
@@ -635,10 +635,10 @@ msgid "A pupil is waiting at school."
 msgstr "Oppilas odottaa koululla."
 
 msgid "Pick up the pupil"
-msgstr "Nosta oppilas"
+msgstr "Hae oppilas kyytiin"
 
 msgid "Drop off the pupil"
-msgstr "Pudota oppilas"
+msgstr "Päästä oppilas pois kyydistä"
 
 msgid "Return to your bus"
 msgstr "Palaa bussiin."
@@ -695,10 +695,10 @@ msgid "Check the clinic entrance"
 msgstr "Tarkista klinikan sisäänkäynti"
 
 msgid "Patrol the marina"
-msgstr "Partioitkaa satamaa."
+msgstr "Partioi satamassa"
 
 msgid "Check the hydrant at the square"
-msgstr "Tarkista paloposti aukiolla"
+msgstr "Tarkista torin paloposti"
 
 msgid "Meet the fire safety team at the clinic"
 msgstr "Tapaa paloturvallisuusryhmä klinikalla"
@@ -707,22 +707,22 @@ msgid "Check the rescue equipment at the marina"
 msgstr "Tarkista pelastusvälineet venesatamassa"
 
 msgid "Collect parcels at the square"
-msgstr "Kerää paketteja aukiolta"
+msgstr "Hae paketit torilta"
 
 msgid "Deliver a parcel to the clinic"
-msgstr "Toimita paketti lääkärille"
+msgstr "Vie paketti klinikalle"
 
 msgid "Deliver the last parcel to the marina"
 msgstr "Toimita viimeinen paketti satamaan"
 
 msgid "Collect warm blankets at the square"
-msgstr "Kerää lämpimät huovat aukiolta"
+msgstr "Hae lämpimät peitot torilta"
 
 msgid "Bring blankets to the clinic"
-msgstr "Tuo peitot klinikalle"
+msgstr "Vie peitot klinikalle"
 
 msgid "Bring blankets to the marina"
-msgstr "Tuo huopia satamaan."
+msgstr "Vie peitot satamaan"
 
 msgid "Have you done your homework? — Mum"
 msgstr "Oletko tehnyt läksyt? — Äiti"
@@ -810,14 +810,14 @@ msgstr "Jää pois seuraavalla laiturilla · F"
 msgid "Stay on board · F"
 msgstr "Jää kyytiin · F"
 
-msgid "Two parcels collected at the square. You earned 10 coins."
-msgstr "Hait torilta kaksi pakettia. Ansaitsit 10 kolikkoa."
+msgid "Two parcels collected at the square. You earned 10 points and 10 coins."
+msgstr "Hait torilta kaksi pakettia. Ansaitsit 10 pistettä ja 10 kolikkoa."
 
-msgid "The clinic received its parcel. You earned 10 coins."
-msgstr "Klinikka sai pakettinsa. Ansaitsit 10 kolikkoa."
+msgid "The clinic received its parcel. You earned 10 points and 10 coins."
+msgstr "Klinikka sai pakettinsa. Ansaitsit 10 pistettä ja 10 kolikkoa."
 
-msgid "The marina received the last parcel. You earned 10 coins."
-msgstr "Viimeinen paketti on perillä venesatamassa. Ansaitsit 10 kolikkoa."
+msgid "The marina received the last parcel. You earned 10 points and 10 coins."
+msgstr "Viimeinen paketti on perillä venesatamassa. Ansaitsit 10 pistettä ja 10 kolikkoa."
 
 #, c-format
 msgid "Stepping ashore in %d s"
@@ -839,7 +839,7 @@ msgid ""
 msgstr "Toisitko kanelipullan? Isä osti kanelin ja pullan erikseen. — Äiti"
 
 msgid "Find clear ground to unfold the scooter."
-msgstr "Etsikää selkeä maa skootterin avaamiseksi."
+msgstr "Etsi paikka, jossa on tilaa avata potkulauta."
 
 msgid "Fold scooter · F"
 msgstr "Taita potkulauta · F"
@@ -866,8 +866,8 @@ msgstr "Tarjoile jäätelöä koulun edessä"
 msgid "Serve ice cream at the marina"
 msgstr "Tarjoile jäätelöä venesatamassa"
 
-msgid "Ice cream served! You earned 10 coins."
-msgstr "Jäätelö on tarjoiltu! Ansaitsit 10 kolikkoa."
+msgid "Ice cream served! You earned 10 points and 10 coins."
+msgstr "Jäätelö on tarjoiltu! Ansaitsit 10 pistettä ja 10 kolikkoa."
 
 msgid "Return to your ice cream van"
 msgstr "Palaa jäätelöautollesi"
@@ -958,7 +958,7 @@ msgid "Classic sedan"
 msgstr "Klassinen sedan"
 
 msgid "Vintage compact"
-msgstr "Pieni museoauto"
+msgstr "Pieni vanha auto"
 
 msgid "Electric sedan"
 msgstr "Sähkösedan"
@@ -979,7 +979,7 @@ msgid "Wheel loader"
 msgstr "Pyöräkuormaaja"
 
 msgid "Tracked excavator"
-msgstr "Tela-alustainen kaivinkone"
+msgstr "Telakaivinkone"
 
 msgid "Tram"
 msgstr "Raitiovaunu"
@@ -1033,16 +1033,16 @@ msgid "Find the cat with white paws."
 msgstr "Etsi kissa, jolla on valkoiset tassut."
 
 msgid "Collect seedlings at the square"
-msgstr "Kerää taimet aukiolla"
+msgstr "Hae taimet torilta"
 
 msgid "Deliver herbs to the clinic garden"
 msgstr "Toimita yrttejä klinikan puutarhaan"
 
 msgid "Bring flowers to the marina"
-msgstr "Tuo kukkia satamaan"
+msgstr "Vie kukat satamaan"
 
 msgid "Pick up soup ingredients at the square"
-msgstr "Poimi keitto ainesosia aukiolta"
+msgstr "Hae keittoainekset torilta"
 
 msgid "Serve lunch to the clinic staff"
 msgstr "Tarjoile lounasta klinikan henkilökunnalle"
@@ -1150,13 +1150,13 @@ msgid "No songs available in this language yet."
 msgstr "Tällä kielellä ei vielä ole lauluja."
 
 msgid "HARBOR FUEL"
-msgstr "HARBOR FUEL"
+msgstr "SATAMAN HUOLTAMO"
 
 msgid "Harbor Fuel  →"
-msgstr "Harbor Fuel  →"
+msgstr "Sataman huoltamo  →"
 
 msgid "←  Harbor Fuel"
-msgstr "←  Harbor Fuel"
+msgstr "←  Sataman huoltamo"
 
 msgid "Tow drop-off"
 msgstr "Hinattujen autojen jättöpaikka"
@@ -1319,3 +1319,209 @@ msgstr "Nykyiset tehtävät"
 
 msgid "Hold left mouse to drive forward or right mouse to reverse."
 msgstr "Aja eteenpäin pitämällä hiiren vasenta painiketta pohjassa tai peruuta pitämällä oikeaa painiketta pohjassa."
+
+msgctxt "decimal separator"
+msgid "."
+msgstr ","
+
+msgid "Meow!"
+msgstr "Miau!"
+
+msgid "Graphics mode"
+msgstr "Grafiikkatila"
+
+msgid "Compatibility (OpenGL)"
+msgstr "Yhteensopivuus (OpenGL)"
+
+msgid "Mobile"
+msgstr "Mobiili"
+
+msgid "MENU"
+msgstr "RUOKALISTA"
+
+msgid "BURGERS"
+msgstr "HAMPURILAISET"
+
+msgid "FRIES"
+msgstr "RANSKALAISET"
+
+msgid "SODA"
+msgstr "LIMSA"
+
+msgid "SPECIAL"
+msgstr "PÄIVÄN ANNOS"
+
+msgid "DOUBLE"
+msgstr "TUPLA"
+
+msgid "WITH CHEESE"
+msgstr "JUUSTOLLA"
+
+msgid "Wait until the crossing is clear."
+msgstr "Odota, että risteys on vapaa."
+
+#, c-format
+msgid "%d km/h"
+msgstr "%d km/h"
+
+msgid "Hold the left or right mouse button and move the mouse sideways to steer."
+msgstr "Pidä hiiren vasenta tai oikeaa painiketta pohjassa ja ohjaa liikuttamalla hiirtä sivulle."
+
+msgid "Hold left to accelerate or right to brake. To reverse, stop, release and hold right again."
+msgstr "Kaasuta pitämällä hiiren vasenta painiketta pohjassa. Jarruta oikealla. Kun olet pysähtynyt, vapauta oikea painike ja pidä sitä uudelleen pohjassa, niin peruutat."
+
+msgid "Our ice creams"
+msgstr "Jäätelömme"
+
+msgid "Berry Boing"
+msgstr "Marjapomppu"
+
+msgid "Minty Moo"
+msgstr "Minttuammuu"
+
+msgid "Purple Hiccup"
+msgstr "Liila hikka"
+
+msgid "Lemon Comet"
+msgstr "Sitruunakomeetta"
+
+msgid "Melon Wiggle"
+msgstr "Melonihytky"
+
+msgid "Blue Blizzard"
+msgstr "Sininen pyry"
+
+msgid "Harbor Town Ice Cream"
+msgstr "Satamakaupungin jäätelö"
+
+msgid "Boarding"
+msgstr "Nousu laivaan"
+
+msgid "E Jump"
+msgstr "E Hyppää"
+
+msgid "Ride-on mower"
+msgstr "Ajoleikkuri"
+
+msgid "System language"
+msgstr "Järjestelmän kieli"
+
+msgid "Did you feel a raindrop?"
+msgstr "Tunsitko sadepisaran?"
+
+msgid "My boots vote for puddles!"
+msgstr "Saappaani äänestävät lätäköiden puolesta!"
+
+msgid "Which ice cream would you pick?"
+msgstr "Minkä jäätelön valitsisit?"
+
+msgid "Blueberry, with a cherry on top!"
+msgstr "Mustikkaa ja kirsikka päälle!"
+
+msgid "Can AI dream?"
+msgstr "Voiko tekoäly nähdä unia?"
+
+msgid "Maybe it dreams of electric sheep!"
+msgstr "Ehkä se näkee unta sähkölampaista!"
+
+msgid "What did the dog find?"
+msgstr "Mitä koira löysi?"
+
+msgid "A leaf worth a really good sniff!"
+msgstr "Lehden, jota kannattaa nuuhkia oikein kunnolla!"
+
+msgid "Japanese haori jacket"
+msgstr "Japanilainen haoritakki"
+
+msgid "Korean jeogori jacket"
+msgstr "Korealainen jeogoritakki"
+
+msgid "Red panda plush"
+msgstr "Kultapandapehmo"
+
+msgid "Moon rabbit figurine"
+msgstr "Kuujänisfiguuri"
+
+msgid "Popcorn Party"
+msgstr "Popcornjuhlat"
+
+msgid "Pickle Carousel"
+msgstr "Kurkkukaruselli"
+
+msgid "Banana Moon"
+msgstr "Banaanikuu"
+
+msgid "Berry Blizzard"
+msgstr "Marjamyrsky"
+
+msgid "Mozzarella, tomato and carrot stars"
+msgstr "Mozzarellaa, tomaattia ja porkkanatähtiä"
+
+msgid "Popcorn, sweetcorn and cheese"
+msgstr "Popcornia, maissia ja juustoa"
+
+msgid "Pickle wheels and crispy onions"
+msgstr "Suolakurkkupyöriä ja rapeaa sipulia"
+
+msgid "Banana moons and coconut snow"
+msgstr "Banaanikuita ja kookoslunta"
+
+msgid "Blueberries, vanilla cream and raspberry swirls"
+msgstr "Mustikoita, vaniljakreemiä ja vadelmakierteitä"
+
+msgid "Frog choir"
+msgstr "Sammakkokuoro"
+
+msgid "Sour shoelaces"
+msgstr "Kirpeät kengännauhat"
+
+msgid "Rocket fudge"
+msgstr "Rakettitoffee"
+
+msgid "Cloud cone"
+msgstr "Pilvitötterö"
+
+msgid "Penguin pop"
+msgstr "Pingviinipuikko"
+
+msgid "Lunar sundae"
+msgstr "Kuukimara"
+
+msgid "Dill disco popcorn"
+msgstr "Tillidiskopopcorn"
+
+msgid "Dragon curls"
+msgstr "Lohikäärmekierteet"
+
+msgid "Chocolate puddles"
+msgstr "Suklaalätäköt"
+
+msgid "Gummy boots and raspberry raindrops"
+msgstr "Hedelmäkumisaappaita ja vadelmapisaroita"
+
+msgid "Pear jelly frogs with fizzy lime dust"
+msgstr "Päärynäsammakoita ja poreilevaa limettijauhetta"
+
+msgid "Apple laces with lemon sugar"
+msgstr "Omenanauhoja ja sitruunasokeria"
+
+msgid "Caramel with popping strawberry sparks"
+msgstr "Toffeeta ja poksuvia mansikkakipinöitä"
+
+msgid "Vanilla ice cream with cotton candy clouds"
+msgstr "Vaniljajäätelöä ja hattarapilviä"
+
+msgid "Licorice ice cream with a mango beak"
+msgstr "Lakritsijäätelöä ja mangonokka"
+
+msgid "Blueberry ice cream with biscuit craters"
+msgstr "Mustikkajäätelöä ja keksikraattereita"
+
+msgid "Popcorn with dill and crunchy cheese stars"
+msgstr "Popcornia, tilliä ja rapeita juustotähtiä"
+
+msgid "Corn twists with sweet paprika scales"
+msgstr "Maissikierteitä ja makeita paprikasuomuja"
+
+msgid "Chocolate buttons with crispy rice bubbles"
+msgstr "Suklaanappeja ja rapeita riisikuplia"
