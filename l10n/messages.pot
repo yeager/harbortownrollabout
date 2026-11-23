@@ -1635,3 +1635,6 @@ msgstr ""
 
 msgid "Deliver groceries to the marina"
 msgstr ""
+
+msgid "Match the customer's ice cream"
+msgstr ""

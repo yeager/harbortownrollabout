@@ -1723,3 +1723,6 @@ msgstr "Bringe eine Einkaufstasche zum Ärztehaus"
 
 msgid "Deliver groceries to the marina"
 msgstr "Bringe eine Einkaufstasche zum Jachthafen"
+
+msgid "Match the customer's ice cream"
+msgstr "Wähle das Eis auf dem Bild"

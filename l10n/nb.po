@@ -1706,3 +1706,6 @@ msgstr "Lever en handlepose ved helsesenteret"
 
 msgid "Deliver groceries to the marina"
 msgstr "Lever en handlepose i småbåthavna"
+
+msgid "Match the customer's ice cream"
+msgstr "Velg isen kunden viser"

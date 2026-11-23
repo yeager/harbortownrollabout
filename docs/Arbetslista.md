@@ -37,7 +37,7 @@ De 50 förbättringarna från genomgången. En tom ruta är öppen. En punkt boc
 - [x] 25. Visa hur verkstaden lagar den bärgade bilen.
 - [x] 26. Barnvänligt brandbilsuppdrag med slang och vatten.
 - [x] 27. Leverera en synlig matkasse i shoppingmopedens korg.
-- [ ] 28. Matcha kundens bildbeställning mot glassbilens meny.
+- [x] 28. Matcha kundens bildbeställning mot glassbilens meny.
 - [ ] 29. Valbara ledtrådar med ljud eller föremål i katt- och skouppdragen.
 - [ ] 30. Varsitt uppdrag för schäfern och den tama komodovaranen.
 

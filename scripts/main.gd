@@ -247,6 +247,10 @@ var lost_wheel: Node3D
 var bonnet_smoke := CPUParticles3D.new()
 var taxi_leg := 0
 var blanket_rolls: Array[Node3D] = []
+var ice_order := PanelContainer.new()
+var requested_ice := TextureRect.new()
+var flavour_choices := GridContainer.new()
+var ice_flavours: Array[AtlasTexture] = []
 var grocery_bags: Array[Node3D] = []
 var delivery_parcels: Array[Node3D] = []
 var clinic_fire_team: Array[Node3D] = []
@@ -1432,6 +1436,7 @@ func _at_target() -> bool:
 	return actor.position.distance_to(_mission_destination()) < _arrival_radius()
 
 func _update_arrival(delta: float) -> void:
+	if ice_order.visible and (vehicle_index != ICE_CREAM or not _at_target() or absf(speed) >= .12): ice_order.hide()
 	var stopped := walking_velocity.length() < .12 if walker.visible else absf(speed) < .12
 	if practice_hose.visible:
 		if vehicle_index != 2 or mission_index != 2 or not _at_target() or not stopped:
@@ -1485,7 +1490,7 @@ func _reward_delivery(amount: int) -> void:
 	delivery_points += amount
 	_save_preferences()
 
-func _help_at_target() -> void:
+func _help_at_target(ice_choice := -1) -> void:
 	if operating_excavator: return
 	if free_drive or mission_index >= TARGETS.size(): return
 	if vehicle_index == BUS:
@@ -1542,6 +1547,19 @@ func _help_at_target() -> void:
 			practice_hose.hide()
 			practice_spray.emitting = false
 			hose_seconds = 0
+		if vehicle_index == ICE_CREAM:
+			var wanted := [0,4,2][mission_index] as int
+			if ice_choice != wanted:
+				requested_ice.texture = ice_flavours[wanted]
+				if not ice_order.visible:
+					ice_order.show()
+					ice_order.move_to_front()
+					for button in flavour_choices.get_children(): button.disabled = false
+					flavour_choices.get_child(0).grab_focus()
+				if ice_choice >= 0:
+					flavour_choices.get_child(ice_choice).disabled = true
+				return
+			ice_order.hide()
 		if vehicle_index == REFUSE and mission_index < 2:
 			_empty_refuse_bin(mission_index)
 		mission_index += 1
@@ -6221,6 +6239,38 @@ func _update_emergency_lights() -> void:
 	for light in red_light_meshes:
 		light.visible = lights_on and (calm_mode or steady_player_lights or phase == 1)
 
+func _build_ice_order() -> void:
+	ui.add_child(ice_order)
+	ice_order.set_anchors_and_offsets_preset(Control.PRESET_CENTER)
+	ice_order.grow_horizontal = Control.GROW_DIRECTION_BOTH
+	ice_order.grow_vertical = Control.GROW_DIRECTION_BOTH
+	var layout := VBoxContainer.new()
+	ice_order.add_child(layout)
+	var title := Label.new()
+	title.text = "Match the customer's ice cream"
+	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	layout.add_child(title)
+	requested_ice.custom_minimum_size = Vector2(96,96)
+	requested_ice.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	requested_ice.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	layout.add_child(requested_ice)
+	layout.add_child(flavour_choices)
+	flavour_choices.columns = 3
+	for i in 6:
+		var icon := AtlasTexture.new()
+		icon.atlas = preload("res://art/ice_cream/menu.png")
+		icon.region = Rect2((i%3)*128,floori(i/3.0)*128,128,128)
+		ice_flavours.append(icon)
+		var choice := Button.new()
+		choice.custom_minimum_size = Vector2(100,84)
+		choice.icon = icon
+		choice.expand_icon = true
+		choice.icon_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		choice.tooltip_text = preload("res://vehicles/ice_cream_menu.gd").FLAVOURS[i]
+		choice.pressed.connect(_help_at_target.bind(i))
+		flavour_choices.add_child(choice)
+	ice_order.hide()
+
 func _build_ui() -> void:
 	ui = CanvasLayer.new()
 	ui.add_child(turn_preview)
@@ -6232,6 +6282,7 @@ func _build_ui() -> void:
 	turn_preview.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	turn_preview.hide()
 	add_child(ui)
+	_build_ice_order()
 	var top := PanelContainer.new()
 	top.name = "DrivingHeader"
 	top.set_anchors_and_offsets_preset(Control.PRESET_TOP_WIDE)
@@ -7761,6 +7812,7 @@ func _refresh_ui() -> void:
 	else:
 		mission_label.text = "ALL MISSIONS COMPLETE"
 	var show_overlay := mode == "menu" or mode == "complete" or paused
+	if show_overlay or vehicle_index != ICE_CREAM: ice_order.hide()
 	ui.get_node("DrivingHeader").visible = mode != "menu"
 	for control in [light_button, siren_button, pause_button]:
 		control.focus_mode = Control.FOCUS_NONE if show_overlay else Control.FOCUS_ALL

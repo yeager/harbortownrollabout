@@ -52,6 +52,17 @@ func check_route() -> void:
 		else:
 			game.gentle_driving = true
 			game._update_arrival(game.HELP_DURATION)
+		if not game.ice_order.is_visible_in_tree():
+			printerr("Missing picture order")
+			quit(1)
+			return
+		var wanted: int = game.ice_flavours.find(game.requested_ice.texture)
+		game.flavour_choices.get_child((wanted+1)%6).pressed.emit()
+		if game.mission_index != leg or game.wallet != starting_balance + 10*leg:
+			printerr("Wrong flavour accepted")
+			quit(1)
+			return
+		game.flavour_choices.get_child(wanted).pressed.emit()
 		if game.wallet != starting_balance + 10 * (leg+1) or game.horn.stream.resource_path != "res://audio/horn_icecream.wav":
 			printerr("Missing payout or van chime")
 			quit(1)

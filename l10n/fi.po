@@ -1702,3 +1702,6 @@ msgstr "Vie ruokakassi terveyskeskukseen"
 
 msgid "Deliver groceries to the marina"
 msgstr "Vie ruokakassi pienvenesatamaan"
+
+msgid "Match the customer's ice cream"
+msgstr "Valitse asiakkaan näyttämä jäätelö"

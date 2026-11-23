@@ -1713,3 +1713,6 @@ msgstr "Entrega una bolsa en el centro de salud"
 
 msgid "Deliver groceries to the marina"
 msgstr "Entrega una bolsa en el puerto deportivo"
+
+msgid "Match the customer's ice cream"
+msgstr "Elige el helado que pide el cliente"

@@ -1636,3 +1636,6 @@ msgstr "Lämna en matkasse vid vårdcentralen"
 
 msgid "Deliver groceries to the marina"
 msgstr "Lämna en matkasse i småbåtshamnen"
+
+msgid "Match the customer's ice cream"
+msgstr "Välj glassen som kunden visar"
