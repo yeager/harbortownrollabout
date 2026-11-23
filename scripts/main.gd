@@ -9282,6 +9282,12 @@ func _resume_road_checkpoint() -> void:
 			ferry_exit_requested = road_checkpoint.get("exit_at_landing", false)
 			wave_time = road_checkpoint.ferry_time
 			_update_moorings(0)
+		elif not bounds.has_point(Vector2(walker.position.x, walker.position.z)):
+			# Choose recovery sites in the saved vehicle's play area.
+			walker.position = ambulance.position
+			_recover_position()
+			if road_checkpoint.get("scooter", false):
+				_toggle_scooter()
 		elif road_checkpoint.get("scooter", false):
 			walker.position.y = _foot_height(walker.position.x, walker.position.z)
 			_toggle_scooter()
