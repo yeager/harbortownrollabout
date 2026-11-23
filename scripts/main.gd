@@ -8152,6 +8152,7 @@ func _refresh_ui() -> void:
 	version_label.text = tr("Version %s") % ProjectSettings.get_setting("application/config/version")
 	_refresh_dispatch()
 	_sync_radio()
+	phone.update_star_album(STAR_SITES, collected_stars)
 	var remaining := STAR_SITES.size() - collected_stars.size()
 	if remaining == 0:
 		phone.star_progress.text = tr("★ All stars found!")

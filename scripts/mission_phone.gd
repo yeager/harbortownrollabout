@@ -18,6 +18,7 @@ var vehicle_action := Action.COLLECT
 var action_rows := VBoxContainer.new()
 var pictured_jobs := PackedStringArray()
 var star_progress := Label.new()
+var star_album := HBoxContainer.new()
 var inbox := Label.new()
 var history_scroll := ScrollContainer.new()
 var message_tone := AudioStreamPlayer.new()
@@ -110,6 +111,7 @@ func _ready() -> void:
 	job_heading.add_theme_font_size_override("font_size",18)
 	take_job.text = "Take a job"
 	content.add_child(star_progress)
+	content.add_child(star_album)
 	content.add_child(take_job)
 	content.add_child(job_heading)
 	content.add_child(action_rows)
@@ -254,3 +256,15 @@ func refresh() -> void:
 			lines.append(tr(body))
 	history_scroll.visible = not lines.is_empty() or active.is_empty()
 	inbox.text="\n\n".join(lines) if not lines.is_empty() else tr("No messages yet.")
+
+func update_star_album(sites: Dictionary, collected: PackedStringArray) -> void:
+	if star_album.get_child_count() == 0:
+		for site in sites:
+			var stamp := Label.new()
+			stamp.name = site
+			stamp.add_theme_font_size_override("font_size", 21)
+			star_album.add_child(stamp)
+	for stamp: Label in star_album.get_children():
+		var found := collected.has(str(stamp.name))
+		stamp.text = "★" if found else "☆"
+		stamp.add_theme_color_override("font_color", Color("#87520c") if found else Color("#516963"))
