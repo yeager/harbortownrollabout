@@ -1175,7 +1175,13 @@ def make_fire_engine():
         profile_loft("Cab amber signal",[
             light_ring(.865,1.335,w,h,d) for w,h,d in
             ((.384,.043,-3.013),(.377,.041,-3.023),(.356,.029,-3.028))],amber,root)
-        cube("Tail lamp", (side*1.075, 3.04, 1.43), (0.125, 0.08, 0.31), TAIL_LAMP, 0.07, root)
+        x = side*1.075
+        cube("Rear combination lamp seal",(x,3.071,1.47),(.148,.088,.435),RUBBER,.019,root)
+        for label,z,height,finish in (
+                ("Rear indicator lens",1.610,.105,amber),
+                ("Tail lamp",1.468,.167,TAIL_LAMP),
+                ("Reversing lens",1.319,.097,GLASS_HI)):
+            cube(label,(x,3.121,z),(.127,.031,height),finish,.010,root)
     bumper=[]
     for x in (-1.13,-1.11,-1.04,-.88,-.69,-.54,0,.54,.69,.88,1.04,1.11,1.13):
         u=abs(x)/1.13
@@ -1202,6 +1208,10 @@ def make_fire_engine():
     cube("Reflective registration plate",(0,-3.170,.49),(.46,.010,.104),PAINT_WHITE,.007,root)
     plate = text_obj("Fleet registration","SJT 711",(-.192,-3.179,.457),.085,BLACK,root=root)
     plate.rotation_euler = (math.pi/2,0,0)
+    cube("Rear registration plinth",(-.63,3.15,.89),(.51,.026,.137),BLACK,.009,root)
+    cube("Rear registration plate",(-.63,3.168,.89),(.484,.012,.114),PAINT_WHITE,.005,root)
+    rear_letters = text_obj("Rear fleet registration","SJT 711",(-.44,3.180,.858),.085,BLACK,root=root)
+    rear_letters.rotation_euler = (math.pi/2,0,math.pi)
     cube("Rear step crossmember",(0,3.05,.81),(2.19,.16,.14),DARK,.022,root)
     for side in (-1,1):
         x=side*.65
