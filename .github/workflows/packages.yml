@@ -82,6 +82,17 @@ jobs:
         run: |
           & "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe" "/DGameVersion=$env:VERSION" packaging/windows/game.iss
           exit $LASTEXITCODE
+      - name: Install and launch the Windows game
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $installer = Get-Item "dist/HarborTownRollabout-$env:VERSION-windows-x64.exe"
+          $dir = Join-Path $env:RUNNER_TEMP 'installed-game'
+          $setup = Start-Process $installer.FullName -ArgumentList "/VERYSILENT /SUPPRESSMSGBOXES /NORESTART /LANG=sv /DIR=`"$dir`"" -Wait -PassThru
+          if ($setup.ExitCode -ne 0) { throw "Installer exited with $($setup.ExitCode)" }
+          $log = Join-Path $env:RUNNER_TEMP 'windows-game.log'
+          $game = Start-Process (Join-Path $dir 'HarborTownRollabout.exe') -ArgumentList "--headless --quit-after 360 --log-file `"$log`"" -Wait -PassThru
+          if ($game.ExitCode -ne 0 -or (Select-String -Path $log -Pattern '^(SCRIPT )?ERROR:')) { throw 'Installed game failed to start cleanly' }
       - if: runner.os == 'macOS'
         run: |
           mkdir image
@@ -91,6 +102,20 @@ jobs:
           codesign --verify --deep --strict "$app"
           ln -s /Applications image/Applications
           hdiutil create -volname "Harbor Town Rollabout" -srcfolder image -format UDZO "dist/HarborTownRollabout-$VERSION-macOS.dmg"
+      - name: Mount the disk image and launch the universal app
+        if: runner.os == 'macOS'
+        run: |
+          mount="$RUNNER_TEMP/rollabout-volume"
+          mkdir -p "$mount"
+          hdiutil attach -readonly -nobrowse -mountpoint "$mount" dist/*.dmg
+          trap 'hdiutil detach "$mount"' EXIT
+          app=$(find "$mount" -maxdepth 1 -name '*.app' -print -quit)
+          binary=$(/usr/libexec/PlistBuddy -c 'Print CFBundleExecutable' "$app/Contents/Info.plist")
+          executable="$app/Contents/MacOS/$binary"
+          codesign --verify --deep --strict "$app"
+          lipo "$executable" -verify_arch arm64 x86_64
+          "$executable" --headless --quit-after 360 2>&1 | tee "$RUNNER_TEMP/mac-game.log"
+          if grep -E '^(SCRIPT )?ERROR:' "$RUNNER_TEMP/mac-game.log"; then exit 1; fi
       - uses: actions/upload-artifact@v4
         with:
           name: package-${{ runner.os }}
