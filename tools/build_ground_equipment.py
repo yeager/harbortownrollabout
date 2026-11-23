@@ -77,8 +77,29 @@ bpy.ops.mesh.primitive_torus_add(location=(0,-.39,.94),major_radius=.156,minor_r
 part("Steering wheel",rubber).rotation_euler.x=-.36
 for x in (-.14,.14):
     rod("Wheel spoke",(0,-.39,.94),(x,-.39,.94),.009,steel)
+# Stamp both blade chambers into one shell with a continuous rolled skirt.
+outline = []
+for centre, start in ((.29, -math.pi/2), (-.29, math.pi/2)):
+    for i in range(21):
+        angle = start + math.pi*i/20
+        outline.append((centre + .36*math.cos(angle), .36*math.sin(angle)))
+rings = [(1.0, .092), (1.0, .112), (.976, .128), (.961, .209), (.925, .237)]
+vertices = [(x*scale, -1.04+y*scale, z) for scale,z in rings for x,y in outline]
+count = len(outline)
+faces = [tuple(reversed(range(count)))]
+for level in range(len(rings)-1):
+    for i in range(count):
+        j = (i+1) % count
+        a = level*count
+        faces.append((a+i, a+j, a+count+j, a+count+i))
+faces.append(tuple(range(len(vertices)-count, len(vertices))))
+deck_mesh = bpy.data.meshes.new("Stamped deck shell")
+deck_mesh.from_pydata(vertices, [], faces)
+deck_mesh.update()
+deck_mesh.materials.append(frame)
+deck = bpy.data.objects.new("Cutting deck", deck_mesh)
+bpy.context.collection.objects.link(deck)
 for x in (-.29,.29):
-    disc("Cutting deck",(x,-1.04,.164),.36,.145,frame)
     rod("Lift arm",(x,-.56,.32),(x,-1.05,.21),.028,steel)
     wheel_x = x*1.8
     disc("Gauge wheel",(wheel_x,-1.31,.095),.095,.08,rubber,(1,0,0))
