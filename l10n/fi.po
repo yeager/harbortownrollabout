@@ -1795,3 +1795,9 @@ msgstr "Mikä pizza vastaa tilauslappua?"
 
 msgid "Order matched!"
 msgstr "Oikea pizza!"
+
+msgid "Mix two sweets in a bag"
+msgstr "Sekoita kaksi lajia pussiin"
+
+msgid "Choose a second sweet for %s"
+msgstr "Valitse toinen makeinen kaveriksi tuotteelle %s"

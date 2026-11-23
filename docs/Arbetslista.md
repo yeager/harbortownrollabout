@@ -106,7 +106,7 @@ Listan innehåller 100 jobb. En tom ruta är öppen. En punkt bockas av när bet
 - [x] 76. Låt lastens tyngdpunkt ändras när en tung låda lossas från ena sidan. Provkör samma kurva före och efter.
 - [ ] 77. Låt spelaren köra tomma glasslådor från kiosken tillbaka till glassbilens depå.
 - [x] 78. Ge pizzerians disk en beställningslapp med bilder av ingredienser som spelaren kan matcha. Fem illustrerade lappar visas både vid disken och i köpmenyn. Alla fem matchningar samt ett vanligt köp kontrollerades i Godot.
-- [ ] 79. Låt godisbutikens kund välja en påse med två sorter och visa båda sorterna när påsen lämnas över.
+- [x] 79. Låt godisbutikens kund välja en påse med två sorter och visa båda sorterna när påsen lämnas över. Båda sorterna syns på påsen vid kassan. Dubbelt val av samma sort, för få mynt och lyckat köp kontrollerades i Godot.
 - [ ] 80. Lägg till en borttappad samlarfigur som kan återlämnas i klädbutiken mot ett tack i en pratbubbla.
 
 ## Trafik, fordon och resor

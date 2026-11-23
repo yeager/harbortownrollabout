@@ -1799,3 +1799,9 @@ msgstr "Hvilken pizza passer til bestillingslappen?"
 
 msgid "Order matched!"
 msgstr "Riktig pizza!"
+
+msgid "Mix two sweets in a bag"
+msgstr "Bland to sorter i en pose"
+
+msgid "Choose a second sweet for %s"
+msgstr "Velg en sort til sammen med %s"

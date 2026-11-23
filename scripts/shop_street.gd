@@ -64,13 +64,18 @@ var shop_card := PanelContainer.new()
 var panel := VBoxContainer.new()
 var first_product: Button
 var till_sound := AudioStreamPlayer.new()
-enum ReceiptKind { NONE, PURCHASE, SHORTFALL, SNACK, ORDER_MATCH }
+enum ReceiptKind { NONE, PURCHASE, SHORTFALL, SNACK, ORDER_MATCH, MIXED_BAG }
 var receipt_kind := ReceiptKind.NONE
 var receipt_subject := ""
 var receipt_amount := 0
 var receipt: Label
 var snack_buttons := {}
 var balance: Label
+var mixing_bag := false
+var first_sweet := -1
+var bag_toggle: CheckButton
+var bag_goods := Vector2i(-1,-1)
+var bag_display := Node3D.new()
 var basket: RichTextLabel
 
 func storefront_x(index: int) -> float:
@@ -285,6 +290,9 @@ func update_customer(foot: bool, pos: Vector3, active: bool) -> void:
 				break
 	var entering := index!=inside or not shop_card.visible
 	if index!=inside:
+		mixing_bag = false
+		first_sweet = -1
+		bag_display.hide()
 		receipt_kind = ReceiptKind.NONE
 		if inside>=0: awnings[inside].show()
 		inside=index
@@ -312,6 +320,18 @@ func rebuild_menu() -> void:
 		keyboard_hint.text = "Tab to choose · Enter to buy or eat"
 	keyboard_hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	panel.add_child(keyboard_hint)
+	if inside == 3:
+		bag_toggle = CheckButton.new()
+		bag_toggle.text = "Mix two sweets in a bag"
+		bag_toggle.button_pressed = mixing_bag
+		if mixing_bag and first_sweet >= 0:
+			bag_toggle.text = tr("Choose a second sweet for %s") % tr(SWEETS[first_sweet])
+		bag_toggle.toggled.connect(func(enabled: bool):
+			mixing_bag = enabled
+			first_sweet = -1
+			bag_toggle.text = "Mix two sweets in a bag"
+		)
+		panel.add_child(bag_toggle)
 	if inside == 2:
 		var prompt := Label.new()
 		prompt.text = "Can you match the order slip?"
@@ -430,7 +450,13 @@ func refresh_basket() -> void:
 func purchase(shop: int, item: int) -> void:
 	var game=get_parent()
 	if shop!=inside or not shop_card.is_visible_in_tree() or not game.walker.visible or game.paused: return
+	var pair := shop == 3 and mixing_bag
+	if pair and (first_sweet < 0 or first_sweet == item):
+		first_sweet = item
+		bag_toggle.text = tr("Choose a second sweet for %s") % tr(SWEETS[item])
+		return
 	var cost:int=PRICES[shop][item]
+	if pair: cost += int(PRICES[3][first_sweet])
 	if game.wallet<cost:
 		receipt_kind = ReceiptKind.SHORTFALL
 		receipt_amount = cost-game.wallet
@@ -438,6 +464,15 @@ func purchase(shop: int, item: int) -> void:
 		return
 	var product:String=MENUS[shop][item]
 	game.wallet-=cost
+	if pair:
+		bag_goods = Vector2i(first_sweet,item)
+		var other: String = SWEETS[first_sweet]
+		game.purchases[other] = int(game.purchases.get(other,0))+1
+		bag_toggle.button_pressed = false
+		for slot in 2:
+			var sweet := bag_display.get_child(slot+1) as Sprite3D
+			sweet.texture = _product_icon(3,bag_goods[slot])
+		bag_display.show()
 	if shop == 6:
 		_serve_grill_order(item)
 	till_sound.play()
@@ -453,6 +488,7 @@ func purchase(shop: int, item: int) -> void:
 	game._refresh_ui()
 	receipt_kind = ReceiptKind.PURCHASE
 	receipt_subject = product
+	if pair: receipt_kind = ReceiptKind.MIXED_BAG
 	receipt_amount = cost
 	if shop == 2 and item == order_recipe:
 		order_recipe = (order_recipe+1) % MENUS[2].size()
@@ -463,8 +499,11 @@ func purchase(shop: int, item: int) -> void:
 func _refresh_receipt() -> void:
 	receipt.visible = receipt_kind != ReceiptKind.NONE
 	match receipt_kind:
-		ReceiptKind.PURCHASE, ReceiptKind.ORDER_MATCH:
+		ReceiptKind.PURCHASE, ReceiptKind.ORDER_MATCH, ReceiptKind.MIXED_BAG:
 			receipt.text = tr_n("%s · Paid %d coin. Thank you!", "%s · Paid %d coins. Thank you!", receipt_amount) % [tr(receipt_subject),receipt_amount]
+			if receipt_kind == ReceiptKind.MIXED_BAG:
+				var contents := tr(SWEETS[bag_goods.x])+" + "+tr(SWEETS[bag_goods.y])
+				receipt.text = tr_n("%s · Paid %d coin. Thank you!", "%s · Paid %d coins. Thank you!", receipt_amount) % [contents,receipt_amount]
 			if receipt_kind == ReceiptKind.ORDER_MATCH:
 				receipt.text += " " + tr("Order matched!")
 		ReceiptKind.SHORTFALL:
@@ -949,6 +988,21 @@ func _update_candy_letters() -> void:
 			letter.position = Vector3(storefront_x(3)+(.5*(title.length()-1)-i)*spacing,3.04+.028*sin(i*1.65),41.94)
 
 func _sweet_shop(x: float) -> void:
+	add_child(bag_display)
+	bag_display.position = Vector3(x+2.94,1.12,47.64)
+	var paper := BoxMesh.new()
+	paper.size = Vector3(.42,.32,.19)
+	var bag := MeshInstance3D.new()
+	bag.mesh = paper
+	bag.material_override = get_parent()._material(Color("#f1d6aa"),.85)
+	bag_display.add_child(bag)
+	for side in [-1,1]:
+		var sweet := Sprite3D.new()
+		sweet.pixel_size = .0031
+		sweet.position = Vector3(side*.10,.09,-.102)
+		sweet.rotation.y = PI
+		bag_display.add_child(sweet)
+	bag_display.hide()
 	var spiral := PackedVector2Array()
 	for i in 33:
 		var angle := float(i)*TAU/20

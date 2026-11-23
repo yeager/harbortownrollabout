@@ -1814,3 +1814,9 @@ msgstr "Quelle pizza correspond au bon de commande ?"
 
 msgid "Order matched!"
 msgstr "C’est la bonne pizza !"
+
+msgid "Mix two sweets in a bag"
+msgstr "Mélanger deux sortes dans un sachet"
+
+msgid "Choose a second sweet for %s"
+msgstr "Choisis une deuxième sorte avec %s"

@@ -1728,3 +1728,9 @@ msgstr ""
 
 msgid "Order matched!"
 msgstr ""
+
+msgid "Mix two sweets in a bag"
+msgstr ""
+
+msgid "Choose a second sweet for %s"
+msgstr ""
