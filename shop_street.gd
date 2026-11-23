@@ -39,6 +39,7 @@ const SIGNS := ["CINNAMON BUN CAFÉ","HARBOR KIOSK","PIZZERIA","GODISBODEN","HAR
 const COLORS := ["#a86343","#427868","#b65f51","#927198","#355e4b","#375c68"]
 const FRONT_Z := 42.5
 var grill_neon_finishes: Array[StandardMaterial3D] = []
+var grill_neon_light: OmniLight3D
 var grill_neon_phase := 0.0
 var grill_neon_lit := true
 var candy_letters: Array[Label3D] = []
@@ -470,6 +471,8 @@ func _hot_dog_stand(x: float) -> void:
 		var t := i/32.0
 		mustard.append(Vector2(lerpf(-.34,.33,t),.081+.066*t+.021*sin(TAU*2.5*t)))
 	_bent_neon_tube(emblem-Vector3.BACK*.014,mustard,Color("#ffd53d"),.009)
+	grill_neon_light = _shop_light(emblem + Vector3.FORWARD * .25, tomato, .48)
+	grill_neon_light.omni_range = 1.35
 	for dx in [-1.40,1.40]:
 		part("Hatch lamp housing",Vector3(x+dx,2.77,42.05),Vector3(.78,.075,.18),steel)
 		var diffuser := part("Hatch lamp diffuser",Vector3(x+dx,2.72,42.05),Vector3(.71,.045,.14),cream)
@@ -691,6 +694,7 @@ func advance_grill_sign(delta: float) -> void:
 	var lit := grill_neon_phase < 2.8
 	if lit == grill_neon_lit: return
 	grill_neon_lit = lit
+	grill_neon_light.visible = lit
 	for finish in grill_neon_finishes:
 		finish.emission_enabled = lit
 		finish.albedo_color = finish.emission if lit else finish.emission.darkened(.86)
@@ -950,7 +954,7 @@ func _stamp_meshes(label_text: String, mesh: Mesh, poses: Array, colors: PackedC
 	instance.material_override = finish
 	add_child(instance)
 
-func _shop_light(pos: Vector3, hue: Color, power: float) -> void:
+func _shop_light(pos: Vector3, hue: Color, power: float) -> OmniLight3D:
 	var light := OmniLight3D.new()
 	light.position = pos
 	light.light_color = hue
@@ -960,6 +964,7 @@ func _shop_light(pos: Vector3, hue: Color, power: float) -> void:
 	light.distance_fade_begin = 18
 	light.distance_fade_length = 10
 	add_child(light)
+	return light
 
 func _open_glass_door(x: float, trim: Color) -> void:
 	# The leaf is held open along the inside jamb, leaving the aisle unobstructed.

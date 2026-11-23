@@ -9,6 +9,10 @@ func check() -> void:
 	var sign_shop = game.shops
 	for interval in [2.9,.8]:
 		sign_shop.advance_grill_sign(interval)
+		if sign_shop.grill_neon_light.visible != (interval < 1):
+			printerr("Roof sign light out of sync with tubes")
+			quit(1)
+			return
 		if sign_shop.grill_neon_finishes.size() != 3:
 			quit(1)
 			return
