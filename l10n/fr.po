@@ -1568,3 +1568,15 @@ msgstr "Retourne au camion-poubelle"
 
 msgid "Shopping trike"
 msgstr "Tricycle de courses"
+
+msgid "Hot dog stand"
+msgstr "Kiosque à hot-dogs"
+
+msgid "Moon mash dog"
+msgstr "Hot-dog à la purée lunaire"
+
+msgid "Pickle rocket"
+msgstr "Fusée au cornichon"
+
+msgid "Crunchy onion comet"
+msgstr "Comète aux oignons croustillants"

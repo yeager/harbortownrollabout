@@ -40,6 +40,7 @@ var reverse_camera: Camera3D
 var reverse_monitor: Sprite3D
 var dash_direction: Label3D
 var dash_speed: Label3D
+var shopper_boarding := false
 var vehicle_model: Node3D
 var headlights: Array[SpotLight3D] = []
 var tractor_beacon: StandardMaterial3D
@@ -876,6 +877,7 @@ func _vehicle_payload() -> float:
 	return 0.0
 
 func _drive(delta: float) -> void:
+	if shopper_boarding: return
 	var throttle := Input.get_axis("ui_down", "ui_up")
 	var steer_input := Input.get_axis("ui_left", "ui_right")
 	if is_zero_approx(steer_input): steer_input = mouse_steering
@@ -3732,7 +3734,23 @@ func _drive_excavator(delta: float) -> void:
 	walker.position = excavator.position
 	_update_entry_button()
 
+func _swing_shopper(model: Node3D, open: bool) -> void:
+	var hinge := model.find_child("EntryHinge",true,false) as Node3D
+	var closed := Quaternion.IDENTITY
+	# A diagonal hinge axis tips the shell towards the nose and the passenger side.
+	var lifted := Quaternion(Vector3(.82,0,-.57).normalized(),deg_to_rad(53))
+	hinge.quaternion = closed if open else lifted
+	var motion := create_tween().set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	motion.tween_property(hinge,"quaternion",lifted if open else closed,.55)
+	await motion.finished
+
+func _step_through_shopper(destination: Vector3) -> void:
+	var motion := create_tween().set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	motion.tween_property(walker,"position",destination,.35)
+	await motion.finished
+
 func _change_seat() -> void:
+	if shopper_boarding: return
 	if walk_jump_left > 0 or bridge_jump_left > 0: return
 	if scooter.visible:
 		_toggle_scooter()
@@ -3842,6 +3860,12 @@ func _change_seat() -> void:
 			message_timer = 3
 			old_car.visible = false
 			return
+		if vehicle_index == SHOPPER:
+			shopper_boarding = true
+			speed = 0
+			old_car.hide()
+			await _swing_shopper(vehicle_model,true)
+			old_car.show()
 		parked_door_offset = old_car.to_local(door)
 		walker.position = Vector3(door.x,_foot_height(door.x,door.z),door.z)
 		walk_basis = ambulance.basis
@@ -3861,9 +3885,23 @@ func _change_seat() -> void:
 		parked_sound_settings[vehicle_index] = sound_on
 		parked_light_settings[vehicle_index] = lights_on
 		siren_player.stop()
+		if vehicle_index == SHOPPER:
+			var parked_hinge := old_car.find_child("EntryHinge",true,false) as Node3D
+			parked_hinge.quaternion = (vehicle_model.find_child("EntryHinge",true,false) as Node3D).quaternion
+			var landing := walker.position
+			walker.position = old_car.to_global(Vector3(signf(parked_door_offset.x)*.38,.18,0))
+			await _step_through_shopper(landing)
+			await _swing_shopper(old_car,false)
+			shopper_boarding = false
 	else:
 		var next := _nearest_car()
 		if next < 0: return
+		if next == SHOPPER:
+			shopper_boarding = true
+			var parked := parked_cars[next]
+			await _swing_shopper(parked,true)
+			var entry_side := signf(parked.to_local(walker.position).x)
+			await _step_through_shopper(parked.to_global(Vector3(entry_side*.38,.18,0)))
 		release_walk_keys = _walk_pedal_pressed()
 		_change_mission_vehicle(next)
 		sound_on = parked_sound_settings[next]
@@ -3879,6 +3917,11 @@ func _change_seat() -> void:
 		listener.transform = Transform3D(Basis.IDENTITY, Vector3.UP*1.3)
 		listener.make_current()
 		_update_camera(0,true)
+		if next == SHOPPER:
+			_refresh_ui()
+			await _swing_shopper(vehicle_model,false)
+			(parked_cars[next].find_child("EntryHinge",true,false) as Node3D).quaternion = Quaternion.IDENTITY
+			shopper_boarding = false
 	message_timer = 0
 	parked_at_target = 0
 	_update_mission_marker()
@@ -3899,6 +3942,7 @@ func _walking_hint() -> String:
 	return tr("W/S Walk · A/D Turn · Shift + W Run · F Enter · U Scooter") + "   ·   " + tr("E Jump") + "   ·   " + tr("PgUp Raise camera · PgDn Lower camera")
 
 func _walk(delta: float) -> void:
+	if shopper_boarding: return
 	var keys := Input.get_vector("ui_left","ui_right","ui_up","ui_down")
 	keys += Vector2(int(Input.is_key_pressed(KEY_D))-int(Input.is_key_pressed(KEY_A)),int(Input.is_key_pressed(KEY_S))-int(Input.is_key_pressed(KEY_W)))
 	if phone.handset.is_visible_in_tree():

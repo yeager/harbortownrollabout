@@ -1560,3 +1560,15 @@ msgstr "Vuelve al camión de basura"
 
 msgid "Shopping trike"
 msgstr "Triciclo de compras"
+
+msgid "Hot dog stand"
+msgstr "Puesto de perritos"
+
+msgid "Moon mash dog"
+msgstr "Perrito con puré lunar"
+
+msgid "Pickle rocket"
+msgstr "Cohete de pepinillo"
+
+msgid "Crunchy onion comet"
+msgstr "Cometa de cebolla crujiente"

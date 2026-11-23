@@ -1570,3 +1570,15 @@ msgstr "Geh zurück zum Müllwagen"
 
 msgid "Shopping trike"
 msgstr "Einkaufsdreirad"
+
+msgid "Hot dog stand"
+msgstr "Würstchenbude"
+
+msgid "Moon mash dog"
+msgstr "Wurst mit Mondpüree"
+
+msgid "Pickle rocket"
+msgstr "Gurkenrakete"
+
+msgid "Crunchy onion comet"
+msgstr "Knuspriger Zwiebelkomet"

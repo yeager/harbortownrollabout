@@ -1553,3 +1553,15 @@ msgstr "Gå tilbake til søppelbilen"
 
 msgid "Shopping trike"
 msgstr "Handlemoped"
+
+msgid "Hot dog stand"
+msgstr "Pølsebod"
+
+msgid "Moon mash dog"
+msgstr "Pølse med månemos"
+
+msgid "Pickle rocket"
+msgstr "Agurkrakett"
+
+msgid "Crunchy onion comet"
+msgstr "Sprø løkkomet"

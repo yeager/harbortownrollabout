@@ -1482,3 +1482,15 @@ msgstr ""
 
 msgid "Shopping trike"
 msgstr ""
+
+msgid "Hot dog stand"
+msgstr ""
+
+msgid "Moon mash dog"
+msgstr ""
+
+msgid "Pickle rocket"
+msgstr ""
+
+msgid "Crunchy onion comet"
+msgstr ""

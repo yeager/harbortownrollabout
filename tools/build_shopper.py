@@ -54,6 +54,7 @@ bpy.ops.object.modifier_apply(modifier=cut.name)
 bpy.data.objects.remove(cutter,do_unlink=True)
 box("Pressed footwell floor",(0,-.315,.211),(.82,.73,.044),red,.018)
 box("Rubber foot mat",(0,-.315,.238),(.765,.64,.010),v.RUBBER,.005)
+fixed_parts = set(root.children) - {bonnet}
 nose_lamp("Chrome headlight bezel",-1.185,.58,.101,.045,v.METAL)
 # Flutes are part of one lens mesh so the driving light still has one emitter.
 lens_radius = .085
@@ -147,6 +148,15 @@ tube("Wiper spindle", screen_point(.25, .08), pivot, .018, v.METAL)
 tube("Wiper arm", pivot, blade_joint, .008, v.DARK)
 tube("Wiper blade lower", wiper_point(.06, .32), blade_joint, .011, v.BLACK)
 tube("Wiper blade upper", blade_joint, wiper_point(-.30, .70), .011, v.BLACK)
+# The bonnet, windscreen and roof lift as one shell about the nose.
+moving_parts = set(root.children) - fixed_parts
+hinge = bpy.data.objects.new("EntryHinge",None)
+bpy.context.collection.objects.link(hinge)
+hinge.parent = root
+hinge.location = (0,-1.13,.44)
+for part in moving_parts:
+    part.parent = hinge
+    part.location -= hinge.location
 box("Seat cushion",(0,.18,.595),(.61,.42,.093),vinyl,.044)
 back=box("Upright seat back",(0,.395,.82),(.60,.074,.48),vinyl,.034)
 back.rotation_euler.x=-.12

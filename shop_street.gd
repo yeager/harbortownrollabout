@@ -1,6 +1,6 @@
 extends Node3D
 
-const SHOPS := ["Café", "Kiosk", "Pizzeria", "Sweet shop","Grocery store","Momo & Bori"]
+const SHOPS := ["Café", "Kiosk", "Pizzeria", "Sweet shop","Grocery store","Momo & Bori","Hot dog stand"]
 const SWEETS := [
 	"Pick and mix",
 	"Frog choir",
@@ -25,13 +25,13 @@ const SWEET_INGREDIENTS := [
 	"Corn twists with sweet paprika scales",
 	"Chocolate buttons with crispy rice bubbles",
 ]
-const MENUS := [["Cinnamon bun","Berry cordial"],["Ice cream","Hot dog"],["Margherita pizza", "Popcorn Party", "Pickle Carousel", "Banana Moon", "Berry Blizzard"],SWEETS,["Apple","Milk"],["Japanese haori jacket","Korean jeogori jacket","Red panda plush","Moon rabbit figurine"]]
+const MENUS := [["Cinnamon bun","Berry cordial"],["Ice cream","Hot dog"],["Margherita pizza", "Popcorn Party", "Pickle Carousel", "Banana Moon", "Berry Blizzard"],SWEETS,["Apple","Milk"],["Japanese haori jacket","Korean jeogori jacket","Red panda plush","Moon rabbit figurine"],["Hot dog","Moon mash dog","Pickle rocket","Crunchy onion comet"]]
 const PRODUCT_ICONS := {
 	2: preload("res://branding/pizza-products.png"),
 	3: preload("res://branding/sweet-products.png"),
 	5: preload("res://branding/boutique-products.png"),
 }
-const PRICES := [[3,2],[4,5],[8,7,8,9,10],[4,3,2,4,5,4,6,3,3,4],[2,4],[9,9,5,4]]
+const PRICES := [[3,2],[4,5],[8,7,8,9,10],[4,3,2,4,5,4,6,3,3,4],[2,4],[9,9,5,4],[5,7,6,8]]
 const PIZZA_TOPPINGS := ["Mozzarella, tomato and carrot stars", "Popcorn, sweetcorn and cheese", "Pickle wheels and crispy onions", "Banana moons and coconut snow", "Blueberries, vanilla cream and raspberry swirls"]
 const SIGNS := ["KAFÉ BULLEN","SJÖKIOSKEN","PIZZERIA","GODISBODEN","SJÖSTADENS LIVS","MOMO & BORI"]
 const COLORS := ["#a86343","#427868","#b65f51","#927198","#355e4b","#375c68"]
@@ -74,6 +74,9 @@ func _ready() -> void:
 	pavement.material_override = get_parent().sidewalk_finish
 	for i in SHOPS.size():
 		var x:=storefront_x(i)
+		if i == 6:
+			_hot_dog_stand(x)
+			continue
 		var color:=Color(COLORS[i])
 		var cream:=Color("#e9debf")
 		get_parent()._make_driving_surface("Shop floor",Vector3(8.4,.2,7),Vector3(x,-.12,46),Color("#eee6da") if i == 3 else Color("#ad9274"),false,self)
@@ -216,6 +219,10 @@ func update_customer(foot: bool, pos: Vector3, active: bool) -> void:
 	var index:=-1
 	if foot:
 		for i in SHOPS.size():
+			if i == 6:
+				if absf(pos.x-storefront_x(i)) < 1.45 and pos.z > FRONT_Z-1.6 and pos.z < FRONT_Z-.15:
+					index=i
+				continue
 			if absf(pos.x-storefront_x(i))<4 and pos.z>FRONT_Z and pos.z<49.4:
 				index=i
 				break
@@ -225,7 +232,7 @@ func update_customer(foot: bool, pos: Vector3, active: bool) -> void:
 		if inside>=0: awnings[inside].show()
 		inside=index
 		if inside>=0:
-			awnings[inside].hide()
+			if inside != 6: awnings[inside].hide()
 			rebuild_menu()
 	shop_card.visible=inside>=0 and active
 	if entering and shop_card.visible:
@@ -311,10 +318,13 @@ func refresh_basket() -> void:
 	var purchases: Dictionary = get_parent().purchases
 	for product in snack_buttons:
 		snack_buttons[product].visible = int(purchases.get(product,0)) > 0
+	var listed: Array[String] = []
 	for menu in MENUS:
 		for product in menu:
 			var count := int(purchases.get(product,0))
-			if count > 0: lines.append(tr("%s × %d") % [tr(product),count])
+			if count <= 0 or product in listed: continue
+			listed.append(product)
+			lines.append(tr("%s × %d") % [tr(product),count])
 	basket.text = tr("Your purchases") + "\n" + "\n".join(lines)
 	basket.visible = not lines.is_empty()
 
@@ -378,6 +388,54 @@ func _turned(label_text: String, pos: Vector3, lower: float, upper: float, heigh
 	piece.position = pos
 	add_child(piece)
 	return piece
+
+func _hot_dog_stand(x: float) -> void:
+	var cream := Color("#f3e2b9")
+	var red := Color("#a73b32")
+	var steel := Color("#82898a")
+	part("Kiosk plinth",Vector3(x,.10,44.5),Vector3(4.7,.22,3.9),steel,true)
+	part("Front wainscot",Vector3(x,.55,42.63),Vector3(4.7,.94,.20),cream,true)
+	part("Kitchen back wall",Vector3(x,1.45,46.34),Vector3(4.7,2.75,.18),cream,true)
+	for side in [-1,1]:
+		part("Timber side wall",Vector3(x+side*2.27,1.45,44.5),Vector3(.18,2.75,3.8),cream,true)
+		part("Hatch jamb",Vector3(x+side*1.29,1.85,42.63),Vector3(.07,1.7,.13),steel)
+		part("Menu slate",Vector3(x+side*1.77,1.84,42.63),Vector3(.89,1.63,.12),Color("#25382e"),true)
+	for i in 23:
+		part("Panel seam",Vector3(x+(i-11)*.20,.56,42.521),Vector3(.014,.87,.016),Color("#c6b591"))
+	part("Serving ledge",Vector3(x,1.06,42.55),Vector3(4.8,.10,.64),steel,true)
+	var roof := part("Grill kiosk roof",Vector3(x,2.91,44.23),Vector3(5.08,.24,4.68),red)
+	awnings.append(roof)
+	var lightbox := part("Illuminated roof sign",Vector3(x,3.22,42.14),Vector3(3.57,.60,.23),cream)
+	lightbox.material_override = get_parent()._material(cream,.42,true)
+	var sign_label := _lettering("Hot dog stand",Vector3(x,3.22,41.996),.009,Color("#502521"))
+	get_parent()._size_world_sign(sign_label,3.3)
+	_shop_light(Vector3(x,2.51,42.85),Color("#ffd69a"),1.25)
+	part("Stainless extraction hood",Vector3(x+.59,2.38,44.10),Vector3(1.83,.25,.81),steel)
+	part("Extraction duct",Vector3(x+.60,2.65,44.22),Vector3(.52,.45,.38),steel)
+	part("Kitchen shelf",Vector3(x-.81,1.77,45.95),Vector3(1.48,.07,.49),cream)
+	for jar in 5:
+		_turned("Pickle jar",Vector3(x-1.3+jar*.25,1.91,45.91),.082,.082,.22,Color("#849852"))
+		_turned("Jar lid",Vector3(x-1.3+jar*.25,2.04,45.91),.086,.086,.034,red)
+	part("Kitchen prep counter",Vector3(x, .54,43.42),Vector3(3.90,1.06,.79),cream)
+	part("Bread tray",Vector3(x-.61,1.10,43.1),Vector3(.91,.05,.61),steel)
+	for i in 3:
+		var bun := MeshInstance3D.new()
+		bun.mesh = SphereMesh.new()
+		bun.scale = Vector3(.19,.13,.39)
+		bun.material_override = get_parent()._material(Color("#d89a58"),.8)
+		bun.position = Vector3(x-.89+.25*i,1.18,43.11)
+		add_child(bun)
+	part("Grill hotplate",Vector3(x+.62,1.09,43.07),Vector3(1.22,.13,.70),Color("#484343"))
+	for i in 5:
+		var sausage := _turned("Grilled sausage",Vector3(x+.22+i*.19,1.21,43.07),.054,.054,.36,Color("#a75432"))
+		sausage.rotation.x = PI*.5
+	for i in 2:
+		var sauce := Color("#c9442e") if i == 0 else Color("#eabe36")
+		_turned("Condiment bottle",Vector3(x-.85+i*.16,1.25,42.49),.058,.062,.26,sauce)
+		_turned("Bottle nozzle",Vector3(x-.85+i*.16,1.41,42.49),.036,.009,.08,cream)
+	for i in 4:
+		var ticket := _lettering(MENUS[6][i],Vector3(x+(-1.77 if i<2 else 1.77),2.01-.38*(i%2),42.55),.003,cream)
+		get_parent()._size_world_sign(ticket,.82)
 
 func _kiosk(x: float) -> void:
 	var ivory := Color("#fff1d9")

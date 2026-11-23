@@ -1549,3 +1549,15 @@ msgstr "Palaa jäteautolle"
 
 msgid "Shopping trike"
 msgstr "Ostosmopo"
+
+msgid "Hot dog stand"
+msgstr "Nakkikioski"
+
+msgid "Moon mash dog"
+msgstr "Kuumuurinakki"
+
+msgid "Pickle rocket"
+msgstr "Kurkkuraketti"
+
+msgid "Crunchy onion comet"
+msgstr "Rapea sipulikomeetta"
