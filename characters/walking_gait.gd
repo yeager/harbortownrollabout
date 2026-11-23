@@ -170,6 +170,7 @@ func advance(distance: float, delta: float, pushing: bool, tuck := 0.0) -> void:
 		shoes[i].position += legs[i].basis.inverse() * (Vector3.FORWARD * 0.025)
 		shoes[i].basis = legs[i].basis.inverse() * Basis(Vector3.RIGHT, shoe_angles[i])
 		if not pushing:
+			arms[i].rotation.y = 0.0
 			arms[i].rotation.x = -foot.x * lerpf(1.05, 1.65, running) - .30 * running + .40 * tuck
 			# Leave room for the resting thumb beside the jacket and thigh.
 			arms[i].rotation.z = signf(hip_centres[i]) * .10
@@ -203,3 +204,20 @@ func wave(time: float, raised: bool, delta: float) -> void:
 	var cuff := Vector3.UP * .06
 	var joint := Vector3.DOWN * UPPER_ARM
 	palms[1].transform = Transform3D(forearm * wrist * rest.basis, joint + forearm * (rest.origin + cuff - wrist * cuff - joint))
+
+## Fit a bent arm between the animated shoulder and a grip on the carried item.
+func reach_with_hand(index: int, world_grip: Vector3) -> void:
+	var shoulder: Node3D = arms[index]
+	var target := actor.to_local(world_grip) - shoulder.position
+	var axis := target.normalized()
+	var upper := Vector3.DOWN * UPPER_ARM
+	var lower := palm_rest[index].origin - upper
+	var span := clampf(target.length(), absf(UPPER_ARM-lower.length())+.001, UPPER_ARM+lower.length()-.001)
+	var along := (span*span + upper.length_squared() - lower.length_squared()) / (2.0*span)
+	var outward := Vector3(signf(shoulder.position.x)*.45, -1, 0).slide(axis).normalized()
+	var elbow := axis * along + outward * sqrt(maxf(0, UPPER_ARM*UPPER_ARM-along*along))
+	shoulder.basis = Basis(Quaternion(upper.normalized(), elbow.normalized()))
+	var forearm := shoulder.basis.inverse() * (axis*span-elbow)
+	var turn := Quaternion(lower.normalized(), forearm.normalized())
+	elbows[index].set_bone_pose_rotation(1, turn)
+	palms[index].transform = Transform3D(Basis(turn)*palm_rest[index].basis, upper+turn*lower)
