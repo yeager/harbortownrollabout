@@ -1825,3 +1825,6 @@ msgstr "Eine zweite Sorte zu %s wählen"
 
 msgid "Also use F6 to change camera view"
 msgstr "Kameraansicht auch mit F6 wechseln"
+
+msgid "Stop requested"
+msgstr "Wagen hält"

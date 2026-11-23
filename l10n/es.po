@@ -1815,3 +1815,6 @@ msgstr "Elige otro dulce para mezclar con %s"
 
 msgid "Also use F6 to change camera view"
 msgstr "Usar también F6 para cambiar de vista"
+
+msgid "Stop requested"
+msgstr "Parada solicitada"

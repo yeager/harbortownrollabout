@@ -230,6 +230,9 @@ const WEST_STOPS := [Vector3(-205,0,2.8),Vector3(-460,0,-45.2)]
 const BUS_DESTINATION := "74  SICKLA UDDE"
 const BUS_STOPS := [0,SCHOOL,2,1,4,5]
 const BUS_MESSAGES := ["Collect passengers at the square.", "Drop off passengers at the school.", "Collect passengers at the marina.", "Drop off passengers at the clinic.", "Collect passengers at Västra torget.", "Drop off passengers at Sickla udde."]
+var bus_stop_request: Label3D
+var bus_request_arm: Node3D
+var bus_press_time := 0.0
 var next_bus_stop_board: Label3D
 var rear_bus_board: Label3D
 var seated_bus_riders: Node3D
@@ -740,6 +743,8 @@ func _process(delta: float) -> void:
 		else:
 			_drive(delta)
 		_collect_stars(before, star_actor.global_position)
+		if vehicle_index == BUS and not free_drive and bus_leg % 2 == 1:
+			_update_bus_stop_request(delta)
 		_update_arrival(delta)
 		route_timer -= delta
 		if route_timer<=0:
@@ -6469,6 +6474,32 @@ func _fit_bus_interior() -> void:
 		_make_box("Passenger cushion",Vector3(.53,.13,.58),Vector3(side*.78,1.54,1.1),Color("#3f6378"),false,vehicle_model)
 		_make_box("Passenger backrest",Vector3(.53,.69,.11),Vector3(side*.78,1.91,.84),Color("#3f6378"),false,vehicle_model)
 	seated_bus_riders.reparent(vehicle_model,false)
+	var rider := seated_bus_riders.get_child(0) as Node3D
+	bus_request_arm = rider.get_meta("arms")[0]
+	bus_request_arm.rotation.x = PI/2
+	var contact := rider.transform * bus_request_arm.transform * (bus_request_arm.get_child(1) as Node3D).position
+	bus_request_arm.rotation.x = 0
+	_make_box("Passenger handrail",Vector3(.045,1.65,.045),Vector3(contact.x,1.84,contact.z+.05),Color("#eabc4e"),false,vehicle_model)
+	_make_box("Stop button",Vector3(.085,.095,.046),contact,Color("#ec3536"),false,vehicle_model)
+	var request_panel := _make_box("Stop request panel",Vector3(.76,.19,.055),Vector3(0,2.34,3.54),Color("#291c20"),false,vehicle_model)
+	bus_stop_request = Label3D.new()
+	bus_stop_request.text = "Stop requested"
+	bus_stop_request.rotation.y = PI
+	bus_stop_request.position.z = -.032
+	bus_stop_request.pixel_size = .00135
+	bus_stop_request.modulate = Color("#ff604b")
+	bus_stop_request.outline_size = 0
+	request_panel.add_child(bus_stop_request)
+	bus_stop_request.hide()
+	bus_press_time = 0
+
+func _update_bus_stop_request(delta: float) -> void:
+	if bus_press_time == 0 and ambulance.position.distance_to(_mission_destination()) > 28:
+		return
+	bus_press_time = minf(1.2,bus_press_time+delta)
+	bus_request_arm.rotation.x = PI/2 * smoothstep(0,.4,bus_press_time) * (1-smoothstep(.65,1.2,bus_press_time))
+	bus_stop_request.visible = bus_press_time >= .4
+
 
 func _load_vehicle_model() -> void:
 	wiper_pivots.clear()
@@ -7206,6 +7237,10 @@ func _update_stop_label(label: Label3D) -> void:
 func _update_bus_board() -> void:
 	if is_instance_valid(bus_board):
 		seated_bus_riders.visible = not free_drive and bus_leg % 2 == 1
+		if not seated_bus_riders.visible:
+			bus_press_time = 0
+			bus_request_arm.rotation.x = 0
+			bus_stop_request.hide()
 		bus_board.text = BUS_DESTINATION
 		var font := ThemeDB.fallback_font
 		var pixels := font.get_string_size(bus_board.text,HORIZONTAL_ALIGNMENT_LEFT,-1,bus_board.font_size)

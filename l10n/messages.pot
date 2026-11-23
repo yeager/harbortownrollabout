@@ -1737,3 +1737,6 @@ msgstr ""
 
 msgid "Also use F6 to change camera view"
 msgstr ""
+
+msgid "Stop requested"
+msgstr ""
