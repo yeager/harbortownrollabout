@@ -6459,6 +6459,17 @@ func _find_light_meshes(node: Node) -> void:
 				child.visible = false
 		_find_light_meshes(child)
 
+func _parked_in_fire_bay() -> bool:
+	if vehicle_index != 2 or walker.visible or absf(speed) >= .12 or ambulance.basis.z.z <= 0:
+		return false
+	var footprint := parked_footprints[2]
+	for x in [footprint.position.x,footprint.end.x]:
+		for z in [footprint.position.y,footprint.end.y]:
+			var corner := ambulance.to_global(Vector3(x,0,z))-FIRE_RETURN_BAY
+			if absf(corner.x)>2.15 or absf(corner.z)>4.9:
+				return false
+	return true
+
 func _update_route_arrows() -> void:
 	turn_preview.hide()
 	for arrow in route_arrows: arrow.visible = false
@@ -6469,6 +6480,8 @@ func _update_route_arrows() -> void:
 	var grill_destination := free_drive and target == shops.grill_counter()
 	var walking_to_grill := grill_destination and walker.visible
 	var arrived := shops.at_grill_counter(origin) if walking_to_grill else origin.distance_to(target) < _arrival_radius()
+	if free_drive and target == FIRE_RETURN_BAY:
+		arrived = _parked_in_fire_bay()
 	if free_drive and arrived:
 		if not grill_destination or walker.visible:
 			map_goal = Vector3.INF

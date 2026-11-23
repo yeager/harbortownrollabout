@@ -81,7 +81,7 @@ Listan innehåller 100 jobb. En tom ruta är öppen. En punkt bockas av när bet
 - [x] 57. Passa in de bakre fotstegen och dragkroken under jalusierna efter bakifrånbilden.
 - [x] 58. Brandbilens främre sidolucka rullas upp när slangövningen startar. Slangrullen syns bakom luckan och luckan stängs när övningen är färdig. Öppning, återställning och utseende verifierade i Godot.
 - [ ] 59. Gör en körbar port på brandstationen som öppnas för brandbilen och väntar tills hela bilen passerat.
-- [x] 60. Efter sista branduppdraget kan spelaren välja att återvända till plats 711. Rutan har vita linjer och fordonsnumret på marken. Ett träd som blockerade infarten flyttades och tio meters backning provkördes i Godot.
+- [x] 60. Efter sista branduppdraget kan spelaren välja att återvända till plats 711. Rutan har vita linjer och fordonsnumret på marken. Ett träd som blockerade infarten flyttades och tio meters backning provkördes i Godot. Vägvisningen avslutas när hela brandbilen står inom linjerna med fronten mot utfarten.
 
 ## Boule och strandpromenad
 
