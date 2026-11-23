@@ -271,3 +271,11 @@ func reach_with_hand(index: int, world_grip: Vector3) -> void:
 	var turn := Quaternion(lower.normalized(), forearm.normalized())
 	elbows[index].set_bone_pose_rotation(1, turn)
 	palms[index].transform = Transform3D(Basis(turn)*palm_rest[index].basis, upper+turn*lower)
+
+func sit() -> void:
+	for i in legs.size():
+		legs[i].rotation = Vector3.RIGHT * PI/2
+		knees[i].set_bone_pose_rotation(1, Quaternion(Vector3.RIGHT,-PI/2))
+		knees[i].set_bone_pose_rotation(2, Quaternion(Vector3.RIGHT,-PI/4))
+		shoes[i].position = Vector3.DOWN*THIGH + (Vector3.DOWN*SHIN).rotated(Vector3.RIGHT,-PI/2)
+		shoes[i].basis = legs[i].basis.inverse()

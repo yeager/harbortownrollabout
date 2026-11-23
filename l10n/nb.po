@@ -1778,3 +1778,9 @@ msgstr "Mellomlangt kast"
 
 msgid "Long throw"
 msgstr "Langt kast"
+
+msgid "Watch boule from the bench · F"
+msgstr "Se på boule fra benken · F"
+
+msgid "Stand up · F"
+msgstr "Reis deg · F"

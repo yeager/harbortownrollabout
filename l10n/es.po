@@ -1785,3 +1785,9 @@ msgstr "Tiro medio"
 
 msgid "Long throw"
 msgstr "Tiro largo"
+
+msgid "Watch boule from the bench · F"
+msgstr "Ver la petanca desde el banco · F"
+
+msgid "Stand up · F"
+msgstr "Levantarse · F"

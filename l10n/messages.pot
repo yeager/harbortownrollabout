@@ -1707,3 +1707,9 @@ msgstr ""
 
 msgid "Long throw"
 msgstr ""
+
+msgid "Watch boule from the bench · F"
+msgstr ""
+
+msgid "Stand up · F"
+msgstr ""

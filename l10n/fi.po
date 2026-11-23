@@ -1774,3 +1774,9 @@ msgstr "Keskipitkä heitto"
 
 msgid "Long throw"
 msgstr "Pitkä heitto"
+
+msgid "Watch boule from the bench · F"
+msgstr "Katso petankkia penkiltä · F"
+
+msgid "Stand up · F"
+msgstr "Nouse ylös · F"

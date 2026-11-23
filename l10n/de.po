@@ -1795,3 +1795,9 @@ msgstr "Mittlerer Wurf"
 
 msgid "Long throw"
 msgstr "Weiter Wurf"
+
+msgid "Watch boule from the bench · F"
+msgstr "Boule von der Bank aus ansehen · F"
+
+msgid "Stand up · F"
+msgstr "Aufstehen · F"

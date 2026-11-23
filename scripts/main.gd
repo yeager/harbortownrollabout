@@ -536,6 +536,8 @@ const SMALL_TALK := [
 	["What did the dog find?", "chat_dog", "A leaf worth a really good sniff!", "chat_sniff"],
 ]
 var boule_join_requested := false
+const BOULE_BENCH := BOULE_CENTRE + Vector3(3.3,0,0)
+var boule_seated := false
 var boule_guest_turn := false
 var boule_choices := VBoxContainer.new()
 var boule_aim := HSlider.new()
@@ -918,7 +920,7 @@ func _notification(what: int) -> void:
 func _unhandled_key_input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed and not event.echo:
 		if event.keycode == jump_key:
-			if mode == "playing" and not paused and walker.visible and not scooter.visible and not ferry_passenger and tram_mode == 0 and not operating_excavator and not boating and not phone.handset.is_visible_in_tree() and walk_jump_left <= 0:
+			if mode == "playing" and not paused and walker.visible and not boule_seated and not scooter.visible and not ferry_passenger and tram_mode == 0 and not operating_excavator and not boating and not phone.handset.is_visible_in_tree() and walk_jump_left <= 0:
 				walk_jump_left = WALK_JUMP_TIME
 			return
 		if event.keycode == recovery_key and mode == "playing" and not paused:
@@ -4217,7 +4219,7 @@ func _near_ferry_landing() -> int:
 	return -1
 
 func _toggle_scooter() -> void:
-	if walk_jump_left > 0: return
+	if walk_jump_left > 0 or boule_seated: return
 	if mode != "playing" or paused or not walker.visible or boating or tram_mode != 0 or ferry_passenger: return
 	if phone.handset.is_visible_in_tree() or shops.inside >= 0: return
 	if scooter.visible:
@@ -4431,6 +4433,21 @@ func _change_seat() -> void:
 		_toggle_scooter()
 		return
 	if boating or mode != "playing" or paused: return
+	if _at_boule_bench():
+		boule_seated = not boule_seated
+		walking_velocity = Vector3.ZERO
+		walker.rotation.y = PI/2
+		walk_basis = walker.basis.orthonormalized()
+		_animate_steps(walker,0,0)
+		if boule_seated:
+			var gait: Gait = walker.get_meta("gait")
+			walker.position = BOULE_BENCH + Vector3.UP*(.50-gait.legs[0].position.y*walker.scale.y)
+			gait.sit()
+		else:
+			walker.position = BOULE_BENCH + Vector3.LEFT*.85
+			walker.position.y = _foot_height(walker.position.x,walker.position.z)
+		_update_entry_button()
+		return
 	if _near_boule_ring():
 		if not boule_guest_turn:
 			boule_join_requested = not boule_join_requested
@@ -4635,7 +4652,7 @@ func _walking_hint() -> String:
 	return tr("{up}/{down} Walk · {left}/{right} Turn · Shift + {up} Run · F Enter · U Scooter") + "   ·   " + (tr("%s Jump") % OS.get_keycode_string(jump_key)) + "   ·   " + tr("9 Raise camera · 3 Lower camera" if number_camera else "PgUp Raise camera · PgDn Lower camera") + "\n" + tr("Hold V and move the mouse to look around")
 
 func _walk(delta: float) -> void:
-	if boule_guest_turn: return
+	if boule_guest_turn or boule_seated: return
 	if shopper_boarding: return
 	var keys := Input.get_vector("ui_left","ui_right","ui_up","ui_down")
 	keys += Vector2(int(_movement_pressed(KEY_D))-int(_movement_pressed(KEY_A)),int(_movement_pressed(KEY_S))-int(_movement_pressed(KEY_W)))
@@ -4763,7 +4780,15 @@ func _build_boule_choices() -> void:
 func _near_boule_ring() -> bool:
 	return walker.visible and not scooter.visible and tram_mode == 0 and not ferry_passenger and not operating_excavator and walker.position.distance_to(BOULE_CENTRE+Vector3.BACK*4) < 3.2
 
+func _at_boule_bench() -> bool:
+	return walker.visible and not scooter.visible and not ferry_passenger and tram_mode == 0 and not operating_excavator and (boule_seated or walker.position.distance_to(BOULE_BENCH) < 1.65)
+
 func _update_entry_button() -> void:
+	if _at_boule_bench():
+		entry_marker.hide()
+		seat_button.disabled = false
+		seat_button.text = "Stand up · F" if boule_seated else "Watch boule from the bench · F"
+		return
 	if _near_boule_ring():
 		entry_marker.hide()
 		seat_button.disabled = boule_guest_turn
@@ -5377,6 +5402,14 @@ func _build_boule_court() -> void:
 	boule_clink.unit_size = 3
 	boule_clink.volume_db = -8
 	add_child(boule_clink)
+	var wood := Color("#94704c")
+	for slat in 4:
+		_make_box("Bench seat slat",Vector3(.105,.07,1.85),BOULE_BENCH+Vector3((slat-1.5)*.12,.43,0),wood)
+	for height in [.68,.85]:
+		_make_box("Bench backrest",Vector3(.075,.14,1.85),BOULE_BENCH+Vector3(.23,height,0),wood)
+	for end in [-.68,.68]:
+		_make_roadside_solid("Bench frame",Vector3(.42,.39,.07),BOULE_BENCH+Vector3(0,.20,end),Color("#394944"))
+		_make_box("Back support",Vector3(.06,.65,.06),BOULE_BENCH+Vector3(.23,.57,end),Color("#394944"))
 	var gravel := _make_driving_surface("Boule gravel", Vector3(3.8,.12,14), BOULE_CENTRE-Vector3.UP*.06, Color("#baa781"))
 	gravel.material_override = _noise_material(Color("#998465"), Color("#d7c7a1"), 38, .5)
 	for side in [-1,1]:
@@ -8216,6 +8249,8 @@ func _recover_road_vehicle() -> bool:
 	return false
 
 func _recover_position() -> void:
+	if boule_seated:
+		_change_seat()
 	if shopper_boarding:
 		shopper_recovery_requested = true
 		return
@@ -8437,6 +8472,7 @@ func _resume_road_checkpoint() -> void:
 	_refresh_ui()
 
 func _start_game() -> void:
+	boule_seated = false
 	boule_choices.hide()
 	boule_guest_turn = false
 	boule_join_requested = false

@@ -1793,3 +1793,9 @@ msgstr "Lancer moyen"
 
 msgid "Long throw"
 msgstr "Lancer long"
+
+msgid "Watch boule from the bench · F"
+msgstr "Regarder la pétanque depuis le banc · F"
+
+msgid "Stand up · F"
+msgstr "Se lever · F"

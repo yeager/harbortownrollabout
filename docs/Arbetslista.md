@@ -91,7 +91,7 @@ Listan innehåller 100 jobb. En tom ruta är öppen. En punkt bockas av när bet
 - [x] 64. Efter tredje kastet visas en gul ring i fem sekunder runt klotet närmast lillen. Kontrollerat med en hel omgång, 0,1 mm skillnad och delad förstaplats vid exakt lika avstånd.
 - [x] 65. Efter resultatvisningen går de tre boulespelarna i tur och ordning fram till sina klot, böjer knäna, plockar upp kloten och bär tillbaka dem till kastringens väntplatser. Två omgångar i följd med alla sex kast och hämtningar kontrolleras i tests/boule_rounds.gd.
 - [x] 66. Kontakt mellan två rullande eller stillaliggande bouleklot ger ett kort metalliskt klick vid träffpunkten. Grusljudet spelas vid nedslaget. Uppspelningen av klicket verifierades under andra spelarens kast.
-- [ ] 67. Ge boulebanan en sittbänk där spelaren kan sätta sig, följa omgången och resa sig igen.
+- [x] 67. Ge boulebanan en sittbänk där spelaren kan sätta sig, följa omgången och resa sig igen. Provad i Godot med ett helt kast från bänken och uppstigning på fri mark.
 - [x] 68. Båda färjelägena har dubbelsidiga vägvisare under Lottens hållplatsskylt. Ett räfflat klot, en gul lille och en pil visar vägen mot närmaste bro på vägen till boulebanan. Pilarnas riktning är kontrollerad från båda sidor.
 - [ ] 69. Gör ett uppdrag där en granne behöver hjälp att hitta sin termos efter boulematchen.
 - [ ] 70. Låt spelaren lämna tillbaka ett upphittat paraply vid färjeläget och se ägaren fälla upp det när det regnar.
