@@ -266,6 +266,7 @@ func _ready() -> void:
 				if s==1:
 					platform_door_leaves.append(leaf)
 		if i==1:
+			_mark_stroller_bay(car)
 			var steel := Color("#384448")
 			world._make_box("Pantograph base",Vector3(1.05,.18,1.26),Vector3(0,2.78,.25),steel,false,car)
 			for side in [-1,1]:
@@ -428,6 +429,16 @@ func platform_height(p: Vector3) -> float:
 		if local.x >= 1.47 and local.x <= 4.085 and local.z >= -7 and local.z <= 13:
 			return station.position.y+lerpf(ramp_starts[i],.29,clampf((local.z+7)/3,0,1))
 	return NAN
+
+func _mark_stroller_bay(car: Node3D) -> void:
+	var world := get_parent()
+	var mat := world._make_box("Stroller bay",Vector3(1.16,.006,.85),Vector3(-.55,.514,.13),Color("#235c76"),false,car) as MeshInstance3D
+	for side in [-1,1]:
+		world._make_box("Bay edge",Vector3(1.12,.003,.018),Vector3(0,.005,side*.40),Color.WHITE,false,mat)
+		world._make_box("Bay end",Vector3(.018,.003,.80),Vector3(side*.55,.005,0),Color.WHITE,false,mat)
+	var label := sign_at(mat,"Stroller space",Vector3(0,.008,0),0,.003)
+	label.rotation = Vector3(-PI/2,0,PI/2)
+	world._size_world_sign(label,.75)
 
 func platform_at(p: Vector3) -> int:
 	for i in stations.size():

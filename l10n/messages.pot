@@ -1740,3 +1740,6 @@ msgstr ""
 
 msgid "Stop requested"
 msgstr ""
+
+msgid "Stroller space"
+msgstr ""

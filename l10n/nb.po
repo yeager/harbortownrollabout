@@ -1811,3 +1811,6 @@ msgstr "Bruk også F6 for å bytte kameravisning"
 
 msgid "Stop requested"
 msgstr "Stopper"
+
+msgid "Stroller space"
+msgstr "Barnevognplass"

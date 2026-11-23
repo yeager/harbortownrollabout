@@ -1826,3 +1826,6 @@ msgstr "Utiliser aussi F6 pour changer de vue"
 
 msgid "Stop requested"
 msgstr "Arrêt demandé"
+
+msgid "Stroller space"
+msgstr "Espace poussettes"

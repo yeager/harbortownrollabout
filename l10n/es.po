@@ -1818,3 +1818,6 @@ msgstr "Usar también F6 para cambiar de vista"
 
 msgid "Stop requested"
 msgstr "Parada solicitada"
+
+msgid "Stroller space"
+msgstr "Zona de carritos"

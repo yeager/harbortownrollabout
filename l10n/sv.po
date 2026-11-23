@@ -1741,3 +1741,6 @@ msgstr "Använd även F6 för att byta kameravy"
 
 msgid "Stop requested"
 msgstr "Stannar"
+
+msgid "Stroller space"
+msgstr "Barnvagnsplats"
