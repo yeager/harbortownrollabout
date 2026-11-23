@@ -66,7 +66,7 @@ var receipt_amount := 0
 var receipt: Label
 var snack_buttons := {}
 var balance: Label
-var basket: Label
+var basket: RichTextLabel
 
 func storefront_x(index: int) -> float:
 	return -39.0+index*9.4
@@ -288,12 +288,8 @@ func rebuild_menu() -> void:
 	for i in MENUS[inside].size():
 		var button:=Button.new()
 		button.custom_minimum_size.y=44
-		if PRODUCT_ICONS.has(inside):
-			var thumbnail := AtlasTexture.new()
-			thumbnail.atlas = PRODUCT_ICONS[inside]
-			thumbnail.region = Rect2(i*64,0,64,64)
-			button.icon = thumbnail
-			button.add_theme_constant_override("icon_max_width",44)
+		button.icon = _product_icon(inside,i)
+		button.add_theme_constant_override("icon_max_width",44)
 		button.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		button.text = _product_price(inside, i)
 		if inside == 2:
@@ -306,7 +302,9 @@ func rebuild_menu() -> void:
 		panel.add_child(button)
 		if i==0: first_product=button
 	_refresh_receipt()
-	basket = Label.new()
+	basket = RichTextLabel.new()
+	basket.fit_content = true
+	basket.scroll_active = false
 	basket.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	panel.add_child(basket)
 	if inside in SNACK_SHOPS:
@@ -351,22 +349,37 @@ func eat_snack(product: String) -> void:
 				return
 		first_product.grab_focus()
 
+func _product_icon(shop: int, item: int) -> Texture2D:
+	if shop == 1 and item == 1:
+		return _product_icon(6,0)
+	if not PRODUCT_ICONS.has(shop): return null
+	var thumbnail := AtlasTexture.new()
+	thumbnail.atlas = PRODUCT_ICONS[shop]
+	thumbnail.region = Rect2(item*64,0,64,64)
+	return thumbnail
+
 func refresh_basket() -> void:
 	var coins: int = get_parent().wallet
 	balance.text = tr("Wallet") + " · " + (tr_n("%d coin", "%d coins", coins) % coins)
-	var lines := PackedStringArray()
+	basket.clear()
+	basket.add_text(tr("Your purchases"))
 	var purchases: Dictionary = get_parent().purchases
 	for product in snack_buttons:
 		snack_buttons[product].visible = int(purchases.get(product,0)) > 0
 	var listed: Array[String] = []
-	for menu in MENUS:
-		for product in menu:
+	for shop in MENUS.size():
+		for item in MENUS[shop].size():
+			var product: String = MENUS[shop][item]
 			var count := int(purchases.get(product,0))
 			if count <= 0 or product in listed: continue
 			listed.append(product)
-			lines.append(tr("%s × %d") % [tr(product),count])
-	basket.text = tr("Your purchases") + "\n" + "\n".join(lines)
-	basket.visible = not lines.is_empty()
+			basket.newline()
+			var icon := _product_icon(shop,item)
+			if icon:
+				basket.add_image(icon,40,40)
+				basket.add_text("  ")
+			basket.add_text(tr("%s × %d") % [tr(product),count])
+	basket.visible = not listed.is_empty()
 
 func purchase(shop: int, item: int) -> void:
 	var game=get_parent()
