@@ -114,7 +114,7 @@ Listan innehåller 100 jobb. En tom ruta är öppen. En punkt bockas av när bet
 - [x] 81. En sittande resenär sträcker sig efter stoppknappen inför avstigningen. Skylten ”Stannar” tänds fram i bussen när handen når knappen och släcks vid avstigning. Förloppet provades på linje 74 i Godot.
 - [x] 82. Visa nästa hållplats inne i bussen när linje 74 lämnar en hållplats.
 - [x] 83. Mittvagnen har en blåmarkerad barnvagnsplats mitt emot dörren. Spelets barnvagn ryms på ytan. Fri bredd och höjd från perrongen genom den öppna dörren till platsen kontrollerades mot vagnens geometri i Godot.
-- [ ] 84. Låt fotgängare invänta avstigande vid spårvagnsdörren innan de själva går ombord.
+- [x] 84. Vid främsta dörren väntar en resenär åt sidan tills den avstigande har lämnat dörröppningen. Bytet provades på samtliga hållplatser och vid återkomst till den första.
 - [x] 85. Tre sekunder före Lottens avgång tänds en grön lampa ovanför påstigningsskylten och två toner hörs en gång vid det aktuella färjeläget. Båda avgångarna verifieras i tests/ferry_passenger.gd.
 - [x] 86. En orangevit vindstrut på kajen följer samma vindriktning som regnet och snön. Riktningen kontrollerades under 40 simulerade sekunder och modellen granskades i spelet.
 - [ ] 87. Gör cykelns trampor rörliga och låt fötterna följa dem ett helt varv vid trampning.

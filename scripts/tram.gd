@@ -29,6 +29,9 @@ var rear_display: Label3D
 var front_display: Label3D
 var ramp_starts: Array[float] = []
 var stops: Array[float] = []
+var platform_riders: Array[Node3D] = []
+var onboard_rider: Node3D
+var exchange_finished := false
 var next_stop := 1
 var distance := 0.0
 var velocity := 0.0
@@ -332,6 +335,9 @@ func _ready() -> void:
 		add_child(gangway)
 		gangways.append(gangway)
 	place_sections()
+	onboard_rider = _new_rider(sections[0],Color("#925649"),Vector3(.36,.51,.13))
+	for i in stations.size():
+		platform_riders.append(_new_rider(stations[i],Color.from_hsv(.16+i*.16,.45,.7),Vector3(2.36,.29,-.70)))
 	for i in 4:
 		var travel := 1 if i%2==0 else -1
 		var offset := (i+.35)*length/4
@@ -342,6 +348,49 @@ func _ready() -> void:
 		road_car.offset = offset
 		road_cars.append(road_car)
 		actor.transform = pose
+
+func _new_rider(parent: Node3D, shirt: Color, at: Vector3) -> Node3D:
+	var world := get_parent()
+	world._make_walker("Tram passenger",0,0,1,shirt,Color("#34414b"))
+	var rider: Node3D = world.walker_data.pop_back().actor
+	rider.reparent(parent,false)
+	rider.position = at
+	return rider
+
+func _move_rider(rider: Node3D, target: Vector3, delta: float) -> void:
+	var step := target-rider.position
+	if step.length_squared() > .000001:
+		rider.rotation.y = atan2(-step.x,-step.z)
+	rider.position = target
+	get_parent()._animate_steps(rider,step.length(),delta)
+
+func _exchange_riders(delta: float) -> void:
+	if exchange_finished or STOP_DURATION-dwell < DOOR_TRAVEL_TIME: return
+	var index := posmod(next_stop-1,stops.size())
+	var car := sections[0]
+	var station := stations[index]
+	var elapsed := STOP_DURATION-dwell-DOOR_TRAVEL_TIME
+	var waiting := platform_riders[index]
+	var inside := Vector3(.36,.51,.13)
+	var outside := Vector3(2.36,.29,.13)
+	var queue_side := float(station.get_meta("queue_side",-1.0))
+	var aside := outside-Vector3.BACK*queue_side*.83
+	var exit_progress := clampf(elapsed/1.45,0,1)
+	var exit_at := inside.lerp(outside,exit_progress)
+	exit_at = exit_at.lerp(aside,clampf((elapsed-1.45)/.70,0,1))
+	_move_rider(onboard_rider,exit_at,delta)
+	if elapsed < 2.15: return
+	var queue := outside+Vector3.BACK*queue_side*.83
+	var entry := queue.lerp(outside,clampf((elapsed-2.15)/.65,0,1))
+	entry = entry.lerp(inside,clampf((elapsed-2.80)/1.35,0,1))
+	_move_rider(waiting,station.to_local(car.to_global(entry)),delta)
+	if elapsed >= 4.15:
+		onboard_rider.reparent(station,true)
+		waiting.reparent(car,true)
+		station.set_meta("queue_side",-queue_side)
+		platform_riders[index] = onboard_rider
+		onboard_rider = waiting
+		exchange_finished = true
 
 func _carriageway_pose(offset: float, travel: int) -> Transform3D:
 	var pose := _track_pose(offset)
@@ -480,6 +529,7 @@ func advance(delta: float, manual: bool, gas: bool, brake: bool) -> void:
 	if dwell>0:
 		var previous_dwell := dwell
 		dwell=maxf(0,dwell-delta)
+		_exchange_riders(delta)
 		if previous_dwell > 1.4 and dwell <= 1.4:
 			door_chime.play()
 		var opening := smoothstep(0,DOOR_TRAVEL_TIME,minf(STOP_DURATION-dwell,dwell))
@@ -527,6 +577,7 @@ func stop_at_station(index: int) -> void:
 		display.text = destination
 	velocity = 0
 	dwell = STOP_DURATION
+	exchange_finished = false
 	place_sections()
 
 func place_sections() -> void:
