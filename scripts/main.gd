@@ -191,7 +191,7 @@ var ground_work := preload("res://environment/ground_work.gd").new(CITY_INTERIOR
 var blade_left: Vector3
 var blade_right: Vector3
 var ploughs: Array[Node3D] = []
-const DRIVER_VIEW_VEHICLES := [3, PUCH_DAKOTA, FOOD_TRUCK, FARM_TRACTOR]
+const DRIVER_VIEW_VEHICLES := [3, PUCH_DAKOTA, FOOD_TRUCK, FARM_TRACTOR, BUS, REFUSE]
 const MopedRider := preload("res://vehicles/moped_rider.gd")
 var moped_pose := MopedRider.new()
 const ICE_STOPS := [0, SCHOOL, 2]
@@ -5830,7 +5830,14 @@ func _update_camera(delta: float, snap_to_car := false) -> void:
 		return
 	if cockpit_view and vehicle_index in DRIVER_VIEW_VEHICLES:
 		var pitch := -.16
+		var curb_yaw := 0.0
 		match vehicle_index:
+			BUS, REFUSE:
+				# These models have solid cab fronts. Place the lens just beyond the glass.
+				var eye := Vector3(-.55,2.12,-5.32) if vehicle_index == BUS else Vector3(-.52,2.60,-4.02)
+				camera.global_position = ambulance.to_global(eye)
+				curb_yaw = -.20
+				pitch = -.85 if vehicle_index == BUS else -1.35
 			FARM_TRACTOR:
 				camera.global_position = ambulance.to_global(Vector3(0,2.77,.40))
 				pitch = -2.2
@@ -5843,7 +5850,7 @@ func _update_camera(delta: float, snap_to_car := false) -> void:
 				pitch = -1.18
 			_:
 				camera.global_position = ambulance.to_global(Vector3(-.32,1.56,-.10))
-		var gaze := Vector3(steering*.38,pitch,-5.9).rotated(Vector3.RIGHT,cockpit_look.y).rotated(Vector3.UP,cockpit_look.x)
+		var gaze := Vector3(steering*.38,pitch,-5.9).rotated(Vector3.RIGHT,cockpit_look.y).rotated(Vector3.UP,cockpit_look.x + curb_yaw)
 		camera.look_at(camera.global_position + ambulance.global_basis*gaze)
 		return
 	var forward := -ambulance.global_transform.basis.z

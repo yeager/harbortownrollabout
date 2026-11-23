@@ -26,7 +26,7 @@ De 50 förbättringarna från genomgången. En tom ruta är öppen. En punkt boc
 - [x] 17. Tydlig tröskel och markering vid den användbara spårvagnsdörren.
 - [x] 18. Traktorns förarvy med C. Kontrollerad i spelvyn för Axel och Alma med sikt över huven och båda framskärmarna.
 - [x] 19. Valbar arbetskamera där skoptänderna och marken syns samtidigt.
-- [ ] 20. Användbara förarvyer i buss och sopbil med sikt mot hållplats respektive kärl.
+- [x] 20. Användbara förarvyer i buss och sopbil med sikt mot hållplats respektive kärl.
 
 ## Uppdrag med synliga resultat
 
