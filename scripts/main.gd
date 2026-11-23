@@ -4100,10 +4100,39 @@ func _swing_shopper(model: Node3D, open: bool) -> void:
 	motion.tween_property(hinge,"quaternion",lifted if open else closed,.55)
 	await motion.finished
 
-func _step_through_shopper(destination: Vector3) -> void:
+func _step_through_shopper(car: Node3D, landing: Vector3, entering: bool) -> void:
+	var side := signf(car.to_local(landing).x)
+	var standing_scale := .88 if play_as_alma else 1.0
+	var riding_scale := standing_scale*.78
+	var seat := car.to_global(Vector3(0,.64-.77*riding_scale,-.04))
+	var start_yaw := walker.rotation.y if entering else car.rotation.y
+	_animate_steps(walker,0.0,.1)
+	var gait: Gait = walker.get_meta("gait")
+	var pose := func(t: float):
+		var settle := smoothstep(.16,.95,t)
+		walker.position = landing.lerp(seat,t) + Vector3.UP*.085*sin(PI*t)
+		walker.scale = Vector3.ONE*lerpf(standing_scale,riding_scale,settle)
+		walker.rotation.y = lerp_angle(start_yaw,car.rotation.y,t) + side*.85*sin(PI*t)
+		for i in 2:
+			var leading := signf(gait.hip_centres[i]) == -side
+			var step := smoothstep(.03 if leading else .28,.78 if leading else .98,t)
+			var ankle_down := lerpf(Gait.THIGH+Gait.SHIN-.002,(.64-.243)/riding_scale-Gait.SOLE_HEIGHT,step)
+			var forward := step*(.49-.04)/riding_scale
+			ankle_down -= .10*sin(PI*step)
+			var reach := Vector2(forward,ankle_down).length()
+			var thigh := atan2(forward,ankle_down)+acos(clampf((Gait.THIGH**2+reach**2-Gait.SHIN**2)/(2*Gait.THIGH*reach),-1,1))
+			var bend := acos(clampf((reach**2-Gait.THIGH**2-Gait.SHIN**2)/(2*Gait.THIGH*Gait.SHIN),-1,1))
+			gait.legs[i].rotation = Vector3(thigh,0,0)
+			gait.knees[i].set_bone_pose_rotation(1,Quaternion(Vector3.RIGHT,-bend))
+			gait.knees[i].set_bone_pose_rotation(2,Quaternion(Vector3.RIGHT,-bend*.5))
+			gait.shoes[i].position = Vector3.DOWN*Gait.THIGH + (Vector3.DOWN*Gait.SHIN).rotated(Vector3.RIGHT,-bend)
+			gait.shoes[i].basis = gait.legs[i].basis.inverse()
+	pose.call(0.0 if entering else 1.0)
 	var motion := create_tween().set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
-	motion.tween_property(walker,"position",destination,.35)
+	motion.tween_method(pose,0.0 if entering else 1.0,1.0 if entering else 0.0,.85)
 	await motion.finished
+	walker.scale = Vector3.ONE*standing_scale
+	if not entering: _animate_steps(walker,0.0,.1)
 
 func _change_seat() -> void:
 	if shopper_boarding: return
@@ -4245,8 +4274,7 @@ func _change_seat() -> void:
 			var parked_hinge := old_car.find_child("EntryHinge",true,false) as Node3D
 			parked_hinge.quaternion = (vehicle_model.find_child("EntryHinge",true,false) as Node3D).quaternion
 			var landing := walker.position
-			walker.position = old_car.to_global(Vector3(signf(parked_door_offset.x)*.38,.18,0))
-			await _step_through_shopper(landing)
+			await _step_through_shopper(old_car,landing,false)
 			await _swing_shopper(old_car,false)
 			shopper_boarding = false
 	else:
@@ -4256,8 +4284,7 @@ func _change_seat() -> void:
 			shopper_boarding = true
 			var parked := parked_cars[next]
 			await _swing_shopper(parked,true)
-			var entry_side := signf(parked.to_local(walker.position).x)
-			await _step_through_shopper(parked.to_global(Vector3(entry_side*.38,.18,0)))
+			await _step_through_shopper(parked,walker.position,true)
 		release_walk_keys = _walk_pedal_pressed()
 		_change_mission_vehicle(next)
 		sound_on = parked_sound_settings[next]
