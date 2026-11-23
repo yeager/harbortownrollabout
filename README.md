@@ -69,3 +69,7 @@ Daniel Nylander made Harbor Town Rollabout for his children. Its Swedish title i
 ## Play from source
 
 Open `project.godot` in Godot 4.7 dev5 and press **F5**.
+
+## Help out
+
+Can you sing a radio song in your language, improve a translation or take a test drive? [See how to contribute](CONTRIBUTE.md).

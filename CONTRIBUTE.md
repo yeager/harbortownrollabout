@@ -1,0 +1,21 @@
+# Help make Harbor Town Rollabout
+
+## Make a song for the radio
+
+Do you sing in Spanish, German, French, Norwegian Bokmål or Finnish? Those stations have a short announcement and music, and we’d love a whole song that children can sing along with while they drive. A chorus about a hot dog that lost its bun would fit right in. Choose a style you enjoy singing.
+
+You can offer lyrics, a translation someone can sing, or a recording. Pick a tune from the [Swedish and English songbook](docs/Radiolatar.md) or write your own. Tell us the language, who wrote and performed it, how to credit them, and whether we can distribute the words and recording with the game. Please share only material you have permission to contribute.
+
+## Help the town speak your language
+
+A single correction helps. If a button, a speech bubble or a driving instruction sounds odd in your language, tell us where you saw it, what it says and what you’d say instead. Short phrases that a child can understand when read aloud are especially helpful.
+
+To edit a translation, find your language’s `.po` file in [l10n](l10n/). Keep placeholders such as `%s` and `%d` so the game can insert names and numbers. New languages are welcome. The [localization guide](l10n/README.md) covers menus, logos, voices and radio tracks.
+
+## Take a test drive
+
+Try boarding the tram from a platform or finding the pizzeria on foot. Could you tell where to go from the picture, sign or spoken instruction? Tell us which vehicle or character you chose, where you were and what happened. If a model looks wrong, a screenshot and a description of the detail you noticed help us find it.
+
+## Get in touch
+
+[Open an issue](https://github.com/yeager/harbortownrollabout/issues/new) with your idea or correction. A few lines in your own language are enough. If you already have a change ready, [open a pull request](https://github.com/yeager/harbortownrollabout/compare). Issues and attachments are public. Leave out passwords, API tokens, private recordings and identifying details about children.

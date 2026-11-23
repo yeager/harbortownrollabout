@@ -18,3 +18,12 @@ dlss_lab/.build_tools/
 
 .local-tools/
 .aws/
+
+# Local agent settings and credentials
+.codex/
+.env
+.env.*
+!.env.example
+*.p12
+*.pfx
+*.key
