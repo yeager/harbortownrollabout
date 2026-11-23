@@ -305,20 +305,23 @@ func tram_clearance(distance: float, length: float) -> float:
 		if gap >= -.001: nearest = minf(nearest,maxf(0,gap))
 	return nearest
 
+func _enters_crosswalk(from: Vector3, to: Vector3, center: Vector3, axis: Vector3, curb_distance: float) -> bool:
+	var start := (from-center).dot(axis)
+	if absf(start) < curb_distance: return false
+	var inward := (from-to).dot(axis) * signf(start)
+	var to_curb := absf(start) - curb_distance
+	if inward <= to_curb: return false
+	var intersection := from.lerp(to,to_curb/inward)
+	return absf((intersection-center).dot(axis.cross(Vector3.UP))) <= 1.45
+
 func pedestrian_may_enter(from: Vector3, to: Vector3) -> bool:
 	for zebra in street_crosswalks:
-		if phase == zebra.walk_phase: continue
-		var axis: Vector3 = zebra.axis
-		var start := from - Vector3(zebra.center)
-		var end := to - Vector3(zebra.center)
-		if absf(end.dot(axis.cross(Vector3.UP))) > 1.45: continue
-		if absf(start.dot(axis)) >= zebra.curb_distance and absf(end.dot(axis)) < zebra.curb_distance: return false
+		if phase != zebra.walk_phase and _enters_crosswalk(from,to,zebra.center,zebra.axis,zebra.curb_distance):
+			return false
 	for c in tram_crossings:
 		if _walk_green(c): continue
-		var dest := to-Vector3(c.center)
-		if absf(dest.dot(c.tangent)-ZEBRA_OFFSET)>1.45: continue
-		var start := (from-Vector3(c.center)).dot(c.across)
-		if absf(start)>=8.7 and absf(dest.dot(c.across))<8.7: return false
+		var center: Vector3 = c.center + c.tangent * ZEBRA_OFFSET
+		if _enters_crosswalk(from,to,center,c.across,8.7): return false
 	return true
 
 func red_clearance(pos: Vector3, heading: Vector3, half_length: float, red_only := false, signals_only := false) -> float:

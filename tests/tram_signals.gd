@@ -33,6 +33,14 @@ func check() -> void:
 			if not lights.pedestrian_may_enter(curb-axis*.2,curb-axis*.6):
 				fail("Pedestrian already crossing stopped on red")
 				return
+			var lateral := axis.cross(Vector3.UP)
+			var end := curb-axis*.4
+			if lights.pedestrian_may_enter(curb+lateral*1.3,end+lateral*1.6):
+				fail("Diagonal step crossed the marked curb on red")
+				return
+			if not lights.pedestrian_may_enter(curb+lateral*1.6,end+lateral*1.3):
+				fail("Diagonal step outside the marked curb was blocked")
+				return
 			lights.phase = zebra.walk_phase
 			if not lights.pedestrian_may_enter(curb,curb-axis*.2):
 				fail("Pedestrian green must allow entry")
