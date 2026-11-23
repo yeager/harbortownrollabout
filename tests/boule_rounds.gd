@@ -8,7 +8,43 @@ func check_rounds() -> void:
 	root.add_child(game)
 	game._start_game()
 	game.free_drive = true
-	game.map_goal = game.BOULE_BENCH_APPROACH
+	game.map_button.pressed.emit()
+	var dialog = game.find_child("TownMap",true,false)
+	var court_pin: Button
+	for button in dialog.find_children("*","Button",true,false):
+		if button.tooltip_text == game.tr("Boule court"):
+			court_pin = button
+			break
+	if not court_pin:
+		printerr("Court missing from town map")
+		quit(1)
+		return
+	court_pin.pressed.emit()
+	game._save_checkpoint()
+	game.queue_free()
+	await process_frame
+	game = load("res://main.tscn").instantiate()
+	root.add_child(game)
+	game._resume_road_checkpoint()
+	if game.map_goal != game.BOULE_BENCH_APPROACH:
+		printerr("Court destination lost after resume: ",game.map_goal)
+		quit(1)
+		return
+	game.map_button.pressed.emit()
+	dialog = game.find_child("TownMap",true,false)
+	var selected := 0
+	for button in dialog.find_children("*","Button",true,false):
+		if button.button_pressed:
+			if button.tooltip_text != game.tr("Boule court") and not button.text.ends_with(game.tr("Boule court")):
+				printerr("Wrong destination highlighted")
+				quit(1)
+				return
+			selected += 1
+	if selected != 2:
+		printerr("Expected the saved destination on the map and in the legend")
+		quit(1)
+		return
+	dialog.hide()
 	game.ambulance.position = game.map_goal + Vector3.LEFT * 4
 	game._update_route_arrows()
 	if game.map_goal == Vector3.INF:

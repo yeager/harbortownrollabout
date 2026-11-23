@@ -14,6 +14,7 @@ func configure(route, landmarks: PackedVector3Array, captions: Array) -> void:
 	custom_minimum_size = Vector2(670,285)
 	for i in stops.size():
 		var pin := Button.new()
+		pin.toggle_mode = true
 		pin.text = str(i+1)
 		pin.tooltip_text = tr(captions[i])
 		pin.accessibility_name = tr(captions[i])

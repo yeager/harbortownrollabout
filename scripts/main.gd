@@ -8185,6 +8185,7 @@ func _build_town_map() -> void:
 	body.add_child(legend)
 	for i in MAP_NAMES.size():
 		var button := Button.new()
+		button.toggle_mode = true
 		button.text = "%d · %s" % [i+1,tr(MAP_NAMES[i])]
 		button.pressed.connect(func(): chart.picked.emit(i))
 		legend.add_child(button)
@@ -8203,6 +8204,9 @@ func _build_town_map() -> void:
 		chart.player = Vector2(actor.position.x,actor.position.z)
 		for i in MAP_NAMES.size():
 			var caption := tr(MAP_NAMES[i])
+			var selected: bool = map_goal == chart.stops[i]
+			legend.get_child(i).set_pressed_no_signal(selected)
+			chart.get_child(i).set_pressed_no_signal(selected)
 			legend.get_child(i).text = "%d · %s" % [i+1,caption]
 			chart.get_child(i).tooltip_text = caption
 			chart.get_child(i).accessibility_name = caption
