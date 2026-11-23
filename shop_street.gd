@@ -737,7 +737,7 @@ func _pizzeria_front(x: float) -> void:
 	lit_sign.material_override = get_parent()._material(gold,.38,true)
 	for h in [2.75,3.39]:
 		part("Vermilion enamel pinstripe",Vector3(x,h,41.967),Vector3(8.16,.037,.014),wine)
-	var nameplate := _lettering("SJÖSTADENS  PIZZERIA",Vector3(x,3.07,41.951),.0175,wine)
+	var nameplate := _lettering("HARBOR TOWN PIZZERIA",Vector3(x,3.07,41.951),.0175,wine)
 	nameplate.font = shop_sign_font
 	# A two-sided blade sign is readable along the pavement in either direction.
 	var blade_x := x + 3.94

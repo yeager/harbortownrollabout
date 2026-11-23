@@ -1521,3 +1521,6 @@ msgstr ""
 
 msgid "HARBOR GROCER"
 msgstr ""
+
+msgid "HARBOR TOWN PIZZERIA"
+msgstr ""
