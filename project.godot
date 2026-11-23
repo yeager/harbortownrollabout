@@ -13,7 +13,7 @@ boot_splash/bg_color=Color(0.045, 0.095, 0.14, 1)
 run/main_scene="res://branding/splash.tscn"
 run/max_fps=60
 config/features=PackedStringArray("4.3", "GL Compatibility")
-config/description="En lugn och vänlig utryckningsrunda för Axel."
+config/description="Explore the waterfront with Axel and Alma. Drive through town, take the ferry or help a neighbour."
 
 [display]
 window/size/viewport_width=1280
