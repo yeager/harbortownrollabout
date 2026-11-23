@@ -1716,3 +1716,9 @@ msgstr "Entrega una bolsa en el puerto deportivo"
 
 msgid "Match the customer's ice cream"
 msgstr "Elige el helado que pide el cliente"
+
+msgid "Listen for the cat"
+msgstr "Escuchar al gato"
+
+msgid "Show footprints"
+msgstr "Mostrar huellas"

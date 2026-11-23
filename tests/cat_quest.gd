@@ -25,6 +25,10 @@ func check_quest() -> void:
 	if not await check_dialogue(game, "Can you find my cat? Look for white paws along this pavement.", "lost_cat"):
 		quit(1)
 		return
+	game._update_search_hints()
+	assert(game.cat_hint.is_visible_in_tree())
+	game.cat_hint.pressed.emit()
+	assert(game.cat_meow.playing and game.greeting.get_parent() == game.lost_cat)
 	game.walker.position = game.lost_cat.position
 	game._update_cat_quest(1.0 / 60)
 	for locale in ["fi", "sv", "de", "es", "nb", "fr", "en"]:
@@ -75,6 +79,10 @@ func check_quest() -> void:
 		return
 	game.walker.position = game.shoe_owner.position
 	game._update_shoe_quest(0)
+	game._update_search_hints()
+	assert(game.shoe_hint.is_visible_in_tree() and not game.shoe_trail.visible)
+	game.shoe_hint.button_pressed = true
+	assert(game.shoe_trail.is_visible_in_tree())
 	game.walker.position = game.lost_shoe.position
 	game._update_shoe_quest(0)
 	game._save_checkpoint()

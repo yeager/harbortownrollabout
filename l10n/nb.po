@@ -1709,3 +1709,9 @@ msgstr "Lever en handlepose i småbåthavna"
 
 msgid "Match the customer's ice cream"
 msgstr "Velg isen kunden viser"
+
+msgid "Listen for the cat"
+msgstr "Lytt etter katten"
+
+msgid "Show footprints"
+msgstr "Vis fotspor"

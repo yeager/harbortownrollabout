@@ -1726,3 +1726,9 @@ msgstr "Bringe eine Einkaufstasche zum Jachthafen"
 
 msgid "Match the customer's ice cream"
 msgstr "Wähle das Eis auf dem Bild"
+
+msgid "Listen for the cat"
+msgstr "Auf die Katze hören"
+
+msgid "Show footprints"
+msgstr "Fußspuren zeigen"

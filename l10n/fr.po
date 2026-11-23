@@ -1724,3 +1724,9 @@ msgstr "Livre un sac de courses au port de plaisance"
 
 msgid "Match the customer's ice cream"
 msgstr "Choisis la glace demandée"
+
+msgid "Listen for the cat"
+msgstr "Écouter le chat"
+
+msgid "Show footprints"
+msgstr "Afficher les empreintes"

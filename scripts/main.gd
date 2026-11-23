@@ -88,7 +88,10 @@ var shoe_owner: Node3D
 var cat_quest := FootQuest.WAITING
 var cat_owner: Node3D
 var lost_cat := Node3D.new()
-var cat_meow := AudioStreamPlayer.new()
+var cat_meow := AudioStreamPlayer3D.new()
+var cat_hint: Button
+var shoe_hint: Button
+var shoe_trail := Node3D.new()
 var cat_legs: Array[Node3D] = []
 var cat_stride := 0.0
 var lost_shoe := Node3D.new()
@@ -4662,6 +4665,20 @@ func _build_pedestrians() -> void:
 	shoe_owner = walker_data.pop_back().actor
 	add_child(lost_shoe)
 	lost_shoe.position = Vector3(33, _foot_height(33, 6.8), 6.8)
+	add_child(shoe_trail)
+	shoe_trail.hide()
+	var sole := SphereMesh.new()
+	var print_finish := _material(Color("#a42e42"))
+	for i in 13:
+		var x := lost_shoe.position.x - 1.1*(13-i)
+		var z := lost_shoe.position.z + (.16 if i%2 else -.16)
+		for heel in [false,true]:
+			var mark := MeshInstance3D.new()
+			mark.mesh = sole
+			mark.material_override = print_finish
+			mark.scale = Vector3(.12,.018,.092) if heel else Vector3(.21,.018,.115)
+			mark.position = Vector3(x-(.16 if heel else 0.0),_foot_height(x,z)+.016,z)
+			shoe_trail.add_child(mark)
 	var shoe_curve := SphereMesh.new()
 	shoe_curve.radius = .5
 	shoe_curve.height = 1.0
@@ -4710,6 +4727,8 @@ func _build_pedestrians() -> void:
 	add_child(lost_cat)
 	cat_meow.stream = preload("res://audio/cat_meow.wav")
 	cat_meow.volume_db = -8
+	cat_meow.unit_size = 10
+	cat_meow.max_distance = 65
 	lost_cat.add_child(cat_meow)
 	lost_cat.position = Vector3(-35, _foot_height(-35,-6.8), -6.8)
 	var ginger := Color("#da8348")
@@ -5253,6 +5272,14 @@ func _update_small_talk(delta: float) -> void:
 			_say(a, SMALL_TALK[chat_topic][0], SMALL_TALK[chat_topic][1])
 			return
 
+func _update_search_hints() -> void:
+	var searching := mode == "playing" and walker.visible and shops.inside < 0 and not paused
+	cat_hint.visible = searching and cat_quest == FootQuest.SEARCHING
+	shoe_hint.visible = searching and shoe_quest == FootQuest.SEARCHING
+	if not shoe_hint.visible:
+		shoe_hint.set_pressed_no_signal(false)
+	shoe_trail.visible = shoe_hint.visible and shoe_hint.button_pressed
+
 func _update_pedestrians(delta: float) -> void:
 	_advance_crossing(delta)
 	greeting_timer = maxf(0,greeting_timer-delta)
@@ -5262,6 +5289,7 @@ func _update_pedestrians(delta: float) -> void:
 	var cat_owner_x := cat_owner.position.x
 	_update_shoe_quest(delta)
 	_update_cat_quest(delta)
+	_update_search_hints()
 	_animate_steps(shoe_owner, absf(shoe_owner.position.x - shoe_owner_x), delta)
 	_animate_steps(cat_owner, absf(cat_owner.position.x - cat_owner_x), delta)
 	for person: Node3D in [square_neighbour, waiting_medic, marina_recipient, passenger, arriving_passenger] + bus_companions + clinic_fire_team:
@@ -6394,6 +6422,18 @@ func _build_ui() -> void:
 		_update_route_arrows()
 		_refresh_ui()
 	)
+	cat_hint = _button("Listen for the cat",180)
+	phone.add_child(cat_hint)
+	cat_hint.hide()
+	cat_hint.pressed.connect(func():
+		cat_meow.play()
+		_say(lost_cat,"Meow!","")
+	)
+	shoe_hint = _button("Show footprints",180)
+	shoe_hint.toggle_mode = true
+	phone.add_child(shoe_hint)
+	shoe_hint.hide()
+	shoe_hint.toggled.connect(func(_enabled: bool): _update_search_hints())
 	phone.add_child(radio_button)
 	radio_button.pressed.connect(_toggle_radio)
 	next_song_button = _button(tr("Next song · %s") % OS.get_keycode_string(radio_keys[1]), 180)

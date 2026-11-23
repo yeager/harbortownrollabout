@@ -1705,3 +1705,9 @@ msgstr "Vie ruokakassi pienvenesatamaan"
 
 msgid "Match the customer's ice cream"
 msgstr "Valitse asiakkaan näyttämä jäätelö"
+
+msgid "Listen for the cat"
+msgstr "Kuuntele kissaa"
+
+msgid "Show footprints"
+msgstr "Näytä jalanjäljet"

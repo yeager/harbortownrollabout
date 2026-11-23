@@ -1638,3 +1638,9 @@ msgstr ""
 
 msgid "Match the customer's ice cream"
 msgstr ""
+
+msgid "Listen for the cat"
+msgstr ""
+
+msgid "Show footprints"
+msgstr ""

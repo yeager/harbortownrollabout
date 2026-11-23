@@ -1639,3 +1639,9 @@ msgstr "Lämna en matkasse i småbåtshamnen"
 
 msgid "Match the customer's ice cream"
 msgstr "Välj glassen som kunden visar"
+
+msgid "Listen for the cat"
+msgstr "Lyssna efter katten"
+
+msgid "Show footprints"
+msgstr "Visa fotspår"
