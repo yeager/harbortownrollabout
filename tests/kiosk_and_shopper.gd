@@ -64,6 +64,10 @@ func check() -> void:
 			var dish: String = shops.MENUS[6][i]
 			var recipe: String = shops.GRILL_TOPPINGS[i]
 			var button: Button = shops.panel.get_child(shops.first_product.get_index()+i)
+			if button.icon == null or shops.snack_buttons[dish].icon != button.icon:
+				printerr("Dish picture differs between buying and eating ", dish)
+				quit(1)
+				return
 			if not button.text.contains(game.tr(dish)) or not button.text.ends_with(game.tr(recipe)) or not button.text.contains(expected):
 				printerr("Menu did not update for ",locale," / ",dish,": ",button.text)
 				quit(1)

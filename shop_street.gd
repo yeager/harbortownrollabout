@@ -293,8 +293,12 @@ func rebuild_menu() -> void:
 	basket.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	panel.add_child(basket)
 	if inside in [1,6]:
-		for product: String in MENUS[inside]:
+		for i in MENUS[inside].size():
+			var product: String = MENUS[inside][i]
+			var purchase_button := panel.get_child(first_product.get_index()+i) as Button
 			var eat := Button.new()
+			eat.icon = purchase_button.icon
+			eat.add_theme_constant_override("icon_max_width",44)
 			match product:
 				"Ice cream": eat.text = "Eat ice cream"
 				"Hot dog": eat.text = "Eat hot dog"
