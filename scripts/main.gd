@@ -7949,6 +7949,7 @@ func _build_overlay() -> void:
 	view_binding.toggled.connect(func(enabled: bool):
 		camera_f6 = enabled
 		_save_preferences()
+		_refresh_ui()
 	)
 	pages[2].add_child(view_binding)
 	var quit_binding := CheckButton.new()
@@ -9229,9 +9230,10 @@ func _refresh_ui() -> void:
 	for control in [light_button, siren_button, pause_button]:
 		control.focus_mode = Control.FOCUS_NONE if show_overlay else Control.FOCUS_ALL
 	camera_button.visible = tram_mode == 0 and not boating and (operating_excavator or vehicle_index in DRIVER_VIEW_VEHICLES) and not walker.visible and not show_overlay
-	camera_button.text = "Outside view · C" if cockpit_view else "Driver view · C"
+	var camera_caption := tr("Outside view · C") if cockpit_view else tr("Driver view · C")
 	if operating_excavator:
-		camera_button.text = "Outside view · C" if excavator_work_view else "Bucket view · C"
+		camera_caption = tr("Outside view · C") if excavator_work_view else tr("Bucket view · C")
+	camera_button.text = camera_caption + (" / F6" if camera_f6 else "")
 	horn_button.visible = not show_overlay and (tram_mode==2 or (tram_mode==0 and (boating or not walker.visible)))
 	horn_button.text = "Tram bell · H" if tram_mode==2 else tr("Ice cream chime · H") if vehicle_index == ICE_CREAM and not boating else "Horn · H"
 	seat_button.visible = not show_overlay and not boating
