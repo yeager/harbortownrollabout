@@ -34,6 +34,10 @@ var ambulance: Node3D
 var trunks := PackedVector3Array() # Centre X, trunk radius, centre Z.
 var roadside_solids: Array[AABB] = []
 var building_bounds: Array[AABB] = []
+var fire_station_shutter: MeshInstance3D
+var fire_door_bounds: AABB
+var fire_door_index: int
+var fire_door_open := 0.0
 var canopy_camera_bounds: Array[AABB] = []
 var pier_surfaces: Array[AABB] = []
 var driving_surfaces: Array[AABB] = []
@@ -726,6 +730,7 @@ func _process(delta: float) -> void:
 		_update_patrol(delta)
 		street_signals.advance(delta)
 		shops.advance_grill_sign(delta, calm_mode)
+		_update_fire_station_door(delta)
 		var tram_gas := mouse_gas or _movement_pressed(KEY_W, true) or Input.is_key_pressed(KEY_UP)
 		var tram_brake := mouse_brake or brake_pedal_held or _movement_pressed(KEY_S, true) or Input.is_key_pressed(KEY_DOWN)
 		tram.advance(delta, tram_mode == 2, tram_gas, tram_brake)
@@ -3303,7 +3308,8 @@ func _build_city_blocks() -> void:
 		_make_box("Backrest board",Vector3(2.0,.135,.065),Vector3(30,.86+i*.17,21.927),Color("#926e4e"),true)
 
 func _build_building(center: Vector3, size: Vector3, _color: Color, sign_text: String) -> void:
-	building_bounds.append(AABB(Vector3(center.x-size.x/2,-1,center.z-size.z/2), size+Vector3.UP))
+	if sign_text != "Brandstationen":
+		building_bounds.append(AABB(Vector3(center.x-size.x/2,-1,center.z-size.z/2), size+Vector3.UP))
 	var packed: PackedScene = load(BUILDING_SCENES[sign_text])
 	var model := packed.instantiate() as Node3D
 	model.name = sign_text.replace(" ", "_")
@@ -3312,6 +3318,46 @@ func _build_building(center: Vector3, size: Vector3, _color: Color, sign_text: S
 	if center.z > 0.0:
 		model.rotation.y = PI
 	add_child(model)
+	if sign_text == "Brandstationen":
+		_build_fire_station_bay(model)
+
+func _build_fire_station_bay(model: Node3D) -> void:
+	for part: MeshInstance3D in model.find_children("*","MeshInstance3D",true,false):
+		var title := String(part.name)
+		if title in ["Station foundation","Red brick fire station"] or (absf(part.position.x)<2 and (title.begins_with("Garage") or title.begins_with("Roller door"))):
+			part.hide()
+	var brick := Color("#b53c30")
+	for side in [-1,1]:
+		var wing := _make_box("Station wing",Vector3(5.8,8,13.7),Vector3(side*5.1,3,0),brick,false,model)
+		building_bounds.append((wing.global_transform*wing.get_aabb()).grow(.02))
+	var back := _make_box("Appliance bay rear wall",Vector3(4.4,8,.25),Vector3(0,3,-6.7),brick,false,model)
+	building_bounds.append((back.global_transform*back.get_aabb()).grow(.02))
+	_make_box("Door lintel",Vector3(4.4,2.45,.3),Vector3(0,5.85,6.8),brick,false,model)
+	fire_station_shutter = _make_box("Appliance bay shutter",Vector3(4.4,4.7,.10),Vector3(0,2.25,6.95),Color("#c9cecf"),false,model)
+	for rib in 17:
+		_make_box("Shutter slat",Vector3(4.35,.035,.025),Vector3(0,-2.18+rib*.27,.06),Color("#828b8e"),false,fire_station_shutter)
+	fire_door_bounds = (fire_station_shutter.global_transform*fire_station_shutter.get_aabb()).grow(.25)
+	fire_door_index = building_bounds.size()
+	building_bounds.append(fire_door_bounds)
+
+func _update_fire_station_door(delta: float) -> void:
+	var truck: AABB
+	if vehicle_index == 2 and ambulance.visible:
+		truck = ambulance.global_transform*AABB(Vector3(-player_half_size.x,-.1,-front_reach),Vector3(player_half_size.x*2,3.8,front_reach+rear_reach))
+	elif parked_cars[2].visible:
+		truck = _parked_bounds(2)
+	var sensor := fire_door_bounds.grow(2.2)
+	if fire_door_open == 0 and not sensor.intersects(truck): return
+	var clear_doorway := not sensor.intersects(truck)
+	if walker.visible and fire_door_bounds.grow(.5).has_point(walker.position+Vector3.UP):
+		clear_doorway = false
+	fire_door_open = move_toward(fire_door_open,0.0 if clear_doorway else 1.0,delta)
+	fire_station_shutter.scale.y = lerpf(1,.025,fire_door_open)
+	fire_station_shutter.position.y = 4.60-2.35*fire_station_shutter.scale.y
+	var barrier := fire_door_bounds
+	if fire_door_open >= .99: barrier.position.y += 6
+	building_bounds[fire_door_index] = barrier
+
 
 func _build_trees() -> void:
 	for x in range(-40, 45, 8):

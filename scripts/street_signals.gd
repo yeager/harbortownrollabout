@@ -27,7 +27,7 @@ func _ready() -> void:
 		mast.rotation.y = i*PI/2
 		mast.position = mast.basis*Vector3(5.4,0,6)
 		if i==3:
-			mast.position.x=-14.7
+			mast.position.x=-13.65
 		heads.append(_vehicle_head(mast,i%2==1))
 	for approach in [Vector3.RIGHT,Vector3.LEFT,Vector3.BACK,Vector3.FORWARD]:
 		var forward: Vector3 = approach
