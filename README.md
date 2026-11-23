@@ -6,13 +6,15 @@ Choose Axel or Alma and explore a waterfront neighbourhood inspired by Hammarby 
 
 ## Download and play
 
-Choose your computer below. Extract the archive before opening the game.
+Choose your computer below. For a ZIP or tar.gz download, extract the archive before opening the game.
 
 | Platform | Download | Launch |
 | --- | --- | --- |
 | Windows 64-bit | [Windows ZIP](https://github.com/yeager/harbortownrollabout/releases/download/v0.1.3-binaries.20261123/harbortown-windows-x86_64.zip) | Open `harbortown.exe`. Keep `harbortown.pck` beside it. |
 | Mac with Apple Silicon (M-series) | [Apple Silicon ZIP](https://github.com/yeager/harbortownrollabout/releases/download/v0.1.3-binaries.20261123/harbortown-macos-arm64.zip) | Open `harbortown.app`. |
 | Mac with an Intel processor | [Intel Mac ZIP](https://github.com/yeager/harbortownrollabout/releases/download/v0.1.3-binaries.20261123/harbortown-macos-x86_64.zip) | Open `harbortown.app`. |
+| Ubuntu or Debian (64-bit) | [DEB package](https://github.com/yeager/harbortownrollabout/releases/download/v0.1.3-binaries.20261123/harbortown_0.1.3_amd64.deb) | Install the package, then open **harbortown** from your apps. |
+| Fedora (64-bit) | [RPM package](https://github.com/yeager/harbortownrollabout/releases/download/v0.1.3-binaries.20261123/harbortown-0.1.3-1.x86_64.rpm) | Install the package, then open **harbortown** from your apps. |
 | Linux x86-64 | [Linux tar.gz](https://github.com/yeager/harbortownrollabout/releases/download/v0.1.3-binaries.20261123/harbortown-linux-x86_64.tar.gz) | Run `./harbortown` from the extracted folder. |
 
 On a Mac, open **Apple menu → About This Mac** if you’re unsure which download to choose. If you see an M-series chip, choose Apple Silicon. The Windows and Mac downloads are preview builds awaiting tests on those systems.
