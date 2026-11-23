@@ -1671,3 +1671,6 @@ msgstr ""
 
 msgid "Next stop: %s"
 msgstr ""
+
+msgid "Return to town"
+msgstr ""

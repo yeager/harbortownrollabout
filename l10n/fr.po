@@ -1757,3 +1757,6 @@ msgstr "Utiliser aussi F3 pour monter dans un véhicule ou en descendre"
 
 msgid "Next stop: %s"
 msgstr "Prochain arrêt : %s"
+
+msgid "Return to town"
+msgstr "Retour en ville"

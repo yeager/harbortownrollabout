@@ -350,6 +350,7 @@ var speed := 0.0
 var steering := 0.0
 var map_goal := Vector3.INF
 var map_button := Button.new()
+var leave_practice_button := Button.new()
 const MAP_NAMES := ["Town square","Clinic","Marina","School","Petrol station","Hot dog stand"]
 var free_drive := true
 var mission_index := 0
@@ -7040,6 +7041,9 @@ func _build_town_map() -> void:
 		dialog.hide()
 		_update_route_arrows()
 	)
+	leave_practice_button.text = "Return to town"
+	phone.add_child(leave_practice_button)
+	leave_practice_button.pressed.connect(_leave_practice)
 	map_button.text = "Town map"
 	phone.add_child(map_button)
 	map_button.pressed.connect(func():
@@ -7846,6 +7850,8 @@ func _play_bounds(point: Vector3) -> Rect2:
 
 func _build_practice_yard() -> void:
 	var center := PRACTICE_YARD.get_center()
+	_make_driving_surface("Practice meadow", Vector3(120,.30,96),
+		Vector3(center.x,-.36,center.y+18), Color.WHITE).material_override = soil_finish
 	_make_driving_surface("Practice asphalt", Vector3(64,.2,40), Vector3(center.x,-.1,center.y), Color.WHITE).material_override = road_finish
 	for z in [90,128]:
 		_make_box("Course edge", Vector3(62,.02,.14), Vector3(center.x,.01,z), Color.WHITE)
@@ -7862,7 +7868,25 @@ func _start_practice() -> void:
 		_on_vehicle_selected(3)
 	_start_game()
 	ambulance.position = PRACTICE_START
+	_refresh_ui()
 	_update_camera(0, true)
+
+func _leave_practice() -> void:
+	if shopper_boarding or not leave_practice_button.visible: return
+	if not _recover_road_vehicle(): return
+	if walker.visible:
+		parked_cars[vehicle_index].transform = ambulance.transform
+		walker.position = ambulance.to_global(parked_door_offset)
+		_recover_position()
+	else:
+		speed = 0
+		steering = 0
+		_release_mouse_pedals()
+		_end_skid()
+	_update_camera(0,true)
+	_update_route_arrows()
+	_refresh_ui()
+	_save_checkpoint()
 
 func _starting_position() -> Vector3:
 	var best_x := -35.0
@@ -8419,7 +8443,8 @@ func _refresh_dispatch() -> void:
 		if shoe_quest == FootQuest.RETURNING: phone.foot_jobs.append("Bring the red shoe back to the neighbour.")
 		if cat_quest == FootQuest.SEARCHING: phone.foot_jobs.append("Find the cat with white paws.")
 		if cat_quest == FootQuest.RETURNING: phone.foot_jobs.append("Walk back to the neighbour with the cat.")
-	map_button.visible = free_drive and not boating and not operating_excavator and tram_mode == 0 and not ferry_passenger and _play_bounds(walker.position if walker.visible else ambulance.position) != PRACTICE_YARD
+	leave_practice_button.visible = _play_bounds(walker.position if walker.visible else ambulance.position) == PRACTICE_YARD
+	map_button.visible = free_drive and not boating and not operating_excavator and tram_mode == 0 and not ferry_passenger and not leave_practice_button.visible
 	phone.take_job.visible = free_drive and not walker.visible and not boating and not operating_excavator and tram_mode == 0 and not ferry_passenger and mission_index < TARGETS.size()
 	phone.visible = mode=="playing" and not paused
 	if free_drive or mode!="playing" or mission_index>=TARGETS.size():

@@ -1738,3 +1738,6 @@ msgstr "Nouse ajoneuvoon tai poistu siitä myös F3-näppäimellä"
 
 msgid "Next stop: %s"
 msgstr "Seuraava pysäkki: %s"
+
+msgid "Return to town"
+msgstr "Takaisin kaupunkiin"

@@ -6,6 +6,7 @@ func _initialize() -> void:
 func verify() -> void:
 	var game = load("res://main.tscn").instantiate()
 	root.add_child(game)
+	game._on_vehicle_selected(game.MOWER)
 	game.find_child("PracticeDriving", true, false).pressed.emit()
 	var start: Vector3 = game.ambulance.position
 	game.mouse_gas = true
@@ -40,5 +41,15 @@ func verify() -> void:
 		printerr("Could not recover and re-enter practice car")
 		quit(1)
 		return
+	for on_foot in [false,true]:
+		game.ambulance.position=game.PRACTICE_START
+		if on_foot: game._change_seat()
+		game._refresh_ui()
+		if not game.leave_practice_button.is_visible_in_tree(): quit(1); return
+		game.leave_practice_button.pressed.emit()
+		var actor=game.walker if on_foot else game.ambulance
+		if not game.CITY_INTERIOR.has_point(Vector2(actor.position.x,actor.position.z)) or game.leave_practice_button.visible:
+			quit(1)
+			return
 	print("Practice course acceleration, braking, reverse, recovery and boarding passed.")
 	quit()

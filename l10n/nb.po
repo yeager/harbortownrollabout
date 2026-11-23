@@ -1742,3 +1742,6 @@ msgstr "Bruk også F3 til å gå inn og ut av kjøretøy"
 
 msgid "Next stop: %s"
 msgstr "Neste holdeplass: %s"
+
+msgid "Return to town"
+msgstr "Tilbake til byen"
