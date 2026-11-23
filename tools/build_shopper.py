@@ -43,8 +43,42 @@ v.mesh_from_rings("Pressed chassis",[(-1.15,.37,.19,.46,.52),(-.94,.47,.17,.53,.
 v.mesh_from_rings("Tilting wedge front",[(-1.18,.37,.42,.54,.65),(-1.06,.44,.44,.57,.69),
     (-.46,.47,.51,.80,.92),(-.25,.43,.54,.85,.95)],red,root,.015,panel_section)
 nose_lamp("Chrome headlight bezel",-1.185,.58,.101,.045,v.METAL)
-nose_lamp("Headlight lens",-1.211,.58,.085,.015,v.HEADLAMP)
-nose_lamp("Horn grille",-1.153,.33,.057,.025,v.BLACK)
+# Flutes are part of one lens mesh so the driving light still has one emitter.
+lens_radius = .085
+vertices = [(-lens_radius,-1.208,.58)]
+faces = []
+columns, rows = 64, 12
+for column in range(1, columns):
+    u = 2*column/columns-1
+    half_height = math.sqrt(1-u*u)
+    for row in range(rows+1):
+        h = half_height*(2*row/rows-1)
+        dome = max(0,1-u*u-h*h)
+        flute = .002*(1-math.cos(math.tau*column/4))*math.sqrt(dome)
+        vertices.append((lens_radius*u,-1.208-.012*dome-flute,.58+lens_radius*h))
+        index = len(vertices)-1
+        if row:
+            if column == 1:
+                faces.append((0,index-1,index))
+            else:
+                faces.append((index-rows-2,index-1,index,index-rows-1))
+tip = len(vertices)
+vertices.append((lens_radius,-1.208,.58))
+for row in range(rows):
+    faces.append((tip-rows-1+row,tip,tip-rows+row))
+mesh = bpy.data.meshes.new("Fluted glass reflector lens")
+mesh.from_pydata(vertices, [], faces)
+mesh.materials.append(v.material("Fluted headlamp glass",(.79,.83,.81),.28,.17))
+lens = bpy.data.objects.new("Headlight lens",mesh)
+bpy.context.collection.objects.link(lens)
+lens.parent = root
+nose_lamp("Horn grille rim",-1.153,.33,.059,.025,v.METAL)
+nose_lamp("Horn grille recess",-1.168,.33,.051,.006,v.BLACK)
+for index in range(-2,3):
+    offset = index*.017
+    half_height = math.sqrt(.048**2-offset**2)
+    tube("Horn grille rib",(offset,-1.173,.33-half_height),
+         (offset,-1.173,.33+half_height),.003,v.METAL)
 
 # The screen bows toward the nose at its centre and narrows under the roof.
 def screen_point(u,t):
