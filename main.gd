@@ -4517,6 +4517,7 @@ func _build_pedestrians() -> void:
 	var neighbour: Dictionary = walker_data.back()
 	var local_scooter := Scooter.new()
 	neighbour.actor.add_child(local_scooter)
+	_animate_steps(neighbour.actor,0.0,1.0)
 	local_scooter.mount(neighbour.actor)
 	neighbour.scooter = local_scooter
 	neighbour.stretch = Vector2(-43,-8)

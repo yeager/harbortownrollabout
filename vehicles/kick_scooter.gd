@@ -6,6 +6,8 @@ const MAX_SPEED := 5.55 # 20 km/h
 var speed := 0.0
 var yaw_input := 0.0
 var wheels: Array[Node3D] = []
+var palm_stance: Array[Transform3D] = []
+var elbow_stance: Array[Quaternion] = []
 var stance: Array[Transform3D] = []
 
 func _ready() -> void:
@@ -18,6 +20,9 @@ func _ready() -> void:
 func mount(rider: Node3D) -> void:
 	if visible: return
 	stance.clear()
+	palm_stance.clear()
+	elbow_stance.clear()
+	var gait = rider.get_meta("gait")
 	for limb: Node3D in rider.get_meta("legs") + rider.get_meta("arms"):
 		stance.append(limb.transform)
 	var legs: Array = rider.get_meta("legs")
@@ -25,8 +30,9 @@ func mount(rider: Node3D) -> void:
 		var side := -1 if i == 0 else 1
 		legs[i].position.x = side*.063
 		legs[i].position.z += side*.11
-		var arm: Node3D = rider.get_meta("arms")[i]
-		arm.rotation.x = .88
+		palm_stance.append(gait.palms[i].transform)
+		elbow_stance.append(gait.elbows[i].get_bone_pose_rotation(1))
+		gait.reach_with_hand(i,to_global(Vector3(side*.226,1.275,-.387)))
 	rider.position.y += DECK_HEIGHT*rider.scale.y
 	speed = 0
 	yaw_input = 0
@@ -37,6 +43,10 @@ func dismount(rider: Node3D) -> void:
 	var limbs: Array = rider.get_meta("legs") + rider.get_meta("arms")
 	for i in limbs.size():
 		limbs[i].transform = stance[i]
+	var gait = rider.get_meta("gait")
+	for i in 2:
+		gait.palms[i].transform = palm_stance[i]
+		gait.elbows[i].set_bone_pose_rotation(1,elbow_stance[i])
 	rider.position.y -= DECK_HEIGHT*rider.scale.y
 	speed = 0
 	yaw_input = 0
