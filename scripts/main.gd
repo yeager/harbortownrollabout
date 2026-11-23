@@ -2871,7 +2871,17 @@ func _build_marina() -> void:
 		var sign_base := Vector3(54.55,0,landing_z+1.35)
 		_make_roadside_solid("Landing signpost",Vector3(.07,2.35,.07),sign_base+Vector3.UP*.98,Color("#646e70"))
 		_make_box("Ferry stop sign",Vector3(.09,.78,2.40),sign_base+Vector3.UP*2.05,Color("#12385b"))
+		# Both landings have a bridge in the +Z direction, at -48 and 0.
 		for side in [-1,1]:
+			var direction := Sprite3D.new()
+			direction.name = "BouleDirection"
+			direction.texture = preload("res://branding/boule-direction.svg")
+			direction.pixel_size = .006
+			direction.double_sided = false
+			direction.rotation.y = side*PI*.5
+			direction.flip_h = side == 1
+			direction.position = sign_base+Vector3(side*.052,1.34,0)
+			add_child(direction)
 			var sign_text := Label3D.new()
 			sign_text.text = "LOTTEN"
 			sign_text.font_size = 48

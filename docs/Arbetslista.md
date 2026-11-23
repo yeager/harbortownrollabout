@@ -92,7 +92,7 @@ Listan innehåller 100 jobb. En tom ruta är öppen. En punkt bockas av när bet
 - [ ] 65. Animera hur boulespelarna hämtar sina klot innan nästa omgång börjar.
 - [ ] 66. Lägg till ett distinkt metalliskt klick när två bouleklot träffar varandra.
 - [ ] 67. Ge boulebanan en sittbänk där spelaren kan sätta sig, följa omgången och resa sig igen.
-- [ ] 68. Sätt upp vägvisare från färjelägena till boulebanan med en bild av ett klot och lillen.
+- [x] 68. Båda färjelägena har dubbelsidiga vägvisare under Lottens hållplatsskylt. Ett räfflat klot, en gul lille och en pil visar vägen mot närmaste bro på vägen till boulebanan. Pilarnas riktning är kontrollerad från båda sidor.
 - [ ] 69. Gör ett uppdrag där en granne behöver hjälp att hitta sin termos efter boulematchen.
 - [ ] 70. Låt spelaren lämna tillbaka ett upphittat paraply vid färjeläget och se ägaren fälla upp det när det regnar.
 
