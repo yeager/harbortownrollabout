@@ -11,7 +11,8 @@ const LANE_OFFSET := 6.0
 var stations: Array[Node3D] = []
 var road_cars: Array[Dictionary] = []
 
-const SERVICE_BRAKE := 1.8
+const Mass := preload("res://vehicles/mass.gd")
+const SERVICE_BRAKE := 75600.0 / Mass.TRAM_KG
 const CAB_REACH := 2.98
 
 var track := Curve3D.new()
@@ -377,7 +378,7 @@ func _advance_road_cars(delta: float, users: Array[AABB]) -> void:
 			var free_space := spacing - float(other.length) - float(car.length) - 1.0
 			clearance = minf(clearance,maxf(0,free_space))
 		var previous_speed := float(car.speed)
-		var pace := move_toward(previous_speed,float(car.cruise),2.0*delta)
+		var pace := move_toward(previous_speed,float(car.cruise),2.0*Mass.road_response(car.mass_kg)*delta)
 		var permitted := sqrt(8.0*maxf(0,clearance-.05))
 		car.speed = minf(pace,permitted)
 		var step := minf(float(car.speed)*delta,maxf(0,clearance-.03))
@@ -477,7 +478,7 @@ func advance(delta: float, manual: bool, gas: bool, brake: bool) -> void:
 	var initial := velocity
 	var half_change := SERVICE_BRAKE * delta * .5
 	var approach_speed := sqrt(maxf(0,half_change*half_change + SERVICE_BRAKE*(2*stopping_gap-initial*delta))) - half_change
-	velocity = move_toward(initial,clampf(approach_speed,0,target),delta*(3.0 if brake else SERVICE_BRAKE))
+	velocity = move_toward(initial,clampf(approach_speed,0,target),delta*(126000.0 / Mass.TRAM_KG if brake else SERVICE_BRAKE))
 	var step := minf((initial + velocity) * .5 * delta, signal_gap)
 	if step >= signal_gap: velocity = 0.0
 	var safe_step := _safe_tram_step(step,users)

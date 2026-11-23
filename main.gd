@@ -15,15 +15,16 @@ func _mission_stop() -> int:
 		2: return [1, 2, 0][mission_index]
 		_: return mission_index
 
+const Mass := preload("res://vehicles/mass.gd")
 const Gait := preload("res://characters/walking_gait.gd")
 const ROAD_HALF := 4.8
 # Inside faces of the continuous perimeter wall, in world X/Z.
 const CITY_INTERIOR := Rect2(-520, -92, 690, 172)
 const VEHICLE_NAMES := ["Ambulance", "Police car", "Fire engine"]
 const VEHICLE_SCENES := ["res://vehicles/ambulance.glb", "res://vehicles/polisbil.glb", "res://vehicles/brandbil.glb"]
-const VEHICLE_NAMES_ALL := ["Ambulance", "Police car", "Fire engine", "SUV", "Taxi", "Recovery truck", "Classic sports coupe", "Classic sedan", "Vintage compact", "Electric sedan", "City bus", "Snowmobile", "Police SUV", "Track sports car", "Ice cream van", "Small convertible", "Classic moped", "Monster truck", "A-tractor", "Classic cruiser", "Wheel loader", "Farm tractor", "Food truck", "Ride-on mower"]
-const VEHICLE_SCENES_ALL := ["res://vehicles/ambulance.glb", "res://vehicles/polisbil.glb", "res://vehicles/brandbil.glb", "res://vehicles/bmw_x5_m60i.glb", "res://vehicles/taxi.glb", "res://vehicles/bargare.glb", "res://vehicles/m3_e30.glb", "res://vehicles/volvo240.glb", "res://vehicles/saab96.glb", "res://vehicles/model_s.glb", "res://vehicles/city_bus.glb", "res://vehicles/snowmobile.glb", "res://vehicles/volvo_xc60_polis.glb", "res://vehicles/porsche_gt3_rs.glb", "res://vehicles/ice_cream_van.tscn", "res://vehicles/mini_cooper_cabriolet.glb", "res://vehicles/puch_dakota.glb", "res://vehicles/monster_truck.glb", "res://vehicles/a_traktor.glb", "res://vehicles/raggarbil.glb", "res://vehicles/volvo_wheel_loader.glb", "res://vehicles/farm_tractor.glb", "res://vehicles/food_truck_road.glb", "res://vehicles/ride_on_mower.glb"]
-const SIREN_SOUNDS := ["res://audio/siren_ambulance.wav", "res://audio/siren_police.wav", "res://audio/siren_fire.wav", "res://audio/bmw_engine.wav", "res://audio/bmw_engine.wav", "res://audio/bmw_engine.wav", "res://audio/bmw_engine.wav", "res://audio/bmw_engine.wav", "res://audio/bmw_engine.wav", "res://audio/electric_drive.wav", "res://audio/bmw_engine.wav", "res://audio/sled_engine.wav", "res://audio/siren_police.wav", "res://audio/porsche_engine.wav", "res://audio/bmw_engine.wav", "res://audio/bmw_engine.wav", "res://audio/moped_engine.wav", "res://audio/monster_engine.wav", "res://audio/bmw_engine.wav", "res://audio/bmw_engine.wav", "res://audio/loader_diesel.wav", "res://audio/tractor_diesel.wav", "res://audio/bmw_engine.wav", "res://audio/mower_engine.wav"]
+const VEHICLE_NAMES_ALL := ["Ambulance", "Police car", "Fire engine", "SUV", "Taxi", "Recovery truck", "Classic sports coupe", "Classic sedan", "Vintage compact", "Electric sedan", "City bus", "Snowmobile", "Police SUV", "Track sports car", "Ice cream van", "Small convertible", "Classic moped", "Monster truck", "A-tractor", "Classic cruiser", "Wheel loader", "Farm tractor", "Food truck", "Ride-on mower", "Refuse truck", "Shopping trike"]
+const VEHICLE_SCENES_ALL := ["res://vehicles/ambulance.glb", "res://vehicles/polisbil.glb", "res://vehicles/brandbil.glb", "res://vehicles/bmw_x5_m60i.glb", "res://vehicles/taxi.glb", "res://vehicles/bargare.glb", "res://vehicles/m3_e30.glb", "res://vehicles/volvo240.glb", "res://vehicles/saab96.glb", "res://vehicles/model_s.glb", "res://vehicles/city_bus.glb", "res://vehicles/snowmobile.glb", "res://vehicles/volvo_xc60_polis.glb", "res://vehicles/porsche_gt3_rs.glb", "res://vehicles/ice_cream_van.tscn", "res://vehicles/mini_cooper_cabriolet.glb", "res://vehicles/puch_dakota.glb", "res://vehicles/monster_truck.glb", "res://vehicles/a_traktor.glb", "res://vehicles/raggarbil.glb", "res://vehicles/volvo_wheel_loader.glb", "res://vehicles/farm_tractor.glb", "res://vehicles/food_truck_road.glb", "res://vehicles/ride_on_mower.glb", "res://vehicles/refuse_truck.glb", "res://vehicles/shopping_trike.glb"]
+const SIREN_SOUNDS := ["res://audio/siren_ambulance.wav", "res://audio/siren_police.wav", "res://audio/siren_fire.wav", "res://audio/bmw_engine.wav", "res://audio/bmw_engine.wav", "res://audio/bmw_engine.wav", "res://audio/bmw_engine.wav", "res://audio/bmw_engine.wav", "res://audio/bmw_engine.wav", "res://audio/electric_drive.wav", "res://audio/bmw_engine.wav", "res://audio/sled_engine.wav", "res://audio/siren_police.wav", "res://audio/porsche_engine.wav", "res://audio/bmw_engine.wav", "res://audio/bmw_engine.wav", "res://audio/moped_engine.wav", "res://audio/monster_engine.wav", "res://audio/bmw_engine.wav", "res://audio/bmw_engine.wav", "res://audio/loader_diesel.wav", "res://audio/tractor_diesel.wav", "res://audio/bmw_engine.wav", "res://audio/mower_engine.wav", "res://audio/loader_diesel.wav", "res://audio/moped_engine.wav"]
 const BUILDING_SCENES := {"Sjukhuset":"res://environment/sjukhus.glb", "Polisstationen":"res://environment/polisstation.glb", "Bageriet":"res://environment/bageri.glb", "Vårdcentralen":"res://environment/vardcentral.glb", "Brandstationen":"res://environment/brandstation.glb", "Biblioteket":"res://environment/bibliotek.glb"}
 const TREE_SCENES := ["res://environment/lovtrad.glb", "res://environment/gran.glb", "res://environment/bredkronigt_lovtrad.glb"]
 
@@ -167,6 +168,8 @@ const WHEEL_LOADER := 20
 const FARM_TRACTOR := 21
 const FOOD_TRUCK := 22
 const MOWER := 23
+const REFUSE := 24
+const SHOPPER := 25
 var ground_work := preload("res://environment/ground_work.gd").new(CITY_INTERIOR)
 var blade_left: Vector3
 var blade_right: Vector3
@@ -188,7 +191,7 @@ var bus_board: Label3D
 const BUS_STOP_NAMES := ["THE SQUARE","HEALTH CENTRE","MARINA","HARBOR TOWN SCHOOL","VÄSTRA TORGET","VÄSTERÄNGEN"]
 var bus_leg := 0
 const TAXI := 4
-const HORNS := ["ambulance","police","fire","bmw","taxi","recovery", "m3_e30", "volvo240", "saab96", "model_s", "city_bus","snowmobile", "police", "porsche", "icecream", "bmw", "saab96", "bmw", "volvo240", "bmw", "recovery", "recovery", "bmw", "saab96"]
+const HORNS := ["ambulance","police","fire","bmw","taxi","recovery", "m3_e30", "volvo240", "saab96", "model_s", "city_bus","snowmobile", "police", "porsche", "icecream", "bmw", "saab96", "bmw", "volvo240", "bmw", "recovery", "recovery", "bmw", "saab96", "recovery", "saab96"]
 var horn := AudioStreamPlayer.new()
 var next_song_button: Button
 var radio_button: Button
@@ -282,6 +285,7 @@ var speed := 0.0
 var steering := 0.0
 var free_drive := true
 var mission_index := 0
+var refuse_bins: Array[Node3D] = []
 var vehicle_progress := {}
 
 func _change_mission_vehicle(next: int) -> void:
@@ -298,6 +302,7 @@ func _vehicle_tasks() -> Array:
 		1, XC60_POLICE: return PATROL_TASKS
 		2: return FIRE_TASKS
 		FARM_TRACTOR: return ["Collect seedlings at the square", "Deliver herbs to the clinic garden", "Bring flowers to the marina"]
+		REFUSE: return ["Collect bins at the square", "Collect bins at the clinic", "Unload recycling at the marina"]
 		FOOD_TRUCK: return ["Pick up soup ingredients at the square", "Serve lunch to the clinic staff", "Serve soup to the boat crews"]
 		SNOWMOBILE: return SLED_TASKS
 		ICE_CREAM: return ["Serve ice cream at the square", "Serve ice cream outside the school", "Serve ice cream at the marina"]
@@ -829,7 +834,7 @@ func _drive_launch(delta: float) -> void:
 		target = -1.6
 	elif gas and not brake:
 		target = 5.0 if gentle_driving else 9.0
-	launch_speed = move_toward(launch_speed,target,delta*(3.4 if brake else 1.5))
+	launch_speed = move_toward(launch_speed,target,delta*(2890.0 if brake else 1275.0)/Mass.LAUNCH_KG)
 	var steering_flow := clampf(launch_speed,-1,2)
 	if gas and not brake and launch_speed >= 0.0:
 		steering_flow = maxf(.8,steering_flow)
@@ -860,6 +865,13 @@ func _drive_launch(delta: float) -> void:
 func _walk_pedal_pressed() -> bool:
 	return Input.is_action_pressed("ui_up") or Input.is_action_pressed("ui_down") or Input.is_key_pressed(KEY_W) or Input.is_key_pressed(KEY_S)
 
+func _vehicle_payload() -> float:
+	if vehicle_index == RECOVERY and casualty.visible and casualty.get_parent() == ambulance:
+		return 1380.0
+	if vehicle_index == REFUSE and not free_drive and mission_index < 3:
+		return mission_index * 400.0
+	return 0.0
+
 func _drive(delta: float) -> void:
 	var throttle := Input.get_axis("ui_down", "ui_up")
 	var steer_input := Input.get_axis("ui_left", "ui_right")
@@ -886,7 +898,7 @@ func _drive(delta: float) -> void:
 	if vehicle_index == MOWER:
 		max_speed = 2.7 if gentle_driving else 4.0
 		acceleration = 2.0
-	if vehicle_index == PUCH_DAKOTA:
+	if vehicle_index in [PUCH_DAKOTA, SHOPPER]:
 		max_speed = 30.0 / 3.6
 		acceleration = 2.2
 	if vehicle_index == PORSCHE:
@@ -898,14 +910,17 @@ func _drive(delta: float) -> void:
 	elif throttle >= 0.0:
 		brake_held = false
 	var previous_speed := speed
+	var empty_mass := Mass.for_model(VEHICLE_SCENES_ALL[vehicle_index])
+	var load_mass := _vehicle_payload()
+	var response := Mass.road_response(empty_mass, load_mass)
 	var previous_pose := ambulance.global_transform
 	var previous_model_pose := vehicle_model.global_transform
 	if brake_held:
-		speed = move_toward(speed, 0.0, (18.0 - 2.0*weather.wet - 3.0*weather.snow) * absf(throttle) * delta)
+		speed = move_toward(speed, 0.0, (18.0 - 2.0*weather.wet - 3.0*weather.snow) * absf(throttle) * response * delta)
 	elif throttle < 0.0:
-		speed = move_toward(speed, throttle * (1.8 if gentle_driving else 4.0), 3.0 * delta)
+		speed = move_toward(speed, throttle * (1.8 if gentle_driving else 4.0), 3.0 * response * delta)
 	else:
-		speed = move_toward(speed, throttle * max_speed, acceleration * delta)
+		speed = move_toward(speed, throttle * max_speed, acceleration * response * delta)
 	steering = move_toward(steering, steer_input, (2.0 if gentle_driving else 3.4) * delta)
 	if cabin_wheel:
 		var angle := deg_to_rad(33.0) if vehicle_index == SNOWMOBILE else 1.2
@@ -914,7 +929,7 @@ func _drive(delta: float) -> void:
 	for knuckle in front_knuckles:
 		knuckle.rotation.y = -steering * deg_to_rad(33.0)
 	driving_controls.set_controls(steering, throttle > 0, brake_held, throttle < 0 and not brake_held)
-	var wheelbase: float = [3.7, 2.75, 4.1, 2.975, 2.85, 4.0, 2.56, 2.64, 2.46, 2.96, 6.06, 1.65, 2.865, 2.457, 3.81, 2.495, 1.14, 3.37, 2.84, 3.1, 3.2, 2.61, 3.8, 1.01][vehicle_index]
+	var wheelbase: float = [3.7, 2.75, 4.1, 2.975, 2.85, 4.0, 2.56, 2.64, 2.46, 2.96, 6.06, 1.65, 2.865, 2.457, 3.81, 2.495, 1.14, 3.37, 2.84, 3.1, 3.2, 2.61, 3.8, 1.01, 4.52, 1.61][vehicle_index]
 	var yaw_rate := speed * tan(steering * deg_to_rad(33.0)) / wheelbase
 	# Limit lateral acceleration at speed while retaining tight parking turns.
 	var max_yaw_rate := 8.0 / maxf(absf(speed), 1.0)
@@ -1059,7 +1074,7 @@ func _drive(delta: float) -> void:
 			struck_vehicle = item
 	if contact_distance < INF:
 		step = step.limit_length(maxf(0.0, contact_distance - .02))
-		speed = -signf(speed) * minf(absf(speed) * .12, 1.4) if allow_crashes else 0.0
+		speed = -signf(speed) * minf(absf(speed) * .24 * struck_vehicle.mass_kg / (empty_mass + load_mass + struck_vehicle.mass_kg), 1.4) if allow_crashes else 0.0
 		struck_vehicle.speed = 0.0
 	var destination := ambulance.position + step
 	var pos := destination
@@ -1224,7 +1239,7 @@ func _taxi_instruction() -> String:
 	return "Pick up your passenger" if taxi_leg%2==0 else "Drop off your passenger"
 
 func _needs_mission_vehicle() -> bool:
-	return walker.visible and vehicle_index in [TAXI, RECOVERY, BUS, ICE_CREAM]
+	return walker.visible and vehicle_index in [TAXI, RECOVERY, BUS, ICE_CREAM, REFUSE]
 
 func _mission_destination() -> Vector3:
 	if _needs_mission_vehicle():
@@ -1248,7 +1263,7 @@ func _arrival_radius() -> float:
 	return 2.1 if walker.visible else 5.2
 
 func _at_target() -> bool:
-	if scooter.visible or free_drive or boating or ferry_passenger or tram_mode != 0 or (vehicle_index in [TAXI,RECOVERY,BUS,ICE_CREAM] and walker.visible) or mission_index >= TARGETS.size(): return false
+	if scooter.visible or free_drive or boating or ferry_passenger or tram_mode != 0 or (vehicle_index in [TAXI,RECOVERY,BUS,ICE_CREAM,REFUSE] and walker.visible) or mission_index >= TARGETS.size(): return false
 	var actor := walker if walker.visible else ambulance
 	return actor.position.distance_to(_mission_destination()) < _arrival_radius()
 
@@ -1269,6 +1284,21 @@ func _delivery_receipt() -> String:
 	elif _vehicle_tasks() == DELIVERY_TASKS:
 		return ["Two parcels collected at the square. You earned 10 points and 10 coins.", "The clinic received its parcel. You earned 10 points and 10 coins.", "The marina received the last parcel. You earned 10 points and 10 coins."][mission_index-1]
 	return "Thank you for helping! You earned 10 points and 10 coins."
+
+func _empty_refuse_bin(stop: int) -> void:
+	var bin := refuse_bins[stop].duplicate() as Node3D
+	vehicle_model.add_child(bin)
+	var curb := vehicle_model.to_local(refuse_bins[stop].global_position)
+	bin.position = curb
+	var loading_edge := Vector3(0,.15,-3.92)
+	var lift := bin.create_tween().set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	lift.tween_property(bin,"position",loading_edge,.65)
+	lift.tween_property(bin,"position",loading_edge + Vector3.UP*1.9,.55)
+	lift.parallel().tween_property(bin,"rotation:x",deg_to_rad(145),.55)
+	lift.tween_interval(.18)
+	lift.tween_property(bin,"rotation:x",0.0,.45)
+	lift.parallel().tween_property(bin,"position",loading_edge,.45)
+	lift.tween_callback(bin.queue_free)
 
 func _reward_delivery(amount: int) -> void:
 	wallet += amount
@@ -1323,6 +1353,8 @@ func _help_at_target() -> void:
 		return
 	if _at_target() and (walker.visible or absf(speed)<.12):
 		parked_at_target = 0.0
+		if vehicle_index == REFUSE and mission_index < 2:
+			_empty_refuse_bin(mission_index)
 		mission_index += 1
 		if vehicle_index == ICE_CREAM:
 			_honk()
@@ -2630,7 +2662,7 @@ func _update_moorings(delta: float) -> void:
 		crossing = 1.0-crossing
 	ferry.position = Vector3(68,-.97+.024*sin(wave_time*1.1),lerpf(FERRY_LANDINGS[0],FERRY_LANDINGS[1],crossing))
 	water_finish.set_shader_parameter("ferry_center",ferry.position)
-	ferry.rotation.z = .006*sin(wave_time*.88)
+	ferry.rotation.z = (288.0 / Mass.FERRY_KG)*sin(wave_time*.88)
 	if ferry_passenger:
 		walker.position = ferry.to_global(Vector3(-.55,.66,5.1))
 		if ferry_exit_requested and _ferry_stop() >= 0:
@@ -3135,6 +3167,8 @@ func _depot_bay(i: int) -> Vector2:
 			var center: Vector2 = lot[0]
 			return center + Vector2((slot - 1) * 6, 0)
 	if i == WHEEL_LOADER: return Vector2(-101,47)
+	if i == SHOPPER: return Vector2(-67,60)
+	if i == REFUSE: return Vector2(-101,56)
 	if i == MOWER: return Vector2(-24,28)
 	if i == FARM_TRACTOR: return Vector2(-18,28)
 	if i == RECOVERY: return Vector2(-45,25)
@@ -3249,6 +3283,17 @@ func _add_parked_moped_stand(body: Node3D) -> void:
 	_tube_between(stand, Vector3(-.10,.05,.205), Vector3(-.175,.065,.25), .007, steel)
 
 func _build_depot() -> void:
+	for i in 2:
+		var bin := Node3D.new()
+		add_child(bin)
+		bin.position = TARGETS[i] + Vector3(2.8,0,2.8)
+		bin.position.y = _foot_height(bin.position.x, bin.position.z)
+		_make_box("Recycling bin",Vector3(.67,.84,.58),Vector3.UP*.51,Color("#245d48"),false,bin)
+		_make_box("Hinged lid",Vector3(.72,.08,.64),Vector3.UP*.97,Color("#74ab54"),false,bin)
+		for side in [-1,1]:
+			_make_box("Bin wheel",Vector3(.08,.16,.16),Vector3(side*.29,.09,.21),Color("#242a29"),false,bin)
+		refuse_bins.append(bin)
+		bin.hide()
 	_build_road_signs()
 	for lot in DISTRICT_PARKING:
 		var center: Vector2 = lot[0]
@@ -3632,7 +3677,7 @@ func _drive_excavator(delta: float) -> void:
 		if not _crawler_clear(): excavator.basis = old.basis
 	var target_speed := clampf(drive, -1, 1) * 1.8
 	var previous_speed := crawler_speed
-	crawler_speed = move_toward(crawler_speed, target_speed, (3.0 if is_zero_approx(drive) else 12.0) * delta)
+	crawler_speed = move_toward(crawler_speed, target_speed, (276000.0 if is_zero_approx(drive) else 1104000.0) / Mass.EXCAVATOR_KG * delta)
 	var motion := excavator.basis.z * (previous_speed + crawler_speed) * .5 * delta
 	for step in [Vector3(motion.x,0,0),Vector3(0,0,motion.z)]:
 		if step.is_zero_approx(): continue
@@ -4161,7 +4206,7 @@ func _spawn_traffic(scene_path: String, x: float, lane_z: float, direction: floa
 	traffic_horn.unit_size = 5
 	traffic_horn.max_distance = 45
 	actor.add_child(traffic_horn)
-	traffic_data.append({"tractor":scene_path.ends_with("a_traktor.glb"), "horn":traffic_horn, "greeted":false, "actor": actor, "model": model, "direction": direction, "cruise": speed_value, "wheels": _rig_wheels(model), "brake_lens": _brake_lens(model),
+	traffic_data.append({"mass_kg": Mass.for_model(scene_path), "tractor":scene_path.ends_with("a_traktor.glb"), "horn":traffic_horn, "greeted":false, "actor": actor, "model": model, "direction": direction, "cruise": speed_value, "wheels": _rig_wheels(model), "brake_lens": _brake_lens(model),
 		"speed": speed_value, "length": half_size.y,
 		"width": half_size.x})
 	return actor
@@ -4263,7 +4308,7 @@ func _update_traffic(delta: float) -> void:
 		if free_space < 0.1:
 			target = 0
 		var previous_speed := float(item.speed)
-		var next_speed := move_toward(previous_speed, target, (6.5 if target < previous_speed else 2.2) * delta)
+		var next_speed := move_toward(previous_speed, target, (6.5 if target < previous_speed else 2.2) * Mass.road_response(item.mass_kg) * delta)
 		var travel := minf(next_speed * delta, free_space)
 		item.speed = travel / delta if delta > 0.0 else previous_speed
 		if item.brake_lens:
@@ -5579,6 +5624,8 @@ func _update_mission_marker() -> void:
 	_update_bus_board()
 	if not is_instance_valid(mission_marker): return
 	_sync_recovery()
+	for i in refuse_bins.size():
+		refuse_bins[i].visible = vehicle_index == REFUSE and not free_drive and mission_index <= i
 	_update_route_arrows()
 	passenger.visible = not free_drive and vehicle_index == TAXI and taxi_leg%2==0
 	if passenger.visible:
@@ -5661,7 +5708,7 @@ func _update_mission_marker() -> void:
 	mission_marker.global_position = _mission_destination() + Vector3(0, 0.05, 0)
 	var marker_label: Label3D = mission_marker.get_node("MissionLabel")
 	if _needs_mission_vehicle():
-		marker_label.text = tr("Return to your taxi" if vehicle_index == TAXI else "Return to your bus" if vehicle_index==BUS else "Return to your ice cream van" if vehicle_index == ICE_CREAM else "Return to your recovery truck").to_upper()
+		marker_label.text = tr("Return to your taxi" if vehicle_index == TAXI else "Return to your bus" if vehicle_index==BUS else "Return to your ice cream van" if vehicle_index == ICE_CREAM else "Return to your refuse truck" if vehicle_index == REFUSE else "Return to your recovery truck").to_upper()
 		return
 	marker_label.text = tr(BUS_MESSAGES[bus_leg%BUS_STOPS.size()] if vehicle_index==BUS else SERVICE_MESSAGES[recovery_leg%4] if vehicle_index==RECOVERY else _taxi_instruction() if vehicle_index==TAXI else _vehicle_tasks()[_mission_stop()]).to_upper()
 
@@ -6674,6 +6721,8 @@ func _refresh_ui() -> void:
 			road_driver.position = Vector3(-.46,1.505-.87*road_driver.scale.y,-1.39)
 		if vehicle_index == MOWER:
 			road_driver.position = Vector3(0,.79-.77*road_driver.scale.y,.18)
+		if vehicle_index == SHOPPER:
+			road_driver.position = Vector3(0,.64-.77*road_driver.scale.y,.18)
 		if vehicle_index == MINI_CABRIO:
 			road_driver.position = Vector3(-.38,.595-.87*road_driver.scale.y,-.19)
 		if vehicle_index == PORSCHE:
@@ -6684,13 +6733,13 @@ func _refresh_ui() -> void:
 		for arm in road_driver.get_meta("arms"):
 			arm.visible = not on_moped
 		road_driver.get_node("RidingLegs").visible = vehicle_index == SNOWMOBILE
-		road_driver.get_node("AlmaMowerLegs").visible = vehicle_index == MOWER and play_as_alma
-		road_driver.get_node("AxelMowerLegs").visible = vehicle_index == MOWER and not play_as_alma
+		road_driver.get_node("AlmaMowerLegs").visible = vehicle_index in [MOWER,SHOPPER] and play_as_alma
+		road_driver.get_node("AxelMowerLegs").visible = vehicle_index in [MOWER,SHOPPER] and not play_as_alma
 		road_driver.get_node("AlmaCabLegs").visible = vehicle_index == FOOD_TRUCK and play_as_alma
 		road_driver.get_node("AxelCabLegs").visible = vehicle_index == FOOD_TRUCK and not play_as_alma
 		for leg in road_driver.get_meta("legs"):
-			leg.visible = vehicle_index not in [SNOWMOBILE,MOWER,PUCH_DAKOTA,FOOD_TRUCK]
-		road_driver.visible = vehicle_index in [3,PORSCHE,SNOWMOBILE,XC60_POLICE,MINI_CABRIO,PUCH_DAKOTA,FOOD_TRUCK,MOWER] and mode == "playing" and not walker.visible and not boating and tram_mode == 0 and not cockpit_view
+			leg.visible = vehicle_index not in [SNOWMOBILE,MOWER,PUCH_DAKOTA,FOOD_TRUCK,SHOPPER]
+		road_driver.visible = vehicle_index in [3,PORSCHE,SNOWMOBILE,XC60_POLICE,MINI_CABRIO,PUCH_DAKOTA,FOOD_TRUCK,MOWER,SHOPPER] and mode == "playing" and not walker.visible and not boating and tram_mode == 0 and not cockpit_view
 	if skipper: skipper.visible = boating and mode == "playing"
 	if not is_instance_valid(mission_label): return
 	menu_footer.visible = mode == "menu"

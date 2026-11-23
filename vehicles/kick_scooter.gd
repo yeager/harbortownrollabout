@@ -58,8 +58,8 @@ func can_stand(game: Node3D, ground: Vector3, yaw: float, actor_scale: float) ->
 func ride(game: Node3D, throttle: float, steer: float, delta: float) -> void:
 	var rider: Node3D = get_parent()
 	var previous := rider.position
-	var brake := 5.0 if throttle < 0.0 else 1.4
-	speed = move_toward(speed, MAX_SPEED if throttle > 0 else 0.0, (2.6 if throttle > 0 else brake)*delta)
+	var brake_force := 375.0 if throttle < 0.0 else 105.0
+	speed = move_toward(speed, MAX_SPEED if throttle > 0 else 0.0, (195.0 if throttle > 0 else brake_force)*delta/preload("res://vehicles/mass.gd").SCOOTER_KG)
 	yaw_input = move_toward(yaw_input,steer,delta*3.5)
 	var steps := maxi(1,ceili(speed*delta/.12))
 	var yaw_step := -yaw_input*minf(speed,2.0)*delta/steps

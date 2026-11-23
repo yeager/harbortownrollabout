@@ -1550,3 +1550,21 @@ msgstr "Kiosque"
 
 msgid "Pizzeria"
 msgstr "Pizzeria"
+
+msgid "Refuse truck"
+msgstr "Camion-poubelle"
+
+msgid "Collect bins at the square"
+msgstr "Ramasse les bacs sur la place"
+
+msgid "Collect bins at the clinic"
+msgstr "Ramasse les bacs au dispensaire"
+
+msgid "Unload recycling at the marina"
+msgstr "Dépose les déchets recyclables au port"
+
+msgid "Return to your refuse truck"
+msgstr "Retourne au camion-poubelle"
+
+msgid "Shopping trike"
+msgstr "Tricycle de courses"

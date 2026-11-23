@@ -1552,3 +1552,21 @@ msgstr "Kiosk"
 
 msgid "Pizzeria"
 msgstr "Pizzeria"
+
+msgid "Refuse truck"
+msgstr "Müllwagen"
+
+msgid "Collect bins at the square"
+msgstr "Leere die Tonnen am Platz"
+
+msgid "Collect bins at the clinic"
+msgstr "Leere die Tonnen am Ärztehaus"
+
+msgid "Unload recycling at the marina"
+msgstr "Lade das Wertstoffgut am Hafen ab"
+
+msgid "Return to your refuse truck"
+msgstr "Geh zurück zum Müllwagen"
+
+msgid "Shopping trike"
+msgstr "Einkaufsdreirad"

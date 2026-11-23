@@ -36,7 +36,10 @@ func check_porsche() -> void:
 		var taxi := measure_car(game, game.TAXI, gentle)
 		var sports := measure_car(game, porsche, gentle)
 		print("Gentle ", gentle, " | taxi and GT3 RS at 1 s and maximum (m/s): ", taxi, " ", sports)
-		if taxi.x <= 0 or not is_equal_approx(sports.x, taxi.x * 3) or not is_equal_approx(sports.y, taxi.y * 3):
+		var taxi_mass: float = game.Mass.for_model(game.VEHICLE_SCENES_ALL[game.TAXI])
+		var sports_mass: float = game.Mass.for_model(game.VEHICLE_SCENES_ALL[porsche])
+		var acceleration_ratio: float = 3 * game.Mass.road_response(sports_mass) / game.Mass.road_response(taxi_mass)
+		if taxi.x <= 0 or not is_equal_approx(sports.x, taxi.x * acceleration_ratio) or not is_equal_approx(sports.y, taxi.y * 3):
 			printerr("Expected rapid acceleration and three times the ordinary top speed")
 			quit(1)
 			return

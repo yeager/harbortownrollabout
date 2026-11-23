@@ -1464,3 +1464,21 @@ msgstr ""
 
 msgid "Pizzeria"
 msgstr ""
+
+msgid "Refuse truck"
+msgstr ""
+
+msgid "Collect bins at the square"
+msgstr ""
+
+msgid "Collect bins at the clinic"
+msgstr ""
+
+msgid "Unload recycling at the marina"
+msgstr ""
+
+msgid "Return to your refuse truck"
+msgstr ""
+
+msgid "Shopping trike"
+msgstr ""

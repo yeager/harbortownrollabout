@@ -1465,3 +1465,21 @@ msgstr "Kiosk"
 
 msgid "Pizzeria"
 msgstr "Pizzeria"
+
+msgid "Refuse truck"
+msgstr "Sopbil"
+
+msgid "Collect bins at the square"
+msgstr "Hämta sopkärlen på torget"
+
+msgid "Collect bins at the clinic"
+msgstr "Hämta sopkärlen vid vårdcentralen"
+
+msgid "Unload recycling at the marina"
+msgstr "Lämna återvinningen i småbåtshamnen"
+
+msgid "Return to your refuse truck"
+msgstr "Gå tillbaka till sopbilen"
+
+msgid "Shopping trike"
+msgstr "Shoppingmoped"
