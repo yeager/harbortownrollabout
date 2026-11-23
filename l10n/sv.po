@@ -1756,3 +1756,15 @@ msgstr "Tack! Vår månkanin är tillbaka!"
 
 msgid "Also use F7 to pause or resume"
 msgstr "Använd även F7 för att pausa eller fortsätta"
+
+msgid "Stop the flatbed at the square in the morning to collect flour."
+msgstr "Stanna med flakbilen vid torget på morgonen för att hämta mjöl."
+
+msgid "Take the flour sacks to the bakery across from the fire station."
+msgstr "Kör mjölsäckarna till bageriet mittemot brandstationen."
+
+msgid "The bakery received three sacks of flour."
+msgstr "Bageriet har tagit emot tre säckar mjöl."
+
+msgid "Bakery"
+msgstr "Bageri"

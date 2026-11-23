@@ -268,6 +268,12 @@ const STATION_PARKING := Vector3(-120,0,20)
 const SERVICE_STOPS := [Vector3(18,0,2.35), STATION_DROP, Vector3(126,0,-2.35), STATION_DROP]
 const SERVICE_MESSAGES := ["Collect the car with a smoking bonnet.","Take the car to the petrol station.","Collect the car with a missing wheel.","Take the car to the petrol station."]
 var recovery_leg := 0
+enum FlourStage { AT_SQUARE, ON_TRUCK, AT_BAKERY }
+var flour_stage := FlourStage.AT_SQUARE
+var flour_sacks := Node3D.new()
+const FLOUR_CURB := Vector3(-15,0,-3)
+const FLOUR_PICKUP := "Stop the flatbed at the square in the morning to collect flour."
+const FLOUR_ROUTE := "Take the flour sacks to the bakery across from the fire station."
 const WORKSHOP_CAR_BOUNDS := AABB(STATION_PARKING - Vector3(2.1,1,.86),Vector3(4.2,3,1.72))
 var workshop_wheel: Node3D
 var wheel_rest: Vector3
@@ -757,6 +763,7 @@ func _process(delta: float) -> void:
 		_collect_stars(before, star_actor.global_position)
 		if vehicle_index == BUS and not free_drive and bus_leg % 2 == 1:
 			_update_bus_stop_request(delta)
+		_update_flour_delivery()
 		_update_arrival(delta)
 		route_timer -= delta
 		if route_timer<=0:
@@ -1144,6 +1151,8 @@ func _parcel_load() -> Vector2:
 func _vehicle_payload() -> float:
 	if vehicle_index in PARCEL_VEHICLES:
 		return _parcel_load().x
+	if vehicle_index == RECOVERY and free_drive and flour_stage == FlourStage.ON_TRUCK:
+		return 75.0
 	if vehicle_index == RECOVERY and casualty.visible and casualty.get_parent() == ambulance:
 		return 1380.0
 	if not free_drive and vehicle_index == TAXI and taxi_leg % 2 == 1:
@@ -6956,7 +6965,37 @@ func _update_hazard_lights() -> void:
 	for lens in hazard_lenses:
 		lens.material_override = hazard_amber if lit else null
 
+func _update_flour_delivery() -> void:
+	if not free_drive or vehicle_index != RECOVERY or walker.visible or absf(speed) >= .12: return
+	if flour_stage == FlourStage.AT_SQUARE:
+		var hour := fposmod(12.0+day_phase*24.0,24.0)
+		if time_mode != 2 or hour < 5 or hour >= 12 or ambulance.position.distance_to(TARGETS[0]) > 4.8: return
+		flour_stage = FlourStage.ON_TRUCK
+		phone.receive(FLOUR_ROUTE)
+	elif flour_stage == FlourStage.ON_TRUCK and ambulance.position.distance_to(FLOUR_CURB) < 4.8:
+		flour_stage = FlourStage.AT_BAKERY
+		phone.delivery_receipts.append(phone.FLOUR_RECEIPT)
+		phone.receive(phone.FLOUR_RECEIPT)
+	else: return
+	_sync_flour_sacks()
+	_refresh_dispatch()
+	_save_preferences()
+
+func _sync_flour_sacks() -> void:
+	if not flour_sacks.is_inside_tree(): return
+	var holder: Node3D = self
+	var place := Vector3(30,.08,7)
+	if flour_stage == FlourStage.ON_TRUCK:
+		holder = ambulance if vehicle_index == RECOVERY and ambulance.visible and not walker.visible else parked_cars[RECOVERY]
+		place = Vector3(0,1.25,1.59)
+	elif flour_stage == FlourStage.AT_BAKERY:
+		place = Vector3(-16.3,.04,-8.8)
+	if flour_sacks.get_parent() != holder: flour_sacks.reparent(holder,false)
+	flour_sacks.position = place
+	flour_sacks.visible = free_drive or flour_stage == FlourStage.AT_BAKERY
+
 func _sync_recovery() -> void:
+	_sync_flour_sacks()
 	var active := vehicle_index==RECOVERY and not free_drive
 	var loaded := recovery_leg%2==1
 	workshop_car.visible = recovery_leg >= 2
@@ -7079,6 +7118,25 @@ func _build_target_marker() -> void:
 	for shirt in [Color("#668d9c"),Color("#b37056")]:
 		_make_walker("Bus passenger",0,0,1,shirt,Color("#343c48"))
 		bus_companions.append(walker_data.pop_back().actor)
+	add_child(flour_sacks)
+	for i in 3:
+		var bag := MeshInstance3D.new()
+		var body := SphereMesh.new()
+		body.radius = .31
+		body.height = .76
+		bag.mesh = body
+		bag.material_override = _material(Color("#d5bb8c"),.94,false,"cotton_jersey")
+		flour_sacks.add_child(bag)
+		bag.position = Vector3((i-1)*.58,.35,.11 if i==1 else 0.)
+		bag.scale = Vector3(1,1,.76)
+		_make_box("Folded sack seam",Vector3(.31,.09,.055),Vector3.UP*.37,Color("#c4a572"),false,bag)
+		# A single ear of wheat printed on the front of each sack.
+		var ink := _material(Color("#73512d"),.95)
+		_tube_between(bag,Vector3(0,-.12,.30),Vector3(0,.14,.30),.008,ink)
+		for j in 3:
+			for side in [-1,1]:
+				var y := -.09+j*.068
+				_tube_between(bag,Vector3(0,y,.30),Vector3(side*.055,y+.068,.30),.016,ink)
 	for i in 2:
 		var bag := _make_grocery_bag(self)
 		grocery_bags.append(bag)
@@ -9070,6 +9128,8 @@ func _load_player_progress(config: ConfigFile, section: String) -> void:
 	boutique_jacket = config.get_value(section,"boutique_jacket","")
 	shops.carried_toy = config.get_value(section,"carried_toy","")
 	wallet=maxi(0,int(config.get_value(section,"coins",0)))
+	flour_stage = clampi(int(config.get_value(section,"flour",0)),0,FlourStage.AT_BAKERY)
+	_sync_flour_sacks()
 	figurine_stage = config.get_value(section,"figurine",FootQuest.WAITING)
 	if figurine_stage not in [FootQuest.RETURNING,FootQuest.FINISHED]: figurine_stage = FootQuest.WAITING
 	_place_lost_figurine()
@@ -9084,7 +9144,7 @@ func _load_player_progress(config: ConfigFile, section: String) -> void:
 	phone.delivery_receipts.clear()
 	if saved_receipts is PackedStringArray:
 		for receipt in saved_receipts:
-			if receipt in [phone.CLINIC_RECEIPT,phone.MARINA_RECEIPT]:
+			if receipt in [phone.CLINIC_RECEIPT,phone.MARINA_RECEIPT,phone.FLOUR_RECEIPT]:
 				phone.delivery_receipts.append(receipt)
 	var saved_memories = config.get_value(section,"mission_memories",PackedStringArray())
 	mission_memories = saved_memories if saved_memories is PackedStringArray else PackedStringArray()
@@ -9105,6 +9165,7 @@ func _store_player_progress(config: ConfigFile, section: String) -> void:
 	config.set_value(section,"delivery_receipts",phone.delivery_receipts)
 	config.set_value(section,"stars",collected_stars)
 	config.set_value(section,"thermos",thermos_stage)
+	config.set_value(section,"flour",flour_stage)
 	config.set_value(section,"figurine",figurine_stage)
 	config.set_value(section,"umbrella",umbrella_stage)
 	config.set_value(section, "foot_quest_points", foot_quest_points)
@@ -9298,6 +9359,9 @@ func _refresh_dispatch() -> void:
 	if free_drive or mode!="playing" or mission_index>=TARGETS.size():
 		last_dispatch=""
 		phone.current_job=""
+		if free_drive and vehicle_index == RECOVERY and flour_stage != FlourStage.AT_BAKERY:
+			phone.current_job = FLOUR_PICKUP if flour_stage == FlourStage.AT_SQUARE else FLOUR_ROUTE
+			phone.vehicle_action = phone.Action.DELIVER
 		phone.refresh()
 		return
 	var dispatch: String

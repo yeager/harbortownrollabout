@@ -1841,3 +1841,15 @@ msgstr "Merci ! Notre lapin lunaire est de retour !"
 
 msgid "Also use F7 to pause or resume"
 msgstr "Utiliser aussi F7 pour mettre en pause ou reprendre"
+
+msgid "Stop the flatbed at the square in the morning to collect flour."
+msgstr "Le matin, arrête le camion à plateau sur la place pour récupérer la farine."
+
+msgid "Take the flour sacks to the bakery across from the fire station."
+msgstr "Apporte les sacs de farine à la boulangerie en face de la caserne des pompiers."
+
+msgid "The bakery received three sacks of flour."
+msgstr "La boulangerie a reçu trois sacs de farine."
+
+msgid "Bakery"
+msgstr "Boulangerie"

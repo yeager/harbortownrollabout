@@ -41,6 +41,7 @@ var spoken_jobs := PackedStringArray()
 var take_job := Button.new()
 
 const CLINIC_RECEIPT := "The clinic received its parcel. You earned 10 points and 10 coins."
+const FLOUR_RECEIPT := "The bakery received three sacks of flour."
 const MARINA_RECEIPT := "The marina received the last parcel. You earned 10 points and 10 coins."
 const HISTORY_LIMIT := 32
 
@@ -146,6 +147,7 @@ func _ready() -> void:
 		menu.clear()
 		for i in range(delivery_receipts.size()-1,-1,-1):
 			var destination := "HEALTH CENTRE" if delivery_receipts[i] == CLINIC_RECEIPT else "MARINA"
+			if delivery_receipts[i] == FLOUR_RECEIPT: destination = "Bakery"
 			menu.add_item("%d · %s" % [i+1,tr(destination)],i)
 	)
 	receipt_menu.get_popup().id_pressed.connect(func(id: int):

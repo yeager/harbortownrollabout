@@ -1822,3 +1822,15 @@ msgstr "Kiitos! Kuukani on taas täällä!"
 
 msgid "Also use F7 to pause or resume"
 msgstr "Keskeytä tai jatka myös F7-näppäimellä"
+
+msgid "Stop the flatbed at the square in the morning to collect flour."
+msgstr "Pysäytä lava-auto aamulla torille ja nouda jauhot."
+
+msgid "Take the flour sacks to the bakery across from the fire station."
+msgstr "Vie jauhosäkit paloasemaa vastapäätä olevaan leipomoon."
+
+msgid "The bakery received three sacks of flour."
+msgstr "Leipomo sai kolme säkkiä jauhoja."
+
+msgid "Bakery"
+msgstr "Leipomo"

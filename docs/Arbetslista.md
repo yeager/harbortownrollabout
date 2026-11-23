@@ -98,7 +98,7 @@ Listan innehåller 100 jobb. En tom ruta är öppen. En punkt bockas av när bet
 
 ## Leveranser och stadens butiker
 
-- [ ] 71. Ge bageriet en morgonleverans av mjöl. Visa säckarna först på flaket och sedan vid bageriets dörr.
+- [x] 71. Ge bageriet en morgonleverans av mjöl. Visa säckarna först på flaket och sedan vid bageriets dörr.
 - [ ] 72. Låt bageriet skicka en tårtkartong till ett kalas. Mottagaren ska öppna kartongen vid leverans.
 - [ ] 73. Lägg till ett cykelbud som ber spelaren hämta en förväxlad leverans hos rätt butik.
 - [x] 74. Låt spelaren välja en avslutad fraktkörning i telefonen och läsa leveranskvittot igen.

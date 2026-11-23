@@ -1843,3 +1843,15 @@ msgstr "Danke! Unser Mondhase ist wieder da!"
 
 msgid "Also use F7 to pause or resume"
 msgstr "Auch mit F7 pausieren oder fortsetzen"
+
+msgid "Stop the flatbed at the square in the morning to collect flour."
+msgstr "Halte morgens mit dem Pritschenwagen am Platz, um Mehl abzuholen."
+
+msgid "Take the flour sacks to the bakery across from the fire station."
+msgstr "Bring die Mehlsäcke zur Bäckerei gegenüber der Feuerwache."
+
+msgid "The bakery received three sacks of flour."
+msgstr "Die Bäckerei hat drei Säcke Mehl erhalten."
+
+msgid "Bakery"
+msgstr "Bäckerei"
