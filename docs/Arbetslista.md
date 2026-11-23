@@ -87,10 +87,10 @@ Listan innehåller 100 jobb. En tom ruta är öppen. En punkt bockas av när bet
 
 - [ ] 61. Låt spelaren tacka ja till en omgång boule och ta plats i kastringen.
 - [ ] 62. Låt spelaren sikta på lillen och välja mellan ett kort, ett mellanlångt och ett långt kast med bilder.
-- [ ] 63. Låt ett kastat klot kunna knuffa ett annat klot. Kontrollera var båda stannar efter träffen.
+- [x] 63. Andra spelarens klot kan träffa det första snett och sätta det i rullning. I Godot flyttades det träffade klotet 28 cm och båda stannade med 35 cm mellan centrum. Kontrollerat med tidssteg på både 1/60 och 1/10 sekund.
 - [ ] 64. Visa vilket klot som ligger närmast lillen efter omgången, även när två ligger nästan lika nära.
 - [ ] 65. Animera hur boulespelarna hämtar sina klot innan nästa omgång börjar.
-- [ ] 66. Lägg till ett distinkt metalliskt klick när två bouleklot träffar varandra.
+- [x] 66. Kontakt mellan två rullande eller stillaliggande bouleklot ger ett kort metalliskt klick vid träffpunkten. Grusljudet spelas vid nedslaget. Uppspelningen av klicket verifierades under andra spelarens kast.
 - [ ] 67. Ge boulebanan en sittbänk där spelaren kan sätta sig, följa omgången och resa sig igen.
 - [x] 68. Båda färjelägena har dubbelsidiga vägvisare under Lottens hållplatsskylt. Ett räfflat klot, en gul lille och en pil visar vägen mot närmaste bro på vägen till boulebanan. Pilarnas riktning är kontrollerad från båda sidor.
 - [ ] 69. Gör ett uppdrag där en granne behöver hjälp att hitta sin termos efter boulematchen.

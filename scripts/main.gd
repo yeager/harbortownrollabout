@@ -532,6 +532,9 @@ var boules: Array[MeshInstance3D] = []
 var boule_turn := 0
 var boule_clock := 0.0
 var boule_impact := AudioStreamPlayer3D.new()
+var boule_velocity: Array[Vector3] = []
+var boule_grounded: Array[bool] = []
+var boule_clink := AudioStreamPlayer3D.new()
 var boule_release := Vector3.ZERO
 var walker_data: Array[Dictionary] = []
 
@@ -5222,6 +5225,11 @@ func _build_boule_court() -> void:
 	boule_impact.unit_size = 3
 	boule_impact.volume_db = -8
 	add_child(boule_impact)
+	boule_clink.stream = preload("res://audio/boule_steel.wav")
+	boule_clink.max_distance = 18
+	boule_clink.unit_size = 3
+	boule_clink.volume_db = -8
+	add_child(boule_clink)
 	var gravel := _make_driving_surface("Boule gravel", Vector3(3.8,.12,14), BOULE_CENTRE-Vector3.UP*.06, Color("#baa781"))
 	gravel.material_override = _noise_material(Color("#998465"), Color("#d7c7a1"), 38, .5)
 	for side in [-1,1]:
@@ -5247,6 +5255,8 @@ func _build_boule_court() -> void:
 		var ball := _boule_ball(.044, Color("#b2b7b7"), true)
 		ball.hide()
 		boules.append(ball)
+		boule_grounded.append(false)
+		boule_velocity.append(Vector3.ZERO)
 
 func _boule_ball(radius: float, tint: Color, steel: bool) -> MeshInstance3D:
 	var ball := MeshInstance3D.new()
@@ -5269,30 +5279,65 @@ func _update_boule(delta: float) -> void:
 	var arm: Node3D = player.get_meta("arms")[1]
 	var hand: Node3D = arm.get_child(1)
 	var ball := boules[boule_turn]
-	var target := BOULE_CENTRE + Vector3([-.22,.32,.12][boule_turn], .044, -4+[.35,.03,-.28][boule_turn])
+	var target := BOULE_CENTRE + Vector3([-.22,-.19,.12][boule_turn], .044, -4+[.35,.03,-.28][boule_turn])
 	var weight := smoothstep(0,1.4,boule_clock)*(1-smoothstep(4.5,6, boule_clock))
 	var previous := player.position
 	player.position = _boule_waiting_spot(boule_turn).lerp(BOULE_CENTRE+Vector3(0,0,4),weight)
 	_animate_steps(player, previous.distance_to(player.position), delta)
 	arm.rotation.x = -.68*smoothstep(1.5,2.3,boule_clock)+1.75*smoothstep(2.3,2.66,boule_clock)-1.07*smoothstep(2.9,3.6,boule_clock)
 	if boule_clock < 2.66:
+		boule_grounded[boule_turn] = false
+		boule_velocity[boule_turn] = Vector3.ZERO
 		ball.show()
 		ball.position = hand.to_global(PALM_GRIP)
 		boule_release = ball.position
 	else:
 		var flight := clampf((boule_clock-2.66)/1.22,0,1)
 		var landing := target+Vector3.BACK*.80
-		if boule_clock >= 3.88 and boule_clock-delta < 3.88:
+		if flight < 1:
+			ball.position = boule_release.lerp(landing,flight)+Vector3.UP*6.4*flight*(1-flight)
+		elif not boule_grounded[boule_turn]:
+			boule_grounded[boule_turn] = true
+			ball.position = landing
+			boule_velocity[boule_turn] = Vector3.FORWARD * (1.6/.78)
 			boule_impact.position = landing
 			boule_impact.pitch_scale = [1.0,.95,1.06][boule_turn]
 			boule_impact.play()
-		ball.position = boule_release.lerp(landing,flight)+Vector3.UP*6.4*flight*(1-flight)
-		if flight == 1:
-			var roll := clampf((boule_clock-3.88)/.78,0,1)
-			ball.position = landing.lerp(target,roll*(2-roll))
+		if boule_grounded[boule_turn]:
+			_roll_boules(minf(delta,boule_clock-3.88))
 	if boule_clock >= 6.5:
 		boule_turn = (boule_turn+1)%boule_players.size()
 		boule_clock = 0
+
+func _roll_boules(duration: float) -> void:
+	# Keep travel per step smaller than a ball radius, even on slow frames.
+	while duration > 0:
+		var step := minf(duration,1.0/120)
+		duration -= step
+		for i in boules.size():
+			if not boule_grounded[i]: continue
+			var slowed := boule_velocity[i].move_toward(Vector3.ZERO,2.63*step)
+			boules[i].position += (boule_velocity[i]+slowed)*(.5*step)
+			boule_velocity[i] = slowed
+		for i in boules.size():
+			if not boule_grounded[i]: continue
+			for j in range(i+1,boules.size()):
+				if not boule_grounded[j]: continue
+				var offset := boules[j].position-boules[i].position
+				var distance := offset.length()
+				if distance >= .088: continue
+				var normal := offset/distance if distance > .00001 else Vector3.RIGHT
+				var correction := normal*(.088-distance)*.5
+				boules[i].position -= correction
+				boules[j].position += correction
+				var approach := (boule_velocity[i]-boule_velocity[j]).dot(normal)
+				if approach <= 0: continue
+				var impulse := normal*approach*.89
+				boule_velocity[i] -= impulse
+				boule_velocity[j] += impulse
+				if approach > .10:
+					boule_clink.position = (boules[i].position+boules[j].position)*.5
+					boule_clink.play()
 
 func _equip_walker(scene: PackedScene, pace: float, stretch: Vector2, right_grip: Vector3) -> void:
 	var neighbour: Dictionary = walker_data.back()
