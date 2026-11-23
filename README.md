@@ -18,13 +18,17 @@ The [Linux preview](https://github.com/yeager/harbortownrollabout/releases/tag/v
 - [Fedora or another RPM-based distribution (.rpm)](https://github.com/yeager/harbortownrollabout/releases/download/v0.1.3-preview.20261123/axels-spel-0.1.3-preview.20261123-1.x86_64.rpm)
 - [Portable archive (.tar.gz)](https://github.com/yeager/harbortownrollabout/releases/download/v0.1.3-preview.20261123/harbortownrollabout-0.1.3-preview.20261123-linux-x86_64.tar.gz). Extract both files into one folder and launch the executable there. New builds use `./harbortown`.
 
-For Windows and macOS, see **Play from source** below. The package workflow also targets a Windows x64 installer in seven languages and separate macOS disk images for Intel (x86_64) and Apple Silicon (arm64).
+The published preview contains Linux downloads only. For Windows or Mac, follow [Play from source](#play-from-source).
+
+New builds use the name `harbortown` and the game icon on all three platforms. On Linux, the DEB and RPM packages install an application-menu entry. The portable archive includes the icon alongside the executable and game data. The Windows x64 installer offers seven languages. The macOS workflow packages `harbortown.app` in separate disk images for Intel (`x86_64`) and Apple Silicon (`arm64`).
+
+The newer Linux packages have passed headless startup checks on Ubuntu 22.04 and Fedora 43. Both Mac architectures have been exported and checked for the correct executable and icon. Native Windows and macOS startup checks are pending. GitHub stopped the [latest packaging run](https://github.com/yeager/harbortownrollabout/actions/runs/45226766075) before export because of an account billing limit.
 
 Pushing a version tag such as `v1.2.3` builds a release. Running **Game packages** manually builds a prerelease. The [DEB mirror](https://github.com/yeager/deb-repo/releases?q=harbortownrollabout) and [RPM mirror](https://github.com/yeager/rpm-repo/releases?q=harbortownrollabout) check hourly and copy their respective package and the portable archive into GitHub Releases.
 
 ## Play from source
 
-Clone this repository, then open `project.godot` in Godot 4.7 dev and press **F5**. Select a vehicle and choose **Start driving**.
+Clone this repository, then open `project.godot` in Godot 4.7 dev5 and press **F5**. Select a vehicle and choose **Start driving**.
 
 On first launch, the game uses your system language if supported, with English as the fallback. To switch languages, open **Settings** and select the tab with the globe. Choose **Deutsch**, **English**, **Español**, **Français**, **Norsk bokmål**, **Suomi** or **Svenska**. The game switches immediately and remembers your choice next time.
 
@@ -76,7 +80,7 @@ Land vehicles slow down at the quay edge in both directions. The two road bridge
 
 The double-ended passenger ferry **Lotten** runs between two landings in the canal. Walk onto either landing and press **F** or select **Board Lotten** when the ferry is alongside. The ferry follows its own route. Look around with the mouse during the crossing. Press **F** underway to request the next landing, or press it again to stay aboard. You can also step ashore with **F** during a stop. Its editable Blender model is in `source_blender/Lotten.blend`.
 
-## Refuse collection and shopping trike
+## Garbage truck and shopping trike
 
 In the source build, choose the green **Garbage truck** and open the phone with **T** to accept the collection round. Stop at the square and the clinic to empty the bins, then unload at the marina. Each stop earns 10 points and 10 coins. The truck takes longer to accelerate as the load grows.
 
