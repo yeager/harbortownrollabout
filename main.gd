@@ -3632,14 +3632,14 @@ func _drive_excavator(delta: float) -> void:
 		if not _crawler_clear(): excavator.basis = old.basis
 	var target_speed := clampf(drive, -1, 1) * 1.8
 	var previous_speed := crawler_speed
-	crawler_speed = move_toward(crawler_speed, target_speed, (6.0 if is_zero_approx(drive) else 12.0) * delta)
+	crawler_speed = move_toward(crawler_speed, target_speed, (3.0 if is_zero_approx(drive) else 12.0) * delta)
 	var motion := excavator.basis.z * (previous_speed + crawler_speed) * .5 * delta
 	for step in [Vector3(motion.x,0,0),Vector3(0,0,motion.z)]:
 		if step.is_zero_approx(): continue
 		var before := excavator.position
 		excavator.position += step
 		if not _crawler_clear(): excavator.position = before
-	if not motion.is_zero_approx() and excavator.position.is_equal_approx(old.origin):
+	if not motion.is_zero_approx() and excavator.position == old.origin:
 		crawler_speed = 0.0
 	if excavator.transform != old:
 		var travel := (excavator.position - old.origin).dot(excavator.basis.z)

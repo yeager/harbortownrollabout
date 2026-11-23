@@ -65,5 +65,18 @@ func check_gallery() -> void:
 			printerr("Wrong activity after selecting ", tile.text)
 			quit(1)
 			return
+		if extra == 0:
+			var origin: Vector3 = game.excavator.position
+			Input.action_press("ui_up")
+			for frame in 240:
+				game._drive_excavator(1.0 / 240.0)
+			Input.action_release("ui_up")
+			var released: Vector3 = game.excavator.position
+			for frame in 240:
+				game._drive_excavator(1.0 / 240.0)
+			if origin.distance_to(released) < 1.5 or released.distance_to(game.excavator.position) < .45 or game.crawler_speed != 0:
+				printerr("Excavator did not accelerate and coast to rest")
+				quit(1)
+				return
 	print("All three special vehicle pictures launched their driving activities.")
 	game._finish_quit()
