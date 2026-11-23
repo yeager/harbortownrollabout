@@ -23,6 +23,7 @@ var wave_weight := 0.0
 var lateral_speed := 0.0
 var hip_centres := PackedFloat32Array()
 var elbows: Array[Skeleton3D] = []
+var wrist_angles := PackedFloat32Array([0.0, 0.0])
 var palms: Array[Node3D] = []
 var palm_rest: Array[Transform3D] = []
 var pelvis: Node3D
@@ -209,8 +210,10 @@ func advance(distance: float, delta: float, pushing: bool, tuck := 0.0) -> void:
 		# The wrist sits at the cuff, above the palm mesh origin. Rotate about
 		# that point so the back of the hand stays joined to the sleeve.
 		var wrist_offset := Vector3.UP * .06
-		var wrist_angle := 0.0 if pushing else -foot.x * .32 + .09 * running
-		var wrist_rotation := Basis(Vector3.RIGHT, wrist_angle)
+		# Let a relaxed hand trail the forearm as its swing reverses.
+		var target_angle := -foot.x * .42 + .09 * running
+		wrist_angles[i] = 0.0 if pushing else lerpf(wrist_angles[i], target_angle, 1.0 - exp(-12.0 * delta))
+		var wrist_rotation := Basis(Vector3.RIGHT, wrist_angles[i])
 		var palm_origin := rest.origin + wrist_offset - wrist_rotation * wrist_offset
 		palms[i].transform = Transform3D(elbow_rotation * wrist_rotation * rest.basis, joint + elbow_rotation * (palm_origin - joint))
 
