@@ -68,8 +68,8 @@ msgstr "Motorljud AV"
 msgid "Pause"
 msgstr "Paus"
 
-msgid "W / ↑  Drive     A D / ← →  Steer     S / ↓  Brake or reverse\nRelease to slow down   ·   Space to help   ·   P to pause"
-msgstr "W / ↑  Gasa     A D / ← →  Styr     S / ↓  Bromsa eller backa\nSläpp gasen för att sakta ner   ·   Mellanslag för att hjälpa   ·   P för paus"
+msgid "{up} / ↑  Drive     {left} {right} / ← →  Steer     {down} / ↓  Brake or reverse\nRelease to slow down   ·   Space to help   ·   P to pause"
+msgstr "{up} / ↑  Gasa     {left} {right} / ← →  Styr     {down} / ↓  Bromsa eller backa\nSläpp gasen för att sakta ner   ·   Mellanslag för att hjälpa   ·   P för paus"
 
 msgid "Start a gentle drive"
 msgstr "Starta lugn runda"
@@ -191,8 +191,8 @@ msgstr "Gå till ett fordon"
 msgid "Stop first to get out."
 msgstr "Stanna först för att kliva ur."
 
-msgid "Walk with WASD or arrows · F to enter a vehicle"
-msgstr "Gå med WASD eller pilarna · F för att kliva in"
+msgid "Walk with {up}{left}{down}{right} or arrows · F to enter a vehicle"
+msgstr "Gå med {up}{left}{down}{right} eller pilarna · F för att kliva in"
 
 msgid "Time · Day"
 msgstr "Tid · Dag"
@@ -221,8 +221,8 @@ msgstr "Fri utforskning"
 msgid "Explore on foot or by vehicle. Stop at the depot to change vehicles."
 msgstr "Utforska till fots eller med ett fordon. Stanna vid depån för att byta fordon."
 
-msgid "W / ↑ Drive   ·   A D / ← → Steer   ·   S / ↓ Brake or reverse   ·   F Get out   ·   P Pause"
-msgstr "W / ↑ Gasa   ·   A D / ← → Styr   ·   S / ↓ Bromsa eller backa   ·   F Kliv ur   ·   P Paus"
+msgid "{up} / ↑ Drive   ·   {left} {right} / ← → Steer   ·   {down} / ↓ Brake or reverse   ·   F Get out   ·   P Pause"
+msgstr "{up} / ↑ Gasa   ·   {left} {right} / ← → Styr   ·   {down} / ↓ Bromsa eller backa   ·   F Kliv ur   ·   P Paus"
 
 msgid "Continue walking"
 msgstr "Fortsätt gå"
@@ -326,8 +326,8 @@ msgstr "Tack för skjutsen!"
 msgid "Drive the motorboat"
 msgstr "Kör motorbåten"
 
-msgid "W / ↑ Throttle · A D / ← → Steer · S / ↓ Slow or reverse · H Horn · P Pause"
-msgstr "W / ↑ Gasa · A D / ← → Styr · S / ↓ Sakta in eller backa · H Tuta · P Paus"
+msgid "{up} / ↑ Throttle · {left} {right} / ← → Steer · {down} / ↓ Slow or reverse · H Horn · P Pause"
+msgstr "{up} / ↑ Gasa · {left} {right} / ← → Styr · {down} / ↓ Sakta in eller backa · H Tuta · P Paus"
 
 #, c-format
 msgid "%d coin"
@@ -444,8 +444,8 @@ msgstr "Bärgningen är klar. Du fick 20 poäng och 20 mynt."
 msgid "Passenger ride · P to pause"
 msgstr "Du åker med · P för paus"
 
-msgid "W / ↑ Accelerate · S / ↓ Brake · Automatic station stops"
-msgstr "W / ↑ Gasa · S / ↓ Bromsa · Vagnen stannar själv vid hållplatserna"
+msgid "{up} / ↑ Accelerate · {down} / ↓ Brake · Automatic station stops"
+msgstr "{up} / ↑ Gasa · {down} / ↓ Bromsa · Vagnen stannar själv vid hållplatserna"
 
 #, c-format
 msgid "%s · Departure in %d s"
@@ -480,8 +480,8 @@ msgstr "%s × %d"
 msgid "Waiting for a green light"
 msgstr "Väntar på grönt ljus"
 
-msgid "Hold left to speed up or right to slow down and reverse. Move the mouse sideways to steer, or use A/D or the arrow keys."
-msgstr "Håll vänster musknapp för att gasa eller höger för att sakta ner och backa. Styr genom att röra musen i sidled, med A/D eller med piltangenterna."
+msgid "Hold left to speed up or right to slow down and reverse. Move the mouse sideways to steer, or use {left}/{right} or the arrow keys."
+msgstr "Håll vänster musknapp för att gasa eller höger för att sakta ner och backa. Styr genom att röra musen i sidled, med {left}/{right} eller med piltangenterna."
 
 msgid "Start boating"
 msgstr "Starta båtturen"
@@ -807,8 +807,8 @@ msgstr "Fäll ihop elsparkcykeln · F"
 msgid "U Unfold scooter"
 msgstr "U Fäll ut elsparkcykeln"
 
-msgid "W / ↑ Accelerate · S / ↓ Brake · A / D Steer · U Fold scooter"
-msgstr "W / ↑ Gasa · S / ↓ Bromsa · A / D Styr · U Fäll ihop"
+msgid "{up} / ↑ Accelerate · {down} / ↓ Brake · {left} / {right} Steer · U Fold scooter"
+msgstr "{up} / ↑ Gasa · {down} / ↓ Bromsa · {left} / {right} Styr · U Fäll ihop"
 
 #, c-format
 msgid "Electric scooter · %d km/h"
@@ -859,15 +859,15 @@ msgstr "Lämna grävmaskinen · F"
 msgid "Drive excavator · F"
 msgstr "Kör grävmaskinen · F"
 
-msgid "Arrows or WASD: drive and steer · Q/E: turn the cab · F: get out\nI/K: raise or lower the boom · Y/G: move the outer arm · O/L: tilt the bucket"
-msgstr "Pilar eller WASD: kör och styr · Q/E: snurra hytten · F: kliv ur\nI/K: höj eller sänk bommen · Y/G: rör den yttre armen · O/L: vinkla skopan"
+msgid "Arrows or {up}{left}{down}{right}: drive and steer · Q/E: turn the cab · F: get out\nI/K: raise or lower the boom · Y/G: move the outer arm · O/L: tilt the bucket"
+msgstr "Pilar eller {up}{left}{down}{right}: kör och styr · Q/E: snurra hytten · F: kliv ur\nI/K: höj eller sänk bommen · Y/G: rör den yttre armen · O/L: vinkla skopan"
 
 #, c-format
 msgid "Walk or rest · Run again in %d s"
 msgstr "Gå eller vila · Du kan springa igen om %d s"
 
-msgid "W/S Walk · A/D Turn · Shift + W Run · F Enter · U Scooter"
-msgstr "W/S Gå · A/D Vänd · Skift + W Spring · F Kliv in · U Sparkcykel"
+msgid "{up}/{down} Walk · {left}/{right} Turn · Shift + {up} Run · F Enter · U Scooter"
+msgstr "{up}/{down} Gå · {left}/{right} Vänd · Skift + {up} Spring · F Kliv in · U Sparkcykel"
 
 msgid "PgUp Raise camera · PgDn Lower camera"
 msgstr "PgUp Höj kameran · PgDn Sänk kameran"
@@ -1558,3 +1558,6 @@ msgstr "Radiotangent"
 
 msgid "Next song key"
 msgstr "Tangent för nästa låt"
+
+msgid "Move with 8, 4, 5, 6"
+msgstr "Styr med 8, 4, 5, 6"

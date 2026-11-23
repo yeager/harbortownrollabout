@@ -203,8 +203,8 @@ msgstr "Gå bort til et kjøretøy"
 msgid "Stop first to get out."
 msgstr "Stopp kjøretøyet før du går ut."
 
-msgid "Walk with WASD or arrows · F to enter a vehicle"
-msgstr "Gå med WASD eller piltastene · Trykk F for å gå inn i et kjøretøy"
+msgid "Walk with {up}{left}{down}{right} or arrows · F to enter a vehicle"
+msgstr "Gå med {up}{left}{down}{right} eller piltastene · Trykk F for å gå inn i et kjøretøy"
 
 msgid "Time · Day"
 msgstr "Tid på døgnet · Dag"
@@ -465,8 +465,8 @@ msgstr "Bilen er levert! Du fikk 20 poeng og 20 mynter."
 msgid "Passenger ride · P to pause"
 msgstr "Du er passasjer · P for pause"
 
-msgid "W / ↑ Accelerate · S / ↓ Brake · Automatic station stops"
-msgstr "W / ↑ Øk farten · S / ↓ Brems · Stopper automatisk ved holdeplassene"
+msgid "{up} / ↑ Accelerate · {down} / ↓ Brake · Automatic station stops"
+msgstr "{up} / ↑ Øk farten · {down} / ↓ Brems · Stopper automatisk ved holdeplassene"
 
 #, c-format
 msgid "%s · Departure in %d s"
@@ -507,8 +507,8 @@ msgstr "%s × %d"
 msgid "Waiting for a green light"
 msgstr "Venter på grønt lys"
 
-msgid "Hold left to speed up or right to slow down and reverse. Move the mouse sideways to steer, or use A/D or the arrow keys."
-msgstr "Hold venstre museknapp inne for å gi gass eller høyre for å bremse og rygge. Styr ved å bevege musa sidelengs, med A/D eller med piltastene."
+msgid "Hold left to speed up or right to slow down and reverse. Move the mouse sideways to steer, or use {left}/{right} or the arrow keys."
+msgstr "Hold venstre museknapp inne for å gi gass eller høyre for å bremse og rygge. Styr ved å bevege musa sidelengs, med {left}/{right} eller med piltastene."
 
 msgid "Start boating"
 msgstr "Start båtturen"
@@ -851,7 +851,7 @@ msgstr "Slå sammen sparkesykkelen · F"
 msgid "U Unfold scooter"
 msgstr "U Slå ut sparkesykkelen"
 
-msgid "W / ↑ Accelerate · S / ↓ Brake · A / D Steer · U Fold scooter"
+msgid "{up} / ↑ Accelerate · {down} / ↓ Brake · {left} / {right} Steer · U Fold scooter"
 msgstr ""
 "W / ↑ Øk farten · S / ↓ Brems · A / D Styr · U Slå sammen sparkesykkelen"
 
@@ -915,8 +915,8 @@ msgstr ""
 msgid "Walk or rest · Run again in %d s"
 msgstr "Gå eller hvil · Du kan løpe igjen om %d s"
 
-msgid "W/S Walk · A/D Turn · Shift + W Run · F Enter · U Scooter"
-msgstr "W/S Gå · A/D Snu · Shift + W Løp · F Gå inn · U Sparkesykkel"
+msgid "{up}/{down} Walk · {left}/{right} Turn · Shift + {up} Run · F Enter · U Scooter"
+msgstr "{up}/{down} Gå · {left}/{right} Snu · Shift + {up} Løp · F Gå inn · U Sparkesykkel"
 
 msgid "PgUp Raise camera · PgDn Lower camera"
 msgstr "PgUp Hev kameraet · PgDn Senk kameraet"
@@ -1628,3 +1628,6 @@ msgstr "Radiotast"
 
 msgid "Next song key"
 msgstr "Tast for neste sang"
+
+msgid "Move with 8, 4, 5, 6"
+msgstr "Styr med 8, 4, 5, 6"

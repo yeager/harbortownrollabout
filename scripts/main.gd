@@ -72,6 +72,8 @@ var previous_season := 0
 var greeting_timer := 0.0
 var greeting_number := 0
 const RADIO_KEYS := [[KEY_J, KEY_B, KEY_X], [KEY_N, KEY_M, KEY_Z]]
+const NUMBER_MOVEMENT := {KEY_W: KEY_8, KEY_A: KEY_4, KEY_S: KEY_5, KEY_D: KEY_6}
+var number_movement := false
 var radio_keys: Array[int] = [KEY_J, KEY_N]
 var large_text := false
 var extra_reading_time := false
@@ -578,8 +580,8 @@ func _process(delta: float) -> void:
 		_update_patrol(delta)
 		street_signals.advance(delta)
 		shops.advance_grill_sign(delta, calm_mode)
-		var tram_gas := mouse_gas or Input.is_physical_key_pressed(KEY_W) or Input.is_key_pressed(KEY_UP)
-		var tram_brake := mouse_brake or brake_pedal_held or Input.is_physical_key_pressed(KEY_S) or Input.is_key_pressed(KEY_DOWN)
+		var tram_gas := mouse_gas or _movement_pressed(KEY_W, true) or Input.is_key_pressed(KEY_UP)
+		var tram_brake := mouse_brake or brake_pedal_held or _movement_pressed(KEY_S, true) or Input.is_key_pressed(KEY_DOWN)
 		tram.advance(delta, tram_mode == 2, tram_gas, tram_brake)
 		if tram_mode != 0: _update_entry_button()
 		if tram_mode == 2:
@@ -729,7 +731,7 @@ func _input(event: InputEvent) -> void:
 			mouse_gas = false
 			brake_pedal_held = false
 		if event.button_index == MOUSE_BUTTON_RIGHT: mouse_brake = false
-		if released_brake and not (mouse_brake or brake_pedal_held or Input.is_action_pressed("ui_down") or Input.is_key_pressed(KEY_S)):
+		if released_brake and not (mouse_brake or brake_pedal_held or Input.is_action_pressed("ui_down") or _movement_pressed(KEY_S)):
 			brake_held = false
 		if not (mouse_gas or mouse_brake or brake_pedal_held): mouse_steering = 0.0
 
@@ -886,12 +888,12 @@ func _update_patrol(delta: float) -> void:
 	tail_rotor.rotate_x(delta*52)
 
 func _drive_launch(delta: float) -> void:
-	var gas := mouse_gas or Input.is_action_pressed("ui_up") or Input.is_physical_key_pressed(KEY_W)
-	var brake := mouse_brake or brake_pedal_held or Input.is_action_pressed("ui_down") or Input.is_physical_key_pressed(KEY_S)
+	var gas := mouse_gas or Input.is_action_pressed("ui_up") or _movement_pressed(KEY_W, true)
+	var brake := mouse_brake or brake_pedal_held or Input.is_action_pressed("ui_down") or _movement_pressed(KEY_S, true)
 	var turn := Input.get_axis("ui_left","ui_right")
 	if is_zero_approx(turn): turn = mouse_steering
-	if Input.is_physical_key_pressed(KEY_A): turn=-1
-	if Input.is_physical_key_pressed(KEY_D): turn=1
+	if _movement_pressed(KEY_A, true): turn=-1
+	if _movement_pressed(KEY_D, true): turn=1
 	var reverse_requested := brake and not gas
 	var target := 0.0
 	if reverse_requested:
@@ -927,7 +929,7 @@ func _drive_launch(delta: float) -> void:
 	driving_controls.set_controls(turn,gas and not brake,brake,reverse_requested and launch_speed<-.1)
 
 func _walk_pedal_pressed() -> bool:
-	return Input.is_action_pressed("ui_up") or Input.is_action_pressed("ui_down") or Input.is_key_pressed(KEY_W) or Input.is_key_pressed(KEY_S)
+	return Input.is_action_pressed("ui_up") or Input.is_action_pressed("ui_down") or _movement_pressed(KEY_W) or _movement_pressed(KEY_S)
 
 func _vehicle_payload() -> float:
 	if vehicle_index == RECOVERY and casualty.visible and casualty.get_parent() == ambulance:
@@ -945,8 +947,8 @@ func _drive(delta: float) -> void:
 	var throttle := Input.get_axis("ui_down", "ui_up")
 	var steer_input := Input.get_axis("ui_left", "ui_right")
 	if is_zero_approx(steer_input): steer_input = mouse_steering
-	if Input.is_key_pressed(KEY_W): throttle = 1.0
-	if Input.is_key_pressed(KEY_S): throttle = -1.0
+	if _movement_pressed(KEY_W): throttle = 1.0
+	if _movement_pressed(KEY_S): throttle = -1.0
 	if release_walk_keys:
 		release_walk_keys = _walk_pedal_pressed()
 		throttle = 0.0
@@ -954,8 +956,8 @@ func _drive(delta: float) -> void:
 	if mouse_brake or brake_pedal_held: throttle = -1.0
 	if vehicle_index == REFUSE and refuse_lift and refuse_lift.is_running():
 		throttle = 0.0
-	if Input.is_key_pressed(KEY_A): steer_input = -1.0
-	if Input.is_key_pressed(KEY_D): steer_input = 1.0
+	if _movement_pressed(KEY_A): steer_input = -1.0
+	if _movement_pressed(KEY_D): steer_input = 1.0
 	var max_speed := 250.0 / 3.6 if vehicle_index in [3, XC60_POLICE] else 11.0
 	var acceleration := lerpf(8.0, 2.3, clampf(speed / max_speed, 0.0, 1.0)) if vehicle_index in [3, XC60_POLICE] else 7.2
 	if vehicle_index >= 6 and vehicle_index <= SNOWMOBILE:
@@ -3767,9 +3769,9 @@ func _crawler_clear() -> bool:
 
 func _drive_excavator(delta: float) -> void:
 	var old := excavator.transform
-	var steer := Input.get_axis("ui_left","ui_right") + int(Input.is_key_pressed(KEY_D))-int(Input.is_key_pressed(KEY_A))
+	var steer := Input.get_axis("ui_left","ui_right") + int(_movement_pressed(KEY_D))-int(_movement_pressed(KEY_A))
 	if is_zero_approx(steer): steer = mouse_steering
-	var drive := Input.get_axis("ui_down","ui_up") + int(Input.is_key_pressed(KEY_W))-int(Input.is_key_pressed(KEY_S))
+	var drive := Input.get_axis("ui_down","ui_up") + int(_movement_pressed(KEY_W))-int(_movement_pressed(KEY_S))
 	if mouse_gas: drive = 1
 	if mouse_brake or brake_pedal_held: drive = -1
 	driving_controls.set_controls(steer, drive > 0, drive < 0, drive < 0)
@@ -4009,20 +4011,28 @@ func _change_seat() -> void:
 func _rest_seconds() -> int:
 	return ceili((60.0-run_reserve)/3.0) if winded else 0
 
+func _movement_pressed(default_key: Key, physical := false) -> bool:
+	if number_movement:
+		return Input.is_key_pressed(NUMBER_MOVEMENT[default_key])
+	return Input.is_physical_key_pressed(default_key) if physical else Input.is_key_pressed(default_key)
+
+func _movement_hint(text: String) -> String:
+	return text.format({"up":"8","left":"4","down":"5","right":"6"} if number_movement else {"up":"W","left":"A","down":"S","right":"D"})
+
 func _with_recovery_hint(controls: String) -> String:
-	return controls + "   ·   " + tr("Stuck? Press R")
+	return _movement_hint(controls) + "   ·   " + tr("Stuck? Press R")
 
 func _walking_hint() -> String:
 	if winded:
 		return tr("Walk or rest · Run again in %d s") % _rest_seconds()
 	if run_ready_hint_time > 0:
 		return tr("Ready to run again! Hold Shift and walk forward.")
-	return tr("W/S Walk · A/D Turn · Shift + W Run · F Enter · U Scooter") + "   ·   " + tr("E Jump") + "   ·   " + tr("PgUp Raise camera · PgDn Lower camera")
+	return tr("{up}/{down} Walk · {left}/{right} Turn · Shift + {up} Run · F Enter · U Scooter") + "   ·   " + tr("E Jump") + "   ·   " + tr("PgUp Raise camera · PgDn Lower camera")
 
 func _walk(delta: float) -> void:
 	if shopper_boarding: return
 	var keys := Input.get_vector("ui_left","ui_right","ui_up","ui_down")
-	keys += Vector2(int(Input.is_key_pressed(KEY_D))-int(Input.is_key_pressed(KEY_A)),int(Input.is_key_pressed(KEY_S))-int(Input.is_key_pressed(KEY_W)))
+	keys += Vector2(int(_movement_pressed(KEY_D))-int(_movement_pressed(KEY_A)),int(_movement_pressed(KEY_S))-int(_movement_pressed(KEY_W)))
 	if phone.handset.is_visible_in_tree():
 		keys = Vector2.ZERO
 		walking_velocity = Vector3.ZERO
@@ -6015,7 +6025,7 @@ func _build_ui() -> void:
 	seat_button.pressed.connect(_change_seat)
 	var help := Label.new()
 	help.name = "DrivingHints"
-	help.text = "W / ↑  Drive     A D / ← →  Steer     S / ↓  Brake or reverse\nRelease to slow down   ·   Space to help   ·   P to pause"
+	help.text = "{up} / ↑  Drive     {left} {right} / ← →  Steer     {down} / ↓  Brake or reverse\nRelease to slow down   ·   Space to help   ·   P to pause"
 	help.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_WIDE)
 	help.offset_top = -50
 	help.offset_left = 12
@@ -6264,6 +6274,16 @@ func _build_overlay() -> void:
 		_save_preferences()
 	)
 	pages[0].add_child(calm_toggle)
+	var movement := CheckButton.new()
+	movement.name = "NumberMovement"
+	movement.text = "Move with 8, 4, 5, 6"
+	movement.button_pressed = number_movement
+	movement.toggled.connect(func(enabled: bool):
+		number_movement = enabled
+		_save_preferences()
+		_refresh_ui()
+	)
+	pages[2].add_child(movement)
 	var reading_size := CheckButton.new()
 	reading_size.name = "LargeText"
 	reading_size.text = "Larger text"
@@ -7035,6 +7055,7 @@ func _load_preferences() -> void:
 	for i in RADIO_KEYS.size():
 		var code = config.get_value("keyboard","radio_%d" % i,radio_keys[i])
 		if code in RADIO_KEYS[i]: radio_keys[i] = code
+	number_movement = config.get_value("keyboard","number_movement",false) == true
 	extra_reading_time = config.get_value("accessibility", "extra_reading_time", false) == true
 	large_text = config.get_value("accessibility", "large_text", false) == true
 	var saved = config.get_value("player", "road_checkpoint", {})
@@ -7097,6 +7118,7 @@ func _save_preferences() -> void:
 	config.set_value("traffic","lights",traffic_light_mode)
 	for i in RADIO_KEYS.size():
 		config.set_value("keyboard","radio_%d" % i, radio_keys[i])
+	config.set_value("keyboard","number_movement",number_movement)
 	config.set_value("accessibility","calm_mode",calm_mode)
 	config.set_value("driving","steady_lights",steady_player_lights)
 	var result := config.save(SETTINGS_PATH)
@@ -7322,19 +7344,19 @@ func _refresh_ui() -> void:
 	if tram_mode == 1:
 		hints.text = "Passenger ride · P to pause"
 	elif tram_mode == 2:
-		hints.text = "W / ↑ Accelerate · S / ↓ Brake · Automatic station stops"
+		hints.text = "{up} / ↑ Accelerate · {down} / ↓ Brake · Automatic station stops"
 	elif boating:
-		hints.text = "W / ↑ Throttle · A D / ← → Steer · S / ↓ Slow or reverse · H Horn · P Pause"
+		hints.text = "{up} / ↑ Throttle · {left} {right} / ← → Steer · {down} / ↓ Slow or reverse · H Horn · P Pause"
 	elif free_drive:
-		hints.text = "W / ↑ Drive   ·   A D / ← → Steer   ·   S / ↓ Brake or reverse   ·   F Get out   ·   P Pause"
+		hints.text = "{up} / ↑ Drive   ·   {left} {right} / ← → Steer   ·   {down} / ↓ Brake or reverse   ·   F Get out   ·   P Pause"
 	else:
-		hints.text = "W / ↑  Drive     A D / ← →  Steer     S / ↓  Brake or reverse\nRelease to slow down   ·   Space to help   ·   P to pause"
+		hints.text = "{up} / ↑  Drive     {left} {right} / ← →  Steer     {down} / ↓  Brake or reverse\nRelease to slow down   ·   Space to help   ·   P to pause"
 	var camera_hint := tr("Hold V and move the mouse to look around")
 	if walker.visible and tram_mode == 0 and not boating and not ferry_passenger and shops.inside < 0:
-		camera_hint = tr("W / ↑ Accelerate · S / ↓ Brake · A / D Steer · U Fold scooter") if scooter.visible else tr("U Unfold scooter") + "   ·   " + camera_hint
+		camera_hint = tr("{up} / ↑ Accelerate · {down} / ↓ Brake · {left} / {right} Steer · U Fold scooter") if scooter.visible else tr("U Unfold scooter") + "   ·   " + camera_hint
 	hints.text = camera_hint if walker.visible and tram_mode == 0 and not boating else tr(hints.text) + "   ·   " + camera_hint
 	if operating_excavator:
-		hints.text = tr("Arrows or WASD: drive and steer · Q/E: turn the cab · F: get out\nI/K: raise or lower the boom · Y/G: move the outer arm · O/L: tilt the bucket")
+		hints.text = tr("Arrows or {up}{left}{down}{right}: drive and steer · Q/E: turn the cab · F: get out\nI/K: raise or lower the boom · Y/G: move the outer arm · O/L: tilt the bucket")
 		hints.text += "\n" + tr("Hold left mouse to drive forward or right mouse to reverse.")
 		for control in [camera_button, horn_button, light_button, siren_button]:
 			control.hide()
@@ -7343,7 +7365,7 @@ func _refresh_ui() -> void:
 	if tram_mode == 0 and not (walker.visible or boating or operating_excavator or ferry_passenger):
 		hints.text += "\n" + tr("Hold left to accelerate or right to brake. To reverse, stop, release and hold right again.")
 	if boating:
-		hints.text += "\n" + tr("Hold left to speed up or right to slow down and reverse. Move the mouse sideways to steer, or use A/D or the arrow keys.")
+		hints.text += "\n" + tr("Hold left to speed up or right to slow down and reverse. Move the mouse sideways to steer, or use {left}/{right} or the arrow keys.")
 	elif tram_mode == 0 and not ferry_passenger and (operating_excavator or not walker.visible):
 		hints.text += "\n" + tr("Hold the left or right mouse button and move the mouse sideways to steer.")
 	hints.text = _with_recovery_hint(hints.text)
@@ -7387,7 +7409,7 @@ func _refresh_ui() -> void:
 			subtitle_label.text = "You can step ashore at either landing."
 			start_button.text = "Resume"
 		elif boating:
-			subtitle_label.text = "Hold left to speed up or right to slow down and reverse. Move the mouse sideways to steer, or use A/D or the arrow keys."
+			subtitle_label.text = "Hold left to speed up or right to slow down and reverse. Move the mouse sideways to steer, or use {left}/{right} or the arrow keys."
 			start_button.text = "Start boating" if mode=="menu" else "Continue boating"
 		elif tram_mode > 0:
 			subtitle_label.text = "The tram drives itself and stops at each platform." if tram_mode==1 else "Control the speed. The tram follows the rails and stops at each platform."
@@ -7460,7 +7482,7 @@ func _refresh_status() -> void:
 	elif waiting_for_signal and mode=="playing" and not paused and not walker.visible and not boating:
 		status_label.text = "Wait until the crossing is clear." if waiting_for_clear_crossing else "Waiting for a green light"
 	elif walker.visible and not boating and not paused:
-		status_label.text = "Walk with WASD or arrows · F to enter a vehicle"
+		status_label.text = _movement_hint(tr("Walk with {up}{left}{down}{right} or arrows · F to enter a vehicle"))
 	else:
 		var current_speed := launch_speed if boating else crawler_speed if operating_excavator else speed
 		status_label.text = tr("Speed  %02d km/h") % roundi(absf(current_speed) * 3.6)

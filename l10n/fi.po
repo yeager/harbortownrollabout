@@ -203,8 +203,8 @@ msgstr "Kävele ajoneuvon luo"
 msgid "Stop first to get out."
 msgstr "Pysäytä ajoneuvo ennen kuin nouset kyydistä."
 
-msgid "Walk with WASD or arrows · F to enter a vehicle"
-msgstr "Liiku WASD- tai nuolinäppäimillä · Nouse kyytiin painamalla F"
+msgid "Walk with {up}{left}{down}{right} or arrows · F to enter a vehicle"
+msgstr "Liiku {up}{left}{down}{right}- tai nuolinäppäimillä · Nouse kyytiin painamalla F"
 
 msgid "Time · Day"
 msgstr "Vuorokaudenaika · Päivä"
@@ -465,8 +465,8 @@ msgstr "Auto on perillä! Sait 20 pistettä ja 20 kolikkoa."
 msgid "Passenger ride · P to pause"
 msgstr "Olet kyydissä · P pitää tauon"
 
-msgid "W / ↑ Accelerate · S / ↓ Brake · Automatic station stops"
-msgstr "W / ↑ Kiihdytä · S / ↓ Jarruta · Automaattinen pysähdys pysäkeillä"
+msgid "{up} / ↑ Accelerate · {down} / ↓ Brake · Automatic station stops"
+msgstr "{up} / ↑ Kiihdytä · {down} / ↓ Jarruta · Automaattinen pysähdys pysäkeillä"
 
 #, c-format
 msgid "%s · Departure in %d s"
@@ -505,8 +505,8 @@ msgstr "%s × %d"
 msgid "Waiting for a green light"
 msgstr "Odotetaan vihreää valoa"
 
-msgid "Hold left to speed up or right to slow down and reverse. Move the mouse sideways to steer, or use A/D or the arrow keys."
-msgstr "Pidä hiiren vasenta painiketta pohjassa, kun haluat kiihdyttää. Oikealla painikkeella hidastat ja peruutat. Ohjaa liikuttamalla hiirtä sivulle tai käyttämällä A- ja D-näppäimiä tai nuolinäppäimiä."
+msgid "Hold left to speed up or right to slow down and reverse. Move the mouse sideways to steer, or use {left}/{right} or the arrow keys."
+msgstr "Pidä hiiren vasenta painiketta pohjassa, kun haluat kiihdyttää. Oikealla painikkeella hidastat ja peruutat. Ohjaa liikuttamalla hiirtä sivulle tai käyttämällä {left}- ja {right}-näppäimiä tai nuolinäppäimiä."
 
 msgid "Start boating"
 msgstr "Lähde veneilemään"
@@ -847,8 +847,8 @@ msgstr "Taita potkulauta · F"
 msgid "U Unfold scooter"
 msgstr "U Avaa potkulauta"
 
-msgid "W / ↑ Accelerate · S / ↓ Brake · A / D Steer · U Fold scooter"
-msgstr "W / ↑ Kiihdytä · S / ↓ Jarruta · A / D Ohjaa · U Taita potkulauta"
+msgid "{up} / ↑ Accelerate · {down} / ↓ Brake · {left} / {right} Steer · U Fold scooter"
+msgstr "{up} / ↑ Kiihdytä · {down} / ↓ Jarruta · {left} / {right} Ohjaa · U Taita potkulauta"
 
 #, c-format
 msgid "Electric scooter · %d km/h"
@@ -910,7 +910,7 @@ msgstr ""
 msgid "Walk or rest · Run again in %d s"
 msgstr "Kävele tai lepää · Voit taas juosta %d s kuluttua"
 
-msgid "W/S Walk · A/D Turn · Shift + W Run · F Enter · U Scooter"
+msgid "{up}/{down} Walk · {left}/{right} Turn · Shift + {up} Run · F Enter · U Scooter"
 msgstr ""
 "W/S Kävele · A/D Käänny · Shift + W Juokse · F Nouse kyytiin · U Potkulauta"
 
@@ -1624,3 +1624,6 @@ msgstr "Radion näppäin"
 
 msgid "Next song key"
 msgstr "Seuraavan kappaleen näppäin"
+
+msgid "Move with 8, 4, 5, 6"
+msgstr "Ohjaa näppäimillä 8, 4, 5, 6"

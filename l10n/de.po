@@ -203,8 +203,8 @@ msgstr "Geh zu einem Fahrzeug"
 msgid "Stop first to get out."
 msgstr "Halte erst an, bevor du aussteigst."
 
-msgid "Walk with WASD or arrows · F to enter a vehicle"
-msgstr "Geh mit WASD oder den Pfeiltasten · Drück F zum Einsteigen"
+msgid "Walk with {up}{left}{down}{right} or arrows · F to enter a vehicle"
+msgstr "Geh mit {up}{left}{down}{right} oder den Pfeiltasten · Drück F zum Einsteigen"
 
 msgid "Time · Day"
 msgstr "Tageszeit · Tag"
@@ -465,7 +465,7 @@ msgstr "Auto abgeliefert! Du hast 20 Punkte und 20 Münzen verdient."
 msgid "Passenger ride · P to pause"
 msgstr "Du fährst mit · P für Pause"
 
-msgid "W / ↑ Accelerate · S / ↓ Brake · Automatic station stops"
+msgid "{up} / ↑ Accelerate · {down} / ↓ Brake · Automatic station stops"
 msgstr ""
 "W / ↑ Beschleunigen · S / ↓ Bremsen · Automatischer Halt an Haltestellen"
 
@@ -511,8 +511,8 @@ msgstr "%s × %d"
 msgid "Waiting for a green light"
 msgstr "Warten auf Grün"
 
-msgid "Hold left to speed up or right to slow down and reverse. Move the mouse sideways to steer, or use A/D or the arrow keys."
-msgstr "Halte die linke Maustaste zum Gasgeben oder die rechte zum Bremsen und Rückwärtsfahren. Lenke durch seitliche Mausbewegungen, mit A/D oder mit den Pfeiltasten."
+msgid "Hold left to speed up or right to slow down and reverse. Move the mouse sideways to steer, or use {left}/{right} or the arrow keys."
+msgstr "Halte die linke Maustaste zum Gasgeben oder die rechte zum Bremsen und Rückwärtsfahren. Lenke durch seitliche Mausbewegungen, mit {left}/{right} oder mit den Pfeiltasten."
 
 msgid "Start boating"
 msgstr "Bootsfahrt starten"
@@ -864,7 +864,7 @@ msgstr "Tretroller zusammenklappen · F"
 msgid "U Unfold scooter"
 msgstr "U Tretroller ausklappen"
 
-msgid "W / ↑ Accelerate · S / ↓ Brake · A / D Steer · U Fold scooter"
+msgid "{up} / ↑ Accelerate · {down} / ↓ Brake · {left} / {right} Steer · U Fold scooter"
 msgstr ""
 "W / ↑ Beschleunigen · S / ↓ Bremsen · A / D Lenken · U Roller einklappen"
 
@@ -928,8 +928,8 @@ msgstr ""
 msgid "Walk or rest · Run again in %d s"
 msgstr "Geh oder ruh dich aus · In %d s kannst du wieder rennen"
 
-msgid "W/S Walk · A/D Turn · Shift + W Run · F Enter · U Scooter"
-msgstr "W/S Gehen · A/D Drehen · Shift + W Rennen · F Einsteigen · U Roller"
+msgid "{up}/{down} Walk · {left}/{right} Turn · Shift + {up} Run · F Enter · U Scooter"
+msgstr "{up}/{down} Gehen · {left}/{right} Drehen · Shift + {up} Rennen · F Einsteigen · U Roller"
 
 msgid "PgUp Raise camera · PgDn Lower camera"
 msgstr "Bild ↑ Kamera höher · Bild ↓ Kamera tiefer"
@@ -1645,3 +1645,6 @@ msgstr "Radiotaste"
 
 msgid "Next song key"
 msgstr "Taste für den nächsten Titel"
+
+msgid "Move with 8, 4, 5, 6"
+msgstr "Mit 8, 4, 5, 6 steuern"

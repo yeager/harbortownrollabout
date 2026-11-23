@@ -203,8 +203,8 @@ msgstr "Acércate a un vehículo"
 msgid "Stop first to get out."
 msgstr "Detén el vehículo antes de bajar."
 
-msgid "Walk with WASD or arrows · F to enter a vehicle"
-msgstr "Camina con WASD o las flechas · Pulsa F para subir"
+msgid "Walk with {up}{left}{down}{right} or arrows · F to enter a vehicle"
+msgstr "Camina con {up}{left}{down}{right} o las flechas · Pulsa F para subir"
 
 msgid "Time · Day"
 msgstr "Hora del día · Día"
@@ -465,8 +465,8 @@ msgstr "¡Coche entregado! Has ganado 20 puntos y 20 monedas."
 msgid "Passenger ride · P to pause"
 msgstr "Vas de pasajero · P para pausar"
 
-msgid "W / ↑ Accelerate · S / ↓ Brake · Automatic station stops"
-msgstr "W / ↑ Acelera · S / ↓ Frena · Paradas automáticas en las estaciones"
+msgid "{up} / ↑ Accelerate · {down} / ↓ Brake · Automatic station stops"
+msgstr "{up} / ↑ Acelera · {down} / ↓ Frena · Paradas automáticas en las estaciones"
 
 #, c-format
 msgid "%s · Departure in %d s"
@@ -510,8 +510,8 @@ msgstr "%s × %d"
 msgid "Waiting for a green light"
 msgstr "Esperando a que el semáforo se ponga verde"
 
-msgid "Hold left to speed up or right to slow down and reverse. Move the mouse sideways to steer, or use A/D or the arrow keys."
-msgstr "Mantén pulsado el botón izquierdo para acelerar o el derecho para frenar y dar marcha atrás. Para girar, mueve el ratón hacia los lados o usa A/D o las flechas."
+msgid "Hold left to speed up or right to slow down and reverse. Move the mouse sideways to steer, or use {left}/{right} or the arrow keys."
+msgstr "Mantén pulsado el botón izquierdo para acelerar o el derecho para frenar y dar marcha atrás. Para girar, mueve el ratón hacia los lados o usa {left}/{right} o las flechas."
 
 msgid "Start boating"
 msgstr "Empezar el paseo en barco"
@@ -858,8 +858,8 @@ msgstr "Plegar el patinete · F"
 msgid "U Unfold scooter"
 msgstr "U Desplegar el patinete"
 
-msgid "W / ↑ Accelerate · S / ↓ Brake · A / D Steer · U Fold scooter"
-msgstr "W / ↑ Acelera · S / ↓ Frena · A / D Gira · U Pliega el patinete"
+msgid "{up} / ↑ Accelerate · {down} / ↓ Brake · {left} / {right} Steer · U Fold scooter"
+msgstr "{up} / ↑ Acelera · {down} / ↓ Frena · {left} / {right} Gira · U Pliega el patinete"
 
 #, c-format
 msgid "Electric scooter · %d km/h"
@@ -921,8 +921,8 @@ msgstr ""
 msgid "Walk or rest · Run again in %d s"
 msgstr "Camina o descansa · Podrás correr en %d s"
 
-msgid "W/S Walk · A/D Turn · Shift + W Run · F Enter · U Scooter"
-msgstr "W/S Camina · A/D Gira · Shift + W Corre · F Sube · U Patinete"
+msgid "{up}/{down} Walk · {left}/{right} Turn · Shift + {up} Run · F Enter · U Scooter"
+msgstr "{up}/{down} Camina · {left}/{right} Gira · Shift + {up} Corre · F Sube · U Patinete"
 
 msgid "PgUp Raise camera · PgDn Lower camera"
 msgstr "Re Pág: sube la cámara · Av Pág: baja la cámara"
@@ -1635,3 +1635,6 @@ msgstr "Tecla de la radio"
 
 msgid "Next song key"
 msgstr "Tecla de la siguiente canción"
+
+msgid "Move with 8, 4, 5, 6"
+msgstr "Moverse con 8, 4, 5, 6"
