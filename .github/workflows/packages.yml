@@ -55,11 +55,11 @@ jobs:
         run: |
           godot --headless --script res://tests/player_gait.gd 2>&1 | tee "$RUNNER_TEMP/gait.log"
           if grep -E '^(SCRIPT )?ERROR:' "$RUNNER_TEMP/gait.log"; then exit 1; fi
-      - name: Check vehicle selection, trike boarding, kiosk purchases and fuel prices
+      - name: Check gameplay scenarios before export
         timeout-minutes: 5
         shell: bash
         run: |
-          for scene in vehicle_gallery_drive kiosk_and_shopper pump_prices; do
+          for scene in vehicle_gallery_drive kiosk_and_shopper pump_prices bus_route weather_transition; do
             export XDG_DATA_HOME="$RUNNER_TEMP/game-tests/$scene"
             mkdir -p "$XDG_DATA_HOME"
             godot --headless --script "res://tests/$scene.gd" 2>&1 | tee "$XDG_DATA_HOME/result.log"
