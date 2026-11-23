@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://cr0dgmx0brajn"
+path="res://.godot/imported/Hafenradio (DE).mp3-83ee47de48cc29152aa8a74a4a2d5435.mp3str"
+
+[deps]
+
+source_file="res://audio/radio/Hafenradio (DE).mp3"
+dest_files=["res://.godot/imported/Hafenradio (DE).mp3-83ee47de48cc29152aa8a74a4a2d5435.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

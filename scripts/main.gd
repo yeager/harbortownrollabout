@@ -956,7 +956,7 @@ func _next_radio_track() -> void:
 	song_title.text = radio_track.get_basename().rsplit(" (",true,1)[0]
 	radio_button.tooltip_text = tr("Now playing: %s") % song_title.text
 	var cover_path := "res://branding/radio/" + radio_track.get_basename() + ".webp"
-	song_cover.texture = load(cover_path) if ResourceLoader.exists(cover_path) else null
+	song_cover.texture = load(cover_path) if ResourceLoader.exists(cover_path) else preload("res://branding/radio/station.svg")
 	song_cover.visible = song_cover.texture != null
 	song_card_seconds = 5.0
 	song_card.show()

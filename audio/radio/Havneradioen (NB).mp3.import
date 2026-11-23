@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://ppkjhtg2xrmm"
+path="res://.godot/imported/Havneradioen (NB).mp3-1a83782a44fde993e948fcd99437c7c0.mp3str"
+
+[deps]
+
+source_file="res://audio/radio/Havneradioen (NB).mp3"
+dest_files=["res://.godot/imported/Havneradioen (NB).mp3-1a83782a44fde993e948fcd99437c7c0.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4
