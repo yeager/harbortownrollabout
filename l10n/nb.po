@@ -1601,3 +1601,6 @@ msgstr "Si det igjen"
 
 msgid "Practice driving"
 msgstr "Øvelseskjør"
+
+msgid "Larger speech bubbles"
+msgstr "Større snakkebobler"

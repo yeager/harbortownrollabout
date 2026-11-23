@@ -71,6 +71,7 @@ var weather := preload("res://scripts/city_weather.gd").new()
 var previous_season := 0
 var greeting_timer := 0.0
 var greeting_number := 0
+var large_text := false
 var greeting := Label3D.new()
 var bubble_back := Sprite3D.new()
 enum FootQuest { WAITING, SEARCHING, RETURNING, FINISHED }
@@ -4456,7 +4457,7 @@ func _attach_pet(pet: Node3D) -> void:
 
 func _build_pedestrians() -> void:
 	greeting.billboard = BaseMaterial3D.BILLBOARD_ENABLED
-	greeting.pixel_size = .003
+	_apply_reading_size()
 	greeting.font_size = 64
 	greeting.modulate = Color("#1f3040")
 	greeting.outline_size = 0
@@ -4837,6 +4838,10 @@ func _make_walker(label: String, start_x: float, lane_z: float, direction: float
 		person.get_meta("legs").append(leg_pivot)
 		person.get_meta("arms").append(arm_pivot)
 	walker_data.append({"actor": person, "direction": direction, "speed": 1.15 + randf() * 0.45, "phase": randf() * TAU})
+
+func _apply_reading_size() -> void:
+	greeting.pixel_size = .0042 if large_text else .003
+	bubble_back.pixel_size = greeting.pixel_size
 
 func _show_speech_bubble(speaker: Node3D, phrase: String) -> void:
 	if greeting.get_parent() != speaker:
@@ -6196,6 +6201,16 @@ func _build_overlay() -> void:
 		if title == "Language":
 			tabs.set_tab_icon(page.get_index(), preload("res://branding/language-globe.svg"))
 		pages.append(page)
+	var reading_size := CheckButton.new()
+	reading_size.name = "LargeText"
+	reading_size.text = "Larger speech bubbles"
+	reading_size.button_pressed = large_text
+	reading_size.toggled.connect(func(enabled: bool):
+		large_text = enabled
+		_apply_reading_size()
+		_save_preferences()
+	)
+	pages[4].add_child(reading_size)
 	renderer_choices.columns = 2
 	renderer_choices.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	renderer_choices.name = "RendererChoice"
@@ -6901,6 +6916,7 @@ func _load_preferences() -> void:
 	L10n.apply_language(language_preference)
 	if not loaded:
 		return
+	large_text = config.get_value("accessibility", "large_text", false) == true
 	var saved = config.get_value("player", "road_checkpoint", {})
 	if _valid_checkpoint(saved):
 		road_checkpoint = saved
@@ -6933,6 +6949,7 @@ func _load_preferences() -> void:
 func _save_preferences() -> void:
 	var config := ConfigFile.new()
 	var volume := 0.0 if AudioServer.is_bus_mute(0) else db_to_linear(AudioServer.get_bus_volume_db(0))*100
+	config.set_value("accessibility", "large_text", large_text)
 	config.set_value("player", "road_checkpoint", road_checkpoint)
 	config.set_value("player","alma",play_as_alma)
 	config.set_value("player","coins",wallet)

@@ -8,6 +8,12 @@ func check_quest() -> void:
 	root.add_child(game)
 	game._start_game()
 	game.walker.show()
+	var standard_size: float = game.greeting.pixel_size
+	game.find_child("LargeText", true, false).button_pressed = true
+	if game.greeting.pixel_size <= standard_size or game.bubble_back.pixel_size != game.greeting.pixel_size:
+		printerr("Speech bubble and lettering must enlarge together")
+		quit(1)
+		return
 	var initial_wallet: int = game.wallet
 	var initial_points: int = game.foot_quest_points
 	# Linger just ahead of the neighbour until she reaches the pavement's end.
@@ -37,6 +43,10 @@ func check_quest() -> void:
 	game = load("res://main.tscn").instantiate()
 	root.add_child(game)
 	game._resume_road_checkpoint()
+	if not game.large_text or game.greeting.pixel_size <= standard_size:
+		printerr("Lost reading size after restart")
+		quit(1)
+		return
 	if not game.walker.visible or not game.walker.position.is_equal_approx(walk_position) or not game.parked_cars[game.vehicle_index].position.is_equal_approx(car_position):
 		printerr("Walk or parked car was not restored")
 		quit(1)

@@ -1531,3 +1531,6 @@ msgstr "Säg igen"
 
 msgid "Practice driving"
 msgstr "Övningskör"
+
+msgid "Larger speech bubbles"
+msgstr "Större pratbubblor"

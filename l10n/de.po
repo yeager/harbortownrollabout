@@ -1618,3 +1618,6 @@ msgstr "Noch einmal anhören"
 
 msgid "Practice driving"
 msgstr "Fahren üben"
+
+msgid "Larger speech bubbles"
+msgstr "Größere Sprechblasen"
