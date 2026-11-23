@@ -68,7 +68,16 @@ for side in (-1,1):
     tube("Mirror stem",(side*.40,-.42,.91),(side*.51,-.43,1.05),.009,v.METAL)
     box("Wing mirror",(side*.51,-.43,1.07),(.094,.034,.07),v.METAL)
     box("Turn signal",(side*.46,-.46,.80),(.024,.085,.046),amber,.008)
-tube("Single windscreen wiper",screen_point(.25,.08),screen_point(-.36,.71),.008,v.BLACK)
+# Both the arm and rubber blade sit on the outside of the bowed screen.
+def wiper_point(u, t):
+    return Vector(screen_point(u, t)) + Vector((0, -.018, 0))
+
+pivot = wiper_point(.25, .08)
+blade_joint = wiper_point(-.12, .51)
+tube("Wiper spindle", screen_point(.25, .08), pivot, .018, v.METAL)
+tube("Wiper arm", pivot, blade_joint, .008, v.DARK)
+tube("Wiper blade lower", wiper_point(.06, .32), blade_joint, .011, v.BLACK)
+tube("Wiper blade upper", blade_joint, wiper_point(-.30, .70), .011, v.BLACK)
 box("Seat cushion",(0,.18,.595),(.61,.42,.093),vinyl,.044)
 back=box("Upright seat back",(0,.395,.82),(.60,.074,.48),vinyl,.034)
 back.rotation_euler.x=-.12
