@@ -5647,6 +5647,16 @@ func _update_pedestrians(delta: float) -> void:
 	greeting_timer = maxf(0,greeting_timer-delta)
 	bubble_time = maxf(0, bubble_time - delta)
 	greeting.visible = bubble_time > 0
+	if greeting.visible:
+		var view := get_viewport().get_camera_3d()
+		if view:
+			# Keep distant speech readable while preserving its size up close.
+			var depth := -view.to_local(greeting.global_position).z
+			var viewport_height := get_viewport().get_visible_rect().size.y
+			var metres_per_pixel := 2.0 * maxf(depth, 0.0) * tan(deg_to_rad(view.fov * .5)) / maxf(viewport_height, 1.0)
+			var target_pixels := 25.0 if large_text else 18.0
+			var natural_height := greeting.font_size * greeting.pixel_size * greeting.get_parent_node_3d().global_basis.y.length()
+			greeting.scale = Vector3.ONE * maxf(1.0, target_pixels * metres_per_pixel / natural_height)
 	var shoe_owner_x := shoe_owner.position.x
 	var cat_owner_x := cat_owner.position.x
 	_update_shoe_quest(delta)
