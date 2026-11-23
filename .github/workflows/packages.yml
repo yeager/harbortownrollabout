@@ -145,9 +145,12 @@ jobs:
           if ($setup.ExitCode -ne 0) { throw "Installer exited with $($setup.ExitCode)" }
           $log = Join-Path $env:RUNNER_TEMP 'windows-game.log'
           $game = Start-Process (Join-Path $dir 'harbortown.exe') -ArgumentList "--headless --quit-after 360 --log-file `"$log`"" -Wait -PassThru
+          if (!(Test-Path -PathType Leaf $log) -or (Get-Item $log).Length -eq 0) { throw 'Installed game produced no startup log' }
           if ($game.ExitCode -ne 0 -or (Select-String -Path $log -Pattern '^(SCRIPT )?ERROR:')) { throw 'Installed game failed to start cleanly' }
       - if: runner.os == 'macOS'
+        shell: bash
         run: |
+          set -euo pipefail
           for arch in x86_64 arm64; do
             image="image-$arch"
             mkdir "$image"
@@ -172,6 +175,7 @@ jobs:
             executable="$app/Contents/MacOS/harbortown"
             test "$(lipo -archs "$executable")" = "$arch"
             "$executable" --headless --quit-after 360 2>&1 | tee "$RUNNER_TEMP/mac-game-$arch.log"
+            test -s "$RUNNER_TEMP/mac-game-$arch.log"
             if grep -E '^(SCRIPT )?ERROR:' "$RUNNER_TEMP/mac-game-$arch.log"; then exit 1; fi
             hdiutil detach "$mount"
           done
