@@ -315,6 +315,37 @@ func check() -> void:
 		fail("Unexpected red-light duration at tram junction: %f" % longest_tram_red)
 		return
 	print("Longest tram junction red: ", longest_tram_red)
+	# Use a real traffic vehicle and its normal movement update on a clear approach.
+	var traffic_car: Dictionary = game.traffic_data[0]
+	game.traffic_data.assign([traffic_car])
+	var route := Curve3D.new()
+	route.add_point(stop_point - Vector3.RIGHT * (float(traffic_car.length) + 4.0))
+	route.add_point(stop_point + Vector3.RIGHT * 25.0)
+	traffic_car.route = route
+	traffic_car.distance = 0.0
+	traffic_car.speed = 6.0
+	traffic_car.cruise = 8.0
+	game._place_traffic(traffic_car)
+	lights.elapsed = 6.5
+	lights.advance(0)
+	game._update_traffic(.1)
+	if traffic_car.speed <= 0.0 or traffic_car.speed >= 6.0:
+		fail("Traffic should brake progressively on amber")
+		return
+	lights.elapsed = 8.0
+	lights.advance(0)
+	for tick in 100:
+		game._update_traffic(.1)
+	var front_x := float(traffic_car.actor.position.x) + float(traffic_car.length)
+	if traffic_car.speed > .01 or absf(front_x - stop_point.x) > .15:
+		fail("Traffic should stop at the red line")
+		return
+	lights.elapsed = 0
+	lights.advance(0)
+	game._update_traffic(.1)
+	if traffic_car.speed <= 0.0:
+		fail("Traffic should move off on green")
+		return
 	finish.call_deferred(game)
 
 func finish(game: Node) -> void:
