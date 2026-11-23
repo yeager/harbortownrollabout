@@ -1627,3 +1627,12 @@ msgstr "Picknickäng · %d%%"
 
 msgid "Ready for a picnic!"
 msgstr "Dags för picknick!"
+
+msgid "Pick up groceries at the square"
+msgstr "Hämta matkassarna på torget"
+
+msgid "Deliver groceries to the clinic"
+msgstr "Lämna en matkasse vid vårdcentralen"
+
+msgid "Deliver groceries to the marina"
+msgstr "Lämna en matkasse i småbåtshamnen"

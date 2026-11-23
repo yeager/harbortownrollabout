@@ -1714,3 +1714,12 @@ msgstr "Picknickwiese · %d%%"
 
 msgid "Ready for a picnic!"
 msgstr "Zeit fürs Picknick!"
+
+msgid "Pick up groceries at the square"
+msgstr "Hole die Einkaufstaschen auf dem Platz ab"
+
+msgid "Deliver groceries to the clinic"
+msgstr "Bringe eine Einkaufstasche zum Ärztehaus"
+
+msgid "Deliver groceries to the marina"
+msgstr "Bringe eine Einkaufstasche zum Jachthafen"

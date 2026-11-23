@@ -247,6 +247,7 @@ var lost_wheel: Node3D
 var bonnet_smoke := CPUParticles3D.new()
 var taxi_leg := 0
 var blanket_rolls: Array[Node3D] = []
+var grocery_bags: Array[Node3D] = []
 var delivery_parcels: Array[Node3D] = []
 var clinic_fire_team: Array[Node3D] = []
 var bus_companions: Array[Node3D] = []
@@ -351,6 +352,7 @@ func _vehicle_tasks() -> Array:
 		1, XC60_POLICE: return PATROL_TASKS
 		2: return FIRE_TASKS
 		FARM_TRACTOR: return ["Collect seedlings at the square", "Deliver herbs to the clinic garden", "Bring flowers to the marina"]
+		SHOPPER: return ["Pick up groceries at the square", "Deliver groceries to the clinic", "Deliver groceries to the marina"]
 		REFUSE: return ["Empty the blue paper bin at the square", "Empty the green glass bin at the clinic", "Unload recycling at the marina"]
 		FOOD_TRUCK: return ["Pick up soup ingredients at the square", "Serve lunch to the clinic staff", "Serve soup to the boat crews"]
 		SNOWMOBILE: return SLED_TASKS
@@ -1425,7 +1427,7 @@ func _arrival_radius() -> float:
 	return 2.1 if walker.visible else 5.2
 
 func _at_target() -> bool:
-	if scooter.visible or free_drive or boating or ferry_passenger or tram_mode != 0 or (vehicle_index in [TAXI,RECOVERY,BUS,ICE_CREAM,REFUSE] and walker.visible) or mission_index >= TARGETS.size(): return false
+	if scooter.visible or free_drive or boating or ferry_passenger or tram_mode != 0 or (vehicle_index in [TAXI,RECOVERY,BUS,ICE_CREAM,REFUSE,SHOPPER] and walker.visible) or mission_index >= TARGETS.size(): return false
 	var actor := walker if walker.visible else ambulance
 	return actor.position.distance_to(_mission_destination()) < _arrival_radius()
 
@@ -5807,6 +5809,18 @@ func _build_target_marker() -> void:
 		_make_walker("Bus passenger",0,0,1,shirt,Color("#343c48"))
 		bus_companions.append(walker_data.pop_back().actor)
 	for i in 2:
+		var bag := Node3D.new()
+		add_child(bag)
+		var paper := Color("#bc8956")
+		_make_box("Paper grocery bag",Vector3(.23,.32,.30),Vector3.UP*.16,paper,false,bag)
+		for side in [-1,1]:
+			for end in [-1,1]:
+				_make_box("Loop side",Vector3(.016,.10,.016),Vector3(end*.060,.36,side*.096),paper,false,bag)
+			_make_box("Loop grip",Vector3(.136,.017,.016),Vector3(0,.410,side*.096),paper,false,bag)
+		var loaf := _make_box("Bread loaf",Vector3(.080,.22,.09),Vector3(-.046,.34,0),Color("#d9a252"),false,bag)
+		loaf.rotation.z = .15
+		_make_box("Milk carton",Vector3(.087,.13,.081),Vector3(.049,.34,-.034),Color("#e2f1ef"),false,bag)
+		grocery_bags.append(bag)
 		var parcel := Node3D.new()
 		parcel.name = "Delivery parcel %d" % (i+1)
 		add_child(parcel)
@@ -6112,6 +6126,22 @@ func _update_mission_marker() -> void:
 			companion.position.y = _foot_height(companion.position.x,companion.position.z)
 	for member in clinic_fire_team:
 		member.visible = not free_drive and vehicle_index == 2 and mission_index == 0
+	for i in grocery_bags.size():
+		var bag := grocery_bags[i]
+		var stage := mission_index if vehicle_index == SHOPPER else int(vehicle_progress.get(SHOPPER,0))
+		var onboard := stage > 0 and stage < i+2
+		var carrier: Node3D = self
+		if onboard:
+			carrier = ambulance if vehicle_index == SHOPPER and ambulance.visible else parked_cars[SHOPPER]
+		if bag.get_parent() != carrier:
+			bag.reparent(carrier,false)
+		bag.visible = not free_drive and (vehicle_index == SHOPPER or onboard)
+		if onboard:
+			bag.position = Vector3(-.133+i*.266,.558,.80)
+		elif bag.visible:
+			var site := WALK_TARGETS[0] if stage == 0 else WALK_TARGETS[i+1]
+			bag.position = site + Vector3(.35+i*.34,0,.58)
+			bag.position.y = _foot_height(bag.position.x,bag.position.z)
 	var delivering := vehicle_index in [3,6,7,8,9,PORSCHE,MINI_CABRIO] and not free_drive
 	for i in delivery_parcels.size():
 		var parcel := delivery_parcels[i]

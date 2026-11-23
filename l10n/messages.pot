@@ -1626,3 +1626,12 @@ msgstr ""
 
 msgid "Ready for a picnic!"
 msgstr ""
+
+msgid "Pick up groceries at the square"
+msgstr ""
+
+msgid "Deliver groceries to the clinic"
+msgstr ""
+
+msgid "Deliver groceries to the marina"
+msgstr ""

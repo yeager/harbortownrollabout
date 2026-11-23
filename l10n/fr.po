@@ -1712,3 +1712,12 @@ msgstr "Pré de pique-nique · %d%%"
 
 msgid "Ready for a picnic!"
 msgstr "Place au pique-nique !"
+
+msgid "Pick up groceries at the square"
+msgstr "Récupère les courses sur la place"
+
+msgid "Deliver groceries to the clinic"
+msgstr "Livre un sac de courses au dispensaire"
+
+msgid "Deliver groceries to the marina"
+msgstr "Livre un sac de courses au port de plaisance"

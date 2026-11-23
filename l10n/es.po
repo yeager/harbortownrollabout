@@ -1704,3 +1704,12 @@ msgstr "Prado de pícnic · %d%%"
 
 msgid "Ready for a picnic!"
 msgstr "¡Hora del pícnic!"
+
+msgid "Pick up groceries at the square"
+msgstr "Recoge las bolsas de la compra en la plaza"
+
+msgid "Deliver groceries to the clinic"
+msgstr "Entrega una bolsa en el centro de salud"
+
+msgid "Deliver groceries to the marina"
+msgstr "Entrega una bolsa en el puerto deportivo"

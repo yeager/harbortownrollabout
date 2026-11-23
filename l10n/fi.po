@@ -1693,3 +1693,12 @@ msgstr "Piknikniitty · %d%%"
 
 msgid "Ready for a picnic!"
 msgstr "Piknikin aika!"
+
+msgid "Pick up groceries at the square"
+msgstr "Nouda ruokakassit torilta"
+
+msgid "Deliver groceries to the clinic"
+msgstr "Vie ruokakassi terveyskeskukseen"
+
+msgid "Deliver groceries to the marina"
+msgstr "Vie ruokakassi pienvenesatamaan"

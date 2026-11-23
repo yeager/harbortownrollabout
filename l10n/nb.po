@@ -1697,3 +1697,12 @@ msgstr "Piknikeng · %d%%"
 
 msgid "Ready for a picnic!"
 msgstr "Tid for piknik!"
+
+msgid "Pick up groceries at the square"
+msgstr "Hent handleposene på torget"
+
+msgid "Deliver groceries to the clinic"
+msgstr "Lever en handlepose ved helsesenteret"
+
+msgid "Deliver groceries to the marina"
+msgstr "Lever en handlepose i småbåthavna"
