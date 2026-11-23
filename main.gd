@@ -2804,6 +2804,7 @@ func _make_tree(pos: Vector3, scale_factor: float, species := "", planting_heigh
 				if not foliage_finishes.has(finish):
 					var foliage := ShaderMaterial.new()
 					foliage.shader = preload("res://environment/foliage.gdshader")
+					foliage.set_shader_parameter("leaf_grain", preload("res://art/surfaces/leaf.png"))
 					foliage.set_shader_parameter("leaf_color", finish.albedo_color)
 					foliage.set_shader_parameter("stiffness", 0.35 if finish.resource_name.begins_with("Spruce") else 1.0)
 					foliage_finishes[finish] = foliage
