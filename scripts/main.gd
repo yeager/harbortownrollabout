@@ -367,7 +367,7 @@ var at_colour_bench := false
 const BENCH_COLOURS := [Color("#905bb9"), Color("#f1ab38"), Color("#399d83")]
 var play_as_alma := false
 const STAR_SITES := {
-	"main_street": Vector2(-7, 2.35), "park": Vector2(30, 18),
+	"main_street": Vector2(-7, 2.35), "park": Vector2(49, 2.35),
 	"west_avenue": Vector2(-205, 2.35), "north_bridge": Vector2(71, -45.65),
 	"south_bridge": Vector2(71, 2.35), "canal": Vector2(71, 42),
 	"east_street": Vector2(104.35, 32), "work_yard": Vector2(-113, 45)
