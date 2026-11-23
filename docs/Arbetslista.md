@@ -44,6 +44,7 @@ Listan innehåller 100 jobb. En tom ruta är öppen. En punkt bockas av när bet
 ## Modeller, människor och stadsliv
 
 - [ ] 31. Betygsätt modeller mot jämförbara bilder av silhuett, proportioner, material, interiör och funktion.
+  - Trafikljus, jämfört med spelarens foto och två närbilder i Godot. Silhuett 90, proportioner 86, färg/material 83, exteriöra detaljer 75, funktion 100. Interiör ej tillämplig. Bedömt medel 87/100. De tre linserna och skärmarna känns igen även snett från sidan. De släta hussidorna saknar fotots gångjärn och fästen, och det tända glaset har ett jämnare ljus än på fotot.
   - Midsommarstång, jämförd med de tre inskickade fotografierna och en Godot-rendering från marknivå. Silhuett 96, proportioner 94, material/färg 90, detaljer 93, årstidsfunktion 100. Interiör ej tillämplig. Medel 95/100 efter att tvärslån och girlanderna fått nedhängande kvistar. Närbilden visar nu sågtandade blad och vikt mittnerv. Kransens kvistar och blommor är fortfarande mer regelbundna än på fotografiet.
 - [x] 32. Granska Axel och Alma från sidan under en hel gångcykel och rätta anatomiska avvikelser. Sidovyer av båda figurerna vid åtta jämnt fördelade faser finns i [gångstudien](player-walk-side.png). Godots gångtest verifierar hälisättning, tåfrånskjut och kontakter under gång och löpning. Armarnas pendelplan följer nu bröstkorgens vridning genom hela steget.
 - [x] 33. Kontrollera och förbättra handgrepp om ratt, styre, hundkoppel och kasse.
