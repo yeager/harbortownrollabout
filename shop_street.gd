@@ -36,6 +36,7 @@ const PIZZA_TOPPINGS := ["Mozzarella, tomato and carrot stars", "Popcorn, sweetc
 const SIGNS := ["KAFÉ BULLEN","SJÖKIOSKEN","PIZZERIA","GODISBODEN","SJÖSTADENS LIVS","MOMO & BORI"]
 const COLORS := ["#a86343","#427868","#b65f51","#927198","#355e4b","#375c68"]
 const FRONT_Z := 42.5
+var pizza_price_signs: Array[Label3D] = []
 var awnings: Array[Node3D] = []
 var shop_sign_font := SystemFont.new()
 var inside := -1
@@ -256,8 +257,7 @@ func rebuild_menu() -> void:
 			button.icon = thumbnail
 			button.add_theme_constant_override("icon_max_width",44)
 		button.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		var price: int = PRICES[inside][i]
-		button.text = tr_n("%s · %d coin", "%s · %d coins", price) % [tr(MENUS[inside][i]), price]
+		button.text = _product_price(inside, i)
 		if inside == 2:
 			button.text += "\n" + tr(PIZZA_TOPPINGS[i])
 		elif inside == 3:
@@ -402,6 +402,16 @@ func _kiosk(x: float) -> void:
 	top.material_override = get_parent()._material(Color("#ec9db1"))
 	add_child(top)
 
+func _product_price(shop: int, item: int) -> String:
+	var price: int = PRICES[shop][item]
+	return tr_n("%s · %d coin", "%s · %d coins", price) % [tr(MENUS[shop][item]), price]
+
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_TRANSLATION_CHANGED and is_node_ready():
+		for sign_label in pizza_price_signs:
+			sign_label.text = _product_price(2, 0)
+			get_parent()._fit_world_sign(sign_label)
+
 func _pizzeria(x: float) -> void:
 	_pizzeria_front(x)
 	var walnut := Color("#704c3c")
@@ -533,9 +543,11 @@ func _pizzeria_front(x: float) -> void:
 		script.font = shop_sign_font
 		get_parent()._size_world_sign(script,2.9)
 		part("Window menu strip",Vector3(cx,1.04,42.32),Vector3(2.97,.22,.027),wine)
-		var menu_text := "MARGHERITA  ·  8 COINS" if side == 1 else "EAT IN  ·  TAKEAWAY"
+		var menu_text := _product_price(2, 0) if side == 1 else "EAT IN  ·  TAKEAWAY"
 		var menu_strip := _lettering(menu_text,Vector3(cx,1.04,42.29),.0048,Color("#fff3d5"))
 		get_parent()._size_world_sign(menu_strip,2.9)
+		if side == 1:
+			pizza_price_signs.append(menu_strip)
 	for edge in [-1,1]:
 		part("Recessed door jamb",Vector3(x+edge*.90,1.30,42.53),Vector3(.087,2.60,.22),timber)
 	part("Door lintel",Vector3(x,2.57,42.53),Vector3(1.88,.12,.22),timber)
@@ -546,7 +558,10 @@ func _pizzeria_front(x: float) -> void:
 	for i in 3:
 		var cx := x+(i-1)*2.17
 		part("Kitchen menu card",Vector3(cx,2.61,49.20),Vector3(2.10,.49,.04),Color("#f1db9e"))
-		_lettering(["PIZZA", "MARGHERITA   8", "TAKEAWAY"][i],Vector3(cx,2.61,49.17),.0058,wine)
+		var card := _lettering(["PIZZA", _product_price(2, 0), "TAKEAWAY"][i],Vector3(cx,2.61,49.17),.0058,wine)
+		if i == 1:
+			get_parent()._size_world_sign(card,1.96)
+			pizza_price_signs.append(card)
 	_shop_light(Vector3(x,2.8,46.0),Color("#ffddab"),1.15)
 
 func _sweet_shop(x: float) -> void:
