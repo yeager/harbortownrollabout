@@ -1583,3 +1583,12 @@ msgstr "Hale av sprøstekt løk og en sennepsstjerne"
 
 msgid "Candy Cabin"
 msgstr "Godteribua"
+
+msgid "CINNAMON BUN CAFÉ"
+msgstr "KANELBOLLEKAFEEN"
+
+msgid "HARBOR KIOSK"
+msgstr "HAVNEKIOSKEN"
+
+msgid "HARBOR GROCER"
+msgstr "HAVNEBUTIKKEN"

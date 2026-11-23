@@ -1513,3 +1513,12 @@ msgstr "Svans av rostad lök och en senapsstjärna"
 
 msgid "Candy Cabin"
 msgstr "Godisboden"
+
+msgid "CINNAMON BUN CAFÉ"
+msgstr "KAFÉ BULLEN"
+
+msgid "HARBOR KIOSK"
+msgstr "SJÖKIOSKEN"
+
+msgid "HARBOR GROCER"
+msgstr "SJÖSTADENS LIVS"

@@ -35,7 +35,7 @@ const PRODUCT_ICONS := {
 const PRICES := [[3,2],[4,5],[8,7,8,9,10],[4,3,2,4,5,4,6,3,3,4],[2,4],[9,9,5,4],[5,7,6,8]]
 const GRILL_TOPPINGS := ["Grilled sausage in a soft bun", "Sausage with a moon of mash and pea craters", "Pickle fins and a carrot nose cone", "Crispy onion tail and a mustard star"]
 const PIZZA_TOPPINGS := ["Mozzarella, tomato and carrot stars", "Popcorn, sweetcorn and cheese", "Pickle wheels and crispy onions", "Banana moons and coconut snow", "Blueberries, vanilla cream and raspberry swirls"]
-const SIGNS := ["KAFÉ BULLEN","SJÖKIOSKEN","PIZZERIA","GODISBODEN","SJÖSTADENS LIVS","MOMO & BORI"]
+const SIGNS := ["CINNAMON BUN CAFÉ","HARBOR KIOSK","PIZZERIA","GODISBODEN","HARBOR GROCER","MOMO & BORI"]
 const COLORS := ["#a86343","#427868","#b65f51","#927198","#355e4b","#375c68"]
 const FRONT_Z := 42.5
 var grill_neon_finishes: Array[StandardMaterial3D] = []
@@ -104,7 +104,9 @@ func _ready() -> void:
 		awnings.append(roof)
 		if i not in [2,3]:
 			part("Shop fascia",Vector3(x,2.98,FRONT_Z-.22),Vector3(8.35,.80,.35),color)
-			_lettering(SIGNS[i],Vector3(x,3.0,FRONT_Z-.41),.009,Color.WHITE).outline_size = 48
+			var fascia := _lettering(SIGNS[i],Vector3(x,3.0,FRONT_Z-.41),.009,Color.WHITE)
+			fascia.outline_size = 48
+			get_parent()._size_world_sign(fascia,7.4)
 		if i != 3:
 			part("Counter",Vector3(x,.48,47.8),Vector3(5.7,1,1),color,true)
 			part("Worktop",Vector3(x,1.02,47.8),Vector3(5.9,.10,1.1),cream)

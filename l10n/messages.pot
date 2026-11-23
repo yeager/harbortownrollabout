@@ -1512,3 +1512,12 @@ msgstr ""
 
 msgid "Candy Cabin"
 msgstr ""
+
+msgid "CINNAMON BUN CAFÉ"
+msgstr ""
+
+msgid "HARBOR KIOSK"
+msgstr ""
+
+msgid "HARBOR GROCER"
+msgstr ""

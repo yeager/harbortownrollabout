@@ -1579,3 +1579,12 @@ msgstr "Rapea sipulipyrstö ja sinappitähti"
 
 msgid "Candy Cabin"
 msgstr "Karkkitupa"
+
+msgid "CINNAMON BUN CAFÉ"
+msgstr "KORVAPUUSTIKAHVILA"
+
+msgid "HARBOR KIOSK"
+msgstr "SATAMAKIOSKI"
+
+msgid "HARBOR GROCER"
+msgstr "SATAMAKAUPPA"

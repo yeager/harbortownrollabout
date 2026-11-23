@@ -1600,3 +1600,12 @@ msgstr "Schweif aus Röstzwiebeln und ein Senfstern"
 
 msgid "Candy Cabin"
 msgstr "Naschhütte"
+
+msgid "CINNAMON BUN CAFÉ"
+msgstr "ZIMTSCHNECKEN-CAFÉ"
+
+msgid "HARBOR KIOSK"
+msgstr "HAFENKIOSK"
+
+msgid "HARBOR GROCER"
+msgstr "HAFENMARKT"

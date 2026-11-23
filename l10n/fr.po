@@ -1598,3 +1598,12 @@ msgstr "Queue d’oignons croustillants et étoile de moutarde"
 
 msgid "Candy Cabin"
 msgstr "Cabane à bonbons"
+
+msgid "CINNAMON BUN CAFÉ"
+msgstr "CAFÉ À LA CANNELLE"
+
+msgid "HARBOR KIOSK"
+msgstr "KIOSQUE DU PORT"
+
+msgid "HARBOR GROCER"
+msgstr "ÉPICERIE DU PORT"
