@@ -396,7 +396,7 @@ var steering := 0.0
 var map_goal := Vector3.INF
 var map_button := Button.new()
 var leave_practice_button := Button.new()
-const MAP_NAMES := ["Town square","Clinic","Marina","School","Petrol station","Hot dog stand","Bakery"]
+const MAP_NAMES := ["Town square","Clinic","Marina","School","Petrol station","Hot dog stand","Bakery","Boule court"]
 var free_drive := true
 var mission_index := 0
 const FireLocker := preload("res://scripts/fire_locker.gd")
@@ -8174,7 +8174,7 @@ func _build_town_map() -> void:
 	var chart := preload("res://scripts/town_map.gd").new()
 	body.add_child(chart)
 	var counter := shops.grill_counter()
-	chart.configure(navigator,PackedVector3Array([TARGETS[0],TARGETS[1],TARGETS[2],SCHOOL_CURB,STATION_DROP,counter,FLOUR_CURB]),MAP_NAMES)
+	chart.configure(navigator,PackedVector3Array([TARGETS[0],TARGETS[1],TARGETS[2],SCHOOL_CURB,STATION_DROP,counter,FLOUR_CURB,BOULE_BENCH+Vector3.LEFT*.85]),MAP_NAMES)
 	var legend := HFlowContainer.new()
 	body.add_child(legend)
 	for i in MAP_NAMES.size():

@@ -1886,3 +1886,6 @@ msgstr "Mellomrom"
 
 msgid "Insert"
 msgstr "Insert"
+
+msgid "Boule court"
+msgstr "Boulebane"

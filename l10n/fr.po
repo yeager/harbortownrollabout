@@ -1901,3 +1901,6 @@ msgstr "Espace"
 
 msgid "Insert"
 msgstr "Inser"
+
+msgid "Boule court"
+msgstr "Terrain de pétanque"

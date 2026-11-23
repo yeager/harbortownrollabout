@@ -1903,3 +1903,6 @@ msgstr "Leertaste"
 
 msgid "Insert"
 msgstr "Einfg"
+
+msgid "Boule court"
+msgstr "Bouleplatz"

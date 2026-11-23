@@ -1816,3 +1816,6 @@ msgstr "Mellanslag"
 
 msgid "Insert"
 msgstr "Insert"
+
+msgid "Boule court"
+msgstr "Boulebanan"

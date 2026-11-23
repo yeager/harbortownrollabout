@@ -1882,3 +1882,6 @@ msgstr "Välilyönti"
 
 msgid "Insert"
 msgstr "Insert"
+
+msgid "Boule court"
+msgstr "Petankkikenttä"

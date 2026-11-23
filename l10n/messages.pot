@@ -1815,3 +1815,6 @@ msgstr ""
 
 msgid "Insert"
 msgstr ""
+
+msgid "Boule court"
+msgstr ""

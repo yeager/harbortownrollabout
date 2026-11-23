@@ -1893,3 +1893,6 @@ msgstr "Espacio"
 
 msgid "Insert"
 msgstr "Insert"
+
+msgid "Boule court"
+msgstr "Pista de petanca"
