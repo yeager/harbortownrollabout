@@ -664,7 +664,7 @@ msgstr ""
 msgid "Patrol the marina"
 msgstr ""
 
-msgid "Check the hydrant at the square"
+msgid "Test the water hose at the square"
 msgstr ""
 
 msgid "Meet the fire safety team at the clinic"

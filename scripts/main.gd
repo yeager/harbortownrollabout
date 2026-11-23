@@ -6,7 +6,7 @@ const TARGETS: Array[Vector3] = [Vector3(30, 0, 3), Vector3(0, 0, -25), Vector3(
 const WALK_TARGETS: Array[Vector3] = [Vector3(30,0,12), Vector3(6.35,0,-25), Vector3(90,0,-24)]
 const TARGET_NAMES := ["Help at the square", "Pick up the medic", "Deliver first aid to the marina"]
 const PATROL_TASKS := ["Check the crossing at the square", "Check the clinic entrance", "Patrol the marina"]
-const FIRE_TASKS := ["Check the hydrant at the square", "Meet the fire safety team at the clinic", "Check the rescue equipment at the marina"]
+const FIRE_TASKS := ["Test the water hose at the square", "Meet the fire safety team at the clinic", "Check the rescue equipment at the marina"]
 const DELIVERY_TASKS := ["Collect parcels at the square", "Deliver a parcel to the clinic", "Deliver the last parcel to the marina"]
 const SLED_TASKS := ["Collect warm blankets at the square", "Bring blankets to the clinic", "Bring blankets to the marina"]
 func _mission_stop() -> int:
@@ -327,6 +327,9 @@ var map_button := Button.new()
 const MAP_NAMES := ["Town square","Clinic","Marina","School","Petrol station"]
 var free_drive := true
 var mission_index := 0
+var practice_hose := Node3D.new()
+var practice_spray := CPUParticles3D.new()
+var hose_seconds := 0.0
 var refuse_pump := AudioStreamPlayer3D.new()
 var refuse_beacon: StandardMaterial3D
 var refuse_lift: Tween
@@ -1428,6 +1431,16 @@ func _at_target() -> bool:
 
 func _update_arrival(delta: float) -> void:
 	var stopped := walking_velocity.length() < .12 if walker.visible else absf(speed) < .12
+	if practice_hose.visible:
+		if vehicle_index != 2 or mission_index != 2 or not _at_target() or not stopped:
+			practice_hose.hide()
+			practice_spray.emitting = false
+			hose_seconds = 0
+			return
+		hose_seconds += delta
+		if hose_seconds >= 2.5:
+			_help_at_target()
+		return
 	if gentle_driving and _at_target() and stopped:
 		parked_at_target += delta
 		if parked_at_target >= HELP_DURATION:
@@ -1519,6 +1532,14 @@ func _help_at_target() -> void:
 		return
 	if _at_target() and (walker.visible or absf(speed)<.12):
 		parked_at_target = 0.0
+		if vehicle_index == 2 and mission_index == 2:
+			if hose_seconds < 2.5:
+				practice_hose.show()
+				practice_spray.emitting = true
+				return
+			practice_hose.hide()
+			practice_spray.emitting = false
+			hose_seconds = 0
 		if vehicle_index == REFUSE and mission_index < 2:
 			_empty_refuse_bin(mission_index)
 		mission_index += 1
@@ -5814,6 +5835,31 @@ func _build_target_marker() -> void:
 	var hydrant := preload("res://environment/fire_hydrant.tscn").instantiate() as Node3D
 	hydrant.position = Vector3(square.x-.85,_foot_height(square.x-.85,square.z),square.z)
 	add_child(hydrant)
+	hydrant.add_child(practice_hose)
+	practice_hose.hide()
+	var hose_finish := _material(Color("#e6bb61"))
+	var hose_path := PackedVector3Array([Vector3(.17,.56,0),Vector3(.52,.09,-.20),Vector3(.85,.06,-.64),Vector3(.97,.06,-1.1),Vector3(.74,.19,-1.48)])
+	for i in range(1,hose_path.size()):
+		_tube_between(practice_hose,hose_path[i-1],hose_path[i],.052,hose_finish)
+	var nozzle := Vector3(.70,.32,-1.76)
+	_tube_between(practice_hose,hose_path[-1],nozzle,.065,_material(Color("#9aaab2")))
+	practice_hose.add_child(practice_spray)
+	practice_spray.position = nozzle
+	practice_spray.direction = Vector3(-.14,.46,-1).normalized()
+	practice_spray.spread = 4
+	practice_spray.initial_velocity_min = 4.2
+	practice_spray.initial_velocity_max = 4.8
+	practice_spray.gravity = Vector3.DOWN*4.9
+	practice_spray.lifetime = 1.05
+	practice_spray.amount = 150
+	var drop := SphereMesh.new()
+	drop.radius = .038
+	drop.height = .076
+	drop.radial_segments = 6
+	drop.rings = 2
+	drop.material = _material(Color("#76c9ed"))
+	practice_spray.mesh = drop
+	practice_spray.emitting = false
 	building_bounds.append(AABB(hydrant.position-Vector3(.22,.1,.2),Vector3(.44,1.1,.4)))
 	_make_walker("Neighbour at the square",square.x+.9,square.z,-1,Color("#408a91"),Color("#465162"))
 	square_neighbour = walker_data.pop_back().actor

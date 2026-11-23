@@ -705,8 +705,8 @@ msgstr "Vérifie l’entrée de la clinique"
 msgid "Patrol the marina"
 msgstr "Patrouille au port de plaisance"
 
-msgid "Check the hydrant at the square"
-msgstr "Vérifie la borne d’incendie sur la place"
+msgid "Test the water hose at the square"
+msgstr "Essaie le tuyau d’eau sur la place"
 
 msgid "Meet the fire safety team at the clinic"
 msgstr "Retrouve l’équipe de sécurité incendie à la clinique"

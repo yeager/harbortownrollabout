@@ -697,8 +697,8 @@ msgstr "Tarkista klinikan sisäänkäynti"
 msgid "Patrol the marina"
 msgstr "Partioi satamassa"
 
-msgid "Check the hydrant at the square"
-msgstr "Tarkista torin paloposti"
+msgid "Test the water hose at the square"
+msgstr "Kokeile vesiletkua torilla"
 
 msgid "Meet the fire safety team at the clinic"
 msgstr "Tapaa paloturvallisuusryhmä klinikalla"

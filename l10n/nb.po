@@ -699,8 +699,8 @@ msgstr "Sjekk klinikkens inngang"
 msgid "Patrol the marina"
 msgstr "Patruljer marinaen"
 
-msgid "Check the hydrant at the square"
-msgstr "Sjekk brannhydranten på torget"
+msgid "Test the water hose at the square"
+msgstr "Prøv vannslangen på torget"
 
 msgid "Meet the fire safety team at the clinic"
 msgstr "Møt brannvernlaget ved klinikken"

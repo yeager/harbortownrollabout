@@ -665,8 +665,8 @@ msgstr "Se till entrén vid vårdcentralen"
 msgid "Patrol the marina"
 msgstr "Patrullera småbåtshamnen"
 
-msgid "Check the hydrant at the square"
-msgstr "Kontrollera brandposten vid torget"
+msgid "Test the water hose at the square"
+msgstr "Prova vattenslangen på torget"
 
 msgid "Meet the fire safety team at the clinic"
 msgstr "Träffa brandskyddsgruppen vid vårdcentralen"
