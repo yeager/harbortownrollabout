@@ -147,23 +147,8 @@ jobs:
         run: |
           mkdir image
           ditto -x -k "export/mac/harbortown.zip" image
-          app=$(find image -maxdepth 1 -name '*.app' -print -quit)
-          original=$(/usr/libexec/PlistBuddy -c 'Print CFBundleExecutable' "$app/Contents/Info.plist")
-          if [[ "$original" != harbortown ]]; then
-            mv "$app/Contents/MacOS/$original" "$app/Contents/MacOS/harbortown"
-            if [[ -f "$app/Contents/Resources/$original.pck" ]]; then
-              mv "$app/Contents/Resources/$original.pck" "$app/Contents/Resources/harbortown.pck"
-            fi
-            /usr/libexec/PlistBuddy -c 'Set :CFBundleExecutable harbortown' "$app/Contents/Info.plist"
-          fi
-          if [[ "$app" != image/harbortown.app ]]; then mv "$app" image/harbortown.app; fi
+          python3 packaging/macos/name_app.py image
           app=image/harbortown.app
-          plutil -replace CFBundleName -string harbortown "$app/Contents/Info.plist"
-          plutil -replace CFBundleDisplayName -string harbortown "$app/Contents/Info.plist"
-          for strings in "$app"/Contents/Resources/*.lproj/InfoPlist.strings; do
-            [[ -f "$strings" ]] || continue
-            sed -i '' 's/^CFBundleDisplayName = .*;/CFBundleDisplayName = "harbortown";/' "$strings"
-          done
           codesign --force --deep --sign - "$app"
           codesign --verify --deep --strict "$app"
           ln -s /Applications image/Applications
