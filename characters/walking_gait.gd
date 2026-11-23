@@ -48,9 +48,9 @@ func _init(person: Node3D, initial_phase: float, terrain := Callable()) -> void:
 	for hip: Node3D in legs:
 		var cloth: MeshInstance3D = hip.get_child(0)
 		if not trousers:
-			trousers = _weight_mesh(cloth.mesh, -(THIGH + cloth.position.y), .075)
+			trousers = _weight_mesh(cloth.mesh, -(THIGH + cloth.position.y), .095, true)
 		cloth.mesh = trousers
-		knees.append(_create_joint(cloth, THIGH, "Thigh", "Shin"))
+		knees.append(_create_joint(cloth, THIGH, "Thigh", "Shin", true))
 		hip_centres.append(hip.position.x)
 		shoes.append(hip.get_child(1))
 	for shoulder: Node3D in arms:
@@ -63,19 +63,23 @@ func _init(person: Node3D, initial_phase: float, terrain := Callable()) -> void:
 		palms.append(hand)
 		palm_rest.append(hand.transform)
 
-func _create_joint(cloth: MeshInstance3D, length: float, upper: String, lower: String) -> Skeleton3D:
+func _create_joint(cloth: MeshInstance3D, length: float, upper: String, lower: String, support_knee := false) -> Skeleton3D:
 	var rig := Skeleton3D.new()
 	cloth.add_child(rig)
 	rig.add_bone(upper)
 	rig.add_bone(lower)
 	rig.set_bone_parent(1, 0)
 	rig.set_bone_rest(1, Transform3D(Basis.IDENTITY, Vector3.DOWN * (length + cloth.position.y)))
+	if support_knee:
+		rig.add_bone("Knee")
+		rig.set_bone_parent(2, 0)
+		rig.set_bone_rest(2, rig.get_bone_rest(1))
 	rig.reset_bone_poses()
 	cloth.skeleton = cloth.get_path_to(rig)
 	cloth.skin = rig.create_skin_from_rest_transforms()
 	return rig
 
-func _weight_mesh(source: Mesh, joint_y: float, blend: float) -> ArrayMesh:
+func _weight_mesh(source: Mesh, joint_y: float, blend: float, support_knee := false) -> ArrayMesh:
 	var result := ArrayMesh.new()
 	for surface in source.get_surface_count():
 		var arrays := source.surface_get_arrays(surface)
@@ -89,6 +93,12 @@ func _weight_mesh(source: Mesh, joint_y: float, blend: float) -> ArrayMesh:
 			bones[i * 4 + 1] = 1
 			weights[i * 4] = 1.0 - lower_weight
 			weights[i * 4 + 1] = lower_weight
+			if support_knee:
+				# Blend via the half-angle joint to retain cloth volume when the knee folds.
+				bones[i * 4 + 2] = 2
+				weights[i * 4] = maxf(0, 1.0 - 2.0 * lower_weight)
+				weights[i * 4 + 1] = maxf(0, 2.0 * lower_weight - 1.0)
+				weights[i * 4 + 2] = 1.0 - absf(2.0 * lower_weight - 1.0)
 		arrays[Mesh.ARRAY_BONES] = bones
 		arrays[Mesh.ARRAY_WEIGHTS] = weights
 		result.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
@@ -191,6 +201,7 @@ func advance(distance: float, delta: float, pushing: bool, tuck := 0.0) -> void:
 		legs[i].position = Vector3(hip_centres[i], hip_y, 0) + hip_offsets[i]
 		legs[i].basis = Basis(Vector3.BACK, lateral_angle) * Basis(Vector3.RIGHT, thigh_angle)
 		knees[i].set_bone_pose_rotation(1, Quaternion(Vector3.RIGHT, -bend))
+		knees[i].set_bone_pose_rotation(2, Quaternion(Vector3.RIGHT, -.5 * bend))
 		var shin := Vector3.DOWN * SHIN
 		shoes[i].position = Vector3.DOWN * THIGH + shin.rotated(Vector3.RIGHT, -bend)
 		shoes[i].position += legs[i].basis.inverse() * (Vector3.FORWARD * 0.025)
