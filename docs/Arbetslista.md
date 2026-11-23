@@ -18,7 +18,7 @@ De 50 förbättringarna från genomgången. En tom ruta är öppen. En punkt boc
 ## Hitta, köra och komma ombord
 
 - [x] 11. Fordonsgalleri med fem bildkategorier och Alla fordon. Alla 29 fordonsbilder verifierade i exakt en kategori vardera och tillgängliga igen under Alla fordon.
-- [ ] 12. Markera och hitta favoritfordon.
+- [x] 12. Markera och hitta favoritfordon med stjärnor. Sparade favoriter, filtrering, avmarkering och start av motorbåten verifierade i Godot.
 - [ ] 13. Markera rätt trottoarkant vid sophämtning, taxiresor och bärgning.
 - [ ] 14. Förvarna med två symboler om nästa vägval vid komplicerade korsningar.
 - [ ] 15. Översiktskarta med klickbara landmärken och vägledning under friåkning.

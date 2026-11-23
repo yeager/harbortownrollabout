@@ -1657,3 +1657,9 @@ msgstr "Henkilöliikenne"
 
 msgid "Leisure vehicles"
 msgstr "Vapaa-aika"
+
+msgid "Favorite vehicles"
+msgstr "Suosikkiajoneuvot"
+
+msgid "Tap a star on a vehicle to add it here."
+msgstr "Lisää ajoneuvo tähän napauttamalla sen tähteä."

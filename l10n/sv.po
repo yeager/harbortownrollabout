@@ -1591,3 +1591,9 @@ msgstr "Persontrafik"
 
 msgid "Leisure vehicles"
 msgstr "Fritidsfordon"
+
+msgid "Favorite vehicles"
+msgstr "Favoritfordon"
+
+msgid "Tap a star on a vehicle to add it here."
+msgstr "Tryck på stjärnan på ett fordon för att lägga till det här."

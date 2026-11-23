@@ -1668,3 +1668,9 @@ msgstr "Pasajeros"
 
 msgid "Leisure vehicles"
 msgstr "Ocio"
+
+msgid "Favorite vehicles"
+msgstr "Vehículos favoritos"
+
+msgid "Tap a star on a vehicle to add it here."
+msgstr "Toca la estrella de un vehículo para añadirlo aquí."

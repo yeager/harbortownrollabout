@@ -1676,3 +1676,9 @@ msgstr "Transport public"
 
 msgid "Leisure vehicles"
 msgstr "Loisirs"
+
+msgid "Favorite vehicles"
+msgstr "Véhicules favoris"
+
+msgid "Tap a star on a vehicle to add it here."
+msgstr "Touche l’étoile d’un véhicule pour l’ajouter ici."

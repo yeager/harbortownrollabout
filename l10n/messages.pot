@@ -1590,3 +1590,9 @@ msgstr ""
 
 msgid "Leisure vehicles"
 msgstr ""
+
+msgid "Favorite vehicles"
+msgstr ""
+
+msgid "Tap a star on a vehicle to add it here."
+msgstr ""

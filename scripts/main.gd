@@ -257,6 +257,7 @@ const GALLERY_GROUPS := {
 	"Leisure vehicles": ["Monster truck", "Classic moped", "Snowmobile", "Shopping trike", "Motorboat"]
 }
 var category_tabs := HBoxContainer.new()
+var favorites := PackedStringArray()
 var gallery_category := "All vehicles"
 var vehicle_selector := GridContainer.new()
 var camera_turn := 0.0
@@ -774,6 +775,9 @@ func _notification(what: int) -> void:
 		traffic_volume_slider.accessibility_name = tr("Traffic sirens")
 		for tile: Button in vehicle_selector.get_children():
 			tile.accessibility_name = tr(tile.text)
+			tile.get_node("Favorite").accessibility_name = tr("Favorite vehicles") + " · " + tr(tile.text)
+		category_tabs.get_child(-1).tooltip_text = tr("Favorite vehicles")
+		category_tabs.get_child(-1).accessibility_name = tr("Favorite vehicles")
 		for label in station_readouts:
 			label.text = _station_readout_text(station_readouts[label])
 		for poster: Label3D in get_tree().get_nodes_in_group("fitted_world_signs"):
@@ -6207,17 +6211,39 @@ func _build_overlay() -> void:
 		else:
 			tile.pressed.connect(_on_vehicle_selected.bind(index))
 		vehicle_selector.add_child(tile)
+		var star := Button.new()
+		star.name = "Favorite"
+		star.toggle_mode = true
+		star.flat = true
+		star.button_pressed = tile.text in favorites
+		star.text = "★" if star.button_pressed else "☆"
+		star.accessibility_name = tr("Favorite vehicles") + " · " + tr(tile.text)
+		tile.add_child(star)
+		star.set_anchors_and_offsets_preset(Control.PRESET_TOP_RIGHT)
+		star.offset_left = -36
+		star.offset_bottom = 36
+		star.toggled.connect(func(enabled: bool):
+			if enabled: favorites.append(tile.text)
+			else: favorites.remove_at(favorites.find(tile.text))
+			star.text = "★" if enabled else "☆"
+			_save_preferences()
+			_filter_gallery()
+		)
 	_mark_selected_vehicle(vehicle_index)
 	category_tabs.alignment = BoxContainer.ALIGNMENT_CENTER
 	var category_group := ButtonGroup.new()
-	for category: String in GALLERY_GROUPS:
+	for category: String in GALLERY_GROUPS.keys() + ["Favorite vehicles"]:
 		var tab := Button.new()
 		tab.text = category
 		tab.toggle_mode = true
 		tab.button_group = category_group
 		tab.button_pressed = category == gallery_category
-		var members: Array = GALLERY_GROUPS[category]
-		if members.is_empty():
+		var members: Array = GALLERY_GROUPS.get(category, [])
+		if category == "Favorite vehicles":
+			tab.text = "★"
+			tab.tooltip_text = tr(category)
+			tab.accessibility_name = tr(category)
+		elif members.is_empty():
 			tab.icon = ThemeDB.get_default_theme().get_icon("grid", "GraphEdit")
 		else:
 			var sample := VEHICLE_NAMES_ALL.find(members[0])
@@ -7008,10 +7034,12 @@ func _select_gallery_activity(index: int) -> void:
 
 func _filter_gallery() -> void:
 	category_tabs.visible = mode == "menu"
-	var members: Array = GALLERY_GROUPS[gallery_category]
+	if mode == "menu":
+		subtitle_label.text = "Tap a star on a vehicle to add it here." if gallery_category == "Favorite vehicles" and favorites.is_empty() else "Click the pictures to choose your vehicle and driver."
+	var members: Array = GALLERY_GROUPS.get(gallery_category, [])
 	for tile: Button in vehicle_selector.get_children():
 		if mode == "menu":
-			tile.visible = members.is_empty() or tile.text in members
+			tile.visible = tile.text in favorites if gallery_category == "Favorite vehicles" else members.is_empty() or tile.text in members
 		else:
 			tile.visible = tile.get_index() < VEHICLE_NAMES_ALL.size()
 
@@ -7141,6 +7169,8 @@ func _load_preferences() -> void:
 	for i in RADIO_KEYS.size():
 		var code = config.get_value("keyboard","radio_%d" % i,radio_keys[i])
 		if code in RADIO_KEYS[i]: radio_keys[i] = code
+	var saved_favorites = config.get_value("gallery","favorites",PackedStringArray())
+	if saved_favorites is PackedStringArray: favorites = saved_favorites
 	number_camera = config.get_value("keyboard","number_camera",false) == true
 	jump_key = KEY_0 if config.get_value("keyboard","zero_jump",false) == true else KEY_E
 	recovery_key = KEY_BACKSPACE if config.get_value("keyboard","backspace_recovery",false) == true else KEY_R
@@ -7207,6 +7237,7 @@ func _save_preferences() -> void:
 	config.set_value("traffic","lights",traffic_light_mode)
 	for i in RADIO_KEYS.size():
 		config.set_value("keyboard","radio_%d" % i, radio_keys[i])
+	config.set_value("gallery","favorites",favorites)
 	config.set_value("keyboard","number_camera",number_camera)
 	config.set_value("keyboard","zero_jump",jump_key == KEY_0)
 	config.set_value("keyboard","backspace_recovery",recovery_key == KEY_BACKSPACE)
@@ -7478,7 +7509,6 @@ func _refresh_ui() -> void:
 	get_window().title = tr("Harbor Town Rollabout")
 	if mode == "menu":
 		title_label.text = "Harbor Town Rollabout"
-		subtitle_label.text = "Click the pictures to choose your vehicle and driver."
 		start_button.text = "Start driving"
 	elif mode == "complete":
 		title_label.text = "All missions complete!"
