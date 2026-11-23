@@ -22,6 +22,18 @@ func check() -> void:
 	if lights.red_clearance(stop_point+Vector3.BACK*8-approach*5,approach,2,true) < INF:
 		fail("Stop line extended beyond the crossing")
 		return
+	for zebra in lights.street_crosswalks:
+		for side in [-1,1]:
+			var axis: Vector3 = zebra.axis * side
+			var curb: Vector3 = zebra.center + axis*4.1
+			lights.phase = (zebra.walk_phase+1)%6
+			if lights.pedestrian_may_enter(curb,curb-axis*.2) or not lights.pedestrian_may_enter(curb-axis*.2,curb):
+				fail("Pedestrian red must block entry and allow exit")
+				return
+			lights.phase = zebra.walk_phase
+			if not lights.pedestrian_may_enter(curb,curb-axis*.2):
+				fail("Pedestrian green must allow entry")
+				return
 	lights.advance(0)
 	# Sample two cycles so a red interval crossing the timer wrap is measured too.
 	var red_seconds := [0.0, 0.0]

@@ -13,6 +13,7 @@ const BOULEVARD_LINE := 10.0
 const SIDE_LINE := 10.5
 const ZEBRA_OFFSET := 6.3
 var tram_crossings: Array[Dictionary] = []
+var street_crosswalks: Array[Dictionary] = []
 const SHOP_CROSSING := Vector3(-39,0,35)
 const EAST_CROSSINGS := [Vector3(91,0,0),Vector3(91,0,-48),Vector3(143,0,-48)]
 const CROSSING_X := -12.0
@@ -38,15 +39,15 @@ func _ready() -> void:
 	_build_street_crossing(SHOP_CROSSING)
 	for center: Vector3 in EAST_CROSSINGS:
 		_build_street_crossing(center)
-	heads.append_array(_add_crossing(Vector3(CROSSING_X,0,0),false))
+	heads.append_array(_street_crosswalk(Vector3(CROSSING_X,0,0),false))
 	for z in [-6.35,6.35]:
-		heads.append_array(_add_crossing(Vector3(0,0,z),true))
+		heads.append_array(_street_crosswalk(Vector3(0,0,z),true))
 	_build_tram_crossings()
 	advance(0)
 
 func _build_street_crossing(center: Vector3) -> void:
 	center.y = get_parent()._surface_height(center.x,center.z)
-	heads.append_array(_add_crossing(center,false))
+	heads.append_array(_street_crosswalk(center,false))
 	for direction in [-1,1]:
 		var mast := Node3D.new()
 		add_child(mast)
@@ -99,6 +100,11 @@ func _make_visor() -> ArrayMesh:
 			surface.set_normal(Vector3(corners[index].x,corners[index].y,0).normalized())
 			surface.add_vertex(corners[index])
 	return surface.commit()
+
+func _street_crosswalk(center: Vector3, east_west: bool) -> Array[Dictionary]:
+	street_crosswalks.append({"center":center, "axis":Vector3.RIGHT if east_west else Vector3.BACK,
+		"walk_phase":0 if east_west else 3})
+	return _add_crossing(center,east_west)
 
 func _add_crossing(center: Vector3, east_west: bool, pavement_offset := 5.45) -> Array[Dictionary]:
 	var signals: Array[Dictionary] = []
@@ -300,6 +306,13 @@ func tram_clearance(distance: float, length: float) -> float:
 	return nearest
 
 func pedestrian_may_enter(from: Vector3, to: Vector3) -> bool:
+	for zebra in street_crosswalks:
+		if phase == zebra.walk_phase: continue
+		var axis: Vector3 = zebra.axis
+		var start := from - Vector3(zebra.center)
+		var end := to - Vector3(zebra.center)
+		if absf(end.dot(axis.cross(Vector3.UP))) > 1.45: continue
+		if absf(start.dot(axis)) >= 4.0 and absf(end.dot(axis)) < 4.0: return false
 	for c in tram_crossings:
 		if _walk_green(c): continue
 		var dest := to-Vector3(c.center)
