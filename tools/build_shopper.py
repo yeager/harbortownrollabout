@@ -42,7 +42,11 @@ v.mesh_from_rings("Pressed chassis",[(-1.15,.37,.19,.46,.52),(-.94,.47,.17,.53,.
     (-.66,.46,.20,.50,.57)],red,root,.018,panel_section)
 v.mesh_from_rings("Seat pedestal and rear deck",[(.005,.42,.21,.50,.55),(.42,.425,.22,.52,.56),(.78,.385,.23,.51,.54),
     (1.02,.345,.24,.50,.525),(1.16,.315,.25,.48,.51)],red,root,.018,panel_section)
-bonnet = v.mesh_from_rings("Tilting wedge front",[(-1.18,.37,.42,.54,.65),(-1.06,.44,.44,.57,.69),
+# The central lamp sits on a flat panel. Close-set sections roll its outer
+# corners back into the sloping cheeks without narrowing the footwell.
+bonnet = v.mesh_from_rings("Tilting wedge front",[(-1.18,.303,.428,.54,.65),
+    (-1.174,.337,.422,.54,.654),(-1.157,.365,.421,.545,.661),
+    (-1.127,.388,.427,.554,.671),(-1.06,.427,.44,.57,.69),
     (-.46,.47,.51,.80,.92),(-.25,.43,.54,.85,.95)],red,root,.015,panel_section)
 # Hollow the underside from the driver side, keeping the outer cheeks and bonnet skin.
 cutter = box("Footwell cavity",(0,-.35,.41),(.76,.60,.70),v.BLACK,.025)
