@@ -114,6 +114,14 @@ for side in (-1,1):
         tube("Basket wire",(side*.30,.53+.52*t,.55),(side*.36,.49+.63*t,.72),.005,v.METAL)
 for i in range(-3,4):
     tube("Basket floor",(i*.095,.53,.55),(i*.095,1.05,.55),.006,v.METAL)
+tube("Exhaust downpipe",(.34,.24,.32),(.426,.34,.213),.020,v.METAL)
+tube("Exhaust inlet",(.426,.34,.213),(.426,.52,.198),.020,v.METAL)
+tube("Silencer",(.426,.51,.198),(.426,1.01,.202),.042,v.METAL)
+for y in (.59,.93):
+    tube("Silencer strap",(.426,y-.007,.20),(.426,y+.007,.20),.044,v.DARK)
+    box("Exhaust hanger",(.414,y,.256),(.023,.027,.086),v.DARK,.004)
+tube("Exhaust outlet",(.426,1.01,.202),(.426,1.12,.194),.022,v.METAL)
+tube("Dark outlet bore",(.426,1.12,.194),(.426,1.121,.194),.016,v.BLACK)
 box("Tail lamp",(0,1.16,.43),(.14,.035,.06),v.TAIL_LAMP)
 v.export_vehicle(root,"shopping_trike.glb")
 if os.getenv("SHOPPER_PORTRAIT"):
