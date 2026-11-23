@@ -4861,8 +4861,7 @@ func _update_pedestrians(delta: float) -> void:
 	for person: Node3D in [square_neighbour, passenger]:
 		if person.visible:
 			_animate_steps(person, 0, delta)
-			if person == passenger or mission_index == 0:
-				person.get_meta("gait").wave(passenger_wave_time)
+			person.get_meta("gait").wave(passenger_wave_time, person == passenger or mission_index == 0, delta)
 	_update_small_talk(delta)
 	for item in walker_data:
 		var person: Node3D = item["actor"]

@@ -16,6 +16,7 @@ var ground_height: Callable
 var phase := 0.0
 var weight := 0.0
 var lateral_shift := 0.0
+var wave_weight := 0.0
 var lateral_speed := 0.0
 var hip_centres := PackedFloat32Array()
 var elbows: Array[Skeleton3D] = []
@@ -188,13 +189,17 @@ func advance(distance: float, delta: float, pushing: bool, tuck := 0.0) -> void:
 		palms[i].transform = Transform3D(elbow_rotation * wrist_rotation * rest.basis, joint + elbow_rotation * (palm_origin - joint))
 
 ## Raise the right hand to hail a vehicle, bending the elbow above the shoulder.
-func wave(time: float) -> void:
+func wave(time: float, raised: bool, delta: float) -> void:
+	wave_weight = move_toward(wave_weight, 1.0 if raised else 0.0, delta * 2.5)
+	if wave_weight == 0.0:
+		return
+	var blend := smoothstep(0.0, 1.0, wave_weight)
 	var beat := sin(time * 5.2)
-	arms[1].rotation = Vector3(.18, 0, 1.65)
-	var forearm := Basis(Vector3.BACK, .99 + .22 * beat)
+	arms[1].rotation = arms[1].rotation.lerp(Vector3(.18, 0, 1.65), blend)
+	var forearm := Basis(elbows[1].get_bone_pose_rotation(1)).slerp(Basis(Vector3.BACK, .99 + .22 * beat), blend)
 	elbows[1].set_bone_pose_rotation(1, forearm.get_rotation_quaternion())
 	var rest := palm_rest[1]
-	var wrist := Basis(Vector3.BACK, .19 * sin(time * 5.2 - .5)) * Basis(Vector3.UP, 1.25)
+	var wrist := Basis(Vector3.BACK, blend * .19 * sin(time * 5.2 - .5)) * Basis(Vector3.UP, blend * 1.25)
 	var cuff := Vector3.UP * .06
 	var joint := Vector3.DOWN * UPPER_ARM
 	palms[1].transform = Transform3D(forearm * wrist * rest.basis, joint + forearm * (rest.origin + cuff - wrist * cuff - joint))
