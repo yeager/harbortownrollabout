@@ -114,6 +114,20 @@ for side in (-1,1):
         tube("Basket wire",(side*.30,.53+.52*t,.55),(side*.36,.49+.63*t,.72),.005,v.METAL)
 for i in range(-3,4):
     tube("Basket floor",(i*.095,.53,.55),(i*.095,1.05,.55),.006,v.METAL)
+# The rear side panels taper inward. Seat the engine vents flush on that slope.
+for side in (-1, 1):
+    vent_y = .65
+    slope = (.40 - .37) / (1.16 - .63)
+    for name, offset, size, finish in (
+        ("Service vent surround", .004, (.018,.35,.145), v.METAL),
+        ("Recess behind cooling slots", .013, (.014,.326,.124), v.BLACK),
+    ):
+        panel = box(name, (side*(.40+offset), vent_y, .387), size, finish, .007)
+        panel.rotation_euler.z = side*math.atan(slope)
+    for row in range(5):
+        slat = box("Engine cooling louvre", (side*.421, vent_y, .34+row*.023),
+                   (.014,.31,.012), v.DARK, .004)
+        slat.rotation_euler.z = side*math.atan(slope)
 tube("Exhaust downpipe",(.34,.24,.32),(.426,.34,.213),.020,v.METAL)
 tube("Exhaust inlet",(.426,.34,.213),(.426,.52,.198),.020,v.METAL)
 tube("Silencer",(.426,.51,.198),(.426,1.01,.202),.042,v.METAL)
