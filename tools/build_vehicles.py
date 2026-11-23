@@ -788,7 +788,7 @@ def make_volvo_xc60_police():
 def rear_prismatic_lens(name, x, z, height, finish, root):
     """Moulded lens with a shallow convex face and individual reflector facets."""
     vertices, faces = [], []
-    columns, rows = 6, round(height / .019)
+    columns, rows = 14, round(height / .007)
     for row in range(rows + 1):
         v = 2 * row / rows - 1
         for column in range(columns + 1):
@@ -802,7 +802,7 @@ def rear_prismatic_lens(name, x, z, height, finish, root):
             a = row*(columns+1) + column
             corners = (a, a+columns+1, a+columns+2, a+1)
             center = [sum(vertices[i][axis] for i in corners)/4 for axis in range(3)]
-            center[1] += .003
+            center[1] += .00038
             tip = len(vertices)
             vertices.append(center)
             faces.extend((i, corners[(k+1)%4], tip) for k,i in enumerate(corners))
