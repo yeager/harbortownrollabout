@@ -812,7 +812,13 @@ def make_fire_engine():
         outline=half+[(-x,y) for x,y in reversed(half[1:])]
         n=len(outline)
         base=len(vertices)
-        vertices.extend((x,y,z) for x,y in outline)
+        # The front door sill climbs towards the B pillar. The rear door
+        # starts a separate sweep and rises again towards the crew compartment.
+        sill_lift = (0,0,0,0,0,0,.13,.075,.185,.185)
+        for k,(x,y) in enumerate(outline):
+            station = min(k,n-k)
+            lift = sill_lift[station] if z in (1.73,1.78) else 0
+            vertices.append((x,y,z+lift))
         if base:
             for k in range(n):
                 q=(k+1)%n
@@ -984,10 +990,38 @@ def make_fire_engine():
     fascia("Reflective eyebrow",1.035,2.512,.030,-2.828,.012,PAINT_YELLOW)
     fascia("Upper cab pressing",1.09,1.64,.25,-3.065,.085,PAINT_RED)
     for z,width,depth in ((1.37,.80,-3.086),(1.124,.73,-3.115)):
-        fascia("Recessed cooling aperture",width,z,.19,depth,.06,RUBBER)
-        fascia("Intake lower reflective lip",width*.99,z-.082,.032,depth-.018,.06,PAINT_YELLOW)
-        for offset in (-.035,.011,.055):
-            fascia("Perforated grille rail",width*.94,z+offset,.012,depth-.012,.06,DARK)
+        # A rolled trapezoidal mouth surrounds a perforated, recessed insert.
+        rings=[]
+        for dz,span,setback in ((-.108,.81,.025),(-.098,.88,.010),
+                                (-.069,.93,0),(.065,.995,0),(.096,1,.013)):
+            rings.append([(x*width*span,depth+setback+dy+.052*x*x,z+dz+.015*x*x)
+                          for x,dy in ((-1,.09),(-1,.014),(-.92,0),(0,-.006),
+                                       (.92,0),(1,.014),(1,.09),(0,.10))])
+        profile_loft("Tapered cooling intake",rings,RUBBER,root)
+        fascia("Reflective lower intake rim",width*.85,z-.099,.021,depth-.011,.024,PAINT_YELLOW)
+        vertices,faces=[],[]
+        pitch=.032
+        for row in range(4):
+            h=z-.052+row*.032
+            for col in range(-26,27):
+                center=(col+.5*(row%2))*pitch
+                if abs(center)+pitch/2 > width*(.85+.026*row): continue
+                base=len(vertices)
+                for radius in (.018,.014):
+                    for j in range(6):
+                        angle=math.tau*j/6+math.pi/2
+                        x=center+radius*math.cos(angle)
+                        vertices.append((x,depth-.012+.052*(x/width)**2,
+                                         h+radius*math.sin(angle)+.015*(x/width)**2))
+                for j in range(6):
+                    k=(j+1)%6
+                    faces.append((base+j,base+k,base+6+k,base+6+j))
+        mesh=bpy.data.meshes.new("Stamped intake screen")
+        mesh.from_pydata(vertices,[],faces)
+        mesh.materials.append(DARK)
+        insert=bpy.data.objects.new("Honeycomb intake insert",mesh)
+        bpy.context.collection.objects.link(insert)
+        insert.parent=root
     for side in (-1,1):
         fascia_x = side*.91
         pod = cube("Upper corner marker housing",(fascia_x,-2.984,1.675),(.31,.11,.12),BLACK,.043,root)
