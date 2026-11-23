@@ -101,6 +101,7 @@ jobs:
             "$(go env GOPATH)/bin/nfpm" package -f packaging/linux/nfpm.yaml -p "$format" -t "dist/harbortown-$VERSION-x86_64.$format"
           done
           install -m 644 branding/app-icon.png export/linux/harbortown.png
+          cp LICENSE export/linux/LICENSE
           tar -czf "dist/harbortown-$VERSION-linux-x86_64.tar.gz" -C export/linux .
       - name: Launch packaged Linux game on Ubuntu 22.04 and Fedora 43
         if: runner.os == 'Linux'
@@ -158,6 +159,7 @@ jobs:
             lipo "$executable" -thin "$arch" -output "$executable.thin"
             mv "$executable.thin" "$executable"
             chmod +x "$executable"
+            cp LICENSE "$app/Contents/Resources/LICENSE"
             codesign --force --deep --sign - "$app"
             ln -s /Applications "$image/Applications"
             dmg="dist/harbortown-$VERSION-macOS-$arch.dmg"

@@ -24,6 +24,7 @@ Name: "nb"; MessagesFile: "compiler:Languages\Norwegian.isl"
 Name: "fi"; MessagesFile: "compiler:Languages\Finnish.isl"
 
 [Files]
+Source: "..\..\LICENSE"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\..\export\windows\*"; DestDir: "{app}"; Flags: recursesubdirs ignoreversion
 
 [Icons]

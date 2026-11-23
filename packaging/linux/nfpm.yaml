@@ -2,12 +2,15 @@ name: harbortown
 arch: amd64
 platform: linux
 version: ${VERSION}
+license: GPL-3.0-only
 maintainer: Daniel Nylander
 description: Harbor Town Rollabout family driving and exploration game
 homepage: https://github.com/yeager/harbortownrollabout
 depends:
   - fontconfig
 contents:
+  - src: LICENSE
+    dst: /usr/share/doc/harbortown/copyright
   - src: export/linux/harbortown
     dst: /usr/lib/harbortown/harbortown
     file_info:

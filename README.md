@@ -79,3 +79,7 @@ Open `project.godot` in Godot 4.7 dev5 and press **F5**.
 ## Help out
 
 Can you sing a radio song in your language, improve a translation or take a test drive? [See how to contribute](CONTRIBUTE.md).
+
+## License
+
+Harbor Town Rollabout is licensed under the [GNU General Public License, version 3 only](LICENSE) (GPL-3.0-only). Third-party components retain their respective licenses.
