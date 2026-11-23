@@ -1071,8 +1071,8 @@ msgstr "Serviere den Bootsbesatzungen die Suppe"
 msgid "Back in a safe place."
 msgstr "Du bist wieder an einem sicheren Ort."
 
-msgid "Stuck? Press R"
-msgstr "Steckst du fest? Drück R"
+msgid "Stuck? Press %s"
+msgstr "Steckst du fest? Drück %s"
 
 msgid "No clear spot yet. Try again in a moment."
 msgstr "Gerade ist kein Platz frei. Versuch es gleich noch mal."
@@ -1648,3 +1648,6 @@ msgstr "Taste für den nächsten Titel"
 
 msgid "Move with 8, 4, 5, 6"
 msgstr "Mit 8, 4, 5, 6 steuern"
+
+msgid "Use Backspace to return to a safe place"
+msgstr "Mit der Rücktaste an einen sicheren Ort zurückkehren"

@@ -1006,8 +1006,8 @@ msgstr "Bjud båtbesättningarna på soppa"
 msgid "Back in a safe place."
 msgstr "Tillbaka på en säker plats."
 
-msgid "Stuck? Press R"
-msgstr "Fastnat? Tryck R"
+msgid "Stuck? Press %s"
+msgstr "Fastnat? Tryck %s"
 
 msgid "No clear spot yet. Try again in a moment."
 msgstr "Alla platser är upptagna. Försök igen om en stund."
@@ -1561,3 +1561,6 @@ msgstr "Tangent för nästa låt"
 
 msgid "Move with 8, 4, 5, 6"
 msgstr "Styr med 8, 4, 5, 6"
+
+msgid "Use Backspace to return to a safe place"
+msgstr "Använd Backspace för att återgå till en säker plats"

@@ -1053,8 +1053,8 @@ msgstr "Tarjoile keittoa laivaväelle"
 msgid "Back in a safe place."
 msgstr "Olet taas turvallisessa paikassa."
 
-msgid "Stuck? Press R"
-msgstr "Jäitkö jumiin? Paina R"
+msgid "Stuck? Press %s"
+msgstr "Jäitkö jumiin? Paina %s"
 
 msgid "No clear spot yet. Try again in a moment."
 msgstr "Vapaata paikkaa ei vielä löytynyt. Kokeile hetken kuluttua uudelleen."
@@ -1627,3 +1627,6 @@ msgstr "Seuraavan kappaleen näppäin"
 
 msgid "Move with 8, 4, 5, 6"
 msgstr "Ohjaa näppäimillä 8, 4, 5, 6"
+
+msgid "Use Backspace to return to a safe place"
+msgstr "Palaa turvalliseen paikkaan askelpalauttimella"

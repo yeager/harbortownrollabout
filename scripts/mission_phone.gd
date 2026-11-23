@@ -3,6 +3,7 @@ extends VBoxContainer
 var open_button := Button.new()
 var title := Label.new()
 var large_text := false
+var recovery_hint := Label.new()
 var handset := PanelContainer.new()
 var messages: Array[String] = []
 var job_heading := Label.new()
@@ -95,8 +96,6 @@ func _ready() -> void:
 	title.add_theme_font_size_override("font_size", 22)
 	title.add_theme_color_override("font_color", Color("#12594f"))
 	content.add_child(title)
-	var recovery_hint := Label.new()
-	recovery_hint.text = "Stuck? Press R"
 	recovery_hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	recovery_hint.add_theme_color_override("font_color", Color("#183a38"))
 	content.add_child(recovery_hint)

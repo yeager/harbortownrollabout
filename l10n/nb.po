@@ -1056,8 +1056,8 @@ msgstr "Server suppe til båtbesetningene"
 msgid "Back in a safe place."
 msgstr "Nå er du på et trygt sted igjen."
 
-msgid "Stuck? Press R"
-msgstr "Sitter du fast? Trykk R"
+msgid "Stuck? Press %s"
+msgstr "Sitter du fast? Trykk %s"
 
 msgid "No clear spot yet. Try again in a moment."
 msgstr "Det er ingen ledig plass akkurat nå. Prøv igjen om litt."
@@ -1631,3 +1631,6 @@ msgstr "Tast for neste sang"
 
 msgid "Move with 8, 4, 5, 6"
 msgstr "Styr med 8, 4, 5, 6"
+
+msgid "Use Backspace to return to a safe place"
+msgstr "Bruk rettetasten for å komme tilbake til et trygt sted"

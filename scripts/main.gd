@@ -74,6 +74,7 @@ var greeting_number := 0
 const RADIO_KEYS := [[KEY_J, KEY_B, KEY_X], [KEY_N, KEY_M, KEY_Z]]
 const NUMBER_MOVEMENT := {KEY_W: KEY_8, KEY_A: KEY_4, KEY_S: KEY_5, KEY_D: KEY_6}
 var number_movement := false
+var recovery_key := KEY_R
 var radio_keys: Array[int] = [KEY_J, KEY_N]
 var large_text := false
 var extra_reading_time := false
@@ -779,6 +780,9 @@ func _notification(what: int) -> void:
 
 func _unhandled_key_input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed and not event.echo:
+		if event.keycode == recovery_key and mode == "playing" and not paused:
+			_recover_position()
+			return
 		if event.keycode == radio_keys[0]:
 			_toggle_radio()
 			return
@@ -808,7 +812,6 @@ func _unhandled_key_input(event: InputEvent) -> void:
 				if mode == "menu": _start_game()
 			KEY_R:
 				if mode == "complete": _start_game()
-				elif mode == "playing" and not paused: _recover_position()
 
 func _toggle_radio() -> void:
 	if radio_button.disabled or not radio_button.is_visible_in_tree(): return
@@ -4020,7 +4023,10 @@ func _movement_hint(text: String) -> String:
 	return text.format({"up":"8","left":"4","down":"5","right":"6"} if number_movement else {"up":"W","left":"A","down":"S","right":"D"})
 
 func _with_recovery_hint(controls: String) -> String:
-	return _movement_hint(controls) + "   ·   " + tr("Stuck? Press R")
+	return _movement_hint(controls) + "   ·   " + _recovery_hint()
+
+func _recovery_hint() -> String:
+	return tr("Stuck? Press %s") % OS.get_keycode_string(recovery_key)
 
 func _walking_hint() -> String:
 	if winded:
@@ -6284,6 +6290,16 @@ func _build_overlay() -> void:
 		_refresh_ui()
 	)
 	pages[2].add_child(movement)
+	var recovery := CheckButton.new()
+	recovery.name = "BackspaceRecovery"
+	recovery.text = "Use Backspace to return to a safe place"
+	recovery.button_pressed = recovery_key == KEY_BACKSPACE
+	recovery.toggled.connect(func(enabled: bool):
+		recovery_key = KEY_BACKSPACE if enabled else KEY_R
+		_save_preferences()
+		_refresh_ui()
+	)
+	pages[2].add_child(recovery)
 	var reading_size := CheckButton.new()
 	reading_size.name = "LargeText"
 	reading_size.text = "Larger text"
@@ -7055,6 +7071,7 @@ func _load_preferences() -> void:
 	for i in RADIO_KEYS.size():
 		var code = config.get_value("keyboard","radio_%d" % i,radio_keys[i])
 		if code in RADIO_KEYS[i]: radio_keys[i] = code
+	recovery_key = KEY_BACKSPACE if config.get_value("keyboard","backspace_recovery",false) == true else KEY_R
 	number_movement = config.get_value("keyboard","number_movement",false) == true
 	extra_reading_time = config.get_value("accessibility", "extra_reading_time", false) == true
 	large_text = config.get_value("accessibility", "large_text", false) == true
@@ -7118,6 +7135,7 @@ func _save_preferences() -> void:
 	config.set_value("traffic","lights",traffic_light_mode)
 	for i in RADIO_KEYS.size():
 		config.set_value("keyboard","radio_%d" % i, radio_keys[i])
+	config.set_value("keyboard","backspace_recovery",recovery_key == KEY_BACKSPACE)
 	config.set_value("keyboard","number_movement",number_movement)
 	config.set_value("accessibility","calm_mode",calm_mode)
 	config.set_value("driving","steady_lights",steady_player_lights)
@@ -7244,6 +7262,7 @@ func _refresh_dispatch() -> void:
 		phone.refresh()
 
 func _refresh_ui() -> void:
+	phone.recovery_hint.text = _recovery_hint()
 	if road_driver:
 		for avatar in [walker, road_driver]:
 			avatar.get_node("Smile").visible = happy_seconds > 0

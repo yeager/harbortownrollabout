@@ -1063,8 +1063,8 @@ msgstr "Sirve la sopa a las tripulaciones de los barcos"
 msgid "Back in a safe place."
 msgstr "Ya estás en un lugar seguro."
 
-msgid "Stuck? Press R"
-msgstr "¿No puedes moverte? Pulsa R"
+msgid "Stuck? Press %s"
+msgstr "¿No puedes moverte? Pulsa %s"
 
 msgid "No clear spot yet. Try again in a moment."
 msgstr "Todavía no hay sitio libre. Inténtalo de nuevo en un momento."
@@ -1638,3 +1638,6 @@ msgstr "Tecla de la siguiente canción"
 
 msgid "Move with 8, 4, 5, 6"
 msgstr "Moverse con 8, 4, 5, 6"
+
+msgid "Use Backspace to return to a safe place"
+msgstr "Volver a un lugar seguro con Retroceso"

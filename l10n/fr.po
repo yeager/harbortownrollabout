@@ -1070,8 +1070,8 @@ msgstr "Sers la soupe aux équipages"
 msgid "Back in a safe place."
 msgstr "Te voilà de retour en lieu sûr."
 
-msgid "Stuck? Press R"
-msgstr "Tu es coincé ? Appuie sur R"
+msgid "Stuck? Press %s"
+msgstr "Tu es coincé ? Appuie sur %s"
 
 msgid "No clear spot yet. Try again in a moment."
 msgstr "Il n’y a pas encore de place libre. Réessaie dans un instant."
@@ -1646,3 +1646,6 @@ msgstr "Touche du morceau suivant"
 
 msgid "Move with 8, 4, 5, 6"
 msgstr "Se déplacer avec 8, 4, 5, 6"
+
+msgid "Use Backspace to return to a safe place"
+msgstr "Revenir en lieu sûr avec Retour arrière"
