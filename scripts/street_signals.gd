@@ -74,12 +74,16 @@ func _vehicle_head(mast: Node3D, east_west: bool) -> Dictionary:
 		mast.add_child(visor)
 		visor.position = pos
 		var lit := lens(mast,pos+Vector3.BACK*.002,colors[j])
-		var finish := lit.material_override as StandardMaterial3D
-		finish.emission_enabled = false
-		finish.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+		if not lit_finishes.has(colors[j]):
+			var finish := ShaderMaterial.new()
+			finish.shader = preload("res://environment/signal_lens.gdshader")
+			finish.set_shader_parameter("lens_color", colors[j])
+			lit_finishes[colors[j]] = finish
+		lit.material_override = lit_finishes[colors[j]]
 		lamps.append(lit)
 	return {"lamps":lamps,"east_west":east_west}
 
+var lit_finishes: Dictionary = {}
 var visor_mesh: ArrayMesh
 
 func _make_visor() -> ArrayMesh:
