@@ -447,6 +447,7 @@ var overlay: ColorRect
 var overlay_panel: PanelContainer
 var brand_logo := TextureRect.new()
 var title_label: Label
+var pause_action_picture := TextureRect.new()
 var subtitle_label: Label
 var road_checkpoint := {}
 var start_button: Button
@@ -7171,7 +7172,12 @@ func _build_overlay() -> void:
 	subtitle_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	subtitle_label.add_theme_font_size_override("font_size", 20)
 	subtitle_label.add_theme_color_override("font_color", Color("#d4e2dc"))
-	box.add_child(subtitle_label)
+	var subtitle_row := HBoxContainer.new()
+	box.add_child(subtitle_row)
+	pause_action_picture.stretch_mode = TextureRect.STRETCH_KEEP_CENTERED
+	subtitle_row.add_child(pause_action_picture)
+	subtitle_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	subtitle_row.add_child(subtitle_label)
 	start_button = _button("Start a gentle drive", 300)
 	_color_action(start_button, true)
 	start_button.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
@@ -8064,6 +8070,7 @@ func _start_game() -> void:
 		launch.transform = Transform3D(Basis.IDENTITY, LAUNCH_BERTH)
 		launch_speed = 0.0
 		outboard.rotation.y = 0.0
+	reward_seconds = 0.0
 	waiting_for_signal = false
 	last_dispatch=""
 	happy_seconds = 0
@@ -8702,8 +8709,6 @@ func _refresh_ui() -> void:
 			subtitle_label.text = "Explore on foot or by vehicle. Stop at the depot to change vehicles."
 		if walker.visible:
 			subtitle_label.text = "Walk up to a parked vehicle to get in."
-		if paused and not last_dispatch.is_empty():
-			subtitle_label.text = tr(last_dispatch)
 		start_button.text = "Continue walking" if walker.visible else "Continue driving"
 	if mode == "menu" and start_in_excavator:
 		subtitle_label.text = tr("Operate the excavator in the equipment yard.")
@@ -8719,6 +8724,16 @@ func _refresh_ui() -> void:
 			subtitle_label.text = "The tram drives itself and stops at each platform." if tram_mode==1 else "Control the speed. The tram follows the rails and stops at each platform."
 			start_button.text = "Ride the tram" if tram_mode==1 else "Drive the tram"
 			if paused: start_button.text = "Resume"
+	if paused:
+		reward_badge.hide()
+	elif mode == "playing" and reward_seconds > 0:
+		reward_badge.show()
+	pause_action_picture.visible = paused and mode == "playing" and not phone.pictured_jobs.is_empty()
+	subtitle_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT if pause_action_picture.visible else HORIZONTAL_ALIGNMENT_CENTER
+	if pause_action_picture.visible:
+		var current_step := phone.action_rows.get_child(0)
+		pause_action_picture.texture = current_step.get_child(0).texture
+		subtitle_label.text = current_step.get_child(1).text
 	_refresh_status()
 
 func _refresh_status() -> void:

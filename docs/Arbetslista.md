@@ -131,6 +131,6 @@ Listan innehåller 100 jobb. En tom ruta är öppen. En punkt bockas av när bet
 - [ ] 95. Lägg till ett bildstöd som visar var en avslagen radio slås på från förarplatsen.
 - [ ] 96. Prova hela vägen från startmenyn till ett köp och tillbaka med enbart tangentbord. Rätta de fokussteg som fastnar.
 - [x] 97. Kontrollera att alla sju språk ryms på leveranskvittot i liten fönsterstorlek och med stor text.
-- [ ] 98. Låt pausmenyn visa det senaste uppdragssteget med samma bild som i telefonen.
+- [x] 98. Låt pausmenyn visa det senaste uppdragssteget med samma bild som i telefonen.
 - [ ] 99. Mät bildtider på kajen medan färjan passerar och tre personer spelar boule. Jämför dag och natt från samma plats.
 - [ ] 100. Spela igenom en leverans från början till slut med musik och trafik igång. Anteckna exakt var en replik blir svår att höra och justera mixen där.
