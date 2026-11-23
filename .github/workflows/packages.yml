@@ -100,6 +100,7 @@ jobs:
           for format in deb rpm; do
             "$(go env GOPATH)/bin/nfpm" package -f packaging/linux/nfpm.yaml -p "$format" -t "dist/harbortown-$VERSION-x86_64.$format"
           done
+          install -m 644 branding/app-icon.png export/linux/harbortown.png
           tar -czf "dist/harbortown-$VERSION-linux-x86_64.tar.gz" -C export/linux .
       - name: Launch packaged Linux game on Ubuntu 22.04 and Fedora 43
         if: runner.os == 'Linux'
@@ -120,6 +121,7 @@ jobs:
                 smoke /usr/bin/harbortown
                 mkdir /root/portable
                 tar -xzf /packages/*.tar.gz -C /root/portable
+                cmp /root/portable/harbortown.png /usr/share/pixmaps/harbortown.png
                 smoke /root/portable/harbortown
               else
                 dnf -y --setopt=install_weak_deps=False install /packages/*.rpm
