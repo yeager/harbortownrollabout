@@ -2831,7 +2831,16 @@ func _build_marina() -> void:
 		for side in [-1,1]:
 			_make_box("Duck eye", Vector3(.024,.024,.012), Vector3(.18,.275,side*.085), Color.BLACK, false, duck)
 	# Boardwalk joins both ferry approaches along the sheltered bank.
-	_pier_section("Waterside boardwalk",Vector3(2.0,.18,21.1),Vector3(58.0,-.75,-23.5),Color("#ab9071"),_deck_material(Color("#ab9071")))
+	var promenade_length: float = FERRY_LANDINGS[1] - FERRY_LANDINGS[0] - 2.0
+	var promenade_midpoint: float = (FERRY_LANDINGS[0] + FERRY_LANDINGS[1]) * .5
+	_pier_section("Waterside boardwalk",Vector3(2.0,.18,promenade_length),Vector3(58.0,-.75,promenade_midpoint),Color("#ab9071"),_deck_material(Color("#ab9071")))
+	var south_end: float = FERRY_LANDINGS[0] + 1.0
+	var rail_end := -33.8
+	for i in 13:
+		var post_z := lerpf(south_end, rail_end, i / 13.0)
+		_make_box("Boardwalk pile", Vector3(.14, 1.80, .14), Vector3(59.08, -.54, post_z), Color("#6b5948"))
+	for height in [-.22, .25]:
+		_make_box("Boardwalk rail", Vector3(.09, .11, rail_end-south_end), Vector3(59.08, height, (south_end+rail_end)*.5), Color("#877461"))
 	for i in range(8):
 		var post_z := -33.8+i*2.94
 		_make_box("Timber bollard",Vector3(.14,1.70,.14),Vector3(59.08,-.53,post_z),Color("#6b5948"))

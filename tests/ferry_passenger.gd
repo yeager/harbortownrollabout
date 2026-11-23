@@ -11,6 +11,12 @@ func check_crossings() -> void:
 	game._apply_player_appearance()
 	game._start_game()
 	game._change_seat()
+	for z in range(int(game.FERRY_LANDINGS[0]), int(game.FERRY_LANDINGS[1])+1):
+		var height: float = game._pier_height(58.0, z)
+		if is_nan(height) or absf(height + .66) > .01:
+			printerr("Missing boardwalk deck between the ferry landings at ", z)
+			quit(1)
+			return
 	var original_scale: Vector3 = game.walker.scale
 	for departure in game.FERRY_LANDINGS.size():
 		var quay_z: float = game.FERRY_LANDINGS[departure]
