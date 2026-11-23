@@ -172,7 +172,14 @@ jobs:
             hdiutil attach -readonly -nobrowse -mountpoint "$mount" "$dmg"
             app="$mount/harbortown.app"
             codesign --verify --deep --strict "$app"
-            executable="$app/Contents/MacOS/harbortown"
+            # Finder resolves the executable through the mounted bundle's plist.
+            plist="$app/Contents/Info.plist"
+            name=$(/usr/libexec/PlistBuddy -c 'Print :CFBundleExecutable' "$plist")
+            test "$name" = harbortown
+            test -s "$app/Contents/Resources/$name.pck"
+            test -s "$app/Contents/Resources/icon.icns"
+            test "$(readlink "$mount/Applications")" = /Applications
+            executable="$app/Contents/MacOS/$name"
             test "$(lipo -archs "$executable")" = "$arch"
             "$executable" --headless --quit-after 360 2>&1 | tee "$RUNNER_TEMP/mac-game-$arch.log"
             test -s "$RUNNER_TEMP/mac-game-$arch.log"
