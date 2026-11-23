@@ -93,7 +93,10 @@ func advance(distance: float, delta: float, pushing: bool, tuck := 0.0) -> void:
 		return
 	var pace := distance / delta
 	var running := smoothstep(2.6, 5.8, pace) * weight if not pushing else 0.0
-	var stride := clampf(0.64 + pace * 0.41, 0.78, 1.57)
+	var sprint := smoothstep(3.4, 6.4, pace * actor.scale.y) * weight
+	# Running covers more ground between contacts while each planted foot
+	# remains within leg reach. Stride is measured between same-foot landings.
+	var stride := clampf(0.64 + pace * 0.41, 0.78, 1.57) + 1.55 * sprint
 	phase = fposmod(phase + distance / stride, 1.0)
 	weight = move_toward(weight, minf(1.0, pace / 0.55), delta * 7.0)
 	# Critical damping gives the centre of mass inertia when a new foot takes the load.
@@ -107,7 +110,7 @@ func advance(distance: float, delta: float, pushing: bool, tuck := 0.0) -> void:
 	if pushing:
 		shoulder_yaw *= .2
 	jacket.rotation.y = shoulder_yaw
-	var stance := lerpf(STANCE, .40, smoothstep(3.4, 6.4, pace * actor.scale.y) * weight)
+	var stance := lerpf(STANCE, .30, sprint)
 	var reach := stride * stance * 0.5 * weight
 	var feet: Array[Vector2] = []
 	var shoe_angles := PackedFloat32Array()

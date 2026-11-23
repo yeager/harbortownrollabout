@@ -66,9 +66,13 @@ func check_gait() -> void:
 		for speed: float in [3.4, 6.4]:
 			var double_support := false
 			var flight := false
+			var measured_steps := 0
 			for frame in 180:
+				var previous_half := floori(gait.phase * 2.0)
 				game._animate_steps(player, speed / 120.0, 1.0 / 120.0)
 				if frame < 30: continue
+				if floori(gait.phase * 2.0) != previous_half:
+					measured_steps += 1
 				var contacts := 0
 				for shoe: Node3D in gait.shoes:
 					var heel := shoe.to_global(Vector3(0, -gait.SOLE_HEIGHT, .075))
@@ -77,6 +81,12 @@ func check_gait() -> void:
 						contacts += 1
 				double_support = double_support or contacts == 2
 				flight = flight or contacts == 0
+			if speed == 6.4:
+				print("Sprint contacts over 1.25 seconds: ", measured_steps, " Alma=", alma)
+				if measured_steps < 4 or measured_steps > 7:
+					printerr("Unexpected sprint cadence")
+					quit(1)
+					return
 			if (speed == 3.4 and (flight or not double_support)) or (speed == 6.4 and not flight):
 				printerr("Unexpected foot contact at ", speed, " m/s for Alma=", alma)
 				quit(1)
