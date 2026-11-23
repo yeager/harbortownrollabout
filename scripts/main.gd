@@ -756,6 +756,8 @@ func _save_checkpoint() -> void:
 			"recovery": recovery_leg, "taxi": taxi_leg, "bus": bus_leg,
 			"free_drive": free_drive, "progress": vehicle_progress.duplicate()
 		}
+		if free_drive and map_goal.is_finite():
+			road_checkpoint["map_goal"] = map_goal
 		if tram_mode != 0:
 			road_checkpoint["tram"] = {
 				"mode": tram_mode, "distance": tram.distance, "next_stop": tram.next_stop,
@@ -8250,6 +8252,9 @@ func _resume_road_checkpoint() -> void:
 	ambulance.global_position = road_checkpoint.position
 	ambulance.rotation.y = road_checkpoint.heading
 	free_drive = road_checkpoint.free_drive
+	var saved_goal: Variant = road_checkpoint.get("map_goal")
+	if free_drive and saved_goal is Vector3 and saved_goal.is_finite():
+		map_goal = saved_goal
 	mission_index = road_checkpoint.mission
 	recovery_leg = road_checkpoint.recovery
 	taxi_leg = road_checkpoint.taxi
@@ -8308,6 +8313,7 @@ func _resume_road_checkpoint() -> void:
 		socked_foot.visible = shoe_quest != FootQuest.FINISHED
 		returned_trainer.visible = shoe_quest == FootQuest.FINISHED
 	_sync_radio()
+	_update_route_arrows()
 
 	_update_mission_marker()
 	_update_camera(0.0, true)
