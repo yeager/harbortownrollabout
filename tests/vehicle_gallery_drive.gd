@@ -57,14 +57,23 @@ func check_gallery() -> void:
 					quit(1)
 					return
 		if index == game.SHOPPER:
+			var mat := game.vehicle_model.find_child("Rubber foot mat*",true,false) as MeshInstance3D
+			if mat == null:
+				printerr("Shopping trike has no foot mat")
+				quit(1)
+				return
+			var vehicle_frame: Transform3D = game.ambulance.global_transform.affine_inverse()
+			var floor_bounds: AABB = (vehicle_frame*mat.global_transform)*mat.get_aabb()
+			var mat_outline := Rect2(floor_bounds.position.x,floor_bounds.position.z,floor_bounds.size.x,floor_bounds.size.z)
 			for alma in [false,true]:
 				game.play_as_alma = alma
 				game._refresh_ui()
 				var pose = game.road_driver.get_node("AlmaShopperLegs" if alma else "AxelShopperLegs")
 				for boot_index in [2,5]:
 					var boot: MeshInstance3D = pose.get_child(boot_index)
-					var bounds: AABB = (game.ambulance.global_transform.affine_inverse()*boot.global_transform)*boot.get_aabb()
-					if not pose.visible or absf(bounds.position.y-.243) > .025 or bounds.get_center().z > -.20 or bounds.position.z < -.63:
+					var bounds: AABB = (vehicle_frame*boot.global_transform)*boot.get_aabb()
+					var sole := Rect2(bounds.position.x,bounds.position.z,bounds.size.x,bounds.size.z)
+					if not pose.visible or absf(bounds.position.y-floor_bounds.end.y) > .025 or not mat_outline.encloses(sole):
 						printerr("Shopping trike boot outside footwell: ",bounds)
 						quit(1)
 						return
