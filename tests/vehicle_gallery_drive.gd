@@ -15,12 +15,6 @@ func check_gallery() -> void:
 	var thumbnails := {}
 	var atlas_image := preload("res://vehicles/menu_thumbnails.png").get_image()
 	for tile: Button in game.vehicle_selector.get_children():
-		if tile.get_index() == game.MOWER:
-			if tile.icon != preload("res://vehicles/mower_menu.png") or not tile.icon.get_image().get_used_rect().has_area():
-				printerr("Missing mower picture")
-				quit(1)
-				return
-			continue
 		var picture := tile.icon as AtlasTexture
 		if not picture or picture.atlas != preload("res://vehicles/menu_thumbnails.png") or thumbnails.has(picture.region):
 			printerr("Missing or reused picture on ", tile.text)

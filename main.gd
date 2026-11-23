@@ -5829,12 +5829,15 @@ func _build_overlay() -> void:
 	center.add_child(overlay_panel)
 	var box := VBoxContainer.new()
 	box.alignment = BoxContainer.ALIGNMENT_CENTER
-	box.add_theme_constant_override("separation", 12)
+	box.add_theme_constant_override("separation", 8)
 	overlay_panel.add_child(box)
-	brand_logo.custom_minimum_size = Vector2(320, 80)
+	var header := HBoxContainer.new()
+	box.add_child(header)
+	brand_logo.custom_minimum_size = Vector2(180, 62)
 	brand_logo.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	brand_logo.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	box.add_child(brand_logo)
+	header.add_child(brand_logo)
+	header.add_spacer(false)
 	title_label = Label.new()
 	title_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	title_label.add_theme_font_size_override("font_size", 38)
@@ -5865,7 +5868,7 @@ func _build_overlay() -> void:
 	selected_style.border_color = Color("#ffe395")
 	for index in VEHICLE_NAMES_ALL.size()+EXTRA_GALLERY_NAMES.size():
 		var tile := Button.new()
-		tile.custom_minimum_size = Vector2(146,78)
+		tile.custom_minimum_size = Vector2(166,117)
 		tile.toggle_mode = true
 		tile.button_group = vehicle_group
 		tile.text = VEHICLE_NAMES_ALL[index] if index < VEHICLE_NAMES_ALL.size() else EXTRA_GALLERY_NAMES[index-VEHICLE_NAMES_ALL.size()]
@@ -5875,12 +5878,11 @@ func _build_overlay() -> void:
 		tile.add_theme_stylebox_override("hover",hover_style)
 		tile.add_theme_stylebox_override("pressed",selected_style)
 		tile.add_theme_stylebox_override("hover_pressed",selected_style)
-		var atlas_index := index - 1 if index > MOWER else index
 		var thumbnail := AtlasTexture.new()
 		thumbnail.atlas = preload("res://vehicles/menu_thumbnails.png")
-		thumbnail.region = Rect2(atlas_index % 6 * 256, floori(atlas_index / 6.0) * 128,256,128)
+		thumbnail.region = Rect2(index % 6 * 256, floori(index / 6.0) * 128,256,128)
 		thumbnail.filter_clip = true
-		tile.icon = preload("res://vehicles/mower_menu.png") if index == MOWER else thumbnail
+		tile.icon = thumbnail
 		tile.expand_icon = true
 		tile.icon_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		tile.vertical_icon_alignment = VERTICAL_ALIGNMENT_TOP
@@ -5900,10 +5902,10 @@ func _build_overlay() -> void:
 	box.add_child(vehicle_selector)
 	var player_row := HBoxContainer.new()
 	player_row.alignment=BoxContainer.ALIGNMENT_CENTER
-	box.add_child(player_row)
+	header.add_child(player_row)
 	var drivers := ButtonGroup.new()
 	for index in 2:
-		var driver := _button("Axel" if index == 0 else "Alma", 135)
+		var driver := _button("Axel" if index == 0 else "Alma", 88)
 		driver.toggle_mode = true
 		driver.button_group = drivers
 		if index == 0:
@@ -5914,7 +5916,7 @@ func _build_overlay() -> void:
 			driver.icon = portrait
 		else:
 			driver.icon = preload("res://branding/driver-alma.png")
-		driver.add_theme_constant_override("icon_max_width", 46)
+		driver.add_theme_constant_override("icon_max_width", 32)
 		for state in ["pressed", "hover_pressed"]:
 			driver.add_theme_stylebox_override(state, selected_style)
 			driver.add_theme_color_override("font_" + state + "_color", Color.WHITE)
@@ -5926,13 +5928,13 @@ func _build_overlay() -> void:
 			_refresh_ui()
 		)
 		player_row.add_child(driver)
-	box.add_child(start_button)
 	var settings_toggle := _button("Settings", 220)
 	settings_toggle.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	var menu_actions := HBoxContainer.new()
 	menu_actions.alignment = BoxContainer.ALIGNMENT_CENTER
 	box.add_child(menu_actions)
 	menu_actions.add_child(settings_toggle)
+	menu_actions.add_child(start_button)
 	var quit_button := _button("Quit game · F10", 220)
 	menu_actions.add_child(quit_button)
 	quit_button.pressed.connect(_request_quit)
