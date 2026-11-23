@@ -50,7 +50,7 @@ def rod(name,a,b,r,mat):
     return disc(name,(a+b)/2,r,(a-b).length,mat,b-a)
 
 def export(name):
-    bpy.ops.export_scene.gltf(filepath=str(ROOT/'vehicles'/(name+'.glb')), export_format='GLB')
+    bpy.ops.export_scene.gltf(filepath=str(ROOT/'vehicles'/(name+'.glb')), export_format='GLB', export_apply=True)
 
 box("Ladder frame",(0,.02,.36),(.61,1.52,.18),frame)
 box("Engine bonnet",(0,.64,.64),(.83,.64,.44),paint,.14)
