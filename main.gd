@@ -41,6 +41,7 @@ var reverse_monitor: Sprite3D
 var dash_direction: Label3D
 var dash_speed: Label3D
 var shopper_boarding := false
+var shopper_recovery_requested := false
 var vehicle_model: Node3D
 var headlights: Array[SpotLight3D] = []
 var tractor_beacon: StandardMaterial3D
@@ -3928,6 +3929,9 @@ func _change_seat() -> void:
 	_update_mission_marker()
 	_refresh_ui()
 	get_viewport().gui_release_focus()
+	if shopper_recovery_requested:
+		shopper_recovery_requested = false
+		_recover_position()
 
 func _rest_seconds() -> int:
 	return ceili((60.0-run_reserve)/3.0) if winded else 0
@@ -6423,6 +6427,9 @@ func _recover_road_vehicle() -> bool:
 	return false
 
 func _recover_position() -> void:
+	if shopper_boarding:
+		shopper_recovery_requested = true
+		return
 	walk_jump_left = 0
 	bridge_jump_left = 0
 	var success := true
