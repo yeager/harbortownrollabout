@@ -406,13 +406,13 @@ My visual overall rating is **95/100** rounded, with equal weight for the three 
 
 ### Shopping Moped's Model Assessment
 
-Visual appreciation based on the user’s photos and the model’s menu image, seen from the front. Each part weighs equally.
+Assessed against the supplied Shopper photographs using front three-quarter, side and rear three-quarter views taken in Godot with a seated driver. Each category carries equal weight.
 
-| Feature | Score out of 100 | observation |
+| Feature | Score out of 100 | Observation |
 | --- | ---: | --- |
-| Silhouette | 85 | The wedge-shaped nose and open entry are recognizable. The roof needs more of the original’s swept overhang. |
-| Color and surface | 84 | Red body and black vinyl follow the photos. Tire sides and lamp glasses lack surface structure. |
-| Driving position | 83 | Light-colored piping outlines the rounded backrest. The seat and backrest padding are more uniform than in the photo. |
-| Exterior details | 86 | The wire basket, exhaust, grilles and wiper are visible. The hubcaps need a deeper pressed profile. |
+| Silhouette | 88 | The tapered rear deck, single rear wheel and swept roof read clearly in profile. The front corners look squarer than the moulded shell in the photos. |
+| Color and surface | 84 | The cherry-red panels, silver basket and black seat match the reference palette. Sunlit panels have a flatter sheen and the lamp lens loses definition at driving distance. |
+| Driving position | 85 | The side view shows the rider’s bent knees and feet extending below the handlebar. The backrest looks thin and straight compared with the padded original. |
+| Exterior details | 91 | The rear view shows both deck vents, the mesh side intake and the filler cap inside the tapered basket. The basket still has angular corners compared with the bent wire in the reference. |
 
-Overall score **85/100** rounded.
+Overall visual score **87/100** (348 ÷ 4). The shell corners, seat padding and basket bends are the clearest discrepancies in these views.
