@@ -1838,3 +1838,6 @@ msgstr "Bakeriet har fått tre sekker mel."
 
 msgid "Bakery"
 msgstr "Bakeri"
+
+msgid "Bring the cake to the birthday table at the square."
+msgstr "Bær kaken til bursdagsbordet på torget."

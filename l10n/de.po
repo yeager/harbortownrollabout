@@ -1855,3 +1855,6 @@ msgstr "Die Bäckerei hat drei Säcke Mehl erhalten."
 
 msgid "Bakery"
 msgstr "Bäckerei"
+
+msgid "Bring the cake to the birthday table at the square."
+msgstr "Bring die Torte zum Geburtstagstisch auf dem Platz."

@@ -1767,3 +1767,6 @@ msgstr ""
 
 msgid "Bakery"
 msgstr ""
+
+msgid "Bring the cake to the birthday table at the square."
+msgstr ""

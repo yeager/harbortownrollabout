@@ -1768,3 +1768,6 @@ msgstr "Bageriet har tagit emot tre säckar mjöl."
 
 msgid "Bakery"
 msgstr "Bageri"
+
+msgid "Bring the cake to the birthday table at the square."
+msgstr "Bär tårtan till kalasbordet på torget."

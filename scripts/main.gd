@@ -563,6 +563,12 @@ const FIGURINE_THANKS := "Thank you! Our moon rabbit is back!"
 var figurine_stage := FootQuest.WAITING
 var lost_figurine: Node3D
 var boutique_owner: Node3D
+const CAKE_ROUTE := "Bring the cake to the birthday table at the square."
+var cake_stage := FootQuest.WAITING
+var cake_box := Node3D.new()
+var cake_lid := Node3D.new()
+var birthday_host: Node3D
+
 var umbrella_owner: Node3D
 var umbrella := Node3D.new()
 var canopy := Node3D.new()
@@ -5526,6 +5532,7 @@ func _build_pedestrians() -> void:
 		walker_data.back().actor.position.y = _foot_height(start_x+27+i*4,pavement_z)
 
 	_build_lost_umbrella()
+	_build_birthday_delivery()
 	var boutique_x := shops.storefront_x(5)
 	_make_walker("Boutique owner",boutique_x,48.55,1,Color("#685284"),Color("#48515c"))
 	boutique_owner = walker_data.pop_back().actor
@@ -5533,6 +5540,66 @@ func _build_pedestrians() -> void:
 	lost_figurine = shops._boutique_toy(Vector3.ZERO,true)
 	_place_lost_figurine()
 	_build_boule_court()
+
+func _build_birthday_delivery() -> void:
+	_make_walker("Birthday host",33,18,1,Color("#418789"),Color("#614955"))
+	birthday_host = walker_data.pop_back().actor
+	birthday_host.rotation.y = 0
+	_animate_steps(birthday_host,0,0)
+	var top := Vector3(33,.84,17.4)
+	_make_box("Birthday table",Vector3(1.4,.08,.75),top,Color("#a1cdb7"),false)
+	for x in [-.55,.55]:
+		for z in [-.26,.26]:
+			_make_box("Table leg",Vector3(.06,.8,.06),top+Vector3(x,-.44,z),Color("#885936"),false)
+	add_child(cake_box)
+	var card := Color("#e8b7be")
+	_make_box("Cake board",Vector3(.47,.018,.47),Vector3.ZERO,card,false,cake_box)
+	for side in [-1,1]:
+		_make_box("Carton side",Vector3(.012,.16,.47),Vector3(.23*side,.08,0),card,false,cake_box)
+		_make_box("Carton end",Vector3(.47,.16,.012),Vector3(0,.08,.23*side),card,false,cake_box)
+	cake_box.add_child(cake_lid)
+	cake_lid.position = Vector3(0,.16,.235)
+	_make_box("Bakery lid",Vector3(.48,.018,.48),Vector3(0,.009,-.235),card.lightened(.18),false,cake_lid)
+	_make_box("Ribbon",Vector3(.046,.004,.48),Vector3(0,.020,-.235),Color("#a34264"),false,cake_lid)
+	var cake := shops._turned("Birthday cake",Vector3.ZERO,.208,.208,.13,Color("#fff2ce"))
+	cake.reparent(cake_box,false)
+	cake.position.y = .08
+	for i in 7:
+		var angle := TAU*i/7
+		var berry := shops._turned("Raspberry",Vector3.ZERO,.017,.012,.022,Color("#ac2348"))
+		berry.reparent(cake_box,false)
+		berry.position = Vector3(.15*cos(angle),.148,.15*sin(angle))
+	_place_cake_box()
+
+func _place_cake_box() -> void:
+	if not cake_box.is_inside_tree(): return
+	var holder: Node3D = walker if cake_stage == FootQuest.RETURNING else self
+	if cake_box.get_parent() != holder: cake_box.reparent(holder,false)
+	match cake_stage:
+		FootQuest.WAITING: cake_box.position = Vector3(-14,.05,-8.6)
+		FootQuest.RETURNING: cake_box.position = Vector3(0,.98,-.38)
+		FootQuest.FINISHED: cake_box.position = Vector3(33,.89,17.4)
+	cake_lid.rotation.x = 1.95 if cake_stage == FootQuest.FINISHED else 0.
+
+func _update_birthday_delivery(delta: float) -> void:
+	if cake_stage == FootQuest.FINISHED:
+		if cake_lid.rotation.x < 1.95:
+			cake_lid.rotation.x = move_toward(cake_lid.rotation.x,1.95,delta*1.6)
+			var gait: Gait = birthday_host.get_meta("gait")
+			gait.reach_with_hand(1,cake_lid.to_global(Vector3(.17,0,-.45)))
+			if cake_lid.rotation.x >= 1.95: _animate_steps(birthday_host,0,0)
+		return
+	if not walker.visible or ferry_passenger or tram_mode != 0: return
+	if cake_stage == FootQuest.WAITING and walker.position.distance_to(cake_box.position) < 1.3:
+		cake_stage = FootQuest.RETURNING
+		phone.receive(CAKE_ROUTE)
+	elif cake_stage == FootQuest.RETURNING and walker.position.distance_to(birthday_host.position) < 1.8:
+		cake_stage = FootQuest.FINISHED
+	else: return
+	_place_cake_box()
+	cake_lid.rotation.x = 0
+	_refresh_dispatch()
+	_save_preferences()
 
 func _place_lost_figurine() -> void:
 	if not is_instance_valid(lost_figurine): return
@@ -6392,6 +6459,7 @@ func _update_pedestrians(delta: float) -> void:
 	_update_thermos()
 	_update_lost_umbrella(delta)
 	_update_lost_figurine()
+	_update_birthday_delivery(delta)
 	_update_cat_quest(delta)
 	_update_search_hints()
 	_update_pet_jobs()
@@ -9130,6 +9198,9 @@ func _load_player_progress(config: ConfigFile, section: String) -> void:
 	wallet=maxi(0,int(config.get_value(section,"coins",0)))
 	flour_stage = clampi(int(config.get_value(section,"flour",0)),0,FlourStage.AT_BAKERY)
 	_sync_flour_sacks()
+	cake_stage = config.get_value(section,"birthday_cake",FootQuest.WAITING)
+	if cake_stage not in [FootQuest.RETURNING,FootQuest.FINISHED]: cake_stage = FootQuest.WAITING
+	_place_cake_box()
 	figurine_stage = config.get_value(section,"figurine",FootQuest.WAITING)
 	if figurine_stage not in [FootQuest.RETURNING,FootQuest.FINISHED]: figurine_stage = FootQuest.WAITING
 	_place_lost_figurine()
@@ -9166,6 +9237,7 @@ func _store_player_progress(config: ConfigFile, section: String) -> void:
 	config.set_value(section,"stars",collected_stars)
 	config.set_value(section,"thermos",thermos_stage)
 	config.set_value(section,"flour",flour_stage)
+	config.set_value(section,"birthday_cake",cake_stage)
 	config.set_value(section,"figurine",figurine_stage)
 	config.set_value(section,"umbrella",umbrella_stage)
 	config.set_value(section, "foot_quest_points", foot_quest_points)
@@ -9344,6 +9416,7 @@ func _refresh_dispatch() -> void:
 		for i in 2:
 			if pet_stages[i] == FootQuest.SEARCHING: phone.foot_jobs.append(PET_REQUESTS[i])
 		if pet_stages[0] == FootQuest.RETURNING: phone.foot_jobs.append("Bring the ball back to the dog.")
+		if cake_stage == FootQuest.RETURNING: phone.foot_jobs.append(CAKE_ROUTE)
 		if figurine_stage == FootQuest.RETURNING: phone.foot_jobs.append(FIGURINE_RETURN)
 		if umbrella_stage == FootQuest.RETURNING: phone.foot_jobs.append(UMBRELLA_RETURN)
 		if thermos_stage == FootQuest.SEARCHING: phone.foot_jobs.append(THERMOS_REQUEST)

@@ -1845,3 +1845,6 @@ msgstr "La panadería ha recibido tres sacos de harina."
 
 msgid "Bakery"
 msgstr "Panadería"
+
+msgid "Bring the cake to the birthday table at the square."
+msgstr "Lleva la tarta a la mesa de cumpleaños en la plaza."

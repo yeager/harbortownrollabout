@@ -1853,3 +1853,6 @@ msgstr "La boulangerie a reçu trois sacs de farine."
 
 msgid "Bakery"
 msgstr "Boulangerie"
+
+msgid "Bring the cake to the birthday table at the square."
+msgstr "Apporte le gâteau à la table d’anniversaire sur la place."
