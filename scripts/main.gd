@@ -470,6 +470,11 @@ var ferry_exit_requested := false
 var ferry: Node3D
 var ferry_engine := AudioStreamPlayer3D.new()
 var wave_time := 0.0
+const PET_REQUESTS := ["Find the dog’s blue ball on the pavement.", "Lay the lizard’s picnic mat by the square bench."]
+var pet_stages := PackedInt32Array([0,0])
+var shepherd: Node3D
+var dog_ball := MeshInstance3D.new()
+var lizard_mat := Node3D.new()
 var komodo: Node3D
 var chat_pair: Array[Node3D] = []
 var chat_topic := 0
@@ -700,7 +705,8 @@ func _save_checkpoint() -> void:
 				road_checkpoint["exit_at_landing"] = ferry_exit_requested
 		road_checkpoint["quests"] = {
 			"shoe": shoe_quest, "cat": cat_quest, "shoe_owner": shoe_owner.position,
-			"cat_owner": cat_owner.position, "lost_cat": lost_cat.position
+			"cat_owner": cat_owner.position, "lost_cat": lost_cat.position,
+			"pets": pet_stages.duplicate(), "komodo_present": komodo.visible
 		}
 		_save_preferences()
 
@@ -4788,12 +4794,28 @@ func _build_pedestrians() -> void:
 	neighbour.speed = 2.9
 	_make_walker("JoggingNeighbour", -31.0, -6.32, 1.0, Color("#344e63"), Color("#4c514a"))
 	_make_walker("WalkingNeighbour", 31.0, 6.32, -1.0, Color("#9a5836"), Color("#33424a"))
-	_attach_pet(preload("res://characters/shepherd.gd").new())
+	shepherd = preload("res://characters/shepherd.gd").new()
+	_attach_pet(shepherd)
 
 	_make_walker("ParkVisitor", -18.0, 6.42, 1.0, Color("#d1a33f"), Color("#38474a"))
 	komodo = preload("res://characters/komodo.gd").new()
 	_attach_pet(komodo)
 	komodo.hide()
+	var ball := SphereMesh.new()
+	ball.radius = .17
+	ball.height = .34
+	dog_ball.mesh = ball
+	dog_ball.material_override = _material(Color("#398ee8"))
+	add_child(dog_ball)
+	dog_ball.position = Vector3(40,_foot_height(40,6.75)+.17,6.75)
+	dog_ball.hide()
+	add_child(lizard_mat)
+	lizard_mat.position = Vector3(30,_foot_height(30,20.4)+.02,20.4)
+	_make_box("Picnic mat",Vector3(1.4,.025,.84),Vector3.ZERO,Color("#de9948"),false,lizard_mat)
+	for stripe in [-1,1]:
+		_make_box("Mat stripe",Vector3(.08,.008,.84),Vector3(stripe*.53,.017,0),Color("#fff1c6"),false,lizard_mat)
+	lizard_mat.hide()
+
 
 
 	_make_walker("Neighbour with pushchair",-26,-6.7,1,Color("#87633f"),Color("#465662"))
@@ -5272,6 +5294,35 @@ func _update_small_talk(delta: float) -> void:
 			_say(a, SMALL_TALK[chat_topic][0], SMALL_TALK[chat_topic][1])
 			return
 
+func _update_pet_jobs() -> void:
+	if not walker.visible or shops.inside >= 0: return
+	for i in 2:
+		var pet := shepherd if i == 0 else komodo
+		if not pet.is_visible_in_tree() or pet_stages[i] == FootQuest.FINISHED: continue
+		var near_owner := walker.global_position.distance_to(pet.get_parent_node_3d().global_position) < 2.2
+		match pet_stages[i]:
+			FootQuest.WAITING:
+				if not near_owner: continue
+				pet_stages[i] = FootQuest.SEARCHING
+				dog_ball.visible = pet_stages[0] == FootQuest.SEARCHING
+				phone.receive(PET_REQUESTS[i])
+			FootQuest.SEARCHING:
+				var target := dog_ball.position if i == 0 else lizard_mat.position
+				if walker.position.distance_to(target) > 1.7: continue
+				if i == 0:
+					dog_ball.hide()
+					pet_stages[i] = FootQuest.RETURNING
+					phone.receive("Bring the ball back to the dog.")
+				else:
+					lizard_mat.show()
+					pet_stages[i] = FootQuest.FINISHED
+					_reward_foot_quest()
+			FootQuest.RETURNING:
+				if not near_owner: continue
+				pet_stages[i] = FootQuest.FINISHED
+				_reward_foot_quest()
+		_refresh_dispatch()
+
 func _update_search_hints() -> void:
 	var searching := mode == "playing" and walker.visible and shops.inside < 0 and not paused
 	cat_hint.visible = searching and cat_quest == FootQuest.SEARCHING
@@ -5290,6 +5341,7 @@ func _update_pedestrians(delta: float) -> void:
 	_update_shoe_quest(delta)
 	_update_cat_quest(delta)
 	_update_search_hints()
+	_update_pet_jobs()
 	_animate_steps(shoe_owner, absf(shoe_owner.position.x - shoe_owner_x), delta)
 	_animate_steps(cat_owner, absf(cat_owner.position.x - cat_owner_x), delta)
 	for person: Node3D in [square_neighbour, waiting_medic, marina_recipient, passenger, arriving_passenger] + bus_companions + clinic_fire_team:
@@ -7347,6 +7399,12 @@ func _resume_road_checkpoint() -> void:
 		shoe_owner.position = quests.shoe_owner
 		cat_owner.position = quests.cat_owner
 		lost_cat.position = quests.lost_cat
+		var stages: Variant = quests.get("pets",PackedInt32Array([0,0]))
+		if stages is PackedInt32Array and stages.size() == 2:
+			pet_stages = stages.duplicate()
+		komodo.visible = quests.get("komodo_present",komodo.visible) or pet_stages[1] == FootQuest.SEARCHING
+		dog_ball.visible = pet_stages[0] == FootQuest.SEARCHING
+		lizard_mat.visible = pet_stages[1] == FootQuest.FINISHED
 		lost_shoe.visible = shoe_quest in [FootQuest.SEARCHING, FootQuest.RETURNING]
 		if shoe_quest == FootQuest.RETURNING:
 			_hold_lost_shoe()
@@ -7360,7 +7418,7 @@ func _resume_road_checkpoint() -> void:
 
 func _start_game() -> void:
 	map_goal = Vector3.INF
-	komodo.visible = randf() < .25
+	komodo.visible = pet_stages[1] == FootQuest.SEARCHING or randf() < .25
 	chat_pair.clear()
 	chat_wait = 0
 	walk_jump_left = 0
@@ -7732,6 +7790,9 @@ func _update_siren() -> void:
 func _refresh_dispatch() -> void:
 	phone.foot_jobs.clear()
 	if walker.visible:
+		for i in 2:
+			if pet_stages[i] == FootQuest.SEARCHING: phone.foot_jobs.append(PET_REQUESTS[i])
+		if pet_stages[0] == FootQuest.RETURNING: phone.foot_jobs.append("Bring the ball back to the dog.")
 		if shoe_quest == FootQuest.SEARCHING: phone.foot_jobs.append("Find the red shoe on the pavement.")
 		if shoe_quest == FootQuest.RETURNING: phone.foot_jobs.append("Bring the red shoe back to the neighbour.")
 		if cat_quest == FootQuest.SEARCHING: phone.foot_jobs.append("Find the cat with white paws.")

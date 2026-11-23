@@ -1715,3 +1715,12 @@ msgstr "Lytt etter katten"
 
 msgid "Show footprints"
 msgstr "Vis fotspor"
+
+msgid "Find the dog’s blue ball on the pavement."
+msgstr "Finn hundens blå ball på fortauet."
+
+msgid "Lay the lizard’s picnic mat by the square bench."
+msgstr "Legg varanens piknikteppe ved benken på torget."
+
+msgid "Bring the ball back to the dog."
+msgstr "Gi ballen tilbake til hunden."

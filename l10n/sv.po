@@ -1645,3 +1645,12 @@ msgstr "Lyssna efter katten"
 
 msgid "Show footprints"
 msgstr "Visa fotspår"
+
+msgid "Find the dog’s blue ball on the pavement."
+msgstr "Hitta hundens blå boll på trottoaren."
+
+msgid "Lay the lizard’s picnic mat by the square bench."
+msgstr "Lägg varanens picknickfilt vid bänken på torget."
+
+msgid "Bring the ball back to the dog."
+msgstr "Ta tillbaka bollen till hunden."

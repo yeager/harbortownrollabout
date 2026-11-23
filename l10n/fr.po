@@ -1730,3 +1730,12 @@ msgstr "Écouter le chat"
 
 msgid "Show footprints"
 msgstr "Afficher les empreintes"
+
+msgid "Find the dog’s blue ball on the pavement."
+msgstr "Trouve la balle bleue du chien sur le trottoir."
+
+msgid "Lay the lizard’s picnic mat by the square bench."
+msgstr "Étale la couverture du varan près du banc de la place."
+
+msgid "Bring the ball back to the dog."
+msgstr "Rapporte la balle au chien."

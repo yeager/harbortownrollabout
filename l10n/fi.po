@@ -1711,3 +1711,12 @@ msgstr "Kuuntele kissaa"
 
 msgid "Show footprints"
 msgstr "Näytä jalanjäljet"
+
+msgid "Find the dog’s blue ball on the pavement."
+msgstr "Etsi koiran sininen pallo jalkakäytävältä."
+
+msgid "Lay the lizard’s picnic mat by the square bench."
+msgstr "Levitä varaanin piknikhuopa torin penkin viereen."
+
+msgid "Bring the ball back to the dog."
+msgstr "Vie pallo takaisin koiralle."

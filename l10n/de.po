@@ -1732,3 +1732,12 @@ msgstr "Auf die Katze hören"
 
 msgid "Show footprints"
 msgstr "Fußspuren zeigen"
+
+msgid "Find the dog’s blue ball on the pavement."
+msgstr "Finde den blauen Ball des Hundes auf dem Gehweg."
+
+msgid "Lay the lizard’s picnic mat by the square bench."
+msgstr "Lege die Picknickdecke des Warans neben die Bank auf dem Platz."
+
+msgid "Bring the ball back to the dog."
+msgstr "Bring dem Hund den Ball zurück."

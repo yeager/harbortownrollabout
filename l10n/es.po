@@ -1722,3 +1722,12 @@ msgstr "Escuchar al gato"
 
 msgid "Show footprints"
 msgstr "Mostrar huellas"
+
+msgid "Find the dog’s blue ball on the pavement."
+msgstr "Busca la pelota azul del perro en la acera."
+
+msgid "Lay the lizard’s picnic mat by the square bench."
+msgstr "Pon la manta del varano junto al banco de la plaza."
+
+msgid "Bring the ball back to the dog."
+msgstr "Devuelve la pelota al perro."

@@ -1644,3 +1644,12 @@ msgstr ""
 
 msgid "Show footprints"
 msgstr ""
+
+msgid "Find the dog’s blue ball on the pavement."
+msgstr ""
+
+msgid "Lay the lizard’s picnic mat by the square bench."
+msgstr ""
+
+msgid "Bring the ball back to the dog."
+msgstr ""
