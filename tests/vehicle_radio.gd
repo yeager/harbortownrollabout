@@ -67,6 +67,9 @@ func _process(_delta: float) -> bool:
 				fail("Unexpected radio rotation in %s at %s" % [LOCALES[locale_index], song])
 				return false
 			var title := song.get_basename().trim_suffix(" (%s)" % LOCALES[locale_index].to_upper())
+			if not game.song_card.is_visible_in_tree() or game.song_cover.texture == null or game.song_title.text != title:
+				fail("Missing cover or title for " + song)
+				return false
 			if game.radio_button.tooltip_text != game.tr("Now playing: %s") % title:
 				fail("Radio tooltip does not identify " + song)
 				return false

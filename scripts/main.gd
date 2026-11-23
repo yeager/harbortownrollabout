@@ -231,6 +231,10 @@ var radio_language := ""
 var radio_tracks := PackedStringArray()
 var radio_bag: Array[String] = []
 var radio_track := ""
+var song_card := PanelContainer.new()
+var song_cover := TextureRect.new()
+var song_title := Label.new()
+var song_card_seconds := 0.0
 var horn_button: Button
 const RECOVERY := 5
 const STATION_DROP := Vector3(-121,0,12)
@@ -589,6 +593,9 @@ func _process(delta: float) -> void:
 			happy_seconds = maxf(0, happy_seconds-delta)
 			if happy_seconds == 0: _refresh_ui()
 		phone.advance(delta)
+		if song_card.visible:
+			song_card_seconds -= delta
+			if song_card_seconds <= 0: song_card.hide()
 		weather.tick(delta)
 		_advance_wipers(delta)
 		if warning_triangle.is_visible_in_tree():
@@ -904,6 +911,8 @@ func _sync_radio() -> void:
 	radio_button.visible = aboard and not paused
 	next_song_button.visible = radio_button.visible and radio_enabled and radio_tracks.size() > 1
 	radio_button.disabled = radio_tracks.is_empty()
+	if not aboard or paused or not radio_enabled or radio_button.disabled:
+		song_card.hide()
 	if radio_button.disabled:
 		radio_button.text = "No songs yet"
 		radio_button.tooltip_text = tr("No songs available in this language yet.")
@@ -930,7 +939,13 @@ func _next_radio_track() -> void:
 			radio_bag[last] = radio_bag[0]
 			radio_bag[0] = radio_track
 	radio_track = radio_bag.pop_back()
-	radio_button.tooltip_text = tr("Now playing: %s") % radio_track.get_basename().rsplit(" (", true, 1)[0]
+	song_title.text = radio_track.get_basename().rsplit(" (",true,1)[0]
+	radio_button.tooltip_text = tr("Now playing: %s") % song_title.text
+	var cover_path := "res://branding/radio/" + radio_track.get_basename() + ".webp"
+	song_cover.texture = load(cover_path) if ResourceLoader.exists(cover_path) else null
+	song_cover.visible = song_cover.texture != null
+	song_card_seconds = 5.0
+	song_card.show()
 	radio.stream = load("res://audio/radio/" + radio_track)
 	radio.play()
 
@@ -6461,6 +6476,26 @@ func _build_ice_order() -> void:
 		flavour_choices.add_child(choice)
 	ice_order.hide()
 
+func _build_song_card() -> void:
+	ui.add_child(song_card)
+	song_card.position = Vector2(22,104)
+	song_card.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	song_card.add_theme_stylebox_override("panel",_style(Color(.055,.09,.11,.94),12))
+	var row := HBoxContainer.new()
+	row.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	row.add_theme_constant_override("separation",12)
+	song_card.add_child(row)
+	song_cover.custom_minimum_size = Vector2(64,64)
+	song_cover.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	song_cover.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	song_cover.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	row.add_child(song_cover)
+	song_title.custom_minimum_size.x = 205
+	song_title.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	song_title.add_theme_font_size_override("font_size",20)
+	row.add_child(song_title)
+	song_card.hide()
+
 func _build_ui() -> void:
 	ui = CanvasLayer.new()
 	ui.add_child(turn_preview)
@@ -6472,6 +6507,7 @@ func _build_ui() -> void:
 	turn_preview.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	turn_preview.hide()
 	add_child(ui)
+	_build_song_card()
 	_build_ice_order()
 	var top := PanelContainer.new()
 	top.name = "DrivingHeader"
