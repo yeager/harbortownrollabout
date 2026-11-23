@@ -5192,10 +5192,10 @@ func _load_vehicle_model() -> void:
 					tractor_beacon.emission = Color("#ff9a15")
 					body.set_surface_override_material(surface, tractor_beacon)
 	var beam_origins: Array[Vector3] = []
-	if vehicle_index in [SNOWMOBILE, PORSCHE, FARM_TRACTOR]:
-		var lens_pattern: String = {PORSCHE:"Headlight lens*", SNOWMOBILE:"Headlight strip*", FARM_TRACTOR:"Projector lens*"}[vehicle_index]
+	if vehicle_index in [SNOWMOBILE, PORSCHE, FARM_TRACTOR, SHOPPER, REFUSE]:
+		var lens_pattern: String = {PORSCHE:"Headlight lens*", SNOWMOBILE:"Headlight strip*", FARM_TRACTOR:"Projector lens*", SHOPPER:"Headlight lens*", REFUSE:"Headlight lens*"}[vehicle_index]
 		for lens: MeshInstance3D in vehicle_model.find_children(lens_pattern, "MeshInstance3D", true, false):
-			if vehicle_index in [PORSCHE, FARM_TRACTOR]:
+			if vehicle_index != SNOWMOBILE:
 				if not projector_finish:
 					projector_finish = lens.get_active_material(0).duplicate() as StandardMaterial3D
 					projector_finish.emission_enabled = true

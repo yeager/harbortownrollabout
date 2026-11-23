@@ -44,6 +44,18 @@ func check_gallery() -> void:
 			printerr("Menu driving failed for ",tile.text," distance=",travel," turn=",turn)
 			quit(1)
 			return
+		if index in [game.SHOPPER, game.REFUSE]:
+			var lenses: Array = game.vehicle_model.find_children("Headlight lens*", "MeshInstance3D", true, false)
+			if lenses.size() != (1 if index == game.SHOPPER else 2) or lenses.size() != game.headlights.size():
+				printerr("Headlight count differs from vehicle body")
+				quit(1)
+				return
+			for i in lenses.size():
+				var center: Vector3 = lenses[i].to_global(lenses[i].get_aabb().get_center())
+				if center.distance_to(game.headlights[i].global_position) > .05:
+					printerr("Headlight beam offset from lens")
+					quit(1)
+					return
 		if index == game.SHOPPER:
 			if game.player_wheels.size() != 3 or game.front_knuckles.size() != 2 or game.rear_tire_contacts.size() != 1:
 				printerr("Shopping trike axle layout changed")
