@@ -413,6 +413,6 @@ Assessed against the supplied Shopper photographs using front three-quarter, sid
 | Silhouette | 88 | The tapered rear deck, single rear wheel and swept roof read clearly in profile. The front corners look squarer than the moulded shell in the photos. |
 | Color and surface | 84 | The cherry-red panels, silver basket and black seat match the reference palette. Sunlit panels have a flatter sheen and the lamp lens loses definition at driving distance. |
 | Driving position | 85 | The side view shows the rider’s bent knees and feet extending below the handlebar. The backrest looks thin and straight compared with the padded original. |
-| Exterior details | 91 | The rear view shows both deck vents, the mesh side intake and the filler cap inside the tapered basket. The basket still has angular corners compared with the bent wire in the reference. |
+| Exterior details | 91 | The rear view shows both deck vents, the mesh side intake and the filler cap inside the tapered basket. The tapered basket now has continuous rounded wire rims, checked in a rear three-quarter game view. |
 
-Overall visual score **87/100** (348 ÷ 4). The shell corners, seat padding and basket bends are the clearest discrepancies in these views.
+Overall visual score **87/100** (348 ÷ 4). The shell corners and seat padding remain the clearest discrepancies in these views.

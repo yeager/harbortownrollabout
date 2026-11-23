@@ -239,10 +239,34 @@ for x,y in ((-.429,-.72),(.429,-.72),(0,.89)):
 for z,w,front,rear in ((.55,.30,.53,1.05),(.72,.345,.49,1.12)):
     rear_width = w-.055
     corners=[(-w,front,z),(w,front,z),(rear_width,rear,z),(-rear_width,rear,z)]
-    for i in range(4): tube("Basket rim",corners[i],corners[(i+1)%4],.010,v.METAL)
+    corners = [Vector(point) for point in corners]
+    path = []
+    for i, corner in enumerate(corners):
+        start = corner + (corners[i-1] - corner).normalized() * .075
+        end = corner + (corners[(i+1)%4] - corner).normalized() * .075
+        for step in range(7):
+            t = step / 6
+            path.append(start.lerp(corner,t).lerp(corner.lerp(end,t),t))
+    curve = bpy.data.curves.new("Bent steel rail", "CURVE")
+    curve.dimensions = "3D"
+    curve.bevel_depth = .009
+    curve.bevel_resolution = 2
+    rim = curve.splines.new("POLY")
+    rim.points.add(len(path)-1)
+    rim.use_cyclic_u = True
+    for point, position in zip(rim.points, path):
+        point.co = (*position,1)
+    obj = bpy.data.objects.new("Basket rim",curve)
+    bpy.context.collection.objects.link(obj)
+    obj.parent = root
+    curve.materials.append(v.METAL)
+    bpy.ops.object.select_all(action="DESELECT")
+    obj.select_set(True)
+    bpy.context.view_layer.objects.active = obj
+    bpy.ops.object.convert(target="MESH")
 for side in (-1,1):
     for i in range(7):
-        t=i/6
+        t=.14+.72*i/6
         tube("Basket wire",(side*(.30-.055*t),.53+.52*t,.55),(side*(.345-.055*t),.49+.63*t,.72),.005,v.METAL)
 # The filler cap sits beside the forward air intake, inside the luggage rail.
 v.cylinder("Filler gasket",(.19,.56,.559),.040,.009,v.RUBBER,False,32,root)
