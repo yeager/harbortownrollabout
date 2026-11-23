@@ -7,7 +7,7 @@ De 50 förbättringarna från genomgången. En tom ruta är öppen. En punkt boc
 - [x] 01. Säg igen. En högtalarknapp i telefonen läser upp nästa uppdragssteg på valt språk, även efter att pratbubblan försvunnit. Verifierat i Godot 4.7 dev med 49 instruktioner på sju språk (343 Piper-klipp).
 - [x] 02. Fortsätt där jag slutade. Huvudmenyn återställer plats, fordon och uppdragssteg efter avslut. Verifierat i Godot för promenad, butik, sparkcykel, vägfordon, grävmaskin, motorbåt, färja och spårvagn. Testerna omfattar 24 steg med åtta uppdragsfordon samt buss, taxi, bärgning, sophämtning, glassförsäljning och återlämning av katten och skon. En ofullständig sparpunkt hindrar inte nystart.
 - [x] 03. Frivilligt trafikfritt övningsområde. Välj Övningskör i huvudmenyn. Gas, broms, backning, urstigning, återställning och återinträde har verifierats i Godot.
-- [ ] 04. Bildstöd som visar nästa handling i uppdraget.
+- [x] 04. Bildstöd för nästa handling i telefonen. Varje aktiv instruktion har en bild, även när två uppdrag till fots pågår samtidigt. Bussens bilder för på- och avstigning har kontrollerats längs hela rutten.
 - [ ] 05. Valbar textstorlek för pratbubblor, telefon och butiker utan avklippta knappar.
 - [ ] 06. Längre lästid eller manuell fortsättning i uppdragssamtal.
 - [ ] 07. Separata volymreglage för tal, radio och motorer.

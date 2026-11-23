@@ -36,6 +36,13 @@ func check_route() -> void:
 			resume.pressed.emit()
 			TranslationServer.set_locale("sv")
 			await process_frame
+		var row: HBoxContainer = game.phone.action_rows.get_child(0)
+		var picture: AtlasTexture = row.get_child(0).texture
+		var action: int = game.phone.Action.BOARD if leg % 2 == 0 else game.phone.Action.ALIGHT
+		if picture.region.position.x != action * 48 or row.get_child(1).text != game.phone.current_job:
+			printerr("Passenger action picture did not follow the next stop")
+			quit(1)
+			return
 		if game._vehicle_payload() != (450.0 if leg % 2 else 0.0):
 			printerr("Incorrect passenger payload")
 			quit(1)

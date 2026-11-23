@@ -4,6 +4,16 @@ var open_button := Button.new()
 var handset := PanelContainer.new()
 var messages: Array[String] = []
 var job_heading := Label.new()
+const FOOT_PICTURES := {
+	"Find the red shoe on the pavement.": 0,
+	"Bring the red shoe back to the neighbour.": 1,
+	"Find the cat with white paws.": 2,
+	"Walk back to the neighbour with the cat.": 3,
+}
+enum Action { COLLECT, DELIVER, BOARD, ALIGHT, INSPECT, AID, ICE_CREAM, SOUP, BIN, TOW }
+var vehicle_action := Action.COLLECT
+var action_rows := VBoxContainer.new()
+var pictured_jobs := PackedStringArray()
 var star_progress := Label.new()
 var inbox := Label.new()
 var history_scroll := ScrollContainer.new()
@@ -102,6 +112,7 @@ func _ready() -> void:
 	content.add_child(star_progress)
 	content.add_child(take_job)
 	content.add_child(job_heading)
+	content.add_child(action_rows)
 	repeat_job.text = "Say again"
 	repeat_job.icon = preload("res://branding/repeat-job.svg")
 	repeat_job.custom_minimum_size.y = 44
@@ -184,6 +195,34 @@ func toggle() -> void:
 	if handset.visible: unread=0
 	refresh()
 
+func _show_action_rows(jobs: PackedStringArray) -> void:
+	if jobs == pictured_jobs: return
+	pictured_jobs = jobs.duplicate()
+	for row in action_rows.get_children():
+		action_rows.remove_child(row)
+		row.queue_free()
+	for job in jobs:
+		var row := HBoxContainer.new()
+		var atlas := AtlasTexture.new()
+		var cell := int(vehicle_action)
+		if FOOT_PICTURES.has(job):
+			atlas.atlas = preload("res://branding/foot-job-actions.svg")
+			cell = FOOT_PICTURES[job]
+		else:
+			atlas.atlas = preload("res://branding/vehicle-job-actions.svg")
+		atlas.region = Rect2(cell * 48, 0, 48, 48)
+		var picture := TextureRect.new()
+		picture.texture = atlas
+		picture.stretch_mode = TextureRect.STRETCH_KEEP_CENTERED
+		row.add_child(picture)
+		var label := Label.new()
+		label.text = job
+		label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		label.add_theme_color_override("font_color", Color("#183a38"))
+		row.add_child(label)
+		action_rows.add_child(row)
+
 func refresh() -> void:
 	open_button.text=tr("Close phone · T") if handset.visible else tr("Phone · T")
 	if unread>0: open_button.text+="  (%d)" % unread
@@ -193,10 +232,9 @@ func refresh() -> void:
 	repeat_job.visible = job_heading.visible
 	if job_voice.playing and (active != spoken_jobs or spoken_locale != TranslationServer.get_locale()):
 		job_voice.stop()
-	var headings := PackedStringArray()
-	for job in active: headings.append(tr(job))
-	var heading := tr("Current jobs") if active.size() > 1 else tr("Current job")
-	job_heading.text = heading + "\n" + "\n".join(headings) if job_heading.visible else ""
+	job_heading.text = tr("Current jobs") if active.size() > 1 else tr("Current job")
+	_show_action_rows(active)
+	action_rows.visible = not active.is_empty()
 	for body in messages:
 		if body not in active:
 			lines.append(tr(body))

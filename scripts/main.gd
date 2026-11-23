@@ -7031,6 +7031,16 @@ func _refresh_dispatch() -> void:
 		dispatch=_vehicle_tasks()[_mission_stop()]
 		if vehicle_index==0:
 			dispatch=["A neighbour needs help at the square.","A medic is waiting at the clinic. Please pick them up.","Please bring the first-aid supplies to the marina."][mission_index]
+	match vehicle_index:
+		RECOVERY: phone.vehicle_action = phone.Action.TOW if recovery_leg % 2 == 0 else phone.Action.DELIVER
+		BUS: phone.vehicle_action = phone.Action.BOARD if bus_leg % 2 == 0 else phone.Action.ALIGHT
+		TAXI: phone.vehicle_action = phone.Action.BOARD if taxi_leg % 2 == 0 else phone.Action.ALIGHT
+		0: phone.vehicle_action = [phone.Action.AID, phone.Action.BOARD, phone.Action.DELIVER][mission_index]
+		1, XC60_POLICE, 2: phone.vehicle_action = phone.Action.INSPECT
+		REFUSE: phone.vehicle_action = phone.Action.BIN if mission_index < 2 else phone.Action.DELIVER
+		ICE_CREAM: phone.vehicle_action = phone.Action.ICE_CREAM
+		FOOD_TRUCK: phone.vehicle_action = phone.Action.COLLECT if mission_index == 0 else phone.Action.SOUP
+		_: phone.vehicle_action = phone.Action.COLLECT if mission_index == 0 else phone.Action.DELIVER
 	if dispatch!=last_dispatch:
 		last_dispatch=dispatch
 		phone.current_job=dispatch
