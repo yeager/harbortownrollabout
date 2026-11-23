@@ -11,6 +11,7 @@ ArchitecturesInstallIn64BitMode=x64compatible
 OutputDir=..\..\dist
 OutputBaseFilename=harbortown-{#GameVersion}-windows-x64
 UninstallDisplayIcon={app}\harbortown.exe
+SetupIconFile=harbortown.ico
 WizardStyle=modern
 
 [Languages]

@@ -70,7 +70,7 @@ jobs:
           mkdir -p export/{linux,windows,mac}
           godot --headless --export-release Linux export/linux/harbortown
           godot --headless --export-release Windows export/windows/harbortown.exe
-          godot --headless --export-release macOS "export/mac/harbortown.zip"
+          godot --headless --export-release macOS export/mac/harbortown.zip
           (cd export/linux && ./harbortown --headless --quit-after 360) 2>&1 | tee "$RUNNER_TEMP/game-startup.log"
           if grep -E '^(SCRIPT )?ERROR:' "$RUNNER_TEMP/game-startup.log"; then exit 1; fi
       - uses: actions/upload-artifact@v4
@@ -145,28 +145,32 @@ jobs:
           if ($game.ExitCode -ne 0 -or (Select-String -Path $log -Pattern '^(SCRIPT )?ERROR:')) { throw 'Installed game failed to start cleanly' }
       - if: runner.os == 'macOS'
         run: |
-          mkdir image
-          ditto -x -k "export/mac/harbortown.zip" image
-          python3 packaging/macos/name_app.py image
-          app=image/harbortown.app
-          codesign --force --deep --sign - "$app"
-          codesign --verify --deep --strict "$app"
-          ln -s /Applications image/Applications
-          hdiutil create -volname "Harbor Town Rollabout" -srcfolder image -format UDZO "dist/harbortown-$VERSION-macOS.dmg"
-      - name: Mount the disk image and launch the universal app
-        if: runner.os == 'macOS'
-        run: |
-          mount="$RUNNER_TEMP/rollabout-volume"
-          mkdir -p "$mount"
-          hdiutil attach -readonly -nobrowse -mountpoint "$mount" dist/*.dmg
-          trap 'hdiutil detach "$mount"' EXIT
-          app=$(find "$mount" -maxdepth 1 -name '*.app' -print -quit)
-          binary=$(/usr/libexec/PlistBuddy -c 'Print CFBundleExecutable' "$app/Contents/Info.plist")
-          executable="$app/Contents/MacOS/$binary"
-          codesign --verify --deep --strict "$app"
-          lipo "$executable" -verify_arch arm64 x86_64
-          "$executable" --headless --quit-after 360 2>&1 | tee "$RUNNER_TEMP/mac-game.log"
-          if grep -E '^(SCRIPT )?ERROR:' "$RUNNER_TEMP/mac-game.log"; then exit 1; fi
+          for arch in x86_64 arm64; do
+            image="image-$arch"
+            mkdir "$image"
+            ditto -x -k "export/mac/harbortown.zip" "$image"
+            python3 packaging/macos/name_app.py "$image"
+            app="$image/harbortown.app"
+            test -s "$app/Contents/Resources/icon.icns"
+            executable="$app/Contents/MacOS/harbortown"
+            lipo "$executable" -thin "$arch" -output "$executable.thin"
+            mv "$executable.thin" "$executable"
+            chmod +x "$executable"
+            codesign --force --deep --sign - "$app"
+            ln -s /Applications "$image/Applications"
+            dmg="dist/harbortown-$VERSION-macOS-$arch.dmg"
+            hdiutil create -volname harbortown -srcfolder "$image" -format UDZO "$dmg"
+            mount="$RUNNER_TEMP/harbortown-$arch"
+            mkdir "$mount"
+            hdiutil attach -readonly -nobrowse -mountpoint "$mount" "$dmg"
+            app="$mount/harbortown.app"
+            codesign --verify --deep --strict "$app"
+            executable="$app/Contents/MacOS/harbortown"
+            test "$(lipo -archs "$executable")" = "$arch"
+            "$executable" --headless --quit-after 360 2>&1 | tee "$RUNNER_TEMP/mac-game-$arch.log"
+            if grep -E '^(SCRIPT )?ERROR:' "$RUNNER_TEMP/mac-game-$arch.log"; then exit 1; fi
+            hdiutil detach "$mount"
+          done
       - uses: actions/upload-artifact@v4
         with:
           name: package-${{ runner.os }}
@@ -186,10 +190,11 @@ jobs:
           pattern: package-*
           merge-multiple: true
           path: dist
-      - name: Publish five installers and checksums
+      - name: Publish six packages and checksums
         working-directory: dist
         run: |
-          for ext in exe dmg deb rpm tar.gz; do test "$(find . -maxdepth 1 -name "*.$ext" | wc -l)" -eq 1; done
+          for arch in x86_64 arm64; do test -f "harbortown-${TAG#v}-macOS-$arch.dmg"; done
+          for ext in exe deb rpm tar.gz; do test "$(find . -maxdepth 1 -name "*.$ext" | wc -l)" -eq 1; done
           sha256sum * > SHA256SUMS
           args=()
           if [[ "$TAG" == *-ci.* ]]; then args+=(--prerelease); fi

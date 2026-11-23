@@ -18,7 +18,7 @@ The [Linux preview](https://github.com/yeager/harbortownrollabout/releases/tag/v
 - [Fedora or another RPM-based distribution (.rpm)](https://github.com/yeager/harbortownrollabout/releases/download/v0.1.3-preview.20261123/axels-spel-0.1.3-preview.20261123-1.x86_64.rpm)
 - [Portable archive (.tar.gz)](https://github.com/yeager/harbortownrollabout/releases/download/v0.1.3-preview.20261123/harbortownrollabout-0.1.3-preview.20261123-linux-x86_64.tar.gz). Extract both files into one folder and launch the executable there. New builds use `./harbortown`.
 
-For Windows and macOS, see **Play from source** below. The package workflow also targets a Windows x64 installer in seven languages and a universal macOS disk image.
+For Windows and macOS, see **Play from source** below. The package workflow also targets a Windows x64 installer in seven languages and separate macOS disk images for Intel (x86_64) and Apple Silicon (arm64).
 
 Pushing a version tag such as `v1.2.3` builds a release. Running **Game packages** manually builds a prerelease. The [DEB mirror](https://github.com/yeager/deb-repo/releases?q=harbortownrollabout) and [RPM mirror](https://github.com/yeager/rpm-repo/releases?q=harbortownrollabout) check hourly and copy their respective package and the portable archive into GitHub Releases.
 
