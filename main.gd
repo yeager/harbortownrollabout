@@ -4459,6 +4459,11 @@ func _equip_walker(scene: PackedScene, pace: float, stretch: Vector2, right_grip
 	neighbour.stretch = stretch
 	neighbour.pushing = true
 	person.set_meta("aid_right_grip", right_grip)
+	if scene.resource_path == "res://environment/rullator.glb":
+		person.set_meta("aid_grip_pitch", -atan2(.08,.10))
+	for shoulder: Node3D in person.get_meta("arms"):
+		var palm := shoulder.get_child(1) as MeshInstance3D
+		palm.mesh = preload("res://characters/GrippingHand.obj")
 
 func _advance_crossing(delta: float) -> void:
 	crossing_wait = maxf(0,crossing_wait-delta)
@@ -4498,6 +4503,8 @@ func _animate_steps(person: Node3D, distance: float, delta: float, pushing := fa
 		for i in 2:
 			var grip := Vector3(-right_grip.x if i == 0 else right_grip.x, right_grip.y, right_grip.z)
 			gait.reach_with_hand(i, person.to_global(grip))
+			if person.has_meta("aid_grip_pitch"):
+				gait.palms[i].global_basis = person.global_basis * Basis(Vector3.RIGHT,float(person.get_meta("aid_grip_pitch"))) * gait.palm_rest[i].basis
 	if person == walker:
 		if left_stance != (gait.phase < 0.5) and distance > 0.0:
 			var shoe := gait.shoes[0 if gait.phase < .5 else 1]
