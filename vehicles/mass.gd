@@ -23,3 +23,12 @@ static func for_model(path: String) -> float:
 ## Larger vehicles have larger engines and brakes. Payload adds inertia only.
 static func road_response(empty_kg: float, load_kg := 0.0) -> float:
 	return pow(1600.0 / empty_kg, .16) * empty_kg / (empty_kg + load_kg)
+
+## Normal collision impulse, projected onto each vehicle's rolling direction.
+static func contact_speeds(player_speed: float, traffic_speed: float, player_axis: Vector3, traffic_axis: Vector3, normal: Vector3, player_mass: float, traffic_mass: float) -> Vector2:
+	var a := player_axis.dot(normal)
+	var b := traffic_axis.dot(normal)
+	var closing := player_speed*a - traffic_speed*b
+	if closing <= 0.0: return Vector2(player_speed,traffic_speed)
+	var impulse := 1.12 * closing / (1.0/player_mass + 1.0/traffic_mass)
+	return Vector2(player_speed - impulse*a/player_mass, maxf(0.0, traffic_speed + impulse*b/traffic_mass))

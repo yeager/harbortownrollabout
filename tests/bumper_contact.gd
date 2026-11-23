@@ -4,6 +4,15 @@ func _initialize() -> void:
 	call_deferred("check_contact")
 
 func check_contact() -> void:
+	var mass := preload("res://vehicles/mass.gd")
+	var light := mass.contact_speeds(8,0,Vector3.RIGHT,Vector3.RIGHT,Vector3.RIGHT,1000,4000)
+	var heavy := mass.contact_speeds(8,0,Vector3.RIGHT,Vector3.RIGHT,Vector3.RIGHT,4000,1000)
+	var approaching := mass.contact_speeds(8,3,Vector3.RIGHT,Vector3.LEFT,Vector3.RIGHT,1000,4000)
+	var separating := mass.contact_speeds(2,5,Vector3.RIGHT,Vector3.RIGHT,Vector3.RIGHT,1000,4000)
+	if light.x >= heavy.x or light.y >= heavy.y or approaching.x >= light.x or separating != Vector2(2,5):
+		printerr("Vehicle masses or direction ignored during contact")
+		quit(1)
+		return
 	var game = load("res://main.tscn").instantiate()
 	root.add_child(game)
 	game._on_vehicle_selected(game.RECOVERY)
@@ -27,20 +36,22 @@ func check_contact() -> void:
 	game.traffic_data.append(other)
 	game.ambulance.rotation.y = -PI / 2
 	game.ambulance.position = Vector3(-200, game._surface_height(-200, 0), 0)
-	var bounced := false
+	var transferred := false
 	var start: Vector3 = game.ambulance.position
 	var clearance: float = game._player_extent().x + other.length
+	other.actor.rotation.y = -PI/2
+	other.speed = 0.0
 	other.actor.position = start + Vector3.RIGHT * (clearance + 1.0)
 	game.mouse_gas = true
 	game.speed = 8.0
 	for frame in 30:
 		game._drive(1.0 / 60.0)
-		if game.speed < 0:
+		if other.speed > 0:
 			var gap: float = other.actor.position.x - game.ambulance.position.x - clearance
 			if gap >= -.001 and gap <= .03:
-				bounced = true
+				transferred = other.speed > game.speed and game.speed < 8.0
 			break
-	if not bounced:
+	if not transferred:
 		printerr("Expected a bumper impact at contact distance")
 		quit(1)
 		return

@@ -1165,6 +1165,7 @@ func _drive(delta: float) -> void:
 			step = step.limit_length(maxf(0.0, ambulance.position.distance_to(contact) - 0.02))
 			speed = 0.0
 	var contact_distance := INF
+	var contact_normal := Vector3.ZERO
 	var struck_vehicle: Dictionary
 	for item in traffic_data:
 		var obstacle: Node3D = item.actor
@@ -1177,10 +1178,20 @@ func _drive(delta: float) -> void:
 		if contact != null and offset.distance_to(contact) < contact_distance:
 			contact_distance = offset.distance_to(contact)
 			struck_vehicle = item
+			var hit: Vector3 = contact
+			if bounds.x - absf(hit.x) < bounds.y - absf(hit.z):
+				contact_normal = Vector3.LEFT * signf(hit.x)
+			else:
+				contact_normal = Vector3.FORWARD * signf(hit.z)
 	if contact_distance < INF:
 		step = step.limit_length(maxf(0.0, contact_distance - .02))
-		speed = -signf(speed) * minf(absf(speed) * .24 * struck_vehicle.mass_kg / (empty_mass + load_mass + struck_vehicle.mass_kg), 1.4) if allow_crashes else 0.0
-		struck_vehicle.speed = 0.0
+		if allow_crashes:
+			var other: Node3D = struck_vehicle.actor
+			var resulting_speeds := Mass.contact_speeds(speed, struck_vehicle.speed, forward, -other.global_basis.z.normalized(), contact_normal, empty_mass + load_mass, struck_vehicle.mass_kg)
+			speed = resulting_speeds.x
+			struck_vehicle.speed = resulting_speeds.y
+		else:
+			speed = 0.0
 	var destination := ambulance.position + step
 	var pos := destination
 	var bounds := _play_bounds(ambulance.position)

@@ -22,7 +22,7 @@ De 50 förbättringarna från genomgången. En tom ruta är öppen. En punkt boc
 - [x] 13. Gul, tresidig stoppmarkering vid sophämtning, taxiresor och bärgning. Placering och riktning kontrollerade för tre sopbilsstopp, tio taxisteg och fyra bärgningssteg.
 - [x] 14. Två vägvalssymboler inför korsningar längs den aktuella körrutten. Vänster, höger, U-sväng och två svängar i följd kontrollerade på navigatorns avrundade körfält i Godot.
 - [x] 15. Översiktskarta med gatunät, spelarposition och fem klickbara landmärken under friåkning. Kartval, återgång från paus, ruttpilar och avslutad vägledning vid ankomst verifierade i Godot.
-- [ ] 16. Mjuka kollisioner där båda fordonens massa och rörelseriktning påverkar utfallet.
+- [x] 16. Mjuka kollisioner mellan spelarfordonet och rörlig vägtrafik. Båda massorna, spelarens last och fordonens hastigheter och riktningar påverkar stöten. Påkörning bakifrån, olika massor, mötande riktning och assisterade stopp verifierade.
 - [ ] 17. Tydlig tröskel och markering vid den användbara spårvagnsdörren.
 - [ ] 18. Kontrollera och förbättra traktorns sikt över huv och framhjul för båda förarna.
 - [ ] 19. Valbar arbetskamera där skoptänderna och marken syns samtidigt.
