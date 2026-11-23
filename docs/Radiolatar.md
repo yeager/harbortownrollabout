@@ -921,3 +921,67 @@ The plates in the rack started chanting for more.
 *Repeat chorus twice.*
 
 [Listen on Suno](https://suno.com/song/9b65179c-d746-4b4b-868b-768094b79b0b)
+
+## Bass in My Flask · five more languages
+
+Sing these versions to the rhythm of song 1. Repeat the chorus after each verse.
+
+### Español · Mi termo tiene ritmo
+
+Llevé galletas, zumo y pan,
+y oí en mi termo un rataplán.
+
+**Estribillo**  
+¡Pum, pum, zumo de frambuesa!  
+¡Baila hasta el pan sobre la mesa!
+
+Giré el tapón, sonó un tambor.
+¡Mi bocadillo es bailarín de honor!
+
+### Deutsch · Bass in der Flasche
+
+Mein Brot liegt still, mein Saft ist kühl.
+Die Flasche wackelt. Was für ein Gefühl!
+
+**Refrain**  
+Bumm, bumm, Himbeersaft!  
+Wer hat den Bass da reingeschafft?
+
+Ich dreh am Deckel, eins, zwei, drei.
+Mein Käsebrot tanzt mit dem Ei.
+
+### Français · Le thermos fait boum
+
+J’ai pris du pain, du jus bien frais.
+Tout au fond, un tambour jouait.
+
+**Refrain**  
+Boum, boum, jus de framboise !  
+Mon petit pain danse une valse !
+
+Je tourne le bouchon d’un tour.
+Mon biscuit joue du tambour.
+
+### Norsk bokmål · Bass i termosen
+
+Jeg pakket saft, jeg pakket kjeks.
+Så dunket lokket klokka seks.
+
+**Refreng**  
+Dunk, dunk, bringebær!  
+Hvem har gjemt en tromme her?
+
+Jeg skrudde lokket litt på skrå.
+Så fikk min brødskive skoene på!
+
+### Suomi · Termospullon basso
+
+Pakkasin mehua, leipää ja voita.
+Kysyin pullolta: ”Mitä sä soitat?”
+
+**Kertosäe**  
+Pum pum, vadelmaa!  
+Leipä hyppii, lattia soi!
+
+Avasin korkin, kuului vain PAM!
+Juusto lensi — ja suoraan suuhun, nam!

@@ -58,7 +58,7 @@ De 50 förbättringarna från genomgången. En tom ruta är öppen. En punkt boc
 ## Radio, sparande och utgåvor
 
 - [ ] 41. Slutför 20 svenska och 20 engelska radioinspelningar. 12 svenska och 8 engelska filer finns. Suno angav kvotförnyelse 22 december 2026.
-- [ ] 42. Lägg till lokala stationsrop och musik för spanska, tyska, franska, norska och finska. Fem inspelade Piper-stationsrop med instrumental signatur finns och spelas vid språkbyte. Fullängdslåtar på dessa språk återstår.
+- [ ] 42. Lägg till lokala stationsrop och musik för spanska, tyska, franska, norska och finska. Fem inspelade Piper-stationsrop med instrumental signatur finns och spelas vid språkbyte. Sångbara versioner av ”Bas i min termos” finns i sångboken på alla fem språken. Inspelningar av fullängdslåtar återstår.
 - [x] 43. Visa en tydlig låtbild och titel när radion byter låt.
 - [x] 44. Visa påskägg, uppdragsminnen och inköp som bilder i en samling. Alla butiksvaror har en produktbild vid köp och i köplistan. Telefonen visar en stjärnrad med en fast plats för var och en av stadens åtta gömda stjärnor. Belönade uppdragsmoment ger sparade bildminnen i telefonen. Telefonen visar också en bild per köpt vara, även efter att den ätits upp.
 - [x] 45. Gemensamma framsteg är förvalda. Separata spelarprofiler kan väljas i huvudmenyn. Byte mellan Axel, Alma och gemensam plånbok samt samling har verifierats efter omstart. Via huvudmenyn återupptog båda förarna rätt fordon på rätt plats efter omladdning i ett separat regressionstest.
