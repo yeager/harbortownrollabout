@@ -932,7 +932,7 @@ func _drive(delta: float) -> void:
 		speed = move_toward(speed, throttle * max_speed, acceleration * response * delta)
 	steering = move_toward(steering, steer_input, (2.0 if gentle_driving else 3.4) * delta)
 	if cabin_wheel:
-		var angle := deg_to_rad(33.0) if vehicle_index == SNOWMOBILE else 1.2
+		var angle := deg_to_rad(33.0) if vehicle_index in [SNOWMOBILE, SHOPPER] else 1.2
 		cabin_wheel.basis = cabin_wheel_rest_basis * Basis(cabin_wheel_axis,-steering*angle)
 		_pose_driver_arms()
 	for knuckle in front_knuckles:
@@ -5307,6 +5307,18 @@ func _load_vehicle_model() -> void:
 	_end_skid()
 	rear_tire_contacts.clear()
 	front_knuckles.clear()
+	if vehicle_index == SHOPPER:
+		var bar := vehicle_model.find_child("Handlebar",true,false) as MeshInstance3D
+		var column := vehicle_model.find_child("Steering column",true,false) as MeshInstance3D
+		var grips := vehicle_model.find_children("Handle grip*", "MeshInstance3D",true,false)
+		cabin_wheel = Node3D.new()
+		vehicle_model.add_child(cabin_wheel)
+		cabin_wheel.global_transform = Transform3D(ambulance.global_basis,bar.global_position)
+		cabin_wheel_rest_basis = cabin_wheel.basis
+		cabin_wheel_axis = -cabin_wheel.to_local(column.global_position).normalized()
+		grip_radius = absf(cabin_wheel.to_local(grips[0].global_position).x)
+		bar.reparent(cabin_wheel)
+		for grip in grips: grip.reparent(cabin_wheel)
 	if vehicle_index == FOOD_TRUCK:
 		cabin_wheel = vehicle_model.find_child("SteeringPivot",true,false)
 		cabin_wheel_rest_basis = cabin_wheel.basis
@@ -6830,11 +6842,8 @@ func _refresh_ui() -> void:
 		for leg in road_driver.get_meta("legs"):
 			leg.visible = vehicle_index not in [SNOWMOBILE,MOWER,PUCH_DAKOTA,FOOD_TRUCK,SHOPPER]
 		road_driver.visible = vehicle_index in [3,PORSCHE,SNOWMOBILE,XC60_POLICE,MINI_CABRIO,PUCH_DAKOTA,FOOD_TRUCK,MOWER,SHOPPER] and mode == "playing" and not walker.visible and not boating and tram_mode == 0 and not cockpit_view
-		if vehicle_index == SHOPPER and road_driver.visible:
-			var arms: Array = road_driver.get_meta("arms")
-			for grip in vehicle_model.find_children("Handle grip*", "MeshInstance3D", true, false):
-				var side := 0 if road_driver.to_local(grip.global_position).x < 0 else 1
-				_fit_driver_arm(arms[side],grip.global_position)
+		if vehicle_index == SHOPPER and cabin_wheel:
+			_pose_driver_arms()
 	if skipper: skipper.visible = boating and mode == "playing"
 	if not is_instance_valid(mission_label): return
 	menu_footer.visible = mode == "menu"
