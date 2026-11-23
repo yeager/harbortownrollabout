@@ -91,6 +91,7 @@ func advance(distance: float, delta: float, pushing: bool, tuck := 0.0) -> void:
 	if delta <= 0.0:
 		return
 	var pace := distance / delta
+	var running := smoothstep(2.6, 5.8, pace) * weight if not pushing else 0.0
 	var stride := clampf(0.64 + pace * 0.41, 0.78, 1.57)
 	phase = fposmod(phase + distance / stride, 1.0)
 	weight = move_toward(weight, minf(1.0, pace / 0.55), delta * 7.0)
@@ -122,7 +123,11 @@ func advance(distance: float, delta: float, pushing: bool, tuck := 0.0) -> void:
 			var swing := (cycle - STANCE) / (1.0 - STANCE)
 			foot.x = lerpf(-reach, reach, smoothstep(0.0, 1.0, swing))
 			foot.y = sin(PI * swing) * (0.085 + 0.025 * pace) * weight
-			shoe_angle = lerpf(-.36, .20, smoothstep(0.0, .78, swing)) * weight
+			# During a run the heel folds up early, before the knee drives forward.
+			var heel_recovery := sin(PI * swing) * (1.0 - swing) * running
+			foot.y += .16 * heel_recovery
+			foot.x -= .10 * heel_recovery
+			shoe_angle = lerpf(-.36, .20, smoothstep(0.0, .78, swing)) * weight - .36 * heel_recovery
 		# Raise the ankle about the heel or forefoot while that end of the sole bears weight.
 		var sole_pivot := Vector3(0, -SOLE_HEIGHT, .075 if shoe_angle >= 0.0 else -.155)
 		var ankle_offset := sole_pivot - sole_pivot.rotated(Vector3.RIGHT, shoe_angle)
@@ -164,14 +169,20 @@ func advance(distance: float, delta: float, pushing: bool, tuck := 0.0) -> void:
 		shoes[i].position += legs[i].basis.inverse() * (Vector3.FORWARD * 0.025)
 		shoes[i].basis = legs[i].basis.inverse() * Basis(Vector3.RIGHT, shoe_angles[i])
 		if not pushing:
-			arms[i].rotation.x = -foot.x * 1.05 + .40 * tuck
+			arms[i].rotation.x = -foot.x * lerpf(1.05, 1.65, running) - .30 * running + .40 * tuck
 			# Leave room for the resting thumb beside the jacket and thigh.
 			arms[i].rotation.z = signf(hip_centres[i]) * .10
-		var flex := .15 + .32 * tuck + weight * (.18 - foot.x * .52)
+		var flex := .15 + .78 * running + .32 * tuck + weight * (.18 - foot.x * .52)
 		if pushing:
 			flex = .12
 		var elbow_rotation := Basis(Vector3.RIGHT, flex)
 		elbows[i].set_bone_pose_rotation(1, elbow_rotation.get_rotation_quaternion())
 		var joint := Vector3.DOWN * UPPER_ARM
 		var rest := palm_rest[i]
-		palms[i].transform = Transform3D(elbow_rotation * rest.basis, joint + elbow_rotation * (rest.origin - joint))
+		# The wrist sits at the cuff, above the palm mesh origin. Rotate about
+		# that point so the back of the hand stays joined to the sleeve.
+		var wrist_offset := Vector3.UP * .06
+		var wrist_angle := 0.0 if pushing else -foot.x * .32 + .09 * running
+		var wrist_rotation := Basis(Vector3.RIGHT, wrist_angle)
+		var palm_origin := rest.origin + wrist_offset - wrist_rotation * wrist_offset
+		palms[i].transform = Transform3D(elbow_rotation * wrist_rotation * rest.basis, joint + elbow_rotation * (palm_origin - joint))
