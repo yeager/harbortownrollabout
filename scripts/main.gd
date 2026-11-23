@@ -346,7 +346,7 @@ var speed := 0.0
 var steering := 0.0
 var map_goal := Vector3.INF
 var map_button := Button.new()
-const MAP_NAMES := ["Town square","Clinic","Marina","School","Petrol station"]
+const MAP_NAMES := ["Town square","Clinic","Marina","School","Petrol station","Hot dog stand"]
 var free_drive := true
 var mission_index := 0
 var practice_hose := Node3D.new()
@@ -6834,7 +6834,8 @@ func _build_town_map() -> void:
 	dialog.add_child(body)
 	var chart := preload("res://scripts/town_map.gd").new()
 	body.add_child(chart)
-	chart.configure(navigator,PackedVector3Array([TARGETS[0],TARGETS[1],TARGETS[2],SCHOOL_CURB,STATION_DROP]),MAP_NAMES)
+	var counter := Vector3(shops.storefront_x(shops.SHOPS.find("Hot dog stand")), 0, shops.FRONT_Z - 0.9)
+	chart.configure(navigator,PackedVector3Array([TARGETS[0],TARGETS[1],TARGETS[2],SCHOOL_CURB,STATION_DROP,counter]),MAP_NAMES)
 	var legend := HFlowContainer.new()
 	body.add_child(legend)
 	for i in MAP_NAMES.size():
