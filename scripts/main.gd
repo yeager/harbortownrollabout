@@ -261,6 +261,7 @@ var favorites := PackedStringArray()
 var gallery_category := "All vehicles"
 var vehicle_selector := GridContainer.new()
 var camera_turn := 0.0
+var excavator_work_view := false
 var cockpit_view := false
 var camera_button: Button
 var camera: Camera3D
@@ -5772,9 +5773,14 @@ func _build_camera() -> void:
 	_update_camera(0.0, true)
 
 func _toggle_camera_view() -> void:
-	if vehicle_index not in DRIVER_VIEW_VEHICLES or boating or tram_mode!=0 or walker.visible or paused or mode != "playing": return
-	cockpit_look = Vector2.ZERO
-	cockpit_view = not cockpit_view
+	if boating or tram_mode != 0 or walker.visible or paused or mode != "playing": return
+	if operating_excavator:
+		excavator_work_view = not excavator_work_view
+	elif vehicle_index in DRIVER_VIEW_VEHICLES:
+		cockpit_look = Vector2.ZERO
+		cockpit_view = not cockpit_view
+	else:
+		return
 	_update_camera(0,true)
 	_refresh_ui()
 	get_viewport().gui_release_focus()
@@ -5804,6 +5810,14 @@ func _update_camera(delta: float, snap_to_car := false) -> void:
 		camera.look_at(cab.to_global(Vector3(0,1.4,-1)))
 		return
 	if operating_excavator:
+		if excavator_work_view:
+			var bucket := bucket_joint.global_position
+			var ground := Vector3(bucket.x, _surface_height(bucket.x,bucket.z), bucket.z)
+			var target := ground.lerp(bucket,.5)
+			var distance := maxf(4.8, bucket.y-ground.y+2.6)
+			camera.global_position = target + cab_turntable.global_basis * Vector3(.90,.44,.28).normalized() * distance
+			camera.look_at(target)
+			return
 		var focus := excavator.position + Vector3.UP*2.2
 		camera.position = focus + cab_turntable.global_basis * Vector3(8,4,-9).rotated(Vector3.UP,orbit_angle)
 		camera.look_at(focus + cab_turntable.global_basis.z*1.8)
@@ -7551,8 +7565,10 @@ func _refresh_ui() -> void:
 	ui.get_node("DrivingHeader").visible = mode != "menu"
 	for control in [light_button, siren_button, pause_button]:
 		control.focus_mode = Control.FOCUS_NONE if show_overlay else Control.FOCUS_ALL
-	camera_button.visible = tram_mode == 0 and not boating and vehicle_index in DRIVER_VIEW_VEHICLES and not walker.visible and not show_overlay
+	camera_button.visible = tram_mode == 0 and not boating and (operating_excavator or vehicle_index in DRIVER_VIEW_VEHICLES) and not walker.visible and not show_overlay
 	camera_button.text = "Outside view · C" if cockpit_view else "Driver view · C"
+	if operating_excavator:
+		camera_button.text = "Outside view · C" if excavator_work_view else "Bucket view · C"
 	horn_button.visible = not show_overlay and (tram_mode==2 or (tram_mode==0 and (boating or not walker.visible)))
 	horn_button.text = "Tram bell · H" if tram_mode==2 else tr("Ice cream chime · H") if vehicle_index == ICE_CREAM and not boating else "Horn · H"
 	seat_button.visible = not show_overlay and not boating
@@ -7588,7 +7604,7 @@ func _refresh_ui() -> void:
 	if operating_excavator:
 		hints.text = tr("Arrows or {up}{left}{down}{right}: drive and steer · Q/E: turn the cab · F: get out\nI/K: raise or lower the boom · Y/G: move the outer arm · O/L: tilt the bucket")
 		hints.text += "\n" + tr("Hold left mouse to drive forward or right mouse to reverse.")
-		for control in [camera_button, horn_button, light_button, siren_button]:
+		for control in [horn_button, light_button, siren_button]:
 			control.hide()
 	elif walker.visible and not scooter.visible and not ferry_passenger and not boating and tram_mode == 0:
 		hints.text = _walking_hint()

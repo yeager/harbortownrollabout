@@ -1681,3 +1681,6 @@ msgstr "Koulu"
 
 msgid "Petrol station"
 msgstr "Huoltoasema"
+
+msgid "Bucket view · C"
+msgstr "Kauhanäkymä · C"

@@ -1700,3 +1700,6 @@ msgstr "École"
 
 msgid "Petrol station"
 msgstr "Station-service"
+
+msgid "Bucket view · C"
+msgstr "Vue du godet · C"

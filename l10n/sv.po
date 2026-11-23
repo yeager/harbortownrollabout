@@ -1615,3 +1615,6 @@ msgstr "Skolan"
 
 msgid "Petrol station"
 msgstr "Bensinstationen"
+
+msgid "Bucket view · C"
+msgstr "Skopvy · C"

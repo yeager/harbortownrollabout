@@ -1702,3 +1702,6 @@ msgstr "Schule"
 
 msgid "Petrol station"
 msgstr "Tankstelle"
+
+msgid "Bucket view · C"
+msgstr "Schaufelansicht · C"

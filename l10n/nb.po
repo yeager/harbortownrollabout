@@ -1685,3 +1685,6 @@ msgstr "Skolen"
 
 msgid "Petrol station"
 msgstr "Bensinstasjonen"
+
+msgid "Bucket view · C"
+msgstr "Skuffevisning · C"
