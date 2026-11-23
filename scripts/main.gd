@@ -788,7 +788,7 @@ func _save_checkpoint() -> void:
 		if tram_mode != 0:
 			road_checkpoint["tram"] = {
 				"mode": tram_mode, "distance": tram.distance, "next_stop": tram.next_stop,
-				"dwell": tram.dwell, "parked": not ambulance.visible
+				"dwell": tram.dwell, "velocity": tram.velocity, "parked": not ambulance.visible
 			}
 		elif operating_excavator:
 			road_checkpoint["excavator"] = {
@@ -8595,6 +8595,7 @@ func _resume_road_checkpoint() -> void:
 		tram.stop_at_station(posmod(trip.next_stop - 1, tram.stops.size()))
 		tram.distance = trip.distance
 		tram.dwell = trip.dwell
+		tram.velocity = trip.get("velocity",0.0) if tram.dwell <= 0 else 0.0
 		tram.place_sections()
 		tram.advance(0, tram_mode == 2, false, false)
 		if trip.parked:
@@ -8871,6 +8872,8 @@ func _valid_checkpoint(saved: Variant) -> bool:
 		return false
 	if saved.has("tram"):
 		if not _checkpoint_fields(saved.tram, {"mode": TYPE_INT, "distance": TYPE_FLOAT, "next_stop": TYPE_INT, "dwell": TYPE_FLOAT, "parked": TYPE_BOOL}) or saved.tram.mode not in [1, 2]:
+			return false
+		if saved.tram.has("velocity") and (not _checkpoint_fields(saved.tram, {"velocity": TYPE_FLOAT}) or saved.tram.velocity < 0 or saved.tram.velocity > 7.0):
 			return false
 	if saved.has("quests"):
 		if not _checkpoint_fields(saved.quests, {"shoe": TYPE_INT, "cat": TYPE_INT, "shoe_owner": TYPE_VECTOR3, "cat_owner": TYPE_VECTOR3, "lost_cat": TYPE_VECTOR3}):
