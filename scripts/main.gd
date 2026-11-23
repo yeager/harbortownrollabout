@@ -71,6 +71,8 @@ var weather := preload("res://scripts/city_weather.gd").new()
 var previous_season := 0
 var greeting_timer := 0.0
 var greeting_number := 0
+const RADIO_KEYS := [[KEY_J, KEY_B, KEY_X], [KEY_N, KEY_M, KEY_Z]]
+var radio_keys: Array[int] = [KEY_J, KEY_N]
 var large_text := false
 var extra_reading_time := false
 var greeting := Label3D.new()
@@ -775,6 +777,12 @@ func _notification(what: int) -> void:
 
 func _unhandled_key_input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed and not event.echo:
+		if event.keycode == radio_keys[0]:
+			_toggle_radio()
+			return
+		if event.keycode == radio_keys[1]:
+			if radio_enabled and radio_button.is_visible_in_tree(): _next_radio_track()
+			return
 		match event.keycode:
 			KEY_T:
 				if phone.visible: phone.toggle()
@@ -783,9 +791,6 @@ func _unhandled_key_input(event: InputEvent) -> void:
 				if mode == "playing" and not paused and walker.visible and not scooter.visible and not ferry_passenger and tram_mode == 0 and not operating_excavator and not boating and not phone.handset.is_visible_in_tree() and walk_jump_left <= 0:
 					walk_jump_left = WALK_JUMP_TIME
 			KEY_H: _honk()
-			KEY_J: _toggle_radio()
-			KEY_N:
-				if radio_enabled and radio_button.is_visible_in_tree(): _next_radio_track()
 			KEY_F:
 				if not phone.handset.is_visible_in_tree(): _change_seat()
 			KEY_C: _toggle_camera_view()
@@ -838,7 +843,8 @@ func _sync_radio() -> void:
 		radio_button.text = "No songs yet"
 		radio_button.tooltip_text = tr("No songs available in this language yet.")
 		return
-	radio_button.text = "Turn radio off · J" if radio_enabled else "Turn radio on · J"
+	radio_button.text = tr("Turn radio off · %s" if radio_enabled else "Turn radio on · %s") % OS.get_keycode_string(radio_keys[0])
+	next_song_button.text = tr("Next song · %s") % OS.get_keycode_string(radio_keys[1])
 	if not radio_enabled:
 		radio_button.tooltip_text = ""
 		radio.stop()
@@ -6025,7 +6031,7 @@ func _build_ui() -> void:
 	driving_controls.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	shops.build_menu(ui)
 	ui.add_child(phone)
-	radio_button = _button("Turn radio on · J", 180)
+	radio_button = _button(tr("Turn radio on · %s") % OS.get_keycode_string(radio_keys[0]), 180)
 	phone.handset.visibility_changed.connect(func():
 		if phone.handset.is_visible_in_tree():
 			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
@@ -6040,7 +6046,7 @@ func _build_ui() -> void:
 	)
 	phone.add_child(radio_button)
 	radio_button.pressed.connect(_toggle_radio)
-	next_song_button = _button("Next song · N", 180)
+	next_song_button = _button(tr("Next song · %s") % OS.get_keycode_string(radio_keys[1]), 180)
 	phone.add_child(next_song_button)
 	next_song_button.pressed.connect(_next_radio_track)
 	radio.finished.connect(_next_radio_track)
@@ -6455,6 +6461,27 @@ func _build_overlay() -> void:
 			_save_preferences()
 		)
 		row.add_child(slider)
+		pages[1].add_child(row)
+	for index in RADIO_KEYS.size():
+		var row := HBoxContainer.new()
+		row.alignment = BoxContainer.ALIGNMENT_CENTER
+		var label := Label.new()
+		label.text = ["Radio key", "Next song key"][index]
+		row.add_child(label)
+		var choices := ButtonGroup.new()
+		for code: int in RADIO_KEYS[index]:
+			var key_button := Button.new()
+			key_button.text = OS.get_keycode_string(code)
+			key_button.custom_minimum_size = Vector2(48,44)
+			key_button.toggle_mode = true
+			key_button.button_group = choices
+			key_button.button_pressed = radio_keys[index] == code
+			key_button.pressed.connect(func():
+				radio_keys[index] = code
+				_save_preferences()
+				_sync_radio()
+			)
+			row.add_child(key_button)
 		pages[1].add_child(row)
 	for own in [false, true]:
 		var row := HBoxContainer.new()
@@ -7005,6 +7032,9 @@ func _load_preferences() -> void:
 	L10n.apply_language(language_preference)
 	if not loaded:
 		return
+	for i in RADIO_KEYS.size():
+		var code = config.get_value("keyboard","radio_%d" % i,radio_keys[i])
+		if code in RADIO_KEYS[i]: radio_keys[i] = code
 	extra_reading_time = config.get_value("accessibility", "extra_reading_time", false) == true
 	large_text = config.get_value("accessibility", "large_text", false) == true
 	var saved = config.get_value("player", "road_checkpoint", {})
@@ -7065,6 +7095,8 @@ func _save_preferences() -> void:
 	config.set_value("driving","allow_crashes",allow_crashes)
 	config.set_value("driving","gentle",gentle_driving)
 	config.set_value("traffic","lights",traffic_light_mode)
+	for i in RADIO_KEYS.size():
+		config.set_value("keyboard","radio_%d" % i, radio_keys[i])
 	config.set_value("accessibility","calm_mode",calm_mode)
 	config.set_value("driving","steady_lights",steady_player_lights)
 	var result := config.save(SETTINGS_PATH)

@@ -953,14 +953,14 @@ msgstr "Jetzt läuft: %s"
 msgid "Farm tractor"
 msgstr "Traktor"
 
-msgid "Turn radio off · J"
-msgstr "Radio ausschalten · J"
+msgid "Turn radio off · %s"
+msgstr "Radio ausschalten · %s"
 
-msgid "Turn radio on · J"
-msgstr "Radio einschalten · J"
+msgid "Turn radio on · %s"
+msgstr "Radio einschalten · %s"
 
-msgid "Next song · N"
-msgstr "Nächstes Lied · N"
+msgid "Next song · %s"
+msgstr "Nächstes Lied · %s"
 
 msgid "Ready to run again! Hold Shift and walk forward."
 msgstr "Du kannst wieder rennen! Halte Shift gedrückt und geh vorwärts."
@@ -1639,3 +1639,9 @@ msgstr "Radio beim Sprechen absenken"
 
 msgid "Calm mode"
 msgstr "Ruhiger Modus"
+
+msgid "Radio key"
+msgstr "Radiotaste"
+
+msgid "Next song key"
+msgstr "Taste für den nächsten Titel"

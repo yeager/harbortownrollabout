@@ -892,14 +892,14 @@ msgstr "Nu spelas: %s"
 msgid "Farm tractor"
 msgstr "Traktor"
 
-msgid "Turn radio off · J"
-msgstr "Stäng av radion · J"
+msgid "Turn radio off · %s"
+msgstr "Stäng av radion · %s"
 
-msgid "Turn radio on · J"
-msgstr "Slå på radion · J"
+msgid "Turn radio on · %s"
+msgstr "Slå på radion · %s"
 
-msgid "Next song · N"
-msgstr "Nästa låt · N"
+msgid "Next song · %s"
+msgstr "Nästa låt · %s"
 
 msgid "Ready to run again! Hold Shift and walk forward."
 msgstr "Nu kan du springa igen! Håll ner Skift och gå framåt."
@@ -1552,3 +1552,9 @@ msgstr "Sänk radion under tal"
 
 msgid "Calm mode"
 msgstr "Lugnt läge"
+
+msgid "Radio key"
+msgstr "Radiotangent"
+
+msgid "Next song key"
+msgstr "Tangent för nästa låt"

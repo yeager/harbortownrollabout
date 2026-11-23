@@ -891,13 +891,13 @@ msgstr ""
 msgid "Farm tractor"
 msgstr ""
 
-msgid "Turn radio off · J"
+msgid "Turn radio off · %s"
 msgstr ""
 
-msgid "Turn radio on · J"
+msgid "Turn radio on · %s"
 msgstr ""
 
-msgid "Next song · N"
+msgid "Next song · %s"
 msgstr ""
 
 msgid "Ready to run again! Hold Shift and walk forward."
@@ -1550,4 +1550,10 @@ msgid "Lower radio during speech"
 msgstr ""
 
 msgid "Calm mode"
+msgstr ""
+
+msgid "Radio key"
+msgstr ""
+
+msgid "Next song key"
 msgstr ""

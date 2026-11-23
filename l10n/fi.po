@@ -936,14 +936,14 @@ msgstr "Nyt soi: %s"
 msgid "Farm tractor"
 msgstr "Traktori"
 
-msgid "Turn radio off · J"
-msgstr "Sammuta radio · J"
+msgid "Turn radio off · %s"
+msgstr "Sammuta radio · %s"
 
-msgid "Turn radio on · J"
-msgstr "Kytke radio päälle · J"
+msgid "Turn radio on · %s"
+msgstr "Kytke radio päälle · %s"
 
-msgid "Next song · N"
-msgstr "Seuraava kappale · N"
+msgid "Next song · %s"
+msgstr "Seuraava kappale · %s"
 
 msgid "Ready to run again! Hold Shift and walk forward."
 msgstr "Voit taas juosta! Pidä Shift pohjassa ja kävele eteenpäin."
@@ -1618,3 +1618,9 @@ msgstr "Vaimenna radiota puheen aikana"
 
 msgid "Calm mode"
 msgstr "Rauhallinen tila"
+
+msgid "Radio key"
+msgstr "Radion näppäin"
+
+msgid "Next song key"
+msgstr "Seuraavan kappaleen näppäin"

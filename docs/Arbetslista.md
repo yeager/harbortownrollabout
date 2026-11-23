@@ -13,7 +13,7 @@ De 50 förbättringarna från genomgången. En tom ruta är öppen. En punkt boc
 - [x] 07. Separata volymreglage för tal, radio och motorer. Kontrollerade i Godot med radion avstängd, tal på 35 procent och motorer på 80 procent efter omstart.
 - [x] 08. Mjuk och justerbar dämpning av radion under tal. Separat radiokompressor med 500 ms återgång. Reglagets ytterlägen, mellanläge och sparade val verifierade i Godot.
 - [x] 09. Lugnt läge under Grafik ger stadiga varningsljus, sänker trafik och motorer med 10 dB och håller korvkioskens neon stadigt tänd. Sparat val och återställning av ljudnivån verifierade i Godot.
-- [ ] 10. Tangentbindningar som spelaren kan ändra.
+- [ ] 10. Tangentbindningar som spelaren kan ändra. Radion och nästa låt har valbara tangenter under Ljud. Övriga spelkontroller återstår.
 
 ## Hitta, köra och komma ombord
 
