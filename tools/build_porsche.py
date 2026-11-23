@@ -512,7 +512,7 @@ def details(front_boundary):
                 arc.append((s*(profile(BODY,y,1)*.996),y,h+r*sin(a)+.008))
             tube("Wheel arch edge",arc,.012,paint)
         # Conform the italic lettering to the door pressing on each side.
-        lettering = badge("GT3 RS",(0,0,0),(0,0,0),.19,paint)
+        lettering = badge("GT5RS",(0,0,0),(0,0,0),.19,paint)
         lettering.data.shear = .32
         bpy.context.view_layer.objects.active = lettering
         bpy.ops.object.select_all(action="DESELECT")
