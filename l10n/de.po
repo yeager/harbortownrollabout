@@ -1624,3 +1624,12 @@ msgstr "Größerer Text"
 
 msgid "Show speech bubbles for longer"
 msgstr "Sprechblasen länger anzeigen"
+
+msgid "Speech"
+msgstr "Sprache"
+
+msgid "Radio"
+msgstr "Radio"
+
+msgid "Engines"
+msgstr "Motoren"

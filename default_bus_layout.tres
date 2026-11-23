@@ -15,3 +15,7 @@ bus/1/effect/0/effect = SubResource("VoiceDucking")
 bus/1/effect/0/enabled = true
 bus/2/name = &"Speech"
 bus/2/send = &"Master"
+bus/3/name = &"Radio"
+bus/3/send = &"Traffic and radio"
+bus/4/name = &"Engines"
+bus/4/send = &"Traffic and radio"

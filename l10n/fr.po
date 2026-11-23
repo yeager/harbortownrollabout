@@ -1622,3 +1622,12 @@ msgstr "Texte agrandi"
 
 msgid "Show speech bubbles for longer"
 msgstr "Afficher les bulles plus longtemps"
+
+msgid "Speech"
+msgstr "Voix"
+
+msgid "Radio"
+msgstr "Radio"
+
+msgid "Engines"
+msgstr "Moteurs"

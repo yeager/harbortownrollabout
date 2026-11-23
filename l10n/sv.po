@@ -1537,3 +1537,12 @@ msgstr "Större text"
 
 msgid "Show speech bubbles for longer"
 msgstr "Visa pratbubblor längre"
+
+msgid "Speech"
+msgstr "Tal"
+
+msgid "Radio"
+msgstr "Radio"
+
+msgid "Engines"
+msgstr "Motorer"

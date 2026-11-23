@@ -387,6 +387,7 @@ var tree_count := 0
 var traffic_data: Array[Dictionary] = []
 const SETTINGS_PATH := L10n.SETTINGS_PATH
 var language_preference := ""
+const MIX_CHANNELS := ["Speech", "Radio", "Engines"]
 var traffic_siren_volume := 100.0
 var traffic_light_mode := 0
 var steady_player_lights := false
@@ -2556,7 +2557,7 @@ func _build_marina() -> void:
 	engine_loop.loop_end = roundi(engine_loop.get_length() * engine_loop.mix_rate)
 	engine_loop.loop_mode = AudioStreamWAV.LOOP_FORWARD
 	ferry_engine.stream = engine_loop
-	ferry_engine.bus = &"Traffic and radio"
+	ferry_engine.bus = &"Engines"
 	ferry_engine.unit_size = 5
 	ferry_engine.max_distance = 48
 	ferry.add_child(ferry_engine)
@@ -6041,7 +6042,7 @@ func _build_ui() -> void:
 	phone.add_child(next_song_button)
 	next_song_button.pressed.connect(_next_radio_track)
 	radio.finished.connect(_next_radio_track)
-	radio.bus = &"Traffic and radio"
+	radio.bus = &"Radio"
 	radio.volume_db=-10
 	add_child(radio)
 	_build_overlay()
@@ -6420,6 +6421,25 @@ func _build_overlay() -> void:
 	)
 	volume_row.add_child(traffic_volume)
 	pages[1].add_child(volume_row)
+	for channel: String in MIX_CHANNELS:
+		var row := HBoxContainer.new()
+		row.alignment = BoxContainer.ALIGNMENT_CENTER
+		var caption := Label.new()
+		caption.text = channel
+		caption.custom_minimum_size.x = 120
+		row.add_child(caption)
+		var slider := HSlider.new()
+		slider.name = channel + "Volume"
+		slider.accessibility_name = channel
+		slider.custom_minimum_size.x = 180
+		slider.step = 5
+		slider.value = _channel_volume(channel)
+		slider.value_changed.connect(func(percent: float):
+			_apply_channel_volume(channel, percent)
+			_save_preferences()
+		)
+		row.add_child(slider)
+		pages[1].add_child(row)
 	for own in [false, true]:
 		var row := HBoxContainer.new()
 		row.name = "OwnBeacon" if own else "TrafficBeacons"
@@ -6883,6 +6903,7 @@ func _preview_sound() -> void:
 		sound_on = false
 	else:
 		sound_on = true
+		siren_player.bus = _vehicle_sound_bus()
 		siren_player.stream = siren_streams[vehicle_index]
 		siren_player.volume_db = -1.0
 		siren_player.pitch_scale = 1.0
@@ -6994,6 +7015,8 @@ func _load_preferences() -> void:
 	var mode_value = config.get_value("traffic","lights",0)
 	if mode_value is int:
 		traffic_light_mode = clampi(mode_value,0,2)
+	for channel: String in MIX_CHANNELS:
+		_apply_channel_volume(channel, float(config.get_value("audio",channel.to_lower(),100)))
 	traffic_siren_volume = clampf(float(config.get_value("audio","traffic_sirens",100)),0,100)
 	var volume_value = config.get_value("audio","volume",100)
 	if volume_value is float or volume_value is int:
@@ -7012,6 +7035,8 @@ func _save_preferences() -> void:
 	config.set_value("player", "delivery_points", delivery_points)
 	config.set_value("player","purchases",purchases)
 	config.set_value("language", "locale", language_preference)
+	for channel: String in MIX_CHANNELS:
+		config.set_value("audio", channel.to_lower(), roundi(_channel_volume(channel)))
 	config.set_value("audio","volume",roundi(volume))
 	config.set_value("audio","traffic_sirens",roundi(traffic_siren_volume))
 	config.set_value("world","season",weather.season_setting)
@@ -7036,6 +7061,16 @@ func _set_traffic_light_mode(index: int) -> void:
 	traffic_light_mode = index
 	_save_preferences()
 
+func _channel_volume(channel: String) -> float:
+	var index := AudioServer.get_bus_index(channel)
+	return 0.0 if AudioServer.is_bus_mute(index) else db_to_linear(AudioServer.get_bus_volume_db(index))*100.0
+
+func _apply_channel_volume(channel: String, percent: float) -> void:
+	var index := AudioServer.get_bus_index(channel)
+	AudioServer.set_bus_mute(index, percent <= 0)
+	if percent > 0:
+		AudioServer.set_bus_volume_db(index, linear_to_db(clampf(percent,0,100)/100.0))
+
 func _set_game_volume(percent: float) -> void:
 	_apply_game_volume(percent)
 	_save_preferences()
@@ -7052,8 +7087,12 @@ func _toggle_sound() -> void:
 	_update_siren()
 	_refresh_ui()
 
+func _vehicle_sound_bus() -> StringName:
+	return &"Traffic and radio" if vehicle_index < 3 or vehicle_index == XC60_POLICE else &"Engines"
+
 func _update_siren() -> void:
 	if (operating_excavator or boating) and mode == "playing" and not paused:
+		siren_player.bus = &"Engines"
 		var engine: AudioStream = preload("res://audio/outboard.wav") if boating else siren_streams[WHEEL_LOADER]
 		if siren_player.stream != engine:
 			siren_player.stream = engine
@@ -7063,6 +7102,7 @@ func _update_siren() -> void:
 			siren_player.play()
 		return
 	if sound_on and not operating_excavator and not boating and tram_mode == 0 and mode == "playing" and not paused and not walker.visible:
+		siren_player.bus = _vehicle_sound_bus()
 		if siren_player.stream != siren_streams[vehicle_index]:
 			siren_player.stream = siren_streams[vehicle_index]
 		if vehicle_index < 3 or vehicle_index == XC60_POLICE:

@@ -1536,3 +1536,12 @@ msgstr ""
 
 msgid "Show speech bubbles for longer"
 msgstr ""
+
+msgid "Speech"
+msgstr ""
+
+msgid "Radio"
+msgstr ""
+
+msgid "Engines"
+msgstr ""
