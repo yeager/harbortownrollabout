@@ -236,6 +236,7 @@ var navigator := preload("res://street_route.gd").new()
 var route_arrows: Array[Node3D] = []
 var route_timer := 0.0
 var medical_bag := Node3D.new()
+var passenger_wave_time := 0.0
 var square_neighbour: Node3D
 var marina_recipient: Node3D
 var waiting_medic: Node3D
@@ -4856,6 +4857,12 @@ func _update_pedestrians(delta: float) -> void:
 	for person: Node3D in [square_neighbour, waiting_medic, marina_recipient, passenger, arriving_passenger] + bus_companions + clinic_fire_team:
 		if is_instance_valid(person):
 			_greet_nearby_player(person)
+	passenger_wave_time = fmod(passenger_wave_time + delta, TAU / 5.2)
+	for person: Node3D in [square_neighbour, passenger]:
+		if person.visible:
+			_animate_steps(person, 0, delta)
+			if person == passenger or mission_index == 0:
+				person.get_meta("gait").wave(passenger_wave_time)
 	_update_small_talk(delta)
 	for item in walker_data:
 		var person: Node3D = item["actor"]
@@ -5335,7 +5342,6 @@ func _build_target_marker() -> void:
 		route_arrows.append(arrow)
 	_make_walker("Taxi passenger",0,0,1,Color("#724e74"),Color("#324c57"))
 	passenger = walker_data.pop_back().actor
-	passenger.get_meta("arms")[1].rotation.z = 2.4
 	_make_walker("Arrived taxi passenger",0,0,1,Color("#724e74"),Color("#324c57"))
 	arriving_passenger = walker_data.pop_back().actor
 	for shirt in [Color("#668d9c"),Color("#b37056")]:
@@ -5622,7 +5628,6 @@ func _update_mission_marker() -> void:
 			roll.position.y = _foot_height(roll.position.x,roll.position.z)
 	var rescue := not free_drive and not boating and vehicle_index == 0
 	square_neighbour.visible = rescue and mission_index <= 1
-	square_neighbour.get_meta("arms")[1].rotation.z = 2.35 if mission_index == 0 else 0.0
 	waiting_medic.visible = rescue and mission_index == 1
 	marina_recipient.visible = rescue and mission_index >= 2
 	var carrier: Node3D = waiting_medic

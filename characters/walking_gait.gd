@@ -186,3 +186,15 @@ func advance(distance: float, delta: float, pushing: bool, tuck := 0.0) -> void:
 		var wrist_rotation := Basis(Vector3.RIGHT, wrist_angle)
 		var palm_origin := rest.origin + wrist_offset - wrist_rotation * wrist_offset
 		palms[i].transform = Transform3D(elbow_rotation * wrist_rotation * rest.basis, joint + elbow_rotation * (palm_origin - joint))
+
+## Raise the right hand to hail a vehicle, bending the elbow above the shoulder.
+func wave(time: float) -> void:
+	var beat := sin(time * 5.2)
+	arms[1].rotation = Vector3(.18, 0, 1.65)
+	var forearm := Basis(Vector3.BACK, .99 + .22 * beat)
+	elbows[1].set_bone_pose_rotation(1, forearm.get_rotation_quaternion())
+	var rest := palm_rest[1]
+	var wrist := Basis(Vector3.BACK, .19 * sin(time * 5.2 - .5))
+	var cuff := Vector3.UP * .06
+	var joint := Vector3.DOWN * UPPER_ARM
+	palms[1].transform = Transform3D(forearm * wrist * rest.basis, joint + forearm * (rest.origin + cuff - wrist * cuff - joint))
