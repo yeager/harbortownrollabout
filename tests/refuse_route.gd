@@ -23,7 +23,20 @@ func check_route() -> void:
 		launch_speeds.append(game.speed)
 		game.mouse_gas = false
 		game.speed = 0.0
+		var curb: Vector3 = game.refuse_bins[stop].global_position if stop < 2 else Vector3.ZERO
 		game._help_at_target()
+		if stop < 2:
+			await create_timer(1.25).timeout
+			var bin: Node3D = game.refuse_bins[stop]
+			if bin.global_position.y <= curb.y + .8:
+				printerr("Bin did not lift above the loading edge")
+				quit(1)
+				return
+			await create_timer(1.45).timeout
+			if not bin.visible or bin.global_position.distance_to(curb) > .01 or absf(bin.rotation.x) > .01:
+				printerr("Bin did not return upright to the curb")
+				quit(1)
+				return
 		if game.mission_index != stop + 1:
 			printerr("Refuse truck stop failed: ", stop)
 			quit(1)

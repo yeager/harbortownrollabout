@@ -1292,19 +1292,20 @@ func _delivery_receipt() -> String:
 	return "Thank you for helping! You earned 10 points and 10 coins."
 
 func _empty_refuse_bin(stop: int) -> void:
-	var bin := refuse_bins[stop].duplicate() as Node3D
-	vehicle_model.add_child(bin)
-	var curb := vehicle_model.to_local(refuse_bins[stop].global_position)
-	bin.position = curb
-	var loading_edge := Vector3(0,.15,-3.92)
+	var bin := refuse_bins[stop]
+	var curb := bin.global_position
+	var loading_edge := vehicle_model.to_global(Vector3(0,.15,-3.92))
+	var rest_rotation := bin.rotation
+	bin.rotation.y = vehicle_model.global_rotation.y
 	var lift := bin.create_tween().set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
-	lift.tween_property(bin,"position",loading_edge,.65)
-	lift.tween_property(bin,"position",loading_edge + Vector3.UP*1.9,.55)
+	lift.tween_property(bin,"global_position",loading_edge,.65)
+	lift.tween_property(bin,"global_position",loading_edge + Vector3.UP*1.9,.55)
 	lift.parallel().tween_property(bin,"rotation:x",deg_to_rad(145),.55)
 	lift.tween_interval(.18)
 	lift.tween_property(bin,"rotation:x",0.0,.45)
-	lift.parallel().tween_property(bin,"position",loading_edge,.45)
-	lift.tween_callback(bin.queue_free)
+	lift.parallel().tween_property(bin,"global_position",loading_edge,.45)
+	lift.tween_property(bin,"global_position",curb,.65)
+	lift.parallel().tween_property(bin,"rotation",rest_rotation,.65)
 
 func _reward_delivery(amount: int) -> void:
 	wallet += amount
@@ -5631,7 +5632,7 @@ func _update_mission_marker() -> void:
 	if not is_instance_valid(mission_marker): return
 	_sync_recovery()
 	for i in refuse_bins.size():
-		refuse_bins[i].visible = vehicle_index == REFUSE and not free_drive and mission_index <= i
+		refuse_bins[i].visible = vehicle_index == REFUSE and not free_drive
 	_update_route_arrows()
 	passenger.visible = not free_drive and vehicle_index == TAXI and taxi_leg%2==0
 	if passenger.visible:
