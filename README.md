@@ -53,12 +53,18 @@ Click a vehicle picture, choose Axel or Alma, then select **Start driving**. Hol
 | To do this | Press |
 | --- | --- |
 | Get in or out of a vehicle | F |
+| Return to a safe spot if you get stuck on foot or in a vehicle | R |
 | Jump on foot | E |
+| Raise or lower the camera on foot | Page Up or Page Down |
 | Open the phone | T |
 | Turn the radio on or off | J |
 | Skip to the next song, when available | N |
 | Pause | P |
 | Quit | F10 (or F8 in Driving settings), then confirm |
+
+Under **Settings → Driving**, you can choose Backspace for recovery, 0 for jumping, 9 and 3 for camera height, or F2 for the phone.
+
+To find the hot dog stand, open the phone and pick **6** on the town map. You can park nearby and follow the arrows on foot to the counter.
 
 The radio switches on when you enter a vehicle. Swedish and English stations play songs. German, Spanish, French, Norwegian Bokmål and Finnish stations have a local announcement with music.
 
