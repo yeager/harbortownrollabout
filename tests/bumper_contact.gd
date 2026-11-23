@@ -83,8 +83,5 @@ func check_contact() -> void:
 				quit(1)
 				return
 		owner.position = original
-	game.queue_free()
-	await process_frame
-	await create_timer(.4).timeout
 	print("Bumper contact and assisted forward and reverse stops passed.")
-	quit()
+	game._finish_quit()
