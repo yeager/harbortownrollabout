@@ -1,12 +1,12 @@
-# Project notes for Axel’s game
+# Harbor Town Rollabout project notes
 
 ## Playable in the main scene
 
-- Godot 4, 3D, with English and Swedish text. Players choose Axel or Alma from the menu. The game saves their character choice and earned coins locally.
-- Drive an ambulance, police car, fire truck, black BMW X5 M60i or taxi. Players can switch vehicles on foot and use mouse pedals, a steering indicator, horns and sirens. Hard braking leaves skid marks. The BMW also has a driver’s-eye view.
+- The 3D game runs on Godot 4.7 dev5 and supports English, Swedish, German, Spanish, French, Finnish and Norwegian Bokmål. Players choose Axel or Alma from the menu. The game saves their character choice and earned coins locally.
+- Drive an ambulance, police car, fire truck, black SUV or taxi. Players can switch vehicles on foot and use mouse pedals, a steering indicator, horns and sirens. Hard braking leaves skid marks. The SUV also has a driver’s-eye view.
 - The road network takes inspiration from Sjöstaden, with canals, bridges, small boats, waterfront houses, depot parking, a library, bakery, clinic and fire station.
 - Traffic includes cyclists, emergency vehicles and slow A-tractors. Pedestrians greet the player. The central junction has traffic signals, and streetlights follow the day/night cycle. Weather and seasons support manual and automatic settings.
-- The phone (T) receives assignments and receipts in English or Swedish and displays the 32 most recent messages during the game round.
+- Press T to open or close the phone. Players can choose F2 in Settings. The phone shows assignments and receipts in the selected language and keeps the 32 most recent messages.
 - Three mission steps, roadside arrows and recurring taxi runs. 10 coins per rescue step and 15 per completed taxi ride.
 - Players can ride or drive the Tvärbanan tram on a four-stop loop between the traffic lanes in the western district. The door sign reads “Vi åker inte till Ekerö” (“We don’t go to Ekerö”).
 - Drive a motorboat in the southern basin, ride the scheduled Lotten ferry or watch the police helicopter on patrol.
