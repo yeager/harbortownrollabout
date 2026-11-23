@@ -6018,10 +6018,12 @@ func _update_route_arrows() -> void:
 	if (free_drive and map_goal == Vector3.INF) or (not free_drive and mission_index >= TARGETS.size()): return
 	var origin := walker.position if walker.visible else ambulance.position
 	var target := map_goal if free_drive else _mission_destination()
-	var walking_to_grill := free_drive and walker.visible and target == shops.grill_counter()
+	var grill_destination := free_drive and target == shops.grill_counter()
+	var walking_to_grill := grill_destination and walker.visible
 	var arrived := shops.at_grill_counter(origin) if walking_to_grill else origin.distance_to(target) < _arrival_radius()
 	if free_drive and arrived:
-		map_goal = Vector3.INF
+		if not grill_destination or walker.visible:
+			map_goal = Vector3.INF
 		return
 	var start := Vector2(origin.x, origin.z)
 	var points := PackedVector2Array()
