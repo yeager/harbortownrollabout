@@ -47,7 +47,8 @@ jobs:
           godot --headless --export-release Linux export/linux/axels-spel
           godot --headless --export-release Windows export/windows/HarborTownRollabout.exe
           godot --headless --export-release macOS "export/mac/Harbor Town Rollabout.zip"
-          export/linux/axels-spel --headless --quit-after 10
+          (cd export/linux && ./axels-spel --headless --quit-after 360) 2>&1 | tee "$RUNNER_TEMP/game-startup.log"
+          if grep -E '^(SCRIPT )?ERROR:' "$RUNNER_TEMP/game-startup.log"; then exit 1; fi
       - uses: actions/upload-artifact@v4
         with:
           name: exports
