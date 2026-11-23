@@ -31,6 +31,9 @@ Click a vehicle picture, choose Axel or Alma, then select **Start driving**. Hol
 
 - **Drive bus 74 to Sickla udde.** Pick up passengers at Västra torget and follow the route to the terminus.
 - **Take the garbage truck on its rounds.** Empty the bins at the square and the clinic, then unload at the marina. A full truck takes longer to get moving.
+- **Make the morning flour run.** Choose the tow truck in **Free exploration** and set the clock to **Day and night**. Stop beside the square between 5 a.m. and noon to load three flour sacks. Stop outside the bakery opposite the fire station to unload them. Your delivery receipt is in the phone.
+- **Bring a cake to a birthday party.** Walk up to the pink box at the bakery door and carry it to the party table in the square. The host opens the lid when you arrive.
+- **Find the moon rabbit.** Look on the pavement outside the sweet shop. Carry the lost figurine to the counter in the clothing shop to hear the owner's thank-you.
 - **Spend your first coins.** Park near Stationsallén, press **F** to get out, then walk to the pizzeria or sweet shop. Use **Tab** to choose what you want and **Enter** to buy it.
 - **Play boule by the canal.** Follow the signs from the ferry to the gravel court. Press **F** by the throwing circle to join. On your turn, aim with **←** or **→**, use **Tab** to choose a short, medium or long throw, then press **Enter** to throw. Try to land closest to the small yellow ball.
 - **Cross the canal on Lotten.** Walk down the steps to a landing. When the ferry pulls alongside, press **F** to board. Press **F** during the crossing to get off at the next landing.
@@ -60,7 +63,7 @@ Click a vehicle picture, choose Axel or Alma, then select **Start driving**. Hol
 | Open the phone | T |
 | Turn the radio on or off | J |
 | Skip to the next song, when available | N |
-| Pause | P |
+| Pause or resume | P (or enable F7 in Driving settings) |
 | Quit | F10 (or F8 in Driving settings), then confirm |
 
 Under **Settings → Driving**, you can choose Backspace for recovery, 0 for jumping, 9 and 3 for camera height, or F2 for the phone.
