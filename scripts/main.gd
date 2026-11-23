@@ -9085,7 +9085,10 @@ func _leave_practice() -> void:
 	if walker.visible:
 		parked_cars[vehicle_index].transform = ambulance.transform
 		walker.position = ambulance.to_global(parked_door_offset)
-		_recover_position()
+		walker.position.y = _foot_height(walker.position.x, walker.position.z)
+		walking_velocity = Vector3.ZERO
+		if not _on_foot_clear(walker.position) or scooter.visible:
+			_recover_position()
 	else:
 		speed = 0
 		steering = 0
