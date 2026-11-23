@@ -57,6 +57,17 @@ func check_gallery() -> void:
 					quit(1)
 					return
 		if index == game.SHOPPER:
+			for alma in [false,true]:
+				game.play_as_alma = alma
+				game._refresh_ui()
+				var pose = game.road_driver.get_node("AlmaShopperLegs" if alma else "AxelShopperLegs")
+				for boot_index in [2,5]:
+					var boot: MeshInstance3D = pose.get_child(boot_index)
+					var bounds: AABB = (game.ambulance.global_transform.affine_inverse()*boot.global_transform)*boot.get_aabb()
+					if not pose.visible or absf(bounds.position.y-.243) > .025 or bounds.get_center().z > -.20 or bounds.position.z < -.63:
+						printerr("Shopping trike boot outside footwell: ",bounds)
+						quit(1)
+						return
 			if game.player_wheels.size() != 3 or game.front_knuckles.size() != 2 or game.rear_tire_contacts.size() != 1:
 				printerr("Shopping trike axle layout changed")
 				quit(1)

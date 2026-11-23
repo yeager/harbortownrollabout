@@ -3420,6 +3420,9 @@ func _build_depot() -> void:
 		var mower_origin_y := .79 - .77 * scale_y
 		var mower_ankle := Vector3(.28, .395-mower_origin_y, -.46) / scale_y + Vector3(0,.098,.05)
 		_build_driving_legs("AlmaMowerLegs" if alma else "AxelMowerLegs",Vector3(.30,.69,-.38),mower_ankle)
+		var shopper_origin_y := .64 - .77 * scale_y
+		var shopper_ankle := Vector3(.17, .243-shopper_origin_y, -.49) / scale_y + Vector3(0,.098,.05)
+		_build_driving_legs("AlmaShopperLegs" if alma else "AxelShopperLegs",Vector3(.22,.68,-.40),shopper_ankle)
 	for arm in road_driver.get_meta("arms"):
 		var forearm := arm.get_child(0).duplicate() as MeshInstance3D
 		forearm.name = "Forearm"
@@ -6762,8 +6765,10 @@ func _refresh_ui() -> void:
 		for arm in road_driver.get_meta("arms"):
 			arm.visible = not on_moped
 		road_driver.get_node("RidingLegs").visible = vehicle_index == SNOWMOBILE
-		road_driver.get_node("AlmaMowerLegs").visible = vehicle_index in [MOWER,SHOPPER] and play_as_alma
-		road_driver.get_node("AxelMowerLegs").visible = vehicle_index in [MOWER,SHOPPER] and not play_as_alma
+		road_driver.get_node("AlmaMowerLegs").visible = vehicle_index == MOWER and play_as_alma
+		road_driver.get_node("AxelMowerLegs").visible = vehicle_index == MOWER and not play_as_alma
+		road_driver.get_node("AlmaShopperLegs").visible = vehicle_index == SHOPPER and play_as_alma
+		road_driver.get_node("AxelShopperLegs").visible = vehicle_index == SHOPPER and not play_as_alma
 		road_driver.get_node("AlmaCabLegs").visible = vehicle_index == FOOD_TRUCK and play_as_alma
 		road_driver.get_node("AxelCabLegs").visible = vehicle_index == FOOD_TRUCK and not play_as_alma
 		for leg in road_driver.get_meta("legs"):

@@ -39,10 +39,21 @@ def panel_section(y, width, bottom, shoulder, crown):
         (.72,.99),(.94,.92),(1,.77),(1,.14),(.93,0)]]
 
 v.mesh_from_rings("Pressed chassis",[(-1.15,.37,.19,.46,.52),(-.94,.47,.17,.53,.59),
-    (-.42,.46,.21,.53,.58),(.42,.425,.22,.52,.56),(.78,.385,.23,.51,.54),
+    (-.66,.46,.20,.50,.57)],red,root,.018,panel_section)
+v.mesh_from_rings("Seat pedestal and rear deck",[(.005,.42,.21,.50,.55),(.42,.425,.22,.52,.56),(.78,.385,.23,.51,.54),
     (1.02,.345,.24,.50,.525),(1.16,.315,.25,.48,.51)],red,root,.018,panel_section)
-v.mesh_from_rings("Tilting wedge front",[(-1.18,.37,.42,.54,.65),(-1.06,.44,.44,.57,.69),
+bonnet = v.mesh_from_rings("Tilting wedge front",[(-1.18,.37,.42,.54,.65),(-1.06,.44,.44,.57,.69),
     (-.46,.47,.51,.80,.92),(-.25,.43,.54,.85,.95)],red,root,.015,panel_section)
+# Hollow the underside from the driver side, keeping the outer cheeks and bonnet skin.
+cutter = box("Footwell cavity",(0,-.35,.41),(.76,.60,.70),v.BLACK,.025)
+bpy.context.view_layer.objects.active = bonnet
+cut = bonnet.modifiers.new("Recess for knees and boots", 'BOOLEAN')
+cut.operation = 'DIFFERENCE'
+cut.object = cutter
+bpy.ops.object.modifier_apply(modifier=cut.name)
+bpy.data.objects.remove(cutter,do_unlink=True)
+box("Pressed footwell floor",(0,-.315,.211),(.82,.73,.044),red,.018)
+box("Rubber foot mat",(0,-.315,.238),(.765,.64,.010),v.RUBBER,.005)
 nose_lamp("Chrome headlight bezel",-1.185,.58,.101,.045,v.METAL)
 # Flutes are part of one lens mesh so the driving light still has one emitter.
 lens_radius = .085
@@ -149,7 +160,7 @@ for cx, cz, start in ((.255,.195,0),(-.255,.195,90),(-.255,-.195,180),(.255,-.19
 for i, point in enumerate(outline):
     tube("Backrest welt", back.location+back.rotation_euler.to_matrix()@point,
          back.location+back.rotation_euler.to_matrix()@outline[(i+1)%len(outline)], .0045, welt)
-tube("Steering column",(0,-.27,.58),(0,-.13,.85),.022,v.DARK)
+tube("Steering column",(0,-.42,.245),(0,-.13,.85),.022,v.DARK)
 tube("Handlebar",(-.25,-.13,.85),(.25,-.13,.85),.017,v.METAL)
 for side in (-1,1):
     tube("Handle grip",(side*.18,-.13,.85),(side*.255,-.13,.85),.024,v.BLACK)
