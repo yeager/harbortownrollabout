@@ -1466,7 +1466,7 @@ msgstr "Kiosk"
 msgid "Pizzeria"
 msgstr "Pizzeria"
 
-msgid "Refuse truck"
+msgid "Garbage truck"
 msgstr "Sopbil"
 
 msgid "Collect bins at the square"
@@ -1478,7 +1478,7 @@ msgstr "Hämta sopkärlen vid vårdcentralen"
 msgid "Unload recycling at the marina"
 msgstr "Lämna återvinningen i småbåtshamnen"
 
-msgid "Return to your refuse truck"
+msgid "Return to your garbage truck"
 msgstr "Gå tillbaka till sopbilen"
 
 msgid "Shopping trike"

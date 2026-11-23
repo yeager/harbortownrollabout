@@ -1,6 +1,6 @@
 extends SceneTree
 
-class WeatherMenuGame extends "res://main.gd":
+class WeatherMenuGame extends "res://scripts/main.gd":
 	# Menu selections in this test must leave the player's preferences untouched.
 	func _save_preferences() -> void:
 		pass
@@ -9,7 +9,7 @@ func _initialize() -> void:
 	call_deferred("check_transition")
 
 func check_transition() -> void:
-	var weather := preload("res://city_weather.gd").new()
+	var weather := preload("res://scripts/city_weather.gd").new()
 	root.add_child(weather)
 	weather.weather_setting = 3
 	for second in range(5):
@@ -133,6 +133,25 @@ func check_transition() -> void:
 		game._animate_steps(game.walker, .08, .033)
 	if game.footstep.stream != game.SNOW_STEP or game.sole_marks.visible_instance_count == 0:
 		printerr("Fresh snowfall should restore snow footsteps")
+		quit(1)
+		return
+	var spruce := game.christmas_spruce
+	game.time_mode = 0
+	game._update_daylight(0)
+	if not spruce.visible or spruce.glow.visible:
+		printerr("Snowy square should have a tree with unlit daytime bulbs")
+		quit(1)
+		return
+	game.time_mode = 1
+	game._update_daylight(0)
+	if not spruce.glow.visible or spruce.bulbs.size() < 4 or spruce.bulbs[0].emission_energy_multiplier < 1:
+		printerr("Missing illuminated Christmas bulbs at night")
+		quit(1)
+		return
+	seasons.get_child(2).pressed.emit()
+	game._update_daylight(0)
+	if spruce.visible or game.roadside_solids.has(spruce.obstacle):
+		printerr("Seasonal tree remained on summer square")
 		quit(1)
 		return
 	game.footstep.stop()

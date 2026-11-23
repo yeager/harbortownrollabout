@@ -64,7 +64,7 @@ func check_route() -> void:
 				quit(1)
 				return
 		if game.mission_index != stop + 1:
-			printerr("Refuse truck stop failed: ", stop)
+			printerr("Garbage truck stop failed: ", stop)
 			quit(1)
 			return
 	if not (launch_speeds[0] > launch_speeds[1] and launch_speeds[1] > launch_speeds[2] and launch_speeds[2] > 0):

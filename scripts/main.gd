@@ -24,7 +24,7 @@ const PRACTICE_START := Vector3(-119, 0, 109)
 const CITY_INTERIOR := Rect2(-520, -92, 690, 172)
 const VEHICLE_NAMES := ["Ambulance", "Police car", "Fire engine"]
 const VEHICLE_SCENES := ["res://vehicles/ambulance.glb", "res://vehicles/polisbil.glb", "res://vehicles/brandbil.glb"]
-const VEHICLE_NAMES_ALL := ["Ambulance", "Police car", "Fire engine", "SUV", "Taxi", "Recovery truck", "Classic sports coupe", "Classic sedan", "Vintage compact", "Electric sedan", "City bus", "Snowmobile", "Police SUV", "Track sports car", "Ice cream van", "Small convertible", "Classic moped", "Monster truck", "A-tractor", "Classic cruiser", "Wheel loader", "Farm tractor", "Food truck", "Ride-on mower", "Refuse truck", "Shopping trike"]
+const VEHICLE_NAMES_ALL := ["Ambulance", "Police car", "Fire engine", "SUV", "Taxi", "Recovery truck", "Classic sports coupe", "Classic sedan", "Vintage compact", "Electric sedan", "City bus", "Snowmobile", "Police SUV", "Track sports car", "Ice cream van", "Small convertible", "Classic moped", "Monster truck", "A-tractor", "Classic cruiser", "Wheel loader", "Farm tractor", "Food truck", "Ride-on mower", "Garbage truck", "Shopping trike"]
 const VEHICLE_SCENES_ALL := ["res://vehicles/ambulance.glb", "res://vehicles/polisbil.glb", "res://vehicles/brandbil.glb", "res://vehicles/bmw_x5_m60i.glb", "res://vehicles/taxi.glb", "res://vehicles/bargare.glb", "res://vehicles/m3_e30.glb", "res://vehicles/volvo240.glb", "res://vehicles/saab96.glb", "res://vehicles/model_s.glb", "res://vehicles/city_bus.glb", "res://vehicles/snowmobile.glb", "res://vehicles/volvo_xc60_polis.glb", "res://vehicles/porsche_gt3_rs.glb", "res://vehicles/ice_cream_van.tscn", "res://vehicles/mini_cooper_cabriolet.glb", "res://vehicles/puch_dakota.glb", "res://vehicles/monster_truck.glb", "res://vehicles/a_traktor.glb", "res://vehicles/raggarbil.glb", "res://vehicles/volvo_wheel_loader.glb", "res://vehicles/farm_tractor.glb", "res://vehicles/food_truck_road.glb", "res://vehicles/ride_on_mower.glb", "res://vehicles/refuse_truck.glb", "res://vehicles/shopping_trike.glb"]
 const SIREN_SOUNDS := ["res://audio/siren_ambulance.wav", "res://audio/siren_police.wav", "res://audio/siren_fire.wav", "res://audio/bmw_engine.wav", "res://audio/bmw_engine.wav", "res://audio/bmw_engine.wav", "res://audio/bmw_engine.wav", "res://audio/bmw_engine.wav", "res://audio/bmw_engine.wav", "res://audio/electric_drive.wav", "res://audio/bmw_engine.wav", "res://audio/sled_engine.wav", "res://audio/siren_police.wav", "res://audio/porsche_engine.wav", "res://audio/bmw_engine.wav", "res://audio/bmw_engine.wav", "res://audio/moped_engine.wav", "res://audio/monster_engine.wav", "res://audio/bmw_engine.wav", "res://audio/bmw_engine.wav", "res://audio/loader_diesel.wav", "res://audio/tractor_diesel.wav", "res://audio/bmw_engine.wav", "res://audio/mower_engine.wav", "res://audio/loader_diesel.wav", "res://audio/moped_engine.wav"]
 const BUILDING_SCENES := {"Sjukhuset":"res://environment/sjukhus.glb", "Polisstationen":"res://environment/polisstation.glb", "Bageriet":"res://environment/bageri.glb", "Vårdcentralen":"res://environment/vardcentral.glb", "Brandstationen":"res://environment/brandstation.glb", "Biblioteket":"res://environment/bibliotek.glb"}
@@ -67,7 +67,7 @@ var tower_lightbox: StandardMaterial3D
 var entrance_diffuser: StandardMaterial3D
 var street_lights: Array[SpotLight3D] = []
 var lamp_glass: StandardMaterial3D
-var weather := preload("res://city_weather.gd").new()
+var weather := preload("res://scripts/city_weather.gd").new()
 var previous_season := 0
 var greeting_timer := 0.0
 var greeting_number := 0
@@ -102,6 +102,7 @@ var walk_camera_height := 0.0
 var orbit_height := 0.0
 var time_mode := 0
 var day_phase := 0.0
+var christmas_spruce := preload("res://environment/christmas_spruce.gd").new()
 var last_night := -1.0
 var parked_door_offset := Vector3.ZERO
 const Scooter := preload("res://vehicles/kick_scooter.gd")
@@ -240,7 +241,7 @@ var camera_turn := 0.0
 var cockpit_view := false
 var camera_button: Button
 var camera: Camera3D
-var navigator := preload("res://street_route.gd").new()
+var navigator := preload("res://scripts/street_route.gd").new()
 var route_arrows: Array[Node3D] = []
 var route_timer := 0.0
 var medical_bag := Node3D.new()
@@ -260,7 +261,7 @@ var front_knuckles: Array[Node3D] = []
 var moped_speed_needle: Node3D
 var player_wheels: Array[Node3D] = []
 var player_brake_lens: StandardMaterial3D
-var driving_controls := preload("res://driving_controls.gd").new()
+var driving_controls := preload("res://scripts/driving_controls.gd").new()
 var release_walk_keys := false
 var mouse_steering := 0.0
 var mouse_gas := false
@@ -351,10 +352,10 @@ var collected_stars := PackedStringArray()
 var star_markers := {}
 var wallet := 0
 var wallet_label: Label
-var shops := preload("res://shop_street.gd").new()
+var shops := preload("res://scripts/shop_street.gd").new()
 var purchases := {}
 var happy_seconds := 0.0
-var phone := preload("res://mission_phone.gd").new()
+var phone := preload("res://scripts/mission_phone.gd").new()
 var last_dispatch := ""
 var mission_label: Label
 const HELP_DURATION := 0.8
@@ -386,8 +387,8 @@ var traffic_light_mode := 0
 var steady_player_lights := false
 var emergency_traffic: Array[Dictionary] = []
 var moorings: Array[Dictionary] = []
-var street_signals := preload("res://street_signals.gd").new()
-var tram := preload("res://tram.gd").new()
+var street_signals := preload("res://scripts/street_signals.gd").new()
+var tram := preload("res://scripts/tram.gd").new()
 var boating := false
 var grip_radius := 0.0
 var road_driver: Node3D
@@ -2815,6 +2816,8 @@ func _build_city_blocks() -> void:
 	_make_driving_surface("Police forecourt",Vector3(9,.10,6.5),Vector3(-34,-.12,-7.75),Color("#a6a29a"))
 	# Låg kantsten och planteringar runt torget.
 	_make_driving_surface("Square paving", Vector3(14, 0.24, 13), Vector3(30, -0.09, 16), Color("#cbbf9f"), true)
+	christmas_spruce.position = Vector3(30,.03,16)
+	add_child(christmas_spruce)
 	for p in [Vector3(25, 0, 12), Vector3(35, 0, 12), Vector3(25, 0, 20), Vector3(35, 0, 20)]:
 		var granite := Color("#878782")
 		_make_roadside_solid("Planter base",Vector3(1.3,.29,1.3),p+Vector3.UP*.12,granite,true)
@@ -2992,6 +2995,7 @@ func _update_daylight(delta: float) -> void:
 		if mode == "playing" and not paused:
 			day_phase = fmod(day_phase+delta/360.0,1.0)
 	var night := 1.0 if time_mode == 1 else (smoothstep(-.4,.4,-cos(day_phase*TAU)) if time_mode == 2 else 0.0)
+	christmas_spruce.update_lights(weather.season == 4 and weather.snow > .02, night)
 	var cloud := weather.cloud_cover*(1.0-night)
 	city_sun.light_energy = lerpf(.73,.17,night)*(1.0-.52*cloud)
 	city_sun.shadow_opacity = 1.0-.48*cloud
@@ -5857,7 +5861,7 @@ func _update_mission_marker() -> void:
 	mission_marker.global_position = _mission_destination() + Vector3(0, 0.05, 0)
 	var marker_label: Label3D = mission_marker.get_node("MissionLabel")
 	if _needs_mission_vehicle():
-		marker_label.text = tr("Return to your taxi" if vehicle_index == TAXI else "Return to your bus" if vehicle_index==BUS else "Return to your ice cream van" if vehicle_index == ICE_CREAM else "Return to your refuse truck" if vehicle_index == REFUSE else "Return to your recovery truck").to_upper()
+		marker_label.text = tr("Return to your taxi" if vehicle_index == TAXI else "Return to your bus" if vehicle_index==BUS else "Return to your ice cream van" if vehicle_index == ICE_CREAM else "Return to your garbage truck" if vehicle_index == REFUSE else "Return to your recovery truck").to_upper()
 		return
 	marker_label.text = tr(BUS_MESSAGES[bus_leg%BUS_STOPS.size()] if vehicle_index==BUS else SERVICE_MESSAGES[recovery_leg%4] if vehicle_index==RECOVERY else _taxi_instruction() if vehicle_index==TAXI else _vehicle_tasks()[_mission_stop()]).to_upper()
 

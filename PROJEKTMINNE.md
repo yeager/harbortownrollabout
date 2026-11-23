@@ -1,418 +1,418 @@
-# Lokalt projektminne för Axels spel
+# Project notes for Axel’s game
 
-## Spelbart i huvudscenen
+## Playable in the main scene
 
-- Godot 4, 3D, engelska och svenska. Axel och Alma kan väljas i menyn. Spelfigur och intjänade mynt sparas lokalt.
-- Ambulans, polisbil, brandbil, svart BMW X5 M60i och taxi. Fordonsbyte till fots, muspedaler, rattindikator, horn, sirener och bromsspår. BMW har även förarvy.
-- Sjöstadsinspirerat vägnät med kanaler, broar, småbåtar, kajhus, parkering vid depån, bibliotek, bageri, vårdcentral och brandstation.
-- Trafik, cyklister, utryckningar, långsamma A-traktorer, hälsande fotgängare, signaler vid centrala korsningen, dag/natt och gatlampor. Manuellt/automatiskt väder och årstider.
-- Telefonen (T) tar emot uppdrag och kvitton på engelska eller svenska och visar de 32 senaste meddelandena under spelomgången.
-- Tre uppdragssteg, vägvisande pilar och återkommande taxikörningar. 10 mynt per räddningssteg och 15 per avslutad taxiresa.
-- Tvärbanan kan följas som passagerare eller köras på en slinga med fyra hållplatser mellan västra stadsdelens körfält. Dörrskylten säger ”Vi åker inte till Ekerö”.
-- Körbar motorbåt i södra bassängen, färjan Lotten i linjetrafik, polishelikopter på patrull.
+- Godot 4, 3D, with English and Swedish text. Players choose Axel or Alma from the menu. The game saves their character choice and earned coins locally.
+- Drive an ambulance, police car, fire truck, black BMW X5 M60i or taxi. Players can switch vehicles on foot and use mouse pedals, a steering indicator, horns and sirens. Hard braking leaves skid marks. The BMW also has a driver’s-eye view.
+- The road network takes inspiration from Sjöstaden, with canals, bridges, small boats, waterfront houses, depot parking, a library, bakery, clinic and fire station.
+- Traffic includes cyclists, emergency vehicles and slow A-tractors. Pedestrians greet the player. The central junction has traffic signals, and streetlights follow the day/night cycle. Weather and seasons support manual and automatic settings.
+- The phone (T) receives assignments and receipts in English or Swedish and displays the 32 most recent messages during the game round.
+- Three mission steps, roadside arrows and recurring taxi runs. 10 coins per rescue step and 15 per completed taxi ride.
+- Players can ride or drive the Tvärbanan tram on a four-stop loop between the traffic lanes in the western district. The door sign reads “Vi åker inte till Ekerö” (“We don’t go to Ekerö”).
+- Drive a motorboat in the southern basin, ride the scheduled Lotten ferry or watch the police helicopter on patrol.
 
-- Fyra butiker på Stationsalléns södra sida har gångbara entréer. Kanelbulle, saft, glass, korv med bröd, pizza och godis kan köpas för sparade mynt.
+- Four shops on the south side of Stationsallén have entrances players can walk through. Spend saved coins on cinnamon buns, berry cordial, ice cream, hot dogs, pizza and candy.
 
-- Körbar rödgul flakbärgare med vinschmodell. Hämta en rykande bil eller en bil som tappat ett hjul, kör den på flaket till verkstaden och få 20 mynt.
+- The red-and-yellow flatbed tow truck has a modeled winch. Pick up a smoking car or one missing a wheel and carry it to the workshop for 20 coins.
 
-- Polisstation vid huvudgatan och sjukhus med akutentré öster om norra bron. Brandstationens portar och övriga samhällsbyggnaders entréer vetter mot gatan.
+- Police station on the main street and hospital with emergency room east of the north bridge. The doors of the fire station and the entrances of other community buildings face the street.
 
-- En granne med barnvagn och en äldre person med rullator promenerar i olika takt längs huvudgatans trottoarer. Båda tillbehören finns som redigerbara Blender-modeller.
+- A neighbor pushing a stroller and an older pedestrian using a rollator walk along the main street at different speeds. Both accessories have editable Blender models.
 
-- Två låga gröna raggarbilar med vitt tak kör mjukt vinglande inom körfältet och stannar i kö.
+- Two low green cruisers with white roofs weave gently within their lanes and stop behind traffic.
 
-- Gångbar träbrygga med pollare och rep mellan Lottens två angöringar. Fyra trappsteg kopplar varje ände till västra kajen.
+- A wooden pier with bollards and ropes connects Lotten’s two landings. Four steps link each end to the western quay.
 
-## Återstående önskemål
+## Outstanding requests
 
-- Godstransporter med synlig last och kvittens vid leverans.
-- Förfina fordonsformer, särskilt BMW-fronten, brandbilen, polisbilen, Tvärbanan och sittande förare. Förbättra vatten- och fönsterreflektioner, arkitektur och strandpromenad utifrån bildreferenser.
-- Utöka gång- och trafiksignaler från centrala korsningen till övriga passager. Speltesta framkomlighet, dialog, läsbarhet, ljudnivå och bildfrekvens i hela staden.
-- Följ upp önskemålet om Blender MCP och verifiera faktisk anslutning innan det räknas som klart.
+- freight transportation with visible load and receipt when delivered.
+- Refine vehicle shapes, especially the BMW front, the fire truck, the police car, the Tvärbanan and the sitting driver. Improve water and window reflections, architecture and boardwalk based on image references.
+- Extend the pedestrian and traffic signals to the other crossings. Playtest routes, dialogue, readability, sound levels and frame rate throughout town.
+- Follow up on the request for Blender MCP and verify actual connection before it counts as clear.
 
-## Källor och verifiering
+## Sources and verification
 
-README.md innehåller engelska spelinstruktioner. Blender-källor finns i source_blender/, byggskript i tools/. Lokala referensbilder ligger i .local-memory/references/ med sina ursprungliga filnamn. Bärgarbildens filnamn börjar med codex-clipboard-56557bc1. Dessa foton ingår inte i Git-repot.
+README.md contains the English playing instructions. Blender sources are in `source_blender/` and build scripts in `tools/`. Local reference photos retain their original filenames under `.local-memory/references/`. The tow truck reference filename starts with `codex-clipboard-56557bc1`. These photos are excluded from Git.
 
-Spelprojektet publiceras i det privata GitHub-repot yeager/axels-emergency-vehicles. Kör Gitleaks före push. Kontrollera alltid aktuella scener, källor och körning när en punkt uppdateras.
+The project was originally published in the private yeager/axels-emergency-vehicles repository. Run Gitleaks before pushing. Check the current scenes, source and running game before updating an entry.
 
-- Förbandsväskan följer räddningsuppdraget från vårdaren till spelaren och lämnas på kajen efter leverans.
+- The medic hands the first-aid bag to the player during the rescue mission. The bag stays on the quay after delivery.
 
-- Båda övergångsställena över tvärgatan i centrum har gångsignaler. Fotgängare väntar vid kanten på rött och går färdigt om signalen växlar under passagen.
+- Both crossings on the central side street have pedestrian signals. Pedestrians wait at the curb on red and finish crossing if the light changes.
 
-- I Tvärbanans förar- och passagerarläge visar HUD nästa hållplats, vagnens hastighet och nedräkning vid hållplatsen på valt språk.
+- In Tvärbanan’s driver and passenger mode, HUD shows the next stop, wagon speed and countdown at the stop in selected language.
 
-- Främre vagnens dubbeldörr öppnas mot den korta plattformen vid varje stopp. Dörrbladen glider igen före avgång i både passagerar- och förarläge.
+- The front wagon double door opens to the short platform at each stop. The door blades slide again before departure in both passenger and driver mode.
 
-- Tvärbanans förare kan ringa en dubbel klang med H eller skärmknappen. Lyssnaren följer främre vagnen i båda spårvagnslägena.
+- The train driver can call a double connotation with the H or screen button. The listener follows the front wagon in both trams.
 
-- I BMW:ns förarvy går det att se åt sidorna och uppåt/nedåt genom att dra med mittenknappen. Förarvyn centreras när man väljer den på nytt.
+- In the BMW’s driver’s view, you can look at the sides and up/down by dragging the middle button. The driver’s view is centered when you choose it again.
 
-- BMW:ns två främre vindrutetorkare följer nederbörden. De sveper snabbare vid kraftigare nederbörd och avslutar svepet i parkerat läge när det klarnar.
+- The BMW's two front windshield wipers follow the precipitation. They sweep faster at stronger precipitation and finish the swipe in parked mode when it clarifies.
 
-- Förarvyn renderades i Godot med parkerade och uppfällda torkare. Svepet ökades till cirka 73 grader efter bildkontrollen.
+- The driver’s view was rendered in Godot with parked and folded dryers. The swipe was increased to about 73 degrees after the image control.
 
-- Spelarambulansens fyra takmoduler lyser nu upp närliggande ytor. Godot-test och bild från följekameran bekräftar ljusen i fast läge och testet kontrollerar båda blinkfaserna.
+- The four roof modules of the player ambulance now light up nearby surfaces. The Godot test and image from the companion camera confirms the lights in fixed mode and the test controls both blink phases.
 
-- De tre utryckningsfordonen i trafiken har blått ljusspill och omväxlande blåljusgrupper. Trafikens inställning för fast eller avstängt blåljus styr även ljusspillet.
+- The three emergency vehicles in traffic have blue light spills and alternating blue light groups. Traffic setting for solid or suspended blue light also controls the light spill.
 
-- Trafikens sirenton följer både ljudkällans och lyssnarens rörelse. Godot-testet verifierade tonhöjningen när båten och spårvagnen närmar sig, sänkningen när båten backar bort och grundtonen när båda står still.
+- The sirenton of the traffic follows both the movement of the sound source and the listener. The Godot test verified the pitch of the tone as the boat and tram approach, the sinking as the boat backs off and the keynote when both stand still.
 
-- Telefonen anger plats och fel vid bärgning, bekräftar lastningen och visar belöningen inför verkstadsresan. Lastning och betalning syns även kort på skärmen.
+- The phone specifies location and errors during salvation, confirms the loading and displays the reward for the workshop journey. The loading and payment are also visible on the screen.
 
-- Vid återgång från manuellt till automatiskt väder börjar prognosens femminuterstid om. Automatiska årstider utgår från vald årstid och behåller den i en halvtimmes speltid. Nederbörd som passar årstiden fortsätter vid bytet.
+- When returning from manual to automatic weather, the forecast’s five-minute time begins. Automatic seasons start from the season chosen and retain it for half an hour’s playing time. Precipitation that fits the season continues at the prey.
 
-- Hård bromsning i snö lämnar bredare grå spår och dämpat däckljud. Slask ger mörkare spår än torr snö. Varje spårsegment behåller färgen från väglaget när det skapades.
+- Hard braking in snow leaves wider grey tracks and subdued tire sound. Slask provides darker tracks than dry snow. Each track segment retains the color from the road when it was created.
 
-- I butikerna visar ”Dina köp” hur många exemplar av varje vara som har köpts. Listan delas mellan butikerna och läser från de lokalt sparade köpen.
+- In the stores, “Your purchase” shows how many copies of each item have been purchased. The list is shared between the stores and reads from the locally saved purchases.
 
-- Butiksmenyn har mörk bakgrund och rullning för längre inköpslistor. I ett spelfönster på 800 × 480 verifierades båda kioskknapparnas placering och ett köp med samtliga sex varor i listan.
+- The store menu has dark background and scrolling for longer shopping lists. In a game window of 800 × 480, the location of both kiosk buttons and a purchase of all six items were verified in the list.
 
-- Från depån leder en skyltad gångväg över Stationsallén till kaféet. Trottoaren fortsätter längs kioskens, pizzerians och godisbutikens entréer.
+- From the depot leads a signed walkway across the Stations Allén to the cafe. The sidewalk continues along the kioskens, pizzerians and candy shop entrances.
 
-- Övergångsstället mellan depån och butikerna på Stationsallén har gångsignaler, trafikljus och stopplinjer i båda körriktningarna. Bilens bromshjälp följer signalen.
+- The transition point between the depot and the shops at Stationsallén has walking signals, traffic lights and stop lines in both directions. The brake help of the car follows the signal.
 
-- Bromshjälpen tar hänsyn till rörelsen under nästa bildruta och tänder bromsljusen när den begränsar farten. Vid test på Stationsallén bromsade bilen från 8 m/s till stillastående före linjen och körde vidare med bibehållen gas vid grönt.
+- The brake aid takes into account the movement under the next frame and lights the brake light when it limits the speed. When testing at Stationsallén, the car braked from 8 m/s to stagnant before the line and continued with retained gas at green.
 
-- När bilen stannar vid signalens stopplinje visas ”Väntar på grönt ljus”. Texten ligger kvar om spelaren släpper gasen och försvinner när signalen ger fri passage.
+- When the car stops at the signal stop line, “Wait for green light.” The lyrics remain if the player releases the gas and disappears when the signal gives free passage.
 
-- Färjan Lottens salongsfönster får varmt sken när staden mörknar. Nattläget granskades i en renderad Godot-bild från kajen och dagsläget kontrollerades utan fönstersken.
+- The Lottens salon window shines warmly when the city is darkening. The night mode was reviewed in a rendered Godot image from the dock and the current situation was checked without the windowlight.
 
-- Kanalvattnet speglar Lottens upplysta sidofönster i skymning och natt. Vågorna bryter upp skenet utifrån kamerans och färjans position. Nattvyn från kajen är visuellt kontrollerad i Godot.
+- The canal water reflects Lotten's illuminated side window in dusk and night. The waves break up the shape from the location of the camera and the ferry. The night view from the dock is visually controlled in Godot.
 
-- Motorbåtens kölvatten utgår från aktern och ändrar längd och ljushet med farten. Riktningen växlar vid backning. Framåtkörning kontrollerades i renderad Godot-vy och parametrarna testades vid stopp, backning och framfart.
+- The engine boat’s wake is based on the stern and changes the length and lightness with the speed. The direction changes when backing. Forward driving was checked in the rendered Godot view and the parameters were tested at stops, backings and advances.
 
-- Motorbåten saktar in mjukt mot farområdets gräns. Med gas och roder kan spelaren svänga tillbaka även från stillastående. Infart och återstart vid norra bojlinjen är testade i Godot.
+- The motorboat slows softly towards the frontier. With gas and rods, the player can turn back even from stagnant. The entrance and reboot at the northern line is tested in Godot.
 
-- Motorbåtens utombordare har ett styrfäste i Blendermodellen. Motorkåpa, växelhus och propellernav svänger tillsammans i Godot och centreras när styrningen släpps.
+- The outboard motorboat has a steering bracket in the Blender model. Motor housing, gear houses and propeller hubs swing together in Godot and are centered when the control is released.
 
-- Motorbåten har nu en sittande förare bakom styrpulpeten som följer spelarvalet Axel eller Alma. Alma kontrollerades i renderad Godot-vy under båtkörning.
+- The engine boat now has a seated driver behind the control pulp following the Axel or Alma player selection. Alma was controlled in the rendered Godot view during boating.
 
-- Motorbåtens röda babordslanterna och gröna styrbordslanterna följer dygnsljuset. Båda sidor kontrollerades i renderade nattbilder och släckningen verifierades i dagsläge.
+- The motorboat’s red bathing lanes and green steering board lanes follow the clock light. Both sides were checked in rendered nightshots and the extinguishing was verified at present.
 
-- Båtföraren har en orange flytväst med ryggstycke, två framstycken, reflexdetaljer och spänne. Västen följer figurens storlek och kontrollerades från båda sidor i Godot.
+- The boat driver has an orange floating vest with backpiece, two front pieces, reflex details and buckle. The West follows the size of the figure and was controlled from both sides of Godot.
 
-- Start- och pausmenyn visar instruktioner för vald båttur eller spårvagnsroll. Bilväljaren och bilens ljudprov visas endast i vägaktiviteterna. Aktivitetsskiften och båtturens pausknapp är testade i Godot.
+- The start and pause menu shows instructions for selected boat ride or tram role. The car selector and the car’s sound sample are shown only in the road activities. The shifts of activity and the pause button of the boat trip are tested in Godot.
 
-- Upplästa hälsningar följer spelets huvudvolym. Vid ljud av stoppas pågående tal och nya hälsningar visas som text. ”Hej!” verifierades i svenskt, ljudlöst läge i Godot.
+- Reading greetings follows the main volume of the game. When sounds are stopped, ongoing speech and new greetings are displayed as text: “Hello!” was verified in Swedish, soundless mode in Godot.
 
-- Tvärbanans förarläge visar gas och broms nere till höger. Muspedaler fungerar även när spelaren byter från promenad i pausmenyn. Test i Godot bekräftar acceleration med vänster knapp och bromsprioritet när båda hålls nere.
+- Tram driver mode shows gas and brakes down to the right. Mouse pedals also work when the player switches from walking in the pause menu. Test in Godot confirms acceleration with the left button and brake priority when both are kept down.
 
-- Tvärbanans främre hytt har en separat Blendermodell med rundad blå nos, lutande vindruta, strålkastare och destinationsskylt. Fronten granskades i en renderad trekvartsvy vid hållplatsen.
+- The front tram cab has a separate Blender model with rounded blue nose, sloping windscreen, headlights and destination sign. The front was reviewed in a rendered three-quart view at the stop.
 
-- Tvärbanan har kontaktledning och stolpar längs slingan samt strömavtagare på mittvagnen. Taket granskades i Godot och ett körtest passerade fyra stationsstopp med dörröppning och stängning.
+- Overhead wires and poles follow the tram loop. The middle car carries a pantograph. A Godot roof inspection and driving test covered four stops with opening and closing doors.
 
-- Spårvagnshållplatserna har dubbelsidiga namnskyltar under taket, bänk och markerad plattformskant.
+- Tram stops have double-sided name signs under the roof, bench and marked platform quantity.
 
-- Tvärbanans status visar avstånd i meter längs rälsen till nästa hållplats tillsammans med namn och fart, på svenska och engelska.
+- The tram status display shows distance in meters along the rails to the next stop along with name and speed, in Swedish and English.
 
-- Vid bärgningen på östra kajen ligger det lossnade hjulet bredvid bilen tills den hämtas. Alla fyra uppdragssteg provades i Godot.
+- At the salvage on the eastern dock, the unloaded wheel is next to the car until it is picked up. All four mission steps were tested in Godot.
 
-- Parkerade uppdragsfordon kan inte utlösa hämtning medan spelaren åker båt eller tvärbana. Bärgning testad vid samma mål i fem färdlägen.
+- Parked assignment vehicles cannot trigger pick-up while the player rides a boat or cross-course. Wearing tested at the same goal in five modes.
 
-- Vid räddningsmål visar manuellt körläge först att spelaren ska stanna och sedan vilken knapp som hjälper. Testat att mellanslag i fart inte tvärstoppar bilen och att hjälp efter stopp genomför uppdragssteget.
+- At rescue goals, manual driving mode first shows that the player should stop and then which button helps. Tested that space speeds do not cross-stop the car and that assistance after stopping performs the mission stage.
 
-- Uppdragstelefonens räknare följer de fyra sparade meddelandena och nollställs när inkorgen blir synlig efter paus. Testat i Godot.
+- The task phone counter follows the four saved messages and zeroes when the inbox becomes visible after pause. Tested in Godot.
 
-- Aktivitetsmenyn visar Taxikörningar eller Bärgningsuppdrag när respektive fordon väljs. Svenska texterna testades genom att växla mellan taxi, bärgningsbil och ambulans.
+- The task menu shows Tax drives or Wearing missions when the respective vehicles are selected. The Swedish texts were tested by switching between taxis, salvage cars and ambulance.
 
-- Startmenyn beskriver första resan för taxi och bärgningsbil. De svenska beskrivningarna kontrollerades vid fordonsbyte i Godot.
+- The start menu describes the first trip for the taxi and salvage car. The Swedish descriptions were checked at vehicle change in Godot.
 
-- Avlämnade taxipassagerare syns på trottoaren vid resmålet fram till nästa hämtning. Tre hela taxiresor testades med rätt avlämningsplats och 15 mynt per resa.
+- Left taxi passengers are shown on the sidewalk at the destination until the next pick-up. Three full taxi trips were tested with the correct drop-off point and 15 coins per trip.
 
-- Spelarens bil och AI-trafiken tar hänsyn till synliga taxipassagerare och väntande sjukvårdare. Godot-test visade att en trafikbil stannade för en passagerare i körfältet och körde vidare när vägen blev fri.
+- The player’s car and the AI traffic take into account visible taxi passengers and waiting healthcare providers. The Godot test showed that a car stopped for a passenger in the lane and drove on when the road was free.
 
-- Trafiken räknar den havererade bilens längd och bredd vid inbromsning. I ett körfältstest i Godot stannade bilen bakom hindret och fortsatte när körfältet blev fritt.
+- Traffic counts the length and width of the crashed car when braking. In a lane test in Godot, the car stopped behind the obstacle and continued as the lane became free.
 
-- En rödorange varningstriangel med självlysande reflexram står vid båda haverierna och plockas bort när bilen lastas. Synligheten kontrollerades genom alla fyra bärgningssteg.
+- A red orange warning triangle with a self-evident reflex frame stands at both breaks and is removed when the car is loaded. Visibility was controlled through all four salvation steps.
 
-- Verkstadens fasad mot bärgningsmålet har två sektionsportar med fönster och en skylt med namnet Sjöstadens bilverkstad.
+- The workshop’s facade against the salvage target has two sectional doors with windows and a sign named Sjöstaden’s car repair shop.
 
-- Verkstadens två garageportar har varmvita nedåtriktade armaturer som följer skymningen. I Godot kontrollerades båda lampornas ljusstyrka och synlighet vid natt och dag.
+- The workshop’s two garage doors have hot-white downward luminaires that follow the twilight. In Godot, the brightness and visibility of both lights were checked at night and day.
 
-- Efter avlämningen står en bil utanför verkstadsporten fram till nästa hämtning. Spelarens bil och gångväg tar hänsyn till den parkerade bilen.
+- After the drop-off, a car stands outside the workshop gate until the next pick-up. The player’s car and walkway take into account the parked car.
 
-- AI-trafiken anpassar fart och avstånd till hur våt och snötäckt vägen är. Samma trafikbil provades på torr, våt och snötäckt väg samt vid en passagerare i körfältet.
+- AI traffic adapts speed and distance to how wet and snow covered the road. The same car was tested on dry, wet and snow-covered roads as well as on a passenger in the lane.
 
-- Mark på båda kanalstränderna samt trottoarerna vid huvudgatorna följer nu samma successiva snötäcke och väta som körbanan. Materialvärdena kontrollerades vid fyra snönivåer i Godot.
+- Mark on both channel beaches as well as the sidewalks at the main streets now follow the same gradual snow cover and wet as the lane. The material values were controlled at four snow levels in Godot.
 
-- Vädret påverkar även stenläggningen vid kajhusen och strandpromenaden. Våt granit mörknar och blir blankare, medan snö samlas först tydligare i fogarna.
+- The weather also affects the stone layer at the docks and the promenade. Wet granite darkens and becomes blanker, while snow gathers first more clearly in the joints.
 
-- Regndroppar skapar expanderande ringar i kanalens ytreflexer. Effekten följer den flytande nederbörden och tonas ned på avstånd. Kontroll i Godot omfattade regn, slask, snö och uppehåll.
+- Rain drops create expanding rings in the channel's surface flaxes. The effect follows the floating precipitation and tons down at a distance. Control in Godot included rain, slack, snow and stop.
 
-- Regn och snö dämpar direkt solljus och skuggornas kontrast i takt med molntäcket. Testat vid tre nederbördsnivåer med fast dagläge.
+- Rain and snow directly suppress sunlight and shadow contrast as the cloud cover. Tested at three precipitation levels with a fixed day mode.
 
-- Himlens reflektionskarta dämpar starka högdagrar och får en svalare ton i mulet väder. Godot startades med den ändrade himmelsshadern utan kompileringsfel.
+- The reflection map of Heaven suppresses strong highlights and gets a cooler tone in the mulet weather. Godot was started with the changed skieshader without compilation errors.
 
-- Sparat manuellt väder gäller redan när en ny spelsession öppnas, inklusive väglag och nederbörd. Testat med sparat snöväder följt av gradvis töväder efter byte till sol.
+- Saved manual weather already applies when a new game session is opened, including road law and precipitation. Tested with saved snow weather followed by gradually thawings after switching to sun.
 
-- När snön smälter blir marken blöt av smältvatten. I Godot provades övergången snö–sol tills snön var borta och vägbanan sedan torkade.
+- When the snow melts, the ground becomes wet of meltwater. In Godot, the transition was snow-sol until the snow was gone and the roadway then dried.
 
-- Nederbördspartiklarna döljs i butiksvyn och syns igen utanför. Entré och utgång provades vid samtliga fyra butiker.
+- The rainfall particles are hidden in the shop view and are visible again outside. Entrance and exit were tested at all four stores.
 
-- Kafé Bullen har en plåt med sex modellerade kanelbullar på disken. Varje bulle har en kanelspiral som följer den välvda ytan.
+- Cafe Bullen has a sheet of six modeled cinnamon noises on the counter. Each noise has a cinnamon spiral that follows the vaulted surface.
 
-- Pizzerian visar en margherita på träbräda vid disken, med gräddad kant, tomatsås och mozzarella.
+- Pizzerian shows a margherita on the wooden board at the counter, with creamed edge, tomato sauce and mozzarella.
 
-- När pengarna inte räcker visar butiken beloppet som saknas och hur spelaren tjänar mynt. Svenska besked och köp med exakt pris provades i kaféet.
+- When the money is not enough, the store shows the amount that is missing and how the player earns coins. Swedish announcements and purchases with the exact price were tested in the cafe.
 
-- Vid inträde i en butik får första varan tangentbordsfokus. Ett köp av en kanelbulle med Enter verifierades med Godots inmatningssystem.
+- Upon entering a store, the first item gets the keyboard focus. A purchase of a cinnamon boulder with Enter was verified with Godot’s input system.
 
-- Butiksmenyn visar hur man väljer vara med Tabb och köper med Enter. I kiosken provades ett köp av korv med bröd med dessa två tangenter.
+- The store menu shows how to choose to be with Tabb and buy with Enter. In the kiosk, a purchase of sausages with bread was tried with these two keys.
 
-- Kiosktestets intermittenta avslutsvarning identifierades i Godots verbose-logg som ambulansens AudioStreamWAV och dess uppspelare. Fem upprepningar med 250 ms mellan frigjord scen och testprocessens avslut genomförde köpet utan resursvarning. Normal spelavslutning är inte undersökt i detta test.
+- The intermittent final warning of the Kiosktest was identified in Godot’s verbose log as the AudioStreamWAV of the ambulance and its playback. Five repetitions of 250 ms between the released stage and the end of the test process completed the purchase without a resource warning. Normal play closure is not investigated in this test.
 
-- Tre separata grafiska Godot-processer under X11 fick fönsterhanterarens normala stängningsmeddelande medan ambulanssirenen spelade. Alla tre avslutades med kod 0 utan resursvarning i den utförliga loggen.
+- Three separate graphic Godot processes during the X11 received the window manager’s normal closing message while the ambulance sir played. All three ended with code 0 without resource alert in the detailed log.
 
-- Butikskvittot visar vara och betalt belopp på svenska och engelska. Svenskt kvitto för en kanelbulle kontrollerades mot tre dragna mynt.
+- The store receipt shows the amount and paid in Swedish and English. The Swedish receipt for a cinnamon boulder was checked against three drawn coins.
 
-- Bärgarens bakre hjullyft har två modellerade hjulstöd med gångjärnstappar och infångningsarmar. Blender-källan och spelmodellen uppdaterades och importerades i Godot.
+- The tow truck’s rear wheel lift has two modeled wheel supports with hinges and capture arms. The Blender source and the game model were updated and imported in Godot.
 
-- Bromshjälp för personer, framförvarande trafik och rödljus använder bilens uppmätta längd framåt respektive bakåt. Bärgarens nya hjulstöd ingår i bakmåttet även när den parkeras.
+- Emergency braking aid for persons, in front of traffic and red lights uses the measured length of the car forward and backwards. The tow truck’s new wheel support is included in the rear dimension even when parked.
 
-- Trädkollisioner använder främre stötfångarens mått vid körning framåt och bakre utrustningens mått vid backning. Test med bärgaren stannade med mindre än en centimeters frigång åt båda håll.
+- Tree collisions use the front bumper's measurements when driving forward and the rear equipment's dimensions when backing. The test with the wearer stopped with less than a centimeter’s release in both directions.
 
-- Parkerade fordons kollisionsytor utgår från modellens faktiska ytterkanter. Till fots provades frigången framför och bakom bärgaren i tre olika riktningar.
+- Parked vehicle collision surfaces are based on the actual outer edges of the model. On foot, the release was tested in front of and behind the wearer in three different directions.
 
-- Depån har en separat asfalterad ruta för bärgaren och en avslutande linje vid taxiplatsen. Godot-testet kontrollerade att hela bärgarens fotavtryck ryms på asfalten efter spelstart.
+- The depot has a separate paved box for the wearer and a closing line at the taxi site. The Godot test checked that the entire wearer’s footprint is accommodated on the asphalt after the start of the game.
 
-- Dörrmarkören visar fordonets namn och F för att kliva in. Svensk uppmaning och byte från promenad till bärgare verifierades i Godot.
+- The door marker shows the name of the vehicle and F to step in. Swedish calling and switching from walk to carrier was verified in Godot.
 
-- Vid urstigning hamnar spelaren längs samma dörrlinje som används vid instigning. Testat att bärgaren kräver stopp och att spelaren direkt kan nå samma dörr igen.
+- In the event of departure, the player ends up on the same door line used when entering. Tested that the wearer requires a stop and that the player can reach the same door again.
 
-- Urstigning vid färjelägets trappa använder trappstegets höjd direkt. Verifierat med en parkerad ambulans vid västra kajen.
+- The descent at the stairs of the ferry mode uses the height of the stairs directly. Verified with a parked ambulance at the western dock.
 
-- Förbandsleveransen kvitteras med plats och ersättning både i telefonen och på slutskärmen. Tre genomförda steg verifierades med Alma och svenska texter.
+- The unit delivery is set off with location and replacement both on the phone and on the end screen. Three stages were verified with Alma and Swedish texts.
 
-- Språkbyte på slutskärmen verifierades svenska–engelska–svenska genom språkvalets signal i Godot. Leveranskvittot översattes direkt, Almas namn behölls och belöningen betalades endast en gång.
+- The end-screen language change was verified by the Swedish-English-Swedish language selection signal in Godot. The delivery receipt was translated directly, the name of Alma was retained and the reward was paid only once.
 
-- En hamnvärd i orange jacka väntar vid småbåtshamnen under förbandsleveransen och håller väskan efter överlämningen. Detta och kvittot provades genom alla tre uppdragsstegen.
-
-- Grannen i turkos jacka står vid första hjälpmålet på torget med handen höjd och sänker armen efter hjälpen. Båda tillstånden verifierades genom räddningsuppdraget.
-- Även uppdragspersoner kan nu hälsa när Axel eller Alma kommer fram till fots. Godot startkontrollerades utan grafik.
-- BMW X5 har en sittande förare som följer spelarvalet. Testat med Alma i Godot vid byte mellan följkamera och förarvy. Placeringen återstår att granska visuellt.
-- BMW-förarens händer följer rattkransen. Båda figurernas handpositioner kontrollerades i Godot vid neutralläge och fullt rattutslag i båda riktningarna.
-- Axel och Alma har böjda armbågar i BMW:n. Båda poserna granskades i renderade närbilder med karossen dold. Handpositionerna testades även med fullt rattutslag.
-- Förarens profil och fotgängarnas ansikten har modellerad näsa och öron. Både Axel och Alma kontrollerades i renderade bilder genom BMW:ns sidoruta med karossen synlig.
-- Havererade bilar visar gula varningsblinkers fram och bak. Båda hämtplatserna, transport på flaket och tre ljuslägen verifierades i Godot.
-- Bärgaren visar separata instruktioner för att stanna, lasta och lasta av. Svenska texter testades vid alla fyra uppdragsstegen med automatisk och manuell lastning.
-- Taxins stopp visar när passageraren ska hämtas eller släppas av, med svensk och engelsk text. Tre taxiresor testades genom sex stopp, med automatisk och manuell hjälp och totalt 45 intjänade mynt.
-- Väntande taxipassagerare står vända mot taxins stoppunkt och håller upp handen. Riktning och gest testades på torget, vid kliniken och vid småbåtshamnen.
-- Avsläppta passagerare placeras på gångytans uppmätta höjd och vänder sig mot taxins stoppunkt. Samtliga tre avlämningar verifierades i Godot.
-- Vid taxikörning och bärgning visar markeringen vägen tillbaka till det parkerade uppdragsfordonet till fots. Återinträde och byte till båt eller Tvärbana verifierades i Godot.
-- Till fots visar returmarkören dörren som användes vid urstigning. Testat i Godot med blockerad högerdörr på taxi och bärgare, inklusive återinträde på vänster sida.
-- Trafiken börjar bromsa när spelaren är på väg in i körfältet inom 1,4 sekunder. Stillastående och rörelse bort från körfältet jämfördes med rörelse mot körfältet i Godot.
-- Bilar tutar på en långsam A-traktor endast om den begränsar avståndet framåt. Test i båda riktningarna med en fotgängare emellan och därefter fem sekunders följekörning gav minst 4,3 meters lucka.
-- Raggarbil och A-traktor har egna syntetiserade tutor. Cyklisternas ringklocka och de två nya ljudens koppling till trafikfordonen verifierades i Godot.
-- Paus avbryter tutor, däckljud och uppläst hälsning samt tystar trafiksirener direkt. Paus och återgång med samtidiga fordonsljud testades i Godot.
-- Paus fryser återstående lästid för tillfälliga meddelanden. Taxins bekräftelse vid upphämtning testades med 60 sekunders simulerad paus och återupptagen nedräkning.
-- Pausmenyn visar den aktuella uppdragstexten från telefonen. Sex uppdragssteg verifierades på svenska och engelska, utan dubbla telefonmeddelanden.
-- Förbättrad textkontrast på ljusa knappar vid tangentbordsfokus, muspekare och tryck. Rendering vid 800 × 500 verifierade fokuserad fortsättknapp och två synliga rader för bärgningsuppdraget på svenska och engelska.
-- Sjöstadsskolan med putsfasad och koppartak modellerades i Blender. Skoltaxi hämtar och lämnar elever och busslinje 502 trafikerar fyra hållplatser. Båda uppdragsserierna samt utbetalning testades i Godot.
-- BMW M3 E30, Volvo 240, Saab 96, Tesla Model S och stadsbuss finns i fordonsval och depå. Egna Blenderkällor, tutor och lågmält eldrivljud ingår. Fordonsradio med egen instrumental slinga startas med J.
-- Compatibility, Mobile och Forward+ renderade buss och skola på datorns Radeon. play.sh kan starta alla tre och välja AMD FSR 2.2 i Forward+. Ingen mätning av bildfrekvens eller verifiering på annan hårdvara ännu.
-- Linje 502 visar nästa hållplats på bussens frontskylt. Verifierat över fyra stopp, ett nytt varv och fri körning.
-- Alla fyra hållplatsstolpar visar linjenummer och hållplatsnamn på två motsatta skyltfronter, riktade längs respektive gata. Kontrollerat i Godot.
-
-Inställningar finns i en separat dialog med flikar. Renderaren väljs under Grafik och aktiveras vid nästa start. Verifierat byte från Compatibility till Forward+ med FSR2 på AMD.
-
-Västra stadsdelen ansluter till vägnätet i tre korsningar. Spelgränsen är nu 690 × 151 m. Axel och Alma använder Blender-modellerade ansikten och jackor. Bänken med färgprover byter jackfärg och bryggvärden har en särskild replik. Fullfart har dubbel toppfart för vägfordon, lugn körning behåller 30 km/h.
-Renderad närbild i Compatibility visade en glipa under huvudet. Hals, hår, ögon och mun justerades och kontrollerades i en ny spelrendering.
-Snöskoter från Blender med band, skidor, fjädring och synlig förare. Provkörd i Godot med gas, broms och avstigning. Parkbänken har fyra ben. Axel har formade ärmar, byxben, händer och skor.
-Snöskotern har nu en egen syntetiserad motorloop med hastighetsstyrd tonhöjd. Uppspelning och fordonsval verifierades i Godot.
-Snöskoterns båda skidor och styre följer nu styrutslaget. Förarens handpositioner följer handtagen. Testat med styrinmatning i Godot.
-Skoterns terrängfart följer snötäcket. Provkört på västra fältet med barmark, halvt och fullt snötäcke i båda körlägena.
-Snöskoterns nattljus utgår från de två Blender-modellerade lyktglasen. Båda ljuskällornas positioner verifierades i Godot.
-Nattljuset provrenderades i Godot Compatibility på västra huvudgatan med samma kamera och lyktorna tända respektive släckta. Båda ljuskäglorna tillsammans belyser asfalten framför skidorna.
-Skoterföraren sitter nu grensle med böjda knän. Modellen har fotbrädor med grepp på båda sidor. Kontrollerat från sidan i Godot och provkört efter omimport.
-Västra stadsdelens huvudgator och tvärgator har streckade mittlinjer. Alla 185 markeringar kontrollerade över vägbanan och utanför korsningarna i Godot.
-Västra stadsdelen har 75 gatlyktor längs huvudgatorna och tvärgatorna. Verifierat i Godot att alla tänds på natten och släcks på dagen.
-De tre västra huvudgatorna har 2,8 meter bred gångbana på båda sidor. Framkomlighet verifierad längs sex stråk och över mellanliggande tvärgator.
-Fem grannar promenerar i västra kvarteren. Verifierade hälsning vid möte och vändning på trottoaren vid kvarterets slut i Godot.
-Gångbanorna längs de västra tvärgatorna ansluter i nivå runt alla tio kvarter. Gånghöjd och framkomlighet kontrollerade runt varje kvarter i Godot.
-Buss 502 hämtar nu även vid Västra torget och lämnar vid Västerängen. Godot-test genom alla sex hållplatsutbyten med destinationsskylt, belöning och återgång till torget.
-Även medresenärerna vid busshållplatserna hälsar. Storlek och avstånd i gruppen återställs före placering vid byte från skoltaxi till buss. Testat vid västra hämtning och lämning.
-Nattvy jämförd i Compatibility, Mobile och Forward+ på AMD. Natthimlens färger färgrymdskonverteras nu av Godot så Vulkan-lägena inte visar en ljus skymningshimmel vid midnatt.
-I automatiskt dygnsläge vandrar ljusriktningen genom dagen, med lägre och varmare ljus vid gryning och skymning. Riktning, skugginställning och kontinuitet över dygnsskarven testade i Godot.
-Kanalens vattenmaterial sprider ljus i regn och skum, med skarpare solblänk på lugnt vatten. Färjans fönsterspegling använder vågens reflekterade siktlinje. Kanalvy renderad med alla tre renderarna.
-Lotten drar ett V-format kölvatten bakom den aktiva aktern. Styrkan följer överfartens hastighet och går till noll vid kaj. Båda riktningarna testade och överfarten granskad i Forward+.
-Motorbåtens svall utgår från aktern vid framfart och från fören vid backning. Godot-test med tre kurser, båda färdriktningarna och stillastående.
-Motorbåtens inbromsning mot östra kajgränsen verifierad i Godot med gasen nedtryckt från 9 m/s vid 30, 60 och 120 uppdateringar per sekund. Farten nådde noll vid gränsen och båten kunde backa loss vid alla tre frekvenser.
-En ny båttur startar vid motorbåtens ursprungliga förtöjningsplats med noll fart och rak utombordare. Verifierat genom att köra en tur och starta en ny i samma spelinstans.
-Båtturens startmeny förklarar nu hur vänster och höger musknapp fungerar vid körning. Svenskt språkval och båtinstruktionernas översättning kontrollerade i Godot.
-Skärmpedalerna kan användas med vänster musknapp. Verifierat gas, broms och släpp utanför pedalen via Godots viewport.
-Paus återställer även den klickbara skärmbromsen. Provade att pausa med pedalen nedtryckt, fortsätta och gasa på nytt.
-Motorbåten stannar om båda pedalerna hålls nere. Provkört framåt, bakåt och från stillastående, inklusive att släppa gasen för att backa.
-Snöskoterns drivband har nu en öppen boggi med dubbla hjul, medar och bandkammar. Blender-modellen är exporterad och provad i Godot.
-Snöskoterns skidspetsar har nu lyftbyglar som följer skidornas styrutslag. Styrning, gas, broms och avstigning testade i Godot.
-Framvagnen på snöskotern har modellerade spiralfjädrar med fjädersäten och separata stötdämpare. Båda fjädrarna finns i exporten och körtestet i Godot gick igenom.
-Snöskotern lämnar ett centrerat, 40 cm brett bromsspår från drivbandet vid hård bromsning. Bilarnas däckskrik används bara för hjulfordon. Kontrollerat spårinstans och ljud i Godot.
-När snö täcker marken lämnar skoterns drivband spår även under vanlig körning. Testade gaspådrag på barmark och snö i Godot.
-Åtgärdat bromsljuset på skotern. Lampan hade en materialtyp som spelet inte kände igen. Verifierade starkare ljus vid broms och återgång när bromsen släpps. Bakpartiet har även lamphus och lyftbåge.
-Bromsljus fungerar nu även för klassikerna, Teslan, bussen, bärgaren, raggarbilen och A-traktorn. Testat ljusstyrka på alla tolv valbara fordon och två trafikmodeller samt att LGF-reflexen är separat.
-Spelarfordonets bromsljus lyser under automatisk väntan vid rött även efter släppt gas. Testat rött till grönt i Godot med fri körbana.
-Körhjälpen bromsar inför parkerade fordon längs färdriktningen med samma fordonsmått som kollisionskontrollen. Vid butikens övergångsställe minskade största farttappet från 5,80 till 0,083 m/s per steg vid 60 Hz. Provade även fri passage vid grönt.
-Depåbussen stod delvis i Stationsalléns körfält. Flyttade den 2,6 meter in på depån och förlängde och markerade bussrutan. Verifierade mjukt stopp vid rött och passage på grönt med alla parkerade fordon på plats.
-Vägvisaren från depån till kafé och gatukök är lokaliserad. Kontrollerade båda depåskyltarnas texter i Godot genom att växla engelska–svenska–engelska.
-Snöskoterns två skidor lämnar 12 cm breda fåror i snö. Spårens positioner hämtas från skidornas leder. Testade växling mellan snö och barmark under spårbildning i Godot.
-Spår som bildats i snötäcket bleknar vid tö och tas bort när snön smält. Bromsspår från barmark ligger kvar. Verifierade mellansteg och noll snö i Godot.
-Äldre bromsspår på asfalt döljs gradvis av snötäcket och framträder efter tö. Verifierade materialens synlighet och bevarade spår i Godot.
-Startskriptet söker Godot 4 och prioriterar uttryckligt GODOT_BIN, även för specialbyggda motorer. Testade mot simulerade 3.x-, 4.x- och specialbyggen.
-Verifierade val av snöskoter, styrning, gas, broms och avstigning i huvudscenen med Godot 4.7.dev NGX. Lade till och provade svensk text för DLSS-inställningen i samma motor. Testet kördes headless.
-Startade huvudscenen med riktig grafik i Godot 4.6.3 på AMD Renoir och kontrollerade fyra bildrutor per renderer. Alla tre avslutades normalt.
-Godot 4.6.3, AMD Renoir, 960×540, VSync av, fast simuleringssteg 1/60 s. Efter 30 uppvärmningsrutor mättes 90 bildintervall under 5,215 m skoterkörning per renderer. Median / 95:e percentil i ms: Compatibility 39,3 / 46,9; Mobile 41,9 / 57,1; Forward+ 51,2 / 58,8. En kort körning per läge.
-Profilering av depåfordonen i Godot 4.6.3 Compatibility, 960×540: fyra körningar med ordningen synliga/dolda/dolda/synliga, identisk förflyttning 5,215 m. Endast parkerade fordonsmodellers MeshInstance3D doldes i testet. Slutbilden gick från 8304 till 7610 draw calls. Median 40,7 och 41,6 ms med modeller, 38,9 och 37,4 ms utan. Även resten av scenen behöver profileras. Spelets fordonsvisning är oförändrad.
-Fordonsstyrda uppdrag, separat framsteg vid byte, familje-SMS och ätknappar för glass och korv i kiosken. Testade tilldelning, byte tillbaka, läx-SMS, båda mellanmålen, saldo och glad-indikator i Godot 4 med isolerad sparfil.
-Brandbilens kontroll vid torget har en modellerad brandpost. Testat framkomlighet, kollision och slutförd inspektion till fots i Godot 4.
-Brandbilens inspektion i småbåtshamnen har en orange livboj på stativ intill gångmålet. Testat kollision, framkomlighet och övergång till nästa uppdrag i Godot 4.
-Två personer ur brandskyddsgruppen möter spelaren vid vårdcentralen under brandbilens första uppdrag. Testat gångmålet, mötet och övergången till inspektionen vid kajen i Godot 4.
-Aktuellt uppdrag ligger överst i telefonen även efter att SMS-historiken fyllts. Verifierade fordonsbyte, svensk rubrik och fri körning i Godot 4.
-Kioskens tangentbordsmarkering flyttas till nästa ätbara mellanmål när sista portionen är uppäten, därefter till första köpknappen. Verifierat med två Enter-tryck genom Godots viewport och kontroll av lagersaldo och mynt.
-Paketuppdragen har två synliga kartonger på torget. Efter hämtning visas respektive kartong på vårdcentralens eller småbåtshamnens avlämningsplats när leveransen är klar. Verifierade alla fyra tillstånd i Godot 4.
-Två hoprullade filtar syns vid snöskoterns hämtplats, på skotern under leverans och hos mottagarna efter avlämning. Hela uppdragsföljden verifierad i Godot 4.
-Telefonens SMS-lista går att rulla och öppnas högst upp. Verifierade separat med svensk text i Godot 4 och 640×360-fönster.
-Telefonen stöder Page Up, Page Down, Home och End när inkorgen är öppen. Testade tangentbordshändelser i en separat telefonvy med svensk text i Godot 4.
-Ren import av publicerade origin/main b283268 i separat projektmapp: huvudscen och depå startade i Godot 4.6.3 Compatibility. Svensk SMS-rullning genom huvudscenen, paket- och filtleveranser samt tangentbordsstyrt kioskbesök passerade med grafik i 640×360 och isolerade sparfiler. Inga skript- eller motorfel i testloggarna.
-Fordonsvalets aktivitetsmeny visar uppdragstyp före start. Svenska rubriker för ambulans, polis, brandbil, paket och filtleveranser verifierade i Godot 4.
-Spelarens mun får uppåtvända mungipor efter glass eller korv. Verifierade aktivering på gång- och förarmodell samt återgång när glädjetiden löpt ut i Godot 4.
-Musstyrning med V och fri pekare när knappen släpps. Axel, Alma och fotgängarna har nya ansiktsdrag, kläddetaljer och steg med böjda knän. Testat gång i kajtrapporna med båda spelpersonerna. Väderkläder följer årstiden och aktuell nederbörd för gående och sittande personer.
-Vid start får alla 25 personer sina väderkläder redan när scenen byggs. Testat med fyra sparade väderval i Godot 4.6.3 före första processbildrutan.
-Tvärbanans främre vagn visar nästa hållplats på en bärnstensfärgad sidoskylt vid dörren. Testade alla tre skyltbyten under både automatisk och manuell körning i Godot 4.6.3.
-Fyra signalreglerade övergångsställen har riktad nattbelysning. Godot 4.6.3 verifierade dags- och nattlägen samt att varje ljuskägla når övergångsställets mitt.
-Barnvagnens och rullatorns åtta hjul rullar efter verklig förflyttning och respektive hjulradie. Däck, fälg, nav och ventil följer samma axel. Verifierat i Godot 4.6.3.
-Fotgängarna på huvudgatans trottoar vänder och går tillbaka vid gatans båda ändar. Verifierade sammanhängande rörelse genom båda vändningarna i Godot 4.6.3.
-Dagsljuset dämpas före automatisk nederbörd och återvänder gradvis efteråt. Verifierade övergången sol–snö–sol i Godot 4.6.3.
-Himlens molnighet följer samma väderövergång som solljuset. Testat himmelsmaterialet före snöfallet och under uppklarningen i huvudscenen.
-Huvudkorsningens fyra tillfarter har målade stopplinjer i färdriktningens högra körfält. Verifierade markeringarnas läge mot rödljusbromsningen i Godot 4.6.3.
-Två nya familje-SMS om morfars spegelbild på Tvärbanan och nallens strumpmössa. Testade leverans och språkbyte i inkorgen med aktuellt uppdrag överst.
-Escape stänger en öppen telefon och låter körningen fortsätta. Testade även svensk stängknapp och att nästa Escape pausar spelet.
-Fordonsradion pausar vid avstigning och fortsätter på samma ställe vid instigning. Testade båda sätesbyten och avstängning med radioåtgärden i Godot.
-Tvärbanans hållplatsbromsning räknar med rörelsen under varje bildruta. Verifierade alla stationer i förar- och passagerarläge vid 30, 60 och 120 simuleringssteg per sekund.
-Skolans taxiplats har en gul dubbelsidig TAXI-skylt vid uppdragets trottoarkant. Kontrollerade placering och båda läsriktningarna i Godot.
-Skolskjutsen bekräftar att eleven sitter i taxin och eleven tackar vid skolan. Testade svensk text, hämtning och avlämning och exakt en utbetalning om 15 mynt.
-Körhjälpens skolskjuts verifierad i Godot 4.6.3: en rullande taxi hämtar ingen elev, en avbruten väntan börjar om och ett fullständigt stopp vid både hämtning och avlämning ger 15 mynt exakt en gång utan knapptryckning.
-Butiksmenyn behåller tangentbordsfokus vid språkbyte. Testade att glassknappen förblir vald och två ägda glassar visas på både svenska och engelska.
-Butikerna visar plånbokens saldo i köpmenyn. Testade saldot före och efter ett glassköp samt när mynten inte räckte till korv.
-Sammanhängande sparfilstest i Godot 4.6.3: skolskjuts gav 15 mynt, glassen kostade fyra och fanns i kiosken efter omladdning av huvudscenen. Eleven kunde äta den sparade glassen; nästa omladdning behöll saldot och visade noll glassar.
-Bussens bakre destinationsskylt visar linje och nästa hållplats även från följekamerans sida. Verifierade sex uppdragssteg och fri körning i Godot.
-Textstorleken på bussens destinationsskyltar anpassas till hållplatsnamnet. Kontrollerade textbredden för samtliga sex namn och samma storlek fram och bak.
-Verifierade sex hållplatser med bussens körhjälp: rullande buss betjänade ingen hållplats, tre avlämningar gav totalt 45 mynt och nästa mål och skylt återgick till torget.
-Ren import från publicerad 1c76c53: åtta scenariotester i Godot 4.6.3 godkända för muskamera, stopplinjer, Tvärbanans bromsning, skolskjuts och kiosksparande, bussrunda, vinterväder, telefon och radio. Varje scenario använde en separat sparmapp.
-Grafisk kontroll av publicerad spelkod i Godot 4.6.3 vid 960×600: Compatibility, Mobile och Forward+ renderade bussuppdraget. På Compatibility-bilden gick hela 502 SJÖSTADSSKOLAN att läsa från följekameran.
-Öppen telefon frigör muspedalerna så att klick under SMS-läsning inte gasar eller bromsar. Verifierat med vänster och höger musknapp före, under och efter telefonvyn i Godot.
-Mittenknappsdrag håller nu kameran stilla när telefonen eller butikens köpmeny är öppen. Testade att drag åter vrider kameran efter båda vyerna i Godot 4.6.3.
-Telefonens aktuella uppdrag har en fast plats ovanför den rullbara SMS-historiken. Testat position vid rullning, svensk rubrik, olästa meddelanden och historik utan uppdrag.
-Vid bussuppdragen väntar två resenärer tillsammans och lika många syns efter avstigning. Testade gruppernas antal och position vid de sex hållplatserna.
-Svensk hållplatsinformation verifierad i förar- och passagerarläge genom hela Tvärbanans slinga. Under varje uppehåll visades rätt station och sex respektive fyra sekunder kvar; vid avgång växlade statusraden till nästa hållplats.
-Den första inlämnade bilen står kvar på verkstaden även medan nästa bil ligger på bärgarens flak. Verifierade båda bärgningarna och två utbetalningar om 20 mynt.
-- Slask kombinerar halsduk, regnhatt och regnkrage. Plaggens synlighet vid slask, snö, regn och uppehåll kontrollerades i Godot 4.6.3.
-- Automatiskt väder behåller den manuella prognosen i fem spelminuter även vid ovanligt årstidsväder. Testat med sommarsnö och gradvis upptining i Godot 4.6.3.
-- Regnstrimmor följer fallriktningen och sexkantiga snöflingor varierar i storlek. Partiklarnas livslängd täcker även hög följkamera. Vädertest kört utan grafik i Godot 4.6.3, visuell kontroll återstår.
-- Visuell kontroll från ambulansens följkamera i Compatibility visade mörka fläckar även vid fullt snötäcke. Snön täcker nu vägbanan successivt och har matt yta vid full täckning. Jämfört före och efter i samma vy.
-- Snö och väta påverkar nu även målade körfält, cykelbanekanter, övergångsställen och parkeringsrutor. Kontrollerat fullt snötäcke från följkameran i Godot Compatibility.
-- Samma vintervy med ambulansen och helt snötäcke kontrollerades visuellt i Mobile och Forward+ på Radeon Renoir med Vulkan i Godot 4.6.3. Uppdragspilar, ratt och pedaler syns även där. Detta kontrollerar scenens utseende på den här datorn.
-- Gas och broms har varsin fast färg och form även i viloläge. En tryckt pedal sänks och får en ljus ram. Viloläget kontrollerat visuellt i följkameran.
-- Båtens backpedal visar höger musknapp vid backning och släpps visuellt när båten glider bakåt. Båda tillstånden verifierade i Godot 4.6.3.
-- Landfordon bromsar inför båda kajkanterna med karossens mått och kan inte vrida ut hörnen över vattenytan. Kontrollerat med ambulansen mot båda stränderna samt fri passage på båda broarna i Godot 4.6.3.
-- Lotten fick omformat skrov, relingar, landgångar, styrhytt och transparent salong med fjorton sittplatser samt skrovspegling i dagsljus. Slutlig GLB importerad och kontrollerad i kanalens ordinarie Godot-scen. Backning och sväng vid kajen också testade.
-- Spelarens fötter behöver stöd på kajen, trottoaren på bron eller bryggan. Även långa gångsteg delas upp så att de inte kan hoppa över vatten. Verifierat båda landgångarna, strandpromenaden och gång mot kajkanten.
-- Modellen har nu Lottens höga flaggstänger, övre reling, svarta fendrar, gula grindar, livbojar och vattenlinje från de nya referenserna. Slutlig spelvy kontrollerad i Godot.
-- Lotten tar passagerare från båda bryggorna. Påstigning och avstigning med F eller skärmknappen när färjan ligger inne. Styrning och steg ut över vattnet är spärrade under färd. Godot-test av tur och retur med kajskyddet och den nya modellen godkänt.
-- Passagerare på Lotten ser återstående sekunder till bryggan följt av avstigningsknappen. Svensk nedräkning kontrollerad visuellt ombord i Godot 4.6.3.
-- Vid båda bryggorna visas väntetiden för just den bryggan. Testat på svenska vid avgång, vid motsatta bryggan och en sekund före ankomst; ombordstigning aktiverades vid ankomst.
-- Båda trapporna till färjan markeras med dubbelsidiga LOTTEN-skyltar på land. Kontrollerat skyltens läsbarhet från gatan i Compatibility.
-- Ombord kan spelaren välja nästa brygga i förväg och ångra valet. Testat avbruten avstigning och automatisk avstigning på gångbar brygga i Godot.
-- Med telefonen öppen påverkar F inte färjans avstigning eller fordonsbyte. Testat F med öppet och stängt SMS-fönster ombord i Godot.
-- Åtgärdat att Alma fick Axels längd när hon gick av Lotten. Ett test som mätte skalan även på bryggan misslyckades före ändringen och passerade efteråt.
-- Beständigt regressionstest för Lottens båda färdriktningar, avstigning över öppet vatten, fotfäste och bevarad karaktärsskala finns i tests/ferry_passenger.gd. Godkänt i Godot 4.6.3.
-- Radio med J fungerar också som passagerare på Lotten. Spelartest i Godot kontrollerade att påslagen radio pausades på gångvägen, återupptogs ombord och pausades vid avstigning.
-- Paketbilarnas uppdrag skickar SMS-kvitton för hämtningen på torget och respektive mottagare. Hela paketresan testad med Volvo 240, inklusive tre kvitton och sammanlagt 30 mynt.
-- Nästa paket följer spelpersonen synligt till fots. Testat att båda paketen i Volvo-uppdraget flyttas till rätt mottagare efter leverans.
-- Paketet följer överkroppens gångrörelse och båda armarna hålls framåt under leveransen. Armställning och överlämning kontrollerade i Godot.
-- Närbilden visade att händerna försvann in i kartongen. Justerad armvinkel och ny kontroll från sidan visar den närmaste handen mot kartongens utsida.
-- Testet tests/water_exit.gd kontrollerar att spelaren kan stiga ur och i bilen på båda sidor av båda broarna och stannar ombord på motorbåten ute i kanalen.
-- Lotten visar en personlig nedräkning när avstigning är vald. Svensk status vid val och ånger samt avstigning vid nästa brygga testade i Godot.
-- Uppdragspilar döljs vid påstigning på Lotten och visas från den nya bryggan vid avstigning. Testat med aktivt uppdrag i Godot.
-- Vid båda färjebryggorna börjar gångvägvisningen på landgångens brädor och leder via kajtrappan till gatan. Första pilens läge och höjd kontrollerade i Godot.
-- Vid fordonsbyte i depån nollställs tiden för pågående hjälp och tillfällig statustext. Verifierat telefonuppdrag och återställda tider för taxi, buss och bärgningsbil i Godot.
-- Regressionstestet tests/taxi_dispatch.gd hämtar en taxipassagerare, byter till buss och tillbaka, verifierar destination, en enda betalning och nästa skolskjuts.
-- Eleven som hämtas vid skolan berättar i text att nästa stopp är vårdcentralen. Både lämning och hämtning testade på svenska.
-- tests/bus_route.gd provar linje 502 genom sex hållplatsbesök med automatisk hjälp, båda destinationsskyltarna, tre biljettintäkter och återgång till Torget.
-- Trafiken reagerar på det synliga spelarfordonet och parkerade fordon. I ett isolerat Godot-test stannade bilen 1,10 m bakom bussen och fortsatte när den försvann från körfältet.
-- Bilister som redan tutat på en A-traktor kommer ihåg det även om en annan bil kommer emellan. Godot-test bekräftar att tutan återställs när avståndet till traktorn ökar.
-- Porsche 911 GT3 RS finns i depån med egen Blender-modell, hjulrigg, motorljud och tuta. Karossen har formade strålkastarhus, öppna kylarintag, skulpterade huvutsläpp, breda bakskärmar och dubbel bakvinge. Körtest jämfört med taxin visar exakt tre gånger acceleration första sekunden och tre gånger toppfarten i båda körlägena (90 respektive 237,6 km/h). Avstigning och återinträde testade i Godot 4.6.3.
-- Porschens vita backljus sitter under den böjda bakljusrampen. Godot-testet kontrollerar att bromsljusen lyser vid stopp och att backljusen tänds vid backning. De nedre reflexerna har separat passivt material.
-- Porschens främre kolfibersplitter har en välvd profil och rundad framkant som följer stötfångaren under alla tre luftintag. Kontrollerad i Blender-rendering och med körtest i Godot.
-- Porschens sidoprofil följer de nya bildreferenserna med vit lack, röda tioekrade fälgar, bred GT3 RS-dekor, kolfiberblad bakom framhjulen och omformat luftintag framför bakhjulen.
-- Bakvingens spännvidd minskad med 11 %, vingprofilens djup med 24 % och höjden ovanför infästningen med 21 %. Mindre rutöppningar, infällda framlyktor med separata projektorer, tätningar och transparenta linser. Kontrollerat från två renderingsvinklar och med körtest.
-Porschens båda projektorlinser lyser med halvljuset på natten. Växlingen mellan dag och natt är testad i Godot 4.6.3.
-Manuella väderbyten följer nu samma långsamma förlopp som automatiska. Godot-testet tests/weather_transition.gd kontrollerar moln före snö och att snöfallet fortsätter vid byte till automatik.
-Automatiken kan ge slask under vår och höst. Testet för väderövergångar kontrollerar även att slask ger både väta och snö på marken.
-Vid vinterregn behåller personerna halsduken när regnhatten kommer på. Plaggens synlighet kontrollerad i Godot för vinter- och sommarregn.
-Granskade regn och snö i en separat renderad Compatibility-scen. Snöflingornas tjocklek ökades så att närliggande flingor syns även från sidan.
-Partikelsystemen avger enbart den nederbörd som faktiskt faller. Testat i Godot att båda avger partiklar vid slask och stängs av efter uppklarning.
-Nederbörden placeras efter kamerans förflyttning i samma bildruta. Testat med Lotten och Tvärbanan i Godot 4.6.3.
-Spelets paus fryser även fallande regn och snö. Godot-test verifierade båda partikelsystemens hastighet vid paus och återupptagning under slask.
-Verifierade fordonsradion vid byte från bil till Lotten. Musiken pausade till fots och fortsatte från samma ställe ombord.
-Utökade SMS-historiken från fyra till 32 meddelanden per spelomgång. Verifierade läsning av ett familje-SMS efter 31 kvitton, olästräknaren och att äldsta meddelandet försvinner först vid nästa leverans.
-Familjen skickar nu sju olika SMS, däribland morfars hälsning från Lotten och mammas kanelbulle. Alla sju levererades via telefonens timer och visades på båda språken efter språkbyte i Godot.
-SMS visas i en mobil på 248 × 350 med rullbar historik. Verifierat visuellt i Godot på svenska. Axel och Alma har egna ansiktsformer och porträtt även som förare. Gången har viktöverföring, böjda armbågar och häl-till-tå-steg. Båda testades i Godot 4.6.3.
-Gångriggen mäter marken vid häl och tå. Testade Axel och Alma med tån på ett 12 cm högt teststeg och hälen över lägre mark.
-Lokala Godot 4.7.dev.custom_build.f8d44ac6b: samtliga sju tests/*.gd godkända utan rapporterade motor- eller skriptfel i headless-läge (buss, Lotten, gång, Porsche, taxi, vatten och väder).
-XC60 har ny kaross, T-formade lyktor och frilagd blåljusramp. Tvärbanan har nya vagnskorgar, rörliga bälgar och två hytter. Bilar kan stöta i annan trafik och parkerade bilar. Bumpertestet kontrollerar kontakt och återstuds.
-Tvärbanans resenär sitter inne i mellanvagnen med fri musblick. Kupén har mönstrade säten, taklampor, gula handtag och hållplatsskyltar. Bild från passagerarkameran och tre skyltväxlingar kontrollerade med lokala Godot 4.7-dev.
-Tvärbanans perronger följer kurvan längs alla tre vagnsdelar. Sex dörrblad mot perrongen öppnas vid uppehåll och stängs före avgång. Testat vid samtliga tre stationer i Godot 4.7-dev.
-Elsparkcykeln viks ut med U på fri mark. Axel och Alma kan styra, gasa och bromsa. En granne åker på trottoaren. Testat båda spelarna, hjulrörelse samt stopp och avstigning vid brokanten i den lokala 4.7-dev-byggnaden.
-
-## Lokal förhandsutgåva c8c5c83
-
-- Glassbilen och elsparkcykeln ingår i DEB, RPM, tar.gz och DMG i `~/Dokument/Axel-releaser/`. Välj filerna för c8c5c83. RPM-filen heter `axels-spel-0.1.0-0.1.preview.x86_64.rpm`.
-- Glassbilens redigerbara modell finns i `source_blender/IceCreamVan.blend`. H spelar melodin. Glassrundan har tre stopp och ger tio mynt per stopp.
-- Linuxpaketen använder det lokala Godot 4.7-dev-bygget och kräver glibc 2.44. Mac-appen använder Godot 4.6.3 och har verifierade Intel- och Apple Silicon-binärer i samma app. DMG-filens integritet samt den inbäddade spelfilen har kontrollerats.
-- Återstår för macOS: provkör appen på en Mac. Förhandsutgåvan är ad hoc-signerad och saknar notarisering.
-
-## Fordon och arbetsplats i västra stadsdelen
-
-- MINI Cooper S Cabriolet kan väljas i fordonsmenyn och står även vid depån. Öppen kupé med spelaren på förarplatsen. Provkörd i huvudscenen i Godot 4.7-dev.
-- Volvo EC950F och Volvos hjullastare står uppställda på grusplanen väster om depån. Båda spelmodellerna har verifierats i huvudscenen. Maskinerna är utställningsmodeller med fast skopställning.
-- Granitmuren omsluter spelområdet. Sjökiosken, pizzerian och Sjöstadens Livs har gångbara entréer.
-- Paket för c8c5c83 ligger i yeager/deb-repo och yeager/rpm-repo. Nyare lokala speländringar ingår i nästa paket först när det byggs. Skapa bara en GitHub-release på uttrycklig begäran.
-
-Tvärbanan går i gatuplan på en 685,4 meter lång slinga med fyra hållplatser, gräs mellan rälerna och körfält i motsatta riktningar. F vid öppna dörrar låter spelaren kliva på och av. Hela turen och skyddet för personer på spåret verifierades med Godot 4.7-dev och tests/street_tram.gd.
-
-Sex spårövergångar har signaler för spårvagn, bil och gångtrafik. Rött stoppar både automatisk och manuellt körd tvärbana. Efter gult och en rödtid får nästa riktning grönt först när korsningen är fri. Genomgång med tests/tram_signals.gd i Godot 4.7-dev.
-
-## Bebyggelse, nattljus och moped i den lokala spelversionen
-
-- I östra stadsdelen finns fyra historiskt inspirerade bostadshus och sju moderna Sjöstadshus. Sex av de moderna husen vetter mot kanalen. Trapphusen bakom glas lyser varmt på kvällen.
-- Sjöstadens Pizzeria har tegel, markiser och meny i skyltfönstret. Godisboden har 40 upplysta lösgodislådor. Gångväg in och ut, köp av pizza för åtta mynt och godis för fyra mynt samt ändringar i plånbok och väska är provade.
-- Av 155 väg- och parklyktor står 18 vid bänken, strandpromenaden och bryggan. Lyktorna tänds och släcks i dygnscykeln. Markbelysningen vid bänken är kontrollerad genom att jämföra renderade nattbilder med parklyktorna tända och släckta.
-- Kanalvattnet återger skenet från 15 kaj- och brygglyktor. Nattvyn har renderats i Compatibility, Mobile och Forward+ med det lokala Godot 4.7-dev-bygget på AMD Radeon. Provkörning av DLSS på en kompatibel NVIDIA-GPU återstår.
-- Puch Dakota finns i fordonsmenyn och i depån. Axel och Alma kan köra den, och en granne åker moped i trafiken. Testet `tests/puch_dakota.gd` täcker bland annat grepp om styret, bromsning och fordonsbyte i depån.
-
-Tvärbanans Blender-modeller har rundat förarparti med infällda lampor, välvt tak, mjuk sidoprofil och blå takfält ovanför skjutdörrarna. Frontskylten följer aktuell hållplats. Spelets ledade bälgar har avrundade hörn. Utseendet granskat i den lokala Godot 4.7-dev-byggnaden. Bild i docs/tram-exterior.png.
-
-### Sjömackens pumpar – visuell bedömning 2026-11-23
-
-Jämförelse mellan referensfotot av pumpen och [pump 3 och 4 i spelvyn](docs/sjomacken-pump.jpg).
-
-| Del | Betyg av 100 | Iakttagelse |
+- A port host in the orange jacket awaits at the marina during the unit delivery and keeps the bag after the handover. This and the receipt were tested through all three mission steps.
+
+- The neighbor in turquoise jacket stands at the first aid target in the square with the hand height and lowers the arm after the aid. Both permits were verified by the rescue mission.
+- Assignees can now greet when Axel or Alma arrives on foot. Goodot was checked without graphics.
+- The BMW X5 has a seated driver who follows the game selection. Tested with Alma in Godot when switching between the camera and the driver’s view. The placement remains to be reviewed visually.
+- The BMW driver’s hands follow the steering wheel. The hand positions of both figures were checked in Godot in neutral mode and in full steering rash in both directions.
+- Axel and Alma have curved elbows in the BMW. Both poses were examined in rendered close-ups with the body hidden. The hand positions were also tested with a full rash.
+- The driver’s profile and the faces of the pedestrians have modeled nose and ears. Both Axel and Alma were controlled in rendered images through the BMW side surface with the body visible.
+- Deserted cars show yellow warning blinkers back and forth. Both pick-up sites, shipping on the flat and three light modes were verified in Godot.
+- The tow truck displays separate instructions to stay, load and load off. Swedish texts were tested at all four mission stages with automatic and manual loading.
+- Taxin’s stop shows when the passenger is to be picked up or dropped off, with Swedish and English text. Three taxi trips were tested through six stops, with automatic and manual assistance and a total of 45 coins.
+- The waiting taxi passengers are facing the stop point of the taxi and holding up their hand. Direction and gesture were tested at the square, at the clinic and at the marina.
+- Released passengers are placed at the measured height of the pedestrian surface and turn to the stop point of the taxi. All three leaves were verified in Godot.
+- In taxi driving and salvage, the marking will show the way back to the parked mission vehicle on foot. Re-entry and replacement to boat or Tvärbana was verified in Godot.
+- On foot, the return marker shows the door that was used when descending. Tested in Godot with blocked right door on taxis and carriers, including re-entry on the left side.
+- Traffic begins to slow when the player is entering the lane within 1.4 seconds. Silent and motion away from the lane was compared to motion towards the lane in Godot.
+- Cars tilt on a slow A-tractor only if it limits the distance forward. Tests in both directions with a pedestrian between and then five seconds of follow-up drive gave at least 4.3 meters of gap.
+- Raggar car and A-tractor have their own synthesized tutors. The ring watch of the cyclists and the connection of the two new sounds to the traffic vehicles were verified in Godot.
+- Paus interrupts tutors, tire sounds and read greetings and silences traffic sirens directly. Pause and return with simultaneous vehicle sounds were tested in Godot.
+- Paus freezes the remaining reading time for temporary messages. Taxins confirmation was tested with 60 seconds simulated break and resumed countdown.
+- The pause menu shows the current mission text from the phone. Six mission steps were verified in Swedish and English, with no double phone messages.
+- Improved text contrast on bright buttons at the keyboard focus, mouse pointers and pressure. Rendering at 800 × 500 verified focused continuation button and two visible rows for the salvage mission in Swedish and English.
+- The seaside school with plaster façade and copper roofs was modeled in Blender. School taxis pick up and leave students and bus route 502 operates four stops. Both assignments and payouts were tested in Godot.
+- The BMW M3 E30, Volvo 240, Saab 96, Tesla Model S and city bus are available in vehicle selection and depot. Own Blender sources, tutors and low-measured electrical sound are included. Vehicle radio with its own instrumental loop starts with J.
+- Compatibility, Mobile and Forward+ rendered the bus and school on the computer’s Radeon. play.sh You can start all three and choose AMD FSR 2.2 in Forward+. No measurement of frame rate or verification on other hardware yet.
+- Line 502 shows the next stop on the front sign of the bus. Verified over four stops, a new lap and free run.
+- All four stop posts show line numbers and stop names on two opposite sign fronts, directed along the respective streets. Checked in Godot.
+
+Settings are available in a separate dialogue with tabs. The renderer is selected under Graphics and activated at the next start. Verified switch from Compatibility to Forward+ with FSR2 on AMD.
+
+The western district connects to the road network in three crossings. The game limit is now 690 × 151 m. Axel and Alma use Blender-modeled faces and jackets. The bench with color samples changes jack paint and brew values have a special replica. Full speed has double top speed for road vehicles, quiet driving retains 30 km/h.
+Rended close-up in Compatibility showed a grind under the head. The neck, hair, eyes and mouth were adjusted and controlled in a new game.
+Snowmobiles from Blender with bands, skis, suspension and visible drivers. Sample in Godot with gas, brakes and disembarkation. The park bench has four legs. Axel has shaped sleeves, trousers, hands and shoes.
+The snowmobile now has its own synthesized motorloop with speed-controlled pitch. Playback and vehicle selection were verified in Godot.
+The two skis and rule of the snowmobile now follow the ruling rash. The driver’s hand positions follow the handles. Tested with control in Godot.
+The terrain speed of the Scooter follows the snow cover. Try the western field with bare ground, half and full snow cover in both driving modes.
+The snowmobile night light is based on the two Blender-modeled lamp glasses. The positions of both light sources were verified in Godot.
+The night light was tested in Godot Compatibility on the western main street with the same camera and the lamps on and off respectively. Both candles together illuminate the asphalt in front of the skis.
+The scooter driver now sits branch with curved knees. The model has footboards with grip on both sides. Checked from the side of Godot and test drive after reimport.
+The main streets and cross streets of the western district have stretched midlines. All 185 markings controlled across the roadway and beyond the crossings of Godot.
+The western district has 75 street lamps along the main streets and cross streets. Verified in Godot that everyone is lit at night and extinguished in the day.
+The three western main streets have 2.8 meters wide walkway on both sides. Accessibility verified along six strings and across intermediate cross streets.
+Five neighbors walk in the western quarter. Verified greeting at meeting and turning on the pavement at the end of the neighborhood in Godot.
+The walkways along the western cross streets connect on a level around all ten blocks. Walking height and prosperity checked around every quarter of Godot.
+Bus 502 is now picking up at the West Square and leaving at Västerängen. Godot test through all six stop exchanges with destination sign, reward and return to the square.
+The passengers at the bus stops also welcome. Size and distance of the group is restored before placement when switching from school taxis to bus. Tested at western pickup and leave.
+Night view compared to Compatibility, Mobile and Forward+ on AMD. The color space of the night sky is now converted by Godot, so the volcano modes do not show a light dusk at midnight.
+In automatic clock mode, the light direction wanders through the day, with lower and warmer lights at dawn and dusk. Direction, shadow setting and continuity over the circadian screw tested in Godot.
+The canal’s water materials spread light in rain and foam, with sharper sunblink on calm water. The ferry’s window mirroring uses the reflected vision line of the wave. Channel View with all three renderers.
+Lotten pulls a V-shaped wake behind the active acre. The strength follows the speed of the crossing and goes to zero at the dock. Both directions tested and exceeded in Forward+.
+The motorboat’s swallow starts from the stern at the front and from the bow when backing. Godot test with three courses, both directions and standstill.
+The braking of the motorboat to the eastern shark limit is verified in Godot with the gas suppressed from 9 m/s at 30, 60 and 120 updates per second. The ship reached zero at the border and the boat was able to back off at all three frequencies.
+A new boat ride starts at the engine boat’s original mooring point with zero speed and straight outboard. Verified by driving a tour and starting a new one in the same game instance.
+The boat ride start menu now explains how the left and right mouse button works when driving. Swedish language choices and the translations of the boat instruction controlled in Godot.
+Screenshots can be used with the left mouse button. Verified gas, brakes and drop off the pedal via Godots viewport.
+Paus also restores the clickable screen brake. Trying to pause with the pedal suppressed, continuing and gassing again.
+The motorboat stops if both pedals are kept down. Try driving forward, backwards and from stagnant, including dropping the gas to back.
+The snowmobile drive band now has an open towing with dual wheels, meds and bandcams. The Blender model is exported and tested in Godot.
+The snowmobile skiing tips now have lifting villages that follow the skis' steering rashes. Governance, gas, brakes and disembarking tested in Godot.
+The front wagon on the snowmobile has modeled spiral springs with spring seats and separate shock absorbers. Both feathers are available in the export and the driving test in Godot went through.
+The snowmobile leaves a centered, 40 cm wide brake track from the drivebar at hard braking. The tyre screams of the cars are used only for wheel vehicles. Controlled track instance and sound in Godot.
+When snow covers the ground, the scooter’s drive tracks also leave during regular driving. Tested gas on bare ground and snow in Godot.
+Fixed the brake light on the scooter. The lamp had a material type that the game did not recognize. Verified stronger light at brakes and returns when the brake is released. The back party also has lamp houses and arc.
+Brake lights now also work for the classics, Teslan, the bus, the tow truck, the raggar car and the A-tractor. Tested brightness on all twelve selectable vehicles and two traffic models and the LGF reflex is separate.
+The brake lights of the player vehicle will shine during the automatic wait at red even after the release of gas. Tested red to green in Godot with free lane.
+Driving aid brakes in front of parked vehicles along the direction of the journey with the same vehicle measure as the collision control. At the store’s transitional point, the main hazard app decreased from 5.80 to 0.083 m/s per step at 60 Hz. I also tried free passage at the green.
+The depot bus was partly in Stationsallén’s lane. It moved 2.6 meters into the depot and extended and marked the bus route. Verified soft stop at red and passage on green with all parked vehicles on site.
+The guide from depot to cafe and street kitchen is located. Checked the texts of both depot signs in Godot by switching English-Swedish-English.
+The snowmobile's two skis leave 12 cm wide sheep in snow. The positions of the tracks are taken from the joints of the skis. Tested switching between snow and bare ground during track formation in Godot.
+Traces formed in the snow cover fade by thigh and are removed when the snow melts. Brake tracks from Barmark remain. Verified intermediate and zero snow in Godot.
+Older brake tracks on asphalt are gradually hidden by the snow cover and appear after thaw. Visibility of verified materials and preserved traces in Godot.
+The start script seeks Godot 4 and explicitly prioritizes GODOT_BIN, even for specially built engines. Tested against simulated 3.x, 4.x and special buildings.
+Verified choices of snowmobiles, control, gas, brakes and disembarkation in the main stage with Godot 4.7.dev NGX. Added and tried Swedish text for the DLSS setting in the same engine. The test was driven headless.
+Started the main scene with real graphics in Godot 4.6.3 on AMD Renoir and controlled four frames per renderer. All three were completed normally.
+Godot 4.6.3, AMD Renoir, 960×540, VSync of, fixed simulation step 1/60s. After 30 heating boxes, 90 frame ranges were measured under 5,215 m of scooter drive per renderer. Median/95th percentile in ms: Compatibility 39.3/46.9; Mobile 41.9/57.1; Forward+51.2/58.8. A short drive per location.
+Profiling of the depot vehicles in Godot 4.6.3 Compatibility, 960×540: four runs with the order visible/hidden/hidden/visible, identical movement 5.215 m. The MeshInstance3D of parked vehicle models was hidden in the test. The final image went from 8304 to 7610 draw calls. Median 40.7 and 41.6 ms with models, 38.9 and 37.4 ms without. The rest of the scene also needs to be profiled. The game's vehicle display is unchanged.
+Vehicle-controlled assignments, separate progress in prey, family-SMS and eating buttons for ice cream and sausages in the kiosk. Tested allocation, replacement, homework SMS, both snacks, balance and happy indicator in Godot 4 with insulated savings file.
+The fire truck’s control at the square has a modeled fire mail. Tested access, collision and completed inspection on foot in Godot 4.
+The fire truck's inspection in the marina has an orange lifeboy on the stand next to the walking destination. Tested collision, accessibility and transition to the next mission in Godot 4.
+Two people from the fire protection team meet the player at the health centre during the first mission of the fire truck. Tested the walking goal, the meeting and the transition to the inspection at the dock in Godot 4.
+Current assignments are at the top of the phone even after the SMS history is completed. Verified vehicle replacement, Swedish heading and free driving in Godot 4.
+The keyboard marking of the kiosk is moved to the next edible snack when the last portion is eaten, then to the first buy button. Verified with two Enter prints through Godots viewport and control of stock balance and coins.
+Package assignments have two visible cartons in the square. After pick-up, the respective cardboard is shown at the drop-off point of the health centre or marina when the delivery is completed. Verified all four states in Godot 4.
+Two folded blankets are visible at the snowmobile pickup point, on the scooter during delivery and on the recipients after dropping. The entire assignment was verified in Godot 4.
+The phone’s SMS list can be rolled and opened at the top. Verified separately with Swedish text in Godot 4 and 640×360 windows.
+The phone supports Page Up, Page Down, Home and End when the inbox is open. Tested keyboard events in a separate telephone view with Swedish text in Godot 4.
+Pure imports of published origin/main b283268 into separate project folder: the main stage and depot started in Godot 4.6.3 Compatibility. Swedish SMS rolling through the main stage, package and file delivery and keyboard-controlled kiosk visits passed with graphics in 640×360 and isolated savings files. No scripts or engine failures in the test logs.
+The vehicle selection task menu shows the assignment type before start. Swedish headlines for ambulance, police, fire truck, packages and file delivery verified in Godot 4.
+The player’s mouth gets upturned mongipes after ice cream or sausage. Verified activation on the walking and driver model and return when the joy time has expired in Godot 4.
+Mouse control with V and free pointer when the button is released. Axis, Alma and pedestrians have new facial features, clothing details and steps with curved knees. Tested time in the quaystacks with both gamers. Weather clothes follow the season and current rainfall for walking and sitting people.
+At the start, all 25 people get their clothes already when the stage is built. Tested with four saved weather choices in Godot 4.6.3 prior to the first process frame.
+The front wagon of the road shows the next stop on a stone-colored side sign at the door. Tested all three sign changes during both automatic and manual driving in Godot 4.6.3.
+Four signal-regulated transition sites have targeted night lighting. Godot 4.6.3 verified day and night modes and that each candle canopy reaches the center of the transition site.
+The eight wheels of the stroller and the roller tower roll after real movement and the respective wheel radius. Tires, rims, hubs and valves follow the same axis. Verified in Godot 4.6.3.
+The pedestrians on the sidewalks of the main street turn and go back at both ends of the street. Verified coherent movement through both turns in Godot 4.6.3.
+Daylight is subdued before automatic precipitation and gradually returns afterwards. Verified transition sun-snow sun in Godot 4.6.3.
+The cloudiness of Heaven follows the same weather transition as the sunlight. Tested the celestial material before the snowfall and during the clearance in the main stage.
+The four main crossings have painted stop lines in the right lane of the route. The location of verified markings against red light braking in Godot 4.6.3.
+Two new family SMS about grandfather's mirror image on the Tvärbanan and the teddy's socket cap. Tested delivery and language change in the inbox with up-to-date mission at the top.
+Escape closes an open phone and allows driving to continue. Also tested the Swedish closing button and the next Escape pauses the game.
+Vehicle radion pauses at disembarking and continues in the same place when embarking. Tested both seat changes and shutdown with the radio action in Godot.
+The stop braking of Tvärbanan counts with the movement under each frame. Verified all stations in driver and passenger mode at 30, 60 and 120 simulation steps per second.
+The school’s taxi seat has a yellow double-sided TAXI sign at the assignment’s pavement curb. Controlled placement and both reading directions in Godot.
+The school transport confirms that the student is in the taxi and the student thanks at the school. Tested Swedish text, pick-up and drop-off and exactly a payout of 15 coins.
+Driving aid is verified in Godot 4.6.3: a rolling taxi does not pick up a pupil, a suspended wait begins again and a complete stop at both pickup and drop-off gives 15 coins exactly once without button pressing.
+The store menu retains keyboard focus at language change. Tested that the ice cream button remains selected and two owned ice creams are displayed in both Swedish and English.
+The shops show the wallet balance in the shopping menu. Tested the balance before and after an ice cream purchase and when the coins were not enough for sausages.
+Coherent savings file test in Godot 4.6.3: school transport provided 15 coins, the ice cream cost four and was in the kiosk after recharging the main stage. The student could eat the saved ice cream; the next recharge kept the balance and showed zero ice creams.
+The rear destination sign of the bus shows the line and the next stop even from the side of the camera. Verified six mission steps and free run in Godot.
+The text size of the bus destination signs is adapted to the stop name. Checked the text width for all six names and the same size in front and back.
+Verified six stops with the bus’s driving assistance: rolling bus served no stop, three drops gave a total of 45 coins and the next goal and sign returned to the square.
+Pure imports from published 1c76c53: eight scenario tests in Godot 4.6.3 approved for mouse camera, stop lines, tvärbanan braking, school transport and kiosk-saving, bus round, winter weather, phone and radio. Each scenario used a separate savings folder.
+Graphic control of published game code in Godot 4.6.3 at 960×600: Compatibility, Mobile and Forward+ rendered the bus mission. On the Compatibility image, the entire 502 SUBD was read from the companion camera.
+The open phone releases the mouse pedals so that clicks during SMS reading do not gas or brake. Verified with the left and right mouse button before, during and after the phone view in Godot.
+The mid-button trait now keeps the camera still when the phone or store’s shopping menu is open. Tested to pull back the camera after both views of Godot 4.6.3.
+The phone’s current mission has a fixed location above the rollable SMS history. Tested position when scrolling, Swedish heading, unread messages and history without a mission.
+At bus missions, two passengers await together and as many are visible after disembarkation. The number and position of the groups tested at the six stops.
+Swedish stop information verified in driver and passenger mode through the entire Tvärbanan loop. During each stop, the correct station and six and four seconds remained; at the time of departure, the status line was switched to the next stop.
+The first handed-in car remains in the workshop even while the next car is on the tow truck’s flatbed. Verified both salvations and two payouts of 20 coins.
+- Slask combines scarf, rain hat and rain collar. The visibility of the garments in slask, snow, rain and residence was controlled in Godot 4.6.3.
+- Automatic weather retains the manual forecast in five game minutes even at unusual seasonal weather. Tested with summer snow and gradual thawing in Godot 4.6.3.
+- Rain streaks follow the fall direction and six-edge snowflakes vary in size. The life of the particles also covers high cameras. Weather tests run without graphics in Godot 4.6.3, visual control remains.
+- Visual control from the compatibility ambulance camera showed dark spots even on full snow cover. The snow now covers the roadway gradually and has matte surface at full coverage. Compared before and after in the same view.
+- Snow and hydrogen now also affect painted lanes, cycling quantities, passageways and parking boxes. Checked full snow cover from the companion camera in Godot Compatibility.
+- The same winter view with the ambulance and total snow cover was visually checked in Mobile and Forward+ on Radeon Renoir with the Volcano in Godot 4.6.3. Assignment arrows, steering wheels and pedals are also visible there. This checks the look of the scene on this computer.
+- Gas and brakes each have solid color and shape even in sleep mode. A printed pedal is lowered and has a light frame. The rest controlled visually in the camera.
+- The boat's back pedal shows the right mouse button when backing and is visually released when the boat slips backwards. Both permits were verified in Godot 4.6.3.
+- Land vehicles brake before both quay edges with the dimensions of the body and cannot turn out the corners over the surface of the water. Checked with the ambulance against both beaches and free passage on both bridges in Godot 4.6.3.
+- Lotten received reshaped hulls, loops, landings, steering cabin and transparent salon with fourteen seats as well as hull mirroring in daylight. Final GLB imported and controlled in the channel's regular Godot scene. Backing and turning at the quay also tested.
+- The player’s feet need support on the dock, sidewalk on the bridge or bridge. Even long walking steps are divided so that they can’t skip water. Verified both landings, the promenade and walking towards the quay edge.
+- The model now features Lotten's high flag bars, upper reling, black fenders, yellow gates, lifeboys and waterline from the new references. Final game view controlled in Godot.
+- Lotten takes passengers from both bridges. Ascension and disembarkation with F or the screen button when the ferry is inside. Steering and stepping out over the water is locked up while traveling. Goodot test of luck and return with the quay protection and the new model approved.
+- Passengers at Lotten see the remaining seconds to the dock followed by the drop-off button. Swedish countdown checked visually on board in Godot 4.6.3.
+- Both bridges show the waiting time for that bridge. Tested in Swedish at departure, at the opposite bridge and a second before arrival; boarding was activated upon arrival.
+- Both stairs to the ferry are marked with double-sided LOTTEN signs on land. Checked the sign's readability from the street in Compatibility.
+- On board, the player can choose the next bridge in advance and regret the choice. Tested interrupted disembarking and automatic disembarking on viable dock in Godot.
+- With the phone open, F does not affect the ferry’s disembarkation or vehicle replacement. Tested F with open and closed SMS windows on board in Godot.
+- Alma was given Axel's length when she left Lotten. A test that measured the scale even on the bridge failed before the change and passed afterwards.
+- Persistent regression test for both directions of the Lotten, disembarkation of open water, foot attachment and preserved character scale can be found in tests/ferry_passenger.gd. approved in Godot 4.6.3.
+- Radio with J also serves as passengers at Lotten. Player tests in Godot checked that the onset radio was paused on the walkway, resumed on board and paused upon disembarkation.
+- The mission of the package cars sends SMS receipts for pickup on the square and the respective recipients. The entire package tour was tested with the Volvo 240, including three receipts and 30 coins.
+- The next package follows the player visible on foot. Tested that both packages in the Volvo assignment are moved to the right recipient after delivery.
+- The package follows the walking movement of the upper body and both arms are held forward during delivery. Reservation and handover controlled in Godot.
+- The close-up showed that the hands disappeared into the carton. Adjusted arm angle and new control from the side show the closest hand to the outside of the carton.
+- Testing tests/water_exit.gd Check that the player can get out of and in the car on both sides of the bridges and stay on board the motor boat in the canal.
+- The plot shows a personal countdown when disembarking is selected. Swedish status in elections and regrets and disembarking at the next bridge tested in Godot.
+- Assignment arrows are hidden at the time of ascension on Lotten and are displayed from the new dock at disembarkation. Tested with active mission in Godot.
+- At both ferry docks, the walkway tour begins on the boards of the landing and leads via the quay staircase to the street. The position and height of the first arrow controlled in Godot.
+- In the case of a vehicle change in the depot, the time for ongoing assistance and temporary status text is zeroed. Verified telephone assignments and restored times for taxi, bus and salvage car in Godot.
+- The regression test in `tests/taxi_dispatch.gd` picks up a taxi passenger, switches to the bus and back, and checks the destination, a single fare payment and the next school pickup.
+- The student who is picked up at the school tells us that the next stop is the health centre. Both the lodge and pickup were tested in Swedish.
+- tests/bus_route.gd Try line 502 through six stop visits with automatic assistance, both destination signs, three ticket revenues and return to Torget.
+- Traffic reacts to the visible player vehicle and parked vehicles. In an isolated Godot test, the car stopped 1.10 m behind the bus and continued as it disappeared from the lane.
+- Automotives who have already taken care of an A tractor will remember that even if another car comes in between. Godot tests confirm that the titanium is restored when the distance to the tractor increases.
+- The Porsche 911 GT3 RS is available in the depot with its own Blender model, wheel rig, engine sound and dumb. The body has shaped headlight houses, open cooler intake, sculpted hoods, wide rear screens and double rear wing. Driving tests compared to the taxi show exactly three times the acceleration of the first second and three times the top speed of both driving modes (90 and 237.6 km/h respectively). Departure and re-entry tested in Godot 4.6.3.
+- The white backlight of the pot sits under the curved rear light ramp. The Godot test verifies that the brake lights shine at stops and that the backlight is lit upon reversal. The lower reflexes have separate passive material.
+- The front-carbon fibre splitter of the porsch has a arched profile and rounded front edge that follows the bumper during all three air intake. Checked in Blender rendering and with driving tests in Godot.
+- The sidoprofil of the porsch follows the new image references with white lacquer, red tenected rims, wide GT3 RS decor, carbon fibre blades behind the front wheels and reshaped air intake in front of the rear wheels.
+- The buckwing range decreased by 11%, the depth of the wing profile by 24% and the height above the fortress by 21%. Less grid openings, folders with separate projectors, seals and transparent lenses. Checked from two rendering angles and with driving tests.
+Both projector lenses shine with the half light at night. The switch between day and night is tested in Godot 4.6.3.
+Manual weather changes now follow the same slow course as automatic. Godot test tests/weather_transition.gd Controls clouds before snow and the snowfall continues when switching to automatic.
+Automatics can provide slask during spring and autumn. The weather transition test also checks that slask provides both hydrogen and snow on the ground.
+During the winter rain, the people retain the scarf when the rain hat comes on. The visibility of the garment checked in Godot for winter and summer rains.
+Reviewed rain and snow in a separately rendered Compatibility scene. The thickness of the snowflakes was increased so that nearby flakes are also visible from the side.
+Particle systems only release the precipitation that actually falls. Tested in Godot that both emit particles when slack and shut down after arousal.
+Precipitation is placed after the camera moves in the same frame. Tested with Lotten and Tvärbanan in Godot 4.6.3.
+The pause of the game also freezes falling rain and snow. Godot tests verified the speed of both particle systems at pause and resume during slask.
+Verified vehicle radio when switching from car to Lotten. The music paused on foot and continued from the same place on board.
+Extended SMS history from four to 32 messages per game round. Verified reading of a family text message after 31 receipts, the unobstructed counter and that the oldest message disappears only at the next delivery.
+The family now sends seven different SMS messages, including grandfather greetings from Lotten and mother’s cinnamon noise. All seven were delivered via the phone’s timer and displayed in both languages after language change in Godot.
+SMS is displayed in a mobile phone of 248 × 350 with rollable history. Visually verified in Godot in Swedish. Axel and Alma have their own face shapes and portraits as drivers. The gait has weight transfer, curved elbows and heel-to-tow steps. Both were tested in Godot 4.6.3.
+The steam rig measures the ground at heel and toe. Tested Axel and Alma with the toe on a 12 cm high test step and heel over lower ground.
+Local Godot 4.7.dev.custom_build.f8d44ac6b: all seven tests/*.gd approved without reported motor or script errors in headless mode (bus, Lotten, walk, Porsche, taxi, water and weather).
+The XC60 has new body, T-shaped lanterns and freed blue light ramp. Tvärbanan has new carriage baskets, moving belts and two cabins. Cars can run into other traffic and parked cars. The Bumper test controls contact and rebound.
+The road traveler sits inside the middle wagon with a free mouse. The coupe has patterned seats, ceiling lamps, yellow handles and stop signs. Image from the passenger camera and three sign switches checked with local Godot 4.7 DVD.
+The Perronger of the Cross Trail follows the curve along all three carriage parts. Six door blades against the perrong are opened at a break and closed before departure. Tested at all three stations in Godot 4.7 Dev.
+The electric park cycle is folded with U on free ground. Axel and Alma can control, gas and brake. A neighbor goes on the sidewalk. Tested both players, wheel movement and stop and drop off at the bridge edge of the local 4.7-dev building.
+
+## Local preliminary edition c8c5c83
+
+- The glass car and the electric park cycle are included in DEB, RPM, take.gz and DMG in `~/Dokument/Axel-releaser/`. Select the files for c8c5c83. The RPM file is called `axels-spel-0.1.0-0.1.preview.x86_64.rpm`.
+- The editable model of the Glass Car is available in `source_blender/IceCreamVan.blend`. H plays the melody. The glass round has three stops and provides ten coins per stop.
+- The Linux package uses the local Godot 4.7-dev build and requires glibc 2.44. The Mac app uses Godot 4.6.3 and has verified Intel and Apple Silicon binaries in the same app. The integrity of the DMG file and the embedded game file have been checked.
+- Remains for macOS: try running the app on a Mac. The preliminary edition is ad hoc-signed and lacks notarization.
+
+## Vehicles and workplaces in the western district
+
+- The MINI Cooper S Cabriolet can be selected in the vehicle menu and also stands at the depot. Open a coupe with the player at the driver’s seat. Sample in the main scene in Godot 4.7-dev.
+- The Volvo EC950F and Volvo wheel loaders are set on the gravel pitch west of the depot. Both game models have been verified in the main stage. The machines are exhibition models with solid scooping.
+- The granite wall encloses the game area. Sjökiosken, pizzeria and Sjöstaden Livs have walk-in entrances.
+- The C8c5c83 package is located in yeager/deb-repo and yeager/rpm-repo. Newer local game changes are included in the next package only when built. Just create a GitHub release on explicit request.
+
+The tram runs at street level on a 685.4 meter long loop with four stops, grass between the rails and lane in opposite directions. F at open doors allows the player to step on and off. The entire tour and protection of persons on the track were verified with Godot 4.7-dev. tests/street_tram.gd.
+
+Six track transitions have signals for trams, cars and foot traffic. Red stops both automatic and manually operated tram. After yellow and a red time, the next direction gets green only when the crossing is free. Transition with tests/tram_signals.gd in Godot 4.7 Dev.
+
+## Building, night lights and moped in the local game version
+
+- In the eastern district there are four historically inspired residential buildings and seven modern Sjöstadshus. Six of the modern houses face the canal. The staircases behind glass shine warmly in the evening.
+- Sjöstadens Pizzeria has brickwork, awnings and a menu in the window. Godisboden has 40 illuminated pick-and-mix bins. Tests covered walking in and out, buying pizza for eight coins and candy for four, and checking the wallet and inventory.
+- Of 155 road and park lamps, 18 stand at the bench, promenade and bridge. The lanterns are lit and extinguished in the day cycle. The ground lighting at the bench is controlled by comparing rendered night images with the park lamps on and off.
+- The canal reflects 15 lights along the quay and pier. Night views were rendered in Compatibility, Mobile and Forward+ using the local Godot 4.7-dev build on AMD Radeon. Testing DLSS on compatible NVIDIA hardware remains outstanding.
+- Puch Dakota is available in the vehicle menu and in the depot. Axel and Alma can drive it, and a neighbor rides moped in traffic. Testing `tests/puch_dakota.gd` covers, among other things, grip on the control, braking and vehicle change in the depot.
+
+The tram’s Blender models have rounded cab fronts with recessed lights, arched roofs, gently curved sides and blue roof panels above the sliding doors. The destination display updates at each stop. The articulated gangways have rounded corners. The exterior was inspected in the local Godot 4.7-dev build. See docs/tram-exterior.png.
+
+### Sjömackens pumps – visual assessment 2026-11-23
+
+Comparison between the reference photo of the pump and [pump 3 and 4 in the game view](docs/sjomacken-pump.jpg).
+
+| Feature | Score out of 100 | observation |
 |---|---:|---|
-| Silhuett | 94 | Tre slangar och handtag sitter bredvid betalterminalen som på referenspumpen. Den kompakta nummerskylten sitter ovanpå mätarhuset. Dess rundade hörn syns tydligast på pump 3 i den uppdaterade spelvyn. |
-| Färg och läsbarhet | 96 | Den gula plåten skiljer de svarta slangarna från sockeln. Handtagen har samma färg som respektive bränsleskylt. Skyltarna ovanför handtagen visar både bränslesort och literpris. Den gula serviceluckan syns även under taket. |
-| Exteriöra detaljer | 94 | Tre öppna fack med mörka bakstycken och ljusa mellanväggar omger munstyckena. Slangarna har genomföringar och serviceluckan har ett runt lås med nyckelhål. Pumphusets hörn är fortfarande kantigare än på fotot. |
+| Silhouette | 94 | Three hoses and handles sit next to the payment terminal as on the reference pump. The compact number sign sits on top of the meter house. Its rounded corners are most clearly visible on pump 3 in the updated game view. |
+| Color and readability | 96 | The yellow plate separates the black hoses from the socket. The handles have the same color as the respective fuel sign. The signs above the handles show both fuel and litre price. The yellow service door is also visible under the roof. |
+| Exterior details | 94 | Three open bays with dark backs and light dividers house the nozzles. The hoses pass through fittings, and the service panel has a round lock with a keyhole. The housing corners are still sharper than in the photo. |
 
-Mitt visuella helhetsbetyg är **95/100** avrundat, med lika vikt för de tre delarna. Bedömningen gäller utsidan som syns i referensfotot.
+My visual overall rating is **95/100** rounded, with equal weight for the three parts. The assessment applies to the outside viewed in the reference photo.
 
-### Shoppingmopedens modellbedömning
+### Shopping Moped's Model Assessment
 
-Visuell uppskattning utifrån användarens foton och modellens menybild, sedd snett framifrån. Varje del väger lika.
+Visual appreciation based on the user’s photos and the model’s menu image, seen from the front. Each part weighs equally.
 
-| Del | Betyg av 100 | Iakttagelse |
+| Feature | Score out of 100 | observation |
 | --- | ---: | --- |
-| Silhuett | 85 | Kilnosen och det öppna insteget känns igen. Taket behöver mer av förebildens svepta överhäng. |
-| Färg och yta | 84 | Röd kaross och svart vinyl följer fotona. Däcksidor och lampglas saknar ytstruktur. |
-| Förarplats | 83 | Ljus keder markerar ryggstödets rundade kant. Sits och rygg har jämnare stoppning än på fotot. |
-| Exteriördetaljer | 86 | Trådkorg, avgasrör, ventilationsgaller och torkare syns. Navkapslarna behöver en djupare pressad profil. |
+| Silhouette | 85 | The wedge-shaped nose and open entry are recognizable. The roof needs more of the original’s swept overhang. |
+| Color and surface | 84 | Red body and black vinyl follow the photos. Tire sides and lamp glasses lack surface structure. |
+| Driving position | 83 | Light-colored piping outlines the rounded backrest. The seat and backrest padding are more uniform than in the photo. |
+| Exterior details | 86 | The wire basket, exhaust, grilles and wiper are visible. The hubcaps need a deeper pressed profile. |
 
-Helhetsbetyg **85/100** avrundat.
+Overall score **85/100** rounded.

@@ -78,7 +78,7 @@ The double-ended passenger ferry **Lotten** runs between two landings in the can
 
 ## Refuse collection and shopping trike
 
-In the source build, choose the green **Refuse truck** and open the phone with **T** to accept the collection round. Stop at the square and the clinic to empty the bins, then unload at the marina. Each stop earns 10 points and 10 coins. The truck takes longer to accelerate as the load grows.
+In the source build, choose the green **Garbage truck** and open the phone with **T** to accept the collection round. Stop at the square and the clinic to empty the bins, then unload at the marina. Each stop earns 10 points and 10 coins. The truck takes longer to accelerate as the load grows.
 
 For a small vehicle, choose the red **Shopping trike**. It has two front wheels that steer, a single rear wheel and a wire basket behind the seat.
 

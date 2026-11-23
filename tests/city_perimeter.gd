@@ -16,7 +16,7 @@ func verify_city() -> void:
 	check_geometry(game)
 
 func check_geometry(game) -> void:
-	var route = preload("res://street_route.gd").new()
+	var route = preload("res://scripts/street_route.gd").new()
 	var asphalt: Array[Rect2] = []
 	for child in game.get_children():
 		if child is MeshInstance3D and child.material_override == game.road_finish:

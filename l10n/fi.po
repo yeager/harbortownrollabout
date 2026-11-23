@@ -1532,7 +1532,7 @@ msgstr "Kioski"
 msgid "Pizzeria"
 msgstr "Pizzeria"
 
-msgid "Refuse truck"
+msgid "Garbage truck"
 msgstr "Jäteauto"
 
 msgid "Collect bins at the square"
@@ -1544,7 +1544,7 @@ msgstr "Tyhjennä terveyskeskuksen jäteastiat"
 msgid "Unload recycling at the marina"
 msgstr "Pura kierrätyskuorma venesatamassa"
 
-msgid "Return to your refuse truck"
+msgid "Return to your garbage truck"
 msgstr "Palaa jäteautolle"
 
 msgid "Shopping trike"

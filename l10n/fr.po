@@ -1551,7 +1551,7 @@ msgstr "Kiosque"
 msgid "Pizzeria"
 msgstr "Pizzeria"
 
-msgid "Refuse truck"
+msgid "Garbage truck"
 msgstr "Camion-poubelle"
 
 msgid "Collect bins at the square"
@@ -1563,7 +1563,7 @@ msgstr "Ramasse les bacs au dispensaire"
 msgid "Unload recycling at the marina"
 msgstr "Dépose les déchets recyclables au port"
 
-msgid "Return to your refuse truck"
+msgid "Return to your garbage truck"
 msgstr "Retourne au camion-poubelle"
 
 msgid "Shopping trike"

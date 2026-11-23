@@ -1465,7 +1465,7 @@ msgstr ""
 msgid "Pizzeria"
 msgstr ""
 
-msgid "Refuse truck"
+msgid "Garbage truck"
 msgstr ""
 
 msgid "Collect bins at the square"
@@ -1477,7 +1477,7 @@ msgstr ""
 msgid "Unload recycling at the marina"
 msgstr ""
 
-msgid "Return to your refuse truck"
+msgid "Return to your garbage truck"
 msgstr ""
 
 msgid "Shopping trike"
