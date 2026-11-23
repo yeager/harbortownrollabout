@@ -3326,14 +3326,35 @@ func _build_fire_station_bay(model: Node3D) -> void:
 		var title := String(part.name)
 		if title in ["Station foundation","Red brick fire station"] or (absf(part.position.x)<2 and (title.begins_with("Garage") or title.begins_with("Roller door"))):
 			part.hide()
-	var brick := Color("#b53c30")
+	var facade := model.find_child("Red brick fire station",true,false) as MeshInstance3D
+	var foundation := model.find_child("Station foundation",true,false) as MeshInstance3D
+	var warning := model.find_child("Garage warning stripe",true,false) as MeshInstance3D
+	var brick := facade.get_active_material(0)
 	for side in [-1,1]:
-		var wing := _make_box("Station wing",Vector3(5.8,8,13.7),Vector3(side*5.1,3,0),brick,false,model)
-		building_bounds.append((wing.global_transform*wing.get_aabb()).grow(.02))
-	var back := _make_box("Appliance bay rear wall",Vector3(4.4,8,.25),Vector3(0,3,-6.7),brick,false,model)
+		var wing := facade.duplicate() as MeshInstance3D
+		model.add_child(wing)
+		wing.scale.x *= 5.8/16.0
+		wing.position.x = side*5.1
+		wing.show()
+		var base := foundation.duplicate() as MeshInstance3D
+		model.add_child(base)
+		base.scale.x *= 6.0/16.4
+		base.position.x = side*5.2
+		base.show()
+		var wing_bounds := (wing.global_transform*wing.get_aabb()).merge(base.global_transform*base.get_aabb())
+		building_bounds.append(wing_bounds.expand(wing_bounds.position-Vector3.UP))
+		var jamb := warning.duplicate() as MeshInstance3D
+		model.add_child(jamb)
+		jamb.position = Vector3(side*2.26,2.29,7.04)
+		jamb.scale.y *= 4.6/3.25
+	var back := _make_box("Appliance bay rear wall",Vector3(4.4,8,.25),Vector3(0,3,-6.7),Color.WHITE,false,model)
+	back.material_override = brick
 	building_bounds.append((back.global_transform*back.get_aabb()).grow(.02))
-	_make_box("Door lintel",Vector3(4.4,2.45,.3),Vector3(0,5.85,6.8),brick,false,model)
-	fire_station_shutter = _make_box("Appliance bay shutter",Vector3(4.4,4.7,.10),Vector3(0,2.25,6.95),Color("#c9cecf"),false,model)
+	var lintel := _make_box("Door lintel",Vector3(4.4,2.45,.3),Vector3(0,5.85,6.70),Color.WHITE,false,model)
+	lintel.material_override = brick
+	fire_station_shutter = _make_box("Appliance bay shutter",Vector3(4.4,4.7,.10),Vector3(0,2.25,6.95),Color.WHITE,false,model)
+	var original_door := model.find_child("Roller door",true,false) as MeshInstance3D
+	fire_station_shutter.material_override = original_door.get_active_material(0)
 	for rib in 17:
 		_make_box("Shutter slat",Vector3(4.35,.035,.025),Vector3(0,-2.18+rib*.27,.06),Color("#828b8e"),false,fire_station_shutter)
 	fire_door_bounds = (fire_station_shutter.global_transform*fire_station_shutter.get_aabb()).grow(.25)
