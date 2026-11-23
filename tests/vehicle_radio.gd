@@ -134,6 +134,13 @@ func check_controls() -> void:
 	if game.radio.playing or not game.siren_player.playing:
 		fail("Unmuting the engine changed the radio setting")
 		return
+	if game.radio_button.icon == null or not game.radio_button.is_visible_in_tree():
+		fail("Parked radio must show its picture on the driver's radio button")
+		return
+	game.radio_button.pressed.emit()
+	if not game.radio.playing or game.radio_button.icon != null:
+		fail("The illustrated radio button must restart playback")
+		return
 	print("Radio rotation, language changes, pause and vehicle audio verified.")
 	phase = "done"
 	game._finish_quit()

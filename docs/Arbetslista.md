@@ -128,7 +128,7 @@ Listan innehåller 100 jobb. En tom ruta är öppen. En punkt bockas av när bet
 - [ ] 92. Visa en bild av rätt dörr när spelaren står mellan två möjliga butiksentréer.
 - [x] 93. Visa stopp i förarhjälpen. Fordonssignalerna har tre runda linser i fast ordning: rött för stopp, orange för sakta in och grönt för kör.
 - [x] 94. Låt spelaren provlyssna på en kort replik direkt när talvolymen ändras i inställningarna.
-- [ ] 95. Lägg till ett bildstöd som visar var en avslagen radio slås på från förarplatsen.
+- [x] 95. En radiobild på knappen ”Slå på radion” visar var radion startas från förarplatsen. Kontrollerat med en renderad svensk knapp och med radiotestet som startar uppspelningen genom knappen.
 - [ ] 96. Prova hela vägen från startmenyn till ett köp och tillbaka med enbart tangentbord. Rätta de fokussteg som fastnar.
 - [x] 97. Kontrollera att alla sju språk ryms på leveranskvittot i liten fönsterstorlek och med stor text.
 - [x] 98. Låt pausmenyn visa det senaste uppdragssteget med samma bild som i telefonen.

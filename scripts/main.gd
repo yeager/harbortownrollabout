@@ -954,6 +954,7 @@ func _sync_radio() -> void:
 	radio_button.visible = aboard and not paused
 	next_song_button.visible = radio_button.visible and radio_enabled and radio_tracks.size() > 1
 	radio_button.disabled = radio_tracks.is_empty()
+	radio_button.icon = preload("res://branding/radio/station.svg") if not radio_enabled and not radio_button.disabled else null
 	if not aboard or paused or not radio_enabled or radio_button.disabled:
 		song_card.hide()
 	if radio_button.disabled:
@@ -7053,6 +7054,7 @@ func _build_ui() -> void:
 	ui.add_child(phone)
 	_build_town_map()
 	radio_button = _button(tr("Turn radio on · %s") % OS.get_keycode_string(radio_keys[0]), 180)
+	radio_button.add_theme_constant_override("icon_max_width",32)
 	phone.handset.visibility_changed.connect(func():
 		if phone.handset.is_visible_in_tree():
 			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
