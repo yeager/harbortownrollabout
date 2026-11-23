@@ -366,8 +366,8 @@ msgstr "Pelihahmo"
 msgid "Wallet"
 msgstr "Lompakko"
 
-msgid "Phone · T"
-msgstr "Puhelin · T"
+msgid "Phone · %s"
+msgstr "Puhelin · %s"
 
 msgid "No messages yet."
 msgstr "Ei viestejä vielä."
@@ -775,8 +775,8 @@ msgid ""
 "Your missing sock turned up. The teddy bear was wearing it as a hat. — Mum"
 msgstr "Kadonnut sukkasi löytyi. Nalle käytti sitä pipona. — Äiti"
 
-msgid "Close phone · T"
-msgstr "Sulje puhelin · T"
+msgid "Close phone · %s"
+msgstr "Sulje puhelin · %s"
 
 msgid "The pupil is on board."
 msgstr "Oppilas on kyydissä."
@@ -1723,3 +1723,6 @@ msgstr "Vie pallo takaisin koiralle."
 
 msgid "Separate profiles"
 msgstr "Erilliset pelaajaprofiilit"
+
+msgid "Open the phone with F2"
+msgstr "Avaa puhelin F2-näppäimellä"

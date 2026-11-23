@@ -1,5 +1,6 @@
 extends VBoxContainer
 
+var toggle_key := KEY_T
 var open_button := Button.new()
 var title := Label.new()
 var large_text := false
@@ -246,7 +247,7 @@ func _show_action_rows(jobs: PackedStringArray) -> void:
 		action_rows.add_child(row)
 
 func refresh() -> void:
-	open_button.text=tr("Close phone · T") if handset.visible else tr("Phone · T")
+	open_button.text = tr("Close phone · %s" if handset.visible else "Phone · %s") % OS.get_keycode_string(toggle_key)
 	if unread>0: open_button.text+="  (%d)" % unread
 	var lines:=PackedStringArray()
 	var active := _active_jobs()

@@ -366,8 +366,8 @@ msgstr "Spielfigur"
 msgid "Wallet"
 msgstr "Geldbeutel"
 
-msgid "Phone · T"
-msgstr "Telefon · T"
+msgid "Phone · %s"
+msgstr "Telefon · %s"
 
 msgid "No messages yet."
 msgstr "Noch keine Nachrichten."
@@ -789,8 +789,8 @@ msgstr ""
 "Deine verschwundene Socke ist wieder da. Der Teddy hatte sie als Mütze auf. "
 "— Mama"
 
-msgid "Close phone · T"
-msgstr "Telefon schließen · T"
+msgid "Close phone · %s"
+msgstr "Telefon schließen · %s"
 
 msgid "The pupil is on board."
 msgstr "Der Schüler ist an Bord."
@@ -1744,3 +1744,6 @@ msgstr "Bring dem Hund den Ball zurück."
 
 msgid "Separate profiles"
 msgstr "Getrennte Spielerprofile"
+
+msgid "Open the phone with F2"
+msgstr "Telefon mit F2 öffnen"

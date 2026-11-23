@@ -345,8 +345,8 @@ msgstr "Spelfigur"
 msgid "Wallet"
 msgstr "Plånbok"
 
-msgid "Phone · T"
-msgstr "Telefon · T"
+msgid "Phone · %s"
+msgstr "Telefon · %s"
 
 msgid "No messages yet."
 msgstr "Inga meddelanden än."
@@ -741,8 +741,8 @@ msgstr "Jag hälsade på någon på Tvärbanan. Det var min spegelbild. – Morf
 msgid "Your missing sock turned up. The teddy bear was wearing it as a hat. — Mum"
 msgstr "Jag hittade din försvunna strumpa. Nallen hade den som mössa. – Mamma"
 
-msgid "Close phone · T"
-msgstr "Stäng telefonen · T"
+msgid "Close phone · %s"
+msgstr "Stäng telefonen · %s"
 
 msgid "The pupil is on board."
 msgstr "Eleven sitter i taxin."
@@ -1657,3 +1657,6 @@ msgstr "Ta tillbaka bollen till hunden."
 
 msgid "Separate profiles"
 msgstr "Separata spelarprofiler"
+
+msgid "Open the phone with F2"
+msgstr "Öppna telefonen med F2"

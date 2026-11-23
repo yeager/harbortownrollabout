@@ -366,8 +366,8 @@ msgstr "Spillfigur"
 msgid "Wallet"
 msgstr "Lommebok"
 
-msgid "Phone · T"
-msgstr "Telefon · T"
+msgid "Phone · %s"
+msgstr "Telefon · %s"
 
 msgid "No messages yet."
 msgstr "Ingen meldinger ennå."
@@ -777,8 +777,8 @@ msgid ""
 "Your missing sock turned up. The teddy bear was wearing it as a hat. — Mum"
 msgstr "Jeg fant sokken du savnet. Bamsen hadde den på hodet som lue. — Mamma"
 
-msgid "Close phone · T"
-msgstr "Lukk telefonen · T"
+msgid "Close phone · %s"
+msgstr "Lukk telefonen · %s"
 
 msgid "The pupil is on board."
 msgstr "Eleven er om bord."
@@ -1727,3 +1727,6 @@ msgstr "Gi ballen tilbake til hunden."
 
 msgid "Separate profiles"
 msgstr "Separate spillerprofiler"
+
+msgid "Open the phone with F2"
+msgstr "Åpne telefonen med F2"

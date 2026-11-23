@@ -873,9 +873,10 @@ func _unhandled_key_input(event: InputEvent) -> void:
 		if event.keycode == radio_keys[1]:
 			if radio_enabled and radio_button.is_visible_in_tree(): _next_radio_track()
 			return
+		if event.keycode == phone.toggle_key:
+			if phone.visible: phone.toggle()
+			return
 		match event.keycode:
-			KEY_T:
-				if phone.visible: phone.toggle()
 			KEY_U: _toggle_scooter()
 			KEY_H: _honk()
 			KEY_F:
@@ -7104,6 +7105,16 @@ func _build_overlay() -> void:
 		_refresh_ui()
 	)
 	pages[2].add_child(jump)
+	var phone_key := CheckButton.new()
+	phone_key.name = "PhoneF2"
+	phone_key.text = "Open the phone with F2"
+	phone_key.button_pressed = phone.toggle_key == KEY_F2
+	phone_key.toggled.connect(func(enabled: bool):
+		phone.toggle_key = KEY_F2 if enabled else KEY_T
+		phone.refresh()
+		_save_preferences()
+	)
+	pages[2].add_child(phone_key)
 	var camera_keys := CheckButton.new()
 	camera_keys.name = "NumberCameraHeight"
 	camera_keys.text = "Adjust walking camera height with 9 and 3"
@@ -7985,6 +7996,7 @@ func _load_preferences() -> void:
 	var saved_favorites = config.get_value("gallery","favorites",PackedStringArray())
 	if saved_favorites is PackedStringArray: favorites = saved_favorites
 	number_camera = config.get_value("keyboard","number_camera",false) == true
+	phone.toggle_key = KEY_F2 if config.get_value("keyboard","phone_f2",false) == true else KEY_T
 	jump_key = KEY_0 if config.get_value("keyboard","zero_jump",false) == true else KEY_E
 	recovery_key = KEY_BACKSPACE if config.get_value("keyboard","backspace_recovery",false) == true else KEY_R
 	number_movement = config.get_value("keyboard","number_movement",false) == true
@@ -8040,6 +8052,7 @@ func _save_preferences() -> void:
 		config.set_value("keyboard","radio_%d" % i, radio_keys[i])
 	config.set_value("gallery","favorites",favorites)
 	config.set_value("keyboard","number_camera",number_camera)
+	config.set_value("keyboard","phone_f2",phone.toggle_key == KEY_F2)
 	config.set_value("keyboard","zero_jump",jump_key == KEY_0)
 	config.set_value("keyboard","backspace_recovery",recovery_key == KEY_BACKSPACE)
 	config.set_value("keyboard","number_movement",number_movement)

@@ -366,8 +366,8 @@ msgstr "Personnage"
 msgid "Wallet"
 msgstr "Porte-monnaie"
 
-msgid "Phone · T"
-msgstr "Téléphone · T"
+msgid "Phone · %s"
+msgstr "Téléphone · %s"
 
 msgid "No messages yet."
 msgstr "Pas encore de messages."
@@ -787,8 +787,8 @@ msgstr ""
 "J’ai retrouvé ta chaussette. Ton ours en peluche en avait fait un bonnet. — "
 "Maman"
 
-msgid "Close phone · T"
-msgstr "Fermer le téléphone · T"
+msgid "Close phone · %s"
+msgstr "Fermer le téléphone · %s"
 
 msgid "The pupil is on board."
 msgstr "L'élève est à bord."
@@ -1742,3 +1742,6 @@ msgstr "Rapporte la balle au chien."
 
 msgid "Separate profiles"
 msgstr "Profils séparés"
+
+msgid "Open the phone with F2"
+msgstr "Ouvrir le téléphone avec F2"

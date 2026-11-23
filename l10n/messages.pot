@@ -344,7 +344,7 @@ msgstr ""
 msgid "Wallet"
 msgstr ""
 
-msgid "Phone · T"
+msgid "Phone · %s"
 msgstr ""
 
 msgid "No messages yet."
@@ -740,7 +740,7 @@ msgstr ""
 msgid "Your missing sock turned up. The teddy bear was wearing it as a hat. — Mum"
 msgstr ""
 
-msgid "Close phone · T"
+msgid "Close phone · %s"
 msgstr ""
 
 msgid "The pupil is on board."
@@ -1655,4 +1655,7 @@ msgid "Bring the ball back to the dog."
 msgstr ""
 
 msgid "Separate profiles"
+msgstr ""
+
+msgid "Open the phone with F2"
 msgstr ""
