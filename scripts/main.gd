@@ -117,6 +117,8 @@ var orbit_height := 0.0
 const DAY_CYCLE_SECONDS := 360.0
 var time_mode := 2
 # Noon is phase zero. Begin on the eastern, rising part of the arc.
+var school_hour_hand := Node3D.new()
+var school_minute_hand := Node3D.new()
 var day_phase := .80
 var santa: Node3D
 var santa_encounters := {}
@@ -2967,6 +2969,33 @@ func _update_moorings(delta: float) -> void:
 			line.transform = Transform3D(Basis(Quaternion(Vector3.UP,axis.normalized())).scaled_local(Vector3(1,axis.length(),1)),(start+end)*.5)
 
 
+func _build_school_clock(school: Node3D) -> void:
+	var face := Node3D.new()
+	face.name = "SchoolClock"
+	school.add_child(face)
+	face.position = Vector3(0, 5.5, -3.69)
+	face.rotation.y = PI
+	for layer in 2:
+		var disc := CylinderMesh.new()
+		disc.top_radius = 1.03 if layer == 0 else .94
+		disc.bottom_radius = disc.top_radius
+		disc.height = .08
+		var dial := MeshInstance3D.new()
+		dial.mesh = disc
+		dial.material_override = _material(Color("#30544e") if layer == 0 else Color("#fff0ce"))
+		dial.rotation.x = PI / 2
+		dial.position.z = layer * .06
+		face.add_child(dial)
+	var ink := Color("#282d33")
+	for hour in 12:
+		var angle := hour * TAU / 12
+		var tick := _make_box("HourMark", Vector3(.065, .16, .025), Vector3(sin(angle)*.8, cos(angle)*.8, .12), ink, false, face)
+		tick.rotation.z = -angle
+	for hand in [school_hour_hand, school_minute_hand]:
+		face.add_child(hand)
+		var length := .69 if hand == school_minute_hand else .47
+		_make_box("Hand", Vector3(.07, length, .035), Vector3(0, length/2, .18 if hand == school_minute_hand else .15), ink, false, hand)
+
 func _build_city_blocks() -> void:
 	var school := preload("res://environment/school.glb").instantiate() as Node3D
 	add_child(school)
@@ -3000,6 +3029,7 @@ func _build_city_blocks() -> void:
 	school_name.position = Vector3(0,3.06,-3.61)
 	school_name.pixel_size = .006
 	school.add_child(school_name)
+	_build_school_clock(school)
 	for stop in BUS_STOPS:
 		var gate: Vector3 = _stop_pavement(stop)
 		var post := _make_roadside_solid("Bus stop",Vector3(.08,2.65,.08),gate+Vector3(.9,1.32,0),Color("#52636c"))
@@ -3277,6 +3307,10 @@ func _update_daylight(delta: float) -> void:
 	if time_mode == 2:
 		if mode == "playing" and not paused:
 			day_phase = fmod(day_phase+delta/DAY_CYCLE_SECONDS,1.0)
+	# Phase zero is noon and phase one half is midnight.
+	var clock_hours := 0.0 if time_mode == 1 else (12.0 + day_phase * 24.0 if time_mode == 2 else 12.0)
+	school_hour_hand.rotation.z = -clock_hours * TAU / 12
+	school_minute_hand.rotation.z = -fmod(clock_hours, 1.0) * TAU
 	var night := 1.0 if time_mode == 1 else (smoothstep(-.4,.4,-cos(day_phase*TAU)) if time_mode == 2 else 0.0)
 	if night >= .5:
 		if not paused:
