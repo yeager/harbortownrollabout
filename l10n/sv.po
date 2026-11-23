@@ -1573,3 +1573,21 @@ msgstr "9 Höj kameran · 3 Sänk kameran"
 
 msgid "Adjust walking camera height with 9 and 3"
 msgstr "Justera kamerahöjden till fots med 9 och 3"
+
+msgid "All vehicles"
+msgstr "Alla fordon"
+
+msgid "Emergency vehicles"
+msgstr "Utryckning"
+
+msgid "Work vehicles"
+msgstr "Arbetsfordon"
+
+msgid "Cars"
+msgstr "Bilar"
+
+msgid "Passenger transport"
+msgstr "Persontrafik"
+
+msgid "Leisure vehicles"
+msgstr "Fritidsfordon"

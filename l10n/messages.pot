@@ -1572,3 +1572,21 @@ msgstr ""
 
 msgid "Adjust walking camera height with 9 and 3"
 msgstr ""
+
+msgid "All vehicles"
+msgstr ""
+
+msgid "Emergency vehicles"
+msgstr ""
+
+msgid "Work vehicles"
+msgstr ""
+
+msgid "Cars"
+msgstr ""
+
+msgid "Passenger transport"
+msgstr ""
+
+msgid "Leisure vehicles"
+msgstr ""

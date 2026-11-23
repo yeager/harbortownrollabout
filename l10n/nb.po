@@ -1643,3 +1643,21 @@ msgstr "9 Hev kameraet · 3 Senk kameraet"
 
 msgid "Adjust walking camera height with 9 and 3"
 msgstr "Juster kamerahøyden til fots med 9 og 3"
+
+msgid "All vehicles"
+msgstr "Alle kjøretøy"
+
+msgid "Emergency vehicles"
+msgstr "Utrykning"
+
+msgid "Work vehicles"
+msgstr "Arbeidskjøretøy"
+
+msgid "Cars"
+msgstr "Biler"
+
+msgid "Passenger transport"
+msgstr "Persontransport"
+
+msgid "Leisure vehicles"
+msgstr "Fritid"

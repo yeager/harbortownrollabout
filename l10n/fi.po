@@ -1639,3 +1639,21 @@ msgstr "9 Nosta kameraa · 3 Laske kameraa"
 
 msgid "Adjust walking camera height with 9 and 3"
 msgstr "Säädä kameran korkeutta kävellessä näppäimillä 9 ja 3"
+
+msgid "All vehicles"
+msgstr "Kaikki ajoneuvot"
+
+msgid "Emergency vehicles"
+msgstr "Hälytysajoneuvot"
+
+msgid "Work vehicles"
+msgstr "Työajoneuvot"
+
+msgid "Cars"
+msgstr "Autot"
+
+msgid "Passenger transport"
+msgstr "Henkilöliikenne"
+
+msgid "Leisure vehicles"
+msgstr "Vapaa-aika"

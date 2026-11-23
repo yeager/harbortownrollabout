@@ -17,7 +17,7 @@ De 50 förbättringarna från genomgången. En tom ruta är öppen. En punkt boc
 
 ## Hitta, köra och komma ombord
 
-- [ ] 11. Fordonsgalleri med bildflikar för kategorier och valet Alla.
+- [x] 11. Fordonsgalleri med fem bildkategorier och Alla fordon. Alla 29 fordonsbilder verifierade i exakt en kategori vardera och tillgängliga igen under Alla fordon.
 - [ ] 12. Markera och hitta favoritfordon.
 - [ ] 13. Markera rätt trottoarkant vid sophämtning, taxiresor och bärgning.
 - [ ] 14. Förvarna med två symboler om nästa vägval vid komplicerade korsningar.

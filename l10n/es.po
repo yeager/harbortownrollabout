@@ -1650,3 +1650,21 @@ msgstr "9: sube la cámara · 3: baja la cámara"
 
 msgid "Adjust walking camera height with 9 and 3"
 msgstr "Ajustar la altura de la cámara a pie con 9 y 3"
+
+msgid "All vehicles"
+msgstr "Todos"
+
+msgid "Emergency vehicles"
+msgstr "Emergencias"
+
+msgid "Work vehicles"
+msgstr "Trabajo"
+
+msgid "Cars"
+msgstr "Coches"
+
+msgid "Passenger transport"
+msgstr "Pasajeros"
+
+msgid "Leisure vehicles"
+msgstr "Ocio"

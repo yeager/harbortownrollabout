@@ -248,6 +248,16 @@ var vehicle_index := 0
 var renderer_choices := GridContainer.new()
 var game_volume_slider := HSlider.new()
 var traffic_volume_slider := HSlider.new()
+const GALLERY_GROUPS := {
+	"All vehicles": [],
+	"Emergency vehicles": ["Ambulance", "Police car", "Police SUV", "Fire engine"],
+	"Work vehicles": ["Farm tractor", "Garbage truck", "Recovery truck", "Wheel loader", "Tracked excavator", "Ride-on mower", "Ice cream van", "Food truck"],
+	"Cars": ["SUV", "Classic sports coupe", "Classic sedan", "Vintage compact", "Electric sedan", "Track sports car", "Small convertible", "Classic cruiser", "A-tractor"],
+	"Passenger transport": ["City bus", "Tram", "Taxi"],
+	"Leisure vehicles": ["Monster truck", "Classic moped", "Snowmobile", "Shopping trike", "Motorboat"]
+}
+var category_tabs := HBoxContainer.new()
+var gallery_category := "All vehicles"
 var vehicle_selector := GridContainer.new()
 var camera_turn := 0.0
 var cockpit_view := false
@@ -6167,7 +6177,7 @@ func _build_overlay() -> void:
 	selected_style.border_color = Color("#ffe395")
 	for index in VEHICLE_NAMES_ALL.size()+EXTRA_GALLERY_NAMES.size():
 		var tile := Button.new()
-		tile.custom_minimum_size = Vector2(166,117)
+		tile.custom_minimum_size = Vector2(166,109)
 		tile.toggle_mode = true
 		tile.button_group = vehicle_group
 		tile.text = VEHICLE_NAMES_ALL[index] if index < VEHICLE_NAMES_ALL.size() else EXTRA_GALLERY_NAMES[index-VEHICLE_NAMES_ALL.size()]
@@ -6198,6 +6208,28 @@ func _build_overlay() -> void:
 			tile.pressed.connect(_on_vehicle_selected.bind(index))
 		vehicle_selector.add_child(tile)
 	_mark_selected_vehicle(vehicle_index)
+	category_tabs.alignment = BoxContainer.ALIGNMENT_CENTER
+	var category_group := ButtonGroup.new()
+	for category: String in GALLERY_GROUPS:
+		var tab := Button.new()
+		tab.text = category
+		tab.toggle_mode = true
+		tab.button_group = category_group
+		tab.button_pressed = category == gallery_category
+		var members: Array = GALLERY_GROUPS[category]
+		if members.is_empty():
+			tab.icon = ThemeDB.get_default_theme().get_icon("grid", "GraphEdit")
+		else:
+			var sample := VEHICLE_NAMES_ALL.find(members[0])
+			tab.icon = vehicle_selector.get_child(sample).icon
+		tab.add_theme_constant_override("icon_max_width",46)
+		tab.custom_minimum_size.y = 44
+		tab.pressed.connect(func():
+			gallery_category = category
+			_filter_gallery()
+		)
+		category_tabs.add_child(tab)
+	box.add_child(category_tabs)
 	box.add_child(vehicle_selector)
 	var player_row := HBoxContainer.new()
 	player_row.alignment=BoxContainer.ALIGNMENT_CENTER
@@ -6974,6 +7006,15 @@ func _select_gallery_activity(index: int) -> void:
 	_update_mission_marker()
 	_refresh_ui()
 
+func _filter_gallery() -> void:
+	category_tabs.visible = mode == "menu"
+	var members: Array = GALLERY_GROUPS[gallery_category]
+	for tile: Button in vehicle_selector.get_children():
+		if mode == "menu":
+			tile.visible = members.is_empty() or tile.text in members
+		else:
+			tile.visible = tile.get_index() < VEHICLE_NAMES_ALL.size()
+
 func _mark_selected_vehicle(index: int) -> void:
 	var tile := vehicle_selector.get_child(index) as Button
 	tile.button_pressed = true
@@ -7426,8 +7467,8 @@ func _refresh_ui() -> void:
 	overlay.visible = show_overlay
 	overlay_panel.visible = show_overlay
 	vehicle_selector.visible = mode == "menu" or (show_overlay and not walker.visible and not boating and tram_mode == 0)
-	for extra in EXTRA_GALLERY_NAMES.size():
-		vehicle_selector.get_child(VEHICLE_NAMES_ALL.size()+extra).visible = mode == "menu"
+	if vehicle_selector.visible: _filter_gallery()
+	else: category_tabs.hide()
 	preview_sound_button.visible = not start_in_excavator and mode == "menu" and not boating and tram_mode == 0
 	preview_sound_button.text = "Stop preview" if siren_player.playing and mode == "menu" else ("Preview engine" if vehicle_index >= 3 and vehicle_index != XC60_POLICE else "Preview siren")
 	brand_logo.texture = L10n.logo(TranslationServer.get_locale())
