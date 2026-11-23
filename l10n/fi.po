@@ -1615,3 +1615,6 @@ msgstr "Moottorit"
 
 msgid "Lower radio during speech"
 msgstr "Vaimenna radiota puheen aikana"
+
+msgid "Calm mode"
+msgstr "Rauhallinen tila"

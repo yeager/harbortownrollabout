@@ -1548,3 +1548,6 @@ msgstr ""
 
 msgid "Lower radio during speech"
 msgstr ""
+
+msgid "Calm mode"
+msgstr ""

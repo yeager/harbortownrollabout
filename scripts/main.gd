@@ -391,6 +391,7 @@ var radio_ducking := 100.0
 const MIX_CHANNELS := ["Speech", "Radio", "Engines"]
 var traffic_siren_volume := 100.0
 var traffic_light_mode := 0
+var calm_mode := false
 var steady_player_lights := false
 var emergency_traffic: Array[Dictionary] = []
 var moorings: Array[Dictionary] = []
@@ -574,7 +575,7 @@ func _process(delta: float) -> void:
 		var before := star_actor.global_position
 		_update_patrol(delta)
 		street_signals.advance(delta)
-		shops.advance_grill_sign(delta)
+		shops.advance_grill_sign(delta, calm_mode)
 		var tram_gas := mouse_gas or Input.is_physical_key_pressed(KEY_W) or Input.is_key_pressed(KEY_UP)
 		var tram_brake := mouse_brake or brake_pedal_held or Input.is_physical_key_pressed(KEY_S) or Input.is_key_pressed(KEY_DOWN)
 		tram.advance(delta, tram_mode == 2, tram_gas, tram_brake)
@@ -607,7 +608,7 @@ func _process(delta: float) -> void:
 		ferry_engine.stop()
 		_end_skid()
 	_update_traffic_signals(delta)
-	if lights_on and not steady_player_lights and mode == "playing" and not paused:
+	if lights_on and not (calm_mode or steady_player_lights) and mode == "playing" and not paused:
 		light_phase += delta * 3.2
 		_update_emergency_lights()
 	shops.update_customer(walker.visible and not ferry_passenger and not boating and tram_mode==0,walker.position,mode=="playing" and not paused)
@@ -4277,10 +4278,10 @@ func _update_traffic_signals(delta: float) -> void:
 		if active:
 			unit.phase = fmod(float(unit.phase) + delta, 1.0)
 		var pulse := fmod(float(unit.phase),.5) < .40
-		var lit := active and (traffic_light_mode == 1 or (traffic_light_mode == 0 and pulse))
+		var lit := active and (traffic_light_mode != 2 and (calm_mode or traffic_light_mode == 1 or pulse))
 		unit.spill.visible = lit
 		for lamp: MeshInstance3D in unit.lamps:
-			lamp.visible = lit and (traffic_light_mode == 1 or lamp.name.begins_with("FlashBlue") == (float(unit.phase) < .5))
+			lamp.visible = lit and (calm_mode or traffic_light_mode == 1 or lamp.name.begins_with("FlashBlue") == (float(unit.phase) < .5))
 		var siren: AudioStreamPlayer3D = unit.siren
 		if active and traffic_siren_volume > 0 and not AudioServer.is_bus_mute(0):
 			var traffic: Dictionary = unit.traffic
@@ -5512,7 +5513,7 @@ func _update_route_arrows() -> void:
 		if used==route_arrows.size(): break
 
 func _update_hazard_lights() -> void:
-	var lit := warning_triangle.is_visible_in_tree() and (traffic_light_mode == 1 or (traffic_light_mode == 0 and hazard_phase < .5))
+	var lit := warning_triangle.is_visible_in_tree() and (traffic_light_mode != 2 and (calm_mode or traffic_light_mode == 1 or hazard_phase < .5))
 	for lens in hazard_lenses:
 		lens.material_override = hazard_amber if lit else null
 
@@ -5918,12 +5919,12 @@ func _update_mission_marker() -> void:
 func _update_emergency_lights() -> void:
 	var phase := int(light_phase * 2.0) % 2
 	if tractor_beacon:
-		tractor_beacon.emission_enabled = lights_on and (steady_player_lights or phase == 0)
+		tractor_beacon.emission_enabled = lights_on and (calm_mode or steady_player_lights or phase == 0)
 		tractor_beacon.emission_energy_multiplier = 3.0
 	for light in blue_light_meshes:
-		light.visible = lights_on and (steady_player_lights or phase == 0)
+		light.visible = lights_on and (calm_mode or steady_player_lights or phase == 0)
 	for light in red_light_meshes:
-		light.visible = lights_on and (steady_player_lights or phase == 1)
+		light.visible = lights_on and (calm_mode or steady_player_lights or phase == 1)
 
 func _build_ui() -> void:
 	ui = CanvasLayer.new()
@@ -6246,6 +6247,17 @@ func _build_overlay() -> void:
 		if title == "Language":
 			tabs.set_tab_icon(page.get_index(), preload("res://branding/language-globe.svg"))
 		pages.append(page)
+	var calm_toggle := CheckButton.new()
+	calm_toggle.name = "CalmMode"
+	calm_toggle.text = "Calm mode"
+	calm_toggle.button_pressed = calm_mode
+	calm_toggle.toggled.connect(func(enabled: bool):
+		_apply_calm_mode(enabled)
+		_update_emergency_lights()
+		shops.advance_grill_sign(0, enabled)
+		_save_preferences()
+	)
+	pages[0].add_child(calm_toggle)
 	var reading_size := CheckButton.new()
 	reading_size.name = "LargeText"
 	reading_size.text = "Larger text"
@@ -7010,6 +7022,7 @@ func _load_preferences() -> void:
 	weather.season_setting = clampi(int(config.get_value("world","season",0)),0,4)
 	weather.weather_setting = clampi(int(config.get_value("world","weather",0)),0,4)
 	time_mode = clampi(int(config.get_value("world","daylight",0)),0,2)
+	_apply_calm_mode(config.get_value("accessibility","calm_mode",false) == true)
 	steady_player_lights = config.get_value("driving","steady_lights",false) == true
 	allow_red_lights = config.get_value("driving","allow_red_lights",false) == true
 	allow_crashes = config.get_value("driving","allow_crashes",true) == true
@@ -7052,6 +7065,7 @@ func _save_preferences() -> void:
 	config.set_value("driving","allow_crashes",allow_crashes)
 	config.set_value("driving","gentle",gentle_driving)
 	config.set_value("traffic","lights",traffic_light_mode)
+	config.set_value("accessibility","calm_mode",calm_mode)
 	config.set_value("driving","steady_lights",steady_player_lights)
 	var result := config.save(SETTINGS_PATH)
 	if result != OK:
@@ -7062,6 +7076,10 @@ func _set_handling(index: int) -> void:
 	if gentle_driving:
 		speed = clampf(speed, -1.8, 30.0 / 3.6)
 	_save_preferences()
+
+func _apply_calm_mode(enabled: bool) -> void:
+	calm_mode = enabled
+	AudioServer.set_bus_volume_db(AudioServer.get_bus_index("Traffic and radio"), -10.0 if enabled else 0.0)
 
 func _set_traffic_light_mode(index: int) -> void:
 	traffic_light_mode = index

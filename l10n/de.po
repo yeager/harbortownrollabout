@@ -1636,3 +1636,6 @@ msgstr "Motoren"
 
 msgid "Lower radio during speech"
 msgstr "Radio beim Sprechen absenken"
+
+msgid "Calm mode"
+msgstr "Ruhiger Modus"

@@ -1549,3 +1549,6 @@ msgstr "Motorer"
 
 msgid "Lower radio during speech"
 msgstr "Sänk radion under tal"
+
+msgid "Calm mode"
+msgstr "Lugnt läge"

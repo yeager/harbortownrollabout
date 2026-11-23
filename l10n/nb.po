@@ -1619,3 +1619,6 @@ msgstr "Motorer"
 
 msgid "Lower radio during speech"
 msgstr "Demp radioen under tale"
+
+msgid "Calm mode"
+msgstr "Rolig modus"
