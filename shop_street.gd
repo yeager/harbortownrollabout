@@ -434,6 +434,13 @@ func _hot_dog_stand(x: float) -> void:
 		pane.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 		part("Sliding sash stile",Vector3(x+side*.70,1.89,42.62),Vector3(.035,1.58,.05),steel)
 		part("Sash pull",Vector3(x+side*.75,1.62,42.57),Vector3(.032,.16,.055),Color("#354448"))
+	# The staff entrance faces the picnic tables, as on a freestanding street kiosk.
+	var door_z := 45.22
+	part("Staff door frame",Vector3(x-2.37,1.22,door_z),Vector3(.07,2.14,.99),steel)
+	part("Painted staff door",Vector3(x-2.41,1.21,door_z),Vector3(.028,2.04,.88),cream)
+	part("Door kick plate",Vector3(x-2.429,.35,door_z),Vector3(.012,.29,.84),steel)
+	part("Lever mount",Vector3(x-2.436,1.14,door_z-.32),Vector3(.023,.14,.047),steel)
+	part("Lever handle",Vector3(x-2.465,1.16,door_z-.27),Vector3(.054,.025,.13),steel)
 	for rail_y in [1.12,2.68]:
 		part("Hatch guide rail",Vector3(x,rail_y,42.62),Vector3(2.64,.042,.083),steel)
 	for i in 23:
