@@ -36,6 +36,7 @@ func _ready() -> void:
 	finish.vertex_color_is_srgb = true
 	finish.cull_mode = BaseMaterial3D.CULL_DISABLED
 	foliage.generate_normals()
+	foliage.index()
 	var leaves := MeshInstance3D.new()
 	leaves.mesh = foliage.commit()
 	leaves.material_override = finish
@@ -68,10 +69,9 @@ func beam(a: Vector3,b: Vector3,radius: float) -> void:
 				var root := origin.lerp(end,.18+pair*.20)
 				for direction in [-1,1]:
 					var tip := root + Vector3(direction*(.10-.014*pair),-.075,.025*direction)
-					var mid := root.lerp(tip,.52)
 					var width := Vector3(direction*.018,.023,.017)
 					var tint := Color("#436333").lerp(Color("#9ab84d"),rng.randf())
-					diamond(root,mid+width,tip,mid-width,tint)
+					birch_leaf(root,tip,width,tint)
 
 func sprigs(a: Vector3,b: Vector3,radius: float) -> void:
 	var axis := (b-a).normalized()
@@ -83,12 +83,8 @@ func sprigs(a: Vector3,b: Vector3,radius: float) -> void:
 		var base := a.lerp(b,float(i)/count)+out*radius*.55
 		var tip := base + out*rng.randf_range(.09,.16) + axis*rng.randf_range(-.13,.09) - Vector3.UP*.055
 		var wing := axis.cross(out)*rng.randf_range(.036,.064)
-		var mid := base.lerp(tip,.47)
 		var colour := Color("#254c29").lerp(Color("#83ac40"),rng.randf())
-		var ridge := mid + out*.018
-		for vertex in [base,mid+wing,ridge,mid+wing,tip,ridge,tip,mid-wing,ridge,mid-wing,base,ridge]:
-			foliage.set_color(colour)
-			foliage.add_vertex(vertex)
+		birch_leaf(base,tip,wing,colour)
 		if rng.randf() < .035:
 			var petal := Color("#fff7dc") if i%2 else Color("#d27dad")
 			for j in 5:
@@ -96,6 +92,28 @@ func sprigs(a: Vector3,b: Vector3,radius: float) -> void:
 				var ray := axis*cos(turn)+axis.cross(out)*sin(turn)
 				var edge := out.cross(ray)*.013
 				diamond(tip,tip+ray*.027+edge,tip+ray*.046,tip+ray*.027-edge,petal)
+
+# Each half folds toward the midrib. The shallow notches break up the edge.
+const LEAF_EDGE := [Vector2(.16,.70), Vector2(.34,1.0), Vector2(.42,.80),
+	Vector2(.49,.92), Vector2(.61,.64), Vector2(.67,.72), Vector2(.81,.35)]
+
+func birch_leaf(base: Vector3, tip: Vector3, wing: Vector3, tint: Color) -> void:
+	var fold := (tip-base).cross(wing).normalized() * wing.length()*.24
+	var midrib := base.lerp(tip,.44) + fold
+	for side: float in [-1,1]:
+		var previous := base
+		for point: Vector2 in LEAF_EDGE:
+			var edge := base.lerp(tip,point.x) + wing*side*point.y
+			leaf_facet(previous,edge,midrib,tint,side)
+			previous = edge
+		leaf_facet(previous,tip,midrib,tint,side)
+
+func leaf_facet(a: Vector3,b: Vector3,ridge: Vector3,tint: Color,side: float) -> void:
+	foliage.set_color(tint)
+	foliage.add_vertex(a if side > 0 else b)
+	foliage.add_vertex(b if side > 0 else a)
+	foliage.set_color(tint.lightened(.10))
+	foliage.add_vertex(ridge)
 
 func diamond(a: Vector3,b: Vector3,c: Vector3,d: Vector3,tint: Color) -> void:
 	for vertex in [a,b,c,a,c,d]:
