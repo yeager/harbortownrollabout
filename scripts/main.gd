@@ -1544,6 +1544,7 @@ func _build_brake_effects() -> void:
 	var scrub := preload("res://audio/tire_scrub.wav").duplicate() as AudioStreamWAV
 	scrub.loop_mode = AudioStreamWAV.LOOP_FORWARD
 	scrub.loop_end = scrub.data.size() / 2
+	tire_player.bus = &"Traffic and radio"
 	tire_player.stream = scrub
 	add_child(tire_player)
 
@@ -3028,6 +3029,7 @@ func _build_marina() -> void:
 	saloon_glazing.emission = Color("#ffcc8c")
 	windows.material_override = saloon_glazing
 	_build_quay_windsock()
+	ferry_boarding_chime.bus = &"Traffic and radio"
 	ferry_boarding_chime.stream = preload("res://audio/ferry_boarding.wav")
 	ferry_boarding_chime.max_distance = 32
 	ferry_boarding_chime.unit_size = 5
@@ -4140,6 +4142,7 @@ func _add_recycling_labels(bin: Node3D, paper: bool) -> void:
 			_make_box("Bottle lip",Vector3(.09,.021,.012),Vector3(0,.172,.012),ink,false,face)
 
 func _build_depot() -> void:
+	refuse_pump.bus = &"Engines"
 	refuse_pump.stream = preload("res://audio/bin_lift.wav")
 	refuse_pump.volume_db = -8
 	refuse_pump.unit_size = 4
