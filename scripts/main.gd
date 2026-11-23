@@ -112,8 +112,10 @@ var footstep := AudioStreamPlayer.new()
 var star_chime := AudioStreamPlayer.new()
 var walk_camera_height := 0.0
 var orbit_height := 0.0
-var time_mode := 0
-var day_phase := 0.0
+const DAY_CYCLE_SECONDS := 360.0
+var time_mode := 2
+# Noon is phase zero. Begin on the eastern, rising part of the arc.
+var day_phase := .80
 var santa: Node3D
 var santa_encounters := {}
 var field_fountain := preload("res://environment/field_fountain.gd").new()
@@ -3204,7 +3206,7 @@ func _build_new_blocks() -> void:
 func _update_daylight(delta: float) -> void:
 	if time_mode == 2:
 		if mode == "playing" and not paused:
-			day_phase = fmod(day_phase+delta/360.0,1.0)
+			day_phase = fmod(day_phase+delta/DAY_CYCLE_SECONDS,1.0)
 	var night := 1.0 if time_mode == 1 else (smoothstep(-.4,.4,-cos(day_phase*TAU)) if time_mode == 2 else 0.0)
 	christmas_spruce.update_lights(weather.season == 4 and weather.snow > .02, night)
 	midsummer_pole.set_summer(weather.season == 2)
@@ -3216,7 +3218,7 @@ func _update_daylight(delta: float) -> void:
 	if time_mode == 2:
 		var height := cos(day_phase*TAU)
 		var elevation := 5.0 + absf(height)*(43.0 if height >= 0 else 22.0)
-		city_sun.rotation = Vector3(-deg_to_rad(elevation),deg_to_rad(-28.0)-day_phase*TAU,0)
+		city_sun.rotation = Vector3(-deg_to_rad(elevation),-day_phase*TAU,0)
 		var twilight := 1.0-smoothstep(.02,.42,absf(height))
 		sunlight = sunlight.lerp(Color("#ffc08b"),twilight*.7)
 	else:
@@ -7768,7 +7770,7 @@ func _load_preferences() -> void:
 			if STAR_SITES.has(id) and not collected_stars.has(id): collected_stars.append(id)
 	weather.season_setting = clampi(int(config.get_value("world","season",0)),0,4)
 	weather.weather_setting = clampi(int(config.get_value("world","weather",0)),0,4)
-	time_mode = clampi(int(config.get_value("world","daylight",0)),0,2)
+	time_mode = clampi(int(config.get_value("world","daylight",2)),0,2)
 	_apply_calm_mode(config.get_value("accessibility","calm_mode",false) == true)
 	steady_player_lights = config.get_value("driving","steady_lights",false) == true
 	allow_red_lights = config.get_value("driving","allow_red_lights",false) == true
