@@ -529,6 +529,8 @@ const SMALL_TALK := [
 const BOULE_CENTRE := Vector3(94.9, 0, 69)
 var boule_players: Array[Node3D] = []
 var boules: Array[MeshInstance3D] = []
+var boule_jack: MeshInstance3D
+var boule_result_rings: Array[MeshInstance3D] = []
 var boule_turn := 0
 var boule_clock := 0.0
 var boule_impact := AudioStreamPlayer3D.new()
@@ -5243,7 +5245,14 @@ func _build_boule_court() -> void:
 	ring.position = BOULE_CENTRE+Vector3(0,.012,4)
 	ring.material_override = _material(Color("#bc402e"))
 	add_child(ring)
-	_boule_ball(.024, Color("#ffb73c"), false).position = BOULE_CENTRE+Vector3(0,.024,-4)
+	boule_jack = _boule_ball(.024, Color("#ffb73c"), false)
+	boule_jack.position = BOULE_CENTRE+Vector3(0,.024,-4)
+	var result_mesh := TorusMesh.new()
+	result_mesh.inner_radius = .071
+	result_mesh.outer_radius = .095
+	result_mesh.rings = 24
+	result_mesh.ring_segments = 8
+	var gold := _material(Color("#ffdc43"))
 	for i in 3:
 		var jacket: Color = [Color("#656f47"),Color("#45627c"),Color("#965a46")][i]
 		_make_walker("Boule player %d" % (i+1), 0, 0, 1, jacket, Color("#4e4942"))
@@ -5255,6 +5264,13 @@ func _build_boule_court() -> void:
 		var ball := _boule_ball(.044, Color("#b2b7b7"), true)
 		ball.hide()
 		boules.append(ball)
+		var marker := MeshInstance3D.new()
+		marker.mesh = result_mesh
+		marker.material_override = gold
+		marker.position.y = -.031
+		ball.add_child(marker)
+		marker.hide()
+		boule_result_rings.append(marker)
 		boule_grounded.append(false)
 		boule_velocity.append(Vector3.ZERO)
 
@@ -5305,9 +5321,24 @@ func _update_boule(delta: float) -> void:
 			boule_impact.play()
 		if boule_grounded[boule_turn]:
 			_roll_boules(minf(delta,boule_clock-3.88))
-	if boule_clock >= 6.5:
+	var final_throw := boule_turn == boules.size()-1
+	if final_throw and boule_clock >= 5 and boule_clock-delta < 5:
+		_show_boule_result()
+	if boule_clock >= (10.0 if final_throw else 6.5):
+		for ring in boule_result_rings:
+			ring.hide()
 		boule_turn = (boule_turn+1)%boule_players.size()
 		boule_clock = 0
+
+func _show_boule_result() -> void:
+	var distances := PackedFloat64Array()
+	for ball in boules:
+		distances.append(ball.position.distance_squared_to(boule_jack.position))
+	var nearest := distances[0]
+	for distance in distances:
+		nearest = minf(nearest,distance)
+	for i in distances.size():
+		boule_result_rings[i].visible = distances[i] == nearest
 
 func _roll_boules(duration: float) -> void:
 	# Keep travel per step smaller than a ball radius, even on slow frames.
