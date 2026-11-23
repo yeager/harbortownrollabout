@@ -1625,6 +1625,30 @@ def make_bmw(color, name="BMW X5 M60i", *, patrol=False):
         grille=bpy.data.objects.new("Radiator shadow",mesh)
         bpy.context.collection.objects.link(grille)
         grille.parent=root
+        # Thin cooling ribs sit behind the paired blades, clipped to the aperture.
+        rib_vertices, rib_faces = [], []
+        for z in (1.18,1.215,1.25,1.285,1.32,1.355,1.39,1.425,1.46):
+            edges = [a+(z-h)*(b-a)/(k-h)
+                     for (a,h),(b,k) in zip(inner,inner[1:]+inner[:1])
+                     if min(h,k) <= z < max(h,k)]
+            if len(edges) != 2:
+                continue
+            lo, hi = sorted(edges)
+            base = len(rib_vertices)
+            for j in range(9):
+                x = lo+(hi-lo)*j/8
+                depth = -2.507+.075*x**3
+                rib_vertices.extend([(side*x,depth,z-.003),(side*x,depth-.002,z+.003)])
+                if j:
+                    i = base+2*j
+                    face = (i-2,i,i+1,i-1)
+                    rib_faces.append(face if side>0 else face[::-1])
+        mesh = bpy.data.meshes.new("Radiator cooling ribs")
+        mesh.from_pydata(rib_vertices,[],rib_faces)
+        mesh.materials.append(DARK)
+        ribs = bpy.data.objects.new("Radiator cooling ribs",mesh)
+        bpy.context.collection.objects.link(ribs)
+        ribs.parent = root
         vertices,faces=[],[]
         for i in range(10):
             # Five paired M blades follow the bowed face of each kidney.
