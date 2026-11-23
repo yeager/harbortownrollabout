@@ -1620,3 +1620,9 @@ msgstr ""
 
 msgid "The road to school is clear!"
 msgstr ""
+
+msgid "Picnic meadow · %d%%"
+msgstr ""
+
+msgid "Ready for a picnic!"
+msgstr ""

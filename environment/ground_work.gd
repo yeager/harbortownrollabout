@@ -1,6 +1,8 @@
 extends RefCounted
 ## One texel per quarter metre. Both tools stamp in world coordinates.
 const DENSITY := 4
+const PICNIC_MEADOW := Rect2(-28,52,8,6)
+var meadow_pixels := 0
 var area: Rect2
 var image: Image
 var texture: ImageTexture
@@ -33,6 +35,7 @@ func sweep(start: Transform3D, finish: Transform3D, left: Vector3, right: Vector
 			if mowing:
 				if colour.g == 1.0: continue
 				colour.g = 1.0
+				if PICNIC_MEADOW.has_point(flat): meadow_pixels += 1
 			else:
 				if colour.r == 1.0: continue
 				colour.r = 1.0

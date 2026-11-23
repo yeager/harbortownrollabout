@@ -1698,3 +1698,9 @@ msgstr "Vista del cucharón · C"
 
 msgid "The road to school is clear!"
 msgstr "¡El camino a la escuela está despejado!"
+
+msgid "Picnic meadow · %d%%"
+msgstr "Prado de pícnic · %d%%"
+
+msgid "Ready for a picnic!"
+msgstr "¡Hora del pícnic!"

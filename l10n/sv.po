@@ -1621,3 +1621,9 @@ msgstr "Skopvy · C"
 
 msgid "The road to school is clear!"
 msgstr "Vägen till skolan är plogad!"
+
+msgid "Picnic meadow · %d%%"
+msgstr "Picknickäng · %d%%"
+
+msgid "Ready for a picnic!"
+msgstr "Dags för picknick!"

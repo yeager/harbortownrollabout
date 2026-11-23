@@ -1691,3 +1691,9 @@ msgstr "Skuffevisning · C"
 
 msgid "The road to school is clear!"
 msgstr "Veien til skolen er brøytet!"
+
+msgid "Picnic meadow · %d%%"
+msgstr "Piknikeng · %d%%"
+
+msgid "Ready for a picnic!"
+msgstr "Tid for piknik!"

@@ -1708,3 +1708,9 @@ msgstr "Schaufelansicht · C"
 
 msgid "The road to school is clear!"
 msgstr "Der Weg zur Schule ist geräumt!"
+
+msgid "Picnic meadow · %d%%"
+msgstr "Picknickwiese · %d%%"
+
+msgid "Ready for a picnic!"
+msgstr "Zeit fürs Picknick!"

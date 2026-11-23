@@ -1706,3 +1706,9 @@ msgstr "Vue du godet · C"
 
 msgid "The road to school is clear!"
 msgstr "La route de l’école est déneigée !"
+
+msgid "Picnic meadow · %d%%"
+msgstr "Pré de pique-nique · %d%%"
+
+msgid "Ready for a picnic!"
+msgstr "Place au pique-nique !"

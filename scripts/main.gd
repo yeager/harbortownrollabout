@@ -201,6 +201,7 @@ const SCHOOL := 3
 const SCHOOL_CURB := Vector3(136,0,3)
 var school_plough_flags: Array[Label3D] = []
 var school_plough_open := false
+var meadow_sign: Label3D
 const SCHOOL_GATE := Vector3(136,0,7)
 const TAXI_STOPS := [0,2, 0,SCHOOL, 1,0, SCHOOL,1, 2,1]
 const WEST_STOPS := [Vector3(-205,0,2.8),Vector3(-460,0,-45.2)]
@@ -568,6 +569,7 @@ func _process(delta: float) -> void:
 	wardrobe.update(weather.season, weather.intensity)
 	ground_work.update(delta, weather.snow)
 	_update_school_plough()
+	_update_meadow_sign()
 	if previous_season != weather.season:
 		for blade in ploughs:
 			blade.visible = weather.season == 4
@@ -1245,6 +1247,12 @@ func _drive(delta: float) -> void:
 		_draw_skid(previous_pose)
 	else:
 		_end_skid()
+
+func _update_meadow_sign() -> void:
+	var total := int(ground_work.PICNIC_MEADOW.get_area()) * ground_work.DENSITY * ground_work.DENSITY
+	var percent := floori(100.0 * ground_work.meadow_pixels / total)
+	meadow_sign.text = tr("Picnic meadow · %d%%") % percent if percent < 100 else tr("Ready for a picnic!")
+	meadow_sign.visible = weather.snow < .12
 
 func _update_school_plough() -> void:
 	var active := weather.season == 4 and weather.snow >= .12
@@ -3488,6 +3496,14 @@ func _build_depot() -> void:
 	_make_driving_surface("Shop pavement",Vector3(37,.08,2.5),Vector3(-24.9,-.09,41.25),Color("#afa99b"))
 	for i in 8:
 		_make_box("Stationsallén crossing",Vector3(2.25,.014,.48),Vector3(-39,-.028,31.85+i*.90),Color("#edece1"))
+	var meadow: Rect2 = ground_work.PICNIC_MEADOW
+	for x in [meadow.position.x,meadow.end.x]:
+		for z in [meadow.position.y,meadow.end.y]:
+			_make_box("Meadow stake",Vector3(.075,.70,.075),Vector3(x,.15,z),Color("#966b42"))
+			_make_box("Meadow pennant",Vector3(.30,.16,.02),Vector3(x+.13,.42,z),Color("#ebc75c"))
+	meadow_sign = _station_sign("",Vector3(meadow.get_center().x,1.15,meadow.end.y+.6),.006,Color.WHITE)
+	meadow_sign.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+	_update_meadow_sign()
 	var waypost := Vector3(-37.65,0,21.2)
 	_make_roadside_solid("Footpath signpost",Vector3(.085,1.9,.085),waypost+Vector3.UP*.9,Color("#758384"))
 	_make_box("Shop direction sign",Vector3(2.0,.49,.08),waypost+Vector3.UP*1.68,Color("#20554c"))

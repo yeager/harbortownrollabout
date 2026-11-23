@@ -1687,3 +1687,9 @@ msgstr "Kauhanäkymä · C"
 
 msgid "The road to school is clear!"
 msgstr "Koulutie on aurattu!"
+
+msgid "Picnic meadow · %d%%"
+msgstr "Piknikniitty · %d%%"
+
+msgid "Ready for a picnic!"
+msgstr "Piknikin aika!"
