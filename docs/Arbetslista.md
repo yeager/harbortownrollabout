@@ -53,7 +53,7 @@ De 50 förbättringarna från genomgången. En tom ruta är öppen. En punkt boc
 - [x] 37. Visa bussens passagerare och förändringen i kupén vid hållplatserna.
 - [x] 38. Lägg till en kioskförsäljare som räcker fram den beställda rätten.
 - [x] 39. Låt spelaren bära, använda eller ställa fram varor från klädbutiken.
-- [ ] 40. Ge kvarteren egna landmärken som är lätta att känna igen. Verkstadskvarteret har fått en avsmalnande, rödvit fabriksskorsten som når 13 meter över marken.
+- [ ] 40. Ge kvarteren egna landmärken som är lätta att känna igen. Verkstadskvarteret har fått en avsmalnande, rödvit fabriksskorsten som når 13 meter över marken. Sikt i mörker har kontrollerats med renderade vyer från vägen väster om verkstaden och från bron österut.
 
 ## Radio, sparande och utgåvor
 
