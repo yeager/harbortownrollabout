@@ -144,8 +144,32 @@ for side in (-1, 1):
 for x,y in ((-.429,-.72),(.429,-.72),(0,.89)):
     v.cylinder("Performance tire",(x,y,.227),.227,.13,v.RUBBER,True,40,root)
     for side in (-1,1):
-        v.cylinder("Wheel hub",(x+side*.066,y,.227),.133,.014,v.METAL,True,32,root)
-        v.cylinder("Center cap",(x+side*.080,y,.227),.053,.025,v.METAL,True,32,root)
+        # Spin the radial section of the pressed disc, rolled lip and recessed dish.
+        profile = [(.138,.064),(.138,.075),(.133,.079),(.128,.076),(.124,.070),
+                   (.115,.068),(.110,.071),(.104,.072),(.086,.070),(.062,.065),
+                   (.048,.066),(.038,.076),(.030,.079)]
+        segments = 48
+        vertices = []
+        faces = []
+        for ring, (radius, depth) in enumerate(profile):
+            for index in range(segments):
+                angle = math.tau*index/segments
+                vertices.append((side*depth,radius*math.cos(angle),radius*math.sin(angle)))
+                if ring:
+                    a = (ring-1)*segments+index
+                    b = (ring-1)*segments+(index+1)%segments
+                    face = (a,b,b+segments,a+segments)
+                    faces.append(face if side > 0 else face[::-1])
+        mesh = bpy.data.meshes.new("Pressed rim section")
+        mesh.from_pydata(vertices, [], faces)
+        mesh.materials.append(v.METAL)
+        rim = bpy.data.objects.new("Wheel hub",mesh)
+        bpy.context.collection.objects.link(rim)
+        rim.parent = root
+        rim.location = (x,y,.227)
+        for polygon in mesh.polygons:
+            polygon.use_smooth = True
+        v.cylinder("Center cap",(x+side*.080,y,.227),.031,.017,v.DARK,True,32,root)
 # Tapered wire basket on the rear deck.
 for z,w,front,rear in ((.55,.30,.53,1.05),(.72,.36,.49,1.12)):
     corners=[(-w,front,z),(w,front,z),(w,rear,z),(-w,rear,z)]
