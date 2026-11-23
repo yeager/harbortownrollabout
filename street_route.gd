@@ -21,13 +21,18 @@ func _init() -> void:
 					edges.append(Vector2i(previous,id))
 				previous=id
 
-func _nearest(point: Vector2) -> Vector2i:
+func _nearest(point: Vector2, heading := Vector2.ZERO) -> Vector2i:
 	var best := INF
 	var result := edges[0]
 	for edge in edges:
 		var snap := Geometry2D.get_closest_point_to_segment(point,graph.get_point_position(edge.x),graph.get_point_position(edge.y))
-		if snap.distance_squared_to(point)<best:
-			best=snap.distance_squared_to(point)
+		var cost := snap.distance_squared_to(point)
+		if not heading.is_zero_approx():
+			# Inside a junction the crossing centreline can be closer than our own lane.
+			var axis := graph.get_point_position(edge.x).direction_to(graph.get_point_position(edge.y))
+			cost += 9.0 * (1.0 - absf(axis.dot(heading)))
+		if cost < best:
+			best = cost
 			result=edge
 	return result
 
@@ -37,7 +42,7 @@ func closest_street_point(point: Vector2) -> Vector2:
 
 func path(start: Vector2, goal: Vector2, heading := Vector2.ZERO, wide_turns := false) -> PackedVector2Array:
 	var driving := not heading.is_zero_approx()
-	var first := _nearest(start + heading * 1.5 if driving else start)
+	var first := _nearest(start + heading * 1.5, heading) if driving else _nearest(start)
 	var axis := graph.get_point_position(first.x).direction_to(graph.get_point_position(first.y))
 	var forward_id := first.y if axis.dot(heading) >= 0 else first.x
 	var forward := axis if forward_id == first.y else -axis
