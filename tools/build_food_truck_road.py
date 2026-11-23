@@ -38,6 +38,14 @@ for name, outline in [("Crown",bun),("Filling",filling),("Heel",base)]:
     bpy.context.collection.objects.link(decal)
     decal.parent = root
     mesh.materials.append(v.PAINT_WHITE)
+# A single warm-white print spans the hatch, with the burger as its centrepiece.
+for word, start_y in [("KAJENS", -.59), ("BURGARE", 1.72)]:
+    bpy.ops.object.select_all(action="DESELECT")
+    v.text_obj("Shutter lettering " + word, word, (1.232,start_y,1.96),
+               .29,v.PAINT_WHITE,side=-1,root=root,flat=True)
+for z in (1.69,2.37):
+    for y in (.00,2.38):
+        box("Printed pinstripe",(1.231,y,z),(.002,1.04,.012),v.PAINT_WHITE,0)
 for y in [-.64,3.02]:
     box("Recessed shutter catch",(1.233,y,1.30),(.016,.115,.055),v.DARK,.008)
     box("Catch lever",(1.245,y,1.30),(.015,.074,.017),v.METAL,.004)
