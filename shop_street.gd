@@ -559,8 +559,8 @@ func _pizzeria_front(x: float) -> void:
 		var cx := x+(i-1)*2.17
 		part("Kitchen menu card",Vector3(cx,2.61,49.20),Vector3(2.10,.49,.04),Color("#f1db9e"))
 		var card := _lettering(["PIZZA", _product_price(2, 0), "TAKEAWAY"][i],Vector3(cx,2.61,49.17),.0058,wine)
+		get_parent()._size_world_sign(card,1.96)
 		if i == 1:
-			get_parent()._size_world_sign(card,1.96)
 			pizza_price_signs.append(card)
 	_shop_light(Vector3(x,2.8,46.0),Color("#ffddab"),1.15)
 
