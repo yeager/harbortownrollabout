@@ -49,6 +49,8 @@ func _process(_delta: float) -> bool:
 			if tracks.is_empty():
 				if game.radio.playing or game.radio.stream != null or not game.radio_button.disabled or game.next_song_button.visible:
 					fail("Radio retained a different language in " + locale)
+				elif game.radio_button.tr(game.radio_button.text) != game.tr("No songs yet") or game.radio_button.tooltip_text != game.tr("No songs available in this language yet."):
+					fail("Incorrect empty radio message in " + locale)
 				else:
 					next_locale()
 				return false
@@ -63,6 +65,10 @@ func _process(_delta: float) -> bool:
 			var song: String = game.radio_track
 			if song not in tracks or heard.has(song) or (tracks.size() > 1 and song == previous) or not game.radio.playing:
 				fail("Unexpected radio rotation in %s at %s" % [LOCALES[locale_index], song])
+				return false
+			var title := song.get_basename().trim_suffix(" (%s)" % LOCALES[locale_index].to_upper())
+			if game.radio_button.tooltip_text != game.tr("Now playing: %s") % title:
+				fail("Radio tooltip does not identify " + song)
 				return false
 			heard[song] = true
 			previous = song
