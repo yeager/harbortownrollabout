@@ -286,6 +286,7 @@ var steering := 0.0
 var free_drive := true
 var mission_index := 0
 var refuse_pump := AudioStreamPlayer3D.new()
+var refuse_beacon: StandardMaterial3D
 var refuse_lift: Tween
 var refuse_bins: Array[Node3D] = []
 var vehicle_progress := {}
@@ -1302,6 +1303,9 @@ func _empty_refuse_bin(stop: int) -> void:
 	var rest_rotation := bin.rotation
 	bin.rotation.y = vehicle_model.global_rotation.y
 	refuse_lift = bin.create_tween().set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	if refuse_beacon:
+		refuse_beacon.emission_enabled = true
+		refuse_lift.finished.connect(refuse_beacon.set.bind("emission_enabled", false), CONNECT_ONE_SHOT)
 	refuse_pump.global_position = loading_edge
 	refuse_lift.tween_property(bin,"global_position",loading_edge,.65)
 	refuse_lift.tween_callback(refuse_pump.play)
@@ -5192,6 +5196,14 @@ func _load_vehicle_model() -> void:
 	headlights.clear()
 	projector_finish = null
 	tractor_beacon = null
+	refuse_beacon = null
+	if vehicle_index == REFUSE:
+		for lens: MeshInstance3D in vehicle_model.find_children("Roof beacon*", "MeshInstance3D", true, false):
+			if not refuse_beacon:
+				refuse_beacon = lens.get_active_material(0).duplicate() as StandardMaterial3D
+				refuse_beacon.emission = Color("#ff9a15")
+				refuse_beacon.emission_energy_multiplier = 3.0
+			lens.set_surface_override_material(0, refuse_beacon)
 	if vehicle_index == FARM_TRACTOR:
 		_fit_plough(vehicle_model)
 		_update_tractor_footprint()
