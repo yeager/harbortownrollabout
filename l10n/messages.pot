@@ -1533,3 +1533,6 @@ msgstr ""
 
 msgid "Larger text"
 msgstr ""
+
+msgid "Show speech bubbles for longer"
+msgstr ""

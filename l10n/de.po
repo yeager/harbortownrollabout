@@ -1621,3 +1621,6 @@ msgstr "Fahren üben"
 
 msgid "Larger text"
 msgstr "Größerer Text"
+
+msgid "Show speech bubbles for longer"
+msgstr "Sprechblasen länger anzeigen"

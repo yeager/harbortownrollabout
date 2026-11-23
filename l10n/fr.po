@@ -1619,3 +1619,6 @@ msgstr "S’entraîner à conduire"
 
 msgid "Larger text"
 msgstr "Texte agrandi"
+
+msgid "Show speech bubbles for longer"
+msgstr "Afficher les bulles plus longtemps"

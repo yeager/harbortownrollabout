@@ -1600,3 +1600,6 @@ msgstr "Harjoittele ajamista"
 
 msgid "Larger text"
 msgstr "Suurempi teksti"
+
+msgid "Show speech bubbles for longer"
+msgstr "Näytä puhekuplat pidempään"

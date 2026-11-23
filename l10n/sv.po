@@ -1534,3 +1534,6 @@ msgstr "Övningskör"
 
 msgid "Larger text"
 msgstr "Större text"
+
+msgid "Show speech bubbles for longer"
+msgstr "Visa pratbubblor längre"

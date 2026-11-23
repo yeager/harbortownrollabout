@@ -9,7 +9,7 @@ De 50 förbättringarna från genomgången. En tom ruta är öppen. En punkt boc
 - [x] 03. Frivilligt trafikfritt övningsområde. Välj Övningskör i huvudmenyn. Gas, broms, backning, urstigning, återställning och återinträde har verifierats i Godot.
 - [x] 04. Bildstöd för nästa handling i telefonen. Varje aktiv instruktion har en bild, även när två uppdrag till fots pågår samtidigt. Bussens bilder för på- och avstigning har kontrollerats längs hela rutten.
 - [x] 05. Valbar textstorlek för pratbubblor, telefon och butiker utan avklippta knappar. Pratbubblor kan förstoras 40 procent i språkinställningarna. Text och bakgrund följs åt och valet har verifierats efter omstart. Butikernas textstorlek har också verifierats vid köp. Även telefonens rubriker, meddelanden och knappar följer valet. Telefonlayouten har kontrollerats på alla sju språk.
-- [ ] 06. Längre lästid eller manuell fortsättning i uppdragssamtal.
+- [x] 06. Valbar längre lästid för pratbubblor under Inställningar → Språk. Kattuppdragets svenska replik fick 10,4 sekunder mot normalt 5,2. Sparat val verifierat efter omstart.
 - [ ] 07. Separata volymreglage för tal, radio och motorer.
 - [ ] 08. Mjuk och justerbar dämpning av radion under tal. Ljudmixern har redan en kompressor styrd av talet.
 - [ ] 09. Samlat lugnt läge med stadiga varningsljus, lugnare ljud och stilla neon.

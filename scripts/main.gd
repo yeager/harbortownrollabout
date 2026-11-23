@@ -72,6 +72,7 @@ var previous_season := 0
 var greeting_timer := 0.0
 var greeting_number := 0
 var large_text := false
+var extra_reading_time := false
 var greeting := Label3D.new()
 var bubble_back := Sprite3D.new()
 enum FootQuest { WAITING, SEARCHING, RETURNING, FINISHED }
@@ -4878,7 +4879,7 @@ func _show_speech_bubble(speaker: Node3D, phrase: String) -> void:
 	bubble_back.scale.x = (width + 88.0) / bubble_back.texture.get_width()
 	bubble_back.scale.y = 1.0 + (lines.size() - 1) * .9
 	greeting.position.y += (lines.size() - 1) * .14
-	bubble_time = maxf(3.5, phrase.length() * .1)
+	bubble_time = maxf(3.5, phrase.length() * .1) * (2.0 if extra_reading_time else 1.0)
 	greeting.show()
 
 func _say(speaker: Node3D, phrase: String, clip: String) -> void:
@@ -4889,7 +4890,7 @@ func _say(speaker: Node3D, phrase: String, clip: String) -> void:
 	greeting_voice.stop()
 	greeting_voice.stream = null if clip.is_empty() else preload("res://audio/voices/santa.wav") if clip == "santa" else L10n.media("res://audio/voices/%s_" + clip + ".wav", TranslationServer.get_locale())
 	if greeting_voice.stream != null:
-		bubble_time = maxf(bubble_time, greeting_voice.stream.get_length() + .4)
+		bubble_time = maxf(bubble_time, greeting_voice.stream.get_length() + (3.5 if extra_reading_time else .4))
 		if not AudioServer.is_bus_mute(0):
 			greeting_voice.play()
 			greeting_voice.stream_paused = paused
@@ -6253,6 +6254,15 @@ func _build_overlay() -> void:
 		_save_preferences()
 	)
 	pages[4].add_child(reading_size)
+	var reading_time := CheckButton.new()
+	reading_time.name = "ExtraReadingTime"
+	reading_time.text = "Show speech bubbles for longer"
+	reading_time.button_pressed = extra_reading_time
+	reading_time.toggled.connect(func(enabled: bool):
+		extra_reading_time = enabled
+		_save_preferences()
+	)
+	pages[4].add_child(reading_time)
 	renderer_choices.columns = 2
 	renderer_choices.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	renderer_choices.name = "RendererChoice"
@@ -6958,6 +6968,7 @@ func _load_preferences() -> void:
 	L10n.apply_language(language_preference)
 	if not loaded:
 		return
+	extra_reading_time = config.get_value("accessibility", "extra_reading_time", false) == true
 	large_text = config.get_value("accessibility", "large_text", false) == true
 	var saved = config.get_value("player", "road_checkpoint", {})
 	if _valid_checkpoint(saved):
@@ -6991,6 +7002,7 @@ func _load_preferences() -> void:
 func _save_preferences() -> void:
 	var config := ConfigFile.new()
 	var volume := 0.0 if AudioServer.is_bus_mute(0) else db_to_linear(AudioServer.get_bus_volume_db(0))*100
+	config.set_value("accessibility", "extra_reading_time", extra_reading_time)
 	config.set_value("accessibility", "large_text", large_text)
 	config.set_value("player", "road_checkpoint", road_checkpoint)
 	config.set_value("player","alma",play_as_alma)

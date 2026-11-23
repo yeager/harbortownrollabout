@@ -1604,3 +1604,6 @@ msgstr "Øvelseskjør"
 
 msgid "Larger text"
 msgstr "Større tekst"
+
+msgid "Show speech bubbles for longer"
+msgstr "Vis snakkebobler lenger"

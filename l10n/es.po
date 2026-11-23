@@ -1611,3 +1611,6 @@ msgstr "Practicar la conducción"
 
 msgid "Larger text"
 msgstr "Texto más grande"
+
+msgid "Show speech bubbles for longer"
+msgstr "Mostrar los bocadillos durante más tiempo"
