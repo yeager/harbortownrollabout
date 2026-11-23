@@ -48,6 +48,11 @@ var dash_direction: Label3D
 var dash_speed: Label3D
 var shopper_boarding := false
 var shopper_recovery_requested := false
+var wash_jets: Array[CPUParticles3D] = []
+var wash_center := Vector3.ZERO
+var vehicle_dirt := {}
+var muddy_parts: Array[Dictionary] = []
+var mud_finish := ShaderMaterial.new()
 var vehicle_model: Node3D
 var headlights: Array[SpotLight3D] = []
 var tractor_beacon: StandardMaterial3D
@@ -1429,6 +1434,7 @@ func _drive(delta: float) -> void:
 	if not pos.is_equal_approx(destination):
 		speed = 0.0
 	pos.y = _surface_height(pos.x, pos.z)
+	_update_vehicle_dirt(pos,previous_pose.origin,delta)
 	if pos.y < -0.15:
 		var terrain_limit := lerpf(6.0, max_speed, weather.snow) if vehicle_index == SNOWMOBILE else 6.0
 		speed = clampf(speed, -3.0, terrain_limit)
@@ -2247,7 +2253,56 @@ func _add_pump_nozzle(face: Node3D, hose_mesh: Mesh, grip: StandardMaterial3D, r
 	_tube_between(face,elbow,socket,.021,steel)
 	_tube_between(face,head.lerp(guard,.22),guard.lerp(heel,.52),.009,steel)
 
+func _update_vehicle_dirt(pos: Vector3, previous: Vector3, delta: float) -> void:
+	var before := float(vehicle_dirt.get(vehicle_index,0.0))
+	var after := before
+	if absf(pos.x-wash_center.x) < 1.75 and absf(pos.z-wash_center.z) < 3.7 and absf(speed) < .5:
+		after = maxf(0,before-delta*.22)
+		if before > 0:
+			for jet in wash_jets:
+				if not jet.emitting: jet.restart()
+	elif pos.y < -.15 and weather.wet > .1 and weather.snow < .2:
+		after = minf(1,before+pos.distance_to(previous)*weather.wet*.035)
+	if after > 0:
+		mud_finish.set_shader_parameter("ground_height",pos.y)
+	if before == after: return
+	vehicle_dirt[vehicle_index] = after
+	mud_finish.set_shader_parameter("dirt",after)
+	if before == 0 or after == 0:
+		_show_mud(after > 0)
+
+func _show_mud(visible_mud: bool) -> void:
+	for entry in muddy_parts:
+		entry.part.set_surface_override_material(entry.surface,entry.coat if visible_mud else entry.original)
+
 func _build_petrol_station(center: Vector3) -> void:
+	wash_center = center + Vector3(-11.8,0,1.8)
+	var drop := SphereMesh.new()
+	drop.radius = .014
+	drop.height = .028
+	drop.radial_segments = 6
+	drop.rings = 2
+	drop.material = _material(Color("#b0e2f1"),.16)
+	for side in [-1,1]:
+		var edge := wash_center + Vector3(side*1.95,0,0)
+		_make_box("Wash lane stripe",Vector3(.12,.025,7.4),edge,Color("#69cee1"))
+		_make_roadside_solid("Wash spray column",Vector3(.24,2.15,.36),edge+Vector3.UP*1.075,Color("#256678"))
+		for height: float in [.42,1.05,1.75]:
+			_make_box("Wash jet nozzle",Vector3(.12,.09,.12),edge+Vector3(-side*.15,height,0),Color("#b7d8db"))
+			var jet := CPUParticles3D.new()
+			jet.emitting = false
+			jet.one_shot = true
+			jet.amount = 32
+			jet.lifetime = .38
+			jet.mesh = drop
+			jet.direction = Vector3(-side,.04,0)
+			jet.spread = 13
+			jet.gravity = Vector3.DOWN*4
+			jet.initial_velocity_min = 3.5
+			jet.initial_velocity_max = 4.8
+			add_child(jet)
+			jet.position = edge + Vector3(-side*.23,height,0)
+			wash_jets.append(jet)
 	var gold := Color("#f6b82c")
 	var cream := Color("#fffae6")
 	var graphite := Color("#354246")
@@ -6840,6 +6895,28 @@ func _load_vehicle_model() -> void:
 	vehicle_model.name = VEHICLE_NAMES_ALL[vehicle_index] + "_BlenderModel"
 	vehicle_model.rotation.y = PI
 	ambulance.add_child(vehicle_model)
+	muddy_parts.clear()
+	mud_finish = ShaderMaterial.new()
+	mud_finish.shader = preload("res://environment/road_mud.gdshader")
+	var coats := {}
+	for part: MeshInstance3D in vehicle_model.find_children("*","MeshInstance3D",true,false):
+		if part.mesh == null or part.material_override: continue
+		for surface in part.mesh.get_surface_count():
+			var finish := part.get_active_material(surface)
+			if finish == null or finish.next_pass: continue
+			if not coats.has(finish):
+				coats[finish] = null
+				for term in ["enamel","paint","lacquer","rubber","tyre","tire","cladding","ceramic white","moulded shell","white gloss","watermelon coral","construction yellow","candy apple","melting silver","vermilion","sidewall"]:
+					if term in finish.resource_name.to_lower():
+						var coat := finish.duplicate() as Material
+						coat.next_pass = mud_finish
+						coats[finish] = coat
+						break
+			if coats[finish]:
+				muddy_parts.append({"part":part,"surface":surface,"original":part.get_surface_override_material(surface),"coat":coats[finish]})
+	if vehicle_dirt.get(vehicle_index,0.0) > 0:
+		_show_mud(true)
+		mud_finish.set_shader_parameter("dirt",vehicle_dirt[vehicle_index])
 	dash_direction = null
 	dash_speed = null
 	reverse_feed = null
