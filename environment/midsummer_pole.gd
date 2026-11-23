@@ -22,8 +22,18 @@ func _ready() -> void:
 			var a := centre + Vector3(sin(angle),cos(angle),0)*.53
 			var b := centre + Vector3(sin(next_angle),cos(next_angle),0)*.53
 			sprigs(a,b,.075)
+	# Narrow blue and yellow bindings wind through the birch leaves.
+	for strand in 2:
+		var tint := Color("#267bb6") if strand == 0 else Color("#f5c638")
+		for step in 224:
+			var a := float(step)/224
+			var b := float(step+1)/224
+			var start := Vector3(cos(a*TAU*14),0,sin(a*TAU*14))*.15 + Vector3.UP*(.14+a*7.08+strand*.035)
+			var end := Vector3(cos(b*TAU*14),0,sin(b*TAU*14))*.15 + Vector3.UP*(.14+b*7.08+strand*.035)
+			diamond(start,end,end+Vector3.UP*.028,start+Vector3.UP*.028,tint)
 	var finish := StandardMaterial3D.new()
 	finish.vertex_color_use_as_albedo = true
+	finish.vertex_color_is_srgb = true
 	finish.cull_mode = BaseMaterial3D.CULL_DISABLED
 	foliage.generate_normals()
 	var leaves := MeshInstance3D.new()
@@ -49,16 +59,19 @@ func beam(a: Vector3,b: Vector3,radius: float) -> void:
 func sprigs(a: Vector3,b: Vector3,radius: float) -> void:
 	var axis := (b-a).normalized()
 	var side := axis.cross(Vector3.BACK).normalized()
-	var count := ceili(a.distance_to(b)*85)
+	var count := ceili(a.distance_to(b)*110)
 	for i in count:
 		var angle := i*2.4+rng.randf_range(-.4,.4)
 		var out := side*cos(angle)+Vector3.BACK*sin(angle)
 		var base := a.lerp(b,float(i)/count)+out*radius*.55
-		var tip := base + out*rng.randf_range(.09,.15) - Vector3.UP*.07
-		var wing := axis.cross(out)*rng.randf_range(.028,.046)
+		var tip := base + out*rng.randf_range(.09,.16) + axis*rng.randf_range(-.13,.09) - Vector3.UP*.055
+		var wing := axis.cross(out)*rng.randf_range(.036,.064)
 		var mid := base.lerp(tip,.47)
 		var colour := Color("#254c29").lerp(Color("#83ac40"),rng.randf())
-		diamond(base,mid+wing,tip,mid-wing,colour)
+		var ridge := mid + out*.018
+		for vertex in [base,mid+wing,ridge,mid+wing,tip,ridge,tip,mid-wing,ridge,mid-wing,base,ridge]:
+			foliage.set_color(colour)
+			foliage.add_vertex(vertex)
 		if rng.randf() < .035:
 			var petal := Color("#fff7dc") if i%2 else Color("#d27dad")
 			for j in 5:
