@@ -32,6 +32,7 @@ Click a vehicle picture, choose Axel or Alma, then select **Start driving**. Hol
 - **Drive bus 74 to Sickla udde.** Pick up passengers at Västra torget and follow the route to the terminus.
 - **Take the garbage truck on its rounds.** Empty the bins at the square and the clinic, then unload at the marina. A full truck takes longer to get moving.
 - **Spend your first coins.** Park near Stationsallén, press **F** to get out, then walk to the pizzeria or sweet shop. Use **Tab** to choose what you want and **Enter** to buy it.
+- **Play boule by the canal.** Follow the signs from the ferry to the gravel court. Press **F** by the throwing circle to join. On your turn, aim with **←** or **→**, use **Tab** to choose a short, medium or long throw, then press **Enter** to throw. Try to land closest to the small yellow ball.
 - **Cross the canal on Lotten.** Walk down the steps to a landing. When the ferry pulls alongside, press **F** to board. Press **F** during the crossing to get off at the next landing.
 
 ![Driving an ambulance through Harbor Town](docs/screenshots/driving.png)

@@ -4753,6 +4753,11 @@ func _build_boule_choices() -> void:
 				boule_throw_length = index
 				boule_choices.hide()
 		)
+	# Keep keyboard navigation on the four controls for the current throw.
+	var last_throw := row.get_child(-1) as Button
+	last_throw.focus_next = last_throw.get_path_to(boule_aim)
+	boule_aim.focus_previous = boule_aim.get_path_to(last_throw)
+	boule_aim.accessibility_name = "Aim at the jack"
 	boule_choices.hide()
 
 func _near_boule_ring() -> bool:
