@@ -5657,6 +5657,7 @@ func _build_ui() -> void:
 	ui = CanvasLayer.new()
 	add_child(ui)
 	var top := PanelContainer.new()
+	top.name = "DrivingHeader"
 	top.set_anchors_and_offsets_preset(Control.PRESET_TOP_WIDE)
 	top.offset_left = 22
 	top.offset_top = 18
@@ -6707,6 +6708,7 @@ func _refresh_ui() -> void:
 	else:
 		mission_label.text = "ALL MISSIONS COMPLETE"
 	var show_overlay := mode == "menu" or mode == "complete" or paused
+	ui.get_node("DrivingHeader").visible = mode != "menu"
 	for control in [light_button, siren_button, pause_button]:
 		control.focus_mode = Control.FOCUS_NONE if show_overlay else Control.FOCUS_ALL
 	camera_button.visible = tram_mode == 0 and not boating and vehicle_index in DRIVER_VIEW_VEHICLES and not walker.visible and not show_overlay
