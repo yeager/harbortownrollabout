@@ -20,6 +20,10 @@ func check_gait() -> void:
 		for frame in 140:
 			game._animate_steps(player, 1.4 / 60.0, 1.0 / 60.0)
 			var gait = player.get_meta("gait")
+			if absf(cos(TAU * gait.phase)) > .5 and gait.pelvis.rotation.y * gait.jacket.rotation.y >= 0:
+				printerr("Pelvis and shoulders should counterrotate during walking")
+				quit(1)
+				return
 			min_shift = minf(min_shift, gait.lateral_shift)
 			max_shift = maxf(max_shift, gait.lateral_shift)
 			for side in 2:

@@ -23,6 +23,7 @@ var hip_centres := PackedFloat32Array()
 var elbows: Array[Skeleton3D] = []
 var palms: Array[Node3D] = []
 var palm_rest: Array[Transform3D] = []
+var pelvis: Node3D
 var jacket: Node3D
 var legs: Array
 var arms: Array
@@ -34,6 +35,7 @@ func _init(person: Node3D, initial_phase: float, terrain := Callable()) -> void:
 	actor = person
 	ground_height = terrain
 	phase = fposmod(initial_phase, 1.0)
+	pelvis = person.get_node("TrouserSeat")
 	jacket = person.get_node("Jacket")
 	legs = person.get_meta("legs")
 	arms = person.get_meta("arms")
@@ -109,7 +111,11 @@ func advance(distance: float, delta: float, pushing: bool, tuck := 0.0) -> void:
 	var decay := exp(-BALANCE_FREQUENCY * delta)
 	lateral_shift = target_shift + (error + slope * delta) * decay
 	lateral_speed = (lateral_speed - BALANCE_FREQUENCY * slope * delta) * decay
-	var shoulder_yaw := -cos(TAU * phase) * .11 * weight
+	var twist := cos(TAU * phase) * weight
+	if walking_backwards:
+		twist = -twist
+	pelvis.rotation.y = -.07 * twist
+	var shoulder_yaw := .11 * twist
 	if pushing:
 		shoulder_yaw *= .2
 	jacket.rotation.y = shoulder_yaw
