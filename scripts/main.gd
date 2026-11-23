@@ -69,6 +69,7 @@ var city_fill: OmniLight3D
 var entrance_lights: Array[SpotLight3D] = []
 var station_readouts: Dictionary[Label3D, String] = {}
 var meter_backlight: StandardMaterial3D
+var fire_sign_face: StandardMaterial3D
 var tower_lightbox: StandardMaterial3D
 var entrance_diffuser: StandardMaterial3D
 var street_lights: Array[SpotLight3D] = []
@@ -3328,6 +3329,9 @@ func _build_fire_station_bay(model: Node3D) -> void:
 			part.hide()
 	model.find_child("Fire house sign",true,false).hide()
 	var nameplate := _make_box("Fire station nameplate",Vector3(8.2,.82,.14),Vector3(0,7.83,6.98),Color("#472022"),false,model)
+	fire_sign_face = _material(Color("#472022"),.48,true)
+	fire_sign_face.emission = Color("#9b2520")
+	nameplate.material_override = fire_sign_face
 	var letters := _road_sign_text(nameplate,"FIRE AND RESCUE",Vector3(0,0,.078),.018,Color("#fff6dc"))
 	_size_world_sign(letters,7.85)
 	var facade := model.find_child("Red brick fire station",true,false) as MeshInstance3D
@@ -3656,6 +3660,7 @@ func _update_daylight(delta: float) -> void:
 	quay_stair_light.emission_energy_multiplier = entrance_glow*1.05
 	entrance_diffuser.emission_energy_multiplier = entrance_glow*2.0
 	tower_lightbox.emission_energy_multiplier = entrance_glow*.85
+	fire_sign_face.emission_energy_multiplier = entrance_glow*.8
 	meter_backlight.emission_energy_multiplier = entrance_glow*.48
 	for lamp in entrance_lights:
 		lamp.visible = entrance_glow > .001
