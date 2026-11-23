@@ -901,9 +901,13 @@ func _pizzeria_front(x: float) -> void:
 			var bracket := part("Awning brace",Vector3(cx+edge*1.49,2.38,41.98),Vector3(.035,.035,1.0),timber)
 			bracket.rotation.x = .23
 		var window_text := "PIZZERIA" if side == 1 else "WOOD-FIRED PIZZA"
-		var script := _lettering(window_text,Vector3(cx,1.68,42.35),.0081,Color("#fff1ce"))
-		script.font = shop_sign_font
-		get_parent()._size_world_sign(script,2.9)
+		for inside_face in [false,true]:
+			var z := 42.58 if inside_face else 42.35
+			var letters := _lettering(window_text,Vector3(cx,1.68,z),.0081,Color("#fff1ce"))
+			letters.rotation.y = 0.0 if inside_face else PI
+			letters.double_sided = false
+			letters.font = shop_sign_font
+			get_parent()._size_world_sign(letters,2.9)
 		part("Window menu strip",Vector3(cx,1.04,42.32),Vector3(2.97,.22,.027),wine)
 		var menu_text := _product_price(2, 0) if side == 1 else "EAT IN  ·  TAKEAWAY"
 		var menu_strip := _lettering(menu_text,Vector3(cx,1.04,42.29),.0048,Color("#fff3d5"))
