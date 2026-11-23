@@ -69,10 +69,10 @@ msgid "Pause"
 msgstr "Pause"
 
 msgid ""
-"W / ↑  Drive     A D / ← →  Steer     S / ↓  Brake or reverse\n"
+"{up} / ↑  Drive     {left} {right} / ← →  Steer     {down} / ↓  Brake or reverse\n"
 "Release to slow down   ·   Space to help   ·   P to pause"
 msgstr ""
-"W / ↑  Kjør     A D / ← →  Styr     S / ↓  Brems eller rygg\n"
+"{up} / ↑  Kjør     {left} {right} / ← →  Styr     {down} / ↓  Brems eller rygg\n"
 "Slipp for å senke farten   ·   Mellomrom for å hjelpe   ·   P for pause"
 
 msgid "Start a gentle drive"
@@ -236,10 +236,10 @@ msgstr ""
 "kjøretøy."
 
 msgid ""
-"W / ↑ Drive   ·   A D / ← → Steer   ·   S / ↓ Brake or reverse   ·   F Get "
+"{up} / ↑ Drive   ·   {left} {right} / ← → Steer   ·   {down} / ↓ Brake or reverse   ·   F Get "
 "out   ·   P Pause"
 msgstr ""
-"W / ↑ Kjør   ·   A D / ← → Styr   ·   S / ↓ Brems eller rygg   ·   F Gå ut"
+"{up} / ↑ Kjør   ·   {left} {right} / ← → Styr   ·   {down} / ↓ Brems eller rygg   ·   F Gå ut"
 "   ·   P Pause"
 
 msgid "Continue walking"
@@ -345,9 +345,9 @@ msgid "Drive the motorboat"
 msgstr "Kjør motorbåten"
 
 msgid ""
-"W / ↑ Throttle · A D / ← → Steer · S / ↓ Slow or reverse · H Horn · P Pause"
+"{up} / ↑ Throttle · {left} {right} / ← → Steer · {down} / ↓ Slow or reverse · H Horn · P Pause"
 msgstr ""
-"W / ↑ Gi gass · A D / ← → Styr · S / ↓ Senk farten eller rygg · H Tut · P "
+"{up} / ↑ Gi gass · {left} {right} / ← → Styr · {down} / ↓ Senk farten eller rygg · H Tut · P "
 "Pause"
 
 #, c-format
@@ -853,7 +853,7 @@ msgstr "U Slå ut sparkesykkelen"
 
 msgid "{up} / ↑ Accelerate · {down} / ↓ Brake · {left} / {right} Steer · U Fold scooter"
 msgstr ""
-"W / ↑ Øk farten · S / ↓ Brems · A / D Styr · U Slå sammen sparkesykkelen"
+"{up} / ↑ Øk farten · {down} / ↓ Brems · {left} / {right} Styr · U Slå sammen sparkesykkelen"
 
 #, c-format
 msgid "Electric scooter · %d km/h"
@@ -905,10 +905,10 @@ msgid "Drive excavator · F"
 msgstr "Kjør gravemaskinen · F"
 
 msgid ""
-"Arrows or WASD: drive and steer · Q/E: turn the cab · F: get out\n"
+"Arrows or {up}{left}{down}{right}: drive and steer · Q/E: turn the cab · F: get out\n"
 "I/K: raise or lower the boom · Y/G: move the outer arm · O/L: tilt the bucket"
 msgstr ""
-"Piltaster eller WASD: kjør og styr · Q/E: sving førerhuset · F: gå ut\n"
+"Piltaster eller {up}{left}{down}{right}: kjør og styr · Q/E: sving førerhuset · F: gå ut\n"
 "I/K: hev eller senk bommen · Y/G: beveg gravearmen · O/L: vipp skuffa"
 
 #, c-format

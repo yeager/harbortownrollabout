@@ -69,10 +69,10 @@ msgid "Pause"
 msgstr "Pausa"
 
 msgid ""
-"W / ↑  Drive     A D / ← →  Steer     S / ↓  Brake or reverse\n"
+"{up} / ↑  Drive     {left} {right} / ← →  Steer     {down} / ↓  Brake or reverse\n"
 "Release to slow down   ·   Space to help   ·   P to pause"
 msgstr ""
-"W / ↑  Avanza     A D / ← →  Gira     S / ↓  Frena o da marcha atrás\n"
+"{up} / ↑  Avanza     {left} {right} / ← →  Gira     {down} / ↓  Frena o da marcha atrás\n"
 "Suelta para ir más despacio   ·   Espacio para ayudar   ·   P para pausar"
 
 msgid "Start a gentle drive"
@@ -236,10 +236,10 @@ msgstr ""
 "vehículo."
 
 msgid ""
-"W / ↑ Drive   ·   A D / ← → Steer   ·   S / ↓ Brake or reverse   ·   F Get "
+"{up} / ↑ Drive   ·   {left} {right} / ← → Steer   ·   {down} / ↓ Brake or reverse   ·   F Get "
 "out   ·   P Pause"
 msgstr ""
-"W / ↑ Avanza   ·   A D / ← → Gira   ·   S / ↓ Frena o da marcha atrás   ·   "
+"{up} / ↑ Avanza   ·   {left} {right} / ← → Gira   ·   {down} / ↓ Frena o da marcha atrás   ·   "
 "F Baja   ·   P Pausa"
 
 msgid "Continue walking"
@@ -345,9 +345,9 @@ msgid "Drive the motorboat"
 msgstr "Conducir la lancha"
 
 msgid ""
-"W / ↑ Throttle · A D / ← → Steer · S / ↓ Slow or reverse · H Horn · P Pause"
+"{up} / ↑ Throttle · {left} {right} / ← → Steer · {down} / ↓ Slow or reverse · H Horn · P Pause"
 msgstr ""
-"W / ↑ Acelera · A D / ← → Gira · S / ↓ Frena o da marcha atrás · H Bocina · "
+"{up} / ↑ Acelera · {left} {right} / ← → Gira · {down} / ↓ Frena o da marcha atrás · H Bocina · "
 "P Pausa"
 
 #, c-format
@@ -911,10 +911,10 @@ msgid "Drive excavator · F"
 msgstr "Conducir la excavadora · F"
 
 msgid ""
-"Arrows or WASD: drive and steer · Q/E: turn the cab · F: get out\n"
+"Arrows or {up}{left}{down}{right}: drive and steer · Q/E: turn the cab · F: get out\n"
 "I/K: raise or lower the boom · Y/G: move the outer arm · O/L: tilt the bucket"
 msgstr ""
-"Flechas o WASD: conduce y gira · Q/E: gira la cabina · F: baja\n"
+"Flechas o {up}{left}{down}{right}: conduce y gira · Q/E: gira la cabina · F: baja\n"
 "I/K: sube o baja la pluma · Y/G: mueve el brazo exterior · O/L: inclina el cucharón"
 
 #, c-format

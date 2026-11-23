@@ -69,10 +69,10 @@ msgid "Pause"
 msgstr "Pause"
 
 msgid ""
-"W / ↑  Drive     A D / ← →  Steer     S / ↓  Brake or reverse\n"
+"{up} / ↑  Drive     {left} {right} / ← →  Steer     {down} / ↓  Brake or reverse\n"
 "Release to slow down   ·   Space to help   ·   P to pause"
 msgstr ""
-"W / ↑  Fahren     A D / ← →  Lenken     S / ↓  Bremsen oder rückwärtsfahren\n"
+"{up} / ↑  Fahren     {left} {right} / ← →  Lenken     {down} / ↓  Bremsen oder rückwärtsfahren\n"
 "Lass los, um langsamer zu werden   ·   Leertaste zum Helfen   ·   P für Pause"
 
 msgid "Start a gentle drive"
@@ -236,10 +236,10 @@ msgstr ""
 "Fahrzeug wechseln."
 
 msgid ""
-"W / ↑ Drive   ·   A D / ← → Steer   ·   S / ↓ Brake or reverse   ·   F Get "
+"{up} / ↑ Drive   ·   {left} {right} / ← → Steer   ·   {down} / ↓ Brake or reverse   ·   F Get "
 "out   ·   P Pause"
 msgstr ""
-"W / ↑ Fahren   ·   A D / ← → Lenken   ·   S / ↓ Bremsen oder rückwärtsfahren"
+"{up} / ↑ Fahren   ·   {left} {right} / ← → Lenken   ·   {down} / ↓ Bremsen oder rückwärtsfahren"
 "   ·   F Aussteigen   ·   P Pause"
 
 msgid "Continue walking"
@@ -345,9 +345,9 @@ msgid "Drive the motorboat"
 msgstr "Motorboot fahren"
 
 msgid ""
-"W / ↑ Throttle · A D / ← → Steer · S / ↓ Slow or reverse · H Horn · P Pause"
+"{up} / ↑ Throttle · {left} {right} / ← → Steer · {down} / ↓ Slow or reverse · H Horn · P Pause"
 msgstr ""
-"W / ↑ Gas geben · A D / ← → Lenken · S / ↓ Bremsen oder rückwärtsfahren · H "
+"{up} / ↑ Gas geben · {left} {right} / ← → Lenken · {down} / ↓ Bremsen oder rückwärtsfahren · H "
 "Hupe · P Pause"
 
 #, c-format
@@ -467,7 +467,7 @@ msgstr "Du fährst mit · P für Pause"
 
 msgid "{up} / ↑ Accelerate · {down} / ↓ Brake · Automatic station stops"
 msgstr ""
-"W / ↑ Beschleunigen · S / ↓ Bremsen · Automatischer Halt an Haltestellen"
+"{up} / ↑ Beschleunigen · {down} / ↓ Bremsen · Automatischer Halt an Haltestellen"
 
 #, c-format
 msgid "%s · Departure in %d s"
@@ -866,7 +866,7 @@ msgstr "U Tretroller ausklappen"
 
 msgid "{up} / ↑ Accelerate · {down} / ↓ Brake · {left} / {right} Steer · U Fold scooter"
 msgstr ""
-"W / ↑ Beschleunigen · S / ↓ Bremsen · A / D Lenken · U Roller einklappen"
+"{up} / ↑ Beschleunigen · {down} / ↓ Bremsen · {left} / {right} Lenken · U Roller einklappen"
 
 #, c-format
 msgid "Electric scooter · %d km/h"
@@ -918,10 +918,10 @@ msgid "Drive excavator · F"
 msgstr "Bagger fahren · F"
 
 msgid ""
-"Arrows or WASD: drive and steer · Q/E: turn the cab · F: get out\n"
+"Arrows or {up}{left}{down}{right}: drive and steer · Q/E: turn the cab · F: get out\n"
 "I/K: raise or lower the boom · Y/G: move the outer arm · O/L: tilt the bucket"
 msgstr ""
-"Pfeiltasten oder WASD: fahren und lenken · Q/E: Kabine drehen · F: aussteigen\n"
+"Pfeiltasten oder {up}{left}{down}{right}: fahren und lenken · Q/E: Kabine drehen · F: aussteigen\n"
 "I/K: Ausleger heben oder senken · Y/G: Stiel bewegen · O/L: Schaufel kippen"
 
 #, c-format

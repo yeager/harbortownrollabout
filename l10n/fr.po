@@ -69,10 +69,10 @@ msgid "Pause"
 msgstr "Pause"
 
 msgid ""
-"W / ↑  Drive     A D / ← →  Steer     S / ↓  Brake or reverse\n"
+"{up} / ↑  Drive     {left} {right} / ← →  Steer     {down} / ↓  Brake or reverse\n"
 "Release to slow down   ·   Space to help   ·   P to pause"
 msgstr ""
-"W / ↑  Avancer     A D / ← →  Tourner     S / ↓  Freiner ou reculer\n"
+"{up} / ↑  Avancer     {left} {right} / ← →  Tourner     {down} / ↓  Freiner ou reculer\n"
 "Relâche pour ralentir   ·   Espace pour aider   ·   P pour la pause"
 
 msgid "Start a gentle drive"
@@ -236,10 +236,10 @@ msgstr ""
 "véhicule."
 
 msgid ""
-"W / ↑ Drive   ·   A D / ← → Steer   ·   S / ↓ Brake or reverse   ·   F Get "
+"{up} / ↑ Drive   ·   {left} {right} / ← → Steer   ·   {down} / ↓ Brake or reverse   ·   F Get "
 "out   ·   P Pause"
 msgstr ""
-"W / ↑ Avancer   ·   A D / ← → Tourner   ·   S / ↓ Freiner ou reculer   ·   F"
+"{up} / ↑ Avancer   ·   {left} {right} / ← → Tourner   ·   {down} / ↓ Freiner ou reculer   ·   F"
 " Descendre   ·   P Pause"
 
 msgid "Continue walking"
@@ -345,9 +345,9 @@ msgid "Drive the motorboat"
 msgstr "Piloter le bateau à moteur"
 
 msgid ""
-"W / ↑ Throttle · A D / ← → Steer · S / ↓ Slow or reverse · H Horn · P Pause"
+"{up} / ↑ Throttle · {left} {right} / ← → Steer · {down} / ↓ Slow or reverse · H Horn · P Pause"
 msgstr ""
-"W / ↑ Accélérer · A D / ← → Tourner · S / ↓ Ralentir ou reculer · H Klaxon ·"
+"{up} / ↑ Accélérer · {left} {right} / ← → Tourner · {down} / ↓ Ralentir ou reculer · H Klaxon ·"
 " P Pause"
 
 #, c-format
@@ -864,7 +864,7 @@ msgstr "U Déplier la trottinette"
 
 msgid "{up} / ↑ Accelerate · {down} / ↓ Brake · {left} / {right} Steer · U Fold scooter"
 msgstr ""
-"W / ↑ Accélérer · S / ↓ Freiner · A / D Tourner · U Plier la trottinette"
+"{up} / ↑ Accélérer · {down} / ↓ Freiner · {left} / {right} Tourner · U Plier la trottinette"
 
 #, c-format
 msgid "Electric scooter · %d km/h"
@@ -916,10 +916,10 @@ msgid "Drive excavator · F"
 msgstr "Conduire la pelleteuse · F"
 
 msgid ""
-"Arrows or WASD: drive and steer · Q/E: turn the cab · F: get out\n"
+"Arrows or {up}{left}{down}{right}: drive and steer · Q/E: turn the cab · F: get out\n"
 "I/K: raise or lower the boom · Y/G: move the outer arm · O/L: tilt the bucket"
 msgstr ""
-"Flèches ou WASD : avancer et tourner · Q/E : pivoter la cabine · F : descendre\n"
+"Flèches ou {up}{left}{down}{right} : avancer et tourner · Q/E : pivoter la cabine · F : descendre\n"
 "I/K : lever ou baisser la flèche · Y/G : déplacer le balancier · O/L : incliner le godet"
 
 #, c-format
@@ -928,7 +928,7 @@ msgstr "Marche ou repose-toi · Tu pourras courir dans %d s"
 
 msgid "{up}/{down} Walk · {left}/{right} Turn · Shift + {up} Run · F Enter · U Scooter"
 msgstr ""
-"W/S Marcher · A/D Tourner · Shift + W Courir · F Monter · U Trottinette"
+"{up}/{down} Marcher · {left}/{right} Tourner · Shift + {up} Courir · F Monter · U Trottinette"
 
 msgid "PgUp Raise camera · PgDn Lower camera"
 msgstr "PgUp Monter la caméra · PgDn Baisser la caméra"
