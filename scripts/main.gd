@@ -1717,8 +1717,8 @@ func _build_city_wall() -> void:
 			_make_box("Avtäckning", size + normal * .08 + Vector3.UP * .13, center + Vector3.UP * 2.365, Color("#a6a293"), false, wall)
 
 func _build_road_network() -> void:
-	marking_finish = _noise_material(Color("#d9d7ca"), Color("#eee9d9"), 2.3, .12)
-	road_finish = _noise_material(Color("#303538"), Color("#45494a"), 2.3, .22)
+	marking_finish = _noise_material(Color("#ededed"), Color.WHITE, 2.3, .12)
+	road_finish = _noise_material(Color("#171819"), Color("#303132"), 2.3, .22)
 	var main_road := _make_driving_surface("Main street", Vector3(100, 0.12, 9.6), Vector3(0, -0.08, 0), Color("#3e484a"), true)
 	main_road.material_override = road_finish
 	var cross_road := _make_driving_surface("Cross street", Vector3(9.6, 0.13, 72), Vector3(0, -0.07, -12), Color("#3e484a"), true)
@@ -1742,8 +1742,8 @@ func _build_road_network() -> void:
 				middle + edge * side * 4.95, Color("#ddd6ba"), true)
 			_make_box("Cycle lane border", direction.abs() * length + edge.abs() * 0.07 + Vector3.UP * 0.025,
 				middle + edge * side * 3.85 + Vector3.UP * 0.015, Color("#e0dfda")).material_override = marking_finish
-		for distance in range(12, int(end_distance) - 1, 7):
-			_make_box("Road marking", direction.abs() * 2.8 + edge.abs() * 0.12 + Vector3.UP * 0.025,
+		for distance in range(12, int(end_distance) - 1, 6):
+			_make_box("Road marking", direction.abs() * 3.0 + edge.abs() * 0.15 + Vector3.UP * 0.025,
 				direction * distance, Color("#e0dfda")).material_override = marking_finish
 	# Crossings align with the pedestrians' east-west route.
 	for z in [-6.35, 6.35]:
@@ -1837,7 +1837,7 @@ func _build_west_district() -> void:
 				var sidewalk := _make_driving_surface("West sidewalk", Vector3(block_length-9.6,.12,2.8), Vector3(block_center,.005,z+side*paving_offset), Color.WHITE)
 				sidewalk.material_override = sidewalk_finish
 			if median: continue
-			for x in range(junction_x[i-1]+9,junction_x[i]-7,8):
+			for x in range(junction_x[i-1]+9,junction_x[i]-7,6):
 				strokes.append(Transform3D(Basis.IDENTITY,Vector3(x,-.009,z)))
 	for i in junction_x.size():
 		for j in range(1,junction_z.size()):
@@ -1853,10 +1853,10 @@ func _build_west_district() -> void:
 				var sidewalk := _make_driving_surface("West side street pavement", Vector3(2.8,.12,block_depth-15.2), Vector3(junction_x[i]+side*paving_offset,.005,middle_z), Color.WHITE)
 				sidewalk.material_override = sidewalk_finish
 			if i == junction_x.size()-1 or median: continue
-			for z in range(junction_z[j-1]+9,junction_z[j]-7,8):
+			for z in range(junction_z[j-1]+9,junction_z[j]-7,6):
 				strokes.append(Transform3D(Basis(Vector3.UP,PI/2),Vector3(junction_x[i],-.009,z)))
 	var stripe := BoxMesh.new()
-	stripe.size = Vector3(2.8,.006,.12)
+	stripe.size = Vector3(3,.006,.15)
 	stripe.material = marking_finish
 	var markings := MultiMeshInstance3D.new()
 	markings.name = "WestLaneMarkings"
@@ -2624,19 +2624,28 @@ func _build_quay_lane_markings() -> void:
 	var dashes: Array[Transform3D] = []
 	for z in [0.0, -48.0]:
 		var first := 54 if z == 0 else 12
-		for x in range(first, 165, 7):
+		for x in range(first, 165, 6):
 			if absi(x - 102) < 7 or absi(x - 162) < 7:
 				continue
 			var slope := atan2(_bridge_rise(x+.1)-_bridge_rise(x-.1), .2) if z == -48.0 else 0.0
 			dashes.append(Transform3D(Basis(Vector3.BACK,slope), Vector3(x, _surface_height(x,z)+0.014, z)))
+		# M2 through the quay and bridge approaches: one metre painted, two clear.
+		for x in range(first, 161, 3):
+			if absi(x-102) < 7 or absi(x-162) < 7:
+				continue
+			var slope := atan2(_bridge_rise(x+.1)-_bridge_rise(x-.1),.2) if z == -48.0 else 0.0
+			var basis := Basis(Vector3.BACK,slope).scaled_local(Vector3(1.0/3,1,1))
+			for side in [-1,1]:
+				var edge_z: float = z + side*4.5
+				dashes.append(Transform3D(basis,Vector3(x,_surface_height(x,edge_z)+.014,edge_z)))
 	for x in [102.0, 162.0]:
-		for z in range(-70, 60, 7):
+		for z in range(-70, 60, 6):
 			if absi(z) < 7 or absi(z + 48) < 7:
 				continue
 			dashes.append(Transform3D(Basis(Vector3.UP, PI/2),Vector3(x,_surface_height(x,z)+0.006,z)))
 	var dash := PlaneMesh.new()
-	dash.size = Vector2(2.8, 0.12)
-	dash.material = _material(Color("#deddd6"), 0.91)
+	dash.size = Vector2(3, 0.15)
+	dash.material = marking_finish
 	var batch := MultiMesh.new()
 	batch.transform_format = MultiMesh.TRANSFORM_3D
 	batch.mesh = dash
@@ -7335,7 +7344,7 @@ func _play_bounds(point: Vector3) -> Rect2:
 
 func _build_practice_yard() -> void:
 	var center := PRACTICE_YARD.get_center()
-	_make_driving_surface("Practice asphalt", Vector3(64,.2,40), Vector3(center.x,-.1,center.y), Color("#595e61"))
+	_make_driving_surface("Practice asphalt", Vector3(64,.2,40), Vector3(center.x,-.1,center.y), Color.WHITE).material_override = road_finish
 	for z in [90,128]:
 		_make_box("Course edge", Vector3(62,.02,.14), Vector3(center.x,.01,z), Color.WHITE)
 	for x in [-129,-67]:
