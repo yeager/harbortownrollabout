@@ -117,7 +117,7 @@ Listan innehåller 100 jobb. En tom ruta är öppen. En punkt bockas av när bet
 - [x] 84. Vid främsta dörren väntar en resenär åt sidan tills den avstigande har lämnat dörröppningen. Bytet provades på samtliga hållplatser och vid återkomst till den första.
 - [x] 85. Tre sekunder före Lottens avgång tänds en grön lampa ovanför påstigningsskylten och två toner hörs en gång vid det aktuella färjeläget. Båda avgångarna verifieras i tests/ferry_passenger.gd.
 - [x] 86. En orangevit vindstrut på kajen följer samma vindriktning som regnet och snön. Riktningen kontrollerades under 40 simulerade sekunder och modellen granskades i spelet.
-- [ ] 87. Gör cykelns trampor rörliga och låt fötterna följa dem ett helt varv vid trampning.
+- [x] 87. Båda cyklisternas trampor roterar med färdsträckan. Knäna böjs och skorna följer varsin pedal ett helt varv. Kontakten med tramporna kontrollerades i 100 steg per cyklist i Godot.
 - [x] 88. Shoppingmopedens vindrutetorkare följer det välvda glaset vid nederbörd och återgår till viloläget när det blir torrt. Kontrollerat i 120 steg över ett helt svep och med en närbild i spelet.
 - [ ] 89. Låt spelaren spola av leran på ett fordon vid macken och se den rena lacken växa fram.
 - [ ] 90. Låt ett trafikfordon lämna lucka åt en buss som blinkar ut från hållplatsen. Prova även med kö bakom bussen.

@@ -5042,7 +5042,8 @@ func _spawn_traffic(scene_path: String, x: float, lane_z: float, direction: floa
 	model.rotation.y = PI
 	actor.add_child(model)
 	var half_size := _vehicle_half_size(actor, model)
-	if not scene_path.ends_with("cyklist.glb"):
+	var is_bicycle := scene_path.ends_with("cyklist.glb")
+	if not is_bicycle:
 		# A single beam represents the overlapping pools from the two dipped lamps.
 		var beam := SpotLight3D.new()
 		beam.name = "Dipped beam"
@@ -5081,7 +5082,8 @@ func _spawn_traffic(scene_path: String, x: float, lane_z: float, direction: floa
 	traffic_horn.unit_size = 5
 	traffic_horn.max_distance = 45
 	actor.add_child(traffic_horn)
-	traffic_data.append({"mass_kg": Mass.for_model(scene_path), "tractor":scene_path.ends_with("a_traktor.glb"), "horn":traffic_horn, "greeted":false, "actor": actor, "model": model, "direction": direction, "cruise": speed_value, "wheels": _rig_wheels(model), "brake_lens": _brake_lens(model),
+	var pedals = preload("res://scripts/bicycle_pedals.gd").new(self,model) if is_bicycle else null
+	traffic_data.append({"pedals":pedals,"mass_kg": Mass.for_model(scene_path), "tractor":scene_path.ends_with("a_traktor.glb"), "horn":traffic_horn, "greeted":false, "actor": actor, "model": model, "direction": direction, "cruise": speed_value, "wheels": _rig_wheels(model), "brake_lens": _brake_lens(model),
 		"speed": speed_value, "length": half_size.y,
 		"width": half_size.x})
 	return actor
@@ -5190,6 +5192,7 @@ func _update_traffic(delta: float) -> void:
 			var braking := float(item.speed) < previous_speed - .0001 or target == 0.0
 			_set_rear_lights(item.brake_lens, braking)
 		_roll_wheels(item.wheels, travel)
+		if item.get("pedals"): item.pedals.advance(travel)
 		item.distance = fposmod(float(item.distance)+travel,item.route.get_baked_length())
 		_place_traffic(item)
 
