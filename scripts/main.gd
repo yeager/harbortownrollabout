@@ -786,6 +786,8 @@ func _save_checkpoint() -> void:
 			road_checkpoint["walk_heading"] = walker.rotation.y
 			road_checkpoint["door_offset"] = parked_door_offset
 			road_checkpoint["scooter"] = scooter.visible
+			if boule_seated:
+				road_checkpoint["boule_bench"] = true
 			if ferry_passenger:
 				road_checkpoint["ferry_time"] = wave_time
 				road_checkpoint["exit_at_landing"] = ferry_exit_requested
@@ -4434,19 +4436,7 @@ func _change_seat() -> void:
 		return
 	if boating or mode != "playing" or paused: return
 	if _at_boule_bench():
-		boule_seated = not boule_seated
-		walking_velocity = Vector3.ZERO
-		walker.rotation.y = PI/2
-		walk_basis = walker.basis.orthonormalized()
-		_animate_steps(walker,0,0)
-		if boule_seated:
-			var gait: Gait = walker.get_meta("gait")
-			walker.position = BOULE_BENCH + Vector3.UP*(.50-gait.legs[0].position.y*walker.scale.y)
-			gait.sit()
-		else:
-			walker.position = BOULE_BENCH + Vector3.LEFT*.85
-			walker.position.y = _foot_height(walker.position.x,walker.position.z)
-		_update_entry_button()
+		_set_boule_seated(not boule_seated)
 		return
 	if _near_boule_ring():
 		if not boule_guest_turn:
@@ -4779,6 +4769,21 @@ func _build_boule_choices() -> void:
 
 func _near_boule_ring() -> bool:
 	return walker.visible and not scooter.visible and tram_mode == 0 and not ferry_passenger and not operating_excavator and walker.position.distance_to(BOULE_CENTRE+Vector3.BACK*4) < 3.2
+
+func _set_boule_seated(seated: bool) -> void:
+	boule_seated = seated
+	walking_velocity = Vector3.ZERO
+	walker.rotation.y = PI/2
+	walk_basis = walker.basis.orthonormalized()
+	_animate_steps(walker,0,0)
+	if boule_seated:
+		var gait: Gait = walker.get_meta("gait")
+		walker.position = BOULE_BENCH + Vector3.UP*(.50-gait.legs[0].position.y*walker.scale.y)
+		gait.sit()
+	else:
+		walker.position = BOULE_BENCH + Vector3.LEFT*.85
+		walker.position.y = _foot_height(walker.position.x,walker.position.z)
+	_update_entry_button()
 
 func _at_boule_bench() -> bool:
 	return walker.visible and not scooter.visible and not ferry_passenger and tram_mode == 0 and not operating_excavator and (boule_seated or walker.position.distance_to(BOULE_BENCH) < 1.65)
@@ -8446,6 +8451,9 @@ func _resume_road_checkpoint() -> void:
 		elif road_checkpoint.get("scooter", false):
 			walker.position.y = _foot_height(walker.position.x, walker.position.z)
 			_toggle_scooter()
+		elif road_checkpoint.get("boule_bench",false) or (walker.position.y < BOULE_BENCH.y and Vector2(walker.position.x,walker.position.z).is_equal_approx(Vector2(BOULE_BENCH.x,BOULE_BENCH.z))):
+			# Earlier saves on this bench stored only the lowered seated position.
+			_set_boule_seated(true)
 	if road_checkpoint.has("quests"):
 		var quests: Dictionary = road_checkpoint.quests
 		shoe_quest = quests.shoe
@@ -8682,7 +8690,7 @@ func _valid_checkpoint(saved: Variant) -> bool:
 		if not vehicle is int or not step is int or step < 0 or step > TARGETS.size(): return false
 	if saved.has("walk_position") and not _checkpoint_fields(saved, {"walk_position": TYPE_VECTOR3, "walk_heading": TYPE_FLOAT, "door_offset": TYPE_VECTOR3}):
 		return false
-	var optional := {"scooter": TYPE_BOOL, "exit_at_landing": TYPE_BOOL, "ferry_time": TYPE_FLOAT, "launch_transform": TYPE_TRANSFORM3D}
+	var optional := {"boule_bench": TYPE_BOOL, "scooter": TYPE_BOOL, "exit_at_landing": TYPE_BOOL, "ferry_time": TYPE_FLOAT, "launch_transform": TYPE_TRANSFORM3D}
 	for key in optional:
 		if saved.has(key) and not _checkpoint_fields(saved, {key: optional[key]}):
 			return false
