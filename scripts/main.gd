@@ -5442,6 +5442,10 @@ func _build_lost_umbrella() -> void:
 
 func _place_umbrella() -> void:
 	if not umbrella.is_inside_tree(): return
+	_animate_steps(umbrella_owner,0,0)
+	if umbrella_stage == FootQuest.FINISHED:
+		var gait: Gait = umbrella_owner.get_meta("gait")
+		gait.reach_with_hand(1,umbrella_owner.to_global(Vector3(.24,1.13,-.24)))
 	var holder: Node3D = self
 	if umbrella_stage == FootQuest.RETURNING:
 		holder = walker.get_meta("arms")[1].get_child(1)
@@ -5449,6 +5453,7 @@ func _place_umbrella() -> void:
 		holder = umbrella_owner.get_meta("arms")[1].get_child(1)
 	if umbrella.get_parent() != holder:
 		umbrella.reparent(holder,false)
+	umbrella.basis = Basis.IDENTITY
 	umbrella.position = Vector3(54,_foot_height(54,-18)+.10,-18) if holder == self else PALM_GRIP
 	var spread := 1.0 if umbrella_stage == FootQuest.FINISHED and weather.intensity.x > .15 else .10
 	canopy.scale = Vector3(spread,lerpf(2.8,1.0,spread),spread)
