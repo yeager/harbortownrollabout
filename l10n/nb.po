@@ -1565,3 +1565,6 @@ msgstr "Agurkrakett"
 
 msgid "Crunchy onion comet"
 msgstr "Sprø løkkomet"
+
+msgid "Eat %s"
+msgstr "Spis %s"

@@ -1580,3 +1580,6 @@ msgstr "Fusée au cornichon"
 
 msgid "Crunchy onion comet"
 msgstr "Comète aux oignons croustillants"
+
+msgid "Eat %s"
+msgstr "Manger %s"

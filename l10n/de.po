@@ -1582,3 +1582,6 @@ msgstr "Gurkenrakete"
 
 msgid "Crunchy onion comet"
 msgstr "Knuspriger Zwiebelkomet"
+
+msgid "Eat %s"
+msgstr "%s essen"

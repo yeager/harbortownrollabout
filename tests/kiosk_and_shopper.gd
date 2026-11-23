@@ -43,5 +43,13 @@ func check() -> void:
 	if game.purchases["Hot dog"] != 1:
 		quit(1)
 		return
+	for product in shops.MENUS[6]:
+		var eat: Button = shops.snack_buttons[product]
+		eat.pressed.emit()
+		if game.purchases[product] != 0 or eat.visible or game.wallet != 0 or game.happy_seconds <= 0:
+			printerr("Failed to eat one serving of ",product)
+			quit(1)
+			return
+	print("All four kiosk meals could be eaten once.")
 	print("Diagonal shopper exit and re-entry, kiosk hatch, four purchases and insufficient funds passed.")
 	game._finish_quit()

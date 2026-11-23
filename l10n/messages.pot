@@ -1494,3 +1494,6 @@ msgstr ""
 
 msgid "Crunchy onion comet"
 msgstr ""
+
+msgid "Eat %s"
+msgstr ""

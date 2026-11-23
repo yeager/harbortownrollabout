@@ -250,7 +250,7 @@ func rebuild_menu() -> void:
 	panel.add_child(title)
 	var keyboard_hint := Label.new()
 	keyboard_hint.text = "Tab to choose · Enter to buy" if MENUS[inside].size()>1 else "Enter to buy"
-	if inside == 1:
+	if inside in [1,6]:
 		keyboard_hint.text = "Tab to choose · Enter to buy or eat"
 	keyboard_hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	panel.add_child(keyboard_hint)
@@ -276,10 +276,13 @@ func rebuild_menu() -> void:
 	basket = Label.new()
 	basket.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	panel.add_child(basket)
-	if inside == 1:
-		for product: String in MENUS[1]:
+	if inside in [1,6]:
+		for product: String in MENUS[inside]:
 			var eat := Button.new()
-			eat.text = "Eat ice cream" if product == "Ice cream" else "Eat hot dog"
+			match product:
+				"Ice cream": eat.text = "Eat ice cream"
+				"Hot dog": eat.text = "Eat hot dog"
+				_: eat.text = tr("Eat %s") % tr(product)
 			eat.custom_minimum_size.y = 44
 			eat.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 			eat.pressed.connect(eat_snack.bind(product))
@@ -293,8 +296,8 @@ func rebuild_menu() -> void:
 
 func eat_snack(product: String) -> void:
 	var game = get_parent()
-	if inside != 1 or not shop_card.is_visible_in_tree() or not game.walker.visible or game.paused: return
-	if not product in MENUS[1] or int(game.purchases.get(product, 0)) <= 0: return
+	if inside not in [1,6] or not shop_card.is_visible_in_tree() or not game.walker.visible or game.paused: return
+	if not product in MENUS[inside] or int(game.purchases.get(product, 0)) <= 0: return
 	var restore_focus: bool = snack_buttons[product].has_focus() and game.purchases[product] == 1
 	game.purchases[product] -= 1
 	game._save_preferences()

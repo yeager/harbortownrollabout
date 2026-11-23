@@ -1572,3 +1572,6 @@ msgstr "Cohete de pepinillo"
 
 msgid "Crunchy onion comet"
 msgstr "Cometa de cebolla crujiente"
+
+msgid "Eat %s"
+msgstr "Comer %s"
