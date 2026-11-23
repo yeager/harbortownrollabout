@@ -285,6 +285,7 @@ var speed := 0.0
 var steering := 0.0
 var free_drive := true
 var mission_index := 0
+var refuse_lift: Tween
 var refuse_bins: Array[Node3D] = []
 var vehicle_progress := {}
 
@@ -883,6 +884,8 @@ func _drive(delta: float) -> void:
 		throttle = 0.0
 	if mouse_gas: throttle = 1.0
 	if mouse_brake or brake_pedal_held: throttle = -1.0
+	if vehicle_index == REFUSE and refuse_lift and refuse_lift.is_running():
+		throttle = 0.0
 	if Input.is_key_pressed(KEY_A): steer_input = -1.0
 	if Input.is_key_pressed(KEY_D): steer_input = 1.0
 	var max_speed := 250.0 / 3.6 if vehicle_index in [3, XC60_POLICE] else 11.0
@@ -1297,15 +1300,15 @@ func _empty_refuse_bin(stop: int) -> void:
 	var loading_edge := vehicle_model.to_global(Vector3(0,.15,-3.92))
 	var rest_rotation := bin.rotation
 	bin.rotation.y = vehicle_model.global_rotation.y
-	var lift := bin.create_tween().set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
-	lift.tween_property(bin,"global_position",loading_edge,.65)
-	lift.tween_property(bin,"global_position",loading_edge + Vector3.UP*1.9,.55)
-	lift.parallel().tween_property(bin,"rotation:x",deg_to_rad(145),.55)
-	lift.tween_interval(.18)
-	lift.tween_property(bin,"rotation:x",0.0,.45)
-	lift.parallel().tween_property(bin,"global_position",loading_edge,.45)
-	lift.tween_property(bin,"global_position",curb,.65)
-	lift.parallel().tween_property(bin,"rotation",rest_rotation,.65)
+	refuse_lift = bin.create_tween().set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	refuse_lift.tween_property(bin,"global_position",loading_edge,.65)
+	refuse_lift.tween_property(bin,"global_position",loading_edge + Vector3.UP*1.9,.55)
+	refuse_lift.parallel().tween_property(bin,"rotation:x",deg_to_rad(145),.55)
+	refuse_lift.tween_interval(.18)
+	refuse_lift.tween_property(bin,"rotation:x",0.0,.45)
+	refuse_lift.parallel().tween_property(bin,"global_position",loading_edge,.45)
+	refuse_lift.tween_property(bin,"global_position",curb,.65)
+	refuse_lift.parallel().tween_property(bin,"rotation",rest_rotation,.65)
 
 func _reward_delivery(amount: int) -> void:
 	wallet += amount

@@ -26,6 +26,17 @@ func check_route() -> void:
 		var curb: Vector3 = game.refuse_bins[stop].global_position if stop < 2 else Vector3.ZERO
 		game._help_at_target()
 		if stop < 2:
+			var loading_pose: Transform3D = game.ambulance.transform
+			game.mouse_gas = true
+			game._drive(1.0 / 60.0)
+			game.mouse_gas = false
+			game.mouse_brake = true
+			game._drive(1.0 / 60.0)
+			game.mouse_brake = false
+			if game.speed != 0 or not game.ambulance.transform.is_equal_approx(loading_pose):
+				printerr("Truck moved during bin lift")
+				quit(1)
+				return
 			await create_timer(1.25).timeout
 			var bin: Node3D = game.refuse_bins[stop]
 			if bin.global_position.y <= curb.y + .8:
