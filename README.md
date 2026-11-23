@@ -4,7 +4,11 @@
 
 Explore a 3D waterfront neighbourhood inspired by Hammarby Sjöstad in Stockholm. Choose Axel or Alma and drive through town, cross the canal by motorboat or ride the tram. Your vehicle determines the jobs you receive, from emergency calls and school taxi trips to roadside recovery. You can also explore at your own pace.
 
-## Play
+## Linux packages
+
+The [0.1.3 release in the original repository](https://github.com/yeager/axels-emergency-vehicles/releases/tag/v0.1.3) includes an amd64 DEB, an x86_64 RPM and a SHA256SUMS file. These packages contain the earlier 0.1.3 build. To play the newer changes on this repository’s main branch, follow the source instructions below.
+
+## Play from source
 
 Clone this repository, then open `project.godot` in Godot 4.7 dev and press **F5**. Select a vehicle and choose **Start driving**.
 
