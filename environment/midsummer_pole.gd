@@ -55,6 +55,23 @@ func beam(a: Vector3,b: Vector3,radius: float) -> void:
 	timber.quaternion = Quaternion(Vector3.UP,(b-a).normalized())
 	add_child(timber)
 	sprigs(a,b,radius)
+	if not is_equal_approx(a.x,b.x):
+		var bundles := ceili(a.distance_to(b)*6.5)
+		for i in bundles:
+			var origin := a.lerp(b,(i+.5)/bundles)
+			var back := Vector3.BACK if i%2 == 0 else Vector3.FORWARD
+			var end := origin + back*rng.randf_range(.045,.09) + Vector3.DOWN*rng.randf_range(.13,.28)
+			end.x += rng.randf_range(-.10,.10)
+			var stem_side := Vector3.RIGHT*.007
+			diamond(origin-stem_side,origin+stem_side,end+stem_side*.25,end-stem_side*.25,Color("#66743a"))
+			for pair in 4:
+				var root := origin.lerp(end,.18+pair*.20)
+				for direction in [-1,1]:
+					var tip := root + Vector3(direction*(.10-.014*pair),-.075,.025*direction)
+					var mid := root.lerp(tip,.52)
+					var width := Vector3(direction*.018,.023,.017)
+					var tint := Color("#436333").lerp(Color("#9ab84d"),rng.randf())
+					diamond(root,mid+width,tip,mid-width,tint)
 
 func sprigs(a: Vector3,b: Vector3,radius: float) -> void:
 	var axis := (b-a).normalized()

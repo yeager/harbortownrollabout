@@ -44,7 +44,7 @@ De 50 förbättringarna från genomgången. En tom ruta är öppen. En punkt boc
 ## Modeller, människor och stadsliv
 
 - [ ] 31. Betygsätt modeller mot jämförbara bilder av silhuett, proportioner, material, interiör och funktion.
-  - Midsommarstång, jämförd med de tre inskickade fotografierna och en Godot-rendering från marknivå. Silhuett 96, proportioner 94, material/färg 87, detaljer 88, årstidsfunktion 100. Interiör ej tillämplig. Medel 93/100. Löven är fortfarande glesare än på närbilden.
+  - Midsommarstång, jämförd med de tre inskickade fotografierna och en Godot-rendering från marknivå. Silhuett 96, proportioner 94, material/färg 90, detaljer 93, årstidsfunktion 100. Interiör ej tillämplig. Medel 95/100 efter att tvärslån och girlanderna fått nedhängande kvistar. Närmast kameran är bladkonturerna fortfarande kantigare än i närbilden.
 - [ ] 32. Granska Axel och Alma från sidan under en hel gångcykel och rätta anatomiska avvikelser.
 - [ ] 33. Kontrollera och förbättra handgrepp om ratt, styre, hundkoppel och kasse.
 - [ ] 34. Animera shoppingmopedens sidoinsteg, kroppsvridning och fötter in under styret.
