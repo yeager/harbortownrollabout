@@ -6,6 +6,20 @@ func _initialize() -> void:
 func check_contact() -> void:
 	var game = load("res://main.tscn").instantiate()
 	root.add_child(game)
+	game._on_vehicle_selected(game.RECOVERY)
+	game.ambulance.rotation.y = PI / 4
+	var post_size := Vector3(.12, 2, .12)
+	for side in [-1, 1]:
+		for touches in [false, true]:
+			var offset: float = game.player_half_size.x + (-.03 if touches else .30)
+			var post_center: Vector3 = game.ambulance.to_global(Vector3(side * offset, 0, 0))
+			var post := AABB(post_center - post_size * .5, post_size)
+			var depth: float = game._vehicle_overlap_depth(post, game._player_extent(), game.ambulance.basis)
+			if (depth > 0) != touches:
+				printerr("Turned tow truck misclassified a post beside its body")
+				quit(1)
+				return
+	game._on_vehicle_selected(0) # Ambulance for the driving and braking checks.
 	game._start_game()
 	game.allow_crashes = true
 	var other: Dictionary = game.traffic_data.front()

@@ -76,7 +76,7 @@ msgstr ""
 "Hidasta päästämällä irti   ·   Auta välilyönnillä   ·   P keskeyttää pelin"
 
 msgid "Start a gentle drive"
-msgstr "Aloita lempeä asema"
+msgstr "Lähde rauhalliselle ajelulle"
 
 msgid "Settings"
 msgstr "Asetukset"
@@ -88,7 +88,10 @@ msgid "Driving mode"
 msgstr "Ajotila"
 
 msgid "Gentle driving · up to 30 km/h"
-msgstr "Hellästi ajaminen · enintään 30 km/h"
+msgstr "Rauhallinen ajo · enintään 30 km/h"
+
+msgid "Gentle driving · up to 90 km/h"
+msgstr "Rauhallinen ajo · enintään 90 km/h"
 
 msgid "Full speed"
 msgstr "Täysi nopeus"
@@ -114,6 +117,7 @@ msgstr "Hälytysajoneuvojen sinivalot · Pois päältä"
 msgid "Resume"
 msgstr "Jatka"
 
+#, c-format
 msgid "MISSION %d / %d   ·   %s"
 msgstr "TEHTÄVÄ %d / %d   ·   %s"
 
@@ -167,6 +171,7 @@ msgstr "Autan..."
 msgid "Paused — take your time."
 msgstr "Peli on tauolla. Ei kiirettä."
 
+#, c-format
 msgid "Speed  %02d km/h"
 msgstr "Nopeus  %02d km/h"
 
@@ -186,8 +191,9 @@ msgid "Language"
 msgstr "Kieli"
 
 msgid "Get out · F"
-msgstr "Ulos. · F"
+msgstr "Nouse kyydistä · F"
 
+#, c-format
 msgid "Enter %s"
 msgstr "Nouse kyytiin: %s"
 
@@ -195,7 +201,7 @@ msgid "Walk to a vehicle"
 msgstr "Kävele ajoneuvon luo"
 
 msgid "Stop first to get out."
-msgstr "Pysähdy ensin päästäksesi ulos."
+msgstr "Pysäytä ajoneuvo ennen kuin nouset kyydistä."
 
 msgid "Walk with WASD or arrows · F to enter a vehicle"
 msgstr "Liiku WASD- tai nuolinäppäimillä · Nouse kyytiin painamalla F"
@@ -249,10 +255,10 @@ msgid "Press Space to help"
 msgstr "Paina tilaa auttaaksesi"
 
 msgid "My vehicle · Flashing"
-msgstr "Minun autoni. · Välähdykset"
+msgstr "Oma ajoneuvo · Vilkkuva sinivalo"
 
 msgid "My vehicle · Steady"
-msgstr "Minun autoni. · Vakaa"
+msgstr "Oma ajoneuvo · Jatkuva sinivalo"
 
 msgid "Traffic sirens"
 msgstr "Muiden ajoneuvojen sireenit"
@@ -270,10 +276,10 @@ msgid "Forward"
 msgstr "Eteenpäin"
 
 msgid "Stopped"
-msgstr "Pysäytetty"
+msgstr "Paikallaan"
 
 msgid "Reversing"
-msgstr "Perutaan."
+msgstr "Peruutus"
 
 msgid "Ride the tram"
 msgstr "Matkusta raitiovaunulla"
@@ -350,11 +356,12 @@ msgid_plural "%d coins"
 msgstr[0] "%d kolikko"
 msgstr[1] "%d kolikkoa"
 
+#, c-format
 msgid "Well done, %s! Ready for another drive?"
 msgstr "Hienosti tehty, %s! Lähdetäänkö uudelle ajelulle?"
 
 msgid "Character"
-msgstr "Merkki"
+msgstr "Pelihahmo"
 
 msgid "Wallet"
 msgstr "Lompakko"
@@ -393,7 +400,7 @@ msgid "Please bring the first-aid supplies to the marina."
 msgstr "Viekää ensiaputarvikkeet satamaan."
 
 msgid "Fare complete. You earned 15 coins."
-msgstr "Ansaitsit 15 kolikkoa."
+msgstr "Kyyti on perillä! Ansaitsit 15 kolikkoa."
 
 msgid "Thank you for helping! You earned 10 coins."
 msgstr "Kiitos avusta! Sait 10 kolikkoa."
@@ -422,6 +429,7 @@ msgstr "Margheritapizza"
 msgid "Pick and mix"
 msgstr "Irtokarkit"
 
+#, c-format
 msgid "%s · %d coins"
 msgstr "%s · %d kolikkoa"
 
@@ -431,6 +439,7 @@ msgid_plural "You need %d more coins."
 msgstr[0] "Tarvitset vielä %d kolikon."
 msgstr[1] "Tarvitset vielä %d kolikkoa."
 
+#, c-format
 msgid "%s · Paid %d coins. Thank you!"
 msgstr "%s · Maksoit %d kolikkoa. Kiitos!"
 
@@ -441,7 +450,7 @@ msgid "Collect the car with a smoking bonnet."
 msgstr "Hae auto, jonka konepellin alta nousee savua."
 
 msgid "Take the car to the workshop."
-msgstr "Vie auto verstaalle."
+msgstr "Vie auto korjaamolle."
 
 msgid "Collect the car with a missing wheel."
 msgstr "Hae auto, josta puuttuu pyörä."
@@ -455,9 +464,11 @@ msgstr "Olet kyydissä · P pitää tauon"
 msgid "W / ↑ Accelerate · S / ↓ Brake · Automatic station stops"
 msgstr "W / ↑ Kiihdytä · S / ↓ Jarruta · Automaattinen pysähdys pysäkeillä"
 
+#, c-format
 msgid "%s · Departure in %d s"
 msgstr "%s · Lähtöön %d s"
 
+#, c-format
 msgid "Next stop: %s · %d m · %d km/h"
 msgstr "Seuraava pysäkki: %s · %d m · %d km/h"
 
@@ -483,6 +494,7 @@ msgstr "Auto on nyt lavalla."
 msgid "Your purchases"
 msgstr "Ostoksesi"
 
+#, c-format
 msgid "%s × %d"
 msgstr "%s × %d"
 
@@ -530,9 +542,11 @@ msgstr "Valitse sarkaimella · Osta Enterillä"
 msgid "Enter to buy"
 msgstr "Osta Enterillä"
 
+#, c-format
 msgid "F · Enter %s"
 msgstr "F · Nouse kyytiin (%s)"
 
+#, c-format
 msgid "Well done, %s!"
 msgstr "Hienoa. %s!"
 
@@ -726,6 +740,7 @@ msgstr "Syö jäätelöä"
 msgid "Eat hot dog"
 msgstr "Syö nakkisämpylä"
 
+#, c-format
 msgid "%s feels extra happy!"
 msgstr "%s Tuntuu erittäin onnelliselta!"
 
@@ -778,12 +793,14 @@ msgstr "Nouse maihin · F"
 msgid "On board Lotten"
 msgstr "Lottenin laivalla"
 
+#, c-format
 msgid "Lotten in %d s"
 msgstr "Lotten saapuu %d s kuluttua"
 
 msgid "You can step ashore at either landing."
 msgstr "Voit jäädä maihin kummalla tahansa laiturilla."
 
+#, c-format
 msgid "Next landing in %d s"
 msgstr "Seuraavalle laiturille %d s"
 
@@ -802,6 +819,7 @@ msgstr "Klinikka sai pakettinsa. Ansaitsit 10 kolikkoa."
 msgid "The marina received the last parcel. You earned 10 coins."
 msgstr "Viimeinen paketti on perillä venesatamassa. Ansaitsit 10 kolikkoa."
 
+#, c-format
 msgid "Stepping ashore in %d s"
 msgstr "Pääset maihin %d s kuluttua"
 
@@ -832,6 +850,7 @@ msgstr "U Avaa potkulauta"
 msgid "W / ↑ Accelerate · S / ↓ Brake · A / D Steer · U Fold scooter"
 msgstr "W / ↑ Kiihdytä · S / ↓ Jarruta · A / D Ohjaa · U Taita potkulauta"
 
+#, c-format
 msgid "Electric scooter · %d km/h"
 msgstr "Sähköpotkulauta · %d km/h"
 
@@ -887,6 +906,7 @@ msgstr ""
 "Nuolinäppäimet tai WASD: aja ja ohjaa · Q/E: käännä ohjaamoa · F: poistu\n"
 "I/K: nosta tai laske puomia · Y/G: liikuta kaivuvartta · O/L: kallista kauhaa"
 
+#, c-format
 msgid "Walk or rest · Run again in %d s"
 msgstr "Kävele tai lepää · Voit taas juosta %d s kuluttua"
 
@@ -909,6 +929,7 @@ msgstr "Moottorivene"
 msgid "J Off · N Next song"
 msgstr "J Sammuta · N Seuraava kappale"
 
+#, c-format
 msgid "Now playing: %s"
 msgstr "Nyt soi: %s"
 
@@ -966,8 +987,11 @@ msgstr "Raitiovaunu"
 msgid "Click the pictures to choose your vehicle and driver."
 msgstr "Valitse ajoneuvo ja kuljettaja napauttamalla kuvia."
 
-msgid "★ %d points"
-msgstr "★ %d pistettä"
+#, c-format
+msgid "★ %d point"
+msgid_plural "★ %d points"
+msgstr[0] "★ %d piste"
+msgstr[1] "★ %d pistettä"
 
 msgid "Take a job"
 msgstr "Ota tehtävä"
@@ -1200,6 +1224,7 @@ msgstr "Tietoja pelistä"
 msgid "Close"
 msgstr "Sulje"
 
+#, c-format
 msgid "Version %s"
 msgstr "Versio %s"
 
@@ -1240,6 +1265,9 @@ msgstr "NAKKIJOOGA"
 msgid "Breathe in. Ketchup out."
 msgstr "Ilma sisään. Ketsuppi ulos."
 
+msgid "0.00 kr"
+msgstr "0,00 kr"
+
 #. Litres shown on a stationary fuel dispenser.
 msgid "0.00 L"
 msgstr "0,00 L"
@@ -1270,3 +1298,24 @@ msgstr "Salli punaista päin ajaminen"
 
 msgid "Red light! Stop at the line and wait for green."
 msgstr "Punainen valo! Pysähdy viivalle ja odota vihreää."
+
+msgid "Diesel"
+msgstr "Diesel"
+
+msgid "Petrol"
+msgstr "Bensiini"
+
+msgid "No songs yet"
+msgstr "Ei vielä kappaleita"
+
+msgid "Messages"
+msgstr "Viestit"
+
+msgid "We don’t go to Ekerö"
+msgstr "Emme mene Ekeröhön"
+
+msgid "Current jobs"
+msgstr "Nykyiset tehtävät"
+
+msgid "Hold left mouse to drive forward or right mouse to reverse."
+msgstr "Aja eteenpäin pitämällä hiiren vasenta painiketta pohjassa tai peruuta pitämällä oikeaa painiketta pohjassa."

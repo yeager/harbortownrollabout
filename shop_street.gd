@@ -213,6 +213,7 @@ func rebuild_menu() -> void:
 	for i in MENUS[inside].size():
 		var button:=Button.new()
 		button.custom_minimum_size.y=44
+		button.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		button.text=tr("%s · %d coins") % [tr(MENUS[inside][i]),PRICES[inside][i]]
 		button.pressed.connect(purchase.bind(inside,i))
 		panel.add_child(button)
@@ -229,6 +230,7 @@ func rebuild_menu() -> void:
 			var eat := Button.new()
 			eat.text = "Eat ice cream" if product == "Ice cream" else "Eat hot dog"
 			eat.custom_minimum_size.y = 44
+			eat.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 			eat.pressed.connect(eat_snack.bind(product))
 			panel.add_child(eat)
 			snack_buttons[product] = eat
@@ -616,7 +618,7 @@ func _candy_bank(origin: Vector3, columns: int, tiers: int, shapes: Array[Array]
 				var orientation := Basis.from_euler(Vector3(.66*sin(phase),phase,.58*cos(phase)))
 				shapes[style].append(Transform3D(orientation*Basis.from_scale(size),pos))
 				colors[style].append(tint.lightened(.14 if i%4==0 else 0.0))
-			part("Flavour ticket",Vector3(cx,height-.032,z-.166),Vector3(.23,.054,.012),charcoal)
+			part("Flavour ticket",Vector3(cx,height-.032,z-.166),Vector3(.30,.065,.012),charcoal)
 			var flavours := ["Raspberry","Lemon","Apple","Liquorice","Vanilla","Strawberry","Orange","Grape"]
 			var ticket := _lettering(flavours[flavour],Vector3(cx,height-.032,z-.174),.00135,Color.WHITE)
 			ticket.visibility_range_end = 5.0

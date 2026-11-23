@@ -5,6 +5,11 @@ var show_wheel := true:
 		if value != show_wheel:
 			show_wheel = value
 			queue_redraw()
+var reverse_pedal := false:
+	set(value):
+		if value != reverse_pedal:
+			reverse_pedal = value
+			queue_redraw()
 var steering := 0.0
 var gas := false
 var brake := false
@@ -38,7 +43,7 @@ func _draw() -> void:
 	var base := Vector2(size.x-216,size.y-132)
 	draw_style_box(_panel,Rect2(base,Vector2(196,106)))
 	_draw_pedal(base+Vector2(48,39),true,gas,tr("Gas"),tr("Left"))
-	_draw_pedal(base+Vector2(148,39),false,brake or reverse,tr("Reverse") if reverse else tr("Brake"),"S / ↓" if reverse and not brake else tr("Right"))
+	_draw_pedal(base+Vector2(148,39),false,brake or reverse,tr("Reverse") if reverse_pedal or reverse else tr("Brake"),"S / ↓" if reverse and not brake else tr("Right"))
 
 var _panel := StyleBoxFlat.new()
 
@@ -60,7 +65,7 @@ func _draw_pedal(center: Vector2, narrow: bool, pressed: bool, label: String, bu
 		var p := foot + Vector2(0,groove*h*.23)
 		draw_line(p-Vector2(w*.33,0),p+Vector2(w*.33,0),backing,2,true)
 	draw_string(ThemeDB.fallback_font,center+Vector2(-46,38),label,HORIZONTAL_ALIGNMENT_CENTER,92,17,ink)
-	draw_string(ThemeDB.fallback_font,center+Vector2(-11,57),button,HORIZONTAL_ALIGNMENT_LEFT,58,13,ink)
+	draw_string(ThemeDB.fallback_font,center+Vector2(-13,57),button,HORIZONTAL_ALIGNMENT_LEFT,61,13,ink)
 
 	if reverse and not brake and not narrow:
 		return

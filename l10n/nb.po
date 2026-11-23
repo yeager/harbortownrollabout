@@ -76,7 +76,7 @@ msgstr ""
 "Slipp for å senke farten   ·   Mellomrom for å hjelpe   ·   P for pause"
 
 msgid "Start a gentle drive"
-msgstr "Start en mild kjøring"
+msgstr "Start en rolig kjøretur"
 
 msgid "Settings"
 msgstr "Innstillinger"
@@ -88,7 +88,10 @@ msgid "Driving mode"
 msgstr "Kjøremodus"
 
 msgid "Gentle driving · up to 30 km/h"
-msgstr "Gentle kjøring · Opp til 30 km/t"
+msgstr "Rolig kjøring · opptil 30 km/t"
+
+msgid "Gentle driving · up to 90 km/h"
+msgstr "Rolig kjøring · opptil 90 km/t"
 
 msgid "Full speed"
 msgstr "Full fart"
@@ -114,6 +117,7 @@ msgstr "Blålys i trafikken · Av"
 msgid "Resume"
 msgstr "Fortsett"
 
+#, c-format
 msgid "MISSION %d / %d   ·   %s"
 msgstr "OPPDRAG %d / %d   ·   %s"
 
@@ -167,6 +171,7 @@ msgstr "Hjelper..."
 msgid "Paused — take your time."
 msgstr "Spillet er på pause. Ta den tiden du trenger."
 
+#, c-format
 msgid "Speed  %02d km/h"
 msgstr "Fart  %02d km/t"
 
@@ -186,8 +191,9 @@ msgid "Language"
 msgstr "Språk"
 
 msgid "Get out · F"
-msgstr "Kom deg ut · F"
+msgstr "Gå ut · F"
 
+#, c-format
 msgid "Enter %s"
 msgstr "Sett deg inn: %s"
 
@@ -195,7 +201,7 @@ msgid "Walk to a vehicle"
 msgstr "Gå bort til et kjøretøy"
 
 msgid "Stop first to get out."
-msgstr "Stopp først for å komme ut."
+msgstr "Stopp kjøretøyet før du går ut."
 
 msgid "Walk with WASD or arrows · F to enter a vehicle"
 msgstr "Gå med WASD eller piltastene · Trykk F for å gå inn i et kjøretøy"
@@ -249,37 +255,37 @@ msgid "Press Space to help"
 msgstr "Trykk på plass for å hjelpe"
 
 msgid "My vehicle · Flashing"
-msgstr "Min bil · Blitzing"
+msgstr "Mitt kjøretøy · Blinkende blålys"
 
 msgid "My vehicle · Steady"
-msgstr "Min bil · Steady"
+msgstr "Mitt kjøretøy · Fast blålys"
 
 msgid "Traffic sirens"
 msgstr "Sirener fra andre kjøretøy"
 
 msgid "Reverse"
-msgstr "Reverser"
+msgstr "Rygg"
 
 msgid "Driver view · C"
-msgstr "Drivervisning · C"
+msgstr "Førervisning · C"
 
 msgid "Outside view · C"
 msgstr "Utendørs visning · C"
 
 msgid "Forward"
-msgstr "Forward"
+msgstr "Framover"
 
 msgid "Stopped"
 msgstr "Stoppet"
 
 msgid "Reversing"
-msgstr "Reversing"
+msgstr "Rygger"
 
 msgid "Ride the tram"
 msgstr "Ta trikken"
 
 msgid "Drive the tram"
-msgstr "Kjør sporvognen"
+msgstr "Kjør trikken"
 
 msgid "Season · Automatic"
 msgstr "Årstid · Automatisk"
@@ -350,11 +356,12 @@ msgid_plural "%d coins"
 msgstr[0] "%d mynt"
 msgstr[1] "%d mynter"
 
+#, c-format
 msgid "Well done, %s! Ready for another drive?"
 msgstr "Bra jobbet, %s! Klar for en tur til?"
 
 msgid "Character"
-msgstr "Tegn"
+msgstr "Spillfigur"
 
 msgid "Wallet"
 msgstr "Lommebok"
@@ -393,13 +400,13 @@ msgid "Please bring the first-aid supplies to the marina."
 msgstr "Ta med førstehjelpsforsyningene til marinaen."
 
 msgid "Fare complete. You earned 15 coins."
-msgstr "Du tjente 15 mynter."
+msgstr "Turen er ferdig! Du tjente 15 mynter."
 
 msgid "Thank you for helping! You earned 10 coins."
 msgstr "Takk for hjelpen! Du fikk 10 mynter."
 
 msgid "Café"
-msgstr "Café"
+msgstr "Kafé"
 
 msgid "Sweet shop"
 msgstr "Godteributikk"
@@ -422,6 +429,7 @@ msgstr "Pizza Margherita"
 msgid "Pick and mix"
 msgstr "Smågodt"
 
+#, c-format
 msgid "%s · %d coins"
 msgstr "%s · %d mynter"
 
@@ -431,6 +439,7 @@ msgid_plural "You need %d more coins."
 msgstr[0] "Du mangler %d mynt."
 msgstr[1] "Du mangler %d mynter."
 
+#, c-format
 msgid "%s · Paid %d coins. Thank you!"
 msgstr "%s · Du betalte %d mynter. Takk!"
 
@@ -441,7 +450,7 @@ msgid "Collect the car with a smoking bonnet."
 msgstr "Hent bilen som ryker fra panseret."
 
 msgid "Take the car to the workshop."
-msgstr "Ta bilen til verkstedet."
+msgstr "Frakt bilen til verkstedet."
 
 msgid "Collect the car with a missing wheel."
 msgstr "Hent bilen som mangler et hjul."
@@ -455,9 +464,11 @@ msgstr "Du er passasjer · P for pause"
 msgid "W / ↑ Accelerate · S / ↓ Brake · Automatic station stops"
 msgstr "W / ↑ Øk farten · S / ↓ Brems · Stopper automatisk ved holdeplassene"
 
+#, c-format
 msgid "%s · Departure in %d s"
 msgstr "%s · Avgang om %d s"
 
+#, c-format
 msgid "Next stop: %s · %d m · %d km/h"
 msgstr "Neste stopp: %s · %d m · %d km/t"
 
@@ -485,6 +496,7 @@ msgstr "Bilen står på lasteplanet."
 msgid "Your purchases"
 msgstr "Kjøpene dine"
 
+#, c-format
 msgid "%s × %d"
 msgstr "%s × %d"
 
@@ -505,7 +517,7 @@ msgid "Continue boating"
 msgstr "Fortsett båtturen"
 
 msgid "The tram drives itself and stops at each platform."
-msgstr "Sporvognen kjører seg selv og stopper på hver plattform."
+msgstr "Trikken kjører av seg selv og stopper ved hver holdeplass."
 
 msgid ""
 "Control the speed. The tram follows the rails and stops at each platform."
@@ -533,9 +545,11 @@ msgstr "Tab for å velge · Enter for å kjøpe"
 msgid "Enter to buy"
 msgstr "Enter for å kjøpe"
 
+#, c-format
 msgid "F · Enter %s"
 msgstr "F · Gå inn i kjøretøyet (%s)"
 
+#, c-format
 msgid "Well done, %s!"
 msgstr "Godt gjort, %s!"
 
@@ -728,6 +742,7 @@ msgstr "Spis is"
 msgid "Eat hot dog"
 msgstr "Spis pølse i brød"
 
+#, c-format
 msgid "%s feels extra happy!"
 msgstr "%s Føles ekstra lykkelig!"
 
@@ -780,12 +795,14 @@ msgstr "Gå i land · F"
 msgid "On board Lotten"
 msgstr "Om bord på Lotten"
 
+#, c-format
 msgid "Lotten in %d s"
 msgstr "Lotten kommer om %d s"
 
 msgid "You can step ashore at either landing."
 msgstr "Du kan gå i land ved begge bryggene."
 
+#, c-format
 msgid "Next landing in %d s"
 msgstr "Neste brygge om %d s"
 
@@ -804,6 +821,7 @@ msgstr "Klinikken har fått pakken sin. Du fikk 10 mynter."
 msgid "The marina received the last parcel. You earned 10 coins."
 msgstr "Den siste pakken er levert i småbåthavna. Du fikk 10 mynter."
 
+#, c-format
 msgid "Stepping ashore in %d s"
 msgstr "Du går i land om %d s"
 
@@ -837,6 +855,7 @@ msgid "W / ↑ Accelerate · S / ↓ Brake · A / D Steer · U Fold scooter"
 msgstr ""
 "W / ↑ Øk farten · S / ↓ Brems · A / D Styr · U Slå sammen sparkesykkelen"
 
+#, c-format
 msgid "Electric scooter · %d km/h"
 msgstr "Elsparkesykkel · %d km/t"
 
@@ -865,7 +884,7 @@ msgid "Grocery store"
 msgstr "Matbutikk"
 
 msgid "Apple"
-msgstr "Apple"
+msgstr "Eple"
 
 msgid "Milk"
 msgstr "Melk"
@@ -892,6 +911,7 @@ msgstr ""
 "Piltaster eller WASD: kjør og styr · Q/E: sving førerhuset · F: gå ut\n"
 "I/K: hev eller senk bommen · Y/G: beveg gravearmen · O/L: vipp skuffa"
 
+#, c-format
 msgid "Walk or rest · Run again in %d s"
 msgstr "Gå eller hvil · Du kan løpe igjen om %d s"
 
@@ -913,6 +933,7 @@ msgstr "Motorbåt"
 msgid "J Off · N Next song"
 msgstr "J Slå av · N Neste sang"
 
+#, c-format
 msgid "Now playing: %s"
 msgstr "Nå spilles: %s"
 
@@ -970,8 +991,11 @@ msgstr "Trikk"
 msgid "Click the pictures to choose your vehicle and driver."
 msgstr "Trykk på bildene for å velge kjøretøy og sjåfør."
 
-msgid "★ %d points"
-msgstr "★ %d poeng"
+#, c-format
+msgid "★ %d point"
+msgid_plural "★ %d points"
+msgstr[0] "★ %d poeng"
+msgstr[1] "★ %d poeng"
 
 msgid "Take a job"
 msgstr "Ta et oppdrag"
@@ -1107,25 +1131,25 @@ msgid "PICK AND MIX"
 msgstr "SMÅGODT"
 
 msgid "Raspberry"
-msgstr "Raspberry"
+msgstr "Bringebær"
 
 msgid "Lemon"
-msgstr "Lemon"
+msgstr "Sitron"
 
 msgid "Liquorice"
-msgstr "Liquorice"
+msgstr "Lakris"
 
 msgid "Vanilla"
-msgstr "Vanilla"
+msgstr "Vanilje"
 
 msgid "Strawberry"
 msgstr "Jordbær"
 
 msgid "Orange"
-msgstr "Orange"
+msgstr "Appelsin"
 
 msgid "Grape"
-msgstr "Grape"
+msgstr "Drue"
 
 msgid "No songs available in this language yet."
 msgstr "Det finnes ingen sanger på dette språket ennå."
@@ -1155,7 +1179,7 @@ msgid "Taxi"
 msgstr "Taxi"
 
 msgid "Food truck"
-msgstr "Matvogn"
+msgstr "Matbil"
 
 msgid "HARBOR TOWN SCHOOL"
 msgstr "HARBOR TOWN SKOLE"
@@ -1205,6 +1229,7 @@ msgstr "Om spillet"
 msgid "Close"
 msgstr "Lukk"
 
+#, c-format
 msgid "Version %s"
 msgstr "Versjon %s"
 
@@ -1244,6 +1269,9 @@ msgstr "PØLSEYOGA"
 msgid "Breathe in. Ketchup out."
 msgstr "Pust inn. Ketchup ut."
 
+msgid "0.00 kr"
+msgstr "0,00 kr"
+
 #. Litres shown on a stationary fuel dispenser.
 msgid "0.00 L"
 msgstr "0,00 L"
@@ -1274,3 +1302,24 @@ msgstr "Tillat kjøring på rødt lys"
 
 msgid "Red light! Stop at the line and wait for green."
 msgstr "Rødt lys! Stopp ved linjen og vent på grønt."
+
+msgid "Diesel"
+msgstr "Diesel"
+
+msgid "Petrol"
+msgstr "Bensin"
+
+msgid "No songs yet"
+msgstr "Ingen sanger ennå"
+
+msgid "Messages"
+msgstr "Meldinger"
+
+msgid "We don’t go to Ekerö"
+msgstr "Vi kjører ikke til Ekerö"
+
+msgid "Current jobs"
+msgstr "Oppdragene dine"
+
+msgid "Hold left mouse to drive forward or right mouse to reverse."
+msgstr "Hold venstre museknapp inne for å kjøre framover eller høyre for å rygge."

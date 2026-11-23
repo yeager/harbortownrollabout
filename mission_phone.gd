@@ -10,6 +10,7 @@ var history_scroll := ScrollContainer.new()
 var message_tone := AudioStreamPlayer.new()
 var unread := 0
 var current_job := ""
+var foot_jobs := PackedStringArray()
 var take_job := Button.new()
 
 const HISTORY_LIMIT := 32
@@ -75,7 +76,7 @@ func _ready() -> void:
 	var content := VBoxContainer.new()
 	screen.add_child(content)
 	var title := Label.new()
-	title.text = "SMS"
+	title.text = "Messages"
 	title.add_theme_font_size_override("font_size", 22)
 	title.add_theme_color_override("font_color", Color("#12594f"))
 	content.add_child(title)
@@ -129,11 +130,16 @@ func _unhandled_key_input(event: InputEvent) -> void:
 		_: return
 	get_viewport().set_input_as_handled()
 
+func _active_jobs() -> PackedStringArray:
+	if not foot_jobs.is_empty(): return foot_jobs
+	if not current_job.is_empty(): return PackedStringArray([current_job])
+	return PackedStringArray()
+
 func receive(body: String) -> void:
 	# Preserve the line being read when new SMS push older ones down the screen.
 	var offset := history_scroll.scroll_vertical
 	var added_height := 0
-	if handset.is_visible_in_tree() and offset > 0 and body != current_job:
+	if handset.is_visible_in_tree() and offset > 0 and body not in _active_jobs():
 		var old_text := inbox.text
 		var old_height := inbox.get_minimum_size().y
 		inbox.text = tr(body) + "\n\n" + old_text
@@ -156,10 +162,14 @@ func refresh() -> void:
 	open_button.text=tr("Close phone · T") if handset.visible else tr("Phone · T")
 	if unread>0: open_button.text+="  (%d)" % unread
 	var lines:=PackedStringArray()
-	job_heading.visible = not current_job.is_empty()
-	job_heading.text = tr("Current job") + "\n" + tr(current_job) if job_heading.visible else ""
+	var active := _active_jobs()
+	job_heading.visible = not active.is_empty()
+	var headings := PackedStringArray()
+	for job in active: headings.append(tr(job))
+	var heading := tr("Current jobs") if active.size() > 1 else tr("Current job")
+	job_heading.text = heading + "\n" + "\n".join(headings) if job_heading.visible else ""
 	for body in messages:
-		if body != current_job:
+		if body not in active:
 			lines.append(tr(body))
-	history_scroll.visible = not lines.is_empty() or current_job.is_empty()
+	history_scroll.visible = not lines.is_empty() or active.is_empty()
 	inbox.text="\n\n".join(lines) if not lines.is_empty() else tr("No messages yet.")

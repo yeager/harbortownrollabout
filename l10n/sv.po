@@ -86,6 +86,9 @@ msgstr "Körläge"
 msgid "Gentle driving · up to 30 km/h"
 msgstr "Lugn körning · högst 30 km/h"
 
+msgid "Gentle driving · up to 90 km/h"
+msgstr "Lugn körning · högst 90 km/h"
+
 msgid "Full speed"
 msgstr "Full fart"
 
@@ -110,6 +113,7 @@ msgstr "Trafikens blåljus · Av"
 msgid "Resume"
 msgstr "Fortsätt"
 
+#, c-format
 msgid "MISSION %d / %d   ·   %s"
 msgstr "UPPDRAG %d / %d   ·   %s"
 
@@ -155,6 +159,7 @@ msgstr "Hjälper till …"
 msgid "Paused — take your time."
 msgstr "Pausad — ta den tid du behöver."
 
+#, c-format
 msgid "Speed  %02d km/h"
 msgstr "Fart  %02d km/h"
 
@@ -176,6 +181,7 @@ msgstr "Språk"
 msgid "Get out · F"
 msgstr "Kliv ur · F"
 
+#, c-format
 msgid "Enter %s"
 msgstr "Kliv in i %s"
 
@@ -329,6 +335,7 @@ msgid_plural "%d coins"
 msgstr[0] "%d mynt"
 msgstr[1] "%d mynt"
 
+#, c-format
 msgid "Well done, %s! Ready for another drive?"
 msgstr "Bra jobbat, %s! Vill du köra en runda till?"
 
@@ -401,6 +408,7 @@ msgstr "Pizza Margherita"
 msgid "Pick and mix"
 msgstr "Lösgodis"
 
+#, c-format
 msgid "%s · %d coins"
 msgstr "%s · %d mynt"
 
@@ -410,6 +418,7 @@ msgid_plural "You need %d more coins."
 msgstr[0] "Du behöver %d mynt till."
 msgstr[1] "Du behöver %d mynt till."
 
+#, c-format
 msgid "%s · Paid %d coins. Thank you!"
 msgstr "%s · Du betalade %d mynt. Tack!"
 
@@ -434,9 +443,11 @@ msgstr "Du åker med · P för paus"
 msgid "W / ↑ Accelerate · S / ↓ Brake · Automatic station stops"
 msgstr "W / ↑ Gasa · S / ↓ Bromsa · Vagnen stannar själv vid hållplatserna"
 
+#, c-format
 msgid "%s · Departure in %d s"
 msgstr "%s · Avgång om %d s"
 
+#, c-format
 msgid "Next stop: %s · %d m · %d km/h"
 msgstr "Nästa hållplats: %s · %d m · %d km/h"
 
@@ -458,6 +469,7 @@ msgstr "Bilen är lastad på flaket."
 msgid "Your purchases"
 msgstr "Dina köp"
 
+#, c-format
 msgid "%s × %d"
 msgstr "%s × %d"
 
@@ -500,9 +512,11 @@ msgstr "Tabb för att välja · Enter för att köpa"
 msgid "Enter to buy"
 msgstr "Enter för att köpa"
 
+#, c-format
 msgid "F · Enter %s"
 msgstr "%s · Tryck F för att kliva in"
 
+#, c-format
 msgid "Well done, %s!"
 msgstr "Bra gjort, %s!"
 
@@ -689,6 +703,7 @@ msgstr "Ät glass"
 msgid "Eat hot dog"
 msgstr "Ät korv med bröd"
 
+#, c-format
 msgid "%s feels extra happy!"
 msgstr "%s är extra glad!"
 
@@ -740,12 +755,14 @@ msgstr "Gå i land · F"
 msgid "On board Lotten"
 msgstr "Ombord på Lotten"
 
+#, c-format
 msgid "Lotten in %d s"
 msgstr "Lotten om %d s"
 
 msgid "You can step ashore at either landing."
 msgstr "Du kan gå i land vid båda bryggorna."
 
+#, c-format
 msgid "Next landing in %d s"
 msgstr "Framme vid bryggan om %d s"
 
@@ -764,6 +781,7 @@ msgstr "Vårdcentralen har fått sitt paket. Du fick 10 mynt."
 msgid "The marina received the last parcel. You earned 10 coins."
 msgstr "Småbåtshamnen har fått det sista paketet. Du fick 10 mynt."
 
+#, c-format
 msgid "Stepping ashore in %d s"
 msgstr "Du går i land om %d s"
 
@@ -788,6 +806,7 @@ msgstr "U Fäll ut elsparkcykeln"
 msgid "W / ↑ Accelerate · S / ↓ Brake · A / D Steer · U Fold scooter"
 msgstr "W / ↑ Gasa · S / ↓ Bromsa · A / D Styr · U Fäll ihop"
 
+#, c-format
 msgid "Electric scooter · %d km/h"
 msgstr "Elsparkcykel · %d km/h"
 
@@ -839,6 +858,7 @@ msgstr "Kör grävmaskinen · F"
 msgid "Arrows or WASD: drive and steer · Q/E: turn the cab · F: get out\nI/K: raise or lower the boom · Y/G: move the outer arm · O/L: tilt the bucket"
 msgstr "Pilar eller WASD: kör och styr · Q/E: snurra hytten · F: kliv ur\nI/K: höj eller sänk bommen · Y/G: rör den yttre armen · O/L: vinkla skopan"
 
+#, c-format
 msgid "Walk or rest · Run again in %d s"
 msgstr "Gå eller vila · Du kan springa igen om %d s"
 
@@ -860,6 +880,7 @@ msgstr "Motorbåt"
 msgid "J Off · N Next song"
 msgstr "J Av · N Nästa låt"
 
+#, c-format
 msgid "Now playing: %s"
 msgstr "Nu spelas: %s"
 
@@ -918,8 +939,11 @@ msgstr "Spårvagn"
 msgid "Click the pictures to choose your vehicle and driver."
 msgstr "Klicka på bilderna för att välja fordon och förare."
 
-msgid "★ %d points"
-msgstr "★ %d poäng"
+#, c-format
+msgid "★ %d point"
+msgid_plural "★ %d points"
+msgstr[0] "★ %d poäng"
+msgstr[1] "★ %d poäng"
 
 msgid "Take a job"
 msgstr "Ta ett uppdrag"
@@ -1143,6 +1167,7 @@ msgstr "Om spelet"
 msgid "Close"
 msgstr "Stäng"
 
+#, c-format
 msgid "Version %s"
 msgstr "Version %s"
 
@@ -1169,6 +1194,9 @@ msgstr "KORVYOGA"
 
 msgid "Breathe in. Ketchup out."
 msgstr "Andas in. Ketchup ut."
+
+msgid "0.00 kr"
+msgstr "0,00 kr"
 
 #. Litres shown on a stationary fuel dispenser.
 msgid "0.00 L"
@@ -1200,3 +1228,24 @@ msgstr "Tillåt körning mot rött ljus"
 
 msgid "Red light! Stop at the line and wait for green."
 msgstr "Rött ljus! Stanna vid linjen och vänta på grönt."
+
+msgid "Diesel"
+msgstr "Diesel"
+
+msgid "Petrol"
+msgstr "Bensin"
+
+msgid "No songs yet"
+msgstr "Inga låtar än"
+
+msgid "Messages"
+msgstr "Meddelanden"
+
+msgid "We don’t go to Ekerö"
+msgstr "Vi åker inte till Ekerö"
+
+msgid "Current jobs"
+msgstr "Aktuella uppdrag"
+
+msgid "Hold left mouse to drive forward or right mouse to reverse."
+msgstr "Håll vänster musknapp för att köra framåt eller höger för att backa."

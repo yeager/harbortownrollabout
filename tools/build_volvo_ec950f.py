@@ -175,7 +175,7 @@ for side in [-1,1]:
 for i in range(5):
     profile("Replaceable tooth",[(-6.35,.21),(-6.11,.17),(-5.88,.13),(-5.96,.23),(-6.20,.33)],bx+(i-2)*.34,.15,shoe,.015)
 for side in [-1,1]:
-    v.text_obj("Boom lettering","VOLVO",(bx+side*.327,-4.46-side*.59,5.34),.32,v.PAINT_WHITE,side=-side,root=root)
+    v.text_obj("Boom lettering","HT-16",(bx+side*.327,-4.46-side*.59,5.34),.32,v.PAINT_WHITE,side=-side,root=root)
 
 bpy.context.preferences.filepaths.save_version=0
 v.export_vehicle(root, "volvo_ec950f.glb")

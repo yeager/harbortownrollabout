@@ -4,7 +4,9 @@ Explore a 3D waterfront neighbourhood inspired by Hammarby Sjöstad in Stockholm
 
 ## Play
 
-Open `project.godot` in Godot 4.6 and press **F5**. Select a vehicle and choose **Start driving**. English is the default. Open **Settings → Language** to choose English, Svenska, Español, Deutsch, Français, Norsk bokmål or Suomi. The game remembers your choice.
+Open `project.godot` in Godot 4.6 and press **F5**. Select a vehicle and choose **Start driving**.
+
+On first launch, the game uses your system language if supported, with English as the fallback. To switch languages, open **Settings** and select the tab with the globe. Choose **Deutsch**, **English**, **Español**, **Français**, **Norsk bokmål**, **Suomi** or **Svenska**. The game switches immediately and remembers your choice next time.
 
 | Action | Control |
 | --- | --- |
@@ -102,7 +104,7 @@ The track sports car has a separate sport tune. Select it at the depot to drive 
 
 ![White track sports car game model with red wheels, side view](docs/porsche-911-gt3-rs.png)
 
-The radio starts with a shuffled song when you enter a vehicle. Press **J** to switch it off or on and **N** for the next song. It stops when you step out. The radio shuffles songs in the selected game language. Songs are available in Swedish and English. For the other languages, the radio tooltip explains that songs are still missing. Lyrics and links to both recordings of each song are in [the songbook](docs/Radiolatar.md).
+The radio starts with a shuffled song when you enter a vehicle. Press **J** to switch it off or on and **N** for the next song. It stops when you step out. The radio shuffles songs in the selected game language. Songs are available in Swedish and English. For the other languages, the disabled radio button displays “No songs yet” in the selected language. Lyrics and links to both recordings of each song are in [the songbook](docs/Radiolatar.md).
 
 ## Graphics settings
 

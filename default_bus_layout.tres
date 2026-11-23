@@ -1,0 +1,17 @@
+[gd_resource type="AudioBusLayout" format=3]
+
+[sub_resource type="AudioEffectCompressor" id="VoiceDucking"]
+threshold = -24.0
+ratio = 3.0
+attack_us = 8000.0
+release_ms = 250.0
+sidechain = &"Speech"
+
+[resource]
+bus/0/name = &"Master"
+bus/1/name = &"Traffic and radio"
+bus/1/send = &"Master"
+bus/1/effect/0/effect = SubResource("VoiceDucking")
+bus/1/effect/0/enabled = true
+bus/2/name = &"Speech"
+bus/2/send = &"Master"

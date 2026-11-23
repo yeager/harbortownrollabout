@@ -232,6 +232,7 @@ func _ready() -> void:
 		add_child(car)
 		sections.append(car)
 		if i == 1:
+			door_chime.bus = &"Traffic and radio"
 			door_chime.stream = preload("res://audio/tram_doors.wav")
 			door_chime.position = Vector3(1.1, 2.3, 0)
 			door_chime.unit_size = 4
@@ -309,7 +310,7 @@ func _ready() -> void:
 			next_stop_display.modulate = Color("#ffbd58")
 			next_stop_display.outline_size = 0
 			world._make_box("Door notice",Vector3(.035,.32,1.4),Vector3(1.21,1.04,1.46),Color("#174460"),false,car)
-			sign_at(car,"Vi åker inte till Ekerö",Vector3(1.24,1.04,1.46),PI/2,.003)
+			sign_at(car,"We don’t go to Ekerö",Vector3(1.24,1.04,1.46),PI/2,.003)
 	bellows_finish.albedo_color = Color("#41494b")
 	bellows_finish.cull_mode = BaseMaterial3D.CULL_DISABLED
 	for joint in sections.size()-1:

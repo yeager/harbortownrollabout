@@ -181,6 +181,7 @@ func check() -> void:
 func finish(game: Node) -> void:
 	game.queue_free()
 	await process_frame
-	await process_frame
+	# Give the audio mixer time to release the stopped siren and radio streams.
+	await create_timer(.4).timeout
 	print("All six crossings, all eight phases, manual and automatic tram stopping, driver stopping, pedestrian permission and junction clearance verified.")
 	quit()

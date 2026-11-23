@@ -76,7 +76,7 @@ msgstr ""
 "Relâche pour ralentir   ·   Espace pour aider   ·   P pour la pause"
 
 msgid "Start a gentle drive"
-msgstr "Démarrez un lecteur doux"
+msgstr "Partir en balade"
 
 msgid "Settings"
 msgstr "Paramètres"
@@ -88,10 +88,13 @@ msgid "Driving mode"
 msgstr "Mode de conduite"
 
 msgid "Gentle driving · up to 30 km/h"
-msgstr "Conduite douce · jusqu’à 30 km/h"
+msgstr "Conduite tranquille · jusqu’à 30 km/h"
+
+msgid "Gentle driving · up to 90 km/h"
+msgstr "Conduite tranquille · jusqu’à 90 km/h"
 
 msgid "Full speed"
-msgstr "Vitesse totale"
+msgstr "Pleine vitesse"
 
 msgid "Preview vehicle sound"
 msgstr "Écouter le véhicule"
@@ -114,6 +117,7 @@ msgstr "Gyrophares bleus · Éteints"
 msgid "Resume"
 msgstr "Reprendre"
 
+#, c-format
 msgid "MISSION %d / %d   ·   %s"
 msgstr "MISSION %d / %d   ·   %s"
 
@@ -150,23 +154,24 @@ msgstr ""
 " Prêt pour un autre trajet ?"
 
 msgid "Drive again"
-msgstr "Roulez encore"
+msgstr "Repartir"
 
 msgid "You can change vehicles here and continue your mission."
 msgstr "Ici, tu peux changer de véhicule et continuer ta mission."
 
 msgid "Continue driving"
-msgstr "Continuez à conduire"
+msgstr "Continuer à conduire"
 
 msgid "Stop here to help."
-msgstr "Arrêtez-vous ici pour aider."
+msgstr "Arrête-toi ici pour aider."
 
 msgid "Helping …"
-msgstr "Aider ..."
+msgstr "Tu aides…"
 
 msgid "Paused — take your time."
 msgstr "Le jeu est en pause. Prends ton temps."
 
+#, c-format
 msgid "Speed  %02d km/h"
 msgstr "Vitesse  %02d km/h"
 
@@ -186,8 +191,9 @@ msgid "Language"
 msgstr "Langue"
 
 msgid "Get out · F"
-msgstr "Dehors. · F"
+msgstr "Descendre · F"
 
+#, c-format
 msgid "Enter %s"
 msgstr "Monte à bord : %s"
 
@@ -195,7 +201,7 @@ msgid "Walk to a vehicle"
 msgstr "Approche-toi d’un véhicule"
 
 msgid "Stop first to get out."
-msgstr "Arrête d'abord de sortir."
+msgstr "Arrête le véhicule avant de descendre."
 
 msgid "Walk with WASD or arrows · F to enter a vehicle"
 msgstr "Marche avec WASD ou les flèches · Appuie sur F pour monter"
@@ -243,22 +249,22 @@ msgid "Walk up to a parked vehicle to get in."
 msgstr "Approche-toi d’un véhicule garé pour monter à bord."
 
 msgid "Stand here to help"
-msgstr "Restez là pour aider"
+msgstr "Reste ici pour aider"
 
 msgid "Press Space to help"
-msgstr "Appuyez sur Espace pour aider"
+msgstr "Appuie sur Espace pour aider"
 
 msgid "My vehicle · Flashing"
-msgstr "Mon véhicule · Flashing"
+msgstr "Mon véhicule · Gyrophares clignotants"
 
 msgid "My vehicle · Steady"
-msgstr "Mon véhicule · Stabilité"
+msgstr "Mon véhicule · Gyrophares fixes"
 
 msgid "Traffic sirens"
 msgstr "Sirènes des autres véhicules"
 
 msgid "Reverse"
-msgstr "Inverser"
+msgstr "Reculer"
 
 msgid "Driver view · C"
 msgstr "Vue du conducteur · C"
@@ -267,19 +273,19 @@ msgid "Outside view · C"
 msgstr "Vue extérieure · C"
 
 msgid "Forward"
-msgstr "Suivant"
+msgstr "Marche avant"
 
 msgid "Stopped"
-msgstr "Arrêts"
+msgstr "À l’arrêt"
 
 msgid "Reversing"
-msgstr "Répugnant"
+msgstr "Marche arrière"
 
 msgid "Ride the tram"
 msgstr "Prendre le tram"
 
 msgid "Drive the tram"
-msgstr "Conduisez le tram"
+msgstr "Conduire le tram"
 
 msgid "Season · Automatic"
 msgstr "Saison · Automatique"
@@ -350,11 +356,12 @@ msgid_plural "%d coins"
 msgstr[0] "%d pièce"
 msgstr[1] "%d pièces"
 
+#, c-format
 msgid "Well done, %s! Ready for another drive?"
 msgstr "Bravo, %s ! On refait un tour ?"
 
 msgid "Character"
-msgstr "Caractère"
+msgstr "Personnage"
 
 msgid "Wallet"
 msgstr "Porte-monnaie"
@@ -402,7 +409,7 @@ msgid "Café"
 msgstr "Café"
 
 msgid "Sweet shop"
-msgstr "Confiserie"
+msgstr "Magasin de bonbons"
 
 msgid "Cinnamon bun"
 msgstr "Brioche à la cannelle"
@@ -411,7 +418,7 @@ msgid "Berry cordial"
 msgstr "Sirop aux fruits rouges"
 
 msgid "Ice cream"
-msgstr "Crème glacée"
+msgstr "Glace"
 
 msgid "Hot dog"
 msgstr "Hot-dog"
@@ -422,6 +429,7 @@ msgstr "Pizza Margherita"
 msgid "Pick and mix"
 msgstr "Bonbons en vrac"
 
+#, c-format
 msgid "%s · %d coins"
 msgstr "%s · %d pièces"
 
@@ -431,6 +439,7 @@ msgid_plural "You need %d more coins."
 msgstr[0] "Il te manque %d pièce."
 msgstr[1] "Il te manque %d pièces."
 
+#, c-format
 msgid "%s · Paid %d coins. Thank you!"
 msgstr "%s · Tu as payé %d pièces. Merci !"
 
@@ -441,7 +450,7 @@ msgid "Collect the car with a smoking bonnet."
 msgstr "Va chercher la voiture dont le capot fume."
 
 msgid "Take the car to the workshop."
-msgstr "Prenez la voiture à l'atelier."
+msgstr "Amène la voiture au garage."
 
 msgid "Collect the car with a missing wheel."
 msgstr "Va chercher la voiture à laquelle il manque une roue."
@@ -455,9 +464,11 @@ msgstr "Tu es à bord · P pour mettre en pause"
 msgid "W / ↑ Accelerate · S / ↓ Brake · Automatic station stops"
 msgstr "W / ↑ Accélérer · S / ↓ Freiner · Arrêt automatique à chaque station"
 
+#, c-format
 msgid "%s · Departure in %d s"
 msgstr "%s · Départ dans %d s"
 
+#, c-format
 msgid "Next stop: %s · %d m · %d km/h"
 msgstr "Prochain arrêt : %s · %d m · %d km/h"
 
@@ -488,6 +499,7 @@ msgstr "La voiture est sur le plateau."
 msgid "Your purchases"
 msgstr "Tes achats"
 
+#, c-format
 msgid "%s × %d"
 msgstr "%s × %d"
 
@@ -537,9 +549,11 @@ msgstr "Tab pour choisir · Entrée pour acheter"
 msgid "Enter to buy"
 msgstr "Entrée pour acheter"
 
+#, c-format
 msgid "F · Enter %s"
 msgstr "F · Monter à bord (%s)"
 
+#, c-format
 msgid "Well done, %s!"
 msgstr "Bien joué. %s!"
 
@@ -735,6 +749,7 @@ msgstr "Manger une glace"
 msgid "Eat hot dog"
 msgstr "Manger un hot-dog"
 
+#, c-format
 msgid "%s feels extra happy!"
 msgstr "%s se sent très heureux !"
 
@@ -790,12 +805,14 @@ msgstr "Descendre à terre · F"
 msgid "On board Lotten"
 msgstr "À bord de Lotten"
 
+#, c-format
 msgid "Lotten in %d s"
 msgstr "Lotten arrive dans %d s"
 
 msgid "You can step ashore at either landing."
 msgstr "Tu peux descendre à l’un ou l’autre des deux quais."
 
+#, c-format
 msgid "Next landing in %d s"
 msgstr "Prochain quai dans %d s"
 
@@ -815,6 +832,7 @@ msgid "The marina received the last parcel. You earned 10 coins."
 msgstr ""
 "Le dernier colis est arrivé au port de plaisance. Tu as gagné 10 pièces."
 
+#, c-format
 msgid "Stepping ashore in %d s"
 msgstr "Tu débarques dans %d s"
 
@@ -848,6 +866,7 @@ msgid "W / ↑ Accelerate · S / ↓ Brake · A / D Steer · U Fold scooter"
 msgstr ""
 "W / ↑ Accélérer · S / ↓ Freiner · A / D Tourner · U Plier la trottinette"
 
+#, c-format
 msgid "Electric scooter · %d km/h"
 msgstr "Trottinette électrique · %d km/h"
 
@@ -876,7 +895,7 @@ msgid "Grocery store"
 msgstr "Épicerie"
 
 msgid "Apple"
-msgstr "Pommes"
+msgstr "Pomme"
 
 msgid "Milk"
 msgstr "Lait"
@@ -903,6 +922,7 @@ msgstr ""
 "Flèches ou WASD : avancer et tourner · Q/E : pivoter la cabine · F : descendre\n"
 "I/K : lever ou baisser la flèche · Y/G : déplacer le balancier · O/L : incliner le godet"
 
+#, c-format
 msgid "Walk or rest · Run again in %d s"
 msgstr "Marche ou repose-toi · Tu pourras courir dans %d s"
 
@@ -925,6 +945,7 @@ msgstr "Bateau à moteur"
 msgid "J Off · N Next song"
 msgstr "J Éteindre · N Chanson suivante"
 
+#, c-format
 msgid "Now playing: %s"
 msgstr "À la radio : %s"
 
@@ -968,7 +989,7 @@ msgid "Small convertible"
 msgstr "Petite décapotable"
 
 msgid "Classic moped"
-msgstr "Mobylette classique"
+msgstr "Cyclomoteur rétro"
 
 msgid "Wheel loader"
 msgstr "Chargeuse sur pneus"
@@ -982,8 +1003,11 @@ msgstr "Tramway"
 msgid "Click the pictures to choose your vehicle and driver."
 msgstr "Touche les images pour choisir le véhicule et la personne au volant."
 
-msgid "★ %d points"
-msgstr "★ %d points"
+#, c-format
+msgid "★ %d point"
+msgid_plural "★ %d points"
+msgstr[0] "★ %d point"
+msgstr[1] "★ %d points"
 
 msgid "Take a job"
 msgstr "Accepter une mission"
@@ -1121,19 +1145,19 @@ msgid "PICK AND MIX"
 msgstr "BONBONS EN VRAC"
 
 msgid "Raspberry"
-msgstr "Fraises"
+msgstr "Framboise"
 
 msgid "Lemon"
 msgstr "Citron"
 
 msgid "Liquorice"
-msgstr "Liqueur"
+msgstr "Réglisse"
 
 msgid "Vanilla"
 msgstr "Vanille"
 
 msgid "Strawberry"
-msgstr "Fraises"
+msgstr "Fraise"
 
 msgid "Orange"
 msgstr "Orange"
@@ -1219,6 +1243,7 @@ msgstr "À propos du jeu"
 msgid "Close"
 msgstr "Fermer"
 
+#, c-format
 msgid "Version %s"
 msgstr "Version %s"
 
@@ -1259,6 +1284,9 @@ msgstr "YOGA HOT-DOG"
 msgid "Breathe in. Ketchup out."
 msgstr "Inspire. Expire du ketchup."
 
+msgid "0.00 kr"
+msgstr "0,00 kr"
+
 #. Litres shown on a stationary fuel dispenser.
 msgid "0.00 L"
 msgstr "0,00 L"
@@ -1289,3 +1317,24 @@ msgstr "Autoriser le passage au feu rouge"
 
 msgid "Red light! Stop at the line and wait for green."
 msgstr "Feu rouge ! Arrête-toi à la ligne et attends le feu vert."
+
+msgid "Diesel"
+msgstr "Gazole"
+
+msgid "Petrol"
+msgstr "Essence"
+
+msgid "No songs yet"
+msgstr "Pas encore de chansons"
+
+msgid "Messages"
+msgstr "Messages"
+
+msgid "We don’t go to Ekerö"
+msgstr "On ne va pas à Ekerö"
+
+msgid "Current jobs"
+msgstr "Missions en cours"
+
+msgid "Hold left mouse to drive forward or right mouse to reverse."
+msgstr "Maintiens le bouton gauche de la souris pour avancer ou le bouton droit pour reculer."

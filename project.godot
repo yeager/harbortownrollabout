@@ -4,7 +4,7 @@ config_version=5
 [application]
 config/project_settings_override="user://graphics.cfg"
 config/name="Harbor Town Rollabout"
-config/version="0.1.2"
+config/version="0.1.3"
 config/custom_user_dir_name="godot/app_userdata/Axels Utryckning"
 config/use_custom_user_dir=true
 run/main_scene="res://main.tscn"

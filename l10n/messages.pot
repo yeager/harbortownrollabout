@@ -85,6 +85,9 @@ msgstr ""
 msgid "Gentle driving · up to 30 km/h"
 msgstr ""
 
+msgid "Gentle driving · up to 90 km/h"
+msgstr ""
+
 msgid "Full speed"
 msgstr ""
 
@@ -109,6 +112,7 @@ msgstr ""
 msgid "Resume"
 msgstr ""
 
+#, c-format
 msgid "MISSION %d / %d   ·   %s"
 msgstr ""
 
@@ -154,6 +158,7 @@ msgstr ""
 msgid "Paused — take your time."
 msgstr ""
 
+#, c-format
 msgid "Speed  %02d km/h"
 msgstr ""
 
@@ -175,6 +180,7 @@ msgstr ""
 msgid "Get out · F"
 msgstr ""
 
+#, c-format
 msgid "Enter %s"
 msgstr ""
 
@@ -328,6 +334,7 @@ msgid_plural "%d coins"
 msgstr[0] ""
 msgstr[1] ""
 
+#, c-format
 msgid "Well done, %s! Ready for another drive?"
 msgstr ""
 
@@ -400,6 +407,7 @@ msgstr ""
 msgid "Pick and mix"
 msgstr ""
 
+#, c-format
 msgid "%s · %d coins"
 msgstr ""
 
@@ -409,6 +417,7 @@ msgid_plural "You need %d more coins."
 msgstr[0] ""
 msgstr[1] ""
 
+#, c-format
 msgid "%s · Paid %d coins. Thank you!"
 msgstr ""
 
@@ -433,9 +442,11 @@ msgstr ""
 msgid "W / ↑ Accelerate · S / ↓ Brake · Automatic station stops"
 msgstr ""
 
+#, c-format
 msgid "%s · Departure in %d s"
 msgstr ""
 
+#, c-format
 msgid "Next stop: %s · %d m · %d km/h"
 msgstr ""
 
@@ -457,6 +468,7 @@ msgstr ""
 msgid "Your purchases"
 msgstr ""
 
+#, c-format
 msgid "%s × %d"
 msgstr ""
 
@@ -499,9 +511,11 @@ msgstr ""
 msgid "Enter to buy"
 msgstr ""
 
+#, c-format
 msgid "F · Enter %s"
 msgstr ""
 
+#, c-format
 msgid "Well done, %s!"
 msgstr ""
 
@@ -688,6 +702,7 @@ msgstr ""
 msgid "Eat hot dog"
 msgstr ""
 
+#, c-format
 msgid "%s feels extra happy!"
 msgstr ""
 
@@ -739,12 +754,14 @@ msgstr ""
 msgid "On board Lotten"
 msgstr ""
 
+#, c-format
 msgid "Lotten in %d s"
 msgstr ""
 
 msgid "You can step ashore at either landing."
 msgstr ""
 
+#, c-format
 msgid "Next landing in %d s"
 msgstr ""
 
@@ -763,6 +780,7 @@ msgstr ""
 msgid "The marina received the last parcel. You earned 10 coins."
 msgstr ""
 
+#, c-format
 msgid "Stepping ashore in %d s"
 msgstr ""
 
@@ -787,6 +805,7 @@ msgstr ""
 msgid "W / ↑ Accelerate · S / ↓ Brake · A / D Steer · U Fold scooter"
 msgstr ""
 
+#, c-format
 msgid "Electric scooter · %d km/h"
 msgstr ""
 
@@ -838,6 +857,7 @@ msgstr ""
 msgid "Arrows or WASD: drive and steer · Q/E: turn the cab · F: get out\nI/K: raise or lower the boom · Y/G: move the outer arm · O/L: tilt the bucket"
 msgstr ""
 
+#, c-format
 msgid "Walk or rest · Run again in %d s"
 msgstr ""
 
@@ -859,6 +879,7 @@ msgstr ""
 msgid "J Off · N Next song"
 msgstr ""
 
+#, c-format
 msgid "Now playing: %s"
 msgstr ""
 
@@ -917,8 +938,11 @@ msgstr ""
 msgid "Click the pictures to choose your vehicle and driver."
 msgstr ""
 
-msgid "★ %d points"
-msgstr ""
+#, c-format
+msgid "★ %d point"
+msgid_plural "★ %d points"
+msgstr[0] ""
+msgstr[1] ""
 
 msgid "Take a job"
 msgstr ""
@@ -1142,6 +1166,7 @@ msgstr ""
 msgid "Close"
 msgstr ""
 
+#, c-format
 msgid "Version %s"
 msgstr ""
 
@@ -1167,6 +1192,9 @@ msgid "HOT DOG YOGA"
 msgstr ""
 
 msgid "Breathe in. Ketchup out."
+msgstr ""
+
+msgid "0.00 kr"
 msgstr ""
 
 #. Litres shown on a stationary fuel dispenser.
@@ -1198,4 +1226,25 @@ msgid "Allow driving through red lights"
 msgstr ""
 
 msgid "Red light! Stop at the line and wait for green."
+msgstr ""
+
+msgid "Diesel"
+msgstr ""
+
+msgid "Petrol"
+msgstr ""
+
+msgid "No songs yet"
+msgstr ""
+
+msgid "Messages"
+msgstr ""
+
+msgid "We don’t go to Ekerö"
+msgstr ""
+
+msgid "Current jobs"
+msgstr ""
+
+msgid "Hold left mouse to drive forward or right mouse to reverse."
 msgstr ""

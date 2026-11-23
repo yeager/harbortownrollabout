@@ -203,10 +203,12 @@ func _junction_occupied(crossing: Dictionary) -> bool:
 func advance_tram_crossings(delta: float) -> void:
 	for crossing in tram_crossings:
 		crossing.timer += delta
-		if crossing.timer < STAGE_SECONDS[crossing.stage]: continue
+		var duration: float = STAGE_SECONDS[crossing.stage]
+		if crossing.timer < duration: continue
 		if crossing.stage in [Stage.CLEAR_BOULEVARD, Stage.CLEAR_SIDE, Stage.CLEAR_WALK] and _junction_occupied(crossing):
+			crossing.timer = duration
 			continue
-		crossing.timer = 0.0
+		crossing.timer = minf(crossing.timer - duration, delta)
 		crossing.stage = (int(crossing.stage)+1)%STAGE_SECONDS.size()
 		_show_crossing(crossing)
 

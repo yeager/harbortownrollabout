@@ -19,9 +19,9 @@ def box(name, pos, dims, mat, bevel=.025):
     return v.cube(name, pos, dims, mat, bevel, root)
 
 
-def rod(name, a, b, radius, mat):
+def rod(name, a, b, radius, mat, segments=12):
     a, b = Vector(a), Vector(b)
-    obj = v.cylinder(name, (a+b)/2, radius, (b-a).length, mat, False, 12, root)
+    obj = v.cylinder(name, (a+b)/2, radius, (b-a).length, mat, False, segments, root)
     obj.rotation_euler = (b-a).to_track_quat('Z','Y').to_euler()
 
 
@@ -277,10 +277,20 @@ box("Headrest",(0,1.04,2.58),(.33,.13,.18),cloth,.05)
 for side in [-1,1]:
     box("Armrest",(side*.34,.78,2.14),(.09,.34,.08),v.DARK)
 box("Dashboard",(0,-.19,2.02),(1.15,.29,.23),v.DARK,.07)
+# Recessed air outlets flank the dials on the face toward the seat.
+for side in (-1, 1):
+    vent_x = side * .445
+    box("Dashboard vent surround",(vent_x,-.047,2.04),(.19,.021,.085),v.BLACK,.014)
+    for slat in (-1,0,1):
+        box("Vent vane",(vent_x,-.033,2.04+slat*.019),(.158,.012,.008),v.DARK,.003)
+for switch_x in (.19,.24,.29):
+    box("Rocker switch bezel",(switch_x,-.046,2.02),(.042,.018,.065),v.BLACK,.006)
+    box("Rocker paddle",(switch_x,-.031,2.02),(.032,.018,.051),v.DARK,.005).rotation_euler.x=.13
+    box("Switch marker",(switch_x,-.020,2.033),(.015,.004,.004),v.PAINT_WHITE,.001)
 box("Instrument binnacle",(0,-.145,2.166),(.49,.19,.17),v.BLACK,.037)
 for gauge_x in (-.112,.112):
-    rod("Instrument bezel",(gauge_x,-.058,2.176),(gauge_x,-.043,2.176),.072,v.METAL)
-    rod("Gauge dial",(gauge_x,-.042,2.176),(gauge_x,-.038,2.176),.064,v.BLACK)
+    rod("Instrument bezel",(gauge_x,-.058,2.176),(gauge_x,-.043,2.176),.072,v.METAL,32)
+    rod("Gauge dial",(gauge_x,-.042,2.176),(gauge_x,-.038,2.176),.064,v.BLACK,32)
     for tick in range(9):
         theta = radians(-118+tick*29.5)
         rod("Dial graduation",(gauge_x+.047*sin(theta),-.036,2.176+.047*cos(theta)),
@@ -301,10 +311,12 @@ rim=bpy.context.object
 rim.name="Steering wheel"
 rim.parent=root
 rim.data.materials.append(v.RUBBER)
+for face in rim.data.polygons:
+    face.use_smooth = True
 for angle in (pi/6,5*pi/6,3*pi/2):
     end = wheel_center + wheel_rotation @ Vector((.19*cos(angle),.19*sin(angle),0))
     rod("Steering spoke",wheel_center,end,.013,v.DARK)
-rod("Steering wheel hub",wheel_center-column_axis*.018,wheel_center+column_axis*.021,.048,v.BLACK)
+rod("Steering wheel hub",wheel_center-column_axis*.018,wheel_center+column_axis*.021,.048,v.BLACK,32)
 # Horizontal rounded rectangles taper from the eaves into the roof crown.
 roof_sections = []
 for width, length, corner, height in [
@@ -316,8 +328,11 @@ for width, length, corner, height in [
     for sx, sy, quadrant in [(1,1,0),(-1,1,1),(-1,-1,2),(1,-1,3)]:
         for step in range(6):
             angle = (quadrant + step/5) * pi/2
-            outline.append((sx*(width-corner)+corner*cos(angle),
-                            .55+sy*(length-corner)+corner*sin(angle),height))
+            x = sx*(width-corner)+corner*cos(angle)
+            y = sy*(length-corner)+corner*sin(angle)
+            # Sweep the visor down at the corners and gently arch the center panel.
+            crown = .067 * (1 - (x/.86)**2) * (1 - (y/1.01)**2)
+            outline.append((x, .55+y, height+crown))
     roof_sections.append(outline)
 v.profile_loft("Crowned cab roof", roof_sections, red, root)
 # Bent roof rails stand clear of the roof skin and leave room for the beacon.

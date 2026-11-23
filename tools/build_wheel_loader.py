@@ -232,10 +232,10 @@ for side in (-1,1):
     rod("Lift ram barrel",(side*.39,-.79,.99),(side*.46,-1.48,1.37),.105,charcoal,front)
     rod("Lift piston",(side*.46,-1.46,1.36),(side*.51,-1.92,1.56),.060,chrome,lift)
     tube("Hydraulic hose",[(x,-.76,1.76),(x,-1.01,2.03),(x,-1.48,2.06),(x,-1.92,1.84)],.022,v.BLACK,lift)
-# Painted manufacturer lettering follows the shoulder of the boom on both sides.
+# Model designation follows the shoulder of the boom on both sides.
 from mathutils import Matrix
 for side in (-1,1):
-    label=v.text_obj("Volvo boom marking","VOLVO",
+    label=v.text_obj("Boom model lettering","HT-90",
         (side*.64, -2.03 if side>0 else -1.62, 1.54 if side>0 else 1.78),
         .126,v.PAINT_WHITE,side=-side,root=lift)
     label.rotation_euler=(Matrix.Rotation(.48,3,'X') @ label.rotation_euler.to_matrix()).to_euler()

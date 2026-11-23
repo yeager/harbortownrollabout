@@ -359,6 +359,7 @@ const FERRY_LANDINGS := [-35.0, -12.0]
 var ferry_passenger := false
 var ferry_exit_requested := false
 var ferry: Node3D
+var ferry_engine := AudioStreamPlayer3D.new()
 var wave_time := 0.0
 var walker_data: Array[Dictionary] = []
 
@@ -371,6 +372,7 @@ func _reset_parked_controls() -> void:
 
 func _ready() -> void:
 	L10n.load_catalogs()
+	greeting_voice.bus = &"Speech"
 	greeting_voice.volume_db = -4
 	add_child(greeting_voice)
 	star_chime.stream = preload("res://audio/star_pickup.wav")
@@ -512,6 +514,7 @@ func _process(delta: float) -> void:
 			var pitch_speed := 12.0 if vehicle_index in [FARM_TRACTOR, WHEEL_LOADER] else 8.33 if vehicle_index == PUCH_DAKOTA else 32.0 if vehicle_index == SNOWMOBILE else 250.0 / 3.6
 			siren_player.pitch_scale = 0.88 + clampf(absf(speed) / pitch_speed, 0.0, 1.0) * 0.72
 	else:
+		ferry_engine.stop()
 		_end_skid()
 	_update_traffic_signals(delta)
 	if lights_on and not steady_player_lights and mode == "playing" and not paused:
@@ -653,7 +656,7 @@ func _unhandled_key_input(event: InputEvent) -> void:
 				elif mode == "playing" and not paused: _recover_position()
 
 func _toggle_radio() -> void:
-	if not radio_button.is_visible_in_tree(): return
+	if radio_button.disabled or not radio_button.is_visible_in_tree(): return
 	radio_enabled = not radio_enabled
 	_sync_radio()
 
@@ -680,13 +683,16 @@ func _sync_radio() -> void:
 		radio_enabled = aboard
 	radio_button.visible = aboard and not paused
 	next_song_button.visible = radio_button.visible and radio_enabled and radio_tracks.size() > 1
+	radio_button.disabled = radio_tracks.is_empty()
+	if radio_button.disabled:
+		radio_button.text = "No songs yet"
+		radio_button.tooltip_text = tr("No songs available in this language yet.")
+		return
 	radio_button.text = "Turn radio off · J" if radio_enabled else "Turn radio on · J"
 	if not radio_enabled:
 		radio_button.tooltip_text = ""
 		radio.stop()
 		radio.stream_paused = false
-	elif radio_tracks.is_empty():
-		radio_button.tooltip_text = tr("No songs available in this language yet.")
 	elif paused:
 		radio.stream_paused = true
 	else:
@@ -833,7 +839,7 @@ func _drive(delta: float) -> void:
 		for item in traffic_data:
 			turn_obstacles.append(_traffic_bounds(item))
 		for obstacle in turn_obstacles:
-			if _vehicle_overlap_depth(obstacle, extent) > _vehicle_overlap_depth(obstacle, previous_extent) + .00001:
+			if _vehicle_overlap_depth(obstacle, extent, ambulance.basis) > _vehicle_overlap_depth(obstacle, previous_extent, previous_pose.basis) + .00001:
 				ambulance.basis = previous_pose.basis
 				extent = previous_extent
 				break
@@ -874,6 +880,7 @@ func _drive(delta: float) -> void:
 		for trunk in trunks:
 			hazards.append(AABB(Vector3(trunk.x-trunk.y,-2,trunk.z-trunk.y),Vector3(2*trunk.y,6,2*trunk.y)))
 		for hazard in hazards:
+			if _outside_driving_strip(hazard, .35): continue
 			var guard := AABB(hazard.position-margin,hazard.size+2*margin).grow(.35)
 			if guard.has_point(ambulance.position):
 				if _moves_deeper_into_box(guard, ambulance.position, travel_direction):
@@ -923,6 +930,7 @@ func _drive(delta: float) -> void:
 			step = step.limit_length(maxf(0.0, clearance - 0.02))
 			speed = 0.0
 	for building in obstacles:
+		if _outside_driving_strip(building, 0.0): continue
 		var wall := AABB(building.position - margin, building.size + 2 * margin)
 		if wall.has_point(ambulance.position):
 			# A vehicle swap can enlarge the footprint beside an existing wall.
@@ -1352,11 +1360,20 @@ func _build_road_network() -> void:
 		for x in range(-4, 5):
 			_make_box("Crosswalk", Vector3(0.50, 0.025, 2.1), Vector3(x, 0.016, z), Color("#eee9d9")).material_override = marking_finish
 
+const EQUIPMENT_YARD := Rect2(-123,39,30,16)
+
 func _build_west_district() -> void:
-	var yard := Vector3(-108,-.16,47)
-	_make_driving_surface("Equipment yard", Vector3(30,.12,16), yard, Color("#898378"))
+	var yard_center := EQUIPMENT_YARD.get_center()
+	var yard := Vector3(yard_center.x,-.16,yard_center.y)
+	var extent := EQUIPMENT_YARD.size
+	_make_driving_surface("Equipment yard", Vector3(extent.x,.12,extent.y), yard, Color("#898378"))
+	var line_width := .14
+	var paint := Color("#f4ca59")
+	for side in [-1, 1]:
+		_make_box("Yard edge marking", Vector3(extent.x,.012,line_width), yard + Vector3(0,.068,side*(extent.y-line_width)/2), paint)
+		_make_box("Yard edge marking", Vector3(line_width,.012,extent.y-2*line_width), yard + Vector3(side*(extent.x-line_width)/2,.068,0), paint)
 	excavator = preload("res://vehicles/volvo_ec950f.glb").instantiate()
-	excavator.position = yard + Vector3(-7,.06,0)
+	excavator.position = yard + Vector3(-7,.06,-4)
 	excavator.rotation.y = PI*.5
 	add_child(excavator)
 	_rig_excavator()
@@ -1566,35 +1583,56 @@ func _build_petrol_station(center: Vector3) -> void:
 				_make_box("Service panel gasket",Vector3(.72,1.10,.012),Vector3(0,.97,-.337),graphite,false,face)
 				_make_box("Service panel enamel",Vector3(.705,1.085,.014),Vector3(0,.97,-.343),cream,false,face)
 				_make_box("Service panel stripe",Vector3(.705,.075,.006),Vector3(0,.47,-.352),gold,false,face)
-				_make_box("Display",Vector3(.61,.3,.03),Vector3(0,1.29,-.352),Color("#21353a"),false,face)
-				_station_sign(PRICES[grade] + " kr/L",Vector3(0,1.29,-.372),.0019,Color("#b5f2cc"),PI,face)
-				_make_box("Fuel grade badge",Vector3(.21,.18,.02),Vector3(-.19,.94,-.35),grip,false,face)
-				_station_sign(grade,Vector3(-.19,.94,-.363),.0018,cream,PI,face)
+				var lcd_ink := Color("#203230")
+				var lcd_glass := Color("#b5c9b4")
+				_make_box("Meter bezel",Vector3(.66,.42,.035),Vector3(0,1.30,-.354),graphite,false,face)
+				_make_box("Transaction LCD",Vector3(.60,.19,.012),Vector3(0,1.394,-.375),lcd_glass,false,face)
+				_station_sign("0.00 kr",Vector3(0,1.438,-.384),.00125,lcd_ink,PI,face)
+				_station_sign("0.00 L",Vector3(0,1.352,-.384),.00125,lcd_ink,PI,face)
+				_make_box("Unit price LCD",Vector3(.60,.14,.012),Vector3(0,1.194,-.375),Color("#21353a"),false,face)
+				_station_sign(PRICES[grade] + " kr/L",Vector3(0,1.194,-.384),.00175,Color("#b5f2cc"),PI,face)
+				_make_box("Fuel grade badge",Vector3(.25,.28,.02),Vector3(-.19,.92,-.35),grip,false,face)
+				_station_sign(grade,Vector3(-.19,.966,-.363),.0018,cream,PI,face)
+				var fuel_name := "Diesel" if grade == "D" else "Petrol"
+				_station_sign(fuel_name,Vector3(-.19,.855,-.363),.00068,cream,PI,face)
 				for slot in 6:
 					_make_box("Vent slot",Vector3(.18,.010,.008),Vector3(-.18,.68-slot*.028,-.352),graphite,false,face)
-				_make_box("Holster back",Vector3(.018,.37,.205),Vector3(.423,1.16,-.14),Color("#182024"),false,face)
+				_make_box("Holster back",Vector3(.018,.37,.205),Vector3(.31,1.16,-.14),Color("#182024"),false,face)
 				for lip_z: float in [-.246,-.034]:
-					_make_box("Holster side lip",Vector3(.09,.37,.022),Vector3(.46,1.16,lip_z),graphite,false,face)
-				_make_box("Holster ledge",Vector3(.09,.024,.23),Vector3(.46,.975,-.14),graphite,false,face)
-				_make_box("Card reader",Vector3(.20,.24,.036),Vector3(.18,.91,-.35),graphite,false,face)
-				_make_box("Receipt slot",Vector3(.14,.02,.018),Vector3(.18,.824,-.375),Color("#151e20"),false,face)
-				_make_box("Reader screen",Vector3(.146,.044,.009),Vector3(.18,.985,-.373),Color("#90bba5"),false,face)
-				for row in 3:
+					_make_box("Holster side lip",Vector3(.10,.37,.022),Vector3(.366,1.16,lip_z),graphite,false,face)
+				_make_box("Holster ledge",Vector3(.10,.024,.23),Vector3(.366,.975,-.14),graphite,false,face)
+				_make_box("Card reader",Vector3(.23,.29,.036),Vector3(.18,.91,-.35),graphite,false,face)
+				_make_box("Reader screen",Vector3(.17,.044,.009),Vector3(.18,1.022,-.373),Color("#90bba5"),false,face)
+				_make_box("Card slot surround",Vector3(.16,.032,.027),Vector3(.18,.79,-.376),Color("#88979c"),false,face)
+				_make_box("Card opening",Vector3(.135,.011,.005),Vector3(.18,.792,-.391),Color("#101619"),false,face)
+				var key_labels := ["1","2","3","4","5","6","7","8","9","×","0","✓"]
+				for row in 4:
 					for column in 3:
-						var key_position := Vector3(.13+column*.05,.95-row*.028,-.377)
-						_make_box("Payment key",Vector3(.037,.019,.012),key_position,cream,false,face)
+						var symbol: String = key_labels[row*3+column]
+						var key_position := Vector3(.24-column*.06,.971-row*.04,-.377)
+						var key_color := cream
+						if symbol == "×": key_color = Color("#ec7166")
+						elif symbol == "✓": key_color = Color("#79c791")
+						_make_box("Payment key",Vector3(.049,.034,.012),key_position,key_color,false,face)
+						_station_sign(symbol,key_position+Vector3.FORWARD*.008,.00044,graphite,PI,face)
 				var hose := PackedVector3Array([Vector3(.40,1.35,.17),Vector3(.48,1.21,.19),Vector3(.53,.42,.16),Vector3(.53,.28,.08),Vector3(.52,.26,-.04),Vector3(.50,.36,-.12),Vector3(.45,1.01,-.10)])
 				for j in range(1,hose.size()):
-					_pump_tube(face,hose[j-1],hose[j],.022,graphite)
+					var start := hose[j-1]
+					var end := hose[j]
+					var previous := start
+					for segment in range(1, 5):
+						var point := start.cubic_interpolate(end, hose[maxi(0,j-2)], hose[mini(hose.size()-1,j+1)], segment/4.0)
+						_pump_tube(face,previous,point,.022,graphite)
+						previous = point
 				var heel := hose[hose.size()-1]
-				var head := Vector3(.49,1.23,-.16)
+				var head := Vector3(.395,1.23,-.16)
 				_pump_tube(face,heel,head,.043,grip)
-				var guard := Vector3(.49,1.07,-.24)
+				var guard := Vector3(.413,1.07,-.24)
 				_pump_tube(face,heel,guard,.014,graphite)
 				_pump_tube(face,guard,head,.014,graphite)
-				var elbow := Vector3(.49,1.30,-.16)
+				var elbow := Vector3(.385,1.30,-.16)
 				_pump_tube(face,head,elbow,.024,Color("#aebabe"))
-				_pump_tube(face,elbow,Vector3(.43,1.32,-.16),.021,Color("#aebabe"))
+				_pump_tube(face,elbow,Vector3(.324,1.32,-.16),.021,Color("#aebabe"))
 				_pump_tube(face,head.lerp(guard,.22),guard.lerp(heel,.52),.009,Color("#aebabe"))
 	for x: float in [-8,-2,4]:
 		for z: float in [-5.6,-.4]:
@@ -1695,8 +1733,10 @@ func _build_petrol_station(center: Vector3) -> void:
 	_make_box("Shop cornice",Vector3(12.25,.27,4.65),kiosk+Vector3.UP*3.18,gold)
 	_make_box("Recovery bay stripe",Vector3(5,.012,.09),STATION_PARKING+Vector3(0,.002,1.35),cream)
 	var bay_sign := _signpost(STATION_PARKING + Vector3(3.4,0,1.35), PI)
-	_make_box("Recovery bay sign",Vector3(2.8,.52,.08),Vector3(0,2.65,.07),graphite,false,bay_sign)
-	_road_sign_text(bay_sign,"Tow drop-off",Vector3(0,2.65,.12),.0048,cream)
+	_make_box("Recovery bay sign",Vector3(2.8,.74,.08),Vector3(0,2.65,.07),graphite,false,bay_sign)
+	var bay_label := _road_sign_text(bay_sign,"Tow drop-off",Vector3(0,2.65,.12),.0048,cream)
+	bay_label.width = 2.6 / bay_label.pixel_size
+	bay_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 
 func _build_waterfront() -> void:
 	var asphalt := Color("#414648")
@@ -2011,6 +2051,14 @@ func _build_marina() -> void:
 			_make_box("Fairway buoy",Vector3(.35,.75,.35),Vector3(x,-.82,z),Color("#bf5e37"))
 	ferry = (load("res://vehicles/lotten.glb") as PackedScene).instantiate()
 	add_child(ferry)
+	var engine_loop := preload("res://audio/loader_diesel.wav").duplicate() as AudioStreamWAV
+	engine_loop.loop_end = roundi(engine_loop.get_length() * engine_loop.mix_rate)
+	engine_loop.loop_mode = AudioStreamWAV.LOOP_FORWARD
+	ferry_engine.stream = engine_loop
+	ferry_engine.bus = &"Traffic and radio"
+	ferry_engine.unit_size = 5
+	ferry_engine.max_distance = 48
+	ferry.add_child(ferry_engine)
 	var windows := ferry.find_child("Continuous tinted glazing*",true,false) as MeshInstance3D
 	saloon_glazing = windows.get_active_material(0).duplicate() as StandardMaterial3D
 	saloon_glazing.emission_enabled = true
@@ -2173,6 +2221,10 @@ func _update_moorings(delta: float) -> void:
 	var crossing := smoothstep(0,1,progress)
 	# Normalized speed of the smoothstep crossing, signed toward the current landing.
 	var motion := 4.0*progress*(1.0-progress)
+	ferry_engine.pitch_scale = lerpf(.66, .87, motion)
+	ferry_engine.volume_db = lerpf(-22, -14, motion)
+	if mode == "playing" and not paused and not ferry_engine.playing:
+		ferry_engine.play()
 	water_finish.set_shader_parameter("ferry_motion",-motion if half_trip >= 29.0 else motion)
 	if half_trip >= 29.0:
 		crossing = 1.0-crossing
@@ -2644,7 +2696,7 @@ func _depot_position(i: int) -> Vector3:
 			var center: Vector2 = lot[0]
 			return Vector3(center.x + (slot - 1) * 6, -.10, center.y)
 	if i == WHEEL_LOADER: return Vector3(-101,-.10,47)
-	if i == FARM_TRACTOR: return Vector3(-108,-.10,51)
+	if i == FARM_TRACTOR: return Vector3(-18,-.10,28)
 	if i == RECOVERY: return Vector3(-45,-.13,25)
 	if i == BUS: return Vector3(-34,-.13,25.4)
 	return Vector3(-47+5*i,-.13,15)
@@ -2652,9 +2704,9 @@ func _depot_position(i: int) -> Vector3:
 func _park_at_home(body: Node3D, index: int) -> void:
 	body.position = _depot_position(index)
 	# The northern bays open southwards onto the avenue.
-	body.rotation = Vector3(0, PI if body.position.z < -48 else 0.0, 0)
+	body.rotation = Vector3(0, PI if body.position.z < -48 or index == FARM_TRACTOR else 0.0, 0)
 
-func _road_sign_text(post: Node3D, words: String, at: Vector3, pixel: float, color: Color) -> void:
+func _road_sign_text(post: Node3D, words: String, at: Vector3, pixel: float, color: Color) -> Label3D:
 	var letters := Label3D.new()
 	letters.text = words
 	letters.position = at
@@ -2663,6 +2715,7 @@ func _road_sign_text(post: Node3D, words: String, at: Vector3, pixel: float, col
 	letters.modulate = color
 	letters.outline_size = 0
 	post.add_child(letters)
+	return letters
 
 func _signpost(at: Vector3, heading: float) -> Node3D:
 	var post := Node3D.new()
@@ -2711,8 +2764,10 @@ func _build_road_signs() -> void:
 		_make_box("Parking sign", Vector3(.84,.94,.08), Vector3(0,2.65,.06), Color.WHITE,false,post)
 		_make_box("Blue parking panel", Vector3(.77,.87,.03), Vector3(0,2.65,.11), Color("#215997"),false,post)
 		_road_sign_text(post,"P",Vector3(0,2.65,.133),.016,Color.WHITE)
-		_make_box("Parking rule", Vector3(2.55,.45,.08), Vector3(0,1.89,.06), Color("#fff8df"),false,post)
-		_road_sign_text(post,rules[index],Vector3(0,1.89,.11),.0035,Color("#182531"))
+		_make_box("Parking rule", Vector3(2.55,.54,.08), Vector3(0,1.89,.06), Color("#fff8df"),false,post)
+		var rule_label := _road_sign_text(post,rules[index],Vector3(0,1.89,.11),.0035,Color("#182531"))
+		rule_label.width = 2.42 / rule_label.pixel_size
+		rule_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 
 func _build_depot() -> void:
 	_build_road_signs()
@@ -3066,7 +3121,7 @@ func _near_excavator() -> bool:
 
 func _crawler_clear() -> bool:
 	var hull := _crawler_bounds()
-	if not Rect2(-123,39,30,16).encloses(Rect2(hull.position.x,hull.position.z,hull.size.x,hull.size.z)):
+	if not EQUIPMENT_YARD.encloses(Rect2(hull.position.x,hull.position.z,hull.size.x,hull.size.z)):
 		return false
 	for i in building_bounds.size():
 		if i != excavator_wall and hull.intersects(building_bounds[i]): return false
@@ -3078,6 +3133,9 @@ func _drive_excavator(delta: float) -> void:
 	var old := excavator.transform
 	var steer := Input.get_axis("ui_left","ui_right") + int(Input.is_key_pressed(KEY_D))-int(Input.is_key_pressed(KEY_A))
 	var drive := Input.get_axis("ui_down","ui_up") + int(Input.is_key_pressed(KEY_W))-int(Input.is_key_pressed(KEY_S))
+	if mouse_gas: drive = 1
+	if mouse_brake or brake_pedal_held: drive = -1
+	driving_controls.set_controls(steer, drive > 0, drive < 0, drive < 0)
 	if steer != 0:
 		excavator.rotate_y(-clampf(steer,-1,1)*delta)
 		if not _crawler_clear(): excavator.basis = old.basis
@@ -3130,6 +3188,8 @@ func _change_seat() -> void:
 		else:
 			walker.hide()
 		operating_excavator = not operating_excavator
+		listener.reparent(cab_turntable if operating_excavator else walker, false)
+		listener.position = Vector3.UP * (2.5 if operating_excavator else 1.6)
 		_update_siren()
 		walking_velocity = Vector3.ZERO
 		_refresh_ui()
@@ -3487,6 +3547,7 @@ func _spawn_emergency_traffic(index: int, x: float, lane: float, direction: floa
 	spill.visible = false
 	actor.add_child(spill)
 	var siren := AudioStreamPlayer3D.new()
+	siren.bus = &"Traffic and radio"
 	siren.stream = load(SIREN_SOUNDS[index])
 	siren.unit_size = 7
 	siren.max_distance = 65
@@ -3566,6 +3627,7 @@ func _spawn_traffic(scene_path: String, x: float, lane_z: float, direction: floa
 			lens.material_override = finish
 			bicycle_lenses.append(finish)
 	var traffic_horn := AudioStreamPlayer3D.new()
+	traffic_horn.bus = &"Traffic and radio"
 	var voice: String = {"cyklist": "bicycle", "a_traktor": "a_traktor", "raggarbil": "raggarbil", "puch_dakota": "saab96"}.get(scene_path.get_file().get_basename(), "bmw")
 	var emergency_index := VEHICLE_SCENES.find(scene_path)
 	if emergency_index >= 0:
@@ -3603,6 +3665,11 @@ func _shore_overlap(span: Vector2, point: Vector3, extent: Vector2) -> float:
 	var along := minf(point.z - span.x + extent.y, span.y - point.z + extent.y)
 	return maxf(0, minf(across, along))
 
+func _outside_driving_strip(obstacle: AABB, extra: float) -> bool:
+	var lateral := ambulance.global_basis.x.normalized()
+	var half_width := (absf(lateral.x)*obstacle.size.x + absf(lateral.z)*obstacle.size.z)*.5
+	return absf((obstacle.get_center()-ambulance.position).dot(lateral)) > player_half_size.x + half_width + extra
+
 static func _moves_deeper_into_box(box: AABB, point: Vector3, motion: Vector3) -> bool:
 	var offset := point - box.get_center()
 	var x_depth := box.size.x * .5 - absf(offset.x)
@@ -3613,13 +3680,20 @@ static func _moves_deeper_into_box(box: AABB, point: Vector3, motion: Vector3) -
 		return inward_x and inward_z
 	return inward_x if x_depth < z_depth else inward_z
 
-func _vehicle_overlap_depth(obstacle: AABB, extent: Vector2) -> float:
+func _vehicle_overlap_depth(obstacle: AABB, extent: Vector2, orientation: Basis) -> float:
 	var center := ambulance.position
 	if center.y < obstacle.position.y or center.y > obstacle.end.y:
 		return 0.0
 	var dx := minf(center.x - obstacle.position.x, obstacle.end.x - center.x) + extent.x
 	var dz := minf(center.z - obstacle.position.z, obstacle.end.z - center.z) + extent.y
-	return maxf(0, minf(dx, dz))
+	var depth := minf(dx, dz)
+	if depth <= 0: return 0
+	var offset := obstacle.get_center() - center
+	for axis: Vector3 in [orientation.x, orientation.z]:
+		var half_span := (absf(axis.x)*obstacle.size.x + absf(axis.z)*obstacle.size.z)*.5
+		var reach := player_half_size.x if axis == orientation.x else player_half_size.y
+		depth = minf(depth, reach + half_span - absf(offset.dot(axis)))
+	return maxf(0, depth)
 
 func _trunk_gap(local_center: Vector3) -> float:
 	var side := maxf(absf(local_center.x) - player_half_size.x, 0)
@@ -3974,8 +4048,9 @@ func _say(speaker: Node3D, phrase: String, clip: String) -> void:
 	greeting_voice.stream = L10n.media("res://audio/voices/%s_" + clip + ".wav", TranslationServer.get_locale())
 	if greeting_voice.stream != null:
 		bubble_time = maxf(bubble_time, greeting_voice.stream.get_length() + .4)
-		if not paused and not AudioServer.is_bus_mute(0):
+		if not AudioServer.is_bus_mute(0):
 			greeting_voice.play()
+			greeting_voice.stream_paused = paused
 	greeting_timer = maxf(7.5, bubble_time)
 
 func _update_shoe_quest(delta: float) -> void:
@@ -3994,12 +4069,14 @@ func _update_shoe_quest(delta: float) -> void:
 				shoe_quest = FootQuest.SEARCHING
 				lost_shoe.show()
 				_say(shoe_owner, "Can you find my red shoe? I lost it farther along the pavement.", "lost_shoe")
+				_refresh_dispatch()
 				phone.receive("Find the red shoe on the pavement.")
 		FootQuest.SEARCHING:
 			if walker.position.distance_to(lost_shoe.position) < 1.6:
 				shoe_quest = FootQuest.RETURNING
 				lost_shoe.hide()
 				star_chime.play()
+				_refresh_dispatch()
 				phone.receive("Bring the red shoe back to the neighbour.")
 				message = "Bring the red shoe back to the neighbour."
 				message_timer = 5
@@ -4029,6 +4106,7 @@ func _update_cat_quest(delta: float) -> void:
 			else:
 				cat_quest = FootQuest.SEARCHING
 				_say(cat_owner, "Can you find my cat? Look for white paws along this pavement.", "lost_cat")
+				_refresh_dispatch()
 				phone.receive("Find the cat with white paws.")
 		FootQuest.SEARCHING:
 			if walker.position.distance_to(lost_cat.position) < 1.6:
@@ -4036,6 +4114,7 @@ func _update_cat_quest(delta: float) -> void:
 				star_chime.play()
 				message = "Walk back to the neighbour with the cat."
 				message_timer = 5
+				_refresh_dispatch()
 				phone.receive(message)
 				_refresh_status()
 		FootQuest.RETURNING:
@@ -4883,6 +4962,7 @@ func _build_ui() -> void:
 	arrival_progress.add_theme_stylebox_override("background", _style(Color("#203137"), 3))
 	arrival_progress.add_theme_stylebox_override("fill", _style(Color("#83dda0"), 3))
 	add_child(horn)
+	horn.bus = &"Traffic and radio"
 	horn.volume_db = -5
 	horn_button = _button("Horn · H",135)
 	ui.add_child(horn_button)
@@ -4937,11 +5017,13 @@ func _build_ui() -> void:
 	phone.add_child(next_song_button)
 	next_song_button.pressed.connect(_next_radio_track)
 	radio.finished.connect(_next_radio_track)
+	radio.bus = &"Traffic and radio"
 	radio.volume_db=-10
 	add_child(radio)
 	_build_overlay()
 	_build_menu_footer()
 	siren_player = AudioStreamPlayer.new()
+	siren_player.bus = &"Traffic and radio"
 	siren_player.volume_db = -11
 	add_child(siren_player)
 	for path in SIREN_SOUNDS:
@@ -4969,6 +5051,7 @@ func _build_menu_footer() -> void:
 	add_child(popup)
 	popup.window_input.connect(_dialog_quit_key.bind(popup))
 	popup.dialog_autowrap = true
+	popup.get_label().custom_minimum_size.x = 480
 	about.pressed.connect(func():
 		popup.title = tr("About the game")
 		popup.ok_button_text = tr("Close")
@@ -5116,6 +5199,8 @@ func _build_overlay() -> void:
 		page.add_theme_constant_override("separation",12)
 		tabs.add_child(page)
 		tabs.set_tab_title(page.get_index(),title)
+		if title == "Language":
+			tabs.set_tab_icon(page.get_index(), preload("res://branding/language-globe.svg"))
 		pages.append(page)
 	var renderer := GridContainer.new()
 	renderer.columns = 2
@@ -5188,7 +5273,10 @@ func _build_overlay() -> void:
 		var catalog := TranslationServer.get_translation_object(locale)
 		var native_name := catalog.get_message("LANGUAGE_SELF_NAME") if catalog and catalog.locale == locale else &""
 		var language := _button(str(native_name) if native_name != &"" else TranslationServer.get_locale_name(locale), 156)
+		language.auto_translate_mode = Node.AUTO_TRANSLATE_MODE_DISABLED
 		language.icon = L10n.media("res://branding/language-%s.svg", locale)
+		if language.icon == null:
+			language.icon = preload("res://branding/language-globe.svg")
 		language.toggle_mode = true
 		language.button_group = language_group
 		language.button_pressed = locale == TranslationServer.get_locale()
@@ -5208,6 +5296,10 @@ func _build_overlay() -> void:
 		choice.icon = preload("res://branding/gentle-driving.svg") if index == 0 else preload("res://branding/full-speed.svg")
 		choice.toggle_mode = true
 		choice.button_group = speed_group
+		if index == 0:
+			dialog.about_to_popup.connect(func():
+				choice.text = "Gentle driving · up to 90 km/h" if vehicle_index == PORSCHE else "Gentle driving · up to 30 km/h"
+			)
 		choice.button_pressed = gentle_driving == (index == 0)
 		choice.pressed.connect(_set_handling.bind(index))
 		handling.add_child(choice)
@@ -5411,7 +5503,7 @@ func _recover_road_vehicle() -> bool:
 		ambulance.position = Vector3(x, _surface_height(x, 2.35), 2.35)
 		var clear := true
 		for obstacle in obstacles:
-			if _vehicle_overlap_depth(obstacle, extent) > 0:
+			if _vehicle_overlap_depth(obstacle, extent, ambulance.basis) > 0:
 				clear = false
 				break
 		if clear: return true
@@ -5427,8 +5519,16 @@ func _recover_position() -> void:
 		launch_speed = 0
 		outboard.rotation.y = 0
 	elif operating_excavator:
-		excavator.transform = Transform3D(Basis(Vector3.UP, PI*.5), Vector3(-115,-.10,47))
-		building_bounds[excavator_wall] = _crawler_bounds()
+		var previous_pose := excavator.transform
+		success = false
+		for spot in [Vector2(-115,43), Vector2(-115,51), Vector2(-108,47), Vector2(-101,51)]:
+			excavator.transform = Transform3D(Basis(Vector3.UP, PI*.5), Vector3(spot.x,-.10,spot.y))
+			if _crawler_clear():
+				building_bounds[excavator_wall] = _crawler_bounds()
+				walker.position = excavator.position
+				success = true
+				break
+		if not success: excavator.transform = previous_pose
 	elif walker.visible or ferry_passenger:
 		success = false
 		for site in [Vector2(20,6.8), Vector2(-23,-6.8), Vector2(90,-24)]:
@@ -5452,6 +5552,7 @@ func _recover_position() -> void:
 		_end_skid()
 		_update_camera(0, true)
 		_update_route_arrows()
+		_refresh_ui()
 		_update_entry_button()
 	message = "Back in a safe place." if success else "No clear spot yet. Try again in a moment."
 	message_timer = 4
@@ -5606,7 +5707,7 @@ func _toggle_pause() -> void:
 		_end_skid()
 		for item in traffic_data:
 			item.horn.stop()
-		greeting_voice.stop()
+	greeting_voice.stream_paused = paused
 	_update_traffic_signals(0)
 	_update_siren()
 	_refresh_ui()
@@ -5622,9 +5723,20 @@ func _toggle_lights() -> void:
 	_refresh_ui()
 
 func _load_preferences() -> void:
-	TranslationServer.set_locale("en")
 	var config := ConfigFile.new()
-	if config.load(SETTINGS_PATH) != OK:
+	var loaded := config.load(SETTINGS_PATH) == OK
+	var saved_language = config.get_value("language", "locale", "")
+	var candidates := PackedStringArray()
+	if saved_language is String and not saved_language.strip_edges().is_empty():
+		candidates.append_array(L10n.variants(saved_language.strip_edges()))
+	candidates.append_array(L10n.variants(OS.get_locale()))
+	candidates.append(L10n.SOURCE)
+	var available := L10n.locales()
+	for candidate in candidates:
+		if candidate in available:
+			TranslationServer.set_locale(candidate)
+			break
+	if not loaded:
 		return
 	play_as_alma=config.get_value("player","alma",false)==true
 	purchases=config.get_value("player","purchases",{})
@@ -5633,12 +5745,6 @@ func _load_preferences() -> void:
 	if saved_stars is PackedStringArray:
 		for id in saved_stars:
 			if STAR_SITES.has(id) and not collected_stars.has(id): collected_stars.append(id)
-	var saved_locale := str(config.get_value("language", "locale", "en"))
-	var available_locales := L10n.locales()
-	for variant in L10n.variants(saved_locale):
-		if variant in available_locales:
-			TranslationServer.set_locale(variant)
-			break
 	weather.season_setting = clampi(int(config.get_value("world","season",0)),0,4)
 	weather.weather_setting = clampi(int(config.get_value("world","weather",0)),0,4)
 	time_mode = clampi(int(config.get_value("world","daylight",0)),0,2)
@@ -5726,9 +5832,14 @@ func _update_siren() -> void:
 			siren_player.stop()
 
 func _refresh_dispatch() -> void:
+	phone.foot_jobs.clear()
+	if walker.visible:
+		if shoe_quest == FootQuest.SEARCHING: phone.foot_jobs.append("Find the red shoe on the pavement.")
+		if shoe_quest == FootQuest.RETURNING: phone.foot_jobs.append("Bring the red shoe back to the neighbour.")
+		if cat_quest == FootQuest.SEARCHING: phone.foot_jobs.append("Find the cat with white paws.")
+		if cat_quest == FootQuest.RETURNING: phone.foot_jobs.append("Walk back to the neighbour with the cat.")
 	phone.take_job.visible = free_drive and not walker.visible and not boating and not operating_excavator and tram_mode == 0 and not ferry_passenger and mission_index < TARGETS.size()
 	phone.visible = mode=="playing" and not paused
-	phone.refresh()
 	if free_drive or mode!="playing" or mission_index>=TARGETS.size():
 		last_dispatch=""
 		phone.current_job=""
@@ -5753,6 +5864,8 @@ func _refresh_dispatch() -> void:
 		last_dispatch=dispatch
 		phone.current_job=dispatch
 		phone.receive(dispatch)
+	else:
+		phone.refresh()
 
 func _refresh_ui() -> void:
 	if road_driver:
@@ -5785,7 +5898,8 @@ func _refresh_ui() -> void:
 		phone.star_progress.text = tr("★ All stars found!")
 	else:
 		phone.star_progress.text = tr_n("★ %d star left", "★ %d stars left", remaining) % remaining
-	wallet_label.text = tr("★ %d points") % (collected_stars.size() * POINTS_PER_STAR) + "   ·   " + tr_n("%d coin", "%d coins", wallet) % wallet
+	var points := collected_stars.size() * POINTS_PER_STAR
+	wallet_label.text = tr_n("★ %d point", "★ %d points", points) % points + "   ·   " + tr_n("%d coin", "%d coins", wallet) % wallet
 	if happy_seconds > 0:
 		wallet_label.text += "   ☺ " + tr("%s feels extra happy!") % ("Alma" if play_as_alma else "Axel")
 	wallet_label.accessibility_name = tr("Wallet") + ". " + wallet_label.text
@@ -5829,9 +5943,12 @@ func _refresh_ui() -> void:
 		seat_button.disabled = false
 		entry_marker.visible = false
 		seat_button.text = "Get out · F"
-	driving_controls.show_wheel = tram_mode == 0
+	driving_controls.reverse_pedal = operating_excavator
+	driving_controls.show_wheel = tram_mode == 0 and not operating_excavator
 	driving_controls.visible = not show_overlay and (tram_mode == 2 or (tram_mode == 0 and (boating or not walker.visible)))
 	var hints := ui.get_node("DrivingHints") as Label
+	hints.offset_right = -228 if driving_controls.visible else -12
+	hints.offset_left = 142 if driving_controls.visible and driving_controls.show_wheel else 12
 	hints.visible = not show_overlay and not shops.shop_card.is_visible_in_tree()
 	if tram_mode == 1:
 		hints.text = "Passenger ride · P to pause"
@@ -5849,7 +5966,8 @@ func _refresh_ui() -> void:
 	hints.text = camera_hint if walker.visible and tram_mode == 0 and not boating else tr(hints.text) + "   ·   " + camera_hint
 	if operating_excavator:
 		hints.text = tr("Arrows or WASD: drive and steer · Q/E: turn the cab · F: get out\nI/K: raise or lower the boom · Y/G: move the outer arm · O/L: tilt the bucket")
-		for control in [driving_controls, camera_button, horn_button, light_button, siren_button]:
+		hints.text += "\n" + tr("Hold left mouse to drive forward or right mouse to reverse.")
+		for control in [camera_button, horn_button, light_button, siren_button]:
 			control.hide()
 	elif walker.visible and not scooter.visible and not ferry_passenger and not boating and tram_mode == 0:
 		hints.text = _walking_hint()
@@ -5865,6 +5983,8 @@ func _refresh_ui() -> void:
 	preview_sound_button.visible = not start_in_excavator and mode == "menu" and not boating and tram_mode == 0
 	preview_sound_button.text = "Stop preview" if siren_player.playing and mode == "menu" else ("Preview engine" if vehicle_index >= 3 and vehicle_index != XC60_POLICE else "Preview siren")
 	brand_logo.texture = L10n.media("res://branding/rollabout-%s.png", TranslationServer.get_locale())
+	if brand_logo.texture == null and tr("Harbor Town Rollabout") == "Harbor Town Rollabout":
+		brand_logo.texture = preload("res://branding/rollabout-en.png")
 	title_label.visible = mode != "menu" or brand_logo.texture == null
 	brand_logo.visible = mode == "menu" and brand_logo.texture != null
 	brand_logo.accessibility_name = tr("Harbor Town Rollabout")
