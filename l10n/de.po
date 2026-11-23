@@ -1891,3 +1891,6 @@ msgstr "Umschalt"
 
 msgid "Run with Ctrl"
 msgstr "Mit Strg rennen"
+
+msgid "Ctrl"
+msgstr "Strg"

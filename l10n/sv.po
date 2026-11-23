@@ -1804,3 +1804,6 @@ msgstr "Skift"
 
 msgid "Run with Ctrl"
 msgstr "Spring med Ctrl"
+
+msgid "Ctrl"
+msgstr "Ctrl"

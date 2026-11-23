@@ -1803,3 +1803,6 @@ msgstr ""
 
 msgid "Run with Ctrl"
 msgstr ""
+
+msgid "Ctrl"
+msgstr ""

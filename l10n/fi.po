@@ -1870,3 +1870,6 @@ msgstr "Vaihto"
 
 msgid "Run with Ctrl"
 msgstr "Juokse Ctrl-näppäimellä"
+
+msgid "Ctrl"
+msgstr "Ctrl"

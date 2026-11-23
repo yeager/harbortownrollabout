@@ -1874,3 +1874,6 @@ msgstr "Shift"
 
 msgid "Run with Ctrl"
 msgstr "Løp med Ctrl"
+
+msgid "Ctrl"
+msgstr "Ctrl"

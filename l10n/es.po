@@ -1881,3 +1881,6 @@ msgstr "Mayús"
 
 msgid "Run with Ctrl"
 msgstr "Correr con Ctrl"
+
+msgid "Ctrl"
+msgstr "Ctrl"

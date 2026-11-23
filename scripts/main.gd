@@ -4937,7 +4937,7 @@ func _recovery_hint() -> String:
 func _walking_hint() -> String:
 	if winded:
 		return tr("Walk or rest · Run again in %d s") % _rest_seconds()
-	var run_key := "Ctrl" if ctrl_run else tr("Shift")
+	var run_key := tr("Ctrl") if ctrl_run else tr("Shift")
 	if run_ready_hint_time > 0:
 		return tr("Ready to run again! Hold {run} and walk forward.").replace("{run}",run_key)
 	return tr("{up}/{down} Walk · {left}/{right} Turn · {run} + {up} Run · {seat} Enter · {scooter} Scooter").replace("{run}",run_key).replace("{scooter}",OS.get_keycode_string(scooter_key)) + "   ·   " + (tr("%s Jump") % OS.get_keycode_string(jump_key)) + "   ·   " + tr("9 Raise camera · 3 Lower camera" if number_camera else "PgUp Raise camera · PgDn Lower camera") + "\n" + tr("Hold V and move the mouse to look around")
