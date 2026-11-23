@@ -47,10 +47,17 @@ jobs:
           dir="$HOME/.local/share/godot/export_templates/$(tr -d '\r\n' < templates/version.txt)"
           mkdir -p "$dir"
           mv templates/* "$dir/"
-      - name: Import game and export all platforms
+      - name: Import game
+        run: godot --headless --editor --import
+      - name: Check walking animation and pedestrian grips
+        timeout-minutes: 3
+        shell: bash
+        run: |
+          godot --headless --script res://tests/player_gait.gd 2>&1 | tee "$RUNNER_TEMP/gait.log"
+          if grep -E '^(SCRIPT )?ERROR:' "$RUNNER_TEMP/gait.log"; then exit 1; fi
+      - name: Export all platforms
         run: |
           mkdir -p export/{linux,windows,mac}
-          godot --headless --editor --import
           godot --headless --export-release Linux export/linux/axels-spel
           godot --headless --export-release Windows export/windows/HarborTownRollabout.exe
           godot --headless --export-release macOS "export/mac/Harbor Town Rollabout.zip"

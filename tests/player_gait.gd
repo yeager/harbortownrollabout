@@ -64,4 +64,25 @@ func check_gait() -> void:
 				return
 		gait.ground_height = terrain
 	print("Axel and Alma transfer weight, maintain lateral foot placement and settle at rest.")
+	var aids_tested := 0
+	for item in game.walker_data:
+		if not item.get("pushing", false):
+			continue
+		var person: Node3D = item.actor
+		var grip: Vector3 = person.get_meta("aid_right_grip")
+		for frame in 120:
+			game._animate_steps(person, item.speed / 60.0, 1.0 / 60.0, true)
+			var gait = person.get_meta("gait")
+			for side in 2:
+				var target := Vector3(-grip.x if side == 0 else grip.x, grip.y, grip.z)
+				if person.to_local(gait.palms[side].global_position).distance_to(target) > .005:
+					printerr("Hand slipped from the handle on ", person.name)
+					quit(1)
+					return
+		aids_tested += 1
+	if aids_tested < 2:
+		printerr("Expected both the pushchair and the rollator")
+		quit(1)
+		return
+	print("Pedestrian hands stayed within 5 mm of their grips.")
 	game._finish_quit()
