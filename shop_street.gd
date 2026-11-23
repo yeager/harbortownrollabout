@@ -216,6 +216,9 @@ func build_menu(ui: CanvasLayer) -> void:
 	layout.add_child(receipt)
 	shop_card.hide()
 
+func customer_is_indoors() -> bool:
+	return inside >= 0 and inside != 6
+
 func update_customer(foot: bool, pos: Vector3, active: bool) -> void:
 	var index:=-1
 	if foot:
@@ -409,11 +412,23 @@ func _hot_dog_stand(x: float) -> void:
 	part("Serving ledge",Vector3(x,1.06,42.55),Vector3(4.8,.10,.64),steel,true)
 	var roof := part("Grill kiosk roof",Vector3(x,2.91,44.23),Vector3(5.08,.24,4.68),red)
 	awnings.append(roof)
-	var lightbox := part("Illuminated roof sign",Vector3(x,3.22,42.14),Vector3(3.57,.60,.23),cream)
-	lightbox.material_override = get_parent()._material(cream,.42,true)
-	var sign_label := _lettering("Hot dog stand",Vector3(x,3.22,41.996),.009,Color("#502521"))
-	get_parent()._size_world_sign(sign_label,3.3)
-	_shop_light(Vector3(x,2.51,42.85),Color("#ffd69a"),1.25)
+	var midnight := Color("#292733")
+	var amber := Color("#ffb34b")
+	var tomato := Color("#ff6049")
+	part("Grill sign backplate",Vector3(x,3.40,42.15),Vector3(4.18,.71,.15),midnight)
+	var sign_label := _lettering("Hot dog stand",Vector3(x-.44,3.40,42.045),.012,Color(1.9,1.36,.58))
+	sign_label.shaded = false
+	sign_label.outline_size = 9
+	sign_label.outline_modulate = tomato
+	get_parent()._size_world_sign(sign_label,2.95)
+	var emblem := Vector3(x+1.53,3.4,42.03)
+	_neon_outline(emblem,PackedVector2Array([Vector2(-.47,-.06),Vector2(-.36,-.17),Vector2(.18,-.11),Vector2(.43,.02),Vector2(.48,.13)]),amber)
+	_neon_outline(emblem,PackedVector2Array([Vector2(-.42,.04),Vector2(-.45,.10),Vector2(-.39,.15),Vector2(-.03,.14),Vector2(.28,.23),Vector2(.39,.22),Vector2(.42,.16),Vector2(.35,.11),Vector2(.01,.02),Vector2(-.42,.04)]),tomato)
+	for dx in [-1.40,1.40]:
+		part("Hatch lamp housing",Vector3(x+dx,2.77,42.05),Vector3(.78,.075,.18),steel)
+		var diffuser := part("Hatch lamp diffuser",Vector3(x+dx,2.72,42.05),Vector3(.71,.045,.14),cream)
+		diffuser.material_override = get_parent()._material(cream,.3,true)
+		_shop_light(Vector3(x+dx,2.58,42.09),Color("#ffd69a"),.95)
 	part("Stainless extraction hood",Vector3(x+.59,2.38,44.10),Vector3(1.83,.25,.81),steel)
 	part("Extraction duct",Vector3(x+.60,2.65,44.22),Vector3(.52,.45,.38),steel)
 	part("Kitchen shelf",Vector3(x-.81,1.77,45.95),Vector3(1.48,.07,.49),cream)

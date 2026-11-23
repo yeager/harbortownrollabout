@@ -598,7 +598,7 @@ func _process(delta: float) -> void:
 		light_phase += delta * 3.2
 		_update_emergency_lights()
 	shops.update_customer(walker.visible and not ferry_passenger and not boating and tram_mode==0,walker.position,mode=="playing" and not paused)
-	weather.visible = shops.inside < 0 and tram_mode != 1
+	weather.visible = not shops.customer_is_indoors() and tram_mode != 1
 	_update_camera(delta)
 	weather.position = camera.position + Vector3.UP*8
 	_refresh_status()
@@ -4636,7 +4636,7 @@ func _animate_steps(person: Node3D, distance: float, delta: float, pushing := fa
 				gait.reach_with_hand(i, parcel.to_global(Vector3(-.24 if i == 0 else .24,.09,0)))
 
 func _snow_underfoot(point: Vector3) -> bool:
-	if weather.snow < .12 or walk_jump_left > 0 or shops.inside >= 0 or scooter.visible or ferry_passenger or tram_mode != 0:
+	if weather.snow < .12 or walk_jump_left > 0 or shops.customer_is_indoors() or scooter.visible or ferry_passenger or tram_mode != 0:
 		return false
 	return not ground_work.cleared_at(point) and is_nan(_pier_height(point.x, point.z)) and is_nan(tram.platform_height(point))
 
