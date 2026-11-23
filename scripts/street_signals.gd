@@ -14,6 +14,7 @@ const SIDE_LINE := 10.5
 const ZEBRA_OFFSET := 6.3
 var tram_crossings: Array[Dictionary] = []
 const SHOP_CROSSING := Vector3(-39,0,35)
+const EAST_CROSSINGS := [Vector3(91,0,0),Vector3(91,0,-48),Vector3(143,0,-48)]
 const CROSSING_X := -12.0
 const WEST_STOP_DISTANCE := 15.0
 const JUNCTION_STOP_DISTANCE := 8.0
@@ -34,20 +35,26 @@ func _ready() -> void:
 		center.y = get_parent()._surface_height(center.x,center.z)+.016
 		var size := Vector3(.22,.018,3.3) if forward.x != 0 else Vector3(3.3,.018,.22)
 		get_parent()._make_box("Junction stop line",size,center,Color("#eee9d9"),false,self)
-	heads.append_array(_add_crossing(SHOP_CROSSING,false))
-	for direction in [-1,1]:
-		var mast := Node3D.new()
-		add_child(mast)
-		mast.position = SHOP_CROSSING + Vector3(-3*direction,0,4.1*direction)
-		mast.rotation.y = -direction*PI/2
-		heads.append(_vehicle_head(mast,true))
-		get_parent()._make_box("Shop crossing stop line",Vector3(.21,.016,3.25),
-			SHOP_CROSSING+Vector3(-3*direction,-.028,1.85*direction),Color("#eee9d9"),false,self)
+	_build_street_crossing(SHOP_CROSSING)
+	for center: Vector3 in EAST_CROSSINGS:
+		_build_street_crossing(center)
 	heads.append_array(_add_crossing(Vector3(CROSSING_X,0,0),false))
 	for z in [-6.35,6.35]:
 		heads.append_array(_add_crossing(Vector3(0,0,z),true))
 	_build_tram_crossings()
 	advance(0)
+
+func _build_street_crossing(center: Vector3) -> void:
+	center.y = get_parent()._surface_height(center.x,center.z)
+	heads.append_array(_add_crossing(center,false))
+	for direction in [-1,1]:
+		var mast := Node3D.new()
+		add_child(mast)
+		mast.position = center + Vector3(-3*direction,0,4.1*direction)
+		mast.rotation.y = -direction*PI/2
+		heads.append(_vehicle_head(mast,true))
+		get_parent()._make_box("Crossing stop line",Vector3(.21,.016,3.25),
+			center+Vector3(-3*direction,.016,1.85*direction),Color("#eee9d9"),false,self)
 
 func _vehicle_head(mast: Node3D, east_west: bool) -> Dictionary:
 	get_parent()._make_roadside_solid("Signal mast",Vector3(.12,3.7,.12),Vector3.UP*1.85,Color("#777e78"),false,mast)
@@ -299,4 +306,6 @@ func _central_clearance(pos: Vector3, heading: Vector3, half_length: float, red_
 	var nearest := _line_clearance(pos,heading,half_length,Vector3.ZERO,axis,setback,4.85)
 	if east_west:
 		nearest = minf(nearest,_line_clearance(pos,heading,half_length,SHOP_CROSSING,axis,3,3.7))
+		for center: Vector3 in EAST_CROSSINGS:
+			nearest = minf(nearest,_line_clearance(pos,heading,half_length,center,axis,3,4.85))
 	return nearest

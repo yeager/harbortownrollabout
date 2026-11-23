@@ -28,6 +28,8 @@ func check_routes() -> void:
 				return
 			game.ambulance.position = target
 			game._help_at_target()
+			if vehicle == 2 and step == 2:
+				game._update_arrival(2.5)
 			if game.wallet != balance + 10 * (step + 1) or game.delivery_points != points + 10 * (step + 1):
 				printerr("Incorrect reward after restart for vehicle ", vehicle, " step ", step)
 				quit(1)

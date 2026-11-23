@@ -178,6 +178,7 @@ var parked_footprints: Array[Rect2] = []
 var tractor_bare_bounds: AABB
 var tractor_plough_bounds: AABB
 var parked_sizes: Array[Vector2] = []
+var parcel_mounts := PackedVector3Array()
 var listener := AudioListener3D.new()
 var walking_velocity := Vector3.ZERO
 const WALK_JUMP_TIME := .64
@@ -2443,6 +2444,9 @@ func _build_waterfront() -> void:
 			*smoothstep(.0,.20,hit.x)*(1.-smoothstep(1.35-.75*bow_taper,1.49-.75*bow_taper,hit.x));
 		float grazing = pow(1.-clamp(dot(-incoming,wave_normal),0.,1.),2.);
 		ALBEDO = mix(ALBEDO,vec3(.52,.60,.59),hull*grazing*(1.-dusk)*.60);
+		// Daylight reflected in the saloon windows breaks into strips across the ripples.
+		vec3 pane_tint = mix(vec3(.055,.095,.11),vec3(.23,.34,.39),clamp(ray.y*2.,0.,1.));
+		ALBEDO = mix(ALBEDO,pane_tint,reflection*grazing*(1.-dusk)*(1.-foam)*.75);
 		EMISSION = dusk*(vec3(.034,.058,.084)*(.75+.25*chop)+vec3(.66,.42,.21)*reflection*(.25+.75*smoothstep(-.5,.8,chop+fine*.38)));
 		if (dusk > .01 && ray.y > .008) {
 			for (int i=0; i<quay_lamp_count; i++) {
@@ -3804,6 +3808,10 @@ func _build_depot() -> void:
 			lamp.visible = false
 		parked_cars.append(body)
 		var bounds := _model_bounds(body,model)
+		var mount := Vector3(bounds.get_center().x,bounds.end.y,bounds.get_center().z)
+		if i == MINI_CABRIO:
+			mount = Vector3(mount.x,bounds.position.y+bounds.size.y*.58,bounds.end.z*.72)
+		parcel_mounts.append(mount)
 		parked_footprints.append(Rect2(bounds.position.x,bounds.position.z,bounds.size.x,bounds.size.z))
 		parked_sizes.append(Vector2(maxf(-bounds.position.x,bounds.end.x),maxf(-bounds.position.z,bounds.end.z)))
 		if i == FARM_TRACTOR:
@@ -6533,11 +6541,16 @@ func _update_mission_marker() -> void:
 		var delivered := mission_index >= i+2
 		var carried := delivering and walker.visible and mission_index == i+1
 		var holder: Node3D = walker.get_node("Jacket") if carried else self
+		var onboard := delivering and mission_index > 0 and not delivered and not carried
+		if onboard:
+			holder = ambulance if ambulance.visible else parked_cars[vehicle_index]
 		if parcel.get_parent() != holder:
 			parcel.reparent(holder,false)
-		parcel.visible = delivering and (mission_index == 0 or delivered or carried)
+		parcel.visible = delivering and (mission_index == 0 or delivered or carried or onboard)
 		if carried:
 			parcel.position = Vector3(0,-.16,-.40)
+		elif onboard:
+			parcel.position = parcel_mounts[vehicle_index] + Vector3((i-.5)*.5,0,0)
 		elif parcel.visible:
 			var stop := WALK_TARGETS[i+1] if delivered else WALK_TARGETS[0]
 			parcel.position = stop + Vector3(.45+i*.51,0,.68)
