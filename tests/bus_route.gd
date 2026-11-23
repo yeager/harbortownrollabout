@@ -57,6 +57,22 @@ func check_route() -> void:
 				printerr("Bus reward must show the completed drop-off and its fare")
 				quit(1)
 				return
+		var nearest_sign: Label3D
+		var nearest_distance := INF
+		for sign: Label3D in get_nodes_in_group("bus_stop_labels"):
+			var distance := sign.global_position.distance_to(game._mission_destination())
+			if distance < nearest_distance:
+				nearest_distance = distance
+				nearest_sign = sign
+		var stop_index := leg % stops.size()
+		if not nearest_sign or nearest_distance > 12 or nearest_sign.text != "74  SICKLA UDDE\n" + stops[stop_index]:
+			printerr("The route marker should lead to the stop sign for ", stops[stop_index])
+			quit(1)
+			return
+		if game.phone.current_job != game.BUS_MESSAGES[stop_index] or game.mission_marker.get_node("MissionLabel").text != game.tr(game.phone.current_job).to_upper():
+			printerr("Phone instruction and route marker disagree at ", stops[stop_index])
+			quit(1)
+			return
 		var destination := "74  SICKLA UDDE"
 		if game.bus_board.text != destination or game.rear_bus_board.text != destination:
 			printerr("Expected both destination displays to show ", destination)
