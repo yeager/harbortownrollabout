@@ -13,6 +13,13 @@ jobs:
       tag: ${{ steps.version.outputs.tag }}
     steps:
       - uses: actions/checkout@v4
+      - name: Check translations, game logos and Linux launcher
+        run: |
+          if ! command -v msgcmp >/dev/null; then
+            sudo apt-get update
+            sudo apt-get install -y gettext
+          fi
+          sh tools/check_localizations.sh
       - id: version
         shell: bash
         run: |
