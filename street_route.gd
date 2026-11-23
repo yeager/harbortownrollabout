@@ -2,6 +2,7 @@ extends RefCounted
 # Centrelines of the connected streets, including both canal bridges.
 const ROWS := [[-82,102,162],[-48,-510,-420,-330,-240,-150,-55,0,48,102,162],[0,-510,-420,-330,-240,-150,-55,0,48,102,162],[35,-510,-420,-330,-240,-150,-55,0,48],[60,102,162]]
 const COLUMNS := [[-510,-48,0,35],[-420,-48,0,35],[-330,-48,0,35],[-240,-48,0,35],[-150,-48,0,35],[-55,-48,0,35],[0,-48,0,35],[48,-48,0,35],[102,-82,-48,0,60],[162,-82,-48,0,60]]
+const TRAM_LANE_OFFSET := 6.0
 var graph := AStar2D.new()
 var edges: Array[Vector2i] = []
 
@@ -30,7 +31,7 @@ func _nearest(point: Vector2, heading := Vector2.ZERO) -> Vector2i:
 		if not heading.is_zero_approx():
 			# Inside a junction the crossing centreline can be closer than our own lane.
 			var axis := graph.get_point_position(edge.x).direction_to(graph.get_point_position(edge.y))
-			cost += 9.0 * (1.0 - absf(axis.dot(heading)))
+			cost += TRAM_LANE_OFFSET * TRAM_LANE_OFFSET * (1.0 - absf(axis.dot(heading)))
 		if cost < best:
 			best = cost
 			result=edge
@@ -100,7 +101,7 @@ func _lane_path(centres: PackedVector2Array) -> PackedVector2Array:
 		var right := Vector2(-direction.y, direction.x)
 		var middle := (a+b)*.5
 		var along_tracks := (middle.y in [-48.0,35.0] and middle.x > -420 and middle.x < -150) or (middle.x in [-420.0,-150.0] and middle.y > -48 and middle.y < 35)
-		var offset := right * (6.0 if along_tracks else 2.35)
+		var offset := right * (TRAM_LANE_OFFSET if along_tracks else 2.35)
 		if previous.dot(direction) < -.99:
 			# Arc across the junction from the incoming lane to the returning lane.
 			var incoming := lane[-1] - a
