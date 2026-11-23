@@ -412,6 +412,11 @@ var delivery_points := 0
 var collected_stars := PackedStringArray()
 var star_markers := {}
 var wallet := 0
+const MEMORY_SHEETS := {
+	"vehicle": preload("res://branding/vehicle-job-actions.svg"),
+	"foot": preload("res://branding/foot-job-actions.svg"),
+}
+var mission_memories := PackedStringArray()
 var reward_badge := Button.new()
 var reward_seconds := 0.0
 var wallet_label: Label
@@ -1523,10 +1528,12 @@ func _empty_refuse_bin(stop: int) -> void:
 	refuse_lift.tween_property(bin,"global_position",curb,.65)
 	refuse_lift.parallel().tween_property(bin,"rotation",rest_rotation,.65)
 
-func _show_mission_reward(atlas: Texture2D, cell: int, points: int, coins: int) -> void:
+func _show_mission_reward(kind: String, cell: int, points: int, coins: int) -> void:
 	var picture := AtlasTexture.new()
-	picture.atlas = atlas
+	picture.atlas = MEMORY_SHEETS[kind]
 	picture.region = Rect2(cell*48,0,48,48)
+	var memory_id := "%s/%d" % [kind, cell]
+	if not mission_memories.has(memory_id): mission_memories.append(memory_id)
 	reward_badge.icon = picture
 	reward_badge.text = "+" + tr_n("★ %d point","★ %d points",points) % points + "   +" + tr_n("%d coin","%d coins",coins) % coins
 	reward_badge.reset_size()
@@ -1535,7 +1542,7 @@ func _show_mission_reward(atlas: Texture2D, cell: int, points: int, coins: int) 
 	reward_seconds = 4.0
 
 func _reward_delivery(amount: int) -> void:
-	_show_mission_reward(preload("res://branding/vehicle-job-actions.svg"),phone.vehicle_action,amount,amount)
+	_show_mission_reward("vehicle",phone.vehicle_action,amount,amount)
 	wallet += amount
 	delivery_points += amount
 	_save_preferences()
@@ -5419,7 +5426,7 @@ func _update_cat_quest(delta: float) -> void:
 				_reward_foot_quest(3)
 
 func _reward_foot_quest(cell: int) -> void:
-	_show_mission_reward(preload("res://branding/foot-job-actions.svg"),cell,POINTS_PER_FOOT_QUEST,10)
+	_show_mission_reward("foot",cell,POINTS_PER_FOOT_QUEST,10)
 	wallet += 10
 	foot_quest_points += POINTS_PER_FOOT_QUEST
 	phone.receive("Thank you for helping! You earned 10 points and 10 coins.")
@@ -7924,6 +7931,8 @@ func _load_preferences() -> void:
 	wallet=maxi(0,int(config.get_value("player","coins",0)))
 	foot_quest_points = maxi(0, int(config.get_value("player", "foot_quest_points", 0)))
 	delivery_points = maxi(0, int(config.get_value("player", "delivery_points", 0)))
+	var saved_memories = config.get_value("player","mission_memories",PackedStringArray())
+	if saved_memories is PackedStringArray: mission_memories = saved_memories
 	var saved_stars = config.get_value("player", "stars", PackedStringArray())
 	if saved_stars is PackedStringArray:
 		for id in saved_stars:
@@ -7957,6 +7966,7 @@ func _save_preferences() -> void:
 	config.set_value("player", "road_checkpoint", road_checkpoint)
 	config.set_value("player","alma",play_as_alma)
 	config.set_value("player","coins",wallet)
+	config.set_value("player","mission_memories",mission_memories)
 	config.set_value("player","stars",collected_stars)
 	config.set_value("player", "foot_quest_points", foot_quest_points)
 	config.set_value("player", "delivery_points", delivery_points)
@@ -8153,6 +8163,7 @@ func _refresh_ui() -> void:
 	_refresh_dispatch()
 	_sync_radio()
 	phone.update_star_album(STAR_SITES, collected_stars)
+	phone.update_mission_album(MEMORY_SHEETS, mission_memories)
 	var remaining := STAR_SITES.size() - collected_stars.size()
 	if remaining == 0:
 		phone.star_progress.text = tr("★ All stars found!")

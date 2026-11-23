@@ -18,6 +18,8 @@ var vehicle_action := Action.COLLECT
 var action_rows := VBoxContainer.new()
 var pictured_jobs := PackedStringArray()
 var star_progress := Label.new()
+var memory_scroll := ScrollContainer.new()
+var memory_strip := HBoxContainer.new()
 var star_album := HBoxContainer.new()
 var inbox := Label.new()
 var history_scroll := ScrollContainer.new()
@@ -112,6 +114,10 @@ func _ready() -> void:
 	take_job.text = "Take a job"
 	content.add_child(star_progress)
 	content.add_child(star_album)
+	memory_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	memory_scroll.custom_minimum_size.y = 55
+	content.add_child(memory_scroll)
+	memory_scroll.add_child(memory_strip)
 	content.add_child(take_job)
 	content.add_child(job_heading)
 	content.add_child(action_rows)
@@ -268,3 +274,21 @@ func update_star_album(sites: Dictionary, collected: PackedStringArray) -> void:
 		var found := collected.has(str(stamp.name))
 		stamp.text = "★" if found else "☆"
 		stamp.add_theme_color_override("font_color", Color("#87520c") if found else Color("#516963"))
+
+func update_mission_album(sheets: Dictionary, memories: PackedStringArray) -> void:
+	for id in memories:
+		var parts := id.split("/")
+		if parts.size() != 2 or not sheets.has(parts[0]) or not parts[1].is_valid_int(): continue
+		var cell := parts[1].to_int()
+		var sheet: Texture2D = sheets[parts[0]]
+		if cell < 0 or (cell+1)*48 > sheet.get_width(): continue
+		var stamp_name := "%s_%d" % [parts[0],cell]
+		if memory_strip.has_node(stamp_name): continue
+		var picture := AtlasTexture.new()
+		picture.atlas = sheet
+		picture.region = Rect2(cell*48,0,48,48)
+		var stamp := TextureRect.new()
+		stamp.name = stamp_name
+		stamp.texture = picture
+		memory_strip.add_child(stamp)
+	memory_scroll.visible = memory_strip.get_child_count() > 0
