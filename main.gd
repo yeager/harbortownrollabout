@@ -3063,15 +3063,15 @@ func _apply_player_appearance() -> void:
 	road_driver.scale *= .78
 	road_driver.position = Vector3(-.32, .88 - .87 * road_driver.scale.y, -.04)
 
-func _build_driving_legs(pose_name: String, straddling: bool, ankle_height: float) -> void:
+func _build_driving_legs(pose_name: String, right_knee: Vector3, right_ankle: Vector3) -> void:
 	var riding_legs := Node3D.new()
 	riding_legs.name = pose_name
 	road_driver.add_child(riding_legs)
 	for leg: Node3D in road_driver.get_meta("legs"):
 		var side := signf(leg.position.x)
 		var hip := leg.position
-		var knee := Vector3(side*.46,.55,-.30) if straddling else Vector3(side*.14,.74,-.37)
-		var ankle := Vector3(side*.48,.18,-.19) if straddling else Vector3(side*.15,ankle_height,-.47)
+		var knee := Vector3(side*right_knee.x, right_knee.y, right_knee.z)
+		var ankle := Vector3(side*right_ankle.x, right_ankle.y, right_ankle.z)
 		var trouser_material: Material = leg.get_child(0).material_override
 		for endpoints in [[hip,knee,.105],[knee,ankle,.083]]:
 			var start: Vector3 = endpoints[0]
@@ -3341,13 +3341,17 @@ func _build_depot() -> void:
 		smile.hide()
 	for leg: Node3D in road_driver.get_meta("legs"):
 		leg.rotation.x = 1.35
-	_build_driving_legs("RidingLegs",true,0.0)
+	_build_driving_legs("RidingLegs",Vector3(.46,.55,-.30),Vector3(.48,.18,-.19))
 	for alma in [false,true]:
 		var scale_y := .78 * (.88 if alma else 1.0)
 		var origin_y := 1.505 - .87 * scale_y
 		# Boot centre and sole lie 9.8 cm below the ankle in character space.
 		var ankle_height := (1.02-origin_y)/scale_y + .098
-		_build_driving_legs("AlmaCabLegs" if alma else "AxelCabLegs",false,ankle_height)
+		_build_driving_legs("AlmaCabLegs" if alma else "AxelCabLegs",Vector3(.14,.74,-.37),Vector3(.15,ankle_height,-.47))
+		# Place each sole on the mower footboard, ahead of the seat.
+		var mower_origin_y := .79 - .77 * scale_y
+		var mower_ankle := Vector3(.28, .395-mower_origin_y, -.46) / scale_y + Vector3(0,.098,.05)
+		_build_driving_legs("AlmaMowerLegs" if alma else "AxelMowerLegs",Vector3(.30,.69,-.38),mower_ankle)
 	for arm in road_driver.get_meta("arms"):
 		var forearm := arm.get_child(0).duplicate() as MeshInstance3D
 		forearm.name = "Forearm"
@@ -6664,7 +6668,9 @@ func _refresh_ui() -> void:
 			moped_pose.fit_to(vehicle_model)
 		for arm in road_driver.get_meta("arms"):
 			arm.visible = not on_moped
-		road_driver.get_node("RidingLegs").visible = vehicle_index in [SNOWMOBILE,MOWER]
+		road_driver.get_node("RidingLegs").visible = vehicle_index == SNOWMOBILE
+		road_driver.get_node("AlmaMowerLegs").visible = vehicle_index == MOWER and play_as_alma
+		road_driver.get_node("AxelMowerLegs").visible = vehicle_index == MOWER and not play_as_alma
 		road_driver.get_node("AlmaCabLegs").visible = vehicle_index == FOOD_TRUCK and play_as_alma
 		road_driver.get_node("AxelCabLegs").visible = vehicle_index == FOOD_TRUCK and not play_as_alma
 		for leg in road_driver.get_meta("legs"):
