@@ -330,6 +330,7 @@ func rebuild_menu() -> void:
 			mixing_bag = enabled
 			first_sweet = -1
 			bag_toggle.text = "Mix two sweets in a bag"
+			_refresh_sweet_prices()
 		)
 		panel.add_child(bag_toggle)
 	if inside == 2:
@@ -352,7 +353,7 @@ func rebuild_menu() -> void:
 		if inside == 2:
 			button.text += "\n" + tr(PIZZA_TOPPINGS[i])
 		elif inside == 3:
-			button.text += "\n" + tr(SWEET_INGREDIENTS[i])
+			button.text = _sweet_button_text(i)
 		elif inside == 6:
 			button.text += "\n" + tr(GRILL_TOPPINGS[i])
 		button.pressed.connect(purchase.bind(inside,i))
@@ -447,6 +448,28 @@ func refresh_basket() -> void:
 			basket.add_text(tr("%s × %d") % [tr(product),count])
 	basket.visible = not listed.is_empty()
 
+func _sweet_button_text(item: int) -> String:
+	var caption := _product_price(3,item)
+	if mixing_bag and first_sweet >= 0:
+		if item == first_sweet:
+			caption = "✓ " + tr(SWEETS[item])
+		else:
+			var pair_name := tr(SWEETS[first_sweet]) + " + " + tr(SWEETS[item])
+			var price := _purchase_cost(3,item)
+			caption = tr_n("%s · %d coin", "%s · %d coins", price) % [pair_name,price]
+	return caption + "\n" + tr(SWEET_INGREDIENTS[item])
+
+func _refresh_sweet_prices() -> void:
+	for item in SWEETS.size():
+		var button := panel.get_child(first_product.get_index()+item) as Button
+		button.text = _sweet_button_text(item)
+
+func _purchase_cost(shop: int, item: int) -> int:
+	var cost: int = PRICES[shop][item]
+	if shop == 3 and mixing_bag and first_sweet >= 0:
+		cost += int(PRICES[3][first_sweet])
+	return cost
+
 func purchase(shop: int, item: int) -> void:
 	var game=get_parent()
 	if shop!=inside or not shop_card.is_visible_in_tree() or not game.walker.visible or game.paused: return
@@ -454,9 +477,9 @@ func purchase(shop: int, item: int) -> void:
 	if pair and (first_sweet < 0 or first_sweet == item):
 		first_sweet = item
 		bag_toggle.text = tr("Choose a second sweet for %s") % tr(SWEETS[item])
+		_refresh_sweet_prices()
 		return
-	var cost:int=PRICES[shop][item]
-	if pair: cost += int(PRICES[3][first_sweet])
+	var cost := _purchase_cost(shop,item)
 	if game.wallet<cost:
 		receipt_kind = ReceiptKind.SHORTFALL
 		receipt_amount = cost-game.wallet
