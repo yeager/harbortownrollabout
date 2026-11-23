@@ -24,7 +24,7 @@ De 50 förbättringarna från genomgången. En tom ruta är öppen. En punkt boc
 - [x] 15. Översiktskarta med gatunät, spelarposition och fem klickbara landmärken under friåkning. Kartval, återgång från paus, ruttpilar och avslutad vägledning vid ankomst verifierade i Godot.
 - [x] 16. Mjuka kollisioner mellan spelarfordonet och rörlig vägtrafik. Båda massorna, spelarens last och fordonens hastigheter och riktningar påverkar stöten. Påkörning bakifrån, olika massor, mötande riktning och assisterade stopp verifierade.
 - [x] 17. Tydlig tröskel och markering vid den användbara spårvagnsdörren.
-- [ ] 18. Kontrollera och förbättra traktorns sikt över huv och framhjul för båda förarna.
+- [x] 18. Traktorns förarvy med C. Kontrollerad i spelvyn för Axel och Alma med sikt över huven och båda framskärmarna.
 - [ ] 19. Valbar arbetskamera där skoptänderna och marken syns samtidigt.
 - [ ] 20. Användbara förarvyer i buss och sopbil med sikt mot hållplats respektive kärl.
 

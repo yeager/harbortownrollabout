@@ -191,7 +191,7 @@ var ground_work := preload("res://environment/ground_work.gd").new(CITY_INTERIOR
 var blade_left: Vector3
 var blade_right: Vector3
 var ploughs: Array[Node3D] = []
-const DRIVER_VIEW_VEHICLES := [3, PUCH_DAKOTA, FOOD_TRUCK]
+const DRIVER_VIEW_VEHICLES := [3, PUCH_DAKOTA, FOOD_TRUCK, FARM_TRACTOR]
 const MopedRider := preload("res://vehicles/moped_rider.gd")
 var moped_pose := MopedRider.new()
 const ICE_STOPS := [0, SCHOOL, 2]
@@ -5817,6 +5817,9 @@ func _update_camera(delta: float, snap_to_car := false) -> void:
 	if cockpit_view and vehicle_index in DRIVER_VIEW_VEHICLES:
 		var pitch := -.16
 		match vehicle_index:
+			FARM_TRACTOR:
+				camera.global_position = ambulance.to_global(Vector3(0,2.77,.40))
+				pitch = -2.2
 			PUCH_DAKOTA:
 				camera.global_position = ambulance.to_global(Vector3(0,1.53,.30))
 				pitch = -1.90
