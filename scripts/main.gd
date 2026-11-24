@@ -66,6 +66,7 @@ var projector_finish: StandardMaterial3D
 var traffic_running_lenses: Array[StandardMaterial3D] = []
 var bus_plate_finish: StandardMaterial3D
 var bus_plate_lamp_finish: StandardMaterial3D
+var bus_side_marker_finish: StandardMaterial3D
 var traffic_headlights: Array[SpotLight3D] = []
 var quay_finish := ShaderMaterial.new()
 var soil_finish: ShaderMaterial
@@ -7085,6 +7086,15 @@ func _add_bus_destination_boards(model: Node3D) -> Array[Label3D]:
 
 func _fit_bus_exterior(model: Node3D) -> void:
 	var window_seal := _material(Color("#22292c"), .64)
+	if not bus_side_marker_finish:
+		bus_side_marker_finish = _material(Color("#a6561d"),.32,true)
+		bus_side_marker_finish.emission = Color("#ffaa43")
+		bus_side_marker_finish.emission_energy_multiplier = 3.0 * maxf(last_night,0)
+		traffic_running_lenses.append(bus_side_marker_finish)
+	for side in [-1.0,1.0]:
+		for z in [-3.15,1.0,3.5]:
+			var marker := _make_box("Bus side marker lens",Vector3(.018,.064,.152),Vector3(side*1.231,1.13,z),Color.WHITE,false,model)
+			marker.material_override = bus_side_marker_finish
 	var brake_housing := _make_box("Bus centre brake housing",Vector3(.58,.078,.028),Vector3(0,1.395,-5.249),window_seal.albedo_color,false,model)
 	var brake_glass := _make_box("Centre brake lamp",Vector3(.51,.038,.012),Vector3(0,0,-.017),Color("#921517"),false,brake_housing)
 	var brake_finish := brake_glass.material_override as StandardMaterial3D
