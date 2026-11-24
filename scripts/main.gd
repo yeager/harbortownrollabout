@@ -8426,7 +8426,7 @@ func _build_overlay() -> void:
 	box.add_child(menu_actions)
 	var practice_button := _button("Practice driving", 165)
 	practice_button.name = "PracticeDriving"
-	box.add_child(practice_button)
+	menu_actions.add_child(practice_button)
 	fire_bay_button = _button("Return to bay 711",220)
 	box.add_child(fire_bay_button)
 	fire_bay_button.pressed.connect(func():
