@@ -195,6 +195,7 @@ def pumper_running_gear(root,chassis):
         bpy.context.view_layer.objects.active=chassis
         bpy.ops.object.modifier_apply(modifier=cut.name)
         bpy.data.objects.remove(cutter,do_unlink=True)
+        recess = .105 if y > 0 else 0.0
         for side in (-1,1):
             def rings(profile):
                 return [[(side*d,y+r*math.cos(i*math.tau/64),.51+r*math.sin(i*math.tau/64))
@@ -204,8 +205,11 @@ def pumper_running_gear(root,chassis):
                   (1.174,.51),(1.181,.499),(1.188,.51),(1.225,.51),
                   (1.25,.495),(1.278,.451),(1.291,.389),(1.283,.303)]
             profile_loft("All terrain tire",rings(tire+[tire[0]]),RUBBER,root,close_ends=False)
-            profile_loft("Alloy wheel rim",rings([(1.232,.308),(1.287,.309),
-                (1.296,.298),(1.278,.277)]),wheel_finish,root,close_ends=False)
+            lip = [(1.232,.308),(1.287,.309),(1.296,.298)]
+            if recess:
+                lip.extend([(1.275,.293),(1.229,.291),(1.189,.287)])
+            lip.append((1.278-recess,.277))
+            profile_loft("Alloy wheel rim",rings(lip),wheel_finish,root,close_ends=False)
             # Stamp each vent into a sector of the dished steel centre.
             vertices,faces=[],[]
             for i in range(8):
@@ -224,7 +228,7 @@ def pumper_running_gear(root,chassis):
                             angle=center_angle+(.192 if layer==1 else .169)*u
                             r=.220+(.036 if layer==1 else .032)*v
                             depth=1.255 if layer==1 else 1.237
-                        vertices.append((side*depth,y+r*math.cos(angle),.51+r*math.sin(angle)))
+                        vertices.append((side*(depth-recess),y+r*math.cos(angle),.51+r*math.sin(angle)))
                 for row in [base,base+32]:
                     for j in range(32):
                         k=(j+1)%32
@@ -237,16 +241,16 @@ def pumper_running_gear(root,chassis):
             dish=bpy.data.objects.new("Alloy wheel ventilated dish",mesh)
             bpy.context.collection.objects.link(dish)
             dish.parent=root
-            cylinder("Brake disc",(side*1.205,y,.51),.268,.028,DARK,root=root)
-            profile_loft("Alloy wheel bolt flange",rings([(1.278,.151),(1.285,.095)]),wheel_finish,root)
+            cylinder("Brake disc",(side*(1.205-recess),y,.51),.268,.028,DARK,root=root)
+            profile_loft("Alloy wheel bolt flange",rings([(1.278-recess,.151),(1.285-recess,.095)]),wheel_finish,root)
             if y < 0:
                 profile_loft("Front axle hub cover",rings([(1.283,.105),(1.309,.106),
                     (1.337,.092),(1.345,.066),(1.346,.025)]),wheel_finish,root)
             else:
-                cylinder("Center cap",(side*1.296,y,.51),.105,.082,DARK,root=root)
+                cylinder("Center cap",(side*(1.296-recess),y,.51),.105,.082,DARK,root=root)
             for i in range(10):
                 angle=math.tau*i/10
-                cylinder("Wheel bolt",(side*1.292,y+.139*math.cos(angle),.51+.139*math.sin(angle)),
+                cylinder("Wheel bolt",(side*(1.292-recess),y+.139*math.cos(angle),.51+.139*math.sin(angle)),
                          .018,.034,stud_finish,vertices=6,root=root)
             arch=[]
             for i in range(41):
