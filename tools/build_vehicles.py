@@ -1291,14 +1291,14 @@ def make_fire_engine():
         side=1 if x>0 else -1
         # The lens cluster wraps back towards the cab corner. Set each
         # reflector behind a rolled chrome edge in a common rubber housing.
-        def light_ring(cx,cz,w,h,depth):
+        def light_ring(cx,cz,w,h,depth,corner=.24):
             ring=[]
             for i in range(32):
                 angle=i*math.tau/32
                 c,sn=math.cos(angle),math.sin(angle)
-                u=cx+.5*w*math.copysign(abs(c)**.48,c)
+                u=cx+.5*w*math.copysign(abs(c)**corner,c)
                 sweep=(u-.86)/.24
-                z=cz-.445+.035*sweep+.5*h*(1-.25*sweep)*math.copysign(abs(sn)**.48,sn)
+                z=cz-.445+.035*sweep+.5*h*(1-.25*sweep)*math.copysign(abs(sn)**corner,sn)
                 ring.append((side*u,depth-.060+.080*((u-.63)/.48)**2,z))
             return ring
         pocket = [light_ring(.866,1.424,.499,.302,d) for d in (-3.24,-2.94)]
@@ -1307,11 +1307,11 @@ def make_fire_engine():
                ((.490,.296,-2.93),(.494,.297,-3.030),(.482,.280,-3.052),(.455,.246,-3.044))]
         profile_loft("Cab headlamp seal",shell,RUBBER,root)
         for cx,w in ((.763,.179),(.945,.156)):
-            optic=[light_ring(cx,1.448,w*f,.155*f,d) for f,d in
+            optic=[light_ring(cx,1.448,w*f,.155*f,d,corner=.58) for f,d in
                    ((1,-3.050),(.94,-3.061),(.81,-3.047),(.63,-3.027))]
             profile_loft("Cab reflector",optic,METAL,root,close_ends=False)
             profile_loft("Cab projector",[
-                light_ring(cx,1.448,w*f,.155*f,d) for f,d in
+                light_ring(cx,1.448,w*f,.155*f,d,corner=.58) for f,d in
                 ((.64,-3.036),(.52,-3.052),(.26,-3.061))],projector_glass,root)
         cover_rings=[light_ring(.861,1.447,w,h,d) for w,h,d in
                      ((.469,.252,-3.060),(.465,.248,-3.067),(.452,.239,-3.073))]
@@ -1319,7 +1319,7 @@ def make_fire_engine():
         amber=material("Amber cab signal",(.88,.235,.012),.12,.23)
         profile_loft("Cab amber signal",[
             light_ring(.865,1.335,w,h,d) for w,h,d in
-            ((.384,.043,-3.013),(.377,.041,-3.023),(.356,.029,-3.028))],amber,root)
+            ((.369,.030,-3.052),(.365,.028,-3.055),(.352,.023,-3.058))],amber,root)
         x = side*1.075
         cube("Rear combination lamp seal",(x,3.071,1.47),(.148,.088,.435),RUBBER,.019,root)
         for label,z,height,finish in (
@@ -1332,8 +1332,12 @@ def make_fire_engine():
         u=abs(x)/1.13
         setback=.031*u*u+.235*u**7
         low=.355+.115*u**5
+        fold=max(0,min(1,(abs(x)-.54)/.22))
+        belt=.676+.075*u**3
         bumper.append([(x,-3.115+setback+dy,z) for dy,z in
                        ((.265,low+.029),(.064,low),(.015,low+.025),(-.012,low+.078),
+                        (-.014,belt-.052),(.037*fold-.014,belt-.012),
+                        (.038*fold-.014,belt+.010),(-.015,belt+.032),
                         (-.018,.934),(-.007,1.013),(.021,1.052),(.060,1.062),(.264,1.030))])
     bumper_shell = profile_loft("Wraparound crew cab bumper",bumper,cab_red,root)
     aprons = [part for part in root.children if part.name.startswith("Sculpted cab corner apron")]
