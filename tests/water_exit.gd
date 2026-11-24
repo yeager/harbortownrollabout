@@ -42,6 +42,11 @@ func check_exits() -> void:
 	game._select_gallery_activity(4)
 	game.walker.hide()
 	game.launch.position = Vector3(71, 0, 25)
+	game._process(0)
+	if game.seat_button.visible:
+		printerr("The disembark button was visible offshore")
+		quit(1)
+		return
 	game._change_seat()
 	if game.walker.visible or not game.boating or game.listener.get_parent() != game.launch:
 		printerr("Player left the motorboat over open water")
@@ -67,6 +72,10 @@ func check_exits() -> void:
 		quit(1)
 		return
 	game._recover_position()
+	if not game.seat_button.visible or game.seat_button.disabled:
+		printerr("The disembark button was unavailable at the berth")
+		quit(1)
+		return
 	game.free_drive = true
 	game.map_goal = game.TARGETS[0]
 	game._change_seat()

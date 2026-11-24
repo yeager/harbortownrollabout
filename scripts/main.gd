@@ -829,8 +829,11 @@ func _process(delta: float) -> void:
 			_drive_excavator(delta)
 		elif boating:
 			_drive_launch(delta)
-			seat_button.visible = _launch_at_berth()
-			_update_entry_button()
+			var can_step_ashore := _launch_at_berth()
+			if seat_button.visible != can_step_ashore:
+				seat_button.visible = can_step_ashore
+				if can_step_ashore:
+					_update_entry_button()
 		elif tram_mode > 0 or ferry_passenger:
 			_end_skid()
 		elif walker.visible:
