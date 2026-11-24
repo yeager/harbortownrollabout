@@ -217,9 +217,14 @@ func check_route() -> void:
 	quit()
 
 func check_traffic_lights(game: Node) -> bool:
-	var bus: Node3D = game._spawn_traffic(game.VEHICLE_SCENES_ALL[game.BUS], -30, 2.35, 1, 5.0, .8)
-	# This fixture checks lights in place and has no traffic route.
-	game.traffic_data.pop_back()
+	var bus: Node3D = game._spawn_traffic(game.VEHICLE_SCENES_ALL[game.BUS], -480, 56, 1, 5.0, .8)
+	var traffic_bus: Dictionary = game.traffic_data.back()
+	var route := Curve3D.new()
+	route.add_point(Vector3(-480,0,65))
+	route.add_point(Vector3(-480,0,10))
+	traffic_bus.route = route
+	traffic_bus.distance = 9.0
+	game._place_traffic(traffic_bus)
 	var beams := bus.find_children("*", "SpotLight3D", false, false)
 	var lenses := bus.find_children("Bus headlight lens*", "MeshInstance3D", true, false)
 	for body: Node3D in [bus, game.parked_cars[game.BUS]]:
@@ -247,6 +252,22 @@ func check_traffic_lights(game: Node) -> bool:
 		if not beams.all(func(beam: SpotLight3D): return beam.visible == night) or not lenses.all(func(lens: MeshInstance3D): return (lens.get_active_material(0).emission_energy_multiplier > 0) == night):
 			printerr("Traffic bus beams or lenses did not follow the day cycle")
 			return false
+	var centre: StandardMaterial3D = traffic_bus.brake_lens.get_meta("centre_lamp", null)
+	if centre == null or centre.emission_enabled:
+		printerr("The traffic bus centre brake lamp should start off")
+		return false
+	traffic_bus.speed = 4.0
+	traffic_bus.cruise = 0.0
+	game._update_traffic(.016)
+	if not centre.emission_enabled:
+		printerr("Traffic braking did not activate the bus centre lamp")
+		return false
+	traffic_bus.cruise = 5.0
+	traffic_bus.speed = 0.0
+	game._update_traffic(.016)
+	if centre.emission_enabled:
+		printerr("Traffic acceleration did not release the bus centre lamp")
+		return false
 	return true
 
 func write_incomplete_checkpoint(game: Node) -> void:
