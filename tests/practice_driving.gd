@@ -63,6 +63,11 @@ func verify() -> void:
 	game._on_vehicle_selected(game.TAXI)
 	game._start_practice()
 	game.phone.open_button.pressed.emit()
+	TranslationServer.set_locale("sv")
+	if game.phone.take_job.tr(game.phone.take_job.text) != "Åk till staden för ett uppdrag":
+		printerr("Job button should explain that accepting leaves practice")
+		quit(1)
+		return
 	game.phone.take_job.pressed.emit()
 	var taxi_position: Vector3 = game.ambulance.position
 	if game.practice_active or game.free_drive or not game.CITY_INTERIOR.has_point(Vector2(taxi_position.x,taxi_position.z)) or game.phone.current_job != "Taxi requested at the square.":

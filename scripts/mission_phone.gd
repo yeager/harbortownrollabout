@@ -121,7 +121,6 @@ func _ready() -> void:
 	history_scroll.follow_focus = true
 	job_heading.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	job_heading.add_theme_font_size_override("font_size",18)
-	take_job.text = "Take a job"
 	content.add_child(star_progress)
 	content.add_child(star_album)
 	memory_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED

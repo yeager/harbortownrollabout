@@ -1818,3 +1818,6 @@ msgstr ""
 
 msgid "Boule court"
 msgstr ""
+
+msgid "Return to town for a job"
+msgstr ""

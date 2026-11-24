@@ -1896,3 +1896,6 @@ msgstr "Insert"
 
 msgid "Boule court"
 msgstr "Pista de petanca"
+
+msgid "Return to town for a job"
+msgstr "Volver a la ciudad para un encargo"

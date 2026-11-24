@@ -1885,3 +1885,6 @@ msgstr "Insert"
 
 msgid "Boule court"
 msgstr "Petankkikenttä"
+
+msgid "Return to town for a job"
+msgstr "Palaa kaupunkiin tekemään tehtävä"

@@ -9847,6 +9847,7 @@ func _refresh_dispatch() -> void:
 		if cat_quest == FootQuest.RETURNING: phone.foot_jobs.append("Walk back to the neighbour with the cat.")
 	leave_practice_button.visible = _play_bounds(walker.position if walker.visible else ambulance.position) == PRACTICE_YARD
 	map_button.visible = free_drive and not boating and not operating_excavator and tram_mode == 0 and not ferry_passenger and not leave_practice_button.visible
+	phone.take_job.text = "Return to town for a job" if leave_practice_button.visible else "Take a job"
 	phone.take_job.visible = free_drive and not walker.visible and not boating and not operating_excavator and tram_mode == 0 and not ferry_passenger and mission_index < TARGETS.size()
 	phone.visible = mode=="playing" and not paused
 	if free_drive or mode!="playing" or mission_index>=TARGETS.size():

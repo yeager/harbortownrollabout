@@ -1904,3 +1904,6 @@ msgstr "Inser"
 
 msgid "Boule court"
 msgstr "Terrain de pétanque"
+
+msgid "Return to town for a job"
+msgstr "Retourner en ville pour une mission"
