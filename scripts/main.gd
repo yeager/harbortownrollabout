@@ -415,7 +415,7 @@ var steering := 0.0
 var map_goal := Vector3.INF
 var map_button := Button.new()
 var leave_practice_button := Button.new()
-const MAP_NAMES := ["Town square","Clinic","Marina","School","Petrol station","Hot dog stand","Bakery","Boule court","Pizzeria"]
+const MAP_NAMES := ["Town square","Clinic","Marina","School","Petrol station","Hot dog stand","Bakery","Boule court","Pizzeria","Sweet shop","Momo & Bori"]
 var free_drive := true
 var mission_index := 0
 const FireLocker := preload("res://scripts/fire_locker.gd")
@@ -8272,7 +8272,7 @@ func _build_town_map() -> void:
 	var chart := preload("res://scripts/town_map.gd").new()
 	body.add_child(chart)
 	var counter := shops.grill_counter()
-	chart.configure(navigator,PackedVector3Array([TARGETS[0],TARGETS[1],TARGETS[2],SCHOOL_CURB,STATION_DROP,counter,FLOUR_CURB,BOULE_BENCH_APPROACH,shops.pizzeria_entrance()]),MAP_NAMES)
+	chart.configure(navigator,PackedVector3Array([TARGETS[0],TARGETS[1],TARGETS[2],SCHOOL_CURB,STATION_DROP,counter,FLOUR_CURB,BOULE_BENCH_APPROACH,shops.pizzeria_entrance(),shops.storefront_entrance("Sweet shop"),shops.storefront_entrance("Momo & Bori")]),MAP_NAMES)
 	dialog.window_input.connect(func(event: InputEvent):
 		if not event is InputEventKey or not event.pressed or event.echo or event.is_command_or_control_pressed() or event.alt_pressed:
 			return
@@ -8281,8 +8281,12 @@ func _build_town_map() -> void:
 			dialog.hide()
 			return
 		var first_key := KEY_KP_1 if event.keycode >= KEY_KP_1 else KEY_1
-		var index: int = event.keycode - first_key
-		if index >= 0 and index < chart.stops.size():
+		var index: int = event.keycode-first_key
+		if event.keycode in [KEY_0,KEY_KP_0]:
+			index = 9
+		elif index < 0 or index > 8:
+			return
+		if index >= 0 and index < mini(10,chart.stops.size()):
 			dialog.set_input_as_handled()
 			chart.picked.emit(index)
 	)
@@ -8291,7 +8295,7 @@ func _build_town_map() -> void:
 	for i in MAP_NAMES.size():
 		var button := Button.new()
 		button.toggle_mode = true
-		button.text = "%d · %s" % [i+1,tr(MAP_NAMES[i])]
+		button.text = "%d · %s" % [chart.pin_number(i),tr(MAP_NAMES[i])]
 		button.pressed.connect(func(): chart.picked.emit(i))
 		legend.add_child(button)
 	chart.picked.connect(func(index: int):
@@ -8312,7 +8316,7 @@ func _build_town_map() -> void:
 			var selected: bool = map_goal == chart.stops[i]
 			legend.get_child(i).set_pressed_no_signal(selected)
 			chart.get_child(i).set_pressed_no_signal(selected)
-			legend.get_child(i).text = "%d · %s" % [i+1,caption]
+			legend.get_child(i).text = "%d · %s" % [chart.pin_number(i),caption]
 			chart.get_child(i).tooltip_text = caption
 			chart.get_child(i).accessibility_name = caption
 		chart.queue_redraw()

@@ -287,7 +287,10 @@ func build_menu(ui: CanvasLayer) -> void:
 	shop_card.hide()
 
 func pizzeria_entrance() -> Vector3:
-	return Vector3(storefront_x(SHOPS.find("Pizzeria")), 0, FRONT_Z + .6)
+	return storefront_entrance("Pizzeria")
+
+func storefront_entrance(shop_name: String) -> Vector3:
+	return Vector3(storefront_x(SHOPS.find(shop_name)),0,FRONT_Z+.6)
 
 func grill_counter() -> Vector3:
 	return Vector3(storefront_x(SHOPS.find("Hot dog stand")), 0, FRONT_Z - 0.9)

@@ -8,6 +8,9 @@ var stops := PackedVector3Array()
 func plot(point: Vector2) -> Vector2:
 	return Vector2(22,22) + (point + Vector2(520,85)) * (size - Vector2(44,44)) / Vector2(700,155)
 
+func pin_number(index: int) -> int:
+	return 0 if index == 9 else index+1
+
 func configure(route, landmarks: PackedVector3Array, captions: Array) -> void:
 	navigator = route
 	stops = landmarks
@@ -15,7 +18,7 @@ func configure(route, landmarks: PackedVector3Array, captions: Array) -> void:
 	for i in stops.size():
 		var pin := Button.new()
 		pin.toggle_mode = true
-		pin.text = str(i+1)
+		pin.text = str(pin_number(i))
 		pin.tooltip_text = tr(captions[i])
 		pin.accessibility_name = tr(captions[i])
 		pin.custom_minimum_size = Vector2(34,34)
