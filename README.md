@@ -23,6 +23,8 @@ On a Mac, open **Apple menu → About This Mac** if you’re unsure which downlo
 
 Click a vehicle picture, choose Axel or Alma, then select **Start driving**. Hold **W** to move, steer with **A** and **D**, and press **S** to brake. The arrow keys work too. If you prefer the mouse, hold the left button to drive and move the mouse sideways to steer. **R** brings you back to a safe spot if you get stuck.
 
+Choose **Practice driving** on the main menu to try the controls on a traffic-free course. If you get stuck there, **R** returns you to a safe spot on the course. Select **Return to town** when you’re ready to explore.
+
 At a traffic light, stop on red, slow down on orange and go on green. By default, the game helps you stop at the line. If you enable **Allow driving through red lights** in Driving settings, crossing on red brings up a reminder.
 
 ![Choosing a vehicle on the main menu](docs/screenshots/vehicle-selection.png)
