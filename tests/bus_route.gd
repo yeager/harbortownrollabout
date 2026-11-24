@@ -35,6 +35,15 @@ func check_route() -> void:
 	for night in [false,true,false]:
 		game.time_mode = 1 if night else 0
 		game._update_daylight(0.0)
+		if game.projector_finish == null or (game.projector_finish.emission_energy_multiplier > 0.0) != night:
+			printerr("The bus headlight lenses did not follow the time of day")
+			quit(1)
+			return
+		for beam: SpotLight3D in game.headlights:
+			if beam.visible != night or (beam.light_energy > 0.0) != night:
+				printerr("The bus headlight beams did not follow the time of day")
+				quit(1)
+				return
 		if game.bus_ceiling_lights.size() != 3:
 			printerr("The bus must have three saloon lights")
 			quit(1)
