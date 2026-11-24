@@ -815,6 +815,37 @@ def rear_prismatic_lens(name, x, z, height, finish, root):
     mesh.materials.append(finish)
 
 
+def fit_fire_speedometer(root):
+    x, y, z = -.57, -2.823, 2.005
+    for name, depth, radius, finish in (
+            ("Speedometer bezel", 0, .110, METAL),
+            ("Speedometer dial", .006, .102, BLACK)):
+        dial = cylinder(name, (x, y+depth, z), radius, .009, finish, False, 48, root)
+        dial.rotation_euler.x = math.pi / 2
+    for index in range(25):
+        angle = math.radians(-135 + index*270/24)
+        major = index % 4 == 0
+        radius = .084 if major else .089
+        mark = cube("Speed graduation", (x-radius*math.sin(angle), y+.014,
+                    z+radius*math.cos(angle)), (.003, .003, .019 if major else .009),
+                    HEADLAMP, .001, root)
+        mark.rotation_euler.y = -angle
+    for speed in range(0, 121, 20):
+        angle = math.radians(-135 + speed*270/120)
+        label = text_obj("Speed dial numeral", str(speed),
+                         (x-.059*math.sin(angle), y+.014, z+.059*math.cos(angle)-.005),
+                         .018, HEADLAMP, root=root, flat=True)
+        label.rotation_euler = (math.pi/2, 0, math.pi)
+        label.location.x += max(v.co.x for v in label.data.vertices)*.5
+    needle = cube("Fire speed needle", (x, y+.020, z), (.005, .004, .075),
+                  PAINT_RED, .001, root)
+    for vertex in needle.data.vertices:
+        vertex.co.z += .033
+    needle.rotation_euler.y = math.radians(135)
+    hub = cylinder("Speedometer spindle", (x, y+.024, z), .010, .007, DARK, False, 16, root)
+    hub.rotation_euler.x = math.pi / 2
+
+
 def fit_fire_cab_headliner(root):
     liner = material("Crew cab headliner fabric", (.48, .46, .42), 0, .92)
     cube("Moulded headliner", (0, -2.10, 3.028), (1.93, 2.16, .065), liner, .032, root)
@@ -1356,6 +1387,7 @@ def make_fire_engine():
             vertex.co=inverse@point
     shape_fire_cab_roof(root)
     fit_fire_cab_headliner(root)
+    fit_fire_speedometer(root)
     return root
 
 def profile_loft(name, rings, finish, parent, close_ends=True):

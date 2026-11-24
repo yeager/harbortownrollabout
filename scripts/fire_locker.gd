@@ -5,9 +5,11 @@ var reflector_finish := StandardMaterial3D.new()
 var panel: MeshInstance3D
 var fittings: Array[MeshInstance3D] = []
 var closed_height := 0.0
+var speed_needle: Node3D
 var lift := 0.0
 
 func fit(model: Node3D) -> void:
+	speed_needle = model.find_child("Fire speed needle", true, false)
 	panel = model.find_child("Roller shutter",true,false)
 	var carrier := panel.get_parent()
 	carrier.add_child(self)
@@ -78,6 +80,9 @@ func _fit_rear_reflector(blind: MeshInstance3D) -> void:
 	var outside := signf(blind.position.x)
 	reflector.position = Vector3(outside * (bounds.size.x * .5 + .045), bounds.position.y - .025, bounds.position.z - .008)
 	blind.add_child(reflector)
+
+func set_road_speed(metres_per_second: float) -> void:
+	speed_needle.rotation.z = deg_to_rad(-135.0 + 270.0 * clampf(absf(metres_per_second) * 3.6 / 120.0, 0.0, 1.0))
 
 func advance(delta: float, opening: bool, reversing := false) -> void:
 	var active := opening or reversing
