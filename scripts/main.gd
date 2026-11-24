@@ -7066,6 +7066,11 @@ func _add_bus_destination_boards(model: Node3D) -> Array[Label3D]:
 	return [bus_board,rear_bus_board,side_bus_board]
 
 func _fit_bus_exterior(model: Node3D) -> void:
+	for pocket in model.find_children("Wraparound headlamp pocket*", "MeshInstance3D", true, false):
+		pocket.position.z -= .025
+		pocket.scale.z *= .72
+	for lens in model.find_children("Bus headlight lens*", "MeshInstance3D", true, false):
+		lens.position.z -= .036
 	var mirror_glass := _material(Color("#9bacb3"), .17)
 	mirror_glass.metallic = .78
 	for side in [-1.0,1.0]:
