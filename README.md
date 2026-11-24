@@ -42,6 +42,7 @@ At a traffic light, stop on red, slow down on orange and go on green. By default
 - **Spend your first coins.** Park near Stationsallén, press **F** to get out, then walk to the pizzeria or sweet shop. Use **Tab** to choose what you want and **Enter** to buy it.
 - **Play boule by the canal.** Follow the signs from the ferry to the gravel court. Press **F** by the throwing circle to join. On your turn, aim with **←** or **→**, use **Tab** to choose a short, medium or long throw, then press **Enter** to throw. Try to land closest to the small yellow ball.
 - **Cross the canal on Lotten.** Walk down the steps to a landing. When the ferry pulls alongside, press **F** to board. Press **F** during the crossing to get off at the next landing.
+- **Take the motorboat.** Choose **Motorboat** on the town map and follow the arrows to the wooden pier on the east quay. Press **F** to board or step ashore when the boat is stopped at the pier. While driving the boat, press **R** to return to its berth.
 
 ![Driving an ambulance through Harbor Town](docs/screenshots/driving.png)
 
@@ -74,7 +75,7 @@ At a traffic light, stop on red, slow down on orange and go on green. By default
 
 Under **Settings → Driving**, you can choose Backspace for recovery, 0 for jumping, 9 and 3 for camera height, or F2 for the phone.
 
-In **Free exploration**, press **F5** or click **Town map**, then click a place or press its number (1–9). Press **F5** again to close the map and keep your current destination. For the pizzeria, choose **9** and walk through the door. For the hot dog stand, choose **6**, park nearby and follow the arrows on foot to the counter.
+In **Free exploration**, press **F5** or click **Town map**. Click a place, use **Tab** and **Enter**, or press the shortcut for a destination numbered **0–9**. Press **F5** again to close the map and keep your destination. For the pizzeria, choose **9** and walk through the door. For the hot dog stand, choose **6**, park nearby and follow the arrows on foot to the counter.
 
 The radio switches on when you enter a vehicle. It plays songs in your chosen language. If there are none yet, it plays English songs.
 
