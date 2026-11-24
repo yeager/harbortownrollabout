@@ -7258,6 +7258,8 @@ func _update_route_arrows() -> void:
 	if free_drive and arrived:
 		if walker.visible or not (grill_destination or bench_destination):
 			map_goal = Vector3.INF
+			if target == FIRE_RETURN_BAY and is_instance_valid(driven_fire_locker):
+				driven_fire_locker.set_destination("")
 		return
 	var start := Vector2(origin.x, origin.z)
 	var points := PackedVector2Array()
@@ -10013,7 +10015,9 @@ func _refresh_ui() -> void:
 		mission_label.text = "ALL MISSIONS COMPLETE"
 	if is_instance_valid(driven_fire_locker):
 		var destination := ""
-		if not free_drive and mission_index < FIRE_TASKS.size():
+		if free_drive and map_goal == FIRE_RETURN_BAY:
+			destination = tr("Fire station")
+		elif not free_drive and mission_index < FIRE_TASKS.size():
 			destination = tr(MAP_NAMES[_mission_stop()])
 		driven_fire_locker.set_destination(destination)
 	fire_bay_button.visible = mode == "complete" and vehicle_index == 2

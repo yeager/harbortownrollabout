@@ -1894,3 +1894,6 @@ msgstr "Oranssi valo. Hidasta."
 
 msgid "Use F12 to look around"
 msgstr "Katsele ympärillesi F12-näppäimellä"
+
+msgid "Fire station"
+msgstr "Paloasema"

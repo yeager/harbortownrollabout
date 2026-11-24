@@ -1828,3 +1828,6 @@ msgstr "Orange ljus. Sakta in."
 
 msgid "Use F12 to look around"
 msgstr "Använd F12 för att se dig omkring"
+
+msgid "Fire station"
+msgstr "Brandstationen"

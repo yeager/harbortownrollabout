@@ -1898,3 +1898,6 @@ msgstr "Oransje lys. Senk farten."
 
 msgid "Use F12 to look around"
 msgstr "Bruk F12 for å se deg rundt"
+
+msgid "Fire station"
+msgstr "Brannstasjonen"

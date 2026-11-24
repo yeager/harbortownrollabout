@@ -1915,3 +1915,6 @@ msgstr "Orange. Langsamer fahren."
 
 msgid "Use F12 to look around"
 msgstr "Mit F12 umsehen"
+
+msgid "Fire station"
+msgstr "Feuerwache"

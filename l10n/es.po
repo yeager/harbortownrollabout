@@ -1905,3 +1905,6 @@ msgstr "Luz ámbar. Reduce la velocidad."
 
 msgid "Use F12 to look around"
 msgstr "Usar F12 para mirar alrededor"
+
+msgid "Fire station"
+msgstr "Parque de bomberos"

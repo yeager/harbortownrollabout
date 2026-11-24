@@ -1913,3 +1913,6 @@ msgstr "Feu orange. Ralentis."
 
 msgid "Use F12 to look around"
 msgstr "Utiliser F12 pour regarder autour de soi"
+
+msgid "Fire station"
+msgstr "Caserne de pompiers"
