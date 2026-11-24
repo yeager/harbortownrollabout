@@ -66,6 +66,13 @@ func verify() -> void:
 		printerr("Driving around the stop line did not trigger a retry")
 		quit(1)
 		return
+	var retry_hint: String = game.tr("You passed the line. Reverse until this message clears.")
+	game.speed = -7.0
+	game._refresh_status()
+	if not game.status_label.text.begins_with(retry_hint):
+		printerr("The retry hint disappeared while reversing behind the stop line")
+		quit(1)
+		return
 	game.speed = 0.0
 	game._track_practice_stop(before,2.0,1.0)
 	if not game.practice_stop_missed or game.practice_stop_complete:
@@ -74,6 +81,11 @@ func verify() -> void:
 		return
 	var retry := before-Vector3.RIGHT
 	game._track_practice_stop(retry,2.0,1.0)
+	game._refresh_status()
+	if not game.status_label.text.begins_with(game.tr("Come to a full stop at the stop line.")):
+		printerr("The stop instruction did not return after resetting the attempt")
+		quit(1)
+		return
 	game._track_practice_stop(before,2.0,1.0)
 	if game.practice_stop_missed or not game.practice_stop_complete:
 		printerr("A full stop at the line was not accepted")
@@ -86,6 +98,11 @@ func verify() -> void:
 	game._track_practice_signal(signal_wait,signal_cross,2.0,1.0,.2)
 	if not game.practice_signal_missed or game.practice_signal_complete:
 		printerr("Crossing the practice signal on red was accepted")
+		quit(1)
+		return
+	game._refresh_status()
+	if not game.status_label.text.begins_with(retry_hint):
+		printerr("Crossing on red did not show the retry hint")
 		quit(1)
 		return
 	var signal_retry := signal_wait-Vector3.RIGHT*4.0
