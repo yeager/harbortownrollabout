@@ -77,5 +77,24 @@ func check_perimeter() -> void:
 			printerr("Misplaced mower resumed in the wrong play area: ", restored)
 			quit(1)
 			return
+		game._change_seat()
+		var edge := Vector3(bounds.position.x + .05, 0, bounds.get_center().y)
+		game.walker.position = edge
+		game._save_checkpoint()
+		game.free()
+		game = load("res://main.tscn").instantiate()
+		root.add_child(game)
+		game._resume_road_checkpoint()
+		var feet: Vector3 = game.walker.position
+		if not game.walker.visible or not bounds.grow(-.25).has_point(Vector2(feet.x, feet.z)) or not game._on_foot_clear(feet):
+			printerr("Walking checkpoint left the player against the perimeter: ", feet)
+			quit(1)
+			return
+		if not practice:
+			game.free()
+			game = load("res://main.tscn").instantiate()
+			root.add_child(game)
+			game._on_vehicle_selected(game.MOWER)
+			game._start_game()
 	print("Mower stopped inside all four edges and corners, forward and in reverse, in both play areas.")
 	quit()
