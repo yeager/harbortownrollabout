@@ -767,8 +767,8 @@ msgstr "Parcel leverer"
 msgid "Blanket deliveries"
 msgstr "Blanket leveranser"
 
-msgid "Hold V and move the mouse to look around"
-msgstr "Hold V inne og flytt musa for å se deg rundt"
+msgid "Hold %s and move the mouse to look around"
+msgstr "Hold %s inne og flytt musa for å se deg rundt"
 
 msgid "I said hello to someone on the tram. It was my reflection. — Grandpa"
 msgstr "Jeg hilste på en på trikken. Det var speilbildet mitt. — Bestefar"
@@ -1895,3 +1895,6 @@ msgstr "Dra til byen for et oppdrag"
 
 msgid "Orange light. Slow down."
 msgstr "Oransje lys. Senk farten."
+
+msgid "Use F12 to look around"
+msgstr "Bruk F12 for å se deg rundt"

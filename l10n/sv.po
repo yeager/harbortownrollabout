@@ -732,8 +732,8 @@ msgstr "Paketleveranser"
 msgid "Blanket deliveries"
 msgstr "Filtleveranser"
 
-msgid "Hold V and move the mouse to look around"
-msgstr "Håll V och rör musen för att se dig omkring"
+msgid "Hold %s and move the mouse to look around"
+msgstr "Håll %s och rör musen för att se dig omkring"
 
 msgid "I said hello to someone on the tram. It was my reflection. — Grandpa"
 msgstr "Jag hälsade på någon på Tvärbanan. Det var min spegelbild. – Morfar"
@@ -1825,3 +1825,6 @@ msgstr "Åk till staden för ett uppdrag"
 
 msgid "Orange light. Slow down."
 msgstr "Orange ljus. Sakta in."
+
+msgid "Use F12 to look around"
+msgstr "Använd F12 för att se dig omkring"

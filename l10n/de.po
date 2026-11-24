@@ -776,8 +776,8 @@ msgstr "Paketlieferungen"
 msgid "Blanket deliveries"
 msgstr "Blankettenlieferungen"
 
-msgid "Hold V and move the mouse to look around"
-msgstr "Halte V gedrückt und bewege die Maus, um dich umzusehen"
+msgid "Hold %s and move the mouse to look around"
+msgstr "Halte %s gedrückt und bewege die Maus, um dich umzusehen"
 
 msgid "I said hello to someone on the tram. It was my reflection. — Grandpa"
 msgstr ""
@@ -1912,3 +1912,6 @@ msgstr "Für einen Auftrag in die Stadt fahren"
 
 msgid "Orange light. Slow down."
 msgstr "Orange. Langsamer fahren."
+
+msgid "Use F12 to look around"
+msgstr "Mit F12 umsehen"

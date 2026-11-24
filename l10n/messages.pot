@@ -731,7 +731,7 @@ msgstr ""
 msgid "Blanket deliveries"
 msgstr ""
 
-msgid "Hold V and move the mouse to look around"
+msgid "Hold %s and move the mouse to look around"
 msgstr ""
 
 msgid "I said hello to someone on the tram. It was my reflection. — Grandpa"
@@ -1823,4 +1823,7 @@ msgid "Return to town for a job"
 msgstr ""
 
 msgid "Orange light. Slow down."
+msgstr ""
+
+msgid "Use F12 to look around"
 msgstr ""

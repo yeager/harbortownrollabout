@@ -765,8 +765,8 @@ msgstr "Pakettitoimitukset"
 msgid "Blanket deliveries"
 msgstr "Tyhjennykset"
 
-msgid "Hold V and move the mouse to look around"
-msgstr "Pidä V pohjassa ja liikuta hiirtä katsellaksesi ympärillesi"
+msgid "Hold %s and move the mouse to look around"
+msgstr "Pidä %s pohjassa ja liikuta hiirtä katsellaksesi ympärillesi"
 
 msgid "I said hello to someone on the tram. It was my reflection. — Grandpa"
 msgstr "Tervehdin ratikassa jotakuta. Se olikin peilikuvani. — Vaari"
@@ -1891,3 +1891,6 @@ msgstr "Palaa kaupunkiin tekemään tehtävä"
 
 msgid "Orange light. Slow down."
 msgstr "Oranssi valo. Hidasta."
+
+msgid "Use F12 to look around"
+msgstr "Katsele ympärillesi F12-näppäimellä"

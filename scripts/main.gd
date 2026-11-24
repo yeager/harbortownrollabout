@@ -95,6 +95,7 @@ var quit_key := KEY_F10
 var practice_active := false
 var recovery_key := KEY_R
 var jump_key := KEY_E
+var look_key := KEY_V
 var number_camera := false
 var insert_help := false
 var ctrl_run := false
@@ -916,7 +917,7 @@ func _input(event: InputEvent) -> void:
 		get_viewport().set_input_as_handled()
 		_request_quit()
 		return
-	if event is InputEventKey and event.physical_keycode == KEY_V and not event.echo:
+	if event is InputEventKey and event.physical_keycode == look_key and not event.echo:
 		if not event.pressed:
 			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 		elif _can_capture_camera():
@@ -4948,7 +4949,7 @@ func _walking_hint() -> String:
 	var run_key := tr("Ctrl") if ctrl_run else tr("Shift")
 	if run_ready_hint_time > 0:
 		return tr("Ready to run again! Hold {run} and walk forward.").replace("{run}",run_key)
-	return tr("{up}/{down} Walk · {left}/{right} Turn · {run} + {up} Run · {seat} Enter · {scooter} Scooter").replace("{run}",run_key).replace("{scooter}",OS.get_keycode_string(scooter_key)) + "   ·   " + (tr("%s Jump") % OS.get_keycode_string(jump_key)) + "   ·   " + tr("9 Raise camera · 3 Lower camera" if number_camera else "PgUp Raise camera · PgDn Lower camera") + "\n" + tr("Hold V and move the mouse to look around")
+	return tr("{up}/{down} Walk · {left}/{right} Turn · {run} + {up} Run · {seat} Enter · {scooter} Scooter").replace("{run}",run_key).replace("{scooter}",OS.get_keycode_string(scooter_key)) + "   ·   " + (tr("%s Jump") % OS.get_keycode_string(jump_key)) + "   ·   " + tr("9 Raise camera · 3 Lower camera" if number_camera else "PgUp Raise camera · PgDn Lower camera") + "\n" + (tr("Hold %s and move the mouse to look around") % OS.get_keycode_string(look_key))
 
 func _walk(delta: float) -> void:
 	if boule_guest_turn or boule_seated: return
@@ -8612,6 +8613,16 @@ func _build_overlay() -> void:
 		_save_preferences()
 	)
 	pages[2].add_child(quit_binding)
+	var look_binding := CheckButton.new()
+	look_binding.name = "LookAroundF12"
+	look_binding.text = "Use F12 to look around"
+	look_binding.button_pressed = look_key == KEY_F12
+	look_binding.toggled.connect(func(enabled: bool):
+		look_key = KEY_F12 if enabled else KEY_V
+		_save_preferences()
+		_refresh_ui()
+	)
+	pages[2].add_child(look_binding)
 	var camera_keys := CheckButton.new()
 	camera_keys.name = "NumberCameraHeight"
 	camera_keys.text = "Adjust walking camera height with 9 and 3"
@@ -9682,6 +9693,7 @@ func _load_preferences() -> void:
 	if saved_favorites is PackedStringArray: favorites = saved_favorites
 	insert_help = config.get_value("keyboard","insert_help",false) == true
 	ctrl_run = config.get_value("keyboard","ctrl_run",false) == true
+	look_key = KEY_F12 if config.get_value("keyboard","look_f12",false) == true else KEY_V
 	number_camera = config.get_value("keyboard","number_camera",false) == true
 	scooter_key = KEY_F9 if config.get_value("keyboard","scooter_f9",false) == true else KEY_U
 	seat_f3 = config.get_value("keyboard","seat_f3",false) == true
@@ -9748,6 +9760,7 @@ func _save_preferences() -> void:
 	config.set_value("gallery","favorites",favorites)
 	config.set_value("keyboard","insert_help",insert_help)
 	config.set_value("keyboard","ctrl_run",ctrl_run)
+	config.set_value("keyboard","look_f12",look_key == KEY_F12)
 	config.set_value("keyboard","number_camera",number_camera)
 	config.set_value("keyboard","scooter_f9",scooter_key == KEY_F9)
 	config.set_value("keyboard","seat_f3",seat_f3)
@@ -10025,7 +10038,7 @@ func _refresh_ui() -> void:
 		hints.text = "{up} / ↑ Drive   ·   {left} {right} / ← → Steer   ·   {down} / ↓ Brake or reverse   ·   {seat} Get out   ·   {pause} Pause"
 	else:
 		hints.text = "{up} / ↑  Drive     {left} {right} / ← →  Steer     {down} / ↓  Brake or reverse\nRelease to slow down   ·   {help} to help   ·   {pause} to pause"
-	var camera_hint := tr("Hold V and move the mouse to look around")
+	var camera_hint := (tr("Hold %s and move the mouse to look around") % OS.get_keycode_string(look_key))
 	if walker.visible and tram_mode == 0 and not boating and not ferry_passenger and shops.inside < 0:
 		camera_hint = tr("{up} / ↑ Accelerate · {down} / ↓ Brake · {left} / {right} Steer · {scooter} Fold scooter") if scooter.visible else tr("{scooter} Unfold scooter") + "   ·   " + camera_hint
 		camera_hint = camera_hint.replace("{scooter}",OS.get_keycode_string(scooter_key))

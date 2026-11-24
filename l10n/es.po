@@ -773,8 +773,8 @@ msgstr "Entregas de Parcel"
 msgid "Blanket deliveries"
 msgstr "Entregas en blanco"
 
-msgid "Hold V and move the mouse to look around"
-msgstr "Mantén pulsada V y mueve el ratón para mirar alrededor"
+msgid "Hold %s and move the mouse to look around"
+msgstr "Mantén pulsada %s y mueve el ratón para mirar alrededor"
 
 msgid "I said hello to someone on the tram. It was my reflection. — Grandpa"
 msgstr "He saludado a alguien en el tranvía. Era mi reflejo. — Abuelo"
@@ -1902,3 +1902,6 @@ msgstr "Volver a la ciudad para un encargo"
 
 msgid "Orange light. Slow down."
 msgstr "Luz ámbar. Reduce la velocidad."
+
+msgid "Use F12 to look around"
+msgstr "Usar F12 para mirar alrededor"
