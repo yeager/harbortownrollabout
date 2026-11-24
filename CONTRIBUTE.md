@@ -2,9 +2,13 @@
 
 ## Make a song for the radio
 
-Do you sing in Spanish, German, French, Norwegian Bokmål or Finnish? Those stations have a short announcement and music, and we’d love a whole song that children can sing along with while they drive. A chorus about a hot dog that lost its bun would fit right in. Choose a style you enjoy singing.
+Do you sing in Spanish, German, French, Norwegian Bokmål or Finnish? Those stations have a recorded greeting and play English songs. We’d love a song in your language that children can sing along with while they drive. A chorus about a hot dog that lost its bun would fit right in. Choose a style you enjoy singing.
 
 You can offer lyrics, a translation someone can sing, or a recording. Pick a tune from the [Swedish and English songbook](docs/Radiolatar.md) or write your own. Tell us the language, who wrote and performed it, how to credit them, and whether we can distribute the words and recording with the game. Please share only material you have permission to contribute.
+
+If you’re adding a recording to the game yourself, put the MP3 in `audio/radio/` and add the language code at the end of its name. For example, `La fugue du cornichon (Live) (FR).mp3` appears on the French radio as **La fugue du cornichon (Live)**. Use ES for Spanish, DE for German, FR for French, NB for Norwegian Bokmål or FI for Finnish.
+
+To hear your recording, open the project in Godot, let it import the MP3, then start the game. Choose the song’s language in Settings and enter a vehicle. If another song plays first, use **Next song** until yours comes on.
 
 ## Help the town speak your language
 
