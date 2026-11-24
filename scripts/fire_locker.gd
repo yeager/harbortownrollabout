@@ -94,12 +94,18 @@ func fit(model: Node3D) -> void:
 
 func _shape_side_lockers(carrier: Node3D) -> void:
 	# Longitudinal bay boundaries, measured in the model's local coordinates.
+	var slat_edge := StandardMaterial3D.new()
+	slat_edge.albedo_color = Color("#838a8c")
+	slat_edge.metallic = .52
+	slat_edge.roughness = .46
 	var old_edges := PackedFloat32Array([.78, -.88, -2.09, -3.27])
 	var new_edges := PackedFloat32Array([.78, -1.41, -2.66, -3.27])
 	for part in carrier.get_children():
 		if not part is MeshInstance3D: continue
 		var label := String(part.name)
 		if not (label.begins_with("Locker ") or label.begins_with("Roller shutter") or label.begins_with("Shutter ") or label.begins_with("Lift handle bracket")): continue
+		if label.begins_with("Shutter seam"):
+			part.material_override = slat_edge
 		var bounds: AABB = part.transform * part.get_aabb()
 		var centre := bounds.get_center()
 		var bay := 0 if centre.z > old_edges[1] else 1 if centre.z > old_edges[2] else 2
