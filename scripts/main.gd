@@ -2702,7 +2702,7 @@ func _build_waterfront() -> void:
 	uniform vec2 wake_origin;
 	uniform vec2 wake_heading;
 	uniform float wake_strength;
-	uniform vec3 quay_lamps[15];
+	uniform vec3 quay_lamps[16];
 	uniform int quay_lamp_count;
 	uniform float dusk;
 	varying vec2 surface;
@@ -4006,6 +4006,7 @@ func _build_lampposts() -> void:
 		park_sites.append(Vector3(92,0,z))
 	for z in [-32,-24,-16]:
 		park_sites.append(Vector3(58.8,0,z))
+	park_sites.append(Vector3(LAUNCH_LANDING.x + 1.4,0,LAUNCH_PIER.end.y - .25))
 	var reflected_lamps := PackedVector3Array()
 	var diffuser := CylinderMesh.new()
 	diffuser.radial_segments = 16
