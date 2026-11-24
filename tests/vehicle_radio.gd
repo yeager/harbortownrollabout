@@ -16,6 +16,11 @@ func _initialize() -> void:
 func start() -> void:
 	game = load("res://main.tscn").instantiate()
 	root.add_child(game)
+	var english: PackedStringArray = game.L10n.radio_tracks("en")
+	var swedish: PackedStringArray = game.L10n.radio_tracks("sv")
+	if english.is_empty() or game.L10n.radio_tracks("it_IT") != english or game.L10n.radio_tracks("sv_FI") != swedish:
+		fail("The radio did not resolve the regional language or fall back to English")
+		return
 	TranslationServer.set_locale(LOCALES[0])
 	game._start_game()
 
@@ -37,7 +42,26 @@ func next_locale() -> void:
 		TranslationServer.set_locale("sv")
 		phase = "controls"
 		return
+	var same_playlist: bool = game.L10n.radio_tracks(LOCALES[locale_index]) == tracks
+	var previous_song: String = game.radio_track
+	var stream: AudioStream = game.radio.stream
+	var playback: AudioStreamPlayback
+	var position: float = game.radio.get_playback_position()
+	if same_playlist and stream != null:
+		playback = game.radio.get_stream_playback()
 	TranslationServer.set_locale(LOCALES[locale_index])
+	game._sync_radio()
+	if same_playlist and stream != null:
+		var same_playback: bool = playback != null and game.radio.get_stream_playback() == playback
+		var stayed_on_track: bool = game.radio_track == previous_song and game.radio.stream == stream and game.radio.playing
+		if not same_playback or not stayed_on_track or game.radio.get_playback_position() < position:
+			fail("Changing between languages with the same playlist interrupted the song")
+			return
+		if game.radio_button.tooltip_text != game.tr("Now playing: %s") % game.song_title.text:
+			fail("The uninterrupted song tooltip did not follow the selected language")
+			return
+		# Begin the independent rotation check at the start of the next shuffle bag.
+		press(KEY_N)
 	phase = "locale"
 
 func _process(_delta: float) -> bool:
@@ -76,7 +100,9 @@ func _process(_delta: float) -> bool:
 			if song not in tracks or heard.has(song) or (tracks.size() > 1 and song == previous) or not game.radio.playing:
 				fail("Unexpected radio rotation in %s at %s" % [LOCALES[locale_index], song])
 				return false
-			var title := song.get_basename().trim_suffix(" (%s)" % LOCALES[locale_index].to_upper())
+			var title := song.get_basename()
+			for tag: String in [LOCALES[locale_index], "en"]:
+				title = title.trim_suffix(" (%s)" % tag.to_upper())
 			if not game.song_card.is_visible_in_tree() or game.song_cover.texture == null or game.song_title.text != title:
 				fail("Missing cover or title for " + song)
 				return false

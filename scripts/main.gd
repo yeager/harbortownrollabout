@@ -1121,12 +1121,15 @@ func _sync_radio() -> void:
 	var language_code := TranslationServer.get_locale()
 	if language_code != radio_language:
 		radio_language = language_code
-		radio.stop()
-		radio.stream = null
-		radio_track = ""
-		radio_bag.clear()
-		radio_tracks.clear()
-		radio_tracks.append_array(L10n.radio_tracks(language_code))
+		var localized_tracks := L10n.radio_tracks(language_code)
+		if localized_tracks != radio_tracks:
+			radio.stop()
+			radio.stream = null
+			radio_track = ""
+			radio_bag.clear()
+			radio_tracks = localized_tracks
+		elif not radio_track.is_empty():
+			radio_button.tooltip_text = tr("Now playing: %s") % song_title.text
 	var aboard := mode == "playing" and (not walker.visible or scooter.visible or boating or operating_excavator or tram_mode > 0 or ferry_passenger)
 	var current_vehicle := ""
 	if aboard:
