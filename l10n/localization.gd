@@ -34,15 +34,25 @@ const STATION_ANNOUNCEMENTS := [
 	"Havneradioen (NB).mp3", "Satamaradio (FI).mp3",
 ]
 
+static func radio_title_and_language(file: String) -> PackedStringArray:
+	var title := file.get_basename()
+	var start := title.rfind(" (")
+	if start >= 0 and title.ends_with(")"):
+		var tag := title.substr(start + 2, title.length() - start - 3)
+		var parts := tag.replace("-", "_").split("_")
+		var language := parts[0].to_lower()
+		if language in TranslationServer.get_all_languages():
+			if parts.size() == 1:
+				return PackedStringArray([title.left(start), language])
+			if parts.size() == 2 and parts[1].to_upper() in TranslationServer.get_all_countries():
+				return PackedStringArray([title.left(start), language + "_" + parts[1].to_upper()])
+	return PackedStringArray([title, SOURCE])
+
 static func radio_tracks(locale: String) -> PackedStringArray:
 	var by_locale := {}
 	for file in ResourceLoader.list_directory("res://audio/radio"):
 		if file.get_extension() != "mp3" or file in STATION_ANNOUNCEMENTS: continue
-		var name := file.get_basename()
-		var suffix := name.rfind(" (")
-		var code := SOURCE
-		if suffix >= 0 and name.ends_with(")"):
-			code = TranslationServer.standardize_locale(name.substr(suffix+2, name.length()-suffix-3).to_lower())
+		var code := radio_title_and_language(file)[1]
 		if not by_locale.has(code): by_locale[code] = []
 		by_locale[code].append(file)
 	for variant in variants(locale):

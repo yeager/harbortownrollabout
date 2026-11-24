@@ -1118,7 +1118,7 @@ func _next_radio_track() -> void:
 			radio_bag[last] = radio_bag[0]
 			radio_bag[0] = radio_track
 	radio_track = radio_bag.pop_back()
-	song_title.text = radio_track.get_basename().rsplit(" (",true,1)[0]
+	song_title.text = L10n.radio_title_and_language(radio_track)[0]
 	radio_button.tooltip_text = tr("Now playing: %s") % song_title.text
 	var cover_path := "res://branding/radio/" + radio_track.get_basename() + ".webp"
 	song_cover.texture = load(cover_path) if ResourceLoader.exists(cover_path) else preload("res://branding/radio/station.svg")
