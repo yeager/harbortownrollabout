@@ -1078,8 +1078,8 @@ func _unhandled_key_input(event: InputEvent) -> void:
 			if mode == "playing" and not paused and map_button.is_visible_in_tree() and not phone.handset.is_visible_in_tree():
 				map_button.pressed.emit()
 			return
-		if number_vehicle_switches and event.keycode in [KEY_1,KEY_2] and mode == "playing" and not paused and not phone.handset.is_visible_in_tree():
-			var control := light_button if event.keycode == KEY_1 else siren_button
+		if number_vehicle_switches and event.keycode in [KEY_1,KEY_2,KEY_KP_1,KEY_KP_2] and mode == "playing" and not paused and not phone.handset.is_visible_in_tree():
+			var control := light_button if event.keycode in [KEY_1,KEY_KP_1] else siren_button
 			if control.is_visible_in_tree() and not control.disabled:
 				control.pressed.emit()
 			return
