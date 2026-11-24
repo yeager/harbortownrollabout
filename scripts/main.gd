@@ -10033,6 +10033,7 @@ func _refresh_ui() -> void:
 		driven_fire_locker.set_destination(destination)
 	fire_bay_button.visible = mode == "complete" and vehicle_index == 2
 	var show_overlay := mode == "menu" or mode == "complete" or paused
+	status_label.visible = mode == "playing"
 	if show_overlay or vehicle_index != ICE_CREAM: ice_order.hide()
 	ui.get_node("DrivingHeader").visible = mode != "menu"
 	for control in [light_button, siren_button, pause_button]:
