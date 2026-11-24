@@ -43,6 +43,7 @@ const COLORS := ["#a86343","#427868","#b65f51","#927198","#355e4b","#375c68"]
 const FRONT_Z := 42.5
 var grill_neon_finishes: Array[StandardMaterial3D] = []
 var grill_neon_light: OmniLight3D
+var candy_blade_glow: StandardMaterial3D
 var grill_neon_phase := 0.0
 var grill_neon_lit := true
 var candy_letters: Array[Label3D] = []
@@ -1091,11 +1092,14 @@ func _sweet_shop(x: float) -> void:
 	part("Candy blade hanger", blade + Vector3(0,.42,0), Vector3(.06,.27,.06), frame)
 	var sweet_body := _turned("Candy blade centre", blade, .32, .32, .16, palette[0])
 	sweet_body.rotation.z = PI * .5
+	candy_blade_glow = get_parent()._material(pearl,.32)
+	candy_blade_glow.emission = Color("#ff7bb2")
 	for side in [-1, 1]:
 		var wrapper := _turned("Candy blade wrapper", blade + Vector3(0,0,side * .39), .075, .23, .25, palette[1])
 		wrapper.rotation.x = side * PI * .5
 		var inset := _turned("Candy blade pearl inset", blade + Vector3(side * .085,0,0), .21, .21, .025, pearl)
 		inset.rotation.z = PI * .5
+		inset.material_override = candy_blade_glow
 	# Two wrapped boiled sweets at opposite ends complete the shop's sign.
 	for side in [-1,1]:
 		var cx:float=x+side*3.56

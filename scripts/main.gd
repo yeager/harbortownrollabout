@@ -3855,6 +3855,7 @@ func _update_daylight(delta: float) -> void:
 		chimney_beacon_phase = 0.0
 		chimney_beacon.emission_enabled = false
 	christmas_spruce.update_lights(weather.season == 4 and weather.snow > .02, night)
+	shops.candy_blade_glow.emission_enabled = night >= .35
 	midsummer_pole.set_summer(weather.season == 2)
 	field_fountain.set_season(weather.season)
 	var cloud := weather.cloud_cover*(1.0-night)
