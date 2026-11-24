@@ -1246,9 +1246,19 @@ def make_fire_engine():
                        ((.265,low+.029),(.064,low),(.015,low+.025),(-.012,low+.078),
                         (-.018,.934),(-.007,1.013),(.021,1.052),(.060,1.062),(.264,1.030))])
     profile_loft("Wraparound crew cab bumper",bumper,PAINT_RED,root)
-    cube("Lower intake shadow",(0,-3.134,.720),(1.098,.034,.152),RUBBER,.036,root)
-    for z in (.687,.743):
-        cube("Lower intake grille",(0,-3.154,z),(1.014,.018,.015),DARK,.006,root)
+    # Lower cooling mouth flares towards the number plate.
+    for name, finish, levels in (
+            ("Lower intake surround", RUBBER, ((.565,.746),(.588,.765),(.804,.630),(.817,.610))),
+            ("Lower intake grille", DARK, ((.641,.695),(.657,.684))),
+            ("Lower intake grille", DARK, ((.719,.651),(.735,.640))),
+            ("Lower intake reflective lip", PAINT_YELLOW, ((.818,.613),(.840,.598)))):
+        sections = []
+        for z, half_width in levels:
+            depth = -3.149 if finish == RUBBER else -3.163
+            sections.append([(u*half_width,depth+.027*u*u+offset,z)
+                             for u,offset in ((-1,.021),(-1,.005),(-.85,0),(0,0),
+                                              (.85,0),(1,.005),(1,.021),(0,.024))])
+        profile_loft(name,sections,finish,root)
     for side in (-1,1):
         # A recessed foothold below each lamp gives the crew access to the windscreen.
         x = side*.84
