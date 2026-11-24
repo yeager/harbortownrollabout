@@ -25,9 +25,26 @@ func configure(route, landmarks: PackedVector3Array, captions: Array) -> void:
 	_position_pins()
 
 func _position_pins() -> void:
+	var placed: Array[Rect2] = []
 	for i in stops.size():
 		var pin := get_child(i) as Button
-		pin.position = plot(Vector2(stops[i].x,stops[i].z)) - pin.size*.5
+		var desired := plot(Vector2(stops[i].x,stops[i].z)) - pin.size*.5
+		var candidates := [desired]
+		for rect in placed:
+			candidates.append(Vector2(rect.position.x - pin.size.x - 3, desired.y))
+			candidates.append(Vector2(rect.end.x + 3, desired.y))
+			candidates.append(Vector2(desired.x, rect.position.y - pin.size.y - 3))
+			candidates.append(Vector2(desired.x, rect.end.y + 3))
+		var shortest := INF
+		for candidate: Vector2 in candidates:
+			var position_on_map := candidate.clamp(Vector2.ZERO, size - pin.size)
+			var area := Rect2(position_on_map, pin.size)
+			var distance := position_on_map.distance_squared_to(desired)
+			if distance < shortest and not placed.any(func(rect: Rect2): return rect.grow(2).intersects(area)):
+				shortest = distance
+				pin.position = position_on_map
+		placed.append(pin.get_rect())
+	queue_redraw()
 
 func _draw() -> void:
 	draw_rect(Rect2(Vector2.ZERO,size),Color("#243e39"))

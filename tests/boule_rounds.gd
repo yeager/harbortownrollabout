@@ -26,6 +26,13 @@ func check_rounds() -> void:
 		printerr("Court missing from town map")
 		quit(1)
 		return
+	var chart_node := court_pin.get_parent()
+	for pin: Button in chart_node.get_children():
+		for other: Button in chart_node.get_children():
+			if pin != other and pin.get_rect().intersects(other.get_rect()):
+				printerr("Overlapping map destinations: ", pin.text, " and ", other.text)
+				quit(1)
+				return
 	court_pin.pressed.emit()
 	for first_key in [KEY_1, KEY_KP_1]:
 		for index in game.MAP_NAMES.size():
