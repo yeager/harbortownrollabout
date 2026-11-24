@@ -1942,3 +1942,6 @@ msgstr "Kiihdytä pitämällä hiiren vasenta painiketta pohjassa tai jarruta oi
 
 msgid "Show more of the city in the distance"
 msgstr "Näytä kauempana olevia kaupunginosia"
+
+msgid "Streetlamp shadows"
+msgstr "Katuvalojen varjot"

@@ -33,6 +33,8 @@
 
 ## Sources and verification
 
+- On a 120-frame rainy station approach at 960 × 563, disabling streetlamp shadows reduced the median frame time to 40.20 ms versus 47.27 and 45.65 ms in the surrounding runs with shadows. Starting shadow fade at 14 m instead of 24 m measured 44.04 ms versus 46.26 and 44.49 ms. That smaller difference was within run-to-run variation, so the game retains the 24 m shadow fade.
+
 - In a fixed 1920 × 1080 daytime view at the western junction (x = −330), Godot 4.7 dev5 Compatibility on Radeon measured a 49.15 ms median frame, with 49.23 ms on repeat. Disabling sun shadows alone measured 47.95 ms, disabling the main game update measured 40.65 ms, and disabling 3D measured 16.67 ms. In separate 45-frame runs, hiding street trees changed the median from 48.81 to 48.52 ms. Hiding the repeated western buildings changed it from 48.58 to 47.92 ms. Neither isolated test explains the slow view. Reducing the gameplay camera far plane to 220 m lowered the western view from 48.48 to 27.81 ms median, with 49.20 ms on a repeat at 4,000 m. The bridge and western intersection were reviewed at both distances. Buildings beyond 220 m disappear from the far horizon.
 
 - Godot 4.7 dev5 verified the central pedestrian crossings and all six tram junctions. The longest sampled red was 9.0 s at the central road junction and 6.9 s at tram junctions. The driving school course also passed its acceleration, braking, reverse, recovery and boarding test.

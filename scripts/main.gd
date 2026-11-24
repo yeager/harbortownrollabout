@@ -377,6 +377,8 @@ var cockpit_view := false
 var camera_button: Button
 var camera: Camera3D
 var long_view_distance := false
+var streetlamp_shadows := true
+var shadow_streetlamps: Array[SpotLight3D] = []
 var navigator := preload("res://scripts/street_route.gd").new()
 var turn_preview := Label.new()
 var route_arrows: Array[Node3D] = []
@@ -4017,7 +4019,8 @@ func _build_lampposts() -> void:
 		light.light_color = Color("#ffdbad")
 		light.spot_range = 17
 		light.spot_angle = 63
-		light.shadow_enabled = true
+		light.shadow_enabled = streetlamp_shadows
+		shadow_streetlamps.append(light)
 		light.distance_fade_enabled = true
 		light.distance_fade_begin = 34
 		light.distance_fade_shadow = 24
@@ -9172,6 +9175,18 @@ func _build_overlay() -> void:
 		_save_preferences()
 	)
 	pages[0].add_child(view_distance)
+	var shadow_choice := CheckButton.new()
+	shadow_choice.name = "StreetlampShadows"
+	shadow_choice.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	shadow_choice.text = "Streetlamp shadows"
+	shadow_choice.button_pressed = streetlamp_shadows
+	shadow_choice.toggled.connect(func(enabled: bool):
+		streetlamp_shadows = enabled
+		for lamp in shadow_streetlamps:
+			lamp.shadow_enabled = enabled
+		_save_preferences()
+	)
+	pages[0].add_child(shadow_choice)
 	var save_renderer := func(index: int):
 		var fsr: bool = methods[index]=="fsr2"
 		var dlss: bool = methods[index]=="dlss"
@@ -10335,6 +10350,7 @@ func _load_preferences() -> void:
 	recovery_key = KEY_BACKSPACE if config.get_value("keyboard","backspace_recovery",false) == true else KEY_R
 	number_movement = config.get_value("keyboard","number_movement",false) == true
 	extra_reading_time = config.get_value("accessibility", "extra_reading_time", false) == true
+	streetlamp_shadows = config.get_value("graphics", "streetlamp_shadows", true) == true
 	long_view_distance = config.get_value("graphics", "long_view_distance", false) == true
 	large_text = config.get_value("accessibility", "large_text", false) == true
 	play_as_alma = config.get_value("player","alma",false) == true
@@ -10369,6 +10385,7 @@ func _save_preferences() -> void:
 	config.set_value("accessibility", "extra_reading_time", extra_reading_time)
 	config.set_value("accessibility", "large_text", large_text)
 	config.set_value("graphics", "long_view_distance", long_view_distance)
+	config.set_value("graphics", "streetlamp_shadows", streetlamp_shadows)
 	config.set_value("player","alma",play_as_alma)
 	config.set_value("player","separate_profiles",separate_profiles)
 	_store_player_progress(config, _profile_section())

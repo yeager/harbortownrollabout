@@ -1876,3 +1876,6 @@ msgstr "Håll vänster musknapp för att gasa eller höger för att bromsa."
 
 msgid "Show more of the city in the distance"
 msgstr "Visa mer av staden på avstånd"
+
+msgid "Streetlamp shadows"
+msgstr "Skuggor från gatlyktor"

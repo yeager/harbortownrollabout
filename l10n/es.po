@@ -1953,3 +1953,6 @@ msgstr "Mantén pulsado el botón izquierdo del ratón para acelerar o el derech
 
 msgid "Show more of the city in the distance"
 msgstr "Mostrar más de la ciudad a lo lejos"
+
+msgid "Streetlamp shadows"
+msgstr "Sombras de las farolas"

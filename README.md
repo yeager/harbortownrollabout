@@ -79,7 +79,7 @@ In **Free exploration**, press **F5** or click **Town map**. Click a place, use 
 
 The radio switches on when you enter a vehicle. It plays songs in your chosen language. If there are none yet, it plays English songs.
 
-The game starts in your system language and falls back to English. To change it, open **Settings** and select the globe. You can also change the weather and season there. Turn on **Show more of the city in the distance** in Settings if you want to see farther down long streets.
+The game starts in your system language and falls back to English. To change it, open **Settings** and select the globe. You can also change the weather and season there. Turn on **Show more of the city in the distance** in Settings if you want to see farther down long streets. Turn off **Streetlamp shadows** for smoother driving at night. Streetlamps still light the road.
 
 Daniel Nylander made Harbor Town Rollabout for his children. Its Swedish title is **Full rulle i Sjöstaden**.
 

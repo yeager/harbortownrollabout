@@ -1961,3 +1961,6 @@ msgstr "Maintiens le bouton gauche de la souris pour accélérer ou le droit pou
 
 msgid "Show more of the city in the distance"
 msgstr "Afficher une plus grande partie de la ville au loin"
+
+msgid "Streetlamp shadows"
+msgstr "Ombres des lampadaires"

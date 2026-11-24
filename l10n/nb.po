@@ -1946,3 +1946,6 @@ msgstr "Hold inne venstre museknapp for å gi gass eller høyre for å bremse."
 
 msgid "Show more of the city in the distance"
 msgstr "Vis mer av byen i det fjerne"
+
+msgid "Streetlamp shadows"
+msgstr "Skygger fra gatelykter"

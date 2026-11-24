@@ -1963,3 +1963,6 @@ msgstr "Halte die linke Maustaste zum Beschleunigen oder die rechte zum Bremsen 
 
 msgid "Show more of the city in the distance"
 msgstr "Mehr von der Stadt in der Ferne anzeigen"
+
+msgid "Streetlamp shadows"
+msgstr "Schatten von Straßenlaternen"
