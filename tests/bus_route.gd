@@ -260,5 +260,16 @@ func check_driver(game: Node) -> bool:
 	if not game.cockpit_view or driver.visible:
 		printerr("Bus driver obstructed the cockpit camera")
 		return false
+	for speed_mps in [0.0,5.0,-2.0]:
+		game.speed = speed_mps
+		game._refresh_status()
+		var expected := game.tr("%d km/h") % roundi(absf(speed_mps)*3.6)
+		if game.dash_speed.text != expected:
+			printerr("Bus dashboard did not report the current speed")
+			return false
+		if speed_mps < 0.0 and game.dash_direction.text != "Reversing":
+			printerr("Bus dashboard did not indicate reverse")
+			return false
+	game.speed = 0.0
 	game._toggle_camera_view()
 	return driver.visible

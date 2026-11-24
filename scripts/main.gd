@@ -7107,6 +7107,14 @@ func _load_vehicle_model() -> void:
 	reverse_camera = null
 	cabin_wheel = null
 	shopper_grip_points.clear()
+	if vehicle_index == BUS:
+		var display := _make_box("Bus dashboard screen",Vector3(.355,.173,.017),Vector3(.58,1.745,4.70),Color("#14272b"),false,vehicle_model)
+		display.rotation.x = -2.20
+		display.rotate_object_local(Vector3.BACK,PI)
+		dash_speed = _station_sign("",Vector3(0,-.022,.011),.00135,Color("#def4f7"),0,display)
+		dash_speed.font_size = 44
+		dash_direction = _station_sign("",Vector3(0,.046,.011),.00092,Color("#def4f7"),0,display)
+		dash_direction.font_size = 32
 	if vehicle_index == SHOPPER:
 		for part_name in ["Wiper arm","Wiper blade lower","Wiper blade upper"]:
 			var part := vehicle_model.find_child(part_name,true,false) as MeshInstance3D
@@ -7851,8 +7859,8 @@ func _update_camera(delta: float, snap_to_car := false) -> void:
 				camera.global_position = vehicle_model.to_global(Vector3(.57, 2.55, 2.45))
 				pitch = -2.68
 			BUS:
-				camera.global_position = vehicle_model.to_global(Vector3(.58,2.08,4.16))
-				pitch = -.57
+				camera.global_position = vehicle_model.to_global(Vector3(.58,2.13,4.07))
+				pitch = -1.30
 			REFUSE:
 				camera.global_position = ambulance.to_global(Vector3(-.52,2.60,-4.02))
 				curb_yaw = -.20
