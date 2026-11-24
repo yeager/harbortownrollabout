@@ -50,6 +50,17 @@ func check_exits() -> void:
 		printerr("Boat did not move after reopening")
 		quit(1)
 		return
+	game._recover_position()
+	game._change_seat()
+	if game.boating or not game.walker.visible or not game._feet_supported(game.walker.position):
+		printerr("Could not step onto the motorboat landing")
+		quit(1)
+		return
+	game._change_seat()
+	if not game.boating or game.walker.visible or game.listener.get_parent() != game.launch:
+		printerr("Could not reboard the motorboat from the landing")
+		quit(1)
+		return
 	game.queue_free()
 	await process_frame
 	await process_frame

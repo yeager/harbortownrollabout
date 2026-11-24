@@ -558,6 +558,8 @@ var grip_radius := 0.0
 var road_driver: Node3D
 var skipper: Node3D
 const LAUNCH_BERTH := Vector3(79,-.94,46)
+const LAUNCH_LANDING := Vector2(80.9,46)
+const LAUNCH_PIER := Rect2(80.5,44.75,7.2,2.5)
 var launch: Node3D
 var navigation_lenses: Array[StandardMaterial3D] = []
 var outboard: Node3D
@@ -825,6 +827,8 @@ func _process(delta: float) -> void:
 			_drive_excavator(delta)
 		elif boating:
 			_drive_launch(delta)
+			seat_button.visible = _launch_at_berth()
+			_update_entry_button()
 		elif tram_mode > 0 or ferry_passenger:
 			_end_skid()
 		elif walker.visible:
@@ -1232,6 +1236,11 @@ func _drive_launch(delta: float) -> void:
 	var next := launch.position+heading*launch_speed*delta
 	var bounded := Vector3(clampf(next.x,58,84),-.94+.026*sin(wave_time*1.7),clampf(next.z,9,74))
 	if absf(next.x-bounded.x)+absf(next.z-bounded.z)>.0001: launch_speed=0
+	var pier_clearance := LAUNCH_PIER.grow(1.0)
+	if pier_clearance.has_point(Vector2(bounded.x,bounded.z)) and not pier_clearance.has_point(Vector2(launch.position.x,launch.position.z)):
+		bounded.x = launch.position.x
+		bounded.z = launch.position.z
+		launch_speed = 0.0
 	var engine_load := clampf(absf(launch_speed) / 9.0, 0, 1)
 	siren_player.pitch_scale = move_toward(siren_player.pitch_scale, 0.8 + engine_load * .85, delta * 1.5)
 	launch.position=bounded
@@ -2829,9 +2838,13 @@ func _build_waterfront() -> void:
 		var middle: float = (span.x + span.y) / 2
 		var promenade := _make_driving_surface("Strandpromenad", Vector3(6,.15,span.y-span.x), Vector3(90,-.11,middle), Color("#b7afa2"))
 		promenade.material_override = quay_finish
-		for z in range(int(span.x)+1,int(span.y),3):
-			_make_box("Kajstolpe",Vector3(.12,.86,.12),Vector3(87.5,.40,z),Color("#525d60"))
-		_make_box("Handledare",Vector3(.065,.07,span.y-span.x),Vector3(87.5,.82,middle),Color("#626c6e"))
+		var rail_spans := [span]
+		if span.x < LAUNCH_PIER.position.y and span.y > LAUNCH_PIER.end.y:
+			rail_spans = [Vector2(span.x,LAUNCH_PIER.position.y), Vector2(LAUNCH_PIER.end.y,span.y)]
+		for rail_span: Vector2 in rail_spans:
+			for z in range(ceili(rail_span.x),ceili(rail_span.y),3):
+				_make_box("Kajstolpe",Vector3(.12,.86,.12),Vector3(87.5,.40,z),Color("#525d60"))
+			_make_box("Handledare",Vector3(.065,.07,rail_span.y-rail_span.x),Vector3(87.5,.82,(rail_span.x+rail_span.y)*.5),Color("#626c6e"))
 	var balcony_glass := StandardMaterial3D.new()
 	balcony_glass.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
 	balcony_glass.albedo_color = Color(.53,.72,.72,.36)
@@ -3089,6 +3102,9 @@ func _build_marina() -> void:
 		navigation_lenses.append(finish)
 	outboard = launch_model.find_child("Outboard swivel",true,false)
 	launch.position = LAUNCH_BERTH
+	var landing_finish := _deck_material(Color("#ab9071"))
+	var landing_center := LAUNCH_PIER.get_center()
+	_pier_section("Motorboat landing",Vector3(LAUNCH_PIER.size.x,.2,LAUNCH_PIER.size.y),Vector3(landing_center.x,-.10,landing_center.y),Color("#ab9071"),landing_finish)
 	for x in [58,65,72,79,84]:
 		for z in [6.8,76.5]:
 			_make_box("Fairway buoy",Vector3(.35,.75,.35),Vector3(x,-.82,z),Color("#bf5e37"))
@@ -4802,7 +4818,23 @@ func _change_seat() -> void:
 	if scooter.visible:
 		_toggle_scooter()
 		return
-	if boating or mode != "playing" or paused: return
+	if mode != "playing" or paused: return
+	if boating or _at_launch_landing():
+		var landing := Vector3(LAUNCH_LANDING.x,_foot_height(LAUNCH_LANDING.x,LAUNCH_LANDING.y),LAUNCH_LANDING.y)
+		if not _launch_at_berth() or not _on_foot_clear(landing): return
+		boating = not boating
+		walker.position = landing
+		walker.visible = not boating
+		walking_velocity = Vector3.ZERO
+		launch_speed = 0.0
+		_release_mouse_pedals()
+		listener.reparent(launch if boating else walker,false)
+		listener.position = Vector3.UP * (1.3 if boating else 1.6)
+		_update_camera(0,true)
+		_update_route_arrows()
+		_update_siren()
+		_refresh_ui()
+		return
 	if _at_boule_bench():
 		_set_boule_seated(not boule_seated)
 		return
@@ -5178,7 +5210,18 @@ func _update_entry_button() -> void:
 	if seat_f3 and not seat_button.disabled:
 		seat_button.text = tr(seat_button.text) + " / F3"
 
+func _at_launch_landing() -> bool:
+	return walker.visible and not ferry_passenger and tram_mode == 0 and not operating_excavator and Vector2(walker.position.x,walker.position.z).distance_to(LAUNCH_LANDING) < 1.0
+
+func _launch_at_berth() -> bool:
+	return absf(launch_speed) <= .2 and Vector2(launch.position.x,launch.position.z).distance_to(Vector2(LAUNCH_BERTH.x,LAUNCH_BERTH.z)) <= 1.0
+
 func _set_entry_action() -> void:
+	if boating or _at_launch_landing():
+		entry_marker.hide()
+		seat_button.disabled = not _launch_at_berth()
+		seat_button.text = "Step ashore · F" if boating else (tr("Enter %s") % tr("Motorboat")) + " · F"
+		return
 	if _at_boule_bench():
 		entry_marker.hide()
 		seat_button.disabled = false
@@ -10418,10 +10461,10 @@ func _refresh_ui() -> void:
 	elif vehicle_index == ICE_CREAM and not boating:
 		horn_caption = tr("Ice cream chime · H")
 	horn_button.text = horn_caption + (" / F4" if horn_f4 else "")
-	seat_button.visible = not show_overlay and not boating
+	seat_button.visible = not show_overlay and (not boating or _launch_at_berth())
 	light_button.visible = tram_mode == 0 and not boating and not walker.visible and (vehicle_index < 3 or vehicle_index in [XC60_POLICE, FARM_TRACTOR])
 	siren_button.visible = tram_mode == 0 and not boating and not walker.visible
-	if walker.visible or tram_mode != 0 or operating_excavator:
+	if walker.visible or tram_mode != 0 or operating_excavator or boating:
 		_update_entry_button()
 	else:
 		seat_button.disabled = false
