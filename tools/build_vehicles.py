@@ -1083,6 +1083,15 @@ def make_fire_engine():
             y=-2.983+.024*t*t+.26*(z-1.78)
             blade.append([(x,y+dy,z+dz) for dy,dz in ((-.010,0),(0,.009),(.009,0),(0,-.009))])
         profile_loft("Crew cab wiper blade",blade,RUBBER,root)
+        arm=[]
+        for distance,height,depth,radius in (
+                (.23,1.781,-3.000,.014),(.27,1.790,-3.004,.012),
+                (.36,1.816,-2.993,.009),(.47,1.847,-2.973,.008)):
+            arm.append([(side*distance,depth+dy*radius,height+dz*radius)
+                        for dy,dz in ((-1,-.5),(1,-.5),(1,.5),(-1,.5))])
+        profile_loft("Cab wiper linkage",arm,DARK,root)
+        cube("Cab wiper spindle cap",(side*.23,-3.000,1.779),
+             (.050,.030,.026),RUBBER,.009,root)
     # The pumper carries one front axle and one rear axle.
     pumper_running_gear(root,chassis)
     cube("Rear pump compartment",(0,2.75,1.81),(2.15,.46,1.22),cab_red,.065,root)
@@ -1156,7 +1165,7 @@ def make_fire_engine():
                          ((.91,.014),(.94,.033),(.978,.079),(.994,.128),
                           (.985,.145),(.95,.075),(.91,.045))])
         profile_loft("Wraparound windshield perimeter",seal,RUBBER,root)
-    fascia("Windshield scuttle",1.075,1.79,.085,-3.015,.025,RUBBER)
+    fascia("Windshield scuttle",1.075,1.769,.044,-2.997,.022,RUBBER)
     fascia("Cab brow over windshield",1.05,2.465,.08,-2.84,.012,BLACK)
     fascia("Reflective eyebrow",1.035,2.512,.030,-2.828,.012,PAINT_YELLOW)
     fascia("Upper cab pressing",1.09,1.64,.25,-3.065,.085,cab_red)
