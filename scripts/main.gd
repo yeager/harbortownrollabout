@@ -7079,6 +7079,11 @@ func _add_bus_destination_boards(model: Node3D) -> Array[Label3D]:
 	return [bus_board,rear_bus_board,side_bus_board]
 
 func _fit_bus_exterior(model: Node3D) -> void:
+	var plate := _make_box("Bus rear number plate",Vector3(.46,.105,.018),Vector3(0,.57,-5.282),Color("#eeeee4"),false,model)
+	_make_box("Bus rear plate country band",Vector3(.045,.094,.006),Vector3(.203,0,-.012),Color("#254883"),false,plate)
+	var number := _station_sign("HBR 074",Vector3(-.016,0,-.013),.0014,Color("#162028"),PI,plate)
+	number.outline_size = 0
+	_size_world_sign(number,.36)
 	for pocket in model.find_children("Wraparound headlamp pocket*", "MeshInstance3D", true, false):
 		pocket.position.z -= .025
 		pocket.scale.z *= .72
