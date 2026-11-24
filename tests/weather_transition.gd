@@ -148,6 +148,21 @@ func check_transition() -> void:
 		printerr("Missing illuminated Christmas bulbs at night")
 		quit(1)
 		return
+	game.time_mode = 2
+	var evening_levels: Array[float] = []
+	for phase in [.0, .24, .5, .76, .0]:
+		game.day_phase = phase
+		game._update_daylight(0)
+		evening_levels.append(spruce.star_finish.emission_energy_multiplier)
+		for bulb in spruce.bulbs:
+			if (bulb.emission_energy_multiplier > 0) != spruce.glow.visible:
+				printerr("Tree bulbs disagree with square lighting at phase ", phase)
+				quit(1)
+				return
+	if evening_levels[0] != 0 or evening_levels[4] != 0 or not (0 < evening_levels[1] and evening_levels[1] < evening_levels[2] and is_equal_approx(evening_levels[3], evening_levels[1])):
+		printerr("Unexpected star brightness from noon through dawn: ", evening_levels)
+		quit(1)
+		return
 	seasons.get_child(2).pressed.emit()
 	game._update_daylight(0)
 	if spruce.visible or game.roadside_solids.has(spruce.obstacle):
