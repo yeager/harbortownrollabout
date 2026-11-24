@@ -183,21 +183,25 @@ func _add_phone_detail(body: VBoxContainer, dimensions: Vector2) -> void:
 	detail.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	body.add_child(detail)
 
-func _repeat_instruction() -> void:
-	var locale := TranslationServer.get_locale()
-	var jobs := _active_jobs()
-	var recordings: Array[AudioStream] = []
+func _recorded_instructions(jobs: PackedStringArray, locale: String) -> PackedStringArray:
+	var recordings := PackedStringArray()
 	for job in jobs:
 		var path := "res://audio/dispatch/%s_%s.ogg" % [locale.get_slice("_", 0), job.md5_text()]
 		if ResourceLoader.exists(path):
-			recordings.append(load(path))
+			recordings.append(path)
+	return recordings
+
+func _repeat_instruction() -> void:
+	var locale := TranslationServer.get_locale()
+	var jobs := _active_jobs()
+	var recordings := _recorded_instructions(jobs, locale)
 	job_voice.stop()
 	if recordings.is_empty(): return
 	var playlist := AudioStreamPlaylist.new()
 	playlist.loop = false
 	playlist.stream_count = recordings.size()
 	for i in recordings.size():
-		playlist.set_list_stream(i, recordings[i])
+		playlist.set_list_stream(i, load(recordings[i]))
 	spoken_locale = locale
 	spoken_jobs = jobs
 	job_voice.stream = playlist
@@ -284,7 +288,7 @@ func refresh() -> void:
 	var lines:=PackedStringArray()
 	var active := _active_jobs()
 	job_heading.visible = not active.is_empty()
-	repeat_job.visible = job_heading.visible
+	repeat_job.visible = not _recorded_instructions(active, TranslationServer.get_locale()).is_empty()
 	if job_voice.playing and (active != spoken_jobs or spoken_locale != TranslationServer.get_locale()):
 		job_voice.stop()
 	job_heading.text = tr("Current jobs") if active.size() > 1 else tr("Current job")
