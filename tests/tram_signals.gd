@@ -289,6 +289,10 @@ func check() -> void:
 	santa.position = user
 	for present in [true, false]:
 		santa.visible = present
+		var pedestrian_bounds := AABB(user-Vector3(.28,1,.28),Vector3(.56,3,.56))
+		if game._road_obstacles().has(pedestrian_bounds) != present:
+			fail("Road obstacle list must follow seasonal pedestrian visibility")
+			return
 		if lights._pedestrian_near_crosswalk(crossing) != present or lights._junction_occupied(crossing) != present:
 			fail("Crossing occupancy and walk requests must follow seasonal pedestrian visibility")
 			return

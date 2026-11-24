@@ -9047,6 +9047,7 @@ func _road_obstacles() -> Array[AABB]:
 		obstacles.append(AABB(person.position-Vector3(.28,1,.28),Vector3(.56,3,.56)))
 	for neighbour in walker_data:
 		var person: Node3D = neighbour.actor
+		if not person.is_visible_in_tree(): continue
 		obstacles.append(AABB(person.position-Vector3(.28,1,.28),Vector3(.56,3,.56)))
 		if neighbour.has("pet") and neighbour.pet.is_visible_in_tree():
 			obstacles.append(neighbour.pet.global_transform * neighbour.pet.BODY_BOUNDS)
