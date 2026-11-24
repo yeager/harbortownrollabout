@@ -1067,10 +1067,19 @@ def make_fire_engine():
             cube("Crew entry tread",(side*d,-1.088,z),(.201,.600,.042),METAL,.012,root)
             for i in range(6):
                 cube("Tread grip",(side*d,-1.32+i*.093,z+.022),(.163,.028,.009),DARK,.004,root)
-        lettering=text_obj("Cab identity","RÄDDNINGSTJÄNST",(side*1.137,-2.245,1.585),
-                           .079,PAINT_WHITE,-side,root)
-        xs=[vertex.co.x for vertex in lettering.data.vertices]
-        lettering.location.y-=side*(min(xs)+max(xs))*.5
+        for label, text, center_y, size in (
+                ("Cab unit number","711",-2.37,.170),
+                ("Cab identity","RÄDDNINGSTJÄNST",-1.29,.059)):
+            marking=text_obj(label,text,(side*1.137,center_y,1.583),
+                             size,PAINT_WHITE,-side,root,flat=True)
+            xs=[vertex.co.x for vertex in marking.data.vertices]
+            marking.location.y-=side*(min(xs)+max(xs))*.5
+            # Seat the decal against the pressed skin along the window sill.
+            for vertex in marking.data.vertices:
+                z = marking.location.z + vertex.co.y
+                span = min(1,max(0,(z-1.572)/.054))
+                panel_x = 1.128 + span*(1.121-1.128)
+                vertex.co.z = panel_x + .0015 - abs(marking.location.x)
         for z in (1.93,2.36):
             cube("Mirror bracket foot",(side*1.09,-2.56,z),(.085,.135,.084),RUBBER,.023,root)
             bracket=cube("Swept mirror bracket",(side*1.22,-2.60,z),(.29,.048,.042),BLACK,.014,root)
