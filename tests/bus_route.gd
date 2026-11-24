@@ -36,6 +36,21 @@ func check_route() -> void:
 			resume.pressed.emit()
 			TranslationServer.set_locale("sv")
 			await process_frame
+		if leg == 1:
+			for locale in ["en","de","es","fi","fr","nb","sv"]:
+				TranslationServer.set_locale(locale)
+				await process_frame
+				var school: String = game.tr("HARBOR TOWN SCHOOL")
+				var expected: String = game.tr("Next stop: %s") % school
+				if game.next_bus_stop_board.text != expected or game.bus_leg != leg:
+					printerr("Interior display lost the current stop after switching to ", locale)
+					quit(1)
+					return
+				for sign: Label3D in get_nodes_in_group("bus_stop_labels"):
+					if sign.text != game.BUS_DESTINATION + "\n" + game.tr(sign.get_meta("stop_name")):
+						printerr("Stale stop sign after switching to ", locale)
+						quit(1)
+						return
 		var row: HBoxContainer = game.phone.action_rows.get_child(0)
 		var picture: AtlasTexture = row.get_child(0).texture
 		var action: int = game.phone.Action.BOARD if leg % 2 == 0 else game.phone.Action.ALIGHT
