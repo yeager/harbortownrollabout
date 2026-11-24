@@ -815,6 +815,20 @@ def rear_prismatic_lens(name, x, z, height, finish, root):
     mesh.materials.append(finish)
 
 
+def fit_fire_cab_headliner(root):
+    liner = material("Crew cab headliner fabric", (.48, .46, .42), 0, .92)
+    cube("Moulded headliner", (0, -2.10, 3.028), (1.93, 2.16, .065), liner, .032, root)
+    cube("Overhead console", (0, -2.94, 2.981), (1.78, .34, .095), liner, .043, root)
+    for x in (-.55, .55):
+        cube("Cab reading light bezel", (x, -2.93, 2.933), (.157, .091, .015), DARK, .007, root)
+        cube("Cab reading light diffuser", (x, -2.93, 2.922), (.134, .069, .012), HEADLAMP, .006, root)
+    for x in (-.24, .24):
+        cube("Overhead vent recess", (x, -2.95, 2.932), (.20, .084, .013), BLACK, .006, root)
+        for row in range(4):
+            cube("Overhead vent slat", (x, -2.98 + row*.018, 2.924),
+                 (.185, .008, .008), DARK, .003, root)
+
+
 def shape_fire_cab_roof(root):
     # Raise the stamped upper shell above the windscreen seal. The rear
     # tapers beneath the ladder; the beacon stays level on the front crown.
@@ -1341,6 +1355,7 @@ def make_fire_engine():
             point.y+=.82*max(0,min(1,(point.y+1.44)/1.98))-.41
             vertex.co=inverse@point
     shape_fire_cab_roof(root)
+    fit_fire_cab_headliner(root)
     return root
 
 def profile_loft(name, rings, finish, parent, close_ends=True):
