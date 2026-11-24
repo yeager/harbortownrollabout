@@ -65,6 +65,15 @@ func check_exits() -> void:
 	var landing: Vector3 = game.walker.position
 	Input.action_press("ui_up")
 	for direction in [1.0, -1.0]:
+		if direction < 0:
+			game.map_button.pressed.emit()
+			var map: AcceptDialog = game.get_node("TownMap")
+			var chart = map.get_child(0).get_child(0)
+			chart.picked.emit(chart.stops.size() - 1)
+			if game.map_goal != game.LAUNCH_MAP_STOP:
+				printerr("The motorboat map pin did not select the landing")
+				quit(1)
+				return
 		game.walker.rotation.y = -direction * PI * .5
 		game.walking_velocity = Vector3.ZERO
 		for frame in 300:
@@ -79,6 +88,11 @@ func check_exits() -> void:
 			quit(1)
 			return
 	Input.action_release("ui_up")
+	game._update_route_arrows()
+	if game.map_goal.is_finite():
+		printerr("The motorboat route did not finish at the landing")
+		quit(1)
+		return
 	game._change_seat()
 	if not game.boating or game.walker.visible or game.listener.get_parent() != game.launch:
 		printerr("Could not reboard the motorboat from the landing")
