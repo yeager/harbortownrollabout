@@ -40,6 +40,15 @@ func check_geometry(game) -> void:
 	if not asphalt.any(func(rect: Rect2): return rect.grow(.001).has_point(entry)) or not yard.grow(.001).has_point(exit):
 		fail("Station driveway does not connect the street and forecourt")
 		return
+	# Parking bays leave the street graph but must still join the carriageway.
+	var bay_mesh := game.get_node("Motorboat parking bay") as MeshInstance3D
+	var bay_bounds := bay_mesh.transform * bay_mesh.get_aabb()
+	var bay := Rect2(bay_bounds.position.x, bay_bounds.position.z, bay_bounds.size.x, bay_bounds.size.z)
+	asphalt.erase(bay)
+	var bay_entry := Vector2(bay.end.x, bay.get_center().y)
+	if not asphalt.any(func(rect: Rect2): return rect.grow(.001).has_point(bay_entry)):
+		fail("Motorboat parking bay does not connect to the street")
+		return
 	var ids: PackedInt64Array = route.graph.get_point_ids()
 	for id in ids:
 		if route.graph.get_point_connections(id).size() < 2 or route.graph.get_id_path(ids[0], id).is_empty():

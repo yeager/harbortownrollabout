@@ -180,6 +180,22 @@ func check_exits() -> void:
 	game.queue_free()
 	await process_frame
 	await process_frame
+	game = load("res://main.tscn").instantiate()
+	root.add_child(game)
+	game._on_vehicle_selected(game.BUS)
+	game._start_game()
+	game.ambulance.position = Vector3(70, 0, 20)
+	game._save_checkpoint()
+	game.queue_free()
+	await process_frame
+	game = load("res://main.tscn").instantiate()
+	root.add_child(game)
+	game._resume_road_checkpoint()
+	for span: Vector2 in game.OPEN_WATER:
+		if game.vehicle_index != game.BUS or game._shore_overlap(span, game.ambulance.position, game._player_extent()) > .01:
+			printerr("A bus saved in the canal was not moved onto dry land")
+			quit(1)
+			return
 	print("Bridge exits, offshore safety and the motorboat pier checkpoint passed.")
 	quit()
 

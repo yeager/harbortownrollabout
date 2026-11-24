@@ -29,9 +29,11 @@
 
 - Refine vehicle shapes, especially the BMW front, the fire truck, the police car, the Tvärbanan and the sitting driver. Improve water and window reflections, architecture and boardwalk based on image references.
 - Review any remaining unsignalized crossings and playtest routes, dialogue, readability, sound levels and frame rate throughout town.
-- Follow up on the request for Blender MCP and verify actual connection before it counts as clear.
+- Verify the Blender MCP connection. Blender 5.3.0 opens the bus source file locally and reports 285 mesh objects. The MCP extension loads, but its bridge refuses to start while Blender’s online access is disabled.
 
 ## Sources and verification
+
+- The water-exit and excavator tests verify recovery onto land when a saved bus or excavator pose is inside the canal. The city perimeter test treats the motorboat parking bay as a parking area and verifies that its east edge joins the carriageway. It also verifies 32 junctions, 49 street segments and all four perimeter walls.
 
 - The Godot 4.7 dev5 weather transition test verifies that switching from winter to summer removes the tractor plough, tyre tracks, footprints and visible snow. Fresh winter snowfall restores the plough and snow footsteps and covers the previously cleared strip. A forward drive from the tractor selected in the gallery clears snow in the path of the cutting edge while leaving snow outside the blade.
 

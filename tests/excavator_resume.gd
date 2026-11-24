@@ -36,7 +36,18 @@ func check_resume() -> void:
 		printerr("Excavator did not drive after restart")
 		quit(1)
 		return
-	print("Restored excavator and articulated bucket, then drove away.")
+	game.excavator.position = Vector3(70, 0, 20)
+	game._save_checkpoint()
+	game.queue_free()
+	await process_frame
+	game = load("res://main.tscn").instantiate()
+	root.add_child(game)
+	game._resume_road_checkpoint()
+	if not game.operating_excavator or not game._crawler_clear():
+		printerr("A saved excavator position in the canal did not return to the equipment yard")
+		quit(1)
+		return
+	print("Restored valid excavator and bucket poses and recovered an invalid canal position.")
 	game.queue_free()
 	await process_frame
 	quit()

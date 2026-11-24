@@ -9890,7 +9890,10 @@ func _resume_road_checkpoint() -> void:
 		_select_gallery_activity(4)
 	elif road_checkpoint.has("excavator"):
 		var pose: Dictionary = road_checkpoint.excavator
+		var parked_pose := excavator.transform
 		excavator.transform = pose.base
+		if not _crawler_clear():
+			excavator.transform = parked_pose
 		cab_turntable.rotation.y = pose.slew
 		boom_joint.rotation.x = pose.arm.x
 		stick_joint.rotation.x = pose.arm.y
@@ -9915,7 +9918,10 @@ func _resume_road_checkpoint() -> void:
 		var center := saved_point.clamp(bounds.position + extent, bounds.end - extent)
 		if center != saved_point:
 			saved_position = Vector3(center.x, _surface_height(center.x, center.y), center.y)
-		ambulance.global_position = saved_position
+		if OPEN_WATER.any(func(span: Vector2): return _shore_overlap(span, saved_position, extent) > .01):
+			_recover_road_vehicle()
+		else:
+			ambulance.global_position = saved_position
 	elif practice_active:
 		ambulance.position = PRACTICE_START
 		ambulance.rotation.y = -PI * .5
