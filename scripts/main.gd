@@ -809,7 +809,7 @@ func _process(delta: float) -> void:
 	if not paused and message_timer > 0.0:
 		message_timer = maxf(0.0, message_timer - delta)
 	if mode == "playing" and not paused:
-		var star_actor := _star_collector()
+		var star_actor := _player_actor()
 		var before := star_actor.global_position
 		_update_patrol(delta)
 		street_signals.advance(delta)
@@ -1913,7 +1913,7 @@ func _build_stars() -> void:
 		add_child(star)
 		star_markers[id] = star
 
-func _star_collector() -> Node3D:
+func _player_actor() -> Node3D:
 	if operating_excavator: return excavator
 	if boating: return launch
 	if tram_mode > 0: return tram.sections[0]
@@ -8424,13 +8424,13 @@ func _build_town_map() -> void:
 	map_button.auto_translate_mode = Node.AUTO_TRANSLATE_MODE_DISABLED
 	phone.add_child(map_button)
 	map_button.pressed.connect(func():
-		var actor := walker if walker.visible else ambulance
-		chart.player = Vector2(actor.position.x,actor.position.z)
+		var actor := _player_actor()
+		chart.player = Vector2(actor.global_position.x,actor.global_position.z)
 		var forward := -actor.global_basis.z
 		chart.player_heading = Vector2(forward.x,forward.z).normalized()
 		chart.route_preview = PackedVector2Array()
-		if map_goal.is_finite():
-			var origin := Vector2(actor.position.x,actor.position.z)
+		if map_goal.is_finite() and not (boating or ferry_passenger or tram_mode != 0 or operating_excavator):
+			var origin: Vector2 = chart.player
 			var target := Vector2(map_goal.x,map_goal.z)
 			var heading := Vector2.ZERO if walker.visible else Vector2(forward.x,forward.z).normalized()
 			chart.route_preview = navigator.path(origin,target,heading,vehicle_index in [2,RECOVERY,BUS,REFUSE])
@@ -10254,7 +10254,7 @@ func _refresh_dispatch() -> void:
 		if cat_quest == FootQuest.SEARCHING: phone.foot_jobs.append("Find the cat with white paws.")
 		if cat_quest == FootQuest.RETURNING: phone.foot_jobs.append("Walk back to the neighbour with the cat.")
 	leave_practice_button.visible = practice_active
-	map_button.visible = free_drive and not boating and not operating_excavator and tram_mode == 0 and not ferry_passenger and not leave_practice_button.visible
+	map_button.visible = free_drive and not leave_practice_button.visible
 	phone.take_job.text = "Return to town for a job" if leave_practice_button.visible else "Take a job"
 	phone.take_job.visible = free_drive and not walker.visible and not boating and not operating_excavator and tram_mode == 0 and not ferry_passenger and mission_index < TARGETS.size()
 	phone.visible = mode=="playing" and not paused
