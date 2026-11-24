@@ -812,8 +812,8 @@ func _process(delta: float) -> void:
 		street_signals.advance(delta)
 		shops.advance_grill_sign(delta, calm_mode)
 		_update_fire_station_door(delta)
-		var tram_gas := mouse_gas or _movement_pressed(KEY_W, true) or Input.is_key_pressed(KEY_UP)
-		var tram_brake := mouse_brake or brake_pedal_held or _movement_pressed(KEY_S, true) or Input.is_key_pressed(KEY_DOWN)
+		var tram_gas := mouse_gas or _movement_pressed(KEY_W) or Input.is_key_pressed(KEY_UP)
+		var tram_brake := mouse_brake or brake_pedal_held or _movement_pressed(KEY_S) or Input.is_key_pressed(KEY_DOWN)
 		tram.advance(delta, tram_mode == 2, tram_gas, tram_brake)
 		if tram_mode != 0: _update_entry_button()
 		if tram_mode == 2:
@@ -1190,12 +1190,12 @@ func _update_patrol(delta: float) -> void:
 	tail_rotor.rotate_x(delta*52)
 
 func _drive_launch(delta: float) -> void:
-	var gas := mouse_gas or Input.is_action_pressed("ui_up") or _movement_pressed(KEY_W, true)
-	var brake := mouse_brake or brake_pedal_held or Input.is_action_pressed("ui_down") or _movement_pressed(KEY_S, true)
+	var gas := mouse_gas or Input.is_action_pressed("ui_up") or _movement_pressed(KEY_W)
+	var brake := mouse_brake or brake_pedal_held or Input.is_action_pressed("ui_down") or _movement_pressed(KEY_S)
 	var turn := Input.get_axis("ui_left","ui_right")
 	if is_zero_approx(turn): turn = mouse_steering
-	if _movement_pressed(KEY_A, true): turn=-1
-	if _movement_pressed(KEY_D, true): turn=1
+	if _movement_pressed(KEY_A): turn=-1
+	if _movement_pressed(KEY_D): turn=1
 	var reverse_requested := brake and not gas
 	var target := 0.0
 	if reverse_requested:
@@ -4977,10 +4977,10 @@ func _change_seat() -> void:
 func _rest_seconds() -> int:
 	return ceili((60.0-run_reserve)/3.0) if winded else 0
 
-func _movement_pressed(default_key: Key, physical := false) -> bool:
+func _movement_pressed(default_key: Key) -> bool:
 	if number_movement:
 		return Input.is_key_pressed(NUMBER_MOVEMENT[default_key])
-	return Input.is_physical_key_pressed(default_key) if physical else Input.is_key_pressed(default_key)
+	return Input.is_key_pressed(default_key)
 
 func _movement_hint(text: String) -> String:
 	var keys := {"up":"8","left":"4","down":"5","right":"6"} if number_movement else {"up":"W","left":"A","down":"S","right":"D"}
