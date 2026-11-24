@@ -1897,8 +1897,8 @@ func _build_stars() -> void:
 		var star := Label3D.new()
 		star.text = "★"
 		star.billboard = BaseMaterial3D.BILLBOARD_ENABLED
-		star.modulate = Color("#ffdb52")
-		star.outline_modulate = Color("#794510")
+		star.modulate = Color("#ffdb5280")
+		star.outline_modulate = Color("#79451080")
 		star.font_size = 96
 		star.pixel_size = .008
 		star.position = Vector3(site.x, _surface_height(site.x, site.y) + 1.35, site.y)
