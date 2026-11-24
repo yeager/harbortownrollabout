@@ -1098,7 +1098,7 @@ def make_fire_engine():
                           for x,dy in ((-1,.09),(-1,.014),(-.92,0),(0,-.006),
                                        (.92,0),(1,.014),(1,.09),(0,.10))])
         profile_loft("Tapered cooling intake",rings,RUBBER,root)
-        fascia("Reflective lower intake rim",width*.85,z-.099,.021,depth-.011,.024,PAINT_YELLOW)
+        fascia("Reflective lower intake rim",width*.85,z-.099,.044,depth-.019,.024,PAINT_YELLOW)
         vertices,faces=[],[]
         pitch=.032
         for row in range(4):
@@ -1128,7 +1128,8 @@ def make_fire_engine():
         pod.rotation_euler.y = -side*.16
         strip = cube("Upper corner running lamp",(fascia_x,-3.045,1.684),(.22,.012,.029),HEADLAMP,.009,root)
         strip.rotation_euler.y = -side*.16
-    badge = text_obj("Rescue unit marking","711",(-.105,-3.088,1.606),.125,PAINT_WHITE,root=root)
+    badge = text_obj("Raised Scania grille lettering","SCANIA",(0,-3.082,1.585),.19,METAL,root=root)
+    badge.location.x = -(min(v.co.x for v in badge.data.vertices) + max(v.co.x for v in badge.data.vertices)) * .5
     badge.rotation_euler = (math.pi/2,0,0)
     for x in [-.56,.56]:
         cube("Beacon mounting foot",(x,-2.32,2.634),(.119,.191,.077),RUBBER,.018,root)
