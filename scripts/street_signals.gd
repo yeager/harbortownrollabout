@@ -283,7 +283,7 @@ func _junction_occupied(crossing: Dictionary) -> bool:
 		if zone.intersects(player_car): return true
 	if world.walker.visible and zone.has_point(world.walker.position): return true
 	for item in world.walker_data:
-		if zone.has_point(item.actor.position): return true
+		if item.actor.is_visible_in_tree() and zone.has_point(item.actor.position): return true
 	return false
 
 func _pedestrian_near_crosswalk(crossing: Dictionary) -> bool:
@@ -294,7 +294,7 @@ func _pedestrian_near_crosswalk(crossing: Dictionary) -> bool:
 	var approach := Transform3D(basis,zebra) * AABB(Vector3(-13,-1,-2.4),Vector3(26,4,4.8))
 	if world.walker.visible and approach.has_point(world.walker.position): return true
 	for item in world.walker_data:
-		if approach.has_point(item.actor.position): return true
+		if item.actor.is_visible_in_tree() and approach.has_point(item.actor.position): return true
 	return false
 
 func advance_tram_crossings(delta: float) -> void:

@@ -282,6 +282,18 @@ func check() -> void:
 	if not crossing.pedestrians[0].figures[1].visible or not lights.pedestrian_may_enter(user+axis*8.75,user+axis*8.65):
 		fail("Cleared zebra did not show green and release the waiting pedestrian")
 		return
+	game.walker.hide()
+	var santa: Node3D = game.santa
+	var santa_position := santa.position
+	var santa_visible := santa.visible
+	santa.position = user
+	for present in [true, false]:
+		santa.visible = present
+		if lights._pedestrian_near_crosswalk(crossing) != present or lights._junction_occupied(crossing) != present:
+			fail("Crossing occupancy and walk requests must follow seasonal pedestrian visibility")
+			return
+	santa.position = santa_position
+	santa.visible = santa_visible
 	crossing.center = saved_center
 	traffic_actor.transform = saved_actor
 	game.walker.transform = saved_walker
