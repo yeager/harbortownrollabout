@@ -561,7 +561,7 @@ const LAUNCH_BERTH := Vector3(79,-.94,46)
 const LAUNCH_LANDING := Vector2(80.9,46)
 const LAUNCH_PIER := Rect2(80.5,44.75,7.2,2.5)
 const LAUNCH_MAP_STOP := Vector3(LAUNCH_LANDING.x,0,LAUNCH_LANDING.y)
-const LAUNCH_ROAD_STOP := Vector3(102,0,LAUNCH_LANDING.y)
+const LAUNCH_ROAD_STOP := Vector3(95.6,-.04,LAUNCH_LANDING.y)
 var launch: Node3D
 var navigation_lenses: Array[StandardMaterial3D] = []
 var outboard: Node3D
@@ -2827,6 +2827,10 @@ func _build_waterfront() -> void:
 		var span := (end-start).abs()+Vector2(7.4,7.4)
 		_make_driving_surface(route[0],Vector3(span.x,.10,span.y),Vector3(middle.x,-.095,middle.y),asphalt).material_override = road_finish
 	_build_quay_lane_markings()
+	_make_driving_surface("Motorboat parking bay", Vector3(4.8,.10,9.4), LAUNCH_ROAD_STOP + Vector3(.35,-.05,0), asphalt).material_override = road_finish
+	for end in [-1.0,1.0]:
+		_make_box("Motorboat parking end marking", Vector3(3.2,.012,.12), LAUNCH_ROAD_STOP + Vector3(0,.015,end * 4.3), Color("#f3f5ed"))
+	_make_box("Motorboat parking edge marking", Vector3(.12,.012,8.6), LAUNCH_ROAD_STOP + Vector3(-1.6,.015,0), Color("#f3f5ed"))
 	# The eastern quay promenade follows the water between the bridge approaches.
 	quay_finish.shader = preload("res://environment/quay_paving.gdshader")
 	# Keep each bridge approach open where the pavement meets the junction.
@@ -7460,7 +7464,7 @@ func _update_route_arrows() -> void:
 			arrived = _at_launch_landing()
 		else:
 			target = LAUNCH_ROAD_STOP
-			arrived = origin.distance_to(target) < _arrival_radius()
+			arrived = origin.distance_to(target) < 2.0
 	if fountain_destination and walker.visible:
 		arrived = origin.distance_to(target) < 1.6
 	var shop_destination := -1

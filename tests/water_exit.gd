@@ -24,7 +24,23 @@ func check_exits() -> void:
 				printerr("Could not return to the car from the bridge")
 				quit(1)
 				return
+	game.free_drive = true
+	game.map_goal = game.LAUNCH_MAP_STOP
+	game.ambulance.position = game.LAUNCH_ROAD_STOP
+	game.ambulance.rotation.y = 0
+	game._update_route_arrows()
+	if game.map_goal != game.LAUNCH_MAP_STOP or game.route_arrows[0].visible:
+		printerr("Arriving at the parking bay did not preserve the motorboat as a walking destination")
+		quit(1)
+		return
+	game._change_seat()
+	game._update_route_arrows()
+	if not game.walker.visible or not game.route_arrows[0].visible:
+		printerr("Walking guidance did not start at the motorboat parking bay")
+		quit(1)
+		return
 	game._select_gallery_activity(4)
+	game.walker.hide()
 	game.launch.position = Vector3(71, 0, 25)
 	game._change_seat()
 	if game.walker.visible or not game.boating or game.listener.get_parent() != game.launch:
