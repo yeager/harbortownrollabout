@@ -10,10 +10,6 @@ var speed_needle: Node3D
 var lift := 0.0
 
 func fit(model: Node3D) -> void:
-	# Seat the complete optical assemblies back into the moulded cab corners.
-	for pattern in ["Cab headlamp seal*", "Cab projector*", "Cab reflector*", "Cab amber signal*", "Swept transparent headlamp cover*"]:
-		for part: MeshInstance3D in model.find_children(pattern, "MeshInstance3D", true, false):
-			part.position.z -= .010
 	# The service steps sit below the fog lamps on both bumper corners.
 	for pattern in ["Cab bumper foothold recess*", "Cab bumper step lip*", "Step tread ridge*"]:
 		for part: MeshInstance3D in model.find_children(pattern, "MeshInstance3D", true, false):

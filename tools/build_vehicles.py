@@ -1269,6 +1269,7 @@ def make_fire_engine():
     shader=next(node for node in cover.node_tree.nodes if node.type=="BSDF_PRINCIPLED")
     shader.inputs["Alpha"].default_value=.19
     projector_glass = material("Clear graphite projector lens",(.27,.34,.37),.38,.12)
+    headlamp_pockets = []
     for x in (-0.82, 0.82):
         side=1 if x>0 else -1
         # The lens cluster wraps back towards the cab corner. Set each
@@ -1281,8 +1282,10 @@ def make_fire_engine():
                 u=cx+.5*w*math.copysign(abs(c)**.48,c)
                 sweep=(u-.86)/.24
                 z=cz-.445+.035*sweep+.5*h*(1-.25*sweep)*math.copysign(abs(sn)**.48,sn)
-                ring.append((side*u,depth-.103+.080*((u-.63)/.48)**2,z))
+                ring.append((side*u,depth-.060+.080*((u-.63)/.48)**2,z))
             return ring
+        pocket = [light_ring(.866,1.424,.499,.302,d) for d in (-3.24,-2.94)]
+        headlamp_pockets.append(profile_loft("Lamp pocket cutter",pocket,RUBBER,root))
         shell=[light_ring(.866,1.424,w,h,d) for w,h,d in
                ((.490,.296,-2.93),(.494,.297,-3.030),(.468,.264,-3.052),(.426,.223,-3.044))]
         profile_loft("Cab headlamp seal",shell,RUBBER,root)
@@ -1315,7 +1318,16 @@ def make_fire_engine():
         bumper.append([(x,-3.115+setback+dy,z) for dy,z in
                        ((.265,low+.029),(.064,low),(.015,low+.025),(-.012,low+.078),
                         (-.018,.934),(-.007,1.013),(.021,1.052),(.060,1.062),(.264,1.030))])
-    profile_loft("Wraparound crew cab bumper",bumper,PAINT_RED,root)
+    bumper_shell = profile_loft("Wraparound crew cab bumper",bumper,PAINT_RED,root)
+    aprons = [part for part in root.children if part.name.startswith("Sculpted cab corner apron")]
+    for pocket in headlamp_pockets:
+        for panel in [bumper_shell, *aprons]:
+            cut = panel.modifiers.new("Recess for lamp housing", "BOOLEAN")
+            cut.object = pocket
+            cut.operation = "DIFFERENCE"
+            bpy.context.view_layer.objects.active = panel
+            bpy.ops.object.modifier_apply(modifier=cut.name)
+        bpy.data.objects.remove(pocket, do_unlink=True)
     # Lower cooling mouth flares towards the number plate.
     for name, finish, levels in (
             ("Lower intake surround", RUBBER, ((.565,.746),(.588,.765),(.804,.630),(.817,.610))),
