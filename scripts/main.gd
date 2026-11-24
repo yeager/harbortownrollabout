@@ -4388,6 +4388,8 @@ func _build_depot() -> void:
 		var model := (load(VEHICLE_SCENES_ALL[i]) as PackedScene).instantiate() as Node3D
 		model.rotation.y = PI
 		body.add_child(model)
+		if i == BUS:
+			_fit_bus_mirrors(model)
 		if i == SCHOOL_CAR:
 			_add_school_car_sign(model)
 		_park_at_home(body, i)
@@ -5466,6 +5468,8 @@ func _spawn_traffic(scene_path: String, x: float, lane_z: float, direction: floa
 	model.scale = Vector3.ONE * model_scale
 	model.rotation.y = PI
 	actor.add_child(model)
+	if scene_path == VEHICLE_SCENES_ALL[BUS]:
+		_fit_bus_mirrors(model)
 	var half_size := _vehicle_half_size(actor, model)
 	var is_bicycle := scene_path.ends_with("cyklist.glb")
 	if not is_bicycle:
@@ -7032,16 +7036,18 @@ func _update_bus_ceiling_lights(night: float) -> void:
 		lamp.visible = glow > .001
 		lamp.light_energy = glow*1.1
 
-func _fit_bus_interior() -> void:
+func _fit_bus_mirrors(model: Node3D) -> void:
 	var mirror_glass := _material(Color("#9bacb3"), .17)
 	mirror_glass.metallic = .78
 	for side in [-1.0,1.0]:
 		var mirror_center := Vector3(side * 1.39, 1.91, 5.07)
-		_make_box("Bus mirror stay",Vector3(.24,.06,.09),mirror_center + Vector3(-side * .10,-.22,0),Color("#202629"),false,vehicle_model)
-		_make_box("Bus mirror housing",Vector3(.19,.46,.15),mirror_center,Color("#202629"),false,vehicle_model)
+		_make_box("Bus mirror stay",Vector3(.24,.06,.09),mirror_center + Vector3(-side * .10,-.22,0),Color("#202629"),false,model)
+		_make_box("Bus mirror housing " + ("left" if side > 0 else "right"),Vector3(.19,.46,.15),mirror_center,Color("#202629"),false,model)
 		for pane in [Vector2(.064,.286),Vector2(-.148,.104)]:
-			var glass := _make_box("Bus mirror glass",Vector3(.145,pane.y,.012),mirror_center + Vector3(0,pane.x,-.077),Color.WHITE,false,vehicle_model)
+			var glass := _make_box("Bus mirror glass",Vector3(.145,pane.y,.012),mirror_center + Vector3(0,pane.x,-.077),Color.WHITE,false,model)
 			glass.material_override = mirror_glass
+
+func _fit_bus_interior() -> void:
 	var cabin := vehicle_model.find_child("Cabin",true,false) as MeshInstance3D
 	for surface in cabin.mesh.get_surface_count():
 		var finish := cabin.get_active_material(surface) as StandardMaterial3D
@@ -7141,6 +7147,7 @@ func _load_vehicle_model() -> void:
 	driver_bus_stop_board = null
 	rear_bus_board = null
 	if vehicle_index == BUS:
+		_fit_bus_mirrors(vehicle_model)
 		_fit_bus_interior()
 		for end in [-1,1]:
 			var lamp := _make_box("Left departure indicator",Vector3(.19,.085,.027),Vector3(1.033,.907,5.374) if end == 1 else Vector3(1.01,1.11,-5.302),Color("#ff9d17"),false,vehicle_model)
