@@ -90,7 +90,12 @@ var previous_season := 0
 var greeting_timer := 0.0
 var greeting_number := 0
 const RADIO_KEYS := [[KEY_J, KEY_B, KEY_X], [KEY_N, KEY_M, KEY_Z]]
-const NUMBER_MOVEMENT := {KEY_W: KEY_8, KEY_A: KEY_4, KEY_S: KEY_5, KEY_D: KEY_6}
+const NUMBER_MOVEMENT := {
+	KEY_W: [KEY_8, KEY_KP_8],
+	KEY_A: [KEY_4, KEY_KP_4],
+	KEY_S: [KEY_5, KEY_KP_5],
+	KEY_D: [KEY_6, KEY_KP_6],
+}
 var number_movement := false
 var seat_f3 := false
 var camera_f6 := false
@@ -4979,7 +4984,10 @@ func _rest_seconds() -> int:
 
 func _movement_pressed(default_key: Key) -> bool:
 	if number_movement:
-		return Input.is_key_pressed(NUMBER_MOVEMENT[default_key])
+		for key: Key in NUMBER_MOVEMENT[default_key]:
+			if Input.is_key_pressed(key):
+				return true
+		return false
 	return Input.is_key_pressed(default_key)
 
 func _movement_hint(text: String) -> String:
