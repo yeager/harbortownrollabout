@@ -7124,6 +7124,10 @@ func _fit_bus_rear_bench(model: Node3D) -> void:
 func _fit_bus_exterior(model: Node3D) -> void:
 	_fit_bus_rear_bench(model)
 	var window_seal := _material(Color("#151c1e"), .53)
+	var lower_door_finish := _material(Color("#283337"), .37)
+	lower_door_finish.metallic = .15
+	for panel: MeshInstance3D in model.find_children("Passenger door lower panel*", "MeshInstance3D", true, false):
+		panel.material_override = lower_door_finish
 	if not bus_side_marker_finish:
 		bus_side_marker_finish = _material(Color("#a6561d"),.32,true)
 		bus_side_marker_finish.emission = Color("#ffaa43")
