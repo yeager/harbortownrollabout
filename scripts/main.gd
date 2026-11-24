@@ -7288,7 +7288,10 @@ func _update_route_arrows() -> void:
 		navigator.remaining_lane.clear()
 		var near_counter := walking_to_grill and origin.z <= shops.FRONT_Z
 		var near_bench := bench_destination and origin.x <= BOULE_BENCH.x
-		if (near_counter or near_bench) and start.distance_to(goal) <= 5.0:
+		if pizza_destination and origin.z <= shops.FRONT_Z and start.distance_to(goal) <= 5.0:
+			# Approach along the pavement, then turn through the open doorway.
+			points = PackedVector2Array([start, Vector2(goal.x, start.y), goal])
+		elif (near_counter or near_bench) and start.distance_to(goal) <= 5.0:
 			points = PackedVector2Array([start, goal])
 		else:
 			points.append_array(navigator.path(start, goal))
@@ -7300,7 +7303,7 @@ func _update_route_arrows() -> void:
 	if not walker.visible and not paused and not boating and not operating_excavator:
 		turn_preview.text = navigator.turn_preview(points, car_forward, show_turn_street)
 		turn_preview.visible = not turn_preview.text.is_empty()
-	var gap := minf(3.5, start.distance_to(goal) * .5) if walking_to_grill or (bench_destination and walker.visible) else 3.5
+	var gap := minf(3.5, start.distance_to(goal) * .5) if walker.visible and (grill_destination or bench_destination or pizza_destination) else 3.5
 	var used := 0
 	for i in range(1,points.size()):
 		var segment := points[i]-points[i-1]

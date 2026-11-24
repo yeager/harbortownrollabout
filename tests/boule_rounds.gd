@@ -57,6 +57,13 @@ func check_rounds() -> void:
 		quit(1)
 		return
 	game.walker.show()
+	game.walker.position = game.map_goal + Vector3.FORWARD * 1.8
+	game._update_route_arrows()
+	var arrow = game.route_arrows[0]
+	if not arrow.visible or not is_equal_approx(arrow.position.x, game.map_goal.x) or arrow.position.z <= game.walker.position.z or arrow.position.z >= game.map_goal.z:
+		printerr("Final walking arrow should point through the pizzeria doorway")
+		quit(1)
+		return
 	game.walker.position = game.map_goal
 	game.shops.update_customer(true,game.walker.position,true)
 	game._update_route_arrows()
