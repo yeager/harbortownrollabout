@@ -6599,7 +6599,7 @@ func _update_santa_encounters() -> void:
 	var greeted := false
 	for person: Node3D in people:
 		if not is_instance_valid(person): continue
-		var gap := santa.position.distance_to(person.position)
+		var gap := santa.global_position.distance_to(person.global_position)
 		if not person.is_visible_in_tree() or gap > 5:
 			santa_encounters.erase(person)
 		elif gap < 3 and not santa_encounters.has(person) and bubble_time <= 0:
@@ -6725,6 +6725,10 @@ func _update_pedestrians(delta: float) -> void:
 		_update_santa_encounters()
 	else:
 		santa_encounters.clear()
+		if greeting.get_parent() == santa and greeting.visible:
+			greeting_voice.stop()
+			greeting.hide()
+			bubble_time = 0
 	_update_small_talk(delta)
 	for item in walker_data:
 		var person: Node3D = item["actor"]
