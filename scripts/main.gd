@@ -8262,6 +8262,10 @@ func _build_overlay() -> void:
 	var center := CenterContainer.new()
 	center.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	overlay.add_child(center)
+	var reserve_footer := func():
+		center.offset_bottom = -menu_footer.get_combined_minimum_size().y - 16 if menu_footer.visible else 0.0
+	menu_footer.visibility_changed.connect(reserve_footer)
+	menu_footer.minimum_size_changed.connect(reserve_footer)
 	overlay_panel = PanelContainer.new()
 	overlay_panel.custom_minimum_size = Vector2(620, 350)
 	overlay_panel.add_theme_stylebox_override("panel", _style(Color("#172b32"), 24))
@@ -8312,7 +8316,7 @@ func _build_overlay() -> void:
 	selected_style.border_color = Color("#ffe395")
 	for index in VEHICLE_NAMES_ALL.size()+EXTRA_GALLERY_NAMES.size():
 		var tile := Button.new()
-		tile.custom_minimum_size = Vector2(166,109)
+		tile.custom_minimum_size = Vector2(166,94)
 		tile.toggle_mode = true
 		tile.button_group = vehicle_group
 		tile.text = VEHICLE_NAMES_ALL[index] if index < VEHICLE_NAMES_ALL.size() else EXTRA_GALLERY_NAMES[index-VEHICLE_NAMES_ALL.size()]
