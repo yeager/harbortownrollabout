@@ -1867,3 +1867,6 @@ msgstr "Använd 1 för varningsljus och 2 för fordonsljud"
 
 msgid "Fountain"
 msgstr "Fontänen"
+
+msgid "City bus 74"
+msgstr "Stadsbuss 74"

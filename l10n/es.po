@@ -1944,3 +1944,6 @@ msgstr "Usar 1 para las luces de aviso y 2 para el sonido del vehículo"
 
 msgid "Fountain"
 msgstr "Fuente"
+
+msgid "City bus 74"
+msgstr "Autobús urbano 74"

@@ -1866,3 +1866,6 @@ msgstr ""
 
 msgid "Fountain"
 msgstr ""
+
+msgid "City bus 74"
+msgstr ""

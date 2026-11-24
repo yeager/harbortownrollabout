@@ -8503,7 +8503,9 @@ func _build_overlay() -> void:
 		tile.custom_minimum_size = Vector2(166,94)
 		tile.toggle_mode = true
 		tile.button_group = vehicle_group
-		tile.text = VEHICLE_NAMES_ALL[index] if index < VEHICLE_NAMES_ALL.size() else EXTRA_GALLERY_NAMES[index-VEHICLE_NAMES_ALL.size()]
+		var vehicle_name: String = VEHICLE_NAMES_ALL[index] if index < VEHICLE_NAMES_ALL.size() else EXTRA_GALLERY_NAMES[index-VEHICLE_NAMES_ALL.size()]
+		tile.set_meta("vehicle_name",vehicle_name)
+		tile.text = "City bus 74" if index == BUS else vehicle_name
 		tile.accessibility_name = tr(tile.text)
 		tile.add_theme_font_size_override("font_size",14)
 		tile.add_theme_stylebox_override("normal",normal_style)
@@ -8534,7 +8536,7 @@ func _build_overlay() -> void:
 		star.name = "Favorite"
 		star.toggle_mode = true
 		star.flat = true
-		star.button_pressed = tile.text in favorites
+		star.button_pressed = vehicle_name in favorites
 		star.text = "★" if star.button_pressed else "☆"
 		star.accessibility_name = tr("Favorite vehicles") + " · " + tr(tile.text)
 		tile.add_child(star)
@@ -8542,8 +8544,8 @@ func _build_overlay() -> void:
 		star.offset_left = -36
 		star.offset_bottom = 36
 		star.toggled.connect(func(enabled: bool):
-			if enabled: favorites.append(tile.text)
-			else: favorites.remove_at(favorites.find(tile.text))
+			if enabled: favorites.append(vehicle_name)
+			else: favorites.remove_at(favorites.find(vehicle_name))
 			star.text = "★" if enabled else "☆"
 			_save_preferences()
 			_filter_gallery()
@@ -9756,7 +9758,8 @@ func _filter_gallery() -> void:
 	var members: Array = GALLERY_GROUPS.get(gallery_category, [])
 	for tile: Button in vehicle_selector.get_children():
 		if mode == "menu":
-			tile.visible = tile.text in favorites if gallery_category == "Favorite vehicles" else members.is_empty() or tile.text in members
+			var vehicle_name: String = tile.get_meta("vehicle_name")
+			tile.visible = vehicle_name in favorites if gallery_category == "Favorite vehicles" else members.is_empty() or vehicle_name in members
 		else:
 			tile.visible = tile.get_index() < VEHICLE_NAMES_ALL.size()
 

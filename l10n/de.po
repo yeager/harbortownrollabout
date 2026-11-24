@@ -1954,3 +1954,6 @@ msgstr "1 für Warnleuchten und 2 für Fahrzeugton verwenden"
 
 msgid "Fountain"
 msgstr "Brunnen"
+
+msgid "City bus 74"
+msgstr "Stadtbus 74"

@@ -1937,3 +1937,6 @@ msgstr "Bruk 1 for varsellys og 2 for kjøretøylyd"
 
 msgid "Fountain"
 msgstr "Fontenen"
+
+msgid "City bus 74"
+msgstr "Bybuss 74"

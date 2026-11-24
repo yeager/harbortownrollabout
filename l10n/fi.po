@@ -1933,3 +1933,6 @@ msgstr "Käytä varoitusvaloihin 1 ja ajoneuvon ääneen 2"
 
 msgid "Fountain"
 msgstr "Suihkulähde"
+
+msgid "City bus 74"
+msgstr "Kaupunkibussi 74"

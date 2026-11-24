@@ -1952,3 +1952,6 @@ msgstr "Utiliser 1 pour les feux d’avertissement et 2 pour le son du véhicule
 
 msgid "Fountain"
 msgstr "Fontaine"
+
+msgid "City bus 74"
+msgstr "Bus urbain 74"
