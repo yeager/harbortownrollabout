@@ -1084,6 +1084,18 @@ func _sweet_shop(x: float) -> void:
 	for y in [2.64,3.44]:
 		part("Fascia rolled rim",Vector3(x,y,41.95),Vector3(8.45,.041,.035),Color("#4b4951"))
 	_update_candy_letters()
+	# The blade sign faces approaching traffic in both directions.
+	var blade := Vector3(x - 1.18, 3.47, 41.13)
+	part("Candy blade bracket", blade + Vector3(0,.53,.47), Vector3(.08,.08,.98), frame)
+	part("Candy blade wall mount", blade + Vector3(0,.24,.95), Vector3(.16,.64,.14), frame)
+	part("Candy blade hanger", blade + Vector3(0,.42,0), Vector3(.06,.27,.06), frame)
+	var sweet_body := _turned("Candy blade centre", blade, .32, .32, .16, palette[0])
+	sweet_body.rotation.z = PI * .5
+	for side in [-1, 1]:
+		var wrapper := _turned("Candy blade wrapper", blade + Vector3(0,0,side * .39), .075, .23, .25, palette[1])
+		wrapper.rotation.x = side * PI * .5
+		var inset := _turned("Candy blade pearl inset", blade + Vector3(side * .085,0,0), .21, .21, .025, pearl)
+		inset.rotation.z = PI * .5
 	# Two wrapped boiled sweets at opposite ends complete the shop's sign.
 	for side in [-1,1]:
 		var cx:float=x+side*3.56
