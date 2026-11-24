@@ -50,6 +50,7 @@ func fit(model: Node3D) -> void:
 			lens.tree_exiting.connect(func(): lens.material_overlay = null)
 	for blind: MeshInstance3D in model.find_children("Rear roller blind*", "MeshInstance3D", true, false):
 		_fit_rear_reflector(blind)
+		_fit_rear_pull_bar(blind)
 	closed_height = -2.0*panel.get_aabb().position.y # The mesh origin is halfway up the closed blind.
 	for part in carrier.get_children():
 		if not part is MeshInstance3D: continue
@@ -75,6 +76,35 @@ func fit(model: Node3D) -> void:
 		coil.scale.y = .26
 		coil.position = Vector3(-1.151,1.64,panel.position.z)
 		add_child(coil)
+
+func _fit_rear_pull_bar(blind: MeshInstance3D) -> void:
+	var bounds := blind.get_aabb()
+	var steel := StandardMaterial3D.new()
+	steel.albedo_color = Color("#c8ccce")
+	steel.metallic = .82
+	steel.roughness = .32
+	var half_span := bounds.size.x * .39
+	var base := Vector3(0, bounds.position.y + .09, bounds.position.z)
+	var tube := CylinderMesh.new()
+	tube.top_radius = .016
+	tube.bottom_radius = .016
+	tube.height = half_span * 2
+	tube.rings = 0
+	tube.material = steel
+	var bar := MeshInstance3D.new()
+	bar.name = "Rear shutter pull bar"
+	bar.mesh = tube
+	bar.rotation.z = PI / 2
+	bar.position = base + Vector3.FORWARD * .06
+	blind.add_child(bar)
+	var bracket := BoxMesh.new()
+	bracket.size = Vector3(.034,.055,.078)
+	bracket.material = steel
+	for side in [-1,1]:
+		var foot := MeshInstance3D.new()
+		foot.mesh = bracket
+		foot.position = base + Vector3(side * half_span,0,-.03)
+		blind.add_child(foot)
 
 func _fit_rear_reflector(blind: MeshInstance3D) -> void:
 	var bounds := blind.get_aabb()
