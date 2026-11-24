@@ -9470,7 +9470,7 @@ func _track_practice_stop(after: Vector3, front_reach: float, heading_x: float) 
 		practice_stop_missed = false
 	if gap < 0.0:
 		practice_stop_missed = true
-	elif gap <= 1.0 and heading_x >= .85 and absf(after.z-PRACTICE_STOP_LANE_Z) <= 2.25 and is_zero_approx(speed):
+	elif not practice_stop_missed and gap <= 1.0 and heading_x >= .85 and absf(after.z-PRACTICE_STOP_LANE_Z) <= 2.25 and is_zero_approx(speed):
 		practice_stop_complete = true
 
 func _set_practice_signal(phase: int) -> void:
@@ -9489,7 +9489,7 @@ func _track_practice_signal(before: Vector3, after: Vector3, front_reach: float,
 		_set_practice_signal(0)
 	var in_approach_lane := heading_x >= .85 and absf(after.z-PRACTICE_STOP_LANE_Z) <= 2.25
 	if gap < 0.0:
-		practice_signal_complete = in_approach_lane and before.x+front_reach <= PRACTICE_SIGNAL_X and practice_signal_phase == 2 and practice_signal_waited
+		practice_signal_complete = not practice_signal_missed and in_approach_lane and before.x+front_reach <= PRACTICE_SIGNAL_X and practice_signal_phase == 2 and practice_signal_waited
 		practice_signal_missed = not practice_signal_complete
 		return
 	if not in_approach_lane:

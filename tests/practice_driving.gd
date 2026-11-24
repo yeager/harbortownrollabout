@@ -67,6 +67,11 @@ func verify() -> void:
 		quit(1)
 		return
 	game.speed = 0.0
+	game._track_practice_stop(before,2.0,1.0)
+	if not game.practice_stop_missed or game.practice_stop_complete:
+		printerr("Backing just behind the line counted as a fresh stop attempt")
+		quit(1)
+		return
 	var retry := before-Vector3.RIGHT
 	game._track_practice_stop(retry,2.0,1.0)
 	game._track_practice_stop(before,2.0,1.0)
@@ -96,6 +101,12 @@ func verify() -> void:
 	game._track_practice_signal(signal_wait,signal_cross+Vector3.BACK*6.0,2.0,1.0,.2)
 	if not game.practice_signal_missed or game.practice_signal_complete:
 		printerr("Driving around the practice signal on green was accepted")
+		quit(1)
+		return
+	game._track_practice_signal(signal_cross,signal_wait,2.0,1.0,.1)
+	game._track_practice_signal(signal_wait,signal_cross,2.0,1.0,.1)
+	if not game.practice_signal_missed or game.practice_signal_complete:
+		printerr("Crossing again without resetting the signal attempt was accepted")
 		quit(1)
 		return
 	game._track_practice_signal(signal_cross,signal_retry,2.0,1.0,.1)
