@@ -111,6 +111,7 @@ var practice_signal_complete := false
 var recovery_key := KEY_R
 var jump_key := KEY_E
 var look_key := KEY_V
+var map_key := KEY_F5
 var number_camera := false
 var insert_help := false
 var ctrl_run := false
@@ -1050,10 +1051,11 @@ func _unhandled_key_input(event: InputEvent) -> void:
 		if event.keycode == scooter_key:
 			_toggle_scooter()
 			return
+		if event.keycode == map_key:
+			if mode == "playing" and not paused and map_button.is_visible_in_tree() and not phone.handset.is_visible_in_tree():
+				map_button.pressed.emit()
+			return
 		match event.keycode:
-			KEY_F5:
-				if mode == "playing" and not paused and map_button.is_visible_in_tree() and not phone.handset.is_visible_in_tree():
-					map_button.pressed.emit()
 			KEY_H: _honk()
 			KEY_F4:
 				if horn_f4 and not event.alt_pressed: _honk()
@@ -8268,7 +8270,7 @@ func _build_town_map() -> void:
 	dialog.window_input.connect(func(event: InputEvent):
 		if not event is InputEventKey or not event.pressed or event.echo or event.is_command_or_control_pressed() or event.alt_pressed:
 			return
-		if event.keycode == KEY_F5:
+		if event.keycode == map_key:
 			dialog.set_input_as_handled()
 			dialog.hide()
 			return
@@ -8294,7 +8296,7 @@ func _build_town_map() -> void:
 	leave_practice_button.text = "Return to town"
 	phone.add_child(leave_practice_button)
 	leave_practice_button.pressed.connect(_leave_practice)
-	map_button.text = "Town map · F5"
+	map_button.auto_translate_mode = Node.AUTO_TRANSLATE_MODE_DISABLED
 	phone.add_child(map_button)
 	map_button.pressed.connect(func():
 		var actor := walker if walker.visible else ambulance
@@ -8642,6 +8644,16 @@ func _build_overlay() -> void:
 		_save_preferences()
 	)
 	pages[2].add_child(phone_key)
+	var map_binding := CheckButton.new()
+	map_binding.name = "MapF11"
+	map_binding.text = "Open the town map with F11"
+	map_binding.button_pressed = map_key == KEY_F11
+	map_binding.toggled.connect(func(enabled: bool):
+		map_key = KEY_F11 if enabled else KEY_F5
+		_save_preferences()
+		_refresh_ui()
+	)
+	pages[2].add_child(map_binding)
 	var scooter_binding := CheckButton.new()
 	scooter_binding.name = "ScooterF9"
 	scooter_binding.text = "Fold or unfold the scooter with F9"
@@ -9920,6 +9932,7 @@ func _load_preferences() -> void:
 	camera_f6 = config.get_value("keyboard","camera_f6",false) == true
 	quit_key = KEY_F8 if config.get_value("keyboard","quit_f8",false) == true else KEY_F10
 	phone.toggle_key = KEY_F2 if config.get_value("keyboard","phone_f2",false) == true else KEY_T
+	map_key = KEY_F11 if config.get_value("keyboard","map_f11",false) == true else KEY_F5
 	jump_key = KEY_0 if config.get_value("keyboard","zero_jump",false) == true else KEY_E
 	recovery_key = KEY_BACKSPACE if config.get_value("keyboard","backspace_recovery",false) == true else KEY_R
 	number_movement = config.get_value("keyboard","number_movement",false) == true
@@ -9987,6 +10000,7 @@ func _save_preferences() -> void:
 	config.set_value("keyboard","camera_f6",camera_f6)
 	config.set_value("keyboard","quit_f8",quit_key == KEY_F8)
 	config.set_value("keyboard","phone_f2",phone.toggle_key == KEY_F2)
+	config.set_value("keyboard","map_f11",map_key == KEY_F11)
 	config.set_value("keyboard","zero_jump",jump_key == KEY_0)
 	config.set_value("keyboard","backspace_recovery",recovery_key == KEY_BACKSPACE)
 	config.set_value("keyboard","number_movement",number_movement)
@@ -10134,6 +10148,7 @@ func _refresh_dispatch() -> void:
 		phone.refresh()
 
 func _refresh_ui() -> void:
+	map_button.text = "%s · %s" % [tr("Town map"),OS.get_keycode_string(map_key)]
 	if is_instance_valid(vehicle_model):
 		var school_sign := vehicle_model.get_node_or_null("SchoolCarSign") as Node3D
 		if school_sign: school_sign.visible = practice_active

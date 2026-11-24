@@ -1600,9 +1600,6 @@ msgstr ""
 msgid "Town map"
 msgstr ""
 
-msgid "Town map · F5"
-msgstr ""
-
 msgid "Town square"
 msgstr ""
 
@@ -1859,4 +1856,7 @@ msgid "Driving lesson complete."
 msgstr ""
 
 msgid "Green light. Drive across the line."
+msgstr ""
+
+msgid "Open the town map with F11"
 msgstr ""

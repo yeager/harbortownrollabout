@@ -1601,9 +1601,6 @@ msgstr "Tryck på stjärnan på ett fordon för att lägga till det här."
 msgid "Town map"
 msgstr "Stadskarta"
 
-msgid "Town map · F5"
-msgstr "Stadskarta · F5"
-
 msgid "Town square"
 msgstr "Torget"
 
@@ -1861,3 +1858,6 @@ msgstr "Körlektionen är klar."
 
 msgid "Green light. Drive across the line."
 msgstr "Grönt ljus. Kör över linjen."
+
+msgid "Open the town map with F11"
+msgstr "Öppna stadskartan med F11"

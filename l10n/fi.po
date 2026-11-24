@@ -1667,9 +1667,6 @@ msgstr "Lisää ajoneuvo tähän napauttamalla sen tähteä."
 msgid "Town map"
 msgstr "Kaupungin kartta"
 
-msgid "Town map · F5"
-msgstr "Kaupungin kartta · F5"
-
 msgid "Town square"
 msgstr "Tori"
 
@@ -1927,3 +1924,6 @@ msgstr "Ajotunti on suoritettu."
 
 msgid "Green light. Drive across the line."
 msgstr "Vihreä valo. Aja viivan yli."
+
+msgid "Open the town map with F11"
+msgstr "Avaa kaupunkikartta F11-näppäimellä"

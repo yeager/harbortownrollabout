@@ -1671,9 +1671,6 @@ msgstr "Trykk på stjernen på et kjøretøy for å legge det til her."
 msgid "Town map"
 msgstr "Bykart"
 
-msgid "Town map · F5"
-msgstr "Bykart · F5"
-
 msgid "Town square"
 msgstr "Torget"
 
@@ -1931,3 +1928,6 @@ msgstr "Kjøretimen er fullført."
 
 msgid "Green light. Drive across the line."
 msgstr "Grønt lys. Kjør over linjen."
+
+msgid "Open the town map with F11"
+msgstr "Åpne bykartet med F11"

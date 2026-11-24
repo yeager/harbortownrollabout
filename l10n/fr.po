@@ -1686,9 +1686,6 @@ msgstr "Touche l’étoile d’un véhicule pour l’ajouter ici."
 msgid "Town map"
 msgstr "Plan de la ville"
 
-msgid "Town map · F5"
-msgstr "Plan de la ville · F5"
-
 msgid "Town square"
 msgstr "Place centrale"
 
@@ -1946,3 +1943,6 @@ msgstr "Leçon de conduite terminée."
 
 msgid "Green light. Drive across the line."
 msgstr "Feu vert. Franchis la ligne."
+
+msgid "Open the town map with F11"
+msgstr "Ouvrir le plan de la ville avec F11"
