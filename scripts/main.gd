@@ -375,6 +375,7 @@ var gentle_driving := true
 var allow_crashes := true
 var show_turn_street := false
 var allow_red_lights := false
+var slowing_for_amber := false
 var waiting_for_signal := false
 var waiting_for_clear_crossing := false
 var brake_held := false
@@ -1388,6 +1389,9 @@ func _drive(delta: float) -> void:
 		speed = signf(speed)*minf(absf(speed),limit)
 	waiting_for_signal = not allow_red_lights and signal_gap <= .35 and signal_gap == stopping_distance and absf(speed) < .25
 	waiting_for_clear_crossing = waiting_for_signal and street_signals.red_clearance(ambulance.position,approach,leading_reach,false,true) > signal_gap
+	slowing_for_amber = assisted_braking and signal_gap == stopping_distance and not waiting_for_signal and not allow_red_lights
+	if slowing_for_amber:
+		slowing_for_amber = street_signals.red_clearance(ambulance.position,approach,leading_reach,false,true) == signal_gap and street_signals.red_clearance(ambulance.position,approach,leading_reach,true) > signal_gap
 	if player_brake_lens:
 		_set_rear_lights(player_brake_lens, brake_held or assisted_braking or waiting_for_signal)
 	var step := forward * speed * delta
@@ -9353,6 +9357,7 @@ func _start_game() -> void:
 		launch_speed = 0.0
 		outboard.rotation.y = 0.0
 	reward_seconds = 0.0
+	slowing_for_amber = false
 	waiting_for_signal = false
 	last_dispatch=""
 	happy_seconds = 0
@@ -10157,6 +10162,8 @@ func _refresh_status() -> void:
 			status_label.text = "Stop here to help."
 		else:
 			status_label.text = "Helping …" if gentle_driving else _movement_hint(tr("Press {help} to help"))
+	elif slowing_for_amber and mode == "playing" and not paused and not walker.visible and not boating:
+		status_label.text = tr("Orange light. Slow down.")
 	elif waiting_for_signal and mode=="playing" and not paused and not walker.visible and not boating:
 		status_label.text = tr("Wait until the crossing is clear." if waiting_for_clear_crossing else "Waiting for a green light")
 	elif walker.visible and not boating and not paused:

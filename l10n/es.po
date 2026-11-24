@@ -1899,3 +1899,6 @@ msgstr "Pista de petanca"
 
 msgid "Return to town for a job"
 msgstr "Volver a la ciudad para un encargo"
+
+msgid "Orange light. Slow down."
+msgstr "Luz ámbar. Reduce la velocidad."

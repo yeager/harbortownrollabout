@@ -177,6 +177,19 @@ func check() -> void:
 	game.allow_red_lights=false
 	game.mouse_gas=true
 	game.speed=7
+	var red_stage: int = crossing.stage
+	crossing.stage = lights.Stage.SIDE_AMBER
+	var saw_amber_hint := false
+	for tick in 100:
+		game._drive(.1)
+		game._refresh_status()
+		if game.status_label.text == game.tr("Orange light. Slow down."):
+			saw_amber_hint = true
+			break
+	if not saw_amber_hint:
+		fail("Driver missed the orange light braking hint")
+		return
+	crossing.stage = red_stage
 	for i in 120: game._drive(.1)
 	var car_gap: float = (Vector3(crossing.center)-game.ambulance.position).dot(axis)-lights.SIDE_LINE-game.front_reach
 	if absf(car_gap)>.25 or absf(game.speed)>.05:

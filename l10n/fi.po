@@ -1888,3 +1888,6 @@ msgstr "Petankkikenttä"
 
 msgid "Return to town for a job"
 msgstr "Palaa kaupunkiin tekemään tehtävä"
+
+msgid "Orange light. Slow down."
+msgstr "Oranssi valo. Hidasta."

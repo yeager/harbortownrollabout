@@ -1909,3 +1909,6 @@ msgstr "Bouleplatz"
 
 msgid "Return to town for a job"
 msgstr "Für einen Auftrag in die Stadt fahren"
+
+msgid "Orange light. Slow down."
+msgstr "Orange. Langsamer fahren."

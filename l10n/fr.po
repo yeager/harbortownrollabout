@@ -1907,3 +1907,6 @@ msgstr "Terrain de pétanque"
 
 msgid "Return to town for a job"
 msgstr "Retourner en ville pour une mission"
+
+msgid "Orange light. Slow down."
+msgstr "Feu orange. Ralentis."

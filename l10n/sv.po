@@ -1822,3 +1822,6 @@ msgstr "Boulebanan"
 
 msgid "Return to town for a job"
 msgstr "Åk till staden för ett uppdrag"
+
+msgid "Orange light. Slow down."
+msgstr "Orange ljus. Sakta in."

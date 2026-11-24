@@ -1892,3 +1892,6 @@ msgstr "Boulebane"
 
 msgid "Return to town for a job"
 msgstr "Dra til byen for et oppdrag"
+
+msgid "Orange light. Slow down."
+msgstr "Oransje lys. Senk farten."

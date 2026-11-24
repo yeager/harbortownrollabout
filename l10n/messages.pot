@@ -1821,3 +1821,6 @@ msgstr ""
 
 msgid "Return to town for a job"
 msgstr ""
+
+msgid "Orange light. Slow down."
+msgstr ""
