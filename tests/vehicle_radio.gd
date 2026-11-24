@@ -152,6 +152,18 @@ func check_controls() -> void:
 	if not game.radio.playing or game.radio_button.icon != null:
 		fail("The illustrated radio button must restart playback")
 		return
-	print("Radio rotation, language changes, pause and vehicle audio verified.")
+	game._set_radio_ducking(100)
+	game._say(game.walker_data[0].actor, "Which ice cream would you pick?", "chat_ice")
+	song = game.radio_track
+	press(KEY_N)
+	if not game.greeting_voice.playing or game.radio_track == song or not is_equal_approx(game.radio.volume_db, game.radio_track_gain_db - 8.0):
+		fail("Changing songs during a pedestrian line lost speech attenuation")
+		return
+	game.greeting_voice.stop()
+	await create_timer(.75).timeout
+	if not is_equal_approx(game.radio.volume_db, game.radio_track_gain_db):
+		fail("Radio did not restore its track volume after speech")
+		return
+	print("Radio rotation, language changes, pause, vehicle audio and speech attenuation verified.")
 	phase = "done"
 	game._finish_quit()
