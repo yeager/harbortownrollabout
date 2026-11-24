@@ -1897,3 +1897,6 @@ msgstr "Katsele ympärillesi F12-näppäimellä"
 
 msgid "Fire station"
 msgstr "Paloasema"
+
+msgid "Red means stop. Orange means slow down. Green means go."
+msgstr "Punaisella pysähdy. Oranssilla hidasta. Vihreällä aja."

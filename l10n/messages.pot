@@ -1830,3 +1830,6 @@ msgstr ""
 
 msgid "Fire station"
 msgstr ""
+
+msgid "Red means stop. Orange means slow down. Green means go."
+msgstr ""

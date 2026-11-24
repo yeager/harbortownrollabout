@@ -1916,3 +1916,6 @@ msgstr "Utiliser F12 pour regarder autour de soi"
 
 msgid "Fire station"
 msgstr "Caserne de pompiers"
+
+msgid "Red means stop. Orange means slow down. Green means go."
+msgstr "Au rouge, arrête-toi. À l’orange, ralentis. Au vert, avance."

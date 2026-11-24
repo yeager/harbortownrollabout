@@ -1831,3 +1831,6 @@ msgstr "Använd F12 för att se dig omkring"
 
 msgid "Fire station"
 msgstr "Brandstationen"
+
+msgid "Red means stop. Orange means slow down. Green means go."
+msgstr "Rött betyder stopp. Orange betyder sakta in. Grönt betyder kör."

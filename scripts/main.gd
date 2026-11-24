@@ -8796,6 +8796,8 @@ func _build_overlay() -> void:
 	pages[2].add_child(street_names)
 	var red_lights := CheckButton.new()
 	red_lights.text = "Allow driving through red lights"
+	red_lights.tooltip_text = "Red means stop. Orange means slow down. Green means go."
+	red_lights.accessibility_description = red_lights.tooltip_text
 	red_lights.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	red_lights.button_pressed = allow_red_lights
 	red_lights.toggled.connect(func(enabled: bool):

@@ -1908,3 +1908,6 @@ msgstr "Usar F12 para mirar alrededor"
 
 msgid "Fire station"
 msgstr "Parque de bomberos"
+
+msgid "Red means stop. Orange means slow down. Green means go."
+msgstr "En rojo, para. En naranja, reduce la velocidad. En verde, avanza."

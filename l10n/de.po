@@ -1918,3 +1918,6 @@ msgstr "Mit F12 umsehen"
 
 msgid "Fire station"
 msgstr "Feuerwache"
+
+msgid "Red means stop. Orange means slow down. Green means go."
+msgstr "Rot heißt anhalten. Orange heißt langsamer fahren. Grün heißt fahren."
