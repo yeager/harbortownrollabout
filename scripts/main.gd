@@ -561,6 +561,7 @@ var tram_mode := 0
 var water_finish := ShaderMaterial.new()
 var saloon_glazing: StandardMaterial3D
 const FERRY_LANDINGS := [-72.0, -12.0]
+const CANAL_BOUNDS := Rect2(55,-93,32,174)
 const HIGH_BRIDGE_X := [51.5, 65.0, 78.0, 98.0]
 const HIGH_BRIDGE_RISE := 5.85
 var ferry_boarding_lamps: Array[MeshInstance3D] = []
@@ -2664,7 +2665,8 @@ func _build_petrol_station(center: Vector3) -> void:
 func _build_waterfront() -> void:
 	var asphalt := Color("#414648")
 	_make_driving_surface("Östra stranden", Vector3(92, 0.3, 174), Vector3(133, -0.35, -6), Color("#859378")).material_override = soil_finish
-	var canal := _make_box("Sjöstadskanalen", Vector3(32, 0.12, 174), Vector3(71, -1.05, -6), Color("#376675"))
+	var water_center := CANAL_BOUNDS.get_center()
+	var canal := _make_box("Sjöstadskanalen",Vector3(CANAL_BOUNDS.size.x,.12,CANAL_BOUNDS.size.y),Vector3(water_center.x,-1.05,water_center.y),Color("#376675"))
 	var water := Shader.new()
 	water.code = """
 	shader_type spatial;
@@ -8279,6 +8281,7 @@ func _build_town_map() -> void:
 	var chart := preload("res://scripts/town_map.gd").new()
 	body.add_child(chart)
 	var counter := shops.grill_counter()
+	chart.water_bounds = CANAL_BOUNDS
 	chart.configure(navigator,PackedVector3Array([TARGETS[0],TARGETS[1],TARGETS[2],SCHOOL_CURB,STATION_DROP,counter,FLOUR_CURB,BOULE_BENCH_APPROACH,shops.pizzeria_entrance(),shops.storefront_entrance("Sweet shop"),shops.storefront_entrance("Momo & Bori")]),MAP_NAMES)
 	dialog.window_input.connect(func(event: InputEvent):
 		if not event is InputEventKey or not event.pressed or event.echo or event.is_command_or_control_pressed() or event.alt_pressed:
@@ -8318,11 +8321,13 @@ func _build_town_map() -> void:
 	map_button.pressed.connect(func():
 		var actor := walker if walker.visible else ambulance
 		chart.player = Vector2(actor.position.x,actor.position.z)
+		var forward := -actor.global_basis.z
+		chart.player_heading = Vector2(forward.x,forward.z).normalized()
 		chart.route_preview = PackedVector2Array()
 		if map_goal.is_finite():
 			var origin := Vector2(actor.position.x,actor.position.z)
 			var target := Vector2(map_goal.x,map_goal.z)
-			var heading := Vector2.ZERO if walker.visible else Vector2(-ambulance.global_basis.z.x,-ambulance.global_basis.z.z).normalized()
+			var heading := Vector2.ZERO if walker.visible else Vector2(forward.x,forward.z).normalized()
 			chart.route_preview = navigator.path(origin,target,heading,vehicle_index in [2,RECOVERY,BUS,REFUSE])
 		for i in MAP_NAMES.size():
 			var caption := tr(MAP_NAMES[i])

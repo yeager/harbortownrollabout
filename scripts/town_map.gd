@@ -1,13 +1,18 @@
 extends Control
 
 signal picked(index: int)
+
+const MAP_BOUNDS := Rect2(-520,-85,700,155)
 var player := Vector2.ZERO
+var player_heading := Vector2.ZERO
+var player_layer := Control.new()
 var navigator
 var stops := PackedVector3Array()
 var route_preview := PackedVector2Array()
+var water_bounds := Rect2()
 
 func plot(point: Vector2) -> Vector2:
-	return Vector2(22,22) + (point + Vector2(520,85)) * (size - Vector2(44,44)) / Vector2(700,155)
+	return Vector2(22,22) + (point-MAP_BOUNDS.position) * (size-Vector2(44,44)) / MAP_BOUNDS.size
 
 func pin_number(index: int) -> int:
 	return 0 if index == 9 else index+1
@@ -25,6 +30,9 @@ func configure(route, landmarks: PackedVector3Array, captions: Array) -> void:
 		pin.custom_minimum_size = Vector2(34,34)
 		pin.pressed.connect(func(): picked.emit(i))
 		add_child(pin)
+	player_layer.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(player_layer)
+	player_layer.draw.connect(_draw_player)
 	resized.connect(_position_pins)
 	_position_pins()
 
@@ -53,6 +61,14 @@ func _position_pins() -> void:
 func _draw() -> void:
 	draw_rect(Rect2(Vector2.ZERO,size),Color("#243e39"))
 	if not navigator: return
+	var water := MAP_BOUNDS.intersection(water_bounds)
+	if water.has_area():
+		var top_left := plot(water.position)
+		var bottom_right := plot(water.end)
+		var banks := Rect2(Vector2(top_left.x,0),Vector2(bottom_right.x-top_left.x,size.y))
+		draw_rect(banks,Color("#285a6a"))
+		for bank_x in [banks.position.x,banks.end.x]:
+			draw_line(Vector2(bank_x,0),Vector2(bank_x,size.y),Color("#81aab2"),1.5,true)
 	for edge: Vector2i in navigator.edges:
 		draw_line(plot(navigator.graph.get_point_position(edge.x)),plot(navigator.graph.get_point_position(edge.y)),Color("#b6ccbd"),3,true)
 	if route_preview.size() >= 2:
@@ -68,5 +84,20 @@ func _draw() -> void:
 			var tint := Color("#ffd369") if pin.button_pressed else Color("#90ada5")
 			draw_line(anchor,pin.get_rect().get_center(),tint,1.5,true)
 			draw_circle(anchor,3.0,tint,true,-1,true)
-	draw_circle(plot(player),8,Color("#242831"),true,-1,true)
-	draw_circle(plot(player),5,Color("#ffd369"),true,-1,true)
+	player_layer.queue_redraw()
+
+func _draw_player() -> void:
+	var position_on_map := plot(player)
+	player_layer.draw_circle(position_on_map,8,Color("#242831"),true,-1,true)
+	player_layer.draw_circle(position_on_map,5,Color("#ffd369"),true,-1,true)
+	var direction := (plot(player+player_heading)-position_on_map).normalized()
+	if not direction.is_zero_approx():
+		var across := direction.orthogonal()
+		var arrow := PackedVector2Array([
+			position_on_map+direction*17.0,
+			position_on_map+direction*6.0+across*5.0,
+			position_on_map+direction*6.0-across*5.0,
+		])
+		player_layer.draw_colored_polygon(arrow,Color("#ffd369"))
+		arrow.append(arrow[0])
+		player_layer.draw_polyline(arrow,Color("#242831"),1.5,true)
