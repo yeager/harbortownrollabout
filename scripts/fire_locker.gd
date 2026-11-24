@@ -27,6 +27,8 @@ func fit(model: Node3D) -> void:
 		lamp.light_color = reflector_finish.emission
 		lamp.hide()
 		work_lights.append(lamp)
+	for blind: MeshInstance3D in model.find_children("Rear roller blind*", "MeshInstance3D", true, false):
+		_fit_rear_reflector(blind)
 	closed_height = -2.0*panel.get_aabb().position.y # The mesh origin is halfway up the closed blind.
 	for part in carrier.get_children():
 		if not part is MeshInstance3D: continue
@@ -52,6 +54,25 @@ func fit(model: Node3D) -> void:
 		coil.scale.y = .26
 		coil.position = Vector3(-1.151,1.64,panel.position.z)
 		add_child(coil)
+
+func _fit_rear_reflector(blind: MeshInstance3D) -> void:
+	var bounds := blind.get_aabb()
+	var reflector := MeshInstance3D.new()
+	reflector.name = "Rear circular reflector"
+	var lens := CylinderMesh.new()
+	lens.top_radius = .042
+	lens.bottom_radius = .045
+	lens.height = .014
+	lens.rings = 0
+	var finish := StandardMaterial3D.new()
+	finish.albedo_color = Color("#bb2024")
+	finish.roughness = .25
+	lens.material = finish
+	reflector.mesh = lens
+	reflector.rotation.x = -PI / 2
+	var outside := signf(blind.position.x)
+	reflector.position = Vector3(outside * (bounds.size.x * .5 + .045), bounds.position.y - .025, bounds.position.z - .008)
+	blind.add_child(reflector)
 
 func advance(delta: float, opening: bool, reversing := false) -> void:
 	var active := opening or reversing
