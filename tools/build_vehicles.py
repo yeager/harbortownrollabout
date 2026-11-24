@@ -815,6 +815,26 @@ def rear_prismatic_lens(name, x, z, height, finish, root):
     mesh.materials.append(finish)
 
 
+def shape_fire_cab_roof(root):
+    # Raise the stamped upper shell above the windscreen seal. The rear
+    # tapers beneath the ladder; the beacon stays level on the front crown.
+    beacon_parts = ("Beacon mounting", "Blue beacon lens", "Blue optic bezel",
+                    "LED reflector", "FlashBlue_", "FlashRed_", "Forward scene lamp")
+    for part in root.children:
+        if part.name.startswith(beacon_parts):
+            part.location.z += .14
+        elif part.name == "Fire crew cab":
+            frame = part.matrix_local.copy()
+            inverse = frame.inverted()
+            for vertex in part.data.vertices:
+                point = frame @ vertex.co
+                height = max(0, min(1, (point.z - 2.93) / .13))
+                front = max(0, min(1, (-point.y - .85) / 1.3))
+                crown = 1 - .18 * min(1, abs(point.x) ** 4)
+                point.z += height * (.075 + .065 * front) * crown
+                vertex.co = inverse @ point
+
+
 def make_fire_engine():
     root = bpy.data.objects.new("Fire engine | Swedish Rescue Pumper", None)
     bpy.context.collection.objects.link(root)
@@ -1320,6 +1340,7 @@ def make_fire_engine():
             point.z += .46 * max(0,min(1,(point.z-1.75)/.75))
             point.y+=.82*max(0,min(1,(point.y+1.44)/1.98))-.41
             vertex.co=inverse@point
+    shape_fire_cab_roof(root)
     return root
 
 def profile_loft(name, rings, finish, parent, close_ends=True):
