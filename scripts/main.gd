@@ -7084,6 +7084,8 @@ func _add_bus_destination_boards(model: Node3D) -> Array[Label3D]:
 	return [bus_board,rear_bus_board,side_bus_board]
 
 func _fit_bus_exterior(model: Node3D) -> void:
+	for row in 6:
+		_make_box("Rear window heating wire",Vector3(1.92,.005,.005),Vector3(0,1.66+row*.12,-5.211),Color("#806958"),false,model)
 	var plate := _make_box("Bus rear number plate",Vector3(.46,.105,.018),Vector3(0,.57,-5.282),Color("#eeeee4"),false,model)
 	if not bus_plate_finish:
 		bus_plate_finish = _material(Color("#eeeee4"),.55,true)
