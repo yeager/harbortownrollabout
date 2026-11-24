@@ -7734,7 +7734,7 @@ func _update_camera(delta: float, snap_to_car := false) -> void:
 		var curb_yaw := 0.0
 		match vehicle_index:
 			2:
-				camera.global_position = vehicle_model.to_global(Vector3(-.57, 2.55, 2.45))
+				camera.global_position = vehicle_model.to_global(Vector3(.57, 2.55, 2.45))
 				pitch = -2.68
 			BUS, REFUSE:
 				# These models have solid cab fronts. Place the lens just beyond the glass.
@@ -9983,7 +9983,7 @@ func _refresh_ui() -> void:
 		road_driver.scale = Vector3.ONE * (.88 if play_as_alma else 1.0) * (1.0 if on_moped else .78)
 		road_driver.position = Vector3(0,.82-.77*road_driver.scale.y,.18) if vehicle_index==SNOWMOBILE else Vector3(-.32,.88-.87*road_driver.scale.y,-.04)
 		if vehicle_index == 2:
-			road_driver.position = Vector3(.57,1.69-.87*road_driver.scale.y,-2.53)
+			road_driver.position = Vector3(-.57,1.69-.87*road_driver.scale.y,-2.53)
 		if vehicle_index == FOOD_TRUCK:
 			road_driver.position = Vector3(-.46,1.505-.87*road_driver.scale.y,-1.39)
 		if vehicle_index == MOWER:

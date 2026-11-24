@@ -816,7 +816,7 @@ def rear_prismatic_lens(name, x, z, height, finish, root):
 
 
 def fit_fire_speedometer(root):
-    x, y, z = -.57, -2.823, 2.125
+    x, y, z = .57, -2.823, 2.125
     # Keep the dial above the steering rim from the seated driving position.
     binnacle = next(part for part in root.children if part.name.startswith("Driver instrument binnacle"))
     binnacle.location.z += .12
@@ -962,16 +962,16 @@ def make_fire_engine():
             back.rotation_euler.x=-.10
             cube("Crew head restraint",(x,y+.203,2.16),(.30,.12,.16),upholstery,.044,root)
     cube("Crew dashboard top",(0,-2.628,1.80),(1.96,.376,.135),DARK,.054,root)
-    cube("Driver instrument binnacle",(-.57,-2.535,1.90),(.47,.23,.17),BLACK,.046,root)
-    bpy.ops.mesh.primitive_torus_add(location=(-.57,-2.37,1.902),rotation=(math.radians(49),0,0),
+    cube("Driver instrument binnacle",(.57,-2.535,1.90),(.47,.23,.17),BLACK,.046,root)
+    bpy.ops.mesh.primitive_torus_add(location=(.57,-2.37,1.902),rotation=(math.radians(49),0,0),
                                     major_radius=.168,minor_radius=.015,major_segments=36,minor_segments=10)
     steering=bpy.context.object
     steering.name="Crew cab steering rim"
     steering.data.materials.append(RUBBER)
     steering.parent=root
-    cube("Crew steering crossbar",(-.57,-2.37,1.902),(.32,.035,.045),DARK,.012,root)
-    cube("Dispatch terminal casing",(.072,-2.53,1.911),(.27,.067,.157),BLACK,.016,root)
-    cube("Dispatch terminal display",(.072,-2.491,1.915),(.242,.012,.129),GLASS_HI,.006,root)
+    cube("Crew steering crossbar",(.57,-2.37,1.902),(.32,.035,.045),DARK,.012,root)
+    cube("Dispatch terminal casing",(-.072,-2.53,1.911),(.27,.067,.157),BLACK,.016,root)
+    cube("Dispatch terminal display",(-.072,-2.491,1.915),(.242,.012,.129),GLASS_HI,.006,root)
     shutter_finish = material("Satin silver shutter slats", (.76,.79,.80), .24, .42)
     def shutter_hardware(center, outward, width, height):
         # Local coordinates run along the slats, out from the face and upwards.
