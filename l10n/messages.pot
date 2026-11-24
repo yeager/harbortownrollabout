@@ -1600,6 +1600,9 @@ msgstr ""
 msgid "Town map"
 msgstr ""
 
+msgid "Town map · F5"
+msgstr ""
+
 msgid "Town square"
 msgstr ""
 

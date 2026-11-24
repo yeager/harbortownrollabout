@@ -1667,6 +1667,9 @@ msgstr "Lisää ajoneuvo tähän napauttamalla sen tähteä."
 msgid "Town map"
 msgstr "Kaupungin kartta"
 
+msgid "Town map · F5"
+msgstr "Kaupungin kartta · F5"
+
 msgid "Town square"
 msgstr "Tori"
 

@@ -1688,6 +1688,9 @@ msgstr "Tippe auf den Stern eines Fahrzeugs, um es hier hinzuzufügen."
 msgid "Town map"
 msgstr "Stadtplan"
 
+msgid "Town map · F5"
+msgstr "Stadtplan · F5"
+
 msgid "Town square"
 msgstr "Marktplatz"
 

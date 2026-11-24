@@ -1678,6 +1678,9 @@ msgstr "Toca la estrella de un vehículo para añadirlo aquí."
 msgid "Town map"
 msgstr "Mapa de la ciudad"
 
+msgid "Town map · F5"
+msgstr "Mapa de la ciudad · F5"
+
 msgid "Town square"
 msgstr "Plaza"
 

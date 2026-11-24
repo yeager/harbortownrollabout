@@ -8247,7 +8247,7 @@ func _build_town_map() -> void:
 	leave_practice_button.text = "Return to town"
 	phone.add_child(leave_practice_button)
 	leave_practice_button.pressed.connect(_leave_practice)
-	map_button.text = "Town map"
+	map_button.text = "Town map · F5"
 	phone.add_child(map_button)
 	map_button.pressed.connect(func():
 		var actor := walker if walker.visible else ambulance

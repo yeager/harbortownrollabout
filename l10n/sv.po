@@ -1601,6 +1601,9 @@ msgstr "Tryck på stjärnan på ett fordon för att lägga till det här."
 msgid "Town map"
 msgstr "Stadskarta"
 
+msgid "Town map · F5"
+msgstr "Stadskarta · F5"
+
 msgid "Town square"
 msgstr "Torget"
 
