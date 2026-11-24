@@ -4389,7 +4389,7 @@ func _build_depot() -> void:
 		model.rotation.y = PI
 		body.add_child(model)
 		if i == BUS:
-			_fit_bus_mirrors(model)
+			_fit_bus_exterior(model)
 		if i == SCHOOL_CAR:
 			_add_school_car_sign(model)
 		_park_at_home(body, i)
@@ -5469,7 +5469,7 @@ func _spawn_traffic(scene_path: String, x: float, lane_z: float, direction: floa
 	model.rotation.y = PI
 	actor.add_child(model)
 	if scene_path == VEHICLE_SCENES_ALL[BUS]:
-		_fit_bus_mirrors(model)
+		_fit_bus_exterior(model)
 	var half_size := _vehicle_half_size(actor, model)
 	var is_bicycle := scene_path.ends_with("cyklist.glb")
 	if not is_bicycle:
@@ -7036,7 +7036,7 @@ func _update_bus_ceiling_lights(night: float) -> void:
 		lamp.visible = glow > .001
 		lamp.light_energy = glow*1.1
 
-func _fit_bus_mirrors(model: Node3D) -> void:
+func _fit_bus_exterior(model: Node3D) -> void:
 	var mirror_glass := _material(Color("#9bacb3"), .17)
 	mirror_glass.metallic = .78
 	for side in [-1.0,1.0]:
@@ -7051,8 +7051,7 @@ func _fit_bus_mirrors(model: Node3D) -> void:
 			var glass := _make_box("Bus mirror glass",Vector3(.145,pane.y,.012),mirror_center + Vector3(0,pane.x,-.077),Color.WHITE,false,model)
 			glass.material_override = mirror_glass
 
-func _fit_bus_interior() -> void:
-	var cabin := vehicle_model.find_child("Cabin",true,false) as MeshInstance3D
+	var cabin := model.find_child("Cabin",true,false) as MeshInstance3D
 	for surface in cabin.mesh.get_surface_count():
 		var finish := cabin.get_active_material(surface) as StandardMaterial3D
 		if finish.resource_name.begins_with("Smoked blue glazing"):
@@ -7060,6 +7059,8 @@ func _fit_bus_interior() -> void:
 			glass.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
 			glass.albedo_color = Color(.40,.62,.68,.22)
 			cabin.set_surface_override_material(surface,glass)
+
+func _fit_bus_interior() -> void:
 	bus_ceiling_diffuser = _material(Color("#ded9c9"),.42,true)
 	for z in [-2.55,0.0,2.15]:
 		var fitting := _make_box("Saloon ceiling light",Vector3(.29,.045,1.12),Vector3(0,2.89,z),Color("#404b4d"),false,vehicle_model)
@@ -7151,7 +7152,7 @@ func _load_vehicle_model() -> void:
 	driver_bus_stop_board = null
 	rear_bus_board = null
 	if vehicle_index == BUS:
-		_fit_bus_mirrors(vehicle_model)
+		_fit_bus_exterior(vehicle_model)
 		_fit_bus_interior()
 		for end in [-1,1]:
 			var lamp := _make_box("Left departure indicator",Vector3(.19,.085,.027),Vector3(1.033,.907,5.374) if end == 1 else Vector3(1.01,1.11,-5.302),Color("#ff9d17"),false,vehicle_model)
