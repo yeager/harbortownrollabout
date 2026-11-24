@@ -102,6 +102,7 @@ func _process(_delta: float) -> bool:
 			elif Time.get_ticks_msec() > deadline:
 				fail("Song ended without advancing: " + previous)
 		"controls":
+			phase = "checking_controls"
 			check_controls()
 	return false
 
@@ -120,6 +121,16 @@ func check_controls() -> void:
 	press(KEY_P)
 	if not game.paused or not game.radio.stream_paused or game.radio.get_playback_position() < 7.0:
 		fail("Pausing lost the current position in the song")
+		return
+	game._request_quit()
+	await process_frame
+	if not game.quit_dialog.visible or not paused:
+		fail("Quit confirmation did not open over the pause menu")
+		return
+	game.quit_dialog.get_cancel_button().pressed.emit()
+	await process_frame
+	if paused or game.quit_dialog.visible or not game.paused or not game.radio.stream_paused:
+		fail("Cancelling quit must leave the pause menu and its radio paused")
 		return
 	press(KEY_P)
 	if game.paused or game.radio.stream_paused or game.radio_track != song or game.radio.get_playback_position() < 7.0:

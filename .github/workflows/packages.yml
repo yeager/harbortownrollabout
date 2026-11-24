@@ -59,7 +59,7 @@ jobs:
         timeout-minutes: 5
         shell: bash
         run: |
-          for scene in vehicle_gallery_drive kiosk_and_shopper pump_prices bus_route weather_transition; do
+          for scene in vehicle_gallery_drive kiosk_and_shopper pump_prices bus_route vehicle_radio weather_transition; do
             export XDG_DATA_HOME="$RUNNER_TEMP/game-tests/$scene"
             mkdir -p "$XDG_DATA_HOME"
             godot --headless --script "res://tests/$scene.gd" 2>&1 | tee "$XDG_DATA_HOME/result.log"
