@@ -7113,8 +7113,10 @@ func _load_vehicle_model() -> void:
 		display.rotate_object_local(Vector3.BACK,PI)
 		dash_speed = _station_sign("",Vector3(0,-.022,.011),.00135,Color("#def4f7"),0,display)
 		dash_speed.font_size = 44
-		dash_direction = _station_sign("",Vector3(0,.046,.011),.00092,Color("#def4f7"),0,display)
+		dash_direction = _station_sign("",Vector3(0,.046,.011),.00115,Color("#def4f7"),0,display)
 		dash_direction.font_size = 32
+		_size_world_sign(dash_speed,.31)
+		_size_world_sign(dash_direction,.31)
 	if vehicle_index == SHOPPER:
 		for part_name in ["Wiper arm","Wiper blade lower","Wiper blade upper"]:
 			var part := vehicle_model.find_child(part_name,true,false) as MeshInstance3D
@@ -10489,10 +10491,12 @@ func _refresh_status() -> void:
 		var direction := "Reversing" if speed < -.12 else "Forward" if speed > .12 else "Stopped"
 		if dash_direction.text != direction:
 			dash_direction.text = direction
+			if vehicle_index == BUS: _fit_world_sign(dash_direction)
 			dash_direction.modulate = Color("#ffd07a") if speed < -.12 else Color("#def4f7")
 		var reading := tr("%d km/h") % roundi(absf(speed)*3.6)
 		if dash_speed.text != reading:
 			dash_speed.text = reading
+			if vehicle_index == BUS: _fit_world_sign(dash_speed)
 	arrival_progress.visible = mode == "playing" and not paused and not free_drive and parked_at_target > 0.0
 	arrival_progress.value = parked_at_target
 	if paused:

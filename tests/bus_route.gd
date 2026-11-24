@@ -260,16 +260,25 @@ func check_driver(game: Node) -> bool:
 	if not game.cockpit_view or driver.visible:
 		printerr("Bus driver obstructed the cockpit camera")
 		return false
-	for speed_mps in [0.0,5.0,-2.0]:
-		game.speed = speed_mps
-		game._refresh_status()
-		var expected := game.tr("%d km/h") % roundi(absf(speed_mps)*3.6)
-		if game.dash_speed.text != expected:
-			printerr("Bus dashboard did not report the current speed")
-			return false
-		if speed_mps < 0.0 and game.dash_direction.text != "Reversing":
-			printerr("Bus dashboard did not indicate reverse")
-			return false
+	var previous_locale := TranslationServer.get_locale()
+	for locale in ["en","de","es","fi","fr","nb","sv"]:
+		TranslationServer.set_locale(locale)
+		for speed_mps in [0.0,5.0,-2.0]:
+			game.speed = speed_mps
+			game._refresh_status()
+			var expected := game.tr("%d km/h") % roundi(absf(speed_mps)*3.6)
+			if game.dash_speed.text != expected:
+				printerr("Bus dashboard did not report the current speed")
+				return false
+			if speed_mps < 0.0 and game.dash_direction.text != "Reversing":
+				printerr("Bus dashboard did not indicate reverse")
+				return false
+			for label: Label3D in [game.dash_speed,game.dash_direction]:
+				var width := ThemeDB.fallback_font.get_string_size(label.atr(label.text),HORIZONTAL_ALIGNMENT_LEFT,-1,label.font_size).x
+				if width*label.pixel_size > .311:
+					printerr("Bus dashboard text is wider than its screen in ",locale)
+					return false
+	TranslationServer.set_locale(previous_locale)
 	game.speed = 0.0
 	game._toggle_camera_view()
 	return driver.visible
