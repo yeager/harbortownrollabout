@@ -63,7 +63,7 @@ var vehicle_model: Node3D
 var headlights: Array[SpotLight3D] = []
 var tractor_beacon: StandardMaterial3D
 var projector_finish: StandardMaterial3D
-var bicycle_lenses: Array[StandardMaterial3D] = []
+var traffic_running_lenses: Array[StandardMaterial3D] = []
 var traffic_headlights: Array[SpotLight3D] = []
 var quay_finish := ShaderMaterial.new()
 var soil_finish: ShaderMaterial
@@ -3942,7 +3942,7 @@ func _update_daylight(delta: float) -> void:
 		lamp.visible = night>.05
 		lamp.light_energy = night*3.2
 	lamp_glass.emission_energy_multiplier = .1+night*3.0
-	for lens in bicycle_lenses:
+	for lens in traffic_running_lenses:
 		lens.emission_energy_multiplier = 3.0*night
 	for beam in traffic_headlights:
 		beam.visible = night>.05
@@ -5478,7 +5478,11 @@ func _spawn_traffic(scene_path: String, x: float, lane_z: float, direction: floa
 	if not is_bicycle:
 		var beam_origins: Array[Vector3] = []
 		if is_bus:
+			var emitter := _material(Color("#fff1dc"),.28,true)
+			emitter.emission_energy_multiplier = 3.0*maxf(last_night,0.0)
+			traffic_running_lenses.append(emitter)
 			for lens: MeshInstance3D in model.find_children("Bus headlight lens*", "MeshInstance3D", true, false):
+				lens.set_surface_override_material(0,emitter)
 				if absf(lens.position.x) > .89:
 					beam_origins.append(actor.to_local(lens.to_global(lens.get_aabb().get_center())) + Vector3.FORWARD * .035)
 		else:
@@ -5508,7 +5512,7 @@ func _spawn_traffic(scene_path: String, x: float, lane_z: float, direction: floa
 			var finish := _material(Color("#fff3cf") if front else Color("#fd3729"),.28,true)
 			finish.emission_energy_multiplier = 3.0*maxf(last_night,0.0)
 			lens.material_override = finish
-			bicycle_lenses.append(finish)
+			traffic_running_lenses.append(finish)
 	var traffic_horn := AudioStreamPlayer3D.new()
 	traffic_horn.bus = &"Traffic and radio"
 	var voice: String = {"cyklist": "bicycle", "a_traktor": "a_traktor", "raggarbil": "raggarbil", "puch_dakota": "saab96"}.get(scene_path.get_file().get_basename(), "bmw")
