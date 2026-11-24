@@ -54,5 +54,20 @@ func check_perimeter() -> void:
 				printerr("Could not get back onto the mower")
 				quit(1)
 				return
+	# A misplaced mower must return to the area selected for that saved game.
+	for practice in [false, true]:
+		game.practice_active = practice
+		game.ambulance.position = Vector3.ZERO if practice else game.PRACTICE_START
+		game._save_checkpoint()
+		game.free()
+		game = load("res://main.tscn").instantiate()
+		root.add_child(game)
+		game._resume_road_checkpoint()
+		var bounds: Rect2 = game.PRACTICE_YARD if practice else game.CITY_INTERIOR
+		var restored: Vector3 = game.ambulance.position
+		if game.practice_active != practice or game.vehicle_index != game.MOWER or not bounds.has_point(Vector2(restored.x, restored.z)):
+			printerr("Misplaced mower resumed in the wrong play area: ", restored)
+			quit(1)
+			return
 	print("Mower stopped inside all four edges and corners, forward and in reverse, in both play areas.")
 	quit()

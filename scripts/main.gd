@@ -847,14 +847,12 @@ func _save_checkpoint() -> void:
 	if mode == "playing":
 		road_checkpoint.clear()
 		road_checkpoint = {
-			"vehicle": vehicle_index, "position": ambulance.global_position,
+			"vehicle": vehicle_index, "position": ambulance.global_position, "practice": practice_active,
 			"heading": ambulance.rotation.y, "mission": mission_index,
 			"sand": Vector2i(excavation_sand.remaining, excavation_sand.delivered),
 			"recovery": recovery_leg, "taxi": taxi_leg, "bus": bus_leg,
 			"free_drive": free_drive, "progress": vehicle_progress.duplicate()
 		}
-		if practice_active:
-			road_checkpoint["practice"] = true
 		if free_drive and map_goal.is_finite():
 			road_checkpoint["map_goal"] = map_goal
 		if tram_mode != 0:
