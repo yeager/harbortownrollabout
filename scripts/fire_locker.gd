@@ -27,6 +27,11 @@ func fit(model: Node3D) -> void:
 		lamp.light_color = reflector_finish.emission
 		lamp.hide()
 		work_lights.append(lamp)
+	var ribbed_glass := ShaderMaterial.new()
+	ribbed_glass.shader = preload("res://environment/fire_lens_ribs.gdshader")
+	for pattern in ["Rear indicator lens*", "Tail lamp*", "Reversing lens*"]:
+		for lens: MeshInstance3D in model.find_children(pattern, "MeshInstance3D", true, false):
+			lens.material_overlay = ribbed_glass
 	for blind: MeshInstance3D in model.find_children("Rear roller blind*", "MeshInstance3D", true, false):
 		_fit_rear_reflector(blind)
 	closed_height = -2.0*panel.get_aabb().position.y # The mesh origin is halfway up the closed blind.
