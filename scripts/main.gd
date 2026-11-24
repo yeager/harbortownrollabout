@@ -7098,8 +7098,27 @@ func _add_bus_destination_boards(model: Node3D) -> Array[Label3D]:
 	side_bus_board.pixel_size = minf(bus_board.pixel_size,1.49/pixels.x)
 	return [bus_board,rear_bus_board,side_bus_board]
 
+func _fit_bus_rear_bench(model: Node3D) -> void:
+	for pattern in ["Seat cushion*", "Seat back shell*", "Seat back upholstery*"]:
+		var sample: MeshInstance3D
+		for part: MeshInstance3D in model.find_children(pattern, "MeshInstance3D", true, false):
+			if sample == null or part.position.z < sample.position.z:
+				sample = part
+		if sample == null:
+			continue
+		for column in [-.72, -.24, .24, .72]:
+			var seat := sample.duplicate() as MeshInstance3D
+			seat.name = "Rear bench " + pattern.trim_suffix("*").trim_prefix("Seat ").to_lower()
+			sample.get_parent().add_child(seat, true)
+			seat.position.x = column
+			seat.position.z -= 1.43
+			seat.position.y += .13
+	var podium := _make_box("Rear bench plinth", Vector3(1.98,.23,.56), Vector3(0,1.48,-4.65), Color("#303638"), false, model)
+	podium.material_override = _material(Color("#303638"), .81)
+
 func _fit_bus_exterior(model: Node3D) -> void:
-	var window_seal := _material(Color("#22292c"), .64)
+	_fit_bus_rear_bench(model)
+	var window_seal := _material(Color("#151c1e"), .53)
 	if not bus_side_marker_finish:
 		bus_side_marker_finish = _material(Color("#a6561d"),.32,true)
 		bus_side_marker_finish.emission = Color("#ffaa43")
@@ -7126,10 +7145,18 @@ func _fit_bus_exterior(model: Node3D) -> void:
 	for pattern in ["Window pillar*", "Roof rail*", "Window sill graphite trim*", "Windscreen outer seal*", "Lower windscreen gasket*", "Passenger door upright*", "Passenger door cross rail*", "Passenger doorway header*"]:
 		for trim: MeshInstance3D in model.find_children(pattern, "MeshInstance3D", true, false):
 			trim.material_override = window_seal
+			if trim.name.begins_with("Window pillar"):
+				trim.scale.z *= 1.32
+			elif trim.name.begins_with("Window sill graphite trim"):
+				trim.scale.y *= 1.7
+			elif trim.name.begins_with("Passenger door upright"):
+				trim.scale.z *= 1.28
+			elif trim.name.begins_with("Passenger doorway header"):
+				trim.scale.y *= 1.4
 			if trim.name.begins_with("Roof rail") and trim.position.z < -4.9:
 				trim.scale = Vector3(.70,1,.70)
 	for side in [-1.0,1.0]:
-		var trim := _make_box("Upper side window seal",Vector3(.035,.052,9.96),Vector3(side*1.166,2.92,.01),window_seal.albedo_color,false,model)
+		var trim := _make_box("Upper side window seal",Vector3(.049,.139,9.96),Vector3(side*1.174,2.875,.01),window_seal.albedo_color,false,model)
 		trim.material_override = window_seal
 	for edge in [Vector3(0,2.92,5.006),Vector3(0,2.92,-4.99),Vector3(0,1.451,-5.205)]:
 		var trim := _make_box("Cross-window seal",Vector3(2.27,.047,.034),edge,window_seal.albedo_color,false,model)
@@ -7140,6 +7167,13 @@ func _fit_bus_exterior(model: Node3D) -> void:
 	for side in [-1.0, 1.0]:
 		_make_box("Rear window heater busbar",Vector3(.018,.626,.006),Vector3(side*.958,1.96,-5.211),heater_color,false,model)
 		_make_box("Rear window heater terminal",Vector3(.034,.035,.012),Vector3(side*.958,1.645,-5.214),window_seal.albedo_color,false,model)
+	var hinge_finish := _material(Color("#41494d"), .42)
+	hinge_finish.metallic = .58
+	for side in [-1.0, 1.0]:
+		var hinge := _make_box("Engine hatch hinge", Vector3(.136,.043,.024), Vector3(side*.48,1.26,-5.265), Color.WHITE, false, model)
+		hinge.material_override = hinge_finish
+		var pin := _make_box("Engine hatch hinge pin", Vector3(.15,.016,.018), Vector3(0,.012,-.017), Color.WHITE, false, hinge)
+		pin.material_override = hinge_finish
 	var plate := _make_box("Bus rear number plate",Vector3(.46,.105,.018),Vector3(0,.57,-5.282),Color("#eeeee4"),false,model)
 	if not bus_plate_finish:
 		bus_plate_finish = _material(Color("#eeeee4"),.55,true)
@@ -7180,11 +7214,13 @@ func _fit_bus_exterior(model: Node3D) -> void:
 		if finish.resource_name.begins_with("Smoked blue glazing"):
 			var glass := finish.duplicate() as StandardMaterial3D
 			glass.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
-			glass.albedo_color = Color(.53,.65,.69,.18)
+			glass.albedo_color = Color(.19,.26,.27,.34)
 			glass.metallic = 0.0
 			cabin.set_surface_override_material(surface,glass)
+			var door_glass := glass.duplicate() as StandardMaterial3D
+			door_glass.albedo_color.a = .40
 			for pane: MeshInstance3D in model.find_children("Passenger door tinted glazing*", "MeshInstance3D", true, false):
-				pane.material_override = glass
+				pane.material_override = door_glass
 
 func _fit_bus_interior() -> void:
 	bus_ceiling_diffuser = _material(Color("#ded9c9"),.42,true)

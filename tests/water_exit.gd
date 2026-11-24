@@ -9,6 +9,12 @@ func check_exits() -> void:
 	root.add_child(game)
 	game._start_game()
 	game.traffic_data.clear()
+	if not check_land_vehicles(game):
+		return
+	game.mode = "menu"
+	game._on_vehicle_selected(0)
+	game._start_game()
+	game.traffic_data.clear()
 	for center_z in [0.0, -48.0]:
 		for side in [-1.0, 1.0]:
 			var z: float = center_z + side * 4.1
@@ -176,3 +182,34 @@ func check_exits() -> void:
 	await process_frame
 	print("Bridge exits, offshore safety and the motorboat pier checkpoint passed.")
 	quit()
+
+
+func check_land_vehicles(game: Node) -> bool:
+	for index in game.VEHICLE_NAMES_ALL.size():
+		game.mode = "menu"
+		game._on_vehicle_selected(index)
+		game._start_game()
+		game.traffic_data.clear()
+		for reverse in [false, true]:
+			game.ambulance.position = Vector3(42, game._surface_height(42, -14), -14)
+			game.ambulance.rotation.y = PI * .5 if reverse else -PI * .5
+			game.speed = -4.0 if reverse else 4.0
+			game.brake_held = false
+			game.mouse_gas = not reverse
+			game.mouse_brake = reverse
+			for frame in 520:
+				game._drive(1.0 / 60.0)
+				var extent: Vector2 = game._player_extent()
+				for span: Vector2 in game.OPEN_WATER:
+					if game._shore_overlap(span, game.ambulance.position, extent) > .01:
+						printerr(game.VEHICLE_NAMES_ALL[index], " entered the canal, reverse: ", reverse)
+						quit(1)
+						return false
+			if game.ambulance.position.x < 42.5 or absf(game.speed) > .05:
+				printerr(game.VEHICLE_NAMES_ALL[index], " did not approach and stop before the canal, reverse: ", reverse)
+				quit(1)
+				return false
+		game.mouse_brake = false
+		game.mouse_gas = false
+	print("All road vehicles stayed out of the canal in forward and reverse.")
+	return true
