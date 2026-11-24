@@ -1948,3 +1948,6 @@ msgstr "Grünes Licht. Fahr über die Linie."
 
 msgid "Open the town map with F11"
 msgstr "Stadtkarte mit F11 öffnen"
+
+msgid "Use 1 for warning lights and 2 for vehicle sound"
+msgstr "1 für Warnleuchten und 2 für Fahrzeugton verwenden"

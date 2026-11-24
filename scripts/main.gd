@@ -112,6 +112,7 @@ var recovery_key := KEY_R
 var jump_key := KEY_E
 var look_key := KEY_V
 var map_key := KEY_F5
+var number_vehicle_switches := false
 var number_camera := false
 var insert_help := false
 var ctrl_run := false
@@ -1054,6 +1055,11 @@ func _unhandled_key_input(event: InputEvent) -> void:
 		if event.keycode == map_key:
 			if mode == "playing" and not paused and map_button.is_visible_in_tree() and not phone.handset.is_visible_in_tree():
 				map_button.pressed.emit()
+			return
+		if number_vehicle_switches and event.keycode in [KEY_1,KEY_2] and mode == "playing" and not paused and not phone.handset.is_visible_in_tree():
+			var control := light_button if event.keycode == KEY_1 else siren_button
+			if control.is_visible_in_tree() and not control.disabled:
+				control.pressed.emit()
 			return
 		match event.keycode:
 			KEY_H: _honk()
@@ -8654,6 +8660,16 @@ func _build_overlay() -> void:
 		_refresh_ui()
 	)
 	pages[2].add_child(map_binding)
+	var vehicle_switches := CheckButton.new()
+	vehicle_switches.name = "NumberVehicleSwitches"
+	vehicle_switches.text = "Use 1 for warning lights and 2 for vehicle sound"
+	vehicle_switches.button_pressed = number_vehicle_switches
+	vehicle_switches.toggled.connect(func(enabled: bool):
+		number_vehicle_switches = enabled
+		_save_preferences()
+		_refresh_ui()
+	)
+	pages[2].add_child(vehicle_switches)
 	var scooter_binding := CheckButton.new()
 	scooter_binding.name = "ScooterF9"
 	scooter_binding.text = "Fold or unfold the scooter with F9"
@@ -9932,6 +9948,7 @@ func _load_preferences() -> void:
 	camera_f6 = config.get_value("keyboard","camera_f6",false) == true
 	quit_key = KEY_F8 if config.get_value("keyboard","quit_f8",false) == true else KEY_F10
 	phone.toggle_key = KEY_F2 if config.get_value("keyboard","phone_f2",false) == true else KEY_T
+	number_vehicle_switches = config.get_value("keyboard","number_vehicle_switches",false) == true
 	map_key = KEY_F11 if config.get_value("keyboard","map_f11",false) == true else KEY_F5
 	jump_key = KEY_0 if config.get_value("keyboard","zero_jump",false) == true else KEY_E
 	recovery_key = KEY_BACKSPACE if config.get_value("keyboard","backspace_recovery",false) == true else KEY_R
@@ -10000,6 +10017,7 @@ func _save_preferences() -> void:
 	config.set_value("keyboard","camera_f6",camera_f6)
 	config.set_value("keyboard","quit_f8",quit_key == KEY_F8)
 	config.set_value("keyboard","phone_f2",phone.toggle_key == KEY_F2)
+	config.set_value("keyboard","number_vehicle_switches",number_vehicle_switches)
 	config.set_value("keyboard","map_f11",map_key == KEY_F11)
 	config.set_value("keyboard","zero_jump",jump_key == KEY_0)
 	config.set_value("keyboard","backspace_recovery",recovery_key == KEY_BACKSPACE)
@@ -10213,6 +10231,9 @@ func _refresh_ui() -> void:
 		siren_button.text = "Engine sound ON" if sound_on else "Engine sound OFF"
 	else:
 		siren_button.text = "Siren ON" if sound_on else "Siren OFF"
+	if number_vehicle_switches:
+		light_button.text = tr(light_button.text) + " · 1"
+		siren_button.text = tr(siren_button.text) + " · 2"
 	pause_button.text = tr("Resume") if paused else tr("Pause")
 	if pause_f7: pause_button.text += " · F7"
 	if ferry_passenger:

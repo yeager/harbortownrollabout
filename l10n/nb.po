@@ -1931,3 +1931,6 @@ msgstr "Grønt lys. Kjør over linjen."
 
 msgid "Open the town map with F11"
 msgstr "Åpne bykartet med F11"
+
+msgid "Use 1 for warning lights and 2 for vehicle sound"
+msgstr "Bruk 1 for varsellys og 2 for kjøretøylyd"

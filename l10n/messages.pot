@@ -1860,3 +1860,6 @@ msgstr ""
 
 msgid "Open the town map with F11"
 msgstr ""
+
+msgid "Use 1 for warning lights and 2 for vehicle sound"
+msgstr ""
