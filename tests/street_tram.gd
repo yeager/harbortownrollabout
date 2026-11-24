@@ -102,9 +102,26 @@ func verify() -> void:
 		fail("Failed to complete four-stop service")
 		return
 	train.advance(1,false,false,false)
+	world.free_drive = true
+	world._refresh_ui()
+	world.map_button.pressed.emit()
+	var map: AcceptDialog = world.get_node("TownMap")
+	if not map.visible:
+		fail("Could not open the map aboard the tram")
+		return
+	var chart = map.get_child(0).get_child(0)
+	chart.picked.emit(0)
+	var destination_after_tram: Vector3 = chart.stops[0]
+	if world.map_goal != destination_after_tram:
+		fail("Could not choose a destination aboard the tram")
+		return
 	world._change_seat()
 	if world.tram_mode!=0 or not world.walker.visible or train.platform_at(world.walker.position)!=0:
 		fail("Could not alight on platform")
+		return
+	world._update_route_arrows()
+	if world.map_goal != destination_after_tram or not world.route_arrows.any(func(arrow): return arrow.visible):
+		fail("Walking guidance did not resume after leaving the tram")
 		return
 	# Stand on the track and verify service stops before the train reaches the player.
 	var ahead: Vector3 = train.track.sample_baked(16)
