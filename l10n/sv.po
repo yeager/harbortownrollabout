@@ -1847,8 +1847,8 @@ msgstr "Hastighetsövningen är klar."
 msgid "Drive 15 m at 20 km/h or less."
 msgstr "Kör 15 m i högst 20 km/h."
 
-msgid "You passed the stop line. Go back and try again."
-msgstr "Du passerade stopplinjen. Åk tillbaka och försök igen."
+msgid "You passed the line. Reverse until this message clears."
+msgstr "Du körde över linjen. Backa tills meddelandet försvinner."
 
 msgid "Come to a full stop at the stop line."
 msgstr "Stanna helt vid stopplinjen."

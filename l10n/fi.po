@@ -1913,8 +1913,8 @@ msgstr "Nopeusharjoitus on valmis."
 msgid "Drive 15 m at 20 km/h or less."
 msgstr "Aja 15 m enintään 20 km/h."
 
-msgid "You passed the stop line. Go back and try again."
-msgstr "Ylitit pysäytysviivan. Palaa takaisin ja yritä uudelleen."
+msgid "You passed the line. Reverse until this message clears."
+msgstr "Ylitit viivan. Peruuta, kunnes ilmoitus katoaa."
 
 msgid "Come to a full stop at the stop line."
 msgstr "Pysähdy kokonaan pysäytysviivalle."

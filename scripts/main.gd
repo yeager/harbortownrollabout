@@ -10559,12 +10559,12 @@ func _refresh_status() -> void:
 		else:
 			status_label.text = "Helping …" if gentle_driving else _movement_hint(tr("Press {help} to help"))
 	elif practice_active and vehicle_index == SCHOOL_CAR and not walker.visible and not paused:
-		if absf(speed)*3.6 > PRACTICE_SPEED_LIMIT:
+		if practice_signal_missed or practice_stop_missed:
+			status_label.text = tr("You passed the line. Reverse until this message clears.")
+		elif absf(speed)*3.6 > PRACTICE_SPEED_LIMIT:
 			status_label.text = tr("Slow down. The limit is 20 km/h.")
 		elif practice_signal_complete:
 			status_label.text = tr("Driving lesson complete.")
-		elif practice_signal_missed:
-			status_label.text = tr("You passed the stop line. Go back and try again.")
 		elif practice_stop_complete:
 			if practice_signal_phase == 2:
 				status_label.text = tr("Green light. Drive across the line.")
@@ -10572,8 +10572,6 @@ func _refresh_status() -> void:
 				status_label.text = tr("Orange light. Slow down.")
 			else:
 				status_label.text = tr("Red light! Stop at the line and wait for green.")
-		elif practice_stop_missed:
-			status_label.text = tr("You passed the stop line. Go back and try again.")
 		elif practice_speed_distance >= PRACTICE_SPEED_DISTANCE:
 			status_label.text = tr("Come to a full stop at the stop line.")
 		else:

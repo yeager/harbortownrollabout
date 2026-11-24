@@ -1934,8 +1934,8 @@ msgstr "Tempoübung abgeschlossen."
 msgid "Drive 15 m at 20 km/h or less."
 msgstr "Fahre 15 m mit höchstens 20 km/h."
 
-msgid "You passed the stop line. Go back and try again."
-msgstr "Du hast die Haltelinie überfahren. Fahr zurück und versuch es erneut."
+msgid "You passed the line. Reverse until this message clears."
+msgstr "Du hast die Linie überfahren. Fahr rückwärts, bis die Meldung verschwindet."
 
 msgid "Come to a full stop at the stop line."
 msgstr "Halte an der Haltelinie vollständig an."

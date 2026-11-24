@@ -1846,7 +1846,7 @@ msgstr ""
 msgid "Drive 15 m at 20 km/h or less."
 msgstr ""
 
-msgid "You passed the stop line. Go back and try again."
+msgid "You passed the line. Reverse until this message clears."
 msgstr ""
 
 msgid "Come to a full stop at the stop line."

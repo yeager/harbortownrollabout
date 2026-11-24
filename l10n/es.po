@@ -1924,8 +1924,8 @@ msgstr "Ejercicio de velocidad completado."
 msgid "Drive 15 m at 20 km/h or less."
 msgstr "Conduce 15 m a 20 km/h o menos."
 
-msgid "You passed the stop line. Go back and try again."
-msgstr "Has cruzado la línea de detención. Vuelve e inténtalo de nuevo."
+msgid "You passed the line. Reverse until this message clears."
+msgstr "Has cruzado la línea. Da marcha atrás hasta que desaparezca el aviso."
 
 msgid "Come to a full stop at the stop line."
 msgstr "Detente por completo en la línea de detención."

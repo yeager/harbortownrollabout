@@ -1917,8 +1917,8 @@ msgstr "Fartsøvelsen er fullført."
 msgid "Drive 15 m at 20 km/h or less."
 msgstr "Kjør 15 m i maks 20 km/t."
 
-msgid "You passed the stop line. Go back and try again."
-msgstr "Du passerte stopplinjen. Kjør tilbake og prøv igjen."
+msgid "You passed the line. Reverse until this message clears."
+msgstr "Du kjørte over linjen. Rygg til meldingen forsvinner."
 
 msgid "Come to a full stop at the stop line."
 msgstr "Stopp helt ved stopplinjen."
