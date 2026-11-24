@@ -203,6 +203,18 @@ func check_traffic_lights(game: Node) -> bool:
 	game.traffic_data.pop_back()
 	var beams := bus.find_children("*", "SpotLight3D", false, false)
 	var lenses := bus.find_children("Bus headlight lens*", "MeshInstance3D", true, false)
+	for body: Node3D in [bus, game.parked_cars[game.BUS]]:
+		var plate := body.find_child("Bus rear number plate", true, false) as MeshInstance3D
+		if plate == null or plate.material_override != game.bus_plate_finish:
+			printerr("A bus variant did not use the day-controlled registration plate")
+			return false
+		var lamps := 0
+		for part in plate.get_children():
+			if part is MeshInstance3D and part.material_override == game.bus_plate_lamp_finish:
+				lamps += 1
+		if lamps != 2:
+			printerr("A bus variant did not have two day-controlled plate lamps")
+			return false
 	if beams.size() != 2 or lenses.size() != 4:
 		printerr("The traffic bus should have two beams and four lenses")
 		return false
