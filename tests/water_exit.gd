@@ -71,6 +71,15 @@ func check_exits() -> void:
 		printerr("Boat did not move after reopening")
 		quit(1)
 		return
+	game.launch.position = Vector3(76, -.94, game.LAUNCH_LANDING.y)
+	game.launch.rotation.y = -PI * .5
+	game.launch_speed = 4.0
+	for frame in 60:
+		game._drive_launch(1.0 / 60.0)
+	if game.launch.position.x > game.LAUNCH_PIER.position.x - 2.69 or not is_zero_approx(game.launch_speed):
+		printerr("The motorboat bow passed through the pier")
+		quit(1)
+		return
 	game._recover_position()
 	if not game.seat_button.visible or game.seat_button.disabled:
 		printerr("The disembark button was unavailable at the berth")

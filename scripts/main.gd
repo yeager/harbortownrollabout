@@ -1226,6 +1226,7 @@ func _drive_launch(delta: float) -> void:
 	elif reverse_requested and launch_speed <= 0.0:
 		steering_flow = minf(-.8,steering_flow)
 	outboard.rotation.y = lerp_angle(outboard.rotation.y,-turn*.52,1-exp(-8*delta))
+	var previous_yaw := launch.rotation.y
 	launch.rotation.y -= turn*steering_flow*delta*.53
 	var heading := Vector3.FORWARD.rotated(Vector3.UP,launch.rotation.y)
 	var course := heading*signf(launch_speed)
@@ -1241,16 +1242,24 @@ func _drive_launch(delta: float) -> void:
 	var next := launch.position+heading*launch_speed*delta
 	var bounded := Vector3(clampf(next.x,58,84),-.94+.026*sin(wave_time*1.7),clampf(next.z,9,74))
 	if absf(next.x-bounded.x)+absf(next.z-bounded.z)>.0001: launch_speed=0
-	var pier_clearance := LAUNCH_PIER.grow(1.0)
-	if pier_clearance.has_point(Vector2(bounded.x,bounded.z)) and not pier_clearance.has_point(Vector2(launch.position.x,launch.position.z)):
+	if _launch_pier_overlap(bounded, launch.rotation.y) > _launch_pier_overlap(launch.position, previous_yaw) + .0001:
 		bounded.x = launch.position.x
 		bounded.z = launch.position.z
+		launch.rotation.y = previous_yaw
 		launch_speed = 0.0
 	var engine_load := clampf(absf(launch_speed) / 9.0, 0, 1)
 	siren_player.pitch_scale = move_toward(siren_player.pitch_scale, 0.8 + engine_load * .85, delta * 1.5)
 	launch.position=bounded
 	launch.rotation.z=lerpf(launch.rotation.z,-turn*absf(launch_speed)*.012,1-exp(-3*delta))
 	driving_controls.set_controls(turn,gas and not brake,brake,reverse_requested and launch_speed<-.1)
+
+func _launch_pier_overlap(position_on_water: Vector3, yaw: float) -> float:
+	# Project the hull's width and length onto the pier axes.
+	var along := Vector2(absf(sin(yaw)), absf(cos(yaw)))
+	var across := Vector2(along.y, along.x)
+	var half_size := along * 2.7 + across
+	var center := Vector2(position_on_water.x, position_on_water.z)
+	return LAUNCH_PIER.intersection(Rect2(center - half_size, half_size * 2.0)).get_area()
 
 func _walk_pedal_pressed() -> bool:
 	return Input.is_action_pressed("ui_up") or Input.is_action_pressed("ui_down") or _movement_pressed(KEY_W) or _movement_pressed(KEY_S)
