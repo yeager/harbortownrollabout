@@ -1605,7 +1605,7 @@ msgid "Town square"
 msgstr "Torget"
 
 msgid "Clinic"
-msgstr "Kliniken"
+msgstr "Vårdcentralen"
 
 msgid "Marina"
 msgstr "Småbåtshamnen"
