@@ -937,8 +937,8 @@ func _bent_neon_tube(center: Vector3, points: PackedVector2Array, hue: Color, ra
 	add_child(tube)
 
 func advance_grill_sign(delta: float, steady := false) -> void:
-	grill_neon_phase = fmod(grill_neon_phase+delta,3.6)
-	var lit := steady or grill_neon_phase < 2.8
+	grill_neon_phase = 0.0 if steady else fmod(grill_neon_phase+delta,3.6)
+	var lit := grill_neon_phase < 2.8
 	if lit == grill_neon_lit: return
 	grill_neon_lit = lit
 	grill_neon_light.visible = lit
