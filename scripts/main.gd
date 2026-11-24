@@ -4390,6 +4390,7 @@ func _build_depot() -> void:
 		body.add_child(model)
 		if i == BUS:
 			_fit_bus_exterior(model)
+			_add_bus_destination_boards(model)
 		if i == SCHOOL_CAR:
 			_add_school_car_sign(model)
 		_park_at_home(body, i)
@@ -5470,6 +5471,7 @@ func _spawn_traffic(scene_path: String, x: float, lane_z: float, direction: floa
 	actor.add_child(model)
 	if scene_path == VEHICLE_SCENES_ALL[BUS]:
 		_fit_bus_exterior(model)
+		_add_bus_destination_boards(model)
 	var half_size := _vehicle_half_size(actor, model)
 	var is_bicycle := scene_path.ends_with("cyklist.glb")
 	if not is_bicycle:
@@ -7036,6 +7038,33 @@ func _update_bus_ceiling_lights(night: float) -> void:
 		lamp.visible = glow > .001
 		lamp.light_energy = glow*1.1
 
+func _add_bus_destination_boards(model: Node3D) -> Array[Label3D]:
+	var bus_board := Label3D.new()
+	bus_board.outline_size = 0
+	bus_board.modulate=Color("#ffbb47")
+	bus_board.position=Vector3(0,2.68,5.28)
+	model.add_child(bus_board)
+	var rear_panel := _make_box("Rear destination panel",Vector3(1.88,.34,.08),Vector3(0,2.68,-5.22),Color("#182126"),false,model)
+	var rear_bus_board := bus_board.duplicate() as Label3D
+	rear_bus_board.name = "RearDestination"
+	rear_bus_board.position = Vector3(0,0,-.046)
+	rear_bus_board.rotation.y = PI
+	rear_panel.add_child(rear_bus_board)
+	var side_panel := _make_box("Door-side destination panel",Vector3(1.65,.30,.07),Vector3(-1.175,2.72,2.77),Color("#182126"),false,model)
+	side_panel.rotation.y = -PI*.5
+	var side_bus_board := bus_board.duplicate() as Label3D
+	side_bus_board.name = "SideDestination"
+	side_bus_board.position = Vector3(0,0,.041)
+	side_panel.add_child(side_bus_board)
+	bus_board.text = BUS_DESTINATION
+	var pixels := ThemeDB.fallback_font.get_string_size(BUS_DESTINATION,HORIZONTAL_ALIGNMENT_LEFT,-1,bus_board.font_size)
+	bus_board.pixel_size = minf(1.62/pixels.x,.25/pixels.y)
+	rear_bus_board.text = BUS_DESTINATION
+	rear_bus_board.pixel_size = bus_board.pixel_size
+	side_bus_board.text = BUS_DESTINATION
+	side_bus_board.pixel_size = minf(bus_board.pixel_size,1.49/pixels.x)
+	return [bus_board,rear_bus_board,side_bus_board]
+
 func _fit_bus_exterior(model: Node3D) -> void:
 	var mirror_glass := _material(Color("#9bacb3"), .17)
 	mirror_glass.metallic = .78
@@ -7159,23 +7188,10 @@ func _load_vehicle_model() -> void:
 			lamp.material_override = _material(Color("#ff9d17"),.25,true)
 			lamp.hide()
 			bus_departure_lamps.append(lamp)
-		bus_board = Label3D.new()
-		bus_board.outline_size = 0
-		bus_board.modulate=Color("#ffbb47")
-		bus_board.position=Vector3(0,2.68,5.28)
-		vehicle_model.add_child(bus_board)
-		var rear_panel := _make_box("Rear destination panel",Vector3(1.88,.34,.08),Vector3(0,2.68,-5.22),Color("#182126"),false,vehicle_model)
-		rear_bus_board = bus_board.duplicate() as Label3D
-		rear_bus_board.name = "RearDestination"
-		rear_bus_board.position = Vector3(0,0,-.046)
-		rear_bus_board.rotation.y = PI
-		rear_panel.add_child(rear_bus_board)
-		var side_panel := _make_box("Door-side destination panel",Vector3(1.65,.30,.07),Vector3(-1.175,2.72,2.77),Color("#182126"),false,vehicle_model)
-		side_panel.rotation.y = -PI*.5
-		side_bus_board = bus_board.duplicate() as Label3D
-		side_bus_board.name = "SideDestination"
-		side_bus_board.position = Vector3(0,0,.041)
-		side_panel.add_child(side_bus_board)
+		var boards := _add_bus_destination_boards(vehicle_model)
+		bus_board = boards[0]
+		rear_bus_board = boards[1]
+		side_bus_board = boards[2]
 		_update_bus_board()
 	vehicle_model.name = VEHICLE_NAMES_ALL[vehicle_index] + "_BlenderModel"
 	vehicle_model.rotation.y = PI
@@ -8081,15 +8097,7 @@ func _update_bus_board() -> void:
 			bus_press_time = 0
 			bus_request_arm.rotation.x = 0
 			bus_stop_request.hide()
-		bus_board.text = BUS_DESTINATION
 		var font := ThemeDB.fallback_font
-		var pixels := font.get_string_size(bus_board.text,HORIZONTAL_ALIGNMENT_LEFT,-1,bus_board.font_size)
-		# Leave a margin inside the narrower of the two destination panels.
-		bus_board.pixel_size = minf(1.62/pixels.x,.25/pixels.y)
-		rear_bus_board.pixel_size = bus_board.pixel_size
-		rear_bus_board.text = bus_board.text
-		side_bus_board.text = bus_board.text
-		side_bus_board.pixel_size = minf(bus_board.pixel_size,1.49/pixels.x)
 		next_bus_stop_board.visible = not free_drive
 		var stop: int = BUS_STOPS[bus_leg % BUS_STOPS.size()]
 		next_bus_stop_board.text = tr("Next stop: %s") % tr(BUS_STOP_NAMES[stop])
