@@ -8,6 +8,22 @@ func check_perimeter() -> void:
 	root.add_child(game)
 	game._on_vehicle_selected(game.MOWER)
 	game._start_game()
+	game.weather.season_setting = 2
+	game.weather.weather_setting = 1
+	game.weather.tick(160)
+	game.traffic_data.clear()
+	game.ambulance.position = Vector3(-26, 0, 55)
+	game.ambulance.rotation.y = -PI * .5
+	game.mouse_gas = true
+	for frame in 95:
+		game._drive(1.0 / 60.0)
+	game.mouse_gas = false
+	game.ground_work.update(.1, game.weather.snow)
+	game._update_meadow_sign()
+	if game.ground_work.meadow_pixels < 20 or game.meadow_sign.text == game.tr("Picnic meadow · %d%%") % 0:
+		printerr("Driving across the picnic meadow did not cut grass or update its sign")
+		quit(1)
+		return
 	for practice in [false, true]:
 		game.practice_active = practice
 		var bounds: Rect2 = game.PRACTICE_YARD if practice else game.CITY_INTERIOR
