@@ -37,4 +37,23 @@ func check_layout() -> void:
 				quit(1)
 				return
 	print("All 21 parcel receipt layouts fit at 800 × 600 with large text.")
+	var recorded_job := "Stop the flatbed at the square in the morning to collect flour."
+	var missing_job := "Unrecorded job fixture"
+	for locale in ["sv", "en", "de", "es", "fr", "fi", "nb"]:
+		TranslationServer.set_locale(locale)
+		phone.foot_jobs = PackedStringArray([missing_job, recorded_job])
+		phone.refresh()
+		phone.repeat_job.pressed.emit()
+		var playlist := phone.job_voice.stream as AudioStreamPlaylist
+		if not phone.repeat_job.is_visible_in_tree() or not phone.job_voice.playing or playlist == null or playlist.stream_count != 1 or not playlist.get_list_stream(0).resource_path.begins_with("res://audio/dispatch/%s_" % locale):
+			printerr(locale, " did not read the available recording")
+			quit(1)
+			return
+		phone.foot_jobs = PackedStringArray([missing_job])
+		phone.refresh()
+		if phone.repeat_job.visible or phone.job_voice.playing or not phone.action_rows.visible:
+			printerr(locale, " did not keep the unrecorded job as text only")
+			quit(1)
+			return
+	print("Mission read-aloud availability and language verified in all seven locales.")
 	game._finish_quit()
