@@ -51,9 +51,15 @@ func check_exits() -> void:
 		quit(1)
 		return
 	game._recover_position()
+	game.free_drive = true
+	game.map_goal = game.TARGETS[0]
 	game._change_seat()
 	if game.boating or not game.walker.visible or not game._feet_supported(game.walker.position):
 		printerr("Could not step onto the motorboat landing")
+		quit(1)
+		return
+	if not game.route_arrows[0].visible or game.route_arrows[0].position.x <= game.walker.position.x or not game.LAUNCH_PIER.has_point(Vector2(game.route_arrows[0].position.x, game.route_arrows[0].position.z)):
+		printerr("Walking guidance did not lead along the motorboat pier toward the east bank")
 		quit(1)
 		return
 	game._change_seat()

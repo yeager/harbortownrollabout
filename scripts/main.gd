@@ -7475,7 +7475,12 @@ func _update_route_arrows() -> void:
 		return
 	var start := Vector2(origin.x, origin.z)
 	var points := PackedVector2Array()
-	if walker.visible and not is_nan(_pier_height(start.x, start.y)):
+	if walker.visible and LAUNCH_PIER.has_point(start):
+		points.append(start)
+		points.append(Vector2(start.x, LAUNCH_LANDING.y))
+		start = Vector2(LAUNCH_PIER.end.x + .5, LAUNCH_LANDING.y)
+		points.append(start)
+	elif walker.visible and not is_nan(_pier_height(start.x, start.y)):
 		var landing_z: float = FERRY_LANDINGS[0] if start.y < (FERRY_LANDINGS[0]+FERRY_LANDINGS[1])*.5 else FERRY_LANDINGS[1]
 		points.append(start)
 		points.append(Vector2(start.x, landing_z))
