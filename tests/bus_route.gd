@@ -14,6 +14,23 @@ func check_route() -> void:
 	if not check_driver(game):
 		quit(1)
 		return
+	var headlamps: Array[Node] = game.vehicle_model.find_children("Bus headlight lens*","MeshInstance3D",true,false)
+	if headlamps.size() != 4 or game.headlights.size() != 2:
+		printerr("The bus must have four lenses and two headlight beams")
+		quit(1)
+		return
+	for beam: SpotLight3D in game.headlights:
+		var aligned := false
+		for lamp: MeshInstance3D in headlamps:
+			aligned = aligned or lamp.to_global(lamp.get_aabb().get_center()).distance_to(beam.global_position) < .05
+		if not aligned:
+			printerr("A bus headlight beam is detached from its lens")
+			quit(1)
+			return
+	if game.side_bus_board.text != game.BUS_DESTINATION:
+		printerr("The side display must show the bus line and destination")
+		quit(1)
+		return
 	game.phone.open_button.pressed.emit()
 	if not game.free_drive or not game.phone.take_job.is_visible_in_tree():
 		printerr("The vehicle must start in free exploration and offer a job in the phone")

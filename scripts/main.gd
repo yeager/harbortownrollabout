@@ -270,6 +270,7 @@ var bus_request_arm: Node3D
 var bus_press_time := 0.0
 var next_bus_stop_board: Label3D
 var rear_bus_board: Label3D
+var side_bus_board: Label3D
 var seated_bus_riders: Node3D
 var bus_board: Label3D
 const BUS_STOP_NAMES := ["THE SQUARE","HEALTH CENTRE","MARINA","HARBOR TOWN SCHOOL","VÄSTRA TORGET","SICKLA UDDE"]
@@ -7021,7 +7022,7 @@ func _load_vehicle_model() -> void:
 	if vehicle_index == BUS:
 		_fit_bus_interior()
 		for end in [-1,1]:
-			var lamp := _make_box("Left departure indicator",Vector3(.19,.085,.027),Vector3(1.04,.96,5.29) if end == 1 else Vector3(1.01,1.11,-5.302),Color("#ff9d17"),false,vehicle_model)
+			var lamp := _make_box("Left departure indicator",Vector3(.19,.085,.027),Vector3(1.033,.907,5.374) if end == 1 else Vector3(1.01,1.11,-5.302),Color("#ff9d17"),false,vehicle_model)
 			lamp.material_override = _material(Color("#ff9d17"),.25,true)
 			lamp.hide()
 			bus_departure_lamps.append(lamp)
@@ -7036,6 +7037,12 @@ func _load_vehicle_model() -> void:
 		rear_bus_board.position = Vector3(0,0,-.046)
 		rear_bus_board.rotation.y = PI
 		rear_panel.add_child(rear_bus_board)
+		var side_panel := _make_box("Door-side destination panel",Vector3(1.65,.30,.07),Vector3(-1.175,2.72,2.77),Color("#182126"),false,vehicle_model)
+		side_panel.rotation.y = -PI*.5
+		side_bus_board = bus_board.duplicate() as Label3D
+		side_bus_board.name = "SideDestination"
+		side_bus_board.position = Vector3(0,0,.041)
+		side_panel.add_child(side_bus_board)
 		_update_bus_board()
 	vehicle_model.name = VEHICLE_NAMES_ALL[vehicle_index] + "_BlenderModel"
 	vehicle_model.rotation.y = PI
@@ -7209,12 +7216,13 @@ func _load_vehicle_model() -> void:
 					tractor_beacon.emission = Color("#ff9a15")
 					body.set_surface_override_material(surface, tractor_beacon)
 	var beam_origins: Array[Vector3] = []
-	if vehicle_index in [2, SNOWMOBILE, PORSCHE, FARM_TRACTOR, SHOPPER, REFUSE]:
-		var lens_pattern: String = {2:"Swept transparent headlamp cover*", PORSCHE:"Headlight lens*", SNOWMOBILE:"Headlight strip*", FARM_TRACTOR:"Projector lens*", SHOPPER:"Headlight lens*", REFUSE:"Headlight lens*"}[vehicle_index]
+	if vehicle_index in [2, SNOWMOBILE, PORSCHE, FARM_TRACTOR, SHOPPER, REFUSE, BUS]:
+		var lens_pattern: String = {2:"Swept transparent headlamp cover*", PORSCHE:"Headlight lens*", SNOWMOBILE:"Headlight strip*", FARM_TRACTOR:"Projector lens*", SHOPPER:"Headlight lens*", REFUSE:"Headlight lens*", BUS:"Bus headlight lens*"}[vehicle_index]
 		var lenses := vehicle_model.find_children(lens_pattern, "MeshInstance3D", true, false)
 		for lens: MeshInstance3D in lenses:
 			var center := ambulance.to_local(lens.to_global(lens.get_aabb().get_center()))
-			beam_origins.append(center + Vector3.FORWARD * .035)
+			if vehicle_index != BUS or absf(center.x) > .89:
+				beam_origins.append(center + Vector3.FORWARD * .035)
 		if vehicle_index != SNOWMOBILE:
 			var emitters := vehicle_model.find_children("Cab projector*", "MeshInstance3D", true, false) if vehicle_index == 2 else lenses
 			for emitter: MeshInstance3D in emitters:
@@ -7905,6 +7913,8 @@ func _update_bus_board() -> void:
 		bus_board.pixel_size = minf(1.62/pixels.x,.25/pixels.y)
 		rear_bus_board.pixel_size = bus_board.pixel_size
 		rear_bus_board.text = bus_board.text
+		side_bus_board.text = bus_board.text
+		side_bus_board.pixel_size = minf(bus_board.pixel_size,1.49/pixels.x)
 		next_bus_stop_board.visible = not free_drive
 		var stop: int = BUS_STOPS[bus_leg % BUS_STOPS.size()]
 		next_bus_stop_board.text = tr("Next stop: %s") % tr(BUS_STOP_NAMES[stop])
