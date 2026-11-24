@@ -27,6 +27,18 @@ func check_rounds() -> void:
 		quit(1)
 		return
 	court_pin.pressed.emit()
+	for first_key in [KEY_1, KEY_KP_1]:
+		for index in game.MAP_NAMES.size():
+			game.map_button.pressed.emit()
+			var number := InputEventKey.new()
+			number.keycode = first_key + index
+			number.pressed = true
+			dialog.window_input.emit(number)
+			var chart = court_pin.get_parent()
+			if dialog.visible or game.paused or game.map_goal != chart.stops[index]:
+				printerr("Number key selected the wrong map destination: ", number.keycode)
+				quit(1)
+				return
 	game._save_checkpoint()
 	game.queue_free()
 	await process_frame

@@ -8208,11 +8208,6 @@ func _build_ui() -> void:
 func _build_town_map() -> void:
 	var dialog := AcceptDialog.new()
 	dialog.name = "TownMap"
-	dialog.window_input.connect(func(event: InputEvent):
-		if event is InputEventKey and event.keycode == KEY_F5 and event.pressed and not event.echo:
-			dialog.set_input_as_handled()
-			dialog.hide()
-	)
 	dialog.window_input.connect(_dialog_quit_key.bind(dialog))
 	dialog.exclusive = true
 	dialog.transient = true
@@ -8223,6 +8218,19 @@ func _build_town_map() -> void:
 	body.add_child(chart)
 	var counter := shops.grill_counter()
 	chart.configure(navigator,PackedVector3Array([TARGETS[0],TARGETS[1],TARGETS[2],SCHOOL_CURB,STATION_DROP,counter,FLOUR_CURB,BOULE_BENCH_APPROACH]),MAP_NAMES)
+	dialog.window_input.connect(func(event: InputEvent):
+		if not event is InputEventKey or not event.pressed or event.echo or event.is_command_or_control_pressed() or event.alt_pressed:
+			return
+		if event.keycode == KEY_F5:
+			dialog.set_input_as_handled()
+			dialog.hide()
+			return
+		var first_key := KEY_KP_1 if event.keycode >= KEY_KP_1 else KEY_1
+		var index: int = event.keycode - first_key
+		if index >= 0 and index < chart.stops.size():
+			dialog.set_input_as_handled()
+			chart.picked.emit(index)
+	)
 	var legend := HFlowContainer.new()
 	body.add_child(legend)
 	for i in MAP_NAMES.size():
