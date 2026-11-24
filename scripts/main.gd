@@ -1044,8 +1044,8 @@ func _unhandled_key_input(event: InputEvent) -> void:
 			KEY_SPACE, KEY_INSERT:
 				if event.keycode == KEY_INSERT and not insert_help: return
 				if mode == "playing" and not paused: _help_at_target()
-			KEY_ENTER:
-				if mode == "menu": _start_game()
+			KEY_ENTER, KEY_KP_ENTER:
+				if mode in ["menu", "complete"]: _start_game()
 			KEY_R:
 				if mode == "complete": _start_game()
 
