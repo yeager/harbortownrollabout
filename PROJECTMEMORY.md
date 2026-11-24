@@ -28,10 +28,12 @@
 ## Outstanding requests
 
 - Refine vehicle shapes, especially the BMW front, the fire truck, the police car, the Tvärbanan and the sitting driver. Improve water and window reflections, architecture and boardwalk based on image references.
-- Extend the pedestrian and traffic signals to the other crossings. Playtest routes, dialogue, readability, sound levels and frame rate throughout town.
+- Review any remaining unsignalized crossings and playtest routes, dialogue, readability, sound levels and frame rate throughout town.
 - Follow up on the request for Blender MCP and verify actual connection before it counts as clear.
 
 ## Sources and verification
+
+- Godot 4.7 dev5 verified the central pedestrian crossings and all six tram junctions. The longest sampled red was 9.0 s at the central road junction and 6.9 s at tram junctions. The driving school course also passed its acceleration, braking, reverse, recovery and boarding test.
 
 - Godot 4.7 dev5 on Linux with the Compatibility renderer and Mesa reported two GLES texture allocations at exit (87,376 and 65,532 bytes). The normal quit confirmation reproduced this from the menu and during play. A standalone SceneTree with only a current Camera3D, three rendered frames and then quit reproduced both allocations without any game scene or assets. The same SceneTree without the camera exited cleanly. Retest that minimal case when changing engine versions.
 

@@ -3872,7 +3872,10 @@ func _build_new_blocks() -> void:
 	workshop_name.position=p+Vector3(0,4.57,-5.23)
 	workshop_name.rotation.y=PI
 	add_child(workshop_name)
-	for crossing in [Vector3(-12,0,0),Vector3(91,0,0),Vector3(91,0,-48),Vector3(143,0,-48)]:
+	var crossings: Array = street_signals.EAST_CROSSINGS.duplicate()
+	for x in street_signals.CENTRAL_BOULEVARD_CROSSINGS:
+		crossings.append(Vector3(x,0,0))
+	for crossing in crossings:
 		for stripe in range(-4,5):
 			_make_box("Zebra crossing",Vector3(2.4,.014,.52),crossing+Vector3(0,_surface_height(crossing.x,crossing.z)+.014,stripe),Color("#eee9d9")).material_override = marking_finish
 

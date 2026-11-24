@@ -16,8 +16,8 @@ var tram_crossings: Array[Dictionary] = []
 var street_crosswalks: Array[Dictionary] = []
 const SHOP_CROSSING := Vector3(-39,0,35)
 const EAST_CROSSINGS := [Vector3(91,0,0),Vector3(91,0,-48),Vector3(143,0,-48)]
-const CROSSING_X := -12.0
-const WEST_STOP_DISTANCE := 15.0
+const CENTRAL_BOULEVARD_CROSSINGS := [-12.0, 12.0]
+const BOULEVARD_STOP_DISTANCE := 15.0
 const JUNCTION_STOP_DISTANCE := 8.0
 
 func _ready() -> void:
@@ -26,12 +26,12 @@ func _ready() -> void:
 		add_child(mast)
 		mast.rotation.y = i*PI/2
 		mast.position = mast.basis*Vector3(5.4,0,6)
-		if i==3:
-			mast.position.x=-13.65
+		if i % 2 == 1:
+			mast.position.x = signf(mast.position.x) * 13.65
 		heads.append(_vehicle_head(mast,i%2==1))
 	for approach in [Vector3.RIGHT,Vector3.LEFT,Vector3.BACK,Vector3.FORWARD]:
 		var forward: Vector3 = approach
-		var setback := WEST_STOP_DISTANCE if forward == Vector3.RIGHT else JUNCTION_STOP_DISTANCE
+		var setback := BOULEVARD_STOP_DISTANCE if forward.x != 0 else JUNCTION_STOP_DISTANCE
 		var center := -forward*setback + forward.cross(Vector3.UP)*1.85
 		center.y = get_parent()._surface_height(center.x,center.z)+.016
 		var size := Vector3(.22,.018,3.3) if forward.x != 0 else Vector3(3.3,.018,.22)
@@ -39,7 +39,8 @@ func _ready() -> void:
 	_build_street_crossing(SHOP_CROSSING)
 	for center: Vector3 in EAST_CROSSINGS:
 		_build_street_crossing(center)
-	heads.append_array(_street_crosswalk(Vector3(CROSSING_X,0,0),false,6.31))
+	for x in CENTRAL_BOULEVARD_CROSSINGS:
+		heads.append_array(_street_crosswalk(Vector3(x,0,0),false,6.31))
 	for z in [-6.35,6.35]:
 		heads.append_array(_street_crosswalk(Vector3(0,0,z),true,5.15))
 	_build_tram_crossings()
@@ -386,7 +387,7 @@ func _central_clearance(pos: Vector3, heading: Vector3, half_length: float, red_
 	var east_west := absf(heading.x)>=absf(heading.z)
 	var green := 0 if east_west else 3
 	if phase==green or (red_only and phase==green+1): return INF
-	var setback := WEST_STOP_DISTANCE if east_west and heading.x>0 else JUNCTION_STOP_DISTANCE
+	var setback := BOULEVARD_STOP_DISTANCE if east_west else JUNCTION_STOP_DISTANCE
 	var axis := Vector3.RIGHT if east_west else Vector3.BACK
 	var nearest := _line_clearance(pos,heading,half_length,Vector3.ZERO,axis,setback,4.85)
 	if east_west:

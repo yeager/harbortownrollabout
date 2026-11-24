@@ -14,13 +14,17 @@ func check() -> void:
 	var lights = game.street_signals
 	var train = game.tram
 	var approach := Vector3(.8660254,0,.5)
-	var stop_point := Vector3(-lights.WEST_STOP_DISTANCE,0,1.85)
+	var stop_point := Vector3(-lights.BOULEVARD_STOP_DISTANCE,0,1.85)
 	lights.phase = 3
 	if not is_equal_approx(lights.red_clearance(stop_point-approach*5,approach,2,true),3.0):
 		fail("Angled approach missed the red stop line")
 		return
 	if lights.red_clearance(stop_point+Vector3.BACK*8-approach*5,approach,2,true) < INF:
 		fail("Stop line extended beyond the crossing")
+		return
+	var east_stop := Vector3(lights.BOULEVARD_STOP_DISTANCE,0,-1.85)
+	if not is_equal_approx(lights.red_clearance(east_stop + Vector3.RIGHT * 5, Vector3.LEFT, 2, true), 3.0):
+		fail("Approach from the east did not stop before the new crosswalk")
 		return
 	# Amber requests braking, but crossing the line is only a red-light
 	# violation once the red lens is lit.
@@ -374,6 +378,25 @@ func check() -> void:
 	game._update_traffic(.1)
 	if traffic_car.speed <= 0.0:
 		fail("Traffic should move off on green")
+		return
+	game.traffic_data.clear()
+	game.ambulance.position = east_stop + Vector3.RIGHT * 9
+	game.ambulance.basis = Basis.looking_at(Vector3.LEFT)
+	game.allow_red_lights = false
+	game.mouse_gas = true
+	game.speed = 5
+	lights.phase = 3
+	for tick in 70:
+		game._drive(.05)
+	var stopped_gap: float = game.ambulance.position.x - east_stop.x - game.front_reach
+	if absf(stopped_gap) > .2 or absf(game.speed) > .05:
+		fail("The player car did not stop before the eastern zebra: %f" % stopped_gap)
+		return
+	lights.phase = 0
+	for tick in 80:
+		game._drive(.05)
+	if game.ambulance.position.x >= east_stop.x - 2.5:
+		fail("The player car did not continue across the eastern zebra on green")
 		return
 	finish.call_deferred(game)
 
