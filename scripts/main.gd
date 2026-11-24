@@ -1029,6 +1029,9 @@ func _unhandled_key_input(event: InputEvent) -> void:
 			_toggle_scooter()
 			return
 		match event.keycode:
+			KEY_F5:
+				if mode == "playing" and not paused and map_button.is_visible_in_tree() and not phone.handset.is_visible_in_tree():
+					map_button.pressed.emit()
 			KEY_H: _honk()
 			KEY_F4:
 				if horn_f4 and not event.alt_pressed: _honk()

@@ -8,8 +8,15 @@ func check_rounds() -> void:
 	root.add_child(game)
 	game._start_game()
 	game.free_drive = true
-	game.map_button.pressed.emit()
+	var map_key := InputEventKey.new()
+	map_key.keycode = KEY_F5
+	map_key.pressed = true
+	game._unhandled_key_input(map_key)
 	var dialog = game.find_child("TownMap",true,false)
+	if not dialog.visible or not game.paused:
+		printerr("Map shortcut did not open the town map and pause play")
+		quit(1)
+		return
 	var court_pin: Button
 	for button in dialog.find_children("*","Button",true,false):
 		if button.tooltip_text == game.tr("Boule court"):
