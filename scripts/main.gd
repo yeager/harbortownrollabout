@@ -3798,7 +3798,7 @@ func _update_daylight(delta: float) -> void:
 	if night >= .5:
 		if not paused:
 			chimney_beacon_phase = fmod(chimney_beacon_phase + delta, 2.0)
-		chimney_beacon.emission_enabled = chimney_beacon_phase < .5
+		chimney_beacon.emission_enabled = calm_mode or chimney_beacon_phase < .5
 	else:
 		chimney_beacon_phase = 0.0
 		chimney_beacon.emission_enabled = false
