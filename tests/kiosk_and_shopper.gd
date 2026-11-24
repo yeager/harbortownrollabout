@@ -166,6 +166,12 @@ func check() -> void:
 			game.wallet = shops.PRICES[shop][i]
 			var buy: Button = shops.panel.get_child(shops.first_product.get_index()+i)
 			buy.pressed.emit()
+			var price: int = shops.PRICES[shop][i]
+			var expected_receipt: String = shops.tr_n("%s · Paid %d coin. Thank you!", "%s · Paid %d coins. Thank you!", price) % [shops.tr(product), price]
+			if not shops.receipt.is_visible_in_tree() or not shops.receipt.text.begins_with(expected_receipt):
+				printerr("Receipt did not show the purchased item and price for ", product)
+				quit(1)
+				return
 			var eat: Button = shops.snack_buttons[product]
 			if not eat.is_visible_in_tree() or buy.icon == null or eat.icon != buy.icon:
 				printerr("Missing matching snack button for ", product)
