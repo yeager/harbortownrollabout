@@ -2074,6 +2074,8 @@ func _build_road_network() -> void:
 			_make_box("Cycle lane border", direction.abs() * length + edge.abs() * 0.07 + Vector3.UP * 0.025,
 				middle + edge * side * 3.85 + Vector3.UP * 0.015, Color("#e0dfda")).material_override = marking_finish
 		for distance in range(12, int(end_distance) - 1, 6):
+			if street_signals.CENTRAL_BOULEVARD_CROSSINGS.has(direction.x * distance):
+				continue
 			_make_box("Road marking", direction.abs() * 3.0 + edge.abs() * 0.15 + Vector3.UP * 0.025,
 				direction * distance, Color("#e0dfda")).material_override = marking_finish
 	# Crossings align with the pedestrians' east-west route.

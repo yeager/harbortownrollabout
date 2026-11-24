@@ -13,6 +13,22 @@ func check() -> void:
 	game._start_game()
 	var lights = game.street_signals
 	var train = game.tram
+	var eastern_zebra := Vector3(lights.CENTRAL_BOULEVARD_CROSSINGS[1], 0, 0)
+	var eastern_lamp: SpotLight3D
+	for lamp: SpotLight3D in lights.find_children("*", "SpotLight3D", true, false):
+		var aim := -lamp.global_basis.z.normalized()
+		if aim.dot(lamp.global_position.direction_to(eastern_zebra)) > .999:
+			eastern_lamp = lamp
+			break
+	if eastern_lamp == null or eastern_lamp.global_position.distance_to(eastern_zebra) >= eastern_lamp.spot_range:
+		fail("The eastern zebra needs a lamp aimed at the crossing")
+		return
+	for night in [false, true, false]:
+		game.time_mode = 1 if night else 0
+		game._update_daylight(0)
+		if eastern_lamp.visible != night or (eastern_lamp.light_energy > 0) != night:
+			fail("Eastern zebra lighting did not follow the day cycle")
+			return
 	var approach := Vector3(.8660254,0,.5)
 	var stop_point := Vector3(-lights.BOULEVARD_STOP_DISTANCE,0,1.85)
 	lights.phase = 3
