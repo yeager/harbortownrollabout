@@ -7033,6 +7033,15 @@ func _update_bus_ceiling_lights(night: float) -> void:
 		lamp.light_energy = glow*1.1
 
 func _fit_bus_interior() -> void:
+	var mirror_glass := _material(Color("#9bacb3"), .17)
+	mirror_glass.metallic = .78
+	for side in [-1.0,1.0]:
+		var mirror_center := Vector3(side * 1.39, 1.91, 5.07)
+		_make_box("Bus mirror stay",Vector3(.24,.06,.09),mirror_center + Vector3(-side * .10,-.22,0),Color("#202629"),false,vehicle_model)
+		_make_box("Bus mirror housing",Vector3(.19,.46,.15),mirror_center,Color("#202629"),false,vehicle_model)
+		for pane in [Vector2(.064,.286),Vector2(-.148,.104)]:
+			var glass := _make_box("Bus mirror glass",Vector3(.145,pane.y,.012),mirror_center + Vector3(0,pane.x,-.077),Color.WHITE,false,vehicle_model)
+			glass.material_override = mirror_glass
 	var cabin := vehicle_model.find_child("Cabin",true,false) as MeshInstance3D
 	for surface in cabin.mesh.get_surface_count():
 		var finish := cabin.get_active_material(surface) as StandardMaterial3D
