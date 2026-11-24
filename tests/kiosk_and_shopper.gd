@@ -182,6 +182,9 @@ func check() -> void:
 				printerr("Failed to consume purchased ", product)
 				quit(1)
 				return
+		if shop == 2:
+			game.wallet = shops.PRICES[2][0]
+			shops.first_product.pressed.emit()
 	print("Bought and ate every pizza and sweet through the shop buttons.")
 	game._process(0)
 	var saved_position: Vector3 = game.walker.position
@@ -193,6 +196,10 @@ func check() -> void:
 	game._resume_road_checkpoint()
 	game._process(0)
 	shops = game.shops
+	if shops.order_recipe != 1 or shops.order_slip.texture.region.position.x != 64:
+		printerr("The next pizza order and its picture must survive a restart")
+		quit(1)
+		return
 	if shops.inside != 3 or not shops.first_product.has_focus() or not game.walker.position.is_equal_approx(saved_position):
 		printerr("Sweet shop resume: ", shops.inside, " focus ", shops.first_product.has_focus(), " position ",game.walker.position," expected ",saved_position," checkpoint ",game.road_checkpoint)
 		quit(1)

@@ -546,7 +546,6 @@ func purchase(shop: int, item: int) -> void:
 		carried_toy = product
 		show_carried_toy()
 	refresh_basket()
-	game._save_preferences()
 	game._refresh_ui()
 	receipt_kind = ReceiptKind.PURCHASE
 	receipt_subject = product
@@ -556,6 +555,7 @@ func purchase(shop: int, item: int) -> void:
 		order_recipe = (order_recipe+1) % MENUS[2].size()
 		_update_order_slip()
 		receipt_kind = ReceiptKind.ORDER_MATCH
+	game._save_preferences()
 	_refresh_receipt()
 
 func _refresh_receipt() -> void:

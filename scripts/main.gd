@@ -9675,6 +9675,9 @@ func _load_player_progress(config: ConfigFile, section: String) -> void:
 	road_checkpoint = saved if _valid_checkpoint(saved) else {}
 	purchases=config.get_value(section,"purchases",{})
 	boutique_jacket = config.get_value(section,"boutique_jacket","")
+	var recipe: Variant = config.get_value(section,"pizza_order",0)
+	shops.order_recipe = recipe if recipe is int and recipe >= 0 and recipe < shops.MENUS[2].size() else 0
+	shops._update_order_slip()
 	shops.carried_toy = config.get_value(section,"carried_toy","")
 	wallet=maxi(0,int(config.get_value(section,"coins",0)))
 	crate_stage = clampi(int(config.get_value(section,"crate_return",0)),0,CrateStage.AT_DEPOT)
@@ -9732,6 +9735,7 @@ func _store_player_progress(config: ConfigFile, section: String) -> void:
 	config.set_value(section,"purchases",purchases)
 	config.set_value(section,"boutique_jacket",boutique_jacket)
 	config.set_value(section,"carried_toy",shops.carried_toy)
+	config.set_value(section,"pizza_order",shops.order_recipe)
 
 func _load_preferences() -> void:
 	var config := ConfigFile.new()
