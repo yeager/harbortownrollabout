@@ -148,6 +148,24 @@ func check_transition() -> void:
 		printerr("Missing illuminated Christmas bulbs at night")
 		quit(1)
 		return
+	game._apply_calm_mode(false)
+	game._update_daylight(.75)
+	if game.chimney_beacon.emission_enabled or not game.shops.candy_blade_glow.emission_enabled:
+		printerr("The candy sign should stay lit between chimney flashes")
+		quit(1)
+		return
+	game._apply_calm_mode(true)
+	game._update_daylight(2.75)
+	if not game.chimney_beacon.emission_enabled:
+		printerr("The chimney beacon should stay lit in calm mode")
+		quit(1)
+		return
+	game._apply_calm_mode(false)
+	game._update_daylight(.25)
+	if not game.chimney_beacon.emission_enabled:
+		printerr("The chimney beacon should resume with a lit pulse")
+		quit(1)
+		return
 	game.time_mode = 2
 	var evening_levels: Array[float] = []
 	for phase in [.0, .24, .5, .76, .0]:
@@ -161,6 +179,10 @@ func check_transition() -> void:
 				return
 	if evening_levels[0] != 0 or evening_levels[4] != 0 or not (0 < evening_levels[1] and evening_levels[1] < evening_levels[2] and is_equal_approx(evening_levels[3], evening_levels[1])):
 		printerr("Unexpected star brightness from noon through dawn: ", evening_levels)
+		quit(1)
+		return
+	if game.chimney_beacon.emission_enabled or game.shops.candy_blade_glow.emission_enabled:
+		printerr("Night lighting remained on after the cycle reached noon")
 		quit(1)
 		return
 	game.walker.position = game.santa.position
