@@ -7138,7 +7138,8 @@ func _fit_bus_exterior(model: Node3D) -> void:
 		if finish.resource_name.begins_with("Smoked blue glazing"):
 			var glass := finish.duplicate() as StandardMaterial3D
 			glass.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
-			glass.albedo_color = Color(.40,.62,.68,.22)
+			glass.albedo_color = Color(.53,.65,.69,.18)
+			glass.metallic = 0.0
 			cabin.set_surface_override_material(surface,glass)
 			for pane: MeshInstance3D in model.find_children("Passenger door tinted glazing*", "MeshInstance3D", true, false):
 				pane.material_override = glass
