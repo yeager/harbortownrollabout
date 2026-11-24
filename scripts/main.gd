@@ -803,9 +803,7 @@ func _process(delta: float) -> void:
 	city_env.sky.sky_material.set_shader_parameter("overcast",weather.cloud_cover)
 	_update_daylight(delta)
 	if radio.playing:
-		# Hold music down across quiet syllables in a phone instruction.
-		var attenuation := 8.0 * radio_ducking / 100.0 if phone.job_voice.playing else 0.0
-		var target_gain := radio_track_gain_db - attenuation
+		var target_gain := _radio_target_gain()
 		var rate := 480.0 if radio.volume_db > target_gain else 16.0
 		radio.volume_db = move_toward(radio.volume_db,target_gain,rate*delta)
 	if not paused and message_timer > 0.0:
@@ -1174,9 +1172,14 @@ func _next_radio_track() -> void:
 	song_card_seconds = 5.0
 	song_card.show()
 	radio_track_gain_db = -10.0 + float(RADIO_GAIN_DB.get(radio_track, 0.0))
-	radio.volume_db = radio_track_gain_db - (8.0*radio_ducking/100.0 if phone.job_voice.playing else 0.0)
+	radio.volume_db = _radio_target_gain()
 	radio.stream = load("res://audio/radio/" + radio_track)
 	radio.play()
+
+func _radio_target_gain() -> float:
+	# Hold music down across quiet syllables as well as audible ones.
+	var speaking := phone.job_voice.playing or (greeting_voice.playing and not greeting_voice.stream_paused)
+	return radio_track_gain_db - (8.0 * radio_ducking / 100.0 if speaking else 0.0)
 
 func _honk() -> void:
 	if mode != "playing" or paused or (walker.visible and not boating and tram_mode == 0) or tram_mode == 1 or horn.playing: return
