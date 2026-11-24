@@ -109,6 +109,17 @@ func check_exits() -> void:
 		printerr("The motorboat route did not finish at the landing")
 		quit(1)
 		return
+	var saved_landing: Vector3 = game.walker.position
+	game._save_checkpoint()
+	game.queue_free()
+	await process_frame
+	game = load("res://main.tscn").instantiate()
+	root.add_child(game)
+	game._resume_road_checkpoint()
+	if game.boating or not game.walker.visible or not game.walker.position.is_equal_approx(saved_landing) or not game._feet_supported(game.walker.position):
+		printerr("Saved walking position on the motorboat pier was not restored")
+		quit(1)
+		return
 	game._change_seat()
 	if not game.boating or game.walker.visible or game.listener.get_parent() != game.launch:
 		printerr("Could not reboard the motorboat from the landing")
@@ -117,5 +128,5 @@ func check_exits() -> void:
 	game.queue_free()
 	await process_frame
 	await process_frame
-	print("Both edges of both bridges and the offshore motorboat exit passed.")
+	print("Bridge exits, offshore safety and the motorboat pier checkpoint passed.")
 	quit()
