@@ -8434,12 +8434,16 @@ func _build_town_map() -> void:
 			var target := Vector2(map_goal.x,map_goal.z)
 			var heading := Vector2.ZERO if walker.visible else Vector2(forward.x,forward.z).normalized()
 			chart.route_preview = navigator.path(origin,target,heading,vehicle_index in [2,RECOVERY,BUS,REFUSE])
+		var focused_stop := legend.get_child(0) as Button
 		for i in MAP_NAMES.size():
 			var caption := tr(MAP_NAMES[i])
 			var selected: bool = map_goal == chart.stops[i]
-			legend.get_child(i).set_pressed_no_signal(selected)
+			var stop_button := legend.get_child(i) as Button
+			stop_button.set_pressed_no_signal(selected)
 			chart.get_child(i).set_pressed_no_signal(selected)
-			legend.get_child(i).text = "%d · %s" % [chart.pin_number(i),caption]
+			stop_button.text = "%d · %s" % [chart.pin_number(i),caption]
+			if selected:
+				focused_stop = stop_button
 			chart.get_child(i).tooltip_text = caption
 			chart.get_child(i).accessibility_name = caption
 		chart.queue_redraw()
@@ -8449,6 +8453,7 @@ func _build_town_map() -> void:
 		dialog.ok_button_text = tr("Close")
 		_toggle_pause()
 		dialog.popup_centered()
+		focused_stop.grab_focus.call_deferred()
 	)
 	dialog.visibility_changed.connect(func():
 		if not dialog.visible and paused and mode == "playing": _toggle_pause()
