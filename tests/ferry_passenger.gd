@@ -57,6 +57,15 @@ func check_crossings() -> void:
 			quit(1)
 			return
 		var deck_position: Vector3 = game.walker.position
+		game.map_button.pressed.emit()
+		var map: AcceptDialog = game.get_node("TownMap")
+		var chart = map.get_child(0).get_child(0)
+		var destination: Vector3 = chart.stops[0]
+		if not map.visible:
+			printerr("Could not open the town map aboard Lotten")
+			quit(1)
+			return
+		chart.picked.emit(0)
 		game._save_checkpoint()
 		game.queue_free()
 		await process_frame
@@ -74,6 +83,11 @@ func check_crossings() -> void:
 			return
 		if not game._feet_supported(game.walker.position) or not game.walker.scale.is_equal_approx(original_scale):
 			printerr("Disembarkation changed Alma's scale or left her without footing")
+			quit(1)
+			return
+		game._update_route_arrows()
+		if game.map_goal != destination or not game.route_arrows.any(func(arrow): return arrow.visible):
+			printerr("Walking guidance did not resume after leaving Lotten")
 			quit(1)
 			return
 	var hull: AABB = game._model_bounds(game.ferry, game.ferry)
