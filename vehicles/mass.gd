@@ -16,6 +16,7 @@ const TRAM_KG := 42000.0
 const LAUNCH_KG := 850.0
 const SCOOTER_KG := 75.0
 const FERRY_KG := 48000.0
+const PATROL_HELICOPTER_KG := 3200.0
 
 static func for_model(path: String) -> float:
 	return KG[path.get_file().get_basename()]

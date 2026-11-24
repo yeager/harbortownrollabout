@@ -1207,13 +1207,17 @@ func _honk() -> void:
 	horn.play()
 
 func _update_patrol(delta: float) -> void:
-	patrol_angle = fmod(patrol_angle+delta*.115,TAU)
+	var angular_speed := .115
+	patrol_angle = fmod(patrol_angle + delta * angular_speed, TAU)
 	var a := patrol_angle
 	helicopter.position = Vector3(54+74*sin(a),36+2*sin(2*a),-16+37*cos(a))
 	var tangent := Vector3(74*cos(a),4*cos(2*a),-37*sin(a))
 	# The Blender nose faces -Y, imported as local +Z.
 	helicopter.look_at(helicopter.position+tangent,Vector3.UP,true)
-	helicopter.rotate_object_local(Vector3.BACK,.095)
+	var acceleration := Vector3(-74*sin(a), 0, -37*cos(a)) * angular_speed * angular_speed
+	var lateral_force := acceleration.dot(helicopter.basis.x.normalized()) * Mass.PATROL_HELICOPTER_KG
+	var bank := atan2(lateral_force, 31400.0)
+	helicopter.rotate_object_local(Vector3.BACK, -bank)
 	main_rotor.rotate_y(delta*28)
 	tail_rotor.rotate_x(delta*52)
 

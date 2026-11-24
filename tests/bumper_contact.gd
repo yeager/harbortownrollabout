@@ -15,6 +15,12 @@ func check_contact() -> void:
 		return
 	var game = load("res://main.tscn").instantiate()
 	root.add_child(game)
+	for model: String in game.VEHICLE_SCENES_ALL:
+		var kg: float = mass.KG.get(model.get_file().get_basename(), 0)
+		if kg <= 0 or mass.road_response(kg, 75.0) >= mass.road_response(kg):
+			printerr("Missing or ineffective mass for ", model)
+			quit(1)
+			return
 	game._on_vehicle_selected(game.RECOVERY)
 	game.ambulance.rotation.y = PI / 4
 	var post_size := Vector3(.12, 2, .12)
