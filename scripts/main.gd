@@ -230,7 +230,7 @@ var ground_work := preload("res://environment/ground_work.gd").new(CITY_INTERIOR
 var blade_left: Vector3
 var blade_right: Vector3
 var ploughs: Array[Node3D] = []
-const DRIVER_VIEW_VEHICLES := [3, PUCH_DAKOTA, FOOD_TRUCK, FARM_TRACTOR, BUS, REFUSE]
+const DRIVER_VIEW_VEHICLES := [2, 3, PUCH_DAKOTA, FOOD_TRUCK, FARM_TRACTOR, BUS, REFUSE]
 const MopedRider := preload("res://vehicles/moped_rider.gd")
 var moped_pose := MopedRider.new()
 const ICE_STOPS := [0, SCHOOL, 2]
@@ -7713,6 +7713,9 @@ func _update_camera(delta: float, snap_to_car := false) -> void:
 		var pitch := -.16
 		var curb_yaw := 0.0
 		match vehicle_index:
+			2:
+				camera.global_position = vehicle_model.to_global(Vector3(-.57, 2.50, 2.40))
+				pitch = -2.35
 			BUS, REFUSE:
 				# These models have solid cab fronts. Place the lens just beyond the glass.
 				var eye := Vector3(-.55,2.12,-5.32) if vehicle_index == BUS else Vector3(-.52,2.60,-4.02)
