@@ -1123,11 +1123,20 @@ def make_fire_engine():
         bpy.context.collection.objects.link(insert)
         insert.parent=root
     for side in (-1,1):
-        fascia_x = side*.91
-        pod = cube("Upper corner marker housing",(fascia_x,-2.984,1.675),(.31,.11,.12),BLACK,.043,root)
-        pod.rotation_euler.y = -side*.16
-        strip = cube("Upper corner running lamp",(fascia_x,-3.045,1.684),(.22,.012,.029),HEADLAMP,.009,root)
-        strip.rotation_euler.y = -side*.16
+        # The marker follows the sloping cheek below the windscreen.
+        for name, finish, lens in (("Upper corner marker housing", BLACK, False),
+                                   ("Upper corner running lamp", HEADLAMP, True)):
+            sections = []
+            for u, z, height in ((.755,1.632,.012),(.79,1.652,.057),
+                                 (.875,1.680,.084),(.995,1.692,.108),(1.05,1.684,.080)):
+                depth = -3.079 + .105*((u-.755)/.295)**2
+                if lens:
+                    z += height*.18
+                    height *= .32
+                    depth -= .009
+                sections.append([(side*u,depth+dy,z+height*dz) for dy,dz in
+                                 ((0,-.45),(-.004,.29),(.004,.5),(.027,.45),(.027,-.5))])
+            profile_loft(name, sections, finish, root)
     badge = text_obj("Raised Scania grille lettering","SCANIA",(0,-3.082,1.585),.19,METAL,root=root)
     badge.location.x = -(min(v.co.x for v in badge.data.vertices) + max(v.co.x for v in badge.data.vertices)) * .5
     badge.rotation_euler = (math.pi/2,0,0)
