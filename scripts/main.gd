@@ -957,7 +957,7 @@ func _input(event: InputEvent) -> void:
 		get_viewport().set_input_as_handled()
 		_request_quit()
 		return
-	if event is InputEventKey and event.physical_keycode == look_key and not event.echo:
+	if event is InputEventKey and event.keycode == look_key and not event.echo:
 		if not event.pressed:
 			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 		elif _can_capture_camera():
@@ -9860,6 +9860,7 @@ func _toggle_pause() -> void:
 			boule_pause_focus = get_viewport().gui_get_focus_owner()
 		boule_choices.visible = not paused
 	if paused:
+		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 		horn.stop()
 		_end_skid()
 		for item in traffic_data:
