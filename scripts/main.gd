@@ -7085,7 +7085,7 @@ func _add_bus_destination_boards(model: Node3D) -> Array[Label3D]:
 
 func _fit_bus_exterior(model: Node3D) -> void:
 	var window_seal := _material(Color("#22292c"), .64)
-	for pattern in ["Window pillar*", "Roof rail*", "Window sill graphite trim*", "Windscreen outer seal*", "Lower windscreen gasket*", "Passenger door upright*"]:
+	for pattern in ["Window pillar*", "Roof rail*", "Window sill graphite trim*", "Windscreen outer seal*", "Lower windscreen gasket*", "Passenger door upright*", "Passenger door cross rail*", "Passenger doorway header*"]:
 		for trim: MeshInstance3D in model.find_children(pattern, "MeshInstance3D", true, false):
 			trim.material_override = window_seal
 			if trim.name.begins_with("Roof rail") and trim.position.z < -4.9:
@@ -7140,6 +7140,8 @@ func _fit_bus_exterior(model: Node3D) -> void:
 			glass.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
 			glass.albedo_color = Color(.40,.62,.68,.22)
 			cabin.set_surface_override_material(surface,glass)
+			for pane: MeshInstance3D in model.find_children("Passenger door tinted glazing*", "MeshInstance3D", true, false):
+				pane.material_override = glass
 
 func _fit_bus_interior() -> void:
 	bus_ceiling_diffuser = _material(Color("#ded9c9"),.42,true)
