@@ -189,7 +189,7 @@ func _fit_rear_reflector(blind: MeshInstance3D) -> void:
 func set_destination(destination: String) -> void:
 	dispatch.text = "711" if destination.is_empty() else "711\n" + destination
 	var width := ThemeDB.fallback_font.get_string_size(destination, HORIZONTAL_ALIGNMENT_LEFT, -1, dispatch.font_size).x
-	dispatch.pixel_size = minf(.0007, .245 / maxf(1, width))
+	dispatch.pixel_size = minf(.0007, .215 / maxf(1, width))
 
 func set_road_speed(metres_per_second: float) -> void:
 	speed_needle.rotation.z = deg_to_rad(-135.0 + 270.0 * clampf(absf(metres_per_second) * 3.6 / 120.0, 0.0, 1.0))

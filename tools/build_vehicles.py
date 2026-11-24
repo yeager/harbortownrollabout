@@ -820,6 +820,16 @@ def fit_fire_speedometer(root):
     # Keep the dial above the steering rim from the seated driving position.
     binnacle = next(part for part in root.children if part.name.startswith("Driver instrument binnacle"))
     binnacle.location.z += .12
+    # Preserve dial clearance at the steering wheel while lowering the hood toward the glass.
+    corners = [vertex.co.copy() for vertex in binnacle.data.vertices]
+    front = min(v.y for v in corners)
+    rear = max(v.y for v in corners)
+    bottom = min(v.z for v in corners)
+    top = max(v.z for v in corners)
+    for vertex in binnacle.data.vertices:
+        forward = (rear - vertex.co.y) / (rear - front)
+        upper = (vertex.co.z - bottom) / (top - bottom)
+        vertex.co.z -= .105 * forward * upper
     for name, depth, radius, finish in (
             ("Speedometer bezel", 0, .110, METAL),
             ("Speedometer dial", .006, .102, BLACK)):
@@ -960,8 +970,8 @@ def make_fire_engine():
     steering.data.materials.append(RUBBER)
     steering.parent=root
     cube("Crew steering crossbar",(-.57,-2.37,1.902),(.32,.035,.045),DARK,.012,root)
-    cube("Dispatch terminal casing",(.072,-2.53,1.935),(.31,.075,.212),BLACK,.016,root)
-    cube("Dispatch terminal display",(.072,-2.487,1.94),(.275,.012,.168),GLASS_HI,.006,root)
+    cube("Dispatch terminal casing",(.072,-2.53,1.911),(.27,.067,.157),BLACK,.016,root)
+    cube("Dispatch terminal display",(.072,-2.491,1.915),(.242,.012,.129),GLASS_HI,.006,root)
     shutter_finish = material("Satin silver shutter slats", (.76,.79,.80), .24, .42)
     def shutter_hardware(center, outward, width, height):
         # Local coordinates run along the slats, out from the face and upwards.
