@@ -10,6 +10,12 @@ var speed_needle: Node3D
 var lift := 0.0
 
 func fit(model: Node3D) -> void:
+	var mirror_housing := StandardMaterial3D.new()
+	mirror_housing.albedo_color = Color("#242628")
+	mirror_housing.roughness = .76
+	for pattern in ["Main mirror shell*", "Wide angle mirror shell*"]:
+		for shell: MeshInstance3D in model.find_children(pattern, "MeshInstance3D", true, false):
+			shell.material_override = mirror_housing
 	var display: MeshInstance3D = model.find_child("Dispatch terminal display", true, false)
 	var screen := display.get_aabb()
 	display.add_child(dispatch)
