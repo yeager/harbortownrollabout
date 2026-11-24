@@ -11,6 +11,9 @@ func check_route() -> void:
 	# This route exercises automatic service after stopping.
 	game.gentle_driving = true
 	game.start_button.pressed.emit()
+	if not check_driver(game):
+		quit(1)
+		return
 	game.phone.open_button.pressed.emit()
 	if not game.free_drive or not game.phone.take_job.is_visible_in_tree():
 		printerr("The vehicle must start in free exploration and offer a job in the phone")
@@ -149,3 +152,35 @@ func write_incomplete_checkpoint(game: Node) -> void:
 	config.load(game.SETTINGS_PATH)
 	config.set_value("player", "road_checkpoint", damaged)
 	config.save(game.SETTINGS_PATH)
+
+
+func check_driver(game: Node) -> bool:
+	var wheel: Node3D = game.cabin_wheel
+	var driver: Node3D = game.road_driver
+	var bus: Node3D = game.ambulance
+	if not wheel or bus.to_local(wheel.global_position).x >= 0.0:
+		printerr("Bus steering wheel is missing or is on the wrong side")
+		return false
+	for alma in [true,false]:
+		game.play_as_alma = alma
+		game._apply_player_appearance()
+		game._refresh_ui()
+		if not driver.is_visible_in_tree() or absf(bus.to_local(driver.global_position).x-bus.to_local(wheel.global_position).x) > .03:
+			printerr("Bus driver is not seated behind the wheel")
+			return false
+		for turn in [-.8,.8,0.0]:
+			game.mouse_steering = turn
+			game._drive(.3)
+			var arms: Array = driver.get_meta("arms")
+			for index in arms.size():
+				var hand: Node3D = arms[index].get_node("Hand")
+				var grip: Vector3 = wheel.to_global(Vector3.RIGHT*game.grip_radius*(-1 if index == 0 else 1))
+				if hand.to_global(game.PALM_GRIP).distance_to(grip) > .01:
+					printerr("Bus driver lost their grip while steering")
+					return false
+	game._toggle_camera_view()
+	if not game.cockpit_view or driver.visible:
+		printerr("Bus driver obstructed the cockpit camera")
+		return false
+	game._toggle_camera_view()
+	return driver.visible

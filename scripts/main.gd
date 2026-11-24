@@ -7096,9 +7096,10 @@ func _load_vehicle_model() -> void:
 			arm.reparent(pivot)
 			blades[i].reparent(pivot)
 			wiper_pivots.append(pivot)
-	if vehicle_index in [2, 3, PORSCHE, MOWER]:
+	if vehicle_index in [2, 3, PORSCHE, MOWER, BUS]:
 		var rim_name := "Steering wheel" if vehicle_index == MOWER else "Steering wheel rim*"
 		if vehicle_index == 2: rim_name = "Crew cab steering rim*"
+		if vehicle_index == BUS: rim_name = "Bus steering wheel"
 		var rim := vehicle_model.find_child(rim_name,true,false) as MeshInstance3D
 		if rim:
 			cabin_wheel = Node3D.new()
@@ -7126,6 +7127,9 @@ func _load_vehicle_model() -> void:
 			var spoke_name := "Wheel spoke*" if vehicle_index == MOWER else "*steering spoke*"
 			for part in vehicle_model.find_children(spoke_name, "MeshInstance3D",true,false) + vehicle_model.find_children("Steering wheel*", "MeshInstance3D",true,false):
 				part.reparent(cabin_wheel)
+			if vehicle_index == BUS:
+				for part in vehicle_model.find_children("Bus steering wheel*","MeshInstance3D",true,false):
+					part.reparent(cabin_wheel)
 			if vehicle_index == 2:
 				rim.reparent(cabin_wheel)
 				vehicle_model.find_child("Crew steering crossbar*",true,false).reparent(cabin_wheel)
@@ -10204,6 +10208,8 @@ func _refresh_ui() -> void:
 		road_driver.position = Vector3(0,.82-.77*road_driver.scale.y,.18) if vehicle_index==SNOWMOBILE else Vector3(-.32,.88-.87*road_driver.scale.y,-.04)
 		if vehicle_index == 2:
 			road_driver.position = Vector3(-.57,1.69-.87*road_driver.scale.y,-2.53)
+		if vehicle_index == BUS:
+			road_driver.position = Vector3(-.59,1.535-.87*road_driver.scale.y,-4.13)
 		if vehicle_index == FOOD_TRUCK:
 			road_driver.position = Vector3(-.46,1.505-.87*road_driver.scale.y,-1.39)
 		if vehicle_index == MOWER:
@@ -10226,9 +10232,9 @@ func _refresh_ui() -> void:
 		road_driver.get_node("AxelShopperLegs").visible = vehicle_index == SHOPPER and not play_as_alma
 		road_driver.get_node("AlmaCabLegs").visible = vehicle_index == FOOD_TRUCK and play_as_alma
 		road_driver.get_node("AxelCabLegs").visible = vehicle_index == FOOD_TRUCK and not play_as_alma
-		road_driver.get_node("CarLegs").visible = vehicle_index in [2,3,PORSCHE,XC60_POLICE,MINI_CABRIO]
-		road_driver.visible = vehicle_index in [2,3,PORSCHE,SNOWMOBILE,XC60_POLICE,MINI_CABRIO,PUCH_DAKOTA,FOOD_TRUCK,MOWER,SHOPPER] and mode == "playing" and not walker.visible and not boating and tram_mode == 0 and not cockpit_view
-		if vehicle_index in [2,SHOPPER] and cabin_wheel:
+		road_driver.get_node("CarLegs").visible = vehicle_index in [2,3,PORSCHE,XC60_POLICE,MINI_CABRIO,BUS]
+		road_driver.visible = vehicle_index in [2,3,PORSCHE,SNOWMOBILE,XC60_POLICE,MINI_CABRIO,PUCH_DAKOTA,FOOD_TRUCK,MOWER,SHOPPER,BUS] and mode == "playing" and not walker.visible and not boating and tram_mode == 0 and not cockpit_view
+		if vehicle_index in [2,SHOPPER,BUS] and cabin_wheel:
 			_pose_driver_arms()
 	if skipper: skipper.visible = boating and mode == "playing"
 	if not is_instance_valid(mission_label): return
