@@ -184,16 +184,22 @@ func _add_phone_detail(body: VBoxContainer, dimensions: Vector2) -> void:
 	body.add_child(detail)
 
 func _repeat_instruction() -> void:
+	var locale := TranslationServer.get_locale()
+	var jobs := _active_jobs()
+	var recordings: Array[AudioStream] = []
+	for job in jobs:
+		var path := "res://audio/dispatch/%s_%s.ogg" % [locale.get_slice("_", 0), job.md5_text()]
+		if ResourceLoader.exists(path):
+			recordings.append(load(path))
+	job_voice.stop()
+	if recordings.is_empty(): return
 	var playlist := AudioStreamPlaylist.new()
 	playlist.loop = false
-	spoken_locale = TranslationServer.get_locale()
-	var jobs := _active_jobs()
-	spoken_jobs = jobs.duplicate()
-	playlist.stream_count = jobs.size()
-	for i in jobs.size():
-		var path := "res://audio/dispatch/%s_%s.ogg" % [spoken_locale.get_slice("_", 0), jobs[i].md5_text()]
-		if not ResourceLoader.exists(path): return
-		playlist.set_list_stream(i, load(path))
+	playlist.stream_count = recordings.size()
+	for i in recordings.size():
+		playlist.set_list_stream(i, recordings[i])
+	spoken_locale = locale
+	spoken_jobs = jobs
 	job_voice.stream = playlist
 	job_voice.play()
 
