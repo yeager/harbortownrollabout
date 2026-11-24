@@ -7041,7 +7041,11 @@ func _fit_bus_mirrors(model: Node3D) -> void:
 	mirror_glass.metallic = .78
 	for side in [-1.0,1.0]:
 		var mirror_center := Vector3(side * 1.39, 1.91, 5.07)
-		_make_box("Bus mirror stay",Vector3(.24,.06,.09),mirror_center + Vector3(-side * .10,-.22,0),Color("#202629"),false,model)
+		var housing_finish := Color("#202629")
+		for height in [-.19,.15]:
+			var mount := mirror_center + Vector3(-side * .19,height,0)
+			_make_box("Bus mirror mounting foot",Vector3(.06,.11,.13),mount - Vector3(side * .071,0,0),housing_finish,false,model)
+			_make_box("Bus mirror support arm",Vector3(.24,.045,.07),mount,housing_finish,false,model)
 		_make_box("Bus mirror housing " + ("left" if side > 0 else "right"),Vector3(.19,.46,.15),mirror_center,Color("#202629"),false,model)
 		for pane in [Vector2(.064,.286),Vector2(-.148,.104)]:
 			var glass := _make_box("Bus mirror glass",Vector3(.145,pane.y,.012),mirror_center + Vector3(0,pane.x,-.077),Color.WHITE,false,model)
