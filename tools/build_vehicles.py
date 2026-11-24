@@ -1159,20 +1159,36 @@ def make_fire_engine():
     fascia("Cab brow over windshield",1.05,2.465,.08,-2.84,.012,BLACK)
     fascia("Reflective eyebrow",1.035,2.512,.030,-2.828,.012,PAINT_YELLOW)
     fascia("Upper cab pressing",1.09,1.64,.25,-3.065,.085,PAINT_RED)
+    radiator_finish = material("Shadowed radiator core",(.012,.014,.016),.03,.87)
     for z,width,depth in ((1.37,.80,-3.086),(1.124,.73,-3.115)):
         # A rolled trapezoidal mouth surrounds a perforated, recessed insert.
-        rings=[]
-        for dz,span,setback in ((-.108,.81,.025),(-.098,.88,.010),
-                                (-.069,.93,0),(.065,.995,0),(.096,1,.013)):
-            rings.append([(x*width*span,depth+setback+dy+.052*x*x,z+dz+.015*x*x)
-                          for x,dy in ((-1,.09),(-1,.014),(-.92,0),(0,-.006),
-                                       (.92,0),(1,.014),(1,.09),(0,.10))])
-        profile_loft("Tapered cooling intake",rings,RUBBER,root)
-        fascia("Reflective lower intake rim",width*.85,z-.099,.044,depth-.019,.024,PAINT_YELLOW)
+        outline = [(-.89,-.088),(-.82,-.108),(.82,-.108),(.89,-.088),
+                   (.995,.060),(1,.085),(.965,.100),(-.965,.100),
+                   (-1,.085),(-.995,.060)]
+        rings = []
+        for scale_x,scale_z,setback in ((1,1,.010),(.985,.95,-.008),
+                                        (.960,.80,-.010),(.925,.72,.033)):
+            rings.append([(x*width*scale_x,depth+setback+.052*x*x,
+                           z+dz*scale_z+.015*x*x) for x,dz in outline])
+        profile_loft("Rolled intake surround",rings,RUBBER,root,close_ends=False)
+        back = [[(x*width*.94,depth+dy+.052*x*x,z+dz*.76+.015*x*x)
+                 for x,dz in outline] for dy in (.045,.055)]
+        radiator = profile_loft("Radiator shadow behind screen",back,radiator_finish,root)
+        for face in radiator.data.polygons:
+            face.use_smooth = False
+        stripe = []
+        for station in range(25):
+            x = width*.81*(station/12-1)
+            curve = (x/width)**2
+            y = depth-.014+.052*curve
+            h = z-.098+.015*curve
+            stripe.append([(x,y+dy,h+dz) for dy,dz in
+                           ((0,-.008),(0,.008),(.003,.008),(.003,-.008))])
+        profile_loft("Reflective lower intake rim",stripe,PAINT_YELLOW,root)
         vertices,faces=[],[]
         pitch=.032
         for row in range(4):
-            h=z-.052+row*.032
+            h=z-.045+row*.029
             for col in range(-26,27):
                 center=(col+.5*(row%2))*pitch
                 if abs(center)+pitch/2 > width*(.85+.026*row): continue
@@ -1181,7 +1197,7 @@ def make_fire_engine():
                     for j in range(6):
                         angle=math.tau*j/6+math.pi/2
                         x=center+radius*math.cos(angle)
-                        vertices.append((x,depth-.012+.052*(x/width)**2,
+                        vertices.append((x,depth+.027+.052*(x/width)**2,
                                          h+radius*math.sin(angle)+.015*(x/width)**2))
                 for j in range(6):
                     k=(j+1)%6
