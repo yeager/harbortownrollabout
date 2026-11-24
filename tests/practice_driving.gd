@@ -61,14 +61,36 @@ func verify() -> void:
 		if not game.CITY_INTERIOR.has_point(Vector2(actor.position.x,actor.position.z)) or game.leave_practice_button.visible:
 			quit(1)
 			return
+	game.find_child("BackspaceRecovery", true, false).button_pressed = true
 	game.queue_free()
 	await process_frame
 	game = load("res://main.tscn").instantiate()
 	root.add_child(game)
 	game._on_vehicle_selected(game.TAXI)
 	game._start_practice()
-	game.phone.open_button.pressed.emit()
 	TranslationServer.set_locale("sv")
+	game._refresh_ui()
+	if not game.driving_hints.text.contains("Fastnat? Tryck Backspace") or game.phone.recovery_hint.text != "Fastnat? Tryck Backspace":
+		printerr("Recovery hints did not follow the saved binding")
+		quit(1)
+		return
+	game.ambulance.position.z += 3
+	var displaced: Vector3 = game.ambulance.position
+	var key := InputEventKey.new()
+	key.pressed = true
+	key.keycode = KEY_R
+	game._unhandled_key_input(key)
+	if game.ambulance.position != displaced:
+		printerr("Old recovery binding was still active")
+		quit(1)
+		return
+	key.keycode = KEY_BACKSPACE
+	game._unhandled_key_input(key)
+	if game.ambulance.position != game.PRACTICE_START:
+		printerr("Saved Backspace binding did not recover the vehicle")
+		quit(1)
+		return
+	game.phone.open_button.pressed.emit()
 	if game.phone.take_job.tr(game.phone.take_job.text) != "Åk till staden för ett uppdrag":
 		printerr("Job button should explain that accepting leaves practice")
 		quit(1)
