@@ -163,8 +163,21 @@ func check_transition() -> void:
 		printerr("Unexpected star brightness from noon through dawn: ", evening_levels)
 		quit(1)
 		return
+	game.walker.position = game.santa.position
+	game.bubble_time = 0
+	game.santa_encounters.clear()
+	game._update_pedestrians(0)
+	if not game.santa.visible or game.greeting.get_parent() != game.santa or game.speech_key != "Ho ho ho" or game.greeting_voice.stream == null:
+		printerr("Santa should greet a nearby walker in snowy winter")
+		quit(1)
+		return
 	seasons.get_child(2).pressed.emit()
 	game._update_daylight(0)
+	game._update_pedestrians(0)
+	if game.santa.visible or not game.santa_encounters.is_empty() or (game.greeting.get_parent() == game.santa and (game.greeting.visible or game.greeting_voice.playing)):
+		printerr("Santa or his greeting remained after switching to summer")
+		quit(1)
+		return
 	if spruce.visible or game.roadside_solids.has(spruce.obstacle):
 		printerr("Seasonal tree remained on summer square")
 		quit(1)
