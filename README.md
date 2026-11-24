@@ -6,16 +6,16 @@ Choose Axel or Alma and explore a waterfront neighbourhood inspired by Hammarby 
 
 ## Download and play
 
-Choose your computer below. For a ZIP or tar.gz download, extract the archive before opening the game.
+Choose the download for your computer.
 
 | Platform | Download | Launch |
 | --- | --- | --- |
-| Windows 64-bit | [Windows installer](https://github.com/yeager/harbortownrollabout/releases/download/v0.1.3-binaries.20261123/harbortown-0.1.3-windows-x64.exe) | Run the installer, choose your language, then open **harbortown** from the Start menu. |
+| Windows (x64) | [Windows installer](https://github.com/yeager/harbortownrollabout/releases/download/v0.1.3-binaries.20261123/harbortown-0.1.3-windows-x64.exe) | Run the installer, choose your language, then open **harbortown** from the Start menu. |
 | Mac with Apple Silicon (M-series) | [Apple Silicon DMG](https://github.com/yeager/harbortownrollabout/releases/download/v0.1.3-binaries.20261123/harbortown-macos-arm64.dmg) | Open the disk image and drag **harbortown** into **Applications**. |
 | Mac with an Intel processor | [Intel Mac DMG](https://github.com/yeager/harbortownrollabout/releases/download/v0.1.3-binaries.20261123/harbortown-macos-x86_64.dmg) | Open the disk image and drag **harbortown** into **Applications**. |
-| Ubuntu or Debian (64-bit) | [DEB package](https://github.com/yeager/harbortownrollabout/releases/download/v0.1.3-binaries.20261123/harbortown_0.1.3_amd64.deb) | Install the package, then open **harbortown** from your apps. |
-| Fedora (64-bit) | [RPM package](https://github.com/yeager/harbortownrollabout/releases/download/v0.1.3-binaries.20261123/harbortown-0.1.3-1.x86_64.rpm) | Install the package, then open **harbortown** from your apps. |
-| Linux x86-64 | [Linux tar.gz](https://github.com/yeager/harbortownrollabout/releases/download/v0.1.3-binaries.20261123/harbortown-linux-x86_64.tar.gz) | Run `./harbortown` from the extracted folder. |
+| Ubuntu or Debian (Intel or AMD, 64-bit) | [DEB package](https://github.com/yeager/harbortownrollabout/releases/download/v0.1.3-binaries.20261123/harbortown_0.1.3_amd64.deb) | Install the package, then open **harbortown** from your apps. |
+| Fedora (Intel or AMD, 64-bit) | [RPM package](https://github.com/yeager/harbortownrollabout/releases/download/v0.1.3-binaries.20261123/harbortown-0.1.3-1.x86_64.rpm) | Install the package, then open **harbortown** from your apps. |
+| Linux x86-64 | [Linux tar.gz](https://github.com/yeager/harbortownrollabout/releases/download/v0.1.3-binaries.20261123/harbortown-linux-x86_64.tar.gz) | Extract the archive, then run `./harbortown` from that folder. |
 
 On a Mac, open **Apple menu → About This Mac** if you’re unsure which download to choose. If you see an M-series chip, choose Apple Silicon. The Windows and Mac downloads are preview builds awaiting tests on those systems.
 
