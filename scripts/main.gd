@@ -8079,23 +8079,24 @@ func _build_ui() -> void:
 	pause_button = _button("Pause", 95)
 	pause_button.pressed.connect(_toggle_pause)
 	row.add_child(pause_button)
+	var footer := VBoxContainer.new()
+	ui.add_child(footer)
+	footer.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_WIDE)
+	footer.offset_left = 12
+	footer.offset_right = -12
+	footer.grow_vertical = Control.GROW_DIRECTION_BEGIN
+	footer.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	footer.add_child(arrival_progress)
 	status_label = Label.new()
-	status_label.set_anchors_and_offsets_preset(Control.PRESET_CENTER_BOTTOM)
-	status_label.position = Vector2(-450, -100)
-	status_label.size = Vector2(900, 48)
+	footer.add_child(status_label)
 	status_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	status_label.add_theme_font_size_override("font_size", 21)
 	status_label.add_theme_color_override("font_color", Color.WHITE)
 	status_label.add_theme_color_override("font_shadow_color", Color(0,0,0,0.8))
 	status_label.add_theme_constant_override("shadow_offset_x", 2)
 	status_label.add_theme_constant_override("shadow_offset_y", 2)
-	ui.add_child(status_label)
-	ui.add_child(arrival_progress)
-	arrival_progress.set_anchors_and_offsets_preset(Control.PRESET_CENTER_BOTTOM)
-	arrival_progress.offset_left = -72
-	arrival_progress.offset_right = 72
-	arrival_progress.offset_top = -108
-	arrival_progress.offset_bottom = -100
+	arrival_progress.custom_minimum_size = Vector2(144, 8)
+	arrival_progress.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	arrival_progress.show_percentage = false
 	arrival_progress.max_value = HELP_DURATION
 	arrival_progress.step = 0.0
@@ -8123,16 +8124,12 @@ func _build_ui() -> void:
 	var help := driving_hints
 	help.name = "DrivingHints"
 	help.text = "{up} / ↑  Drive     {left} {right} / ← →  Steer     {down} / ↓  Brake or reverse\nRelease to slow down   ·   {help} to help   ·   {pause} to pause"
-	help.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_WIDE)
-	help.offset_top = -50
-	help.offset_left = 12
-	help.offset_right = -12
 	help.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	help.grow_vertical = Control.GROW_DIRECTION_BEGIN
 	help.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	help.add_theme_color_override("font_color", Color("#f5f1df"))
 	help.add_theme_color_override("font_shadow_color", Color(0,0,0,0.8))
-	ui.add_child(help)
+	footer.add_child(help)
 	ui.add_child(driving_controls)
 	driving_controls.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	shops.build_menu(ui)
