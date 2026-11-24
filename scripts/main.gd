@@ -8208,6 +8208,11 @@ func _build_ui() -> void:
 func _build_town_map() -> void:
 	var dialog := AcceptDialog.new()
 	dialog.name = "TownMap"
+	dialog.window_input.connect(func(event: InputEvent):
+		if event is InputEventKey and event.keycode == KEY_F5 and event.pressed and not event.echo:
+			dialog.set_input_as_handled()
+			dialog.hide()
+	)
 	dialog.window_input.connect(_dialog_quit_key.bind(dialog))
 	dialog.exclusive = true
 	dialog.transient = true

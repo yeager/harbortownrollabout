@@ -74,7 +74,7 @@ At a traffic light, stop on red, slow down on orange and go on green. By default
 
 Under **Settings → Driving**, you can choose Backspace for recovery, 0 for jumping, 9 and 3 for camera height, or F2 for the phone.
 
-In **Free exploration**, press **F5** or click **Town map**, then choose a place by name or number. For the hot dog stand, choose **6**, park nearby and follow the arrows on foot to the counter.
+In **Free exploration**, press **F5** or click **Town map**, then choose a place by name or number. Press **F5** again to close the map and keep your current destination. For the hot dog stand, choose **6**, park nearby and follow the arrows on foot to the counter.
 
 The radio switches on when you enter a vehicle. It plays songs in your chosen language. If there are none yet, it plays English songs.
 

@@ -51,7 +51,18 @@ func check_rounds() -> void:
 		printerr("Expected the saved destination on the map and in the legend")
 		quit(1)
 		return
-	dialog.hide()
+	map_key.echo = true
+	dialog.window_input.emit(map_key)
+	if not dialog.visible:
+		printerr("Holding F5 closed the map")
+		quit(1)
+		return
+	map_key.echo = false
+	dialog.window_input.emit(map_key)
+	if dialog.visible or game.paused or game.map_goal != game.BOULE_BENCH_APPROACH:
+		printerr("Closing the map with F5 should resume the selected route")
+		quit(1)
+		return
 	game.ambulance.position = game.map_goal + Vector3.LEFT * 4
 	game._update_route_arrows()
 	if game.map_goal == Vector3.INF:
