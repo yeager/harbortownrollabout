@@ -36,7 +36,7 @@ func verify() -> void:
 		quit(1)
 		return
 	game._change_seat()
-	if not game.walker.visible or game._play_bounds(game.walker.position) != game.PRACTICE_YARD:
+	if not game.walker.visible or game._play_bounds() != game.PRACTICE_YARD:
 		printerr("Could not get out inside practice yard")
 		quit(1)
 		return
@@ -47,7 +47,12 @@ func verify() -> void:
 		quit(1)
 		return
 	for on_foot in [false,true]:
-		game.ambulance.position=game.PRACTICE_START
+		if on_foot:
+			game.free()
+			game = load("res://main.tscn").instantiate()
+			root.add_child(game)
+			game._on_vehicle_selected(game.MOWER)
+			game._start_practice()
 		if on_foot: game._change_seat()
 		game._refresh_ui()
 		if not game.leave_practice_button.is_visible_in_tree(): quit(1); return

@@ -58,6 +58,14 @@ func check_perimeter() -> void:
 	for practice in [false, true]:
 		game.practice_active = practice
 		game.ambulance.position = Vector3.ZERO if practice else game.PRACTICE_START
+		game._recover_position()
+		var safe_bounds: Rect2 = game.PRACTICE_YARD if practice else game.CITY_INTERIOR
+		var recovered: Vector3 = game.ambulance.position
+		if not safe_bounds.has_point(Vector2(recovered.x, recovered.z)):
+			printerr("Recovery sent the mower to the wrong area: ", recovered)
+			quit(1)
+			return
+		game.ambulance.position = Vector3.ZERO if practice else game.PRACTICE_START
 		game._save_checkpoint()
 		game.free()
 		game = load("res://main.tscn").instantiate()

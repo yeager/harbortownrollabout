@@ -1455,7 +1455,7 @@ func _drive(delta: float) -> void:
 			speed = 0.0
 	var destination := ambulance.position + step
 	var pos := destination
-	var bounds := _play_bounds(ambulance.position)
+	var bounds := _play_bounds()
 	pos.x = clampf(pos.x, bounds.position.x + extent.x, bounds.end.x - extent.x)
 	pos.z = clampf(pos.z, bounds.position.y + extent.y, bounds.end.y - extent.y)
 	if pos.x != destination.x or pos.z != destination.z:
@@ -4479,7 +4479,7 @@ func _feet_supported(p: Vector3) -> bool:
 func _on_foot_clear(p: Vector3) -> bool:
 	if is_instance_valid(workshop_car) and workshop_car.visible and WORKSHOP_CAR_BOUNDS.grow(.2).has_point(p): return false
 	if is_instance_valid(casualty) and casualty.visible and casualty.get_parent()==self and AABB(casualty.position-Vector3(2.35,1,1.1),Vector3(4.7,3,2.2)).has_point(p): return false
-	if not _play_bounds(walker.position if walker.visible else ambulance.position).grow(-.25).has_point(Vector2(p.x,p.z)):
+	if not _play_bounds().grow(-.25).has_point(Vector2(p.x,p.z)):
 		return false
 	for body in tram.car_bounds():
 		if body.grow(.22).has_point(p+Vector3.UP): return false
@@ -9086,8 +9086,7 @@ func _recover_position() -> void:
 	walk_jump_left = 0
 	bridge_jump_left = 0
 	var success := true
-	var actor := walker if walker.visible else ambulance
-	if _play_bounds(actor.position) == PRACTICE_YARD:
+	if practice_active:
 		if walker.visible:
 			success = false
 			var door := parked_cars[vehicle_index].to_global(parked_door_offset)
@@ -9157,8 +9156,8 @@ func _recover_position() -> void:
 	message_timer = 4
 	_refresh_status()
 
-func _play_bounds(point: Vector3) -> Rect2:
-	return PRACTICE_YARD if practice_active or PRACTICE_YARD.has_point(Vector2(point.x, point.z)) else CITY_INTERIOR
+func _play_bounds() -> Rect2:
+	return PRACTICE_YARD if practice_active else CITY_INTERIOR
 
 func _build_practice_yard() -> void:
 	var center := PRACTICE_YARD.get_center()
@@ -9900,7 +9899,7 @@ func _refresh_dispatch() -> void:
 		if shoe_quest == FootQuest.RETURNING: phone.foot_jobs.append("Bring the red shoe back to the neighbour.")
 		if cat_quest == FootQuest.SEARCHING: phone.foot_jobs.append("Find the cat with white paws.")
 		if cat_quest == FootQuest.RETURNING: phone.foot_jobs.append("Walk back to the neighbour with the cat.")
-	leave_practice_button.visible = _play_bounds(walker.position if walker.visible else ambulance.position) == PRACTICE_YARD
+	leave_practice_button.visible = practice_active
 	map_button.visible = free_drive and not boating and not operating_excavator and tram_mode == 0 and not ferry_passenger and not leave_practice_button.visible
 	phone.take_job.text = "Return to town for a job" if leave_practice_button.visible else "Take a job"
 	phone.take_job.visible = free_drive and not walker.visible and not boating and not operating_excavator and tram_mode == 0 and not ferry_passenger and mission_index < TARGETS.size()
