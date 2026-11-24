@@ -82,6 +82,11 @@ func check_transition() -> void:
 		printerr("Winter steps should crunch and leave footprints")
 		quit(1)
 		return
+	var ploughed_position := game.walker.position
+	if game.ploughs.is_empty() or not game.ploughs.all(func(blade: Node3D): return blade.visible):
+		printerr("The tractor plough should be fitted in winter")
+		quit(1)
+		return
 	var marks_before_plough := game.sole_marks.visible_instance_count
 	var strip := Transform3D(Basis.IDENTITY, game.walker.position + Vector3.FORWARD)
 	game.ground_work.sweep(strip, strip.translated(Vector3.BACK*2), Vector3.LEFT, Vector3.RIGHT, false)
@@ -111,6 +116,10 @@ func check_transition() -> void:
 		printerr("Summer retained snow tracks")
 		quit(1)
 		return
+	if game.ploughs.any(func(blade: Node3D): return blade.visible):
+		printerr("Summer retained the tractor plough")
+		quit(1)
+		return
 	if game.weather.snow_particles.emitting or not game.weather.rain_particles.emitting:
 		printerr("Winter slush did not change to summer rain")
 		quit(1)
@@ -125,6 +134,10 @@ func check_transition() -> void:
 	conditions.get_child(3).pressed.emit()
 	game.weather.tick(160)
 	game._process(0)
+	if game.ground_work.cleared_at(ploughed_position) or not game.ploughs.all(func(blade: Node3D): return blade.visible):
+		printerr("A new winter retained the cleared strip or failed to restore the plough")
+		quit(1)
+		return
 	if game.sole_marks.visible_instance_count != 0:
 		printerr("Old footprints reappeared after fresh snowfall")
 		quit(1)
@@ -223,6 +236,27 @@ func check_transition() -> void:
 				printerr("Fountain spray is wrong in season ", season)
 				quit(1)
 				return
+	seasons.get_child(4).pressed.emit()
+	conditions.get_child(3).pressed.emit()
+	game.weather.tick(160)
+	game.mode = "menu"
+	game._on_vehicle_selected(game.FARM_TRACTOR)
+	game.start_button.pressed.emit()
+	game.traffic_data.clear()
+	game.ambulance.position = Vector3(-285, 0, 2.35)
+	game.ambulance.rotation.y = PI * .5
+	game._process(0)
+	var blade_midpoint := game.vehicle_model.to_global((game.blade_left + game.blade_right) * .5)
+	var ahead := blade_midpoint + Vector3.LEFT
+	var outside_blade := ahead + Vector3.BACK * 3.0
+	game.mouse_gas = true
+	for frame in 100:
+		game._drive(1.0 / 60.0)
+	game.mouse_gas = false
+	if not game.ground_work.cleared_at(ahead) or game.ground_work.cleared_at(outside_blade):
+		printerr("Driving the tractor did not clear only the strip swept by the blade")
+		quit(1)
+		return
 	game.footstep.stop()
 	game.free()
 	weather.free()

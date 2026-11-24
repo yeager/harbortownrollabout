@@ -15,6 +15,7 @@ In-game renders from Harbor Town Rollabout. Select a vehicle to open its full-si
 - [Electric kick scooter](electric-kick-scooter.jpg)
 - [Electric sedan](electric-sedan.jpg)
 - [Farm tractor](farm-tractor.jpg)
+  · [Snow plough in winter](farm-tractor-winter.jpg)
 - [Fire engine](fire-engine.jpg)
 - [Food truck serving](food-truck-serving.jpg)
 - [Food truck](food-truck.jpg)
