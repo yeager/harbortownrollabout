@@ -133,9 +133,10 @@ func _make_visor() -> ArrayMesh:
 	return surface.commit()
 
 func _street_crosswalk(center: Vector3, east_west: bool, curb_distance := 4.0) -> Array[Dictionary]:
+	var signals := _add_crossing(center,east_west)
 	street_crosswalks.append({"center":center, "axis":Vector3.RIGHT if east_west else Vector3.BACK,
-		"walk_phase":0 if east_west else 3, "curb_distance":curb_distance})
-	return _add_crossing(center,east_west)
+		"walk_phase":0 if east_west else 3, "curb_distance":curb_distance, "signals":signals})
+	return signals
 
 func _add_crossing(center: Vector3, east_west: bool, pavement_offset := 5.45) -> Array[Dictionary]:
 	var signals: Array[Dictionary] = []
@@ -201,16 +202,18 @@ func lens(parent: Node3D, pos: Vector3, color: Color) -> MeshInstance3D:
 func advance(delta: float) -> void:
 	elapsed=fmod(elapsed+delta,16)
 	var current := 0 if elapsed<6 else 1 if elapsed<7 else 2 if elapsed<8 else 3 if elapsed<14 else 4 if elapsed<15 else 5
-	if current==phase: return
-	phase=current
-	for head in heads:
-		if head.has("figures"):
-			head.figures[0].visible=phase!=head.walk_phase
-			head.figures[1].visible=phase==head.walk_phase
-		else:
+	if current != phase:
+		phase = current
+		for head in heads:
+			if head.has("figures"): continue
 			var green := 0 if head.east_west else 3
 			for j in 3:
 				head.lamps[j].visible = j==(2 if phase==green else 1 if phase==green+1 else 0)
+	for zebra in street_crosswalks:
+		var walk := _street_walk_green(zebra)
+		for head in zebra.signals:
+			head.figures[0].visible = not walk
+			head.figures[1].visible = walk
 
 func _build_tram_crossings() -> void:
 	var world := get_parent()
@@ -275,6 +278,14 @@ func _junction_occupied(crossing: Dictionary) -> bool:
 	var zone := Transform3D(basis,crossing.center)*AABB(Vector3(-8.45,-.6,-7.65),Vector3(16.9,4,15.3))
 	for body in world.tram.car_bounds():
 		if zone.intersects(body): return true
+	if _road_vehicle_in(zone): return true
+	if world.walker.visible and zone.has_point(world.walker.position): return true
+	for item in world.walker_data:
+		if item.actor.is_visible_in_tree() and zone.has_point(item.actor.position): return true
+	return false
+
+func _road_vehicle_in(zone: AABB) -> bool:
+	var world := get_parent()
 	for item in world.traffic_data:
 		var actor: Node3D = item.actor
 		var half_size := Vector3(item.width, 1.2, item.length)
@@ -283,16 +294,21 @@ func _junction_occupied(crossing: Dictionary) -> bool:
 	for i in world.parked_cars.size():
 		if world.parked_cars[i].visible and zone.intersects(world._parked_bounds(i)):
 			return true
-	if world.ambulance.visible:
+	if is_instance_valid(world.ambulance) and world.ambulance.visible:
 		var half_width: float = world.player_half_size.x
 		var local_body := AABB(Vector3(-half_width, -.2, -world.front_reach),
 			Vector3(2 * half_width, 3, world.front_reach + world.rear_reach))
 		var player_car: AABB = world.ambulance.transform * local_body
 		if zone.intersects(player_car): return true
-	if world.walker.visible and zone.has_point(world.walker.position): return true
-	for item in world.walker_data:
-		if item.actor.is_visible_in_tree() and zone.has_point(item.actor.position): return true
 	return false
+
+func _street_walk_green(zebra: Dictionary) -> bool:
+	if phase != zebra.walk_phase: return false
+	var across: Vector3 = zebra.axis
+	var half_span := across.abs() * float(zebra.curb_distance)
+	half_span += across.cross(Vector3.UP).abs() * 1.45 + Vector3.UP * 2.0
+	var center: Vector3 = zebra.center + Vector3.UP
+	return not _road_vehicle_in(AABB(center - half_span, half_span * 2.0))
 
 func _pedestrian_near_crosswalk(crossing: Dictionary) -> bool:
 	var world := get_parent()
@@ -350,7 +366,7 @@ func _enters_crosswalk(from: Vector3, to: Vector3, center: Vector3, axis: Vector
 
 func pedestrian_may_enter(from: Vector3, to: Vector3) -> bool:
 	for zebra in street_crosswalks:
-		if phase != zebra.walk_phase and _enters_crosswalk(from,to,zebra.center,zebra.axis,zebra.curb_distance):
+		if _enters_crosswalk(from,to,zebra.center,zebra.axis,zebra.curb_distance) and not _street_walk_green(zebra):
 			return false
 	for c in tram_crossings:
 		if _walk_green(c): continue

@@ -1932,8 +1932,8 @@ msgstr "Grønt lys. Kjør over linjen."
 msgid "Open the town map with F11"
 msgstr "Åpne bykartet med F11"
 
-msgid "Use 1 for warning lights and 2 for vehicle sound"
-msgstr "Bruk 1 for varsellys og 2 for kjøretøylyd"
+msgid "Use 1 for warning lights, 2 for vehicle sound and 7 for the spreader"
+msgstr "Bruk 1 for varsellys, 2 for kjøretøylyd og 7 for sprederen"
 
 msgid "Fountain"
 msgstr "Fontenen"
@@ -1949,3 +1949,33 @@ msgstr "Vis mer av byen i det fjerne"
 
 msgid "Streetlamp shadows"
 msgstr "Skygger fra gatelykter"
+
+msgid "DAM pickup"
+msgstr "DAM-pickup"
+
+msgid "Audi Sport quattro"
+msgstr "Audi Sport quattro"
+
+msgid "Spreader on"
+msgstr "Spreder på"
+
+msgid "Spreader off"
+msgstr "Spreder av"
+
+msgid "Fit winter tyres"
+msgstr "Monter vinterdekk"
+
+msgid "Fit summer tyres"
+msgstr "Monter sommerdekk"
+
+msgid "Tyre service"
+msgstr "Dekkservice"
+
+msgid "Fuel and tyre service"
+msgstr "Bensinstasjon og dekkservice"
+
+msgid "Summer tyres fitted."
+msgstr "Sommerdekkene er montert."
+
+msgid "Winter tyres fitted."
+msgstr "Vinterdekkene er montert."

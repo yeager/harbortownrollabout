@@ -31,6 +31,9 @@ func check_route() -> void:
 		printerr("The side display must show the bus line and destination")
 		quit(1)
 		return
+	if not check_glazing(game, game.vehicle_model):
+		quit(1)
+		return
 	var original_time: int = game.time_mode
 	var centre_brake: StandardMaterial3D = game.player_brake_lens.get_meta("centre_lamp", null)
 	if centre_brake == null or centre_brake.emission_enabled:
@@ -59,6 +62,10 @@ func check_route() -> void:
 	for night in [false,true,false]:
 		game.time_mode = 1 if night else 0
 		game._update_daylight(0.0)
+		if (float(game.bus_glazing.get_shader_parameter("night")) > .5) != night:
+			printerr("Bus window reflections did not follow daylight")
+			quit(1)
+			return
 		if not rear_markers.all(func(lens: MeshInstance3D): return (lens.material_override.emission_energy_multiplier > 0.0) == night):
 			printerr("Upper rear position lights did not follow the time of day")
 			quit(1)
@@ -225,6 +232,20 @@ func check_route() -> void:
 	print("Both bus displays followed the six stops and three completed journeys paid once each.")
 	quit()
 
+func check_glazing(game: Node, body: Node3D) -> bool:
+	var doors := body.find_children("Passenger door tinted glazing*", "MeshInstance3D", true, false)
+	var cabin := body.find_child("Cabin", true, false) as MeshInstance3D
+	var cabin_uses_glazing := false
+	if cabin:
+		for surface in cabin.mesh.get_surface_count():
+			if cabin.get_surface_override_material(surface) == game.bus_glazing:
+				cabin_uses_glazing = true
+				break
+	if not cabin_uses_glazing or doors.size() != 6 or not doors.all(func(pane: MeshInstance3D): return pane.material_override == game.bus_glazing):
+		printerr("Unexpected bus glazing on ", body.name, " (", doors.size(), " panes, cabin override ", cabin_uses_glazing, ")")
+		return false
+	return true
+
 func check_traffic_lights(game: Node) -> bool:
 	var bus: Node3D = game._spawn_traffic(game.VEHICLE_SCENES_ALL[game.BUS], -480, 56, 1, 5.0, .8)
 	var traffic_bus: Dictionary = game.traffic_data.back()
@@ -236,6 +257,8 @@ func check_traffic_lights(game: Node) -> bool:
 	game._place_traffic(traffic_bus)
 	var beams := bus.find_children("*", "SpotLight3D", false, false)
 	var lenses := bus.find_children("Bus headlight lens*", "MeshInstance3D", true, false)
+	if not check_glazing(game, bus) or not check_glazing(game, game.parked_cars[game.BUS]):
+		return false
 	for body: Node3D in [bus, game.parked_cars[game.BUS]]:
 		var markers := body.find_children("Bus rear upper marker lens*", "MeshInstance3D", true, false)
 		if markers.size() != 2 or not markers.all(func(lens: MeshInstance3D): return lens.material_override == game.bus_rear_marker_finish):

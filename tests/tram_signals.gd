@@ -29,6 +29,31 @@ func check() -> void:
 		if eastern_lamp.visible != night or (eastern_lamp.light_energy > 0) != night:
 			fail("Eastern zebra lighting did not follow the day cycle")
 			return
+	var street_zebras: Array[Vector3] = [lights.SHOP_CROSSING]
+	for center: Vector3 in lights.EAST_CROSSINGS:
+		street_zebras.append(center)
+	for center: Vector3 in street_zebras:
+		for heading: Vector3 in [Vector3.RIGHT, Vector3.LEFT]:
+			var stop_line := center - heading * 3.0 + heading.cross(Vector3.UP) * 1.85
+			var from := stop_line - heading * 5.0
+			for stage in 6:
+				lights.phase = stage
+				var expected_gap := INF if stage == 0 else 3.0
+				if lights._central_clearance(from, heading, 2.0) != expected_gap:
+					fail("Street zebra stop line at %s disagreed with vehicle phase %d" % [center, stage])
+					return
+				var expected_red_gap := INF if stage <= 1 else 3.0
+				if lights._central_clearance(from, heading, 2.0, true) != expected_red_gap:
+					fail("Street zebra at %s mistook amber for red in phase %d" % [center, stage])
+					return
+		for side in [-1.0, 1.0]:
+			var curb: Vector3 = center + Vector3.BACK * side * 4.1
+			for stage in 6:
+				lights.phase = stage
+				if lights.pedestrian_may_enter(curb, curb - Vector3.BACK * side * .2) != (stage == 3):
+					fail("Street zebra at %s disagreed with pedestrian phase %d" % [center, stage])
+					return
+	print("Four street zebras checked in both directions through all six street phases.")
 	var approach := Vector3(.8660254,0,.5)
 	var stop_point := Vector3(-lights.BOULEVARD_STOP_DISTANCE,0,1.85)
 	lights.phase = 3
@@ -59,6 +84,10 @@ func check() -> void:
 		fail("Amber was counted as a red-light violation")
 		return
 	lights.elapsed = 0
+	var saved_traffic: Array = game.traffic_data.duplicate()
+	game.traffic_data.clear()
+	var player_position: Vector3 = game.ambulance.position
+	game.ambulance.hide()
 	for zebra in lights.street_crosswalks:
 		for side in [-1,1]:
 			var axis: Vector3 = zebra.axis * side
@@ -82,6 +111,46 @@ func check() -> void:
 			if not lights.pedestrian_may_enter(curb,curb-axis*.2):
 				fail("Pedestrian green must allow entry")
 				return
+	var street_zebra: Dictionary = lights.street_crosswalks[0]
+	var across: Vector3 = street_zebra.axis
+	var waiting_point: Vector3 = street_zebra.center + across * (street_zebra.curb_distance + .1)
+	lights.elapsed = 9.0
+	game.ambulance.position = street_zebra.center
+	game.ambulance.show()
+	lights.advance(0)
+	if street_zebra.signals[0].figures[1].visible or lights.pedestrian_may_enter(waiting_point, waiting_point - across * .2):
+		fail("Occupied street zebra released pedestrians")
+		return
+	game.ambulance.hide()
+	lights.advance(0)
+	if not street_zebra.signals[0].figures[1].visible or not lights.pedestrian_may_enter(waiting_point, waiting_point - across * .2):
+		fail("Street zebra did not release pedestrians when the road cleared")
+		return
+	var neighbour: Node3D = game.crossing_pedestrian
+	var neighbour_position := neighbour.position
+	var neighbour_direction: float = game.crossing_direction
+	var neighbour_wait: float = game.crossing_wait
+	game.crossing_direction = 1.0
+	game.crossing_wait = 0.0
+	game.ambulance.position = Vector3(neighbour.position.x, 0, 0)
+	game.ambulance.show()
+	game._advance_crossing(.2)
+	if not is_equal_approx(neighbour.position.z, neighbour_position.z):
+		fail("Neighbour entered the zebra while a car was on it")
+		return
+	game.ambulance.hide()
+	game._advance_crossing(.2)
+	if neighbour.position.z <= neighbour_position.z + .1:
+		fail("Neighbour stayed on the curb after the zebra cleared")
+		return
+	neighbour.position = neighbour_position
+	game.crossing_direction = neighbour_direction
+	game.crossing_wait = neighbour_wait
+	print("The central crossing neighbour waited for a car and resumed once it left.")
+	game.ambulance.position = player_position
+	game.ambulance.show()
+	game.traffic_data.assign(saved_traffic)
+	lights.elapsed = 0
 	lights.advance(0)
 	# Sample two cycles so a red interval crossing the timer wrap is measured too.
 	var red_seconds := [0.0, 0.0]
@@ -395,6 +464,26 @@ func check() -> void:
 	if traffic_car.speed <= 0.0:
 		fail("Traffic should move off on green")
 		return
+	var crossing_jogger := game.find_child("Tram crossing jogger", true, false) as Node3D
+	var jogger_position := crossing_jogger.position
+	var jogger_visible := crossing_jogger.visible
+	crossing_jogger.position = Vector3(-12, 0, stop_point.z)
+	crossing_jogger.show()
+	for tick in 120:
+		game._update_traffic(.05)
+	var jogger_gap := crossing_jogger.position.x - float(traffic_car.actor.position.x) - float(traffic_car.length)
+	if traffic_car.speed > .02 or jogger_gap < 1.3 or jogger_gap > 1.7:
+		fail("Traffic failed to stop before a jogger still in the crossing: %f" % jogger_gap)
+		return
+	crossing_jogger.position.z += 6.0
+	for tick in 80:
+		game._update_traffic(.05)
+	if float(traffic_car.actor.position.x) <= crossing_jogger.position.x:
+		fail("Traffic failed to resume after the jogger crossed")
+		return
+	crossing_jogger.position = jogger_position
+	crossing_jogger.visible = jogger_visible
+	print("Traffic stopped for the jogger on green and resumed once the lane cleared.")
 	game.traffic_data.clear()
 	game.ambulance.position = east_stop + Vector3.RIGHT * 9
 	game.ambulance.basis = Basis.looking_at(Vector3.LEFT)

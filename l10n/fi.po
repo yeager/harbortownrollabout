@@ -1928,8 +1928,8 @@ msgstr "Vihreä valo. Aja viivan yli."
 msgid "Open the town map with F11"
 msgstr "Avaa kaupunkikartta F11-näppäimellä"
 
-msgid "Use 1 for warning lights and 2 for vehicle sound"
-msgstr "Käytä varoitusvaloihin 1 ja ajoneuvon ääneen 2"
+msgid "Use 1 for warning lights, 2 for vehicle sound and 7 for the spreader"
+msgstr "1 varoitusvalot, 2 ajoneuvon ääni, 7 levitin"
 
 msgid "Fountain"
 msgstr "Suihkulähde"
@@ -1945,3 +1945,33 @@ msgstr "Näytä kauempana olevia kaupunginosia"
 
 msgid "Streetlamp shadows"
 msgstr "Katuvalojen varjot"
+
+msgid "DAM pickup"
+msgstr "DAM-avolava"
+
+msgid "Audi Sport quattro"
+msgstr "Audi Sport quattro"
+
+msgid "Spreader on"
+msgstr "Levitin päällä"
+
+msgid "Spreader off"
+msgstr "Levitin pois"
+
+msgid "Fit winter tyres"
+msgstr "Asenna talvirenkaat"
+
+msgid "Fit summer tyres"
+msgstr "Asenna kesärenkaat"
+
+msgid "Tyre service"
+msgstr "Rengaspalvelu"
+
+msgid "Fuel and tyre service"
+msgstr "Huoltoasema ja rengaspalvelu"
+
+msgid "Summer tyres fitted."
+msgstr "Kesärenkaat asennettu."
+
+msgid "Winter tyres fitted."
+msgstr "Talvirenkaat asennettu."

@@ -30,9 +30,9 @@ const PRACTICE_START := Vector3(-119, 0, 109)
 const CITY_INTERIOR := Rect2(-520, -92, 690, 172)
 const VEHICLE_NAMES := ["Ambulance", "Police car", "Fire engine"]
 const VEHICLE_SCENES := ["res://vehicles/ambulance.glb", "res://vehicles/polisbil.glb", "res://vehicles/brandbil.glb"]
-const VEHICLE_NAMES_ALL := ["Ambulance", "Police car", "Fire engine", "SUV", "Taxi", "Recovery truck", "Classic sports coupe", "Classic sedan", "Vintage compact", "Electric sedan", "City bus", "Snowmobile", "Police SUV", "Track sports car", "Ice cream van", "Small convertible", "Classic moped", "Monster truck", "A-tractor", "Classic cruiser", "Wheel loader", "Farm tractor", "Food truck", "Ride-on mower", "Garbage truck", "Shopping trike"]
-const VEHICLE_SCENES_ALL := ["res://vehicles/ambulance.glb", "res://vehicles/polisbil.glb", "res://vehicles/brandbil.glb", "res://vehicles/bmw_x5_m60i.glb", "res://vehicles/taxi.glb", "res://vehicles/bargare.glb", "res://vehicles/m3_e30.glb", "res://vehicles/volvo240.glb", "res://vehicles/saab96.glb", "res://vehicles/model_s.glb", "res://vehicles/city_bus.glb", "res://vehicles/snowmobile.glb", "res://vehicles/volvo_xc60_polis.glb", "res://vehicles/porsche_gt3_rs.glb", "res://vehicles/ice_cream_van.tscn", "res://vehicles/mini_cooper_cabriolet.glb", "res://vehicles/puch_dakota.glb", "res://vehicles/monster_truck.glb", "res://vehicles/a_traktor.glb", "res://vehicles/raggarbil.glb", "res://vehicles/volvo_wheel_loader.glb", "res://vehicles/farm_tractor.glb", "res://vehicles/food_truck_road.glb", "res://vehicles/ride_on_mower.glb", "res://vehicles/refuse_truck.glb", "res://vehicles/shopping_trike.glb"]
-const SIREN_SOUNDS := ["res://audio/siren_ambulance.wav", "res://audio/siren_police.wav", "res://audio/siren_fire.wav", "res://audio/bmw_engine.wav", "res://audio/bmw_engine.wav", "res://audio/bmw_engine.wav", "res://audio/bmw_engine.wav", "res://audio/bmw_engine.wav", "res://audio/bmw_engine.wav", "res://audio/electric_drive.wav", "res://audio/bmw_engine.wav", "res://audio/sled_engine.wav", "res://audio/siren_police.wav", "res://audio/porsche_engine.wav", "res://audio/bmw_engine.wav", "res://audio/bmw_engine.wav", "res://audio/moped_engine.wav", "res://audio/monster_engine.wav", "res://audio/bmw_engine.wav", "res://audio/bmw_engine.wav", "res://audio/loader_diesel.wav", "res://audio/tractor_diesel.wav", "res://audio/bmw_engine.wav", "res://audio/mower_engine.wav", "res://audio/loader_diesel.wav", "res://audio/moped_engine.wav"]
+const VEHICLE_NAMES_ALL := ["Ambulance", "Police car", "Fire engine", "SUV", "Taxi", "Recovery truck", "Classic sports coupe", "Classic sedan", "Vintage compact", "Electric sedan", "City bus", "Snowmobile", "Police SUV", "Track sports car", "Ice cream van", "Small convertible", "Classic moped", "Monster truck", "A-tractor", "Classic cruiser", "Wheel loader", "Farm tractor", "Food truck", "Ride-on mower", "Garbage truck", "Shopping trike", "DAM pickup", "Audi Sport quattro"]
+const VEHICLE_SCENES_ALL := ["res://vehicles/ambulance.glb", "res://vehicles/polisbil.glb", "res://vehicles/brandbil.glb", "res://vehicles/bmw_x5_m60i.glb", "res://vehicles/taxi.glb", "res://vehicles/bargare.glb", "res://vehicles/m3_e30.glb", "res://vehicles/volvo240.glb", "res://vehicles/saab96.glb", "res://vehicles/model_s.glb", "res://vehicles/city_bus.glb", "res://vehicles/snowmobile.glb", "res://vehicles/volvo_xc60_polis.glb", "res://vehicles/porsche_gt3_rs.glb", "res://vehicles/ice_cream_van.tscn", "res://vehicles/mini_cooper_cabriolet.glb", "res://vehicles/puch_dakota.glb", "res://vehicles/monster_truck.glb", "res://vehicles/a_traktor.glb", "res://vehicles/raggarbil.glb", "res://vehicles/volvo_wheel_loader.glb", "res://vehicles/farm_tractor.glb", "res://vehicles/food_truck_road.glb", "res://vehicles/ride_on_mower.glb", "res://vehicles/refuse_truck.glb", "res://vehicles/shopping_trike.glb", "res://vehicles/dam_pickup.glb", "res://vehicles/sport_quattro.glb"]
+const SIREN_SOUNDS := ["res://audio/siren_ambulance.wav", "res://audio/siren_police.wav", "res://audio/siren_fire.wav", "res://audio/bmw_engine.wav", "res://audio/bmw_engine.wav", "res://audio/bmw_engine.wav", "res://audio/bmw_engine.wav", "res://audio/bmw_engine.wav", "res://audio/bmw_engine.wav", "res://audio/electric_drive.wav", "res://audio/bmw_engine.wav", "res://audio/sled_engine.wav", "res://audio/siren_police.wav", "res://audio/porsche_engine.wav", "res://audio/bmw_engine.wav", "res://audio/bmw_engine.wav", "res://audio/moped_engine.wav", "res://audio/monster_engine.wav", "res://audio/bmw_engine.wav", "res://audio/bmw_engine.wav", "res://audio/loader_diesel.wav", "res://audio/tractor_diesel.wav", "res://audio/bmw_engine.wav", "res://audio/mower_engine.wav", "res://audio/loader_diesel.wav", "res://audio/moped_engine.wav", "res://audio/bmw_engine.wav", "res://audio/quattro_engine.wav"]
 const BUILDING_SCENES := {"Sjukhuset":"res://environment/sjukhus.glb", "Polisstationen":"res://environment/polisstation.glb", "Bageriet":"res://environment/bageri.glb", "Vårdcentralen":"res://environment/vardcentral.glb", "Brandstationen":"res://environment/brandstation.glb", "Biblioteket":"res://environment/bibliotek.glb"}
 const TREE_SCENES := ["res://environment/lovtrad.glb", "res://environment/gran.glb", "res://environment/bredkronigt_lovtrad.glb"]
 
@@ -77,6 +77,10 @@ var road_finish: ShaderMaterial
 var apartment_lights: Array[StandardMaterial3D] = []
 var quay_stair_light: StandardMaterial3D
 var city_env: Environment
+var quattro_glazing: ShaderMaterial
+var bus_glazing: ShaderMaterial
+var quattro_gauge_marks: StandardMaterial3D
+var quattro_gauge_needle: StandardMaterial3D
 var chimney_beacon: StandardMaterial3D
 var chimney_beacon_phase := 0.0
 var city_sun: DirectionalLight3D
@@ -253,11 +257,18 @@ const FOOD_TRUCK := 22
 const MOWER := 23
 const REFUSE := 24
 const SHOPPER := 25
+const DAM_PICKUP := 26
+const QUATTRO := 27
 var ground_work := preload("res://environment/ground_work.gd").new(CITY_INTERIOR)
 var blade_left: Vector3
 var blade_right: Vector3
 var ploughs: Array[Node3D] = []
-const DRIVER_VIEW_VEHICLES := [2, 3, PUCH_DAKOTA, FOOD_TRUCK, FARM_TRACTOR, BUS, REFUSE]
+var spreader_particles: CPUParticles3D
+var spreader_audio: AudioStreamPlayer3D
+var spreader_button: Button
+var spreader_enabled := true
+const SPREADER_EDGE := Vector3(1.72,0,-3.18)
+const DRIVER_VIEW_VEHICLES := [2, 3, PUCH_DAKOTA, FOOD_TRUCK, FARM_TRACTOR, BUS, REFUSE, QUATTRO]
 const MopedRider := preload("res://vehicles/moped_rider.gd")
 var moped_pose := MopedRider.new()
 const ICE_STOPS := [0, SCHOOL, 2]
@@ -289,7 +300,7 @@ var bus_ceiling_diffuser: StandardMaterial3D
 const BUS_STOP_NAMES := ["THE SQUARE","HEALTH CENTRE","MARINA","HARBOR TOWN SCHOOL","VÄSTRA TORGET","SICKLA UDDE"]
 var bus_leg := 0
 const TAXI := 4
-const HORNS := ["ambulance","police","fire","bmw","taxi","recovery", "m3_e30", "volvo240", "saab96", "model_s", "city_bus","snowmobile", "police", "porsche", "icecream", "bmw", "saab96", "bmw", "volvo240", "bmw", "recovery", "recovery", "bmw", "saab96", "recovery", "saab96"]
+const HORNS := ["ambulance","police","fire","bmw","taxi","recovery", "m3_e30", "volvo240", "saab96", "model_s", "city_bus","snowmobile", "police", "porsche", "icecream", "bmw", "saab96", "bmw", "volvo240", "bmw", "recovery", "recovery", "bmw", "saab96", "recovery", "saab96", "bmw", "m3_e30"]
 var horn := AudioStreamPlayer.new()
 var next_song_button: Button
 var radio_button: Button
@@ -308,6 +319,8 @@ var horn_button: Button
 const RECOVERY := 5
 const STATION_DROP := Vector3(-121,0,12)
 const STATION_PARKING := Vector3(-120,0,20)
+var tyre_service_button: Button
+var winter_tyre_models := PackedStringArray()
 const SERVICE_STOPS := [Vector3(18,0,2.35), STATION_DROP, Vector3(126,0,-2.35), STATION_DROP]
 const SERVICE_MESSAGES := ["Collect the car with a smoking bonnet.","Take the car to the petrol station.","Collect the car with a missing wheel.","Take the car to the petrol station."]
 var recovery_leg := 0
@@ -347,7 +360,7 @@ var ice_flavours: Array[AtlasTexture] = []
 var grocery_bags: Array[Node3D] = []
 const PARCEL_MASS_KG := [32.0, 9.0]
 const PARCEL_SPACING := .50
-const PARCEL_VEHICLES := [3,6,7,8,9,PORSCHE,MINI_CABRIO]
+const PARCEL_VEHICLES := [3,6,7,8,9,PORSCHE,MINI_CABRIO,DAM_PICKUP]
 var carried_parcel_leg := -1
 var delivery_parcels: Array[Node3D] = []
 var clinic_fire_team: Array[Node3D] = []
@@ -362,8 +375,8 @@ var traffic_volume_slider := HSlider.new()
 const GALLERY_GROUPS := {
 	"All vehicles": [],
 	"Emergency vehicles": ["Ambulance", "Police car", "Police SUV", "Fire engine"],
-	"Work vehicles": ["Farm tractor", "Garbage truck", "Recovery truck", "Wheel loader", "Tracked excavator", "Ride-on mower", "Ice cream van", "Food truck"],
-	"Cars": ["SUV", "Classic sports coupe", "Classic sedan", "Vintage compact", "Electric sedan", "Track sports car", "Small convertible", "Classic cruiser", "A-tractor"],
+	"Work vehicles": ["Farm tractor", "Garbage truck", "Recovery truck", "Wheel loader", "Tracked excavator", "Ride-on mower", "Ice cream van", "Food truck", "DAM pickup"],
+	"Cars": ["SUV", "Classic sports coupe", "Classic sedan", "Vintage compact", "Electric sedan", "Track sports car", "Small convertible", "Classic cruiser", "A-tractor", "Audi Sport quattro"],
 	"Passenger transport": ["City bus", "Tram", "Taxi"],
 	"Leisure vehicles": ["Monster truck", "Classic moped", "Snowmobile", "Shopping trike", "Motorboat"]
 }
@@ -398,6 +411,7 @@ var cabin_wheel_rest_basis := Basis.IDENTITY
 var cabin_wheel_axis := Vector3.BACK
 var front_knuckles: Array[Node3D] = []
 var moped_speed_needle: Node3D
+var quattro_speed_needle: Node3D
 var player_wheels: Array[Node3D] = []
 var player_brake_lens: StandardMaterial3D
 var driving_controls := preload("res://scripts/driving_controls.gd").new()
@@ -429,12 +443,13 @@ var skid_anchors := PackedVector3Array()
 const SKID_CAPACITY := 2048
 var speed := 0.0
 var steering := 0.0
+var snow_slip_angle := 0.0
 var map_goal := Vector3.INF
 var map_button := Button.new()
 var leave_practice_button := Button.new()
 const FOUNTAIN_APPROACH := Vector3(41,0,39.5)
 const MAP_STOREFRONTS := ["Pizzeria","Sweet shop","Momo & Bori"]
-const MAP_NAMES := ["Town square","Clinic","Marina","School","Petrol station","Hot dog stand","Bakery","Boule court","Pizzeria","Sweet shop","Momo & Bori","Fountain","Motorboat"]
+const MAP_NAMES := ["Town square","Clinic","Marina","School","Fuel and tyre service","Hot dog stand","Bakery","Boule court","Pizzeria","Sweet shop","Momo & Bori","Fountain","Motorboat"]
 var free_drive := true
 var mission_index := 0
 const FireLocker := preload("res://scripts/fire_locker.gd")
@@ -787,8 +802,9 @@ func _process(delta: float) -> void:
 	_update_school_plough()
 	_update_meadow_sign()
 	if previous_season != weather.season:
-		for blade in ploughs:
-			blade.visible = weather.season == 4
+		for winter_attachment in ploughs:
+			winter_attachment.visible = weather.season == 4
+		_set_spreader_active(false)
 		_update_tractor_footprint()
 		previous_season = weather.season
 		for finish in foliage_finishes:
@@ -813,6 +829,8 @@ func _process(delta: float) -> void:
 		snow_cursor = 0
 	water_finish.set_shader_parameter("rain",weather.intensity.x)
 	city_env.sky.sky_material.set_shader_parameter("overcast",weather.cloud_cover)
+	quattro_glazing.set_shader_parameter("overcast",weather.cloud_cover)
+	if bus_glazing: bus_glazing.set_shader_parameter("overcast",weather.cloud_cover)
 	_update_daylight(delta)
 	if radio.playing:
 		var target_gain := _radio_target_gain()
@@ -833,6 +851,8 @@ func _process(delta: float) -> void:
 		if tram_mode != 0: _update_entry_button()
 		if tram_mode == 2:
 			driving_controls.set_controls(0,tram_gas and not tram_brake,tram_brake)
+		if walker.visible or operating_excavator or boating or tram_mode > 0 or ferry_passenger:
+			_set_spreader_active(false)
 		if operating_excavator:
 			_drive_excavator(delta)
 		elif boating:
@@ -863,8 +883,10 @@ func _process(delta: float) -> void:
 		_update_moorings(delta)
 		if not boating and not operating_excavator and vehicle_index >= 3 and vehicle_index != XC60_POLICE and siren_player.playing:
 			var pitch_speed := 12.0 if vehicle_index in [FARM_TRACTOR, WHEEL_LOADER] else 8.33 if vehicle_index == PUCH_DAKOTA else 32.0 if vehicle_index == SNOWMOBILE else 250.0 / 3.6
+			if vehicle_index == QUATTRO: pitch_speed = 29.0
 			siren_player.pitch_scale = 0.88 + clampf(absf(speed) / pitch_speed, 0.0, 1.0) * 0.72
 	else:
+		_set_spreader_active(false)
 		ferry_engine.stop()
 		_end_skid()
 	_update_traffic_signals(delta)
@@ -1082,6 +1104,10 @@ func _unhandled_key_input(event: InputEvent) -> void:
 		if event.keycode == map_key:
 			if mode == "playing" and not paused and map_button.is_visible_in_tree() and not phone.handset.is_visible_in_tree():
 				map_button.pressed.emit()
+			return
+		if number_vehicle_switches and event.keycode in [KEY_7, KEY_KP_7]:
+			if mode == "playing" and not paused and not phone.handset.is_visible_in_tree() and spreader_button.is_visible_in_tree():
+				spreader_button.button_pressed = not spreader_button.button_pressed
 			return
 		if number_vehicle_switches and event.keycode in [KEY_1,KEY_2,KEY_KP_1,KEY_KP_2] and mode == "playing" and not paused and not phone.handset.is_visible_in_tree():
 			var control := light_button if event.keycode in [KEY_1,KEY_KP_1] else siren_button
@@ -1305,6 +1331,24 @@ func _vehicle_payload() -> float:
 		return mission_index * 400.0
 	return 0.0
 
+func _road_coverage() -> Vector2:
+	if (not ground_work.has_ploughed and not ground_work.has_gritted) or weather.snow <= .01:
+		return Vector2(weather.snow,0)
+	var contacts := PackedVector3Array()
+	for offset in rear_tire_contacts:
+		contacts.append(ambulance.to_global(offset))
+	for knuckle in front_knuckles:
+		contacts.append(knuckle.global_position)
+	if contacts.is_empty():
+		contacts.append(ambulance.position)
+	var coverage := Vector2.ZERO
+	for point in contacts:
+		if not ground_work.cleared_at(point):
+			coverage.x += weather.snow
+		if ground_work.gritted_at(point):
+			coverage.y += 1.0
+	return coverage / contacts.size()
+
 func _drive(delta: float) -> void:
 	if shopper_boarding: return
 	var throttle := Input.get_axis("ui_down", "ui_up")
@@ -1321,11 +1365,21 @@ func _drive(delta: float) -> void:
 		throttle = 0.0
 	if _movement_pressed(KEY_A): steer_input = -1.0
 	if _movement_pressed(KEY_D): steer_input = 1.0
+	var road_cover := _road_coverage()
+	var road_snow := road_cover.x * (1.0-.55*road_cover.y)
+	var winter_tyres: bool = VEHICLE_SCENES_ALL[vehicle_index] in winter_tyre_models
 	var max_speed := 250.0 / 3.6 if vehicle_index in [3, XC60_POLICE] else 11.0
 	var acceleration := lerpf(8.0, 2.3, clampf(speed / max_speed, 0.0, 1.0)) if vehicle_index in [3, XC60_POLICE] else 7.2
 	if vehicle_index >= 6 and vehicle_index <= SNOWMOBILE:
 		max_speed = [53.0, 10.0, 8.5, 64.0, 12.0, 16.0][vehicle_index-6]
 		acceleration = [7.8, 2.2, 1.8, 10.0, 2.6, 5.2][vehicle_index-6]
+	if vehicle_index == QUATTRO:
+		max_speed = 22.0
+		# The all-wheel-drive launch retains grip on wet roads. Snow still
+		# limits the traction that the tyres can transmit to the ground.
+		var engine_pull := lerpf(6.0,2.4,clampf(absf(speed)/44.0,0,1))
+		var traction := lerpf(6.3,5.0,weather.wet) - (1.25 if winter_tyres else 2.4)*road_snow
+		acceleration = minf(engine_pull,maxf(2.0,traction))
 	if not gentle_driving:
 		max_speed *= 2.0
 	if gentle_driving:
@@ -1352,7 +1406,7 @@ func _drive(delta: float) -> void:
 	var previous_pose := ambulance.global_transform
 	var previous_model_pose := vehicle_model.global_transform
 	if brake_held:
-		speed = move_toward(speed, 0.0, (18.0 - 2.0*weather.wet - 3.0*weather.snow) * absf(throttle) * response * delta)
+		speed = move_toward(speed, 0.0, (18.0 - 2.0*weather.wet - (3.5 if winter_tyres else 8.0)*road_snow + 2.2*road_cover.y) * absf(throttle) * response * delta)
 	elif throttle < 0.0:
 		speed = move_toward(speed, throttle * (1.8 if gentle_driving else 4.0), 3.0 * response * delta)
 	else:
@@ -1371,16 +1425,25 @@ func _drive(delta: float) -> void:
 			wheel_angle = atan2(1.61 * tangent, 1.61 - side_offset * tangent)
 		knuckle.rotation.y = -wheel_angle
 	driving_controls.set_controls(steering, throttle > 0, brake_held, throttle < 0 and not brake_held)
-	var wheelbase: float = [3.7, 2.75, 4.1, 2.975, 2.85, 4.0, 2.56, 2.64, 2.46, 2.96, 6.06, 1.65, 2.865, 2.457, 3.81, 2.495, 1.14, 3.37, 2.84, 3.1, 3.2, 2.61, 3.8, 1.01, 4.52, 1.61][vehicle_index]
+	var wheelbase: float = [3.7, 2.75, 4.1, 2.975, 2.85, 4.0, 2.56, 2.64, 2.46, 2.96, 6.06, 1.65, 2.865, 2.457, 3.81, 2.495, 1.14, 3.37, 2.84, 3.1, 3.2, 2.61, 3.8, 1.01, 4.52, 1.61, 3.74, 2.224][vehicle_index]
 	var yaw_rate := speed * tan(steering * deg_to_rad(33.0)) / wheelbase
 	# Limit lateral acceleration at speed while retaining tight parking turns.
-	var lateral_limit := 8.0
+	var lateral_limit := 8.0 + 1.2*road_cover.y - (0.6 if winter_tyres else 1.7)*road_snow
+	if vehicle_index == QUATTRO:
+		lateral_limit -= 1.2*weather.wet + 2.2*road_snow
 	if load_mass > 0 and vehicle_index in PARCEL_VEHICLES:
 		var center_offset := _parcel_load().y / (empty_mass + load_mass)
 		var half_track := player_half_size.x * .85
 		# A turn loads the outside wheels. Roof freight also raises the centre of mass.
 		var cg_height := (.60*empty_mass + parcel_mounts[vehicle_index].y*load_mass) / (empty_mass + load_mass)
 		lateral_limit *= (.60/cg_height) * (1.0 + signf(yaw_rate*speed)*center_offset/half_track)
+	var snow_grip := smoothstep(.24,.7,road_snow)
+	var speed_factor := smoothstep(7.6,12.6,absf(speed)) if winter_tyres else smoothstep(6.0,10.0,absf(speed))
+	var slide := 0.0
+	if vehicle_index != SNOWMOBILE and bridge_jump_left <= 0.0 and not brake_held:
+		var excess := maxf(0.0,absf(yaw_rate * speed) - lateral_limit * lerpf(1.0,.48,snow_grip))
+		slide = signf(yaw_rate) * minf(.29,excess*.063) * snow_grip * speed_factor * (.43 if winter_tyres else 1.0)
+	snow_slip_angle = move_toward(snow_slip_angle,slide,delta*(.85 if is_zero_approx(slide) else .95))
 	var max_yaw_rate := lateral_limit / maxf(absf(speed), 1.0)
 	var previous_extent := _player_extent()
 	ambulance.rotate_y(-clampf(yaw_rate, -max_yaw_rate, max_yaw_rate) * delta)
@@ -1413,7 +1476,7 @@ func _drive(delta: float) -> void:
 				extent = previous_extent
 				break
 	var forward := -ambulance.global_transform.basis.z
-	var travel_direction := forward * signf(speed)
+	var travel_direction := forward.rotated(Vector3.UP,snow_slip_angle) * signf(speed)
 	var leading_reach := rear_reach if speed<0 else front_reach
 	var approach := forward if is_zero_approx(speed) else travel_direction
 	var signal_gap := street_signals.red_clearance(ambulance.position,approach,leading_reach)
@@ -1435,6 +1498,14 @@ func _drive(delta: float) -> void:
 		var offset := ambulance.to_local(person.position)
 		if absf(offset.x)<player_half_size.x+.36 and -offset.z*signf(speed)>0:
 			stopping_distance = minf(stopping_distance,maxf(0,absf(offset.z)-leading_reach-.65))
+		if not is_zero_approx(snow_slip_angle) and not travel_direction.is_zero_approx():
+			var sliding_offset := person.position - ambulance.position
+			var side := travel_direction.cross(Vector3.UP)
+			var ahead := sliding_offset.dot(travel_direction)
+			var side_reach := absf(side.x)*extent.x + absf(side.z)*extent.y
+			if ahead > 0.0 and absf(sliding_offset.dot(side)) < side_reach+.36:
+				var slide_reach := absf(travel_direction.x)*extent.x + absf(travel_direction.z)*extent.y
+				stopping_distance = minf(stopping_distance,maxf(0.0,ahead-slide_reach-.65))
 	var margin := Vector3(extent.x, 0, extent.y)
 	var lookahead := ambulance.position + travel_direction * (1.0 + speed*speed/10.0 + absf(speed)*delta)
 	if not allow_crashes and not travel_direction.is_zero_approx():
@@ -1445,7 +1516,7 @@ func _drive(delta: float) -> void:
 		for trunk in trunks:
 			hazards.append(AABB(Vector3(trunk.x-trunk.y,-2,trunk.z-trunk.y),Vector3(2*trunk.y,6,2*trunk.y)))
 		for hazard in hazards:
-			if _outside_driving_strip(hazard, .35): continue
+			if is_zero_approx(snow_slip_angle) and _outside_driving_strip(hazard, .35): continue
 			var guard := AABB(hazard.position-margin,hazard.size+2*margin).grow(.35)
 			if guard.has_point(ambulance.position):
 				if _moves_deeper_into_box(guard, ambulance.position, travel_direction):
@@ -1485,11 +1556,21 @@ func _drive(delta: float) -> void:
 		slowing_for_amber = street_signals.red_clearance(ambulance.position,approach,leading_reach,false,true) == signal_gap and street_signals.red_clearance(ambulance.position,approach,leading_reach,true) > signal_gap
 	if player_brake_lens:
 		_set_rear_lights(player_brake_lens, brake_held or assisted_braking or waiting_for_signal)
-	var step := forward * speed * delta
+	var step := travel_direction * absf(speed) * delta
 	# In vehicle space the sweep is straight along Z. A round trunk also
 	# clears the bumper corners when passing diagonally beside a tree.
 	var travel_sign := signf(step.dot(forward))
 	for trunk in trunks:
+		if not is_zero_approx(snow_slip_angle):
+			var half_size := Vector3(extent.x+trunk.y,1,extent.y+trunk.y)
+			var guard := AABB(Vector3(trunk.x,ambulance.position.y,trunk.z)-half_size,half_size*2)
+			if guard.has_point(ambulance.position) and not _moves_deeper_into_box(guard,ambulance.position,step):
+				continue
+			var hit = guard.intersects_segment(ambulance.position,ambulance.position+step)
+			if hit != null:
+				step = step.limit_length(maxf(0.0,ambulance.position.distance_to(hit)-.02))
+				speed = 0.0
+			continue
 		var relative := ambulance.to_local(Vector3(trunk.x, ambulance.position.y, trunk.z))
 		var side_gap := maxf(absf(relative.x) - player_half_size.x, 0.0)
 		if side_gap >= trunk.y or relative.z * travel_sign >= 0.0:
@@ -1499,7 +1580,7 @@ func _drive(delta: float) -> void:
 			step = step.limit_length(maxf(0.0, clearance - 0.02))
 			speed = 0.0
 	for building in obstacles:
-		if _outside_driving_strip(building, 0.0): continue
+		if is_zero_approx(snow_slip_angle) and _outside_driving_strip(building, 0.0): continue
 		var wall := AABB(building.position - margin, building.size + 2 * margin)
 		if wall.has_point(ambulance.position):
 			# A vehicle swap can enlarge the footprint beside an existing wall.
@@ -1546,6 +1627,8 @@ func _drive(delta: float) -> void:
 	pos.z = clampf(pos.z, bounds.position.y + extent.y, bounds.end.y - extent.y)
 	if pos.x != destination.x or pos.z != destination.z:
 		speed = 0.0
+	if absf(speed) < .1:
+		snow_slip_angle = 0.0
 	pos.y = _surface_height(pos.x, pos.z)
 	_update_vehicle_dirt(pos,previous_pose.origin,delta)
 	if pos.y < -0.15:
@@ -1559,6 +1642,8 @@ func _drive(delta: float) -> void:
 	if moped_speed_needle:
 		# Nine graduations span 0–40 km/h on the dial.
 		moped_speed_needle.rotation.y = deg_to_rad(-252.0) * clampf(absf(speed)*3.6/40.0,0.0,1.0)
+	if quattro_speed_needle:
+		quattro_speed_needle.rotation.z = deg_to_rad(-252.0) * clampf(absf(speed)*3.6/240.0,0.0,1.0)
 	_roll_wheels(player_wheels, (pos - previous_pose.origin).dot(forward))
 	# Carry a little upward momentum from the climbing ramp onto the level span.
 	var eastbound := previous_pose.origin.x < HIGH_BRIDGE_X[1] and pos.x >= HIGH_BRIDGE_X[1]
@@ -1577,7 +1662,14 @@ func _drive(delta: float) -> void:
 	_track_practice_stop(pos,extent.x,forward.x)
 	_track_practice_signal(previous_pose.origin,pos,extent.x,forward.x,delta)
 	_align_model_to_bridge(ambulance, vehicle_model, wheelbase)
-	if bridge_jump_left <= 0 and previous_pose.origin.distance_squared_to(pos) > .000001:
+	var moving_on_ground := bridge_jump_left <= 0 and previous_pose.origin.distance_squared_to(pos) > .000001
+	if vehicle_index == FARM_TRACTOR and is_instance_valid(spreader_particles):
+		var forward_travel := (pos - previous_pose.origin).dot(forward)
+		var spreading := spreader_enabled and moving_on_ground and weather.season == 4 and weather.snow >= .12 and speed > .25 and forward_travel > .0001
+		_set_spreader_active(spreading)
+		if spreading:
+			ground_work.sweep(previous_model_pose,vehicle_model.global_transform,Vector3(-SPREADER_EDGE.x,0,SPREADER_EDGE.z),SPREADER_EDGE,false,true)
+	if moving_on_ground:
 		if vehicle_index == MOWER and weather.snow < .12:
 			ground_work.sweep(previous_pose, ambulance.global_transform, Vector3(-.65,0,-1.04), Vector3(.65,0,-1.04), true)
 		elif vehicle_index == FARM_TRACTOR and weather.season == 4 and weather.snow >= .12 and speed > 0:
@@ -1586,7 +1678,7 @@ func _drive(delta: float) -> void:
 		reverse_lens.emission_energy_multiplier = 2.0 if speed < -0.01 else 0.0
 	var hard_braking := brake_held and throttle < -0.7 and previous_speed > (2.0 if not skid_anchors.is_empty() else 7.0)
 	var snow_trail := vehicle_index == SNOWMOBILE and weather.snow >= .25
-	if (snow_trail or (hard_braking and pos.y > -.15)) and previous_pose.origin.distance_squared_to(pos) > .000001:
+	if (snow_trail or absf(snow_slip_angle) > .025 or (hard_braking and pos.y > -.15)) and previous_pose.origin.distance_squared_to(pos) > .000001:
 		_draw_skid(previous_pose)
 	else:
 		_end_skid()
@@ -3226,15 +3318,23 @@ func _build_marina() -> void:
 	var promenade_length: float = FERRY_LANDINGS[1] - FERRY_LANDINGS[0] - 2.0
 	var promenade_midpoint: float = (FERRY_LANDINGS[0] + FERRY_LANDINGS[1]) * .5
 	_pier_section("Waterside boardwalk",Vector3(2.0,.18,promenade_length),Vector3(58.0,-.75,promenade_midpoint),Color("#ab9071"),_deck_material(Color("#ab9071")))
+	var timber_frame := _material(Color("#625448"), .85)
+	for beam_x in [57.18, 58.87]:
+		var beam := _make_box("Boardwalk longitudinal beam", Vector3(.19,.28,promenade_length),
+			Vector3(beam_x,-.91,promenade_midpoint), Color.WHITE)
+		beam.material_override = timber_frame
+	var support_positions := PackedFloat32Array()
 	var south_end: float = FERRY_LANDINGS[0] + 1.0
 	var rail_end := -33.8
 	for i in 13:
 		var post_z := lerpf(south_end, rail_end, i / 13.0)
+		support_positions.append(post_z)
 		_make_box("Boardwalk pile", Vector3(.14, 1.80, .14), Vector3(59.08, -.54, post_z), Color("#6b5948"))
 	for height in [-.22, .25]:
 		_make_box("Boardwalk rail", Vector3(.09, .11, rail_end-south_end), Vector3(59.08, height, (south_end+rail_end)*.5), Color("#877461"))
 	for i in range(8):
-		var post_z := -33.8+i*2.94
+		var post_z := rail_end+i*2.94
+		support_positions.append(post_z)
 		_make_box("Timber bollard",Vector3(.14,1.70,.14),Vector3(59.08,-.53,post_z),Color("#6b5948"))
 		if i<7:
 			for segment in 6:
@@ -3244,6 +3344,10 @@ func _build_marina() -> void:
 				var end := Vector3(59.08,.22-.60*b*(1-b),post_z+2.94*b)
 				var rope_span := _make_box("Hemp rope",Vector3(.032,.032,start.distance_to(end)),(start+end)*.5,Color("#c9b38e"))
 				rope_span.look_at(end)
+	for support_z in support_positions:
+		var joist := _make_box("Boardwalk cross beam", Vector3(2.14,.16,.18),
+			Vector3(58.03,-1.025,support_z), Color.WHITE)
+		joist.material_override = timber_frame
 	_make_box("Flytbrygga",Vector3(1.4,.25,32),Vector3(85.8,-.63,-24),Color("#877962")).material_override = _deck_material(Color("#877962"))
 	var rope := CylinderMesh.new()
 	rope.top_radius = 0.018
@@ -3556,23 +3660,96 @@ func _build_building(center: Vector3, size: Vector3, _color: Color, sign_text: S
 	if sign_text == "Brandstationen":
 		_build_fire_station_bay(model)
 	elif sign_text == "Bageriet":
+		_close_bakery_gables(model)
+		var door := model.find_child("Bakery glazed door", true, false) as MeshInstance3D
+		var glass := model.find_child("Door glass", true, false) as MeshInstance3D
+		var door_drop := .255
+		door.position.y -= door_drop
+		glass.position.y -= door_drop
+		_make_box("Bakery entrance threshold", Vector3(1.66, .045, .46), Vector3(0, .024, 6.02), Color("#777a72"), false, model)
+		var handle_finish := _material(Color("#a19069"), .32)
+		handle_finish.metallic = .45
+		for height in [1.03, 1.32]:
+			var mount := _make_box("Bakery door handle mount", Vector3(.044,.048,.082), Vector3(.59,height-door_drop,6.05), Color.WHITE, false, model)
+			mount.material_override = handle_finish
+		var pull := _make_box("Bakery door pull", Vector3(.034,.35,.036), Vector3(.59,1.175-door_drop,6.098), Color.WHITE, false, model)
+		pull.material_override = handle_finish
 		_build_bakery_cup(model)
+
+func _close_bakery_gables(model: Node3D) -> void:
+	var wall := model.find_child("Timber house shell", true, false) as MeshInstance3D
+	var timber := wall.get_active_material(0)
+	var gables := SurfaceTool.new()
+	gables.begin(Mesh.PRIMITIVE_TRIANGLES)
+	gables.set_material(timber)
+	for side in [-1.0, 1.0]:
+		var z: float = side * 5.65
+		var corners := PackedVector3Array([
+			Vector3(-6.35,5.98,z), Vector3(-6.35,6.13,z), Vector3(0,8.25,z),
+			Vector3(6.35,6.13,z), Vector3(6.35,5.98,z),
+		])
+		var order := [0,1,2,0,2,4,4,2,3] if side > 0 else [2,1,0,4,2,0,3,2,4]
+		for index in order:
+			var point := corners[index]
+			gables.set_normal(Vector3(0,0,side))
+			gables.set_uv(Vector2(point.x,point.y)*.25)
+			gables.add_vertex(point)
+		var eave := _make_box("Bakery eave infill", Vector3(.03,.16,11.30),
+			Vector3(side*6.335,6.05,0), Color.WHITE, false, model)
+		eave.material_override = timber
+	var infill := MeshInstance3D.new()
+	infill.name = "Bakery timber gables"
+	infill.mesh = gables.commit()
+	model.add_child(infill)
 
 func _build_bakery_cup(model: Node3D) -> void:
 	var bracket := _make_box("Bakery sign arm",Vector3(.12,.15,2.8),Vector3(0,5.86,7.15),Color("#414544"),false,model)
-	_make_box("Hanging rod",Vector3(.06,.5,.06),Vector3(0,-.25,1.31),Color("#414544"),false,bracket)
+	_make_box("Hanging rod",Vector3(.06,1.14,.06),Vector3(0,-.57,1.31),Color("#414544"),false,bracket)
 	var cup := MeshInstance3D.new()
 	cup.name = "Hanging coffee cup"
 	var bowl := CylinderMesh.new()
 	bowl.top_radius = .55
 	bowl.bottom_radius = .34
 	bowl.height = .76
+	bowl.cap_top = false
 	var porcelain := _material(Color("#ffeed1"),.23)
 	bowl.material = porcelain
 	cup.mesh = bowl
 	bracket.add_child(cup)
-	cup.position = Vector3(0,-1.03,1.31)
-	cup.scale = Vector3.ONE*1.45
+	cup.position = Vector3(0,-1.55,1.31)
+	cup.scale = Vector3.ONE*1.15
+	var rim := MeshInstance3D.new()
+	var lip := TorusMesh.new()
+	lip.inner_radius = .520
+	lip.outer_radius = .550
+	lip.material = porcelain
+	rim.mesh = lip
+	rim.position.y = .375
+	cup.add_child(rim)
+
+	var inside := porcelain.duplicate() as StandardMaterial3D
+	inside.cull_mode = BaseMaterial3D.CULL_FRONT
+	var liner := CylinderMesh.new()
+	liner.cap_top = false
+	liner.cap_bottom = false
+	liner.top_radius = .520
+	liner.bottom_radius = .435
+	liner.height = .29
+	liner.material = inside
+	var lining := MeshInstance3D.new()
+	lining.mesh = liner
+	lining.position.y = .23
+	cup.add_child(lining)
+
+	var coffee := CylinderMesh.new()
+	coffee.top_radius = .446
+	coffee.bottom_radius = .437
+	coffee.height = .024
+	coffee.material = _material(Color("#422a1e"), .48)
+	var filling := MeshInstance3D.new()
+	filling.mesh = coffee
+	filling.position.y = .092
+	cup.add_child(filling)
 	var handle := MeshInstance3D.new()
 	var loop_mesh := TorusMesh.new()
 	loop_mesh.inner_radius = .19
@@ -3580,8 +3757,8 @@ func _build_bakery_cup(model: Node3D) -> void:
 	loop_mesh.material = porcelain
 	handle.mesh = loop_mesh
 	cup.add_child(handle)
-	handle.rotation.z = PI*.5
-	handle.position = Vector3(0,.01,.50)
+	handle.rotation.x = PI*.5
+	handle.position = Vector3(.54,.01,0)
 	var saucer := MeshInstance3D.new()
 	var dish := CylinderMesh.new()
 	dish.top_radius = .66
@@ -3885,6 +4062,32 @@ func _build_new_blocks() -> void:
 	workshop_name.position=p+Vector3(0,4.57,-5.23)
 	workshop_name.rotation.y=PI
 	add_child(workshop_name)
+	var tyre_post := _signpost(STATION_DROP+Vector3(3.8,0,2.6),PI)
+	_make_box("Tyre service sign",Vector3(2.8,.62,.08),Vector3(0,2.55,.06),Color("#244750"),false,tyre_post)
+	var tyre_sign := _road_sign_text(tyre_post,"Tyre service",Vector3(0,2.55,.11),.0045,Color("#edf7f7"))
+	_size_world_sign(tyre_sign,2.55)
+	var tyre_rack := STATION_DROP + Vector3(5.3,0,3.8)
+	var rack_finish := Color("#344d4d")
+	for x in [-.97,.97]:
+		for z in [-.31,.31]:
+			_make_box("Tyre rack upright",Vector3(.065,1.94,.065),tyre_rack+Vector3(x,.97,z),rack_finish)
+	var rubber := _material(Color("#171a1b"),.91,false,"rubber")
+	var casing := TorusMesh.new()
+	casing.inner_radius = .19
+	casing.outer_radius = .34
+	casing.rings = 32
+	casing.ring_segments = 12
+	for shelf in [.17,1.04]:
+		for z in [-.24,.24]:
+			_make_box("Tyre rack beam",Vector3(2,.07,.085),tyre_rack+Vector3(0,shelf,z),rack_finish)
+		for slot in 6:
+			var tyre := MeshInstance3D.new()
+			tyre.name = "Tyre casing"
+			tyre.mesh = casing
+			tyre.material_override = rubber
+			tyre.rotation.z = PI*.5
+			tyre.position = tyre_rack+Vector3(-.76+slot*.30,shelf+.30,0)
+			add_child(tyre)
 	var crossings: Array = street_signals.EAST_CROSSINGS.duplicate()
 	for x in street_signals.CENTRAL_BOULEVARD_CROSSINGS:
 		crossings.append(Vector3(x,0,0))
@@ -3949,6 +4152,9 @@ func _update_daylight(delta: float) -> void:
 		var dusk := smoothstep(.22+.18*i,.85+.12*i,night)
 		apartment_lights[i].emission_energy_multiplier = dusk*(.83-.22*i)
 	city_env.sky.sky_material.set_shader_parameter("night",night)
+	quattro_glazing.set_shader_parameter("night",night)
+	if bus_glazing: bus_glazing.set_shader_parameter("night",night)
+	_update_quattro_gauge_light(night)
 	city_env.ambient_light_energy = lerpf(.38,.28,night)
 	city_env.ambient_light_color = Color("#c4d5d1").lerp(Color("#9cb1d3"),night)
 	city_fill.light_energy = .45*(1-night)
@@ -4204,6 +4410,8 @@ func _depot_bay(i: int) -> Vector2:
 	if i == SHOPPER: return Vector2(-67,60)
 	if i == REFUSE: return Vector2(-101,56)
 	if i == MOWER: return Vector2(-24,28)
+	if i == DAM_PICKUP: return Vector2(-12,28)
+	if i == QUATTRO: return Vector2(-32,15)
 	if i == FARM_TRACTOR: return Vector2(-18,28)
 	if i == RECOVERY: return Vector2(-45,25)
 	if i == BUS: return Vector2(-34,25.4)
@@ -4233,6 +4441,73 @@ func _fit_plough(model: Node3D) -> void:
 		blade_right = model.to_local(edge.to_global(centre + half_width))
 	ploughs.append(blade)
 	blade.tree_exiting.connect(func(): ploughs.erase(blade), CONNECT_ONE_SHOT)
+	_fit_spreader(model)
+
+func _fit_spreader(model: Node3D) -> void:
+	var spreader := Node3D.new()
+	spreader.name = "Grit and salt spreader"
+	spreader.position = Vector3(0,.78,-2.54)
+	spreader.visible = weather.season == 4
+	model.add_child(spreader)
+	var enamel := Color("#51843b")
+	var steel := Color("#353b3c")
+	_make_box("Hitch crossmember",Vector3(1.32,.12,.65),Vector3(0,-.10,.36),steel,false,spreader)
+	_make_box("Metering roller housing",Vector3(1.66,.19,.30),Vector3(0,0,-.28),steel,false,spreader)
+	_make_box("Hopper floor",Vector3(1.48,.08,.50),Vector3(0,.10,.04),enamel,false,spreader)
+	for end in [-1,1]:
+		var wall := _make_box("Folded hopper wall",Vector3(1.93,.61,.061),Vector3(0,.39,end*.30),enamel,false,spreader)
+		wall.rotation.x = end * .32
+		_make_box("Rolled rim",Vector3(1.98,.057,.068),Vector3(0,.69,end*.396),enamel,false,spreader)
+		var cheek := _make_box("Hopper end cheek",Vector3(.055,.60,.70),Vector3(end*.896,.39,0),enamel,false,spreader)
+		cheek.rotation.z = -end*.23
+		_make_box("Rear reflector",Vector3(.17,.07,.025),Vector3(end*.78,.23,-.325),Color("#c43627"),false,spreader)
+	var payload := _make_box("Grit and salt load",Vector3(1.66,.10,.54),Vector3(0,.53,0),Color("#aaa38b"),false,spreader)
+	payload.material_override = _noise_material(Color("#514a39"),Color("#e1ddd0"),18.0,.75)
+	ploughs.append(spreader)
+	spreader.tree_exiting.connect(func(): ploughs.erase(spreader), CONNECT_ONE_SHOT)
+	if model != vehicle_model:
+		return
+	spreader_particles = CPUParticles3D.new()
+	spreader_particles.name = "Falling road grit"
+	spreader_particles.position = Vector3(0,-.05,-.33)
+	spreader_particles.emitting = false
+	spreader_particles.amount = 90
+	spreader_particles.lifetime = .27
+	spreader_particles.local_coords = false
+	spreader_particles.emission_shape = CPUParticles3D.EMISSION_SHAPE_BOX
+	spreader_particles.emission_box_extents = Vector3(.78,.02,.07)
+	spreader_particles.direction = Vector3(0,-.85,-.65)
+	spreader_particles.spread = 46
+	spreader_particles.initial_velocity_min = 1.0
+	spreader_particles.initial_velocity_max = 3.0
+	var grit := BoxMesh.new()
+	grit.size = Vector3(.031,.018,.025)
+	grit.material = _material(Color("#a4a092"),.84)
+	spreader_particles.mesh = grit
+	spreader.add_child(spreader_particles)
+	var gravel := preload("res://audio/grit_spreader.wav").duplicate() as AudioStreamWAV
+	gravel.loop_mode = AudioStreamWAV.LOOP_FORWARD
+	gravel.loop_end = roundi(gravel.get_length()*gravel.mix_rate)
+	spreader_audio = AudioStreamPlayer3D.new()
+	spreader_audio.name = "Spreader rattle"
+	spreader_audio.stream = gravel
+	spreader_audio.bus = &"Engines"
+	spreader_audio.volume_db = -13.0
+	spreader_audio.unit_size = 3.0
+	spreader_audio.max_distance = 18.0
+	spreader_audio.position = spreader_particles.position
+	spreader.add_child(spreader_audio)
+
+func _set_spreader_active(active: bool) -> void:
+	if not is_instance_valid(spreader_particles):
+		return
+	spreader_particles.emitting = active
+	if active and sound_on:
+		if not spreader_audio.playing:
+			spreader_audio.play()
+	elif spreader_audio.playing:
+		spreader_audio.stop()
+
 
 func _park_at_home(body: Node3D, index: int) -> void:
 	var bay := _depot_bay(index)
@@ -4415,6 +4690,8 @@ func _build_depot() -> void:
 		if i == BUS:
 			_fit_bus_exterior(model)
 			_add_bus_destination_boards(model)
+		if i == QUATTRO:
+			_fit_quattro_glazing(model)
 		if i == SCHOOL_CAR:
 			_add_school_car_sign(model)
 		_park_at_home(body, i)
@@ -4428,6 +4705,12 @@ func _build_depot() -> void:
 		var mount := Vector3(bounds.get_center().x,bounds.end.y,bounds.get_center().z)
 		if i == MINI_CABRIO:
 			mount = Vector3(mount.x,bounds.position.y+bounds.size.y*.58,bounds.end.z*.72)
+		elif i == DAM_PICKUP:
+			var floor_mesh := model.find_child("Cargo bed floor",true,false) as MeshInstance3D
+			var rib := model.find_child("Cargo floor rib*",true,false) as MeshInstance3D
+			var floor_center := body.to_local(floor_mesh.to_global(floor_mesh.get_aabb().get_center()))
+			var rib_bounds := (body.global_transform.affine_inverse() * rib.global_transform) * rib.get_aabb()
+			mount = Vector3(floor_center.x,rib_bounds.end.y,floor_center.z)
 		parcel_mounts.append(mount)
 		parked_footprints.append(Rect2(bounds.position.x,bounds.position.z,bounds.size.x,bounds.size.z))
 		parked_sizes.append(Vector2(maxf(-bounds.position.x,bounds.end.x),maxf(-bounds.position.z,bounds.end.z)))
@@ -5625,6 +5908,12 @@ func _update_traffic(delta: float) -> void:
 		lamp.visible = bus_merge_time > 0 and (calm_mode or steady_player_lights or fmod(6.0-bus_merge_time,.8)<.4)
 	var weather_pace := 1.0-.12*weather.wet-.23*weather.snow
 	var player_size := _player_extent()
+	var pedestrians: Array = [walker, passenger, arriving_passenger, waiting_medic, marina_recipient, square_neighbour, crossing_pedestrian, shoe_owner, cat_owner]
+	pedestrians.append_array(bus_companions)
+	pedestrians.append_array(clinic_fire_team)
+	for entry in walker_data:
+		pedestrians.append(entry.actor)
+	pedestrians = pedestrians.filter(func(person: Node3D): return person.is_visible_in_tree())
 	for item in traffic_data:
 		var actor: Node3D = item.actor
 		var clearance := street_signals.red_clearance(actor.position,-actor.basis.z,float(item.length))+1.0
@@ -5645,8 +5934,7 @@ func _update_traffic(delta: float) -> void:
 			if not parked_cars[i].visible: continue
 			var bounds := _parked_bounds(i)
 			clearance=minf(clearance,_traffic_gap(item,bounds.get_center(),Vector2(bounds.size.x,bounds.size.z)*.5))
-		for person: Node3D in [walker,passenger,arriving_passenger,waiting_medic,marina_recipient,square_neighbour,crossing_pedestrian] + bus_companions + clinic_fire_team:
-			if not person.visible: continue
+		for person: Node3D in pedestrians:
 			clearance=minf(clearance,_traffic_gap(item,person.position,Vector2(.45,.45)))
 			if person==walker:
 				clearance=minf(clearance,_traffic_gap(item,person.position+walking_velocity*.8,Vector2(.45,.45)))
@@ -5661,7 +5949,24 @@ func _update_traffic(delta: float) -> void:
 		if free_space < 0.1:
 			target = 0
 		var previous_speed := float(item.speed)
-		var next_speed := move_toward(previous_speed, target, (6.5 if target < previous_speed else 2.2) * Mass.road_response(item.mass_kg) * delta)
+		var snow_under_wheels := 0.0
+		var grit_coverage := 0.0
+		if not item.has("rider") and weather.snow > .01:
+			if ground_work.has_ploughed or ground_work.has_gritted:
+				for side in [-1.0,1.0]:
+					for axle in [-1.0,1.0]:
+						var contact := Vector3(side*float(item.width)*.78,0,axle*float(item.length)*.61)
+						var wheel_position := actor.to_global(contact)
+						if not ground_work.cleared_at(wheel_position):
+							snow_under_wheels += .25 * weather.snow
+						if ground_work.gritted_at(wheel_position):
+							grit_coverage += .25
+			else:
+				snow_under_wheels = weather.snow
+		var acceleration := 2.2 - .65 * snow_under_wheels + .35 * grit_coverage
+		if target < previous_speed:
+			acceleration = 6.5 - .7 * weather.wet - 1.92 * snow_under_wheels + 1.68 * grit_coverage
+		var next_speed := move_toward(previous_speed,target,acceleration*Mass.road_response(item.mass_kg)*delta)
 		var travel := minf(next_speed * delta, free_space)
 		item.speed = travel / delta if delta > 0.0 else previous_speed
 		if item.brake_lens:
@@ -6597,6 +6902,8 @@ func _make_walker(label: String, start_x: float, lane_z: float, direction: float
 
 func _apply_reading_size() -> void:
 	driving_hints.add_theme_font_size_override("font_size", 22 if large_text else 16)
+	if is_instance_valid(tyre_service_button):
+		tyre_service_button.add_theme_font_size_override("font_size", 22 if large_text else 16)
 	shops.set_large_text(large_text)
 	phone.set_large_text(large_text)
 	greeting.pixel_size = .0042 if large_text else .003
@@ -7079,8 +7386,14 @@ func _add_bus_destination_boards(model: Node3D) -> Array[Label3D]:
 	var bus_board := Label3D.new()
 	bus_board.outline_size = 0
 	bus_board.modulate=Color("#ffbb47")
-	var front_panel := _make_box("Front destination mask", Vector3(2.02,.31,.028), Vector3(0,2.68,5.276), Color("#151c1e"), false, model)
-	bus_board.position = Vector3(0,0,.018)
+	var fascia := model.find_child("Front destination fascia", true, false) as MeshInstance3D
+	fascia.scale.x *= 1.075
+	fascia.scale.y *= 1.19
+	var imported_board := model.find_child("Destination board", true, false) as MeshInstance3D
+	imported_board.hide()
+	var front_panel := _make_box("Front destination mask", Vector3(1.96,.31,.014),
+		Vector3(0,2.68,5.262), Color("#0e1517"), false, model)
+	bus_board.position = Vector3(0,0,.010)
 	front_panel.add_child(bus_board)
 	var rear_panel := _make_box("Rear destination panel",Vector3(1.88,.34,.08),Vector3(0,2.68,-5.22),Color("#182126"),false,model)
 	var rear_bus_board := bus_board.duplicate() as Label3D
@@ -7121,6 +7434,34 @@ func _fit_bus_rear_bench(model: Node3D) -> void:
 	var podium := _make_box("Rear bench plinth", Vector3(1.98,.23,.56), Vector3(0,1.48,-4.65), Color("#303638"), false, model)
 	podium.material_override = _material(Color("#303638"), .81)
 
+func _fit_quattro_glazing(model: Node3D) -> void:
+	if quattro_glazing == null:
+		quattro_glazing = ShaderMaterial.new()
+		quattro_glazing.shader = preload("res://environment/quattro_glazing.gdshader")
+		quattro_glazing.set_shader_parameter("skyline",preload("res://environment/portland_landing_pad.exr"))
+	for pane: MeshInstance3D in model.find_children("*glass*","MeshInstance3D",true,false):
+		for surface in pane.mesh.get_surface_count():
+			var finish := pane.get_active_material(surface)
+			if finish != null and finish.resource_name == "Blue-green laminated glazing":
+				pane.set_surface_override_material(surface,quattro_glazing)
+
+func _fit_quattro_gauges(model: Node3D) -> void:
+	if quattro_gauge_marks == null:
+		quattro_gauge_marks = _material(Color("#d7d4b7"),.56,true)
+		quattro_gauge_marks.emission = Color("#f0d89d")
+		quattro_gauge_needle = _material(Color("#c62c22"),.43,true)
+		quattro_gauge_needle.emission = Color("#ff5340")
+	for part: MeshInstance3D in model.find_children("Gauge tick*","MeshInstance3D",true,false) + model.find_children("Speed scale numeral*","MeshInstance3D",true,false):
+		part.material_override = quattro_gauge_marks
+	for needle: MeshInstance3D in model.find_children("Gauge needle*","MeshInstance3D",true,false):
+		needle.material_override = quattro_gauge_needle
+	_update_quattro_gauge_light(maxf(last_night,0.0))
+
+func _update_quattro_gauge_light(night: float) -> void:
+	if quattro_gauge_marks:
+		quattro_gauge_marks.emission_energy_multiplier = lerpf(.06,.67,night)
+		quattro_gauge_needle.emission_energy_multiplier = lerpf(.02,.51,night)
+
 func _fit_bus_exterior(model: Node3D) -> void:
 	_fit_bus_rear_bench(model)
 	var window_seal := _material(Color("#151c1e"), .53)
@@ -7128,6 +7469,15 @@ func _fit_bus_exterior(model: Node3D) -> void:
 	lower_door_finish.metallic = .15
 	for panel: MeshInstance3D in model.find_children("Passenger door lower panel*", "MeshInstance3D", true, false):
 		panel.material_override = lower_door_finish
+	var door_jamb := _material(Color("#0e1517"), .79)
+	var tread := _material(Color("#545e61"), .72)
+	for door_center in [4.4, -.30, -4.11]:
+		var seal := _make_box("Passenger door centre gasket", Vector3(.024, 1.91, .043),
+			Vector3(-1.272, 1.41, door_center), door_jamb.albedo_color, false, model)
+		seal.material_override = door_jamb
+		var threshold := _make_box("Passenger door threshold", Vector3(.072, .036, 1.04),
+			Vector3(-1.262, .447, door_center), tread.albedo_color, false, model)
+		threshold.material_override = tread
 	if not bus_side_marker_finish:
 		bus_side_marker_finish = _material(Color("#a6561d"),.32,true)
 		bus_side_marker_finish.emission = Color("#ffaa43")
@@ -7174,12 +7524,38 @@ func _fit_bus_exterior(model: Node3D) -> void:
 	for edge in [Vector3(0,2.92,5.006),Vector3(0,2.92,-4.99),Vector3(0,1.451,-5.205)]:
 		var trim := _make_box("Cross-window seal",Vector3(2.27,.047,.034),edge,window_seal.albedo_color,false,model)
 		trim.material_override = window_seal
-	var heater_color := Color("#806958")
-	for row in 6:
-		_make_box("Rear window heating wire",Vector3(1.92,.005,.005),Vector3(0,1.66+row*.12,-5.211),heater_color,false,model)
+	# Close the tapered gap between the last side pillar and the sloping rear seal.
 	for side in [-1.0, 1.0]:
-		_make_box("Rear window heater busbar",Vector3(.018,.626,.006),Vector3(side*.958,1.96,-5.211),heater_color,false,model)
-		_make_box("Rear window heater terminal",Vector3(.034,.035,.012),Vector3(side*.958,1.645,-5.214),window_seal.albedo_color,false,model)
+		var corner := SurfaceTool.new()
+		corner.begin(Mesh.PRIMITIVE_TRIANGLES)
+		corner.set_material(window_seal)
+		var x: float = side * 1.151
+		var vertices := PackedVector3Array([
+			Vector3(x, 1.45, -4.944), Vector3(x, 1.45, -5.209),
+			Vector3(x, 2.91, -5.001), Vector3(x, 2.91, -4.944),
+		])
+		var indices := [2, 1, 0, 3, 2, 0] if side > 0 else [0, 1, 2, 0, 2, 3]
+		for index in indices:
+			corner.set_normal(Vector3(side, 0, 0))
+			corner.add_vertex(vertices[index])
+		var trim := MeshInstance3D.new()
+		trim.name = "Rear window corner infill"
+		trim.mesh = corner.commit()
+		model.add_child(trim)
+	var heater_color := Color("#68534a")
+	# The rear glazing slopes inward toward the top of the cabin.
+	var rear_glass_slope := .23 / (2.945 - 1.465)
+	var bottom_wire_z := -5.204 + (1.66 - 1.465) * rear_glass_slope
+	for row in 6:
+		var rise := row * .12
+		_make_box("Rear window heating wire", Vector3(1.92,.0035,.003),
+			Vector3(0,1.66+rise,bottom_wire_z+rise*rear_glass_slope), heater_color, false, model)
+	for side in [-1.0, 1.0]:
+		var busbar := _make_box("Rear window heater busbar", Vector3(.010,.625,.004),
+			Vector3(side*.958,1.96,bottom_wire_z+.30*rear_glass_slope), heater_color, false, model)
+		busbar.rotation.x = atan(rear_glass_slope)
+		_make_box("Rear window heater terminal", Vector3(.024,.029,.008),
+			Vector3(side*.958,1.645,bottom_wire_z-.015*rear_glass_slope), window_seal.albedo_color, false, model)
 	var hinge_finish := _material(Color("#41494d"), .42)
 	hinge_finish.metallic = .58
 	for side in [-1.0, 1.0]:
@@ -7221,19 +7597,19 @@ func _fit_bus_exterior(model: Node3D) -> void:
 			var glass := _make_box("Bus mirror glass",Vector3(.145,pane.y,.012),mirror_center + Vector3(0,pane.x,-.077),Color.WHITE,false,model)
 			glass.material_override = mirror_glass
 
+	if bus_glazing == null:
+		bus_glazing = ShaderMaterial.new()
+		bus_glazing.shader = preload("res://environment/quattro_glazing.gdshader")
+		bus_glazing.set_shader_parameter("skyline",preload("res://environment/portland_landing_pad.exr"))
+		bus_glazing.set_shader_parameter("glass_tint", Color(.12, .20, .21))
+		bus_glazing.set_shader_parameter("glass_opacity", Vector2(.27, .37))
 	var cabin := model.find_child("Cabin",true,false) as MeshInstance3D
 	for surface in cabin.mesh.get_surface_count():
-		var finish := cabin.get_active_material(surface) as StandardMaterial3D
+		var finish := cabin.get_active_material(surface)
 		if finish.resource_name.begins_with("Smoked blue glazing"):
-			var glass := finish.duplicate() as StandardMaterial3D
-			glass.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
-			glass.albedo_color = Color(.19,.26,.27,.34)
-			glass.metallic = 0.0
-			cabin.set_surface_override_material(surface,glass)
-			var door_glass := glass.duplicate() as StandardMaterial3D
-			door_glass.albedo_color.a = .40
-			for pane: MeshInstance3D in model.find_children("Passenger door tinted glazing*", "MeshInstance3D", true, false):
-				pane.material_override = door_glass
+			cabin.set_surface_override_material(surface,bus_glazing)
+	for pane: MeshInstance3D in model.find_children("Passenger door tinted glazing*", "MeshInstance3D", true, false):
+		pane.material_override = bus_glazing
 
 func _fit_bus_interior() -> void:
 	bus_ceiling_diffuser = _material(Color("#ded9c9"),.42,true)
@@ -7302,6 +7678,7 @@ func _update_bus_stop_request(delta: float) -> void:
 
 
 func _load_vehicle_model() -> void:
+	snow_slip_angle = 0.0
 	bus_merge_time = 0
 	bus_departure_lamps.clear()
 	wiper_pivots.clear()
@@ -7317,6 +7694,9 @@ func _load_vehicle_model() -> void:
 	red_light_meshes.clear()
 	var packed: PackedScene = load(VEHICLE_SCENES_ALL[vehicle_index])
 	vehicle_model = packed.instantiate() as Node3D
+	if vehicle_index == QUATTRO:
+		_fit_quattro_glazing(vehicle_model)
+		_fit_quattro_gauges(vehicle_model)
 	driven_fire_locker = null
 	if vehicle_index == 2:
 		driven_fire_locker = FireLocker.new()
@@ -7432,7 +7812,14 @@ func _load_vehicle_model() -> void:
 				if signf(part.position.x) == side:
 					part.reparent(pivot)
 			wiper_pivots.append(pivot)
-	if vehicle_index in [2, 3, PORSCHE, MOWER, BUS]:
+	if vehicle_index in [DAM_PICKUP, QUATTRO]:
+		var pickup := vehicle_index == DAM_PICKUP
+		var pattern := "PickupWiperPivot_*" if pickup else "QuattroWiperPivot_*"
+		var axis := Vector3(0,.44,.56) if pickup else Vector3(0,.495,.425)
+		for pivot: Node3D in vehicle_model.find_children(pattern,"Node3D",true,false):
+			pivot.set_meta("sweep_axis", axis.normalized())
+			wiper_pivots.append(pivot)
+	if vehicle_index in [2, 3, PORSCHE, MOWER, BUS, QUATTRO]:
 		var rim_name := "Steering wheel" if vehicle_index == MOWER else "Steering wheel rim*"
 		if vehicle_index == 2: rim_name = "Crew cab steering rim*"
 		if vehicle_index == BUS: rim_name = "Bus steering wheel"
@@ -7531,15 +7918,19 @@ func _load_vehicle_model() -> void:
 					tractor_beacon.emission = Color("#ff9a15")
 					body.set_surface_override_material(surface, tractor_beacon)
 	var beam_origins: Array[Vector3] = []
-	if vehicle_index in [2, SNOWMOBILE, PORSCHE, FARM_TRACTOR, SHOPPER, REFUSE, BUS]:
-		var lens_pattern: String = {2:"Swept transparent headlamp cover*", PORSCHE:"Headlight lens*", SNOWMOBILE:"Headlight strip*", FARM_TRACTOR:"Projector lens*", SHOPPER:"Headlight lens*", REFUSE:"Headlight lens*", BUS:"Bus headlight lens*"}[vehicle_index]
+	if vehicle_index in [2, SNOWMOBILE, PORSCHE, FARM_TRACTOR, SHOPPER, REFUSE, BUS, DAM_PICKUP, QUATTRO]:
+		var lens_pattern: String = {2:"Swept transparent headlamp cover*", PORSCHE:"Headlight lens*", SNOWMOBILE:"Headlight strip*", FARM_TRACTOR:"Projector lens*", SHOPPER:"Headlight lens*", REFUSE:"Headlight lens*", BUS:"Bus headlight lens*", DAM_PICKUP:"Projector lens*", QUATTRO:"Headlight lens*"}[vehicle_index]
 		var lenses := vehicle_model.find_children(lens_pattern, "MeshInstance3D", true, false)
 		for lens: MeshInstance3D in lenses:
 			var center := ambulance.to_local(lens.to_global(lens.get_aabb().get_center()))
 			if vehicle_index != BUS or absf(center.x) > .89:
 				beam_origins.append(center + Vector3.FORWARD * .035)
 		if vehicle_index != SNOWMOBILE:
-			var emitters := vehicle_model.find_children("Cab projector*", "MeshInstance3D", true, false) if vehicle_index == 2 else lenses
+			var emitters := lenses
+			if vehicle_index == 2:
+				emitters = vehicle_model.find_children("Cab projector*", "MeshInstance3D", true, false)
+			elif vehicle_index == QUATTRO:
+				emitters = vehicle_model.find_children("Headlamp reflector*", "MeshInstance3D", true, false)
 			for emitter: MeshInstance3D in emitters:
 				if not projector_finish:
 					projector_finish = emitter.get_active_material(0).duplicate() as StandardMaterial3D
@@ -7569,6 +7960,7 @@ func _load_vehicle_model() -> void:
 		ambulance.add_child(beam)
 		headlights.append(beam)
 	moped_speed_needle = vehicle_model.find_child("SpeedNeedle",true,false) if vehicle_index == PUCH_DAKOTA else null
+	quattro_speed_needle = vehicle_model.find_child("QuattroSpeedNeedle",true,false) if vehicle_index == QUATTRO else null
 	player_wheels = _rig_wheels(vehicle_model)
 	_end_skid()
 	rear_tire_contacts.clear()
@@ -8115,7 +8507,12 @@ func _toggle_camera_view() -> void:
 
 func _update_camera(delta: float, snap_to_car := false) -> void:
 	if not is_instance_valid(camera) or not is_instance_valid(ambulance): return
-	camera.fov = 78 if cockpit_view and vehicle_index == 2 and not walker.visible and not boating and tram_mode == 0 and not operating_excavator and not ferry_passenger else 58
+	camera.fov = 58
+	if cockpit_view and not walker.visible and not boating and tram_mode == 0 and not operating_excavator and not ferry_passenger:
+		if vehicle_index == 2:
+			camera.fov = 78
+		elif vehicle_index == QUATTRO:
+			camera.fov = 74
 	if ferry_passenger:
 		var focus := walker.position + Vector3.UP*.95
 		camera.position = focus + Vector3(5,3.3+orbit_height,7).rotated(Vector3.UP,orbit_angle)
@@ -8167,6 +8564,9 @@ func _update_camera(delta: float, snap_to_car := false) -> void:
 			BUS:
 				camera.global_position = vehicle_model.to_global(Vector3(.58,2.13,4.07))
 				pitch = -1.30
+			QUATTRO:
+				camera.global_position = vehicle_model.to_global(Vector3(.346,1.17,-.20))
+				pitch = -1.66
 			REFUSE:
 				camera.global_position = ambulance.to_global(Vector3(-.52,2.60,-4.02))
 				curb_yaw = -.20
@@ -8570,6 +8970,32 @@ func _build_ui() -> void:
 	horn_button.offset_top = -82
 	horn_button.offset_bottom = -34
 	horn_button.pressed.connect(_honk)
+	tyre_service_button = _button("Fit winter tyres", 135)
+	tyre_service_button.add_theme_font_size_override("font_size", 22 if large_text else 16)
+	ui.add_child(tyre_service_button)
+	tyre_service_button.set_anchors_and_offsets_preset(Control.PRESET_CENTER_RIGHT)
+	tyre_service_button.offset_left = -246
+	tyre_service_button.offset_right = -22
+	tyre_service_button.grow_horizontal = Control.GROW_DIRECTION_BEGIN
+	tyre_service_button.offset_top = -138
+	tyre_service_button.offset_bottom = -90
+	tyre_service_button.pressed.connect(_swap_workshop_tyres)
+	spreader_button = _button("Spreader on", 135)
+	ui.add_child(spreader_button)
+	spreader_button.set_anchors_and_offsets_preset(Control.PRESET_CENTER_RIGHT)
+	spreader_button.offset_left = -220
+	spreader_button.offset_right = -22
+	spreader_button.offset_top = -138
+	spreader_button.offset_bottom = -90
+	spreader_button.toggle_mode = true
+	spreader_button.set_pressed_no_signal(spreader_enabled)
+	spreader_button.toggled.connect(func(enabled: bool):
+		spreader_enabled = enabled
+		_save_preferences()
+		if not enabled:
+			_set_spreader_active(false)
+		_refresh_ui()
+	)
 	_build_boule_choices()
 	seat_button = _button("Get out · F", 135)
 	ui.add_child(seat_button)
@@ -8853,7 +9279,8 @@ func _build_overlay() -> void:
 		tile.add_theme_stylebox_override("hover_pressed",selected_style)
 		var thumbnail := AtlasTexture.new()
 		thumbnail.atlas = preload("res://vehicles/menu_thumbnails.png")
-		thumbnail.region = Rect2(index % 6 * 256, floori(index / 6.0) * 128,256,128)
+		var picture_index := index + 3 if index in [DAM_PICKUP, QUATTRO] else index - 2 if index > QUATTRO else index
+		thumbnail.region = Rect2(picture_index % 6 * 256, floori(picture_index / 6.0) * 128,256,128)
 		thumbnail.filter_clip = true
 		tile.icon = thumbnail
 		tile.expand_icon = true
@@ -9085,7 +9512,7 @@ func _build_overlay() -> void:
 	pages[2].add_child(map_binding)
 	var vehicle_switches := CheckButton.new()
 	vehicle_switches.name = "NumberVehicleSwitches"
-	vehicle_switches.text = "Use 1 for warning lights and 2 for vehicle sound"
+	vehicle_switches.text = "Use 1 for warning lights, 2 for vehicle sound and 7 for the spreader"
 	vehicle_switches.button_pressed = number_vehicle_switches
 	vehicle_switches.toggled.connect(func(enabled: bool):
 		number_vehicle_switches = enabled
@@ -9615,6 +10042,7 @@ func _recover_road_vehicle() -> bool:
 	return false
 
 func _recover_position() -> void:
+	snow_slip_angle = 0.0
 	if boule_seated:
 		_change_seat()
 	if shopper_boarding:
@@ -10422,6 +10850,9 @@ func _load_preferences() -> void:
 	show_turn_street = config.get_value("driving","turn_street_names",false) == true
 	allow_red_lights = config.get_value("driving","allow_red_lights",false) == true
 	allow_crashes = config.get_value("driving","allow_crashes",true) == true
+	spreader_enabled = config.get_value("driving","spreader_enabled",true) != false
+	var tyres: Variant = config.get_value("driving","winter_tyre_models",PackedStringArray())
+	if tyres is PackedStringArray: winter_tyre_models = tyres
 	var gentle = config.get_value("driving","gentle",true)
 	if gentle is bool:
 		gentle_driving = gentle
@@ -10459,6 +10890,8 @@ func _save_preferences() -> void:
 	config.set_value("driving","turn_street_names",show_turn_street)
 	config.set_value("driving","allow_red_lights",allow_red_lights)
 	config.set_value("driving","allow_crashes",allow_crashes)
+	config.set_value("driving","spreader_enabled",spreader_enabled)
+	config.set_value("driving","winter_tyre_models",winter_tyre_models)
 	config.set_value("driving","gentle",gentle_driving)
 	config.set_value("traffic","lights",traffic_light_mode)
 	for i in RADIO_KEYS.size():
@@ -10650,6 +11083,8 @@ func _refresh_ui() -> void:
 			road_driver.position = Vector3(0,.64-.77*road_driver.scale.y,.18)
 		if vehicle_index == MINI_CABRIO:
 			road_driver.position = Vector3(-.38,.595-.87*road_driver.scale.y,-.19)
+		if vehicle_index == QUATTRO:
+			road_driver.position = Vector3(-.346,.52-.87*road_driver.scale.y,.16)
 		if vehicle_index == PORSCHE:
 			road_driver.position = Vector3(-.356,.48-.87*road_driver.scale.y,.10)
 		moped_pose.visible = on_moped
@@ -10664,9 +11099,9 @@ func _refresh_ui() -> void:
 		road_driver.get_node("AxelShopperLegs").visible = vehicle_index == SHOPPER and not play_as_alma
 		road_driver.get_node("AlmaCabLegs").visible = vehicle_index == FOOD_TRUCK and play_as_alma
 		road_driver.get_node("AxelCabLegs").visible = vehicle_index == FOOD_TRUCK and not play_as_alma
-		road_driver.get_node("CarLegs").visible = vehicle_index in [2,3,PORSCHE,XC60_POLICE,MINI_CABRIO,BUS]
-		road_driver.visible = vehicle_index in [2,3,PORSCHE,SNOWMOBILE,XC60_POLICE,MINI_CABRIO,PUCH_DAKOTA,FOOD_TRUCK,MOWER,SHOPPER,BUS] and mode == "playing" and not walker.visible and not boating and tram_mode == 0 and not cockpit_view
-		if vehicle_index in [2,SHOPPER,BUS] and cabin_wheel:
+		road_driver.get_node("CarLegs").visible = vehicle_index in [2,3,PORSCHE,XC60_POLICE,MINI_CABRIO,BUS,QUATTRO]
+		road_driver.visible = vehicle_index in [2,3,PORSCHE,SNOWMOBILE,XC60_POLICE,MINI_CABRIO,PUCH_DAKOTA,FOOD_TRUCK,MOWER,SHOPPER,BUS,QUATTRO] and mode == "playing" and not walker.visible and not boating and tram_mode == 0 and not cockpit_view
+		if vehicle_index in [2,SHOPPER,BUS,QUATTRO] and cabin_wheel:
 			_pose_driver_arms()
 	if skipper: skipper.visible = boating and mode == "playing"
 	if not is_instance_valid(mission_label): return
@@ -10741,6 +11176,10 @@ func _refresh_ui() -> void:
 	elif vehicle_index == ICE_CREAM and not boating:
 		horn_caption = tr("Ice cream chime · H")
 	horn_button.text = horn_caption + (" / F4" if horn_f4 else "")
+	spreader_button.text = "Spreader on" if spreader_enabled else "Spreader off"
+	if number_vehicle_switches:
+		spreader_button.text = tr(spreader_button.text) + " · 7"
+	spreader_button.visible = not show_overlay and vehicle_index == FARM_TRACTOR and weather.season == 4 and tram_mode == 0 and not (walker.visible or boating or operating_excavator or ferry_passenger)
 	seat_button.visible = not show_overlay and (not boating or _launch_at_berth())
 	light_button.visible = tram_mode == 0 and not boating and not walker.visible and (vehicle_index < 3 or vehicle_index in [XC60_POLICE, FARM_TRACTOR])
 	siren_button.visible = tram_mode == 0 and not boating and not walker.visible
@@ -10844,8 +11283,35 @@ func _refresh_ui() -> void:
 		subtitle_label.text = current_step.get_child(1).text
 	_refresh_status()
 
+func _can_swap_workshop_tyres() -> bool:
+	if mode != "playing" or paused or practice_active or not ambulance.visible or tram_mode != 0:
+		return false
+	if walker.visible or boating or ferry_passenger or operating_excavator or absf(speed) >= .16:
+		return false
+	if vehicle_index in [SNOWMOBILE, PUCH_DAKOTA, FARM_TRACTOR, WHEEL_LOADER, MOWER, SHOPPER]:
+		return false
+	return Vector2(ambulance.position.x,ambulance.position.z).distance_to(Vector2(STATION_DROP.x,STATION_DROP.z)) <= 5.3
+
+func _swap_workshop_tyres() -> void:
+	if not _can_swap_workshop_tyres():
+		return
+	var model: String = VEHICLE_SCENES_ALL[vehicle_index]
+	var current := winter_tyre_models.find(model)
+	if current >= 0:
+		winter_tyre_models.remove_at(current)
+		message = "Summer tyres fitted."
+	else:
+		winter_tyre_models.append(model)
+		message = "Winter tyres fitted."
+	message_timer = 3.0
+	_save_preferences()
+	_refresh_status()
+
 func _refresh_status() -> void:
 	if not is_instance_valid(status_label): return
+	tyre_service_button.visible = _can_swap_workshop_tyres()
+	if tyre_service_button.visible:
+		tyre_service_button.text = "Fit summer tyres" if VEHICLE_SCENES_ALL[vehicle_index] in winter_tyre_models else "Fit winter tyres"
 	if reverse_monitor:
 		var reversing := cockpit_view and not walker.visible and speed < -.12 and mode == "playing" and not paused
 		reverse_monitor.visible = reversing
@@ -10998,6 +11464,7 @@ func _noise_material(dark_color: Color, light_color: Color, frequency: float, st
 	var shader := Shader.new()
 	shader.code = """
 	shader_type spatial;
+	#include "res://environment/road_grit.gdshaderinc"
 	uniform vec4 dark_color : source_color;
 	uniform vec4 light_color : source_color;
 	uniform float wet = 0.0;
@@ -11020,9 +11487,9 @@ func _noise_material(dark_color: Color, light_color: Color, frequency: float, st
 		float broad = mix(noise(p), .5, smoothstep(.25, 1., footprint));
 		float grain = mix(noise(p * 12.), .5, smoothstep(.25, 1., footprint * 12.));
 		ALBEDO = mix(dark_color.rgb, light_color.rgb, clamp(0.5 + (broad - 0.5) * strength * 3.0 + (grain - 0.5) * strength * 0.4, 0.0, 1.0));
-		vec2 worked = vec2(0.0);
+		vec3 worked = vec3(0.0);
 		if (is_grass || snow_cover > 0.0) {
-			worked = texture(work_map,(world_position.xz-work_bounds.xy)/work_bounds.zw).rg;
+			worked = texture(work_map,(world_position.xz-work_bounds.xy)/work_bounds.zw).rgb;
 		}
 		if (is_grass) {
 			vec3 short_grass = light_color.rgb * vec3(1.06,1.15,.93) * (.96 + .08 * grain);
@@ -11030,9 +11497,10 @@ func _noise_material(dark_color: Color, light_color: Color, frequency: float, st
 		}
 		ALBEDO *= 1.0 - wet*.42;
 		float coverage = smoothstep(.12, .92, snow_cover + (broad - .5) * .65);
-		coverage *= (1.0-worked.r) * smoothstep(0., .22, snow_cover);
+		coverage *= (1.0-worked.r) * (1.0-.27*worked.b) * smoothstep(0., .22, snow_cover);
 		ALBEDO = mix(ALBEDO,vec3(.73,.81,.85) * (.90 + .10 * grain),coverage);
-		ROUGHNESS = mix(mix(.92,.23,wet),.94,coverage);
+		ALBEDO = road_grit_color(ALBEDO, world_position.xz, worked.b);
+		ROUGHNESS = mix(mix(mix(.92,.23,wet),.94,coverage),.94,worked.b);
 	}
 	"""
 	var material := ShaderMaterial.new()

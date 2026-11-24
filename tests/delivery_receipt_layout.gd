@@ -61,6 +61,25 @@ func check_layout() -> void:
 	await process_frame
 	game = load("res://main.tscn").instantiate()
 	root.add_child(game)
+	var bakery: Node = game.get_node("Bageriet")
+	var door := bakery.find_child("Bakery glazed door", true, false) as MeshInstance3D
+	var threshold := bakery.find_child("Bakery entrance threshold", true, false) as MeshInstance3D
+	var door_bottom := door.to_global(door.get_aabb().position).y
+	var threshold_top := threshold.to_global(threshold.get_aabb().end).y
+	if absf(door_bottom - threshold_top) > .01:
+		printerr("The bakery door does not meet its threshold")
+		quit(1)
+		return
+	var door_bounds := door.transform * door.get_aabb()
+	var entrance := Rect2(Vector2(door_bounds.position.x, door_bounds.position.y), Vector2(door_bounds.size.x, door_bounds.size.y))
+	for window: MeshInstance3D in bakery.find_children("Insulated glazing*", "MeshInstance3D", true, false):
+		var bounds := window.transform * window.get_aabb()
+		var opening := Rect2(Vector2(bounds.position.x, bounds.position.y), Vector2(bounds.size.x, bounds.size.y))
+		if entrance.intersects(opening):
+			printerr("Bakery facade window overlaps the entrance")
+			quit(1)
+			return
+	print("Bakery facade windows clear the entrance and the door meets the threshold.")
 	game._on_vehicle_selected(game.RECOVERY)
 	game.start_button.pressed.emit()
 	game.free_drive = true

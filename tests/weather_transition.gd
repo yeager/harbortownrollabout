@@ -161,6 +161,29 @@ func check_transition() -> void:
 		printerr("Missing illuminated Christmas bulbs at night")
 		quit(1)
 		return
+	var bulb_colors := {}
+	for bulb in spruce.bulbs:
+		bulb_colors[bulb.emission] = true
+	if bulb_colors.size() < 4:
+		printerr("Christmas lights should have at least four distinct colours")
+		quit(1)
+		return
+	var winter_cover := game.weather.snow
+	game.weather.snow = 0.0
+	game._update_daylight(0)
+	game._update_pedestrians(0)
+	if spruce.visible or game.roadside_solids.has(spruce.obstacle) or game.santa.visible or game.midsummer_pole.visible:
+		printerr("Snow-free winter should leave the square clear of seasonal decorations")
+		quit(1)
+		return
+	game.weather.snow = winter_cover
+	game._update_daylight(0)
+	game._update_pedestrians(0)
+	if not spruce.visible or game.roadside_solids.count(spruce.obstacle) != 1 or not game.santa.visible:
+		printerr("Returning winter snow should restore the tree and Santa once")
+		quit(1)
+		return
+	print("Snow-free winter clears the tree and Santa; snowfall restores both and four or more light colours.")
 	game._apply_calm_mode(false)
 	game._update_daylight(.75)
 	if game.chimney_beacon.emission_enabled or not game.shops.candy_blade_glow.emission_enabled:
@@ -219,6 +242,7 @@ func check_transition() -> void:
 		return
 	var pole := game.midsummer_pole
 	var fountain := game.field_fountain
+	var first_jet_speed := -1.0
 	for season in [2, 3, 4, 1, 2]:
 		seasons.get_child(season).pressed.emit()
 		game._process(0)
@@ -236,6 +260,23 @@ func check_transition() -> void:
 				printerr("Fountain spray is wrong in season ", season)
 				quit(1)
 				return
+		if fountain.is_processing() != summer or fountain.spray_audio.playing != summer:
+			printerr("Fountain animation or positional sound did not follow the summer schedule")
+			quit(1)
+			return
+		if summer:
+			var speed := fountain.jets[0].initial_velocity_max
+			if speed <= 0.0 or (first_jet_speed >= 0.0 and not is_equal_approx(speed, first_jet_speed)):
+				printerr("New summer did not restart the fountain at its opening velocity")
+				quit(1)
+				return
+			first_jet_speed = speed
+			fountain._process(.5)
+			if is_equal_approx(fountain.jets[0].initial_velocity_max, speed):
+				printerr("Fountain spray height did not change")
+				quit(1)
+				return
+	print("Fountain restarts its animated spray each summer.")
 	seasons.get_child(4).pressed.emit()
 	conditions.get_child(3).pressed.emit()
 	game.weather.tick(160)

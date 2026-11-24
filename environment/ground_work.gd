@@ -7,19 +7,20 @@ var area: Rect2
 var image: Image
 var texture: ImageTexture
 var has_ploughed := false
+var has_gritted := false
 var dirty := false
 var upload_time := 0.0
 
 func _init(bounds: Rect2) -> void:
 	area = bounds
-	image = Image.create_empty(int(bounds.size.x)*DENSITY, int(bounds.size.y)*DENSITY, false, Image.FORMAT_RG8)
+	image = Image.create_empty(int(bounds.size.x)*DENSITY, int(bounds.size.y)*DENSITY, false, Image.FORMAT_RGB8)
 	texture = ImageTexture.create_from_image(image)
 
 func attach(surface: ShaderMaterial) -> void:
 	surface.set_shader_parameter("work_map", texture)
 	surface.set_shader_parameter("work_bounds", Vector4(area.position.x,area.position.y,area.size.x,area.size.y))
 
-func sweep(start: Transform3D, finish: Transform3D, left: Vector3, right: Vector3, mowing: bool) -> void:
+func sweep(start: Transform3D, finish: Transform3D, left: Vector3, right: Vector3, mowing: bool, gritting := false) -> void:
 	var travel := maxf((start * left).distance_to(finish * left), (start * right).distance_to(finish * right))
 	var steps := maxi(1, ceili(travel*DENSITY*2))
 	var samples := maxi(1, ceili(left.distance_to(right)*DENSITY*2))
@@ -36,6 +37,10 @@ func sweep(start: Transform3D, finish: Transform3D, left: Vector3, right: Vector
 				if colour.g == 1.0: continue
 				colour.g = 1.0
 				if PICNIC_MEADOW.has_point(flat): meadow_pixels += 1
+			elif gritting:
+				if colour.b == 1.0: continue
+				colour.b = 1.0
+				has_gritted = true
 			else:
 				if colour.r == 1.0: continue
 				colour.r = 1.0
@@ -47,13 +52,20 @@ func cleared_at(point: Vector3) -> bool:
 	var flat := Vector2(point.x,point.z)
 	return has_ploughed and area.has_point(flat) and image.get_pixelv(Vector2i((flat-area.position)*DENSITY)).r > .5
 
+func gritted_at(point: Vector3) -> bool:
+	var flat := Vector2(point.x,point.z)
+	return has_gritted and area.has_point(flat) and image.get_pixelv(Vector2i((flat-area.position)*DENSITY)).b > .5
+
 func update(delta: float, snow: float) -> void:
-	if snow <= .01 and has_ploughed:
+	if snow <= .01 and (has_ploughed or has_gritted):
 		# Preserve the green mowing channel when the snow melts.
 		var data := image.get_data()
-		for i in range(0,data.size(),2): data[i] = 0
-		image.set_data(image.get_width(),image.get_height(),false,Image.FORMAT_RG8,data)
+		for i in range(0,data.size(),3):
+			data[i] = 0
+			data[i+2] = 0
+		image.set_data(image.get_width(),image.get_height(),false,Image.FORMAT_RGB8,data)
 		has_ploughed = false
+		has_gritted = false
 		dirty = true
 	upload_time -= delta
 	if dirty and upload_time <= 0:

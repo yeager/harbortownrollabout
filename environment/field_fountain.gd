@@ -3,6 +3,7 @@ extends Node3D
 # Fält, Thomas Nordström (2003). https://sv.wikipedia.org/wiki/Fält_(fontän)
 var jets: Array[CPUParticles3D] = []
 var covers := Node3D.new()
+var spray_audio := AudioStreamPlayer3D.new()
 var season := -1
 var elapsed := 0.0
 
@@ -20,6 +21,16 @@ func place(parent: Node3D, mesh: Mesh, position_local: Vector3) -> void:
 
 func _ready() -> void:
 	add_child(covers)
+	var water := preload("res://audio/fountain_water.wav").duplicate() as AudioStreamWAV
+	water.loop_mode = AudioStreamWAV.LOOP_FORWARD
+	water.loop_end = roundi(water.get_length() * water.mix_rate)
+	spray_audio.stream = water
+	spray_audio.bus = &"Traffic and radio"
+	spray_audio.position = Vector3.UP * .6
+	spray_audio.unit_size = 4.0
+	spray_audio.max_distance = 17.0
+	spray_audio.volume_db = -11.0
+	add_child(spray_audio)
 	var slab := BoxMesh.new()
 	slab.size = Vector3(2.47,.06,2.47)
 	slab.material = finish(Color("#8baf95"),.82)
@@ -50,6 +61,7 @@ func _ready() -> void:
 			var jet := CPUParticles3D.new()
 			jet.emitting = false
 			jet.mesh = drop
+			jet.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 			jet.amount = 100
 			jet.lifetime = 1.15
 			jet.direction = Vector3.UP
@@ -64,11 +76,21 @@ func set_season(value: int) -> void:
 	if season == value:
 		return
 	season = value
+	var spraying := value == 2
 	covers.visible = value == 4
-	set_process(value == 2)
+	set_process(spraying)
+	if spraying:
+		elapsed = 0.0
+		_process(0.0)
+		spray_audio.play()
+	else:
+		spray_audio.stop()
 	for jet in jets:
-		jet.visible = value == 2
-		jet.emitting = value == 2
+		jet.visible = spraying
+		if spraying:
+			jet.restart()
+		else:
+			jet.emitting = false
 
 func _process(delta: float) -> void:
 	elapsed += delta

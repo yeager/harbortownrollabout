@@ -1861,7 +1861,7 @@ msgstr ""
 msgid "Open the town map with F11"
 msgstr ""
 
-msgid "Use 1 for warning lights and 2 for vehicle sound"
+msgid "Use 1 for warning lights, 2 for vehicle sound and 7 for the spreader"
 msgstr ""
 
 msgid "Fountain"
@@ -1877,4 +1877,34 @@ msgid "Show more of the city in the distance"
 msgstr ""
 
 msgid "Streetlamp shadows"
+msgstr ""
+
+msgid "DAM pickup"
+msgstr ""
+
+msgid "Audi Sport quattro"
+msgstr ""
+
+msgid "Spreader on"
+msgstr ""
+
+msgid "Spreader off"
+msgstr ""
+
+msgid "Fit winter tyres"
+msgstr ""
+
+msgid "Fit summer tyres"
+msgstr ""
+
+msgid "Tyre service"
+msgstr ""
+
+msgid "Fuel and tyre service"
+msgstr ""
+
+msgid "Summer tyres fitted."
+msgstr ""
+
+msgid "Winter tyres fitted."
 msgstr ""

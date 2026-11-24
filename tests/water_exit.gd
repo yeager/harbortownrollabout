@@ -182,34 +182,36 @@ func check_exits() -> void:
 	await process_frame
 	game = load("res://main.tscn").instantiate()
 	root.add_child(game)
-	game._on_vehicle_selected(game.BUS)
-	game._start_game()
-	game.ambulance.position = Vector3(70, 0, 20)
-	game._save_checkpoint()
-	game.queue_free()
-	await process_frame
-	game = load("res://main.tscn").instantiate()
-	root.add_child(game)
-	game._resume_road_checkpoint()
-	for span: Vector2 in game.OPEN_WATER:
-		if game.vehicle_index != game.BUS or game._shore_overlap(span, game.ambulance.position, game._player_extent()) > .01:
-			printerr("A bus saved in the canal was not moved onto dry land")
-			quit(1)
-			return
-	for bridge_z: float in [0.0, -48.0]:
-		var bridge_position := Vector3(71, game._surface_height(71, bridge_z), bridge_z)
-		game.ambulance.position = bridge_position
-		game.ambulance.rotation.y = -PI * .5
+	for index in [game.BUS, game.DAM_PICKUP]:
+		game.mode = "menu"
+		game._on_vehicle_selected(index)
+		game._start_game()
+		game.ambulance.position = Vector3(70, 0, 20)
 		game._save_checkpoint()
 		game.queue_free()
 		await process_frame
 		game = load("res://main.tscn").instantiate()
 		root.add_child(game)
 		game._resume_road_checkpoint()
-		if game.vehicle_index != game.BUS or not game.ambulance.position.is_equal_approx(bridge_position):
-			printerr("A valid bus checkpoint moved off the bridge at z = ", bridge_z)
-			quit(1)
-			return
+		for span: Vector2 in game.OPEN_WATER:
+			if game.vehicle_index != index or game._shore_overlap(span, game.ambulance.position, game._player_extent()) > .01:
+				printerr(game.VEHICLE_NAMES_ALL[index], " saved in the canal was not moved onto dry land")
+				quit(1)
+				return
+		for bridge_z: float in [0.0, -48.0]:
+			var bridge_position := Vector3(71, game._surface_height(71, bridge_z), bridge_z)
+			game.ambulance.position = bridge_position
+			game.ambulance.rotation.y = -PI * .5
+			game._save_checkpoint()
+			game.queue_free()
+			await process_frame
+			game = load("res://main.tscn").instantiate()
+			root.add_child(game)
+			game._resume_road_checkpoint()
+			if game.vehicle_index != index or not game.ambulance.position.is_equal_approx(bridge_position):
+				printerr(game.VEHICLE_NAMES_ALL[index], " checkpoint moved off the bridge at z = ", bridge_z)
+				quit(1)
+				return
 	print("Bridge exits, offshore safety and the motorboat pier checkpoint passed.")
 	quit()
 

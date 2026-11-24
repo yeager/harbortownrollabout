@@ -33,6 +33,8 @@
 
 ## Sources and verification
 
+- The pump price test verifies that all eight main pump displays collectively show petrol 95, petrol 98 and diesel. Each of the 24 nozzle prices matches the corresponding tower price in the currency and number format of all seven languages.
+
 - The bumper contact test checks that all 26 selectable road vehicles have an assigned operating mass, that 75 kg of additional load reduces the drive response for each, and that lighter and heavier vehicles exchange speed differently in contact. The patrol helicopter has a 3,200 kg gameplay mass. Its bank is based on the lateral force needed to follow the patrol curve. Sampling 24 points in Godot gave 2.85° to 5.66°.
 
 - After the route 74 glazing and canal checkpoint changes, Godot 4.7 dev5 verified six bus stops, all 26 road vehicles and three special gallery activities, separate Axel and Alma save profiles, and all 24 resumed mission steps across eight vehicles.
@@ -433,3 +435,7 @@ Assessed against the supplied Shopper photographs using front three-quarter, sid
 | Exterior details | 91 | The rear view shows both deck vents, the mesh side intake and the filler cap inside the tapered basket. The tapered basket now has continuous rounded wire rims, checked in a rear three-quarter game view. |
 
 Overall visual score **87/100** (348 ÷ 4). The front shell corners and the surface finish remain the clearest discrepancies in these views.
+
+## Renderer diagnostics
+
+- On Godot 4.7 dev5 with Compatibility and Radeon Renoir, two texture RIDs (87,376 and 65,532 bytes) are reported at shutdown. The same warnings reproduce in a standalone scene with only a camera and a box, as well as when quitting Harbor Town through its confirmation dialog. Use the standalone scene as a baseline when investigating future rendering warnings.

@@ -1949,8 +1949,8 @@ msgstr "Grünes Licht. Fahr über die Linie."
 msgid "Open the town map with F11"
 msgstr "Stadtkarte mit F11 öffnen"
 
-msgid "Use 1 for warning lights and 2 for vehicle sound"
-msgstr "1 für Warnleuchten und 2 für Fahrzeugton verwenden"
+msgid "Use 1 for warning lights, 2 for vehicle sound and 7 for the spreader"
+msgstr "1 für Warnleuchten, 2 für Fahrzeugton und 7 für den Streuer"
 
 msgid "Fountain"
 msgstr "Brunnen"
@@ -1966,3 +1966,33 @@ msgstr "Mehr von der Stadt in der Ferne anzeigen"
 
 msgid "Streetlamp shadows"
 msgstr "Schatten von Straßenlaternen"
+
+msgid "DAM pickup"
+msgstr "DAM-Pick-up"
+
+msgid "Audi Sport quattro"
+msgstr "Audi Sport quattro"
+
+msgid "Spreader on"
+msgstr "Streuer an"
+
+msgid "Spreader off"
+msgstr "Streuer aus"
+
+msgid "Fit winter tyres"
+msgstr "Winterreifen montieren"
+
+msgid "Fit summer tyres"
+msgstr "Sommerreifen montieren"
+
+msgid "Tyre service"
+msgstr "Reifenservice"
+
+msgid "Fuel and tyre service"
+msgstr "Tankstelle und Reifenservice"
+
+msgid "Summer tyres fitted."
+msgstr "Sommerreifen montiert."
+
+msgid "Winter tyres fitted."
+msgstr "Winterreifen montiert."

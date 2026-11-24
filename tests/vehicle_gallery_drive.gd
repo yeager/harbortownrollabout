@@ -44,7 +44,31 @@ func check_gallery() -> void:
 			printerr("Menu driving failed for ",tile.text," distance=",travel," turn=",turn)
 			quit(1)
 			return
-		if index in [2, game.SHOPPER, game.REFUSE]:
+		if index == game.DAM_PICKUP:
+			if game.player_wheels.size() != 4 or game.front_knuckles.size() != 2 or game.rear_tire_contacts.size() != 2:
+				printerr("DAM pickup axle layout is incomplete")
+				quit(1)
+				return
+			for wheel in game.player_wheels:
+				if is_zero_approx(wheel.rotation.x):
+					printerr("DAM pickup wheel did not roll")
+					quit(1)
+					return
+		if index == game.QUATTRO:
+			var rings: Array = game.vehicle_model.find_children("Polished grille ring*","MeshInstance3D",true,false)
+			if rings.size() != 5 or game.cabin_wheel == null or not game.road_driver.visible:
+				printerr("Quattro grille or driver layout is incomplete")
+				quit(1)
+				return
+			if game.ambulance.to_local(game.cabin_wheel.global_position).x >= 0.0 or game.road_driver.position.x >= 0.0:
+				printerr("Quattro driver or wheel moved off the left seat")
+				quit(1)
+				return
+			if game.quattro_speed_needle == null or game.quattro_speed_needle.rotation.z >= 0.0:
+				printerr("Quattro speedometer did not follow forward motion")
+				quit(1)
+				return
+		if index in [2, game.SHOPPER, game.REFUSE, game.QUATTRO]:
 			var lenses: Array = game.vehicle_model.find_children("Swept transparent headlamp cover*" if index == 2 else "Headlight lens*", "MeshInstance3D", true, false)
 			if lenses.size() != (1 if index == game.SHOPPER else 2) or lenses.size() != game.headlights.size():
 				printerr("Headlight count differs from vehicle body")
@@ -100,6 +124,18 @@ func check_gallery() -> void:
 			printerr("Holding the brake did not stop ", tile.text, " speed=", game.speed)
 			quit(1)
 			return
+		if index == game.DAM_PICKUP:
+			var brake: StandardMaterial3D = game.player_brake_lens
+			var reverse: StandardMaterial3D = game.reverse_lens
+			if brake == null or reverse == null or not brake.has_meta("centre_lamp") or not brake.get_meta("centre_lamp").emission_enabled or brake.emission_energy_multiplier < 2.39 or reverse.emission_energy_multiplier > 0:
+				printerr("Pickup braking did not light the red lenses only")
+				quit(1)
+				return
+		if index == game.QUATTRO:
+			if game.player_brake_lens == null or game.reverse_lens == null or game.player_brake_lens.emission_energy_multiplier < 2.39 or game.reverse_lens.emission_energy_multiplier > 0:
+				printerr("Quattro brake lights did not work independently of the reverse lights")
+				quit(1)
+				return
 		game._drive(1.0/60.0)
 		var stopped: Transform3D = game.ambulance.transform
 		Input.action_press("ui_down")
@@ -111,6 +147,16 @@ func check_gallery() -> void:
 			printerr("Reverse failed for ", tile.text, " distance=", reverse_travel)
 			quit(1)
 			return
+		if index == game.DAM_PICKUP:
+			if game.reverse_lens.emission_energy_multiplier < 1.99 or game.player_brake_lens.get_meta("centre_lamp").emission_enabled:
+				printerr("Pickup reversing did not light the white lenses independently")
+				quit(1)
+				return
+		if index == game.QUATTRO:
+			if game.reverse_lens.emission_energy_multiplier < 1.99 or game.player_brake_lens.emission_energy_multiplier >= 2.39:
+				printerr("Quattro reverse lights did not activate independently")
+				quit(1)
+				return
 	print("All ",game.VEHICLE_NAMES_ALL.size()," road vehicles started, moved, steered, braked and reversed from the picture menu.")
 	for extra in game.EXTRA_GALLERY_NAMES.size():
 		game.mode = "menu"

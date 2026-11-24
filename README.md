@@ -25,6 +25,8 @@ Click a vehicle picture, choose Axel or Alma, then select **Start driving**. Hol
 
 Choose **Practice driving** on the main menu to start in a marked driving-school car on a traffic-free course. Practise staying within 20 km/h, stopping at the STOP sign and waiting for green. If you get stuck there, **R** returns you to a safe spot on the course. Select **Return to town** when you’re ready to explore.
 
+On snowy roads, a sharp turn above about 22 km/h can make a vehicle slide sideways and leave tyre marks. Ease off and straighten the wheel to regain grip. Ploughed lanes also give the tyres more grip. Drive the farm tractor forward in winter snow to plough and spread grit and salt. Other vehicles get extra grip on the treated strip. Use the **Spreader on/off** button to keep ploughing without spreading. To toggle the spreader with **7** on the main keyboard or number pad, enable the numbered vehicle shortcuts under **Settings → Driving**.
+
 At a traffic light, stop on red, slow down on orange and go on green. By default, the game helps you stop at the line. If you enable **Allow driving through red lights** in Driving settings, crossing on red brings up a reminder.
 
 ![Choosing a vehicle on the main menu](docs/screenshots/vehicle-selection.png)
@@ -36,6 +38,9 @@ At a traffic light, stop on red, slow down on orange and go on green. By default
 - **Drive bus 74 to Sickla udde.** Pick up your first passengers at the square and drop them off at the school. The display inside the bus shows the next stop.
 - **Take the garbage truck on its rounds.** Empty the bins at the square and the clinic, then unload at the marina. A full truck takes longer to get moving.
 - **Return the ice cream crates.** In **Free exploration**, stop the ice cream van outside the kiosk on Stationsallén to collect two empty crates. Drive west along the same street and park in the bay marked **Ice cream depot**.
+- **Change tyres at the garage.** Select **Fuel and tyre service** on the town map, stop beside the **Tyre service** sign and choose which tyres to fit. Summer tyres slide more and take longer to stop on snow. The game remembers the tyres fitted to each vehicle.
+- **Drive the Sport quattro from inside.** Choose **Audi Sport quattro** under **Cars** and press **C** to switch between the left-hand driver’s seat and the outside camera.
+- **Deliver parcels in the DAM pickup.** Choose the pickup under **Work vehicles**, open the phone with **T** and select **Take a job**. Pick up two parcels at the square and watch them ride in the bed. Deliver them to the health centre and marina, then check the receipts on your phone.
 - **Make the morning flour run.** Choose the tow truck in **Free exploration** and set the clock to **Day and night**. Stop beside the square between 5 a.m. and noon to load three flour sacks. Stop outside the bakery opposite the fire station to unload them. Your delivery receipt is in the phone.
 - **Bring a cake to a birthday party.** Walk up to the pink box at the bakery door and carry it to the party table in the square. The host opens the lid when you arrive.
 - **Find the moon rabbit.** Look on the pavement outside the sweet shop. Carry the lost figurine to the counter in the clothing shop to hear the owner's thank-you.

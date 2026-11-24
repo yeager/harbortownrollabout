@@ -42,6 +42,7 @@ func check_displays(game: Node, locale: String) -> bool:
 	if tower.size() != 3 or prices.size() != 24 or meters.size() != 8:
 		printerr("Expected three tower prices, eight pump displays and twenty-four nozzle labels")
 		return false
+	var fuel_on_main_displays := {}
 	for meter in meters:
 		var grade := ""
 		for sibling in meter.get_parent().get_children():
@@ -51,6 +52,10 @@ func check_displays(game: Node, locale: String) -> bool:
 		if not tower.has(grade) or meter.text != tower[grade] + "/L":
 			printerr("Main pump display disagrees with the tower in ", locale, ": ", meter.text)
 			return false
+		fuel_on_main_displays[grade] = true
+	if fuel_on_main_displays.size() != tower.size():
+		printerr("The main pump displays should advertise a mix of petrol and diesel")
+		return false
 	var grades_by_face := {}
 	for price in prices:
 		var matched := false
