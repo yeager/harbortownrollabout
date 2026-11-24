@@ -1941,3 +1941,6 @@ msgstr "Abrir el mapa de la ciudad con F11"
 
 msgid "Use 1 for warning lights and 2 for vehicle sound"
 msgstr "Usar 1 para las luces de aviso y 2 para el sonido del vehículo"
+
+msgid "Fountain"
+msgstr "Fuente"

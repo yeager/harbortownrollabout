@@ -418,8 +418,9 @@ var steering := 0.0
 var map_goal := Vector3.INF
 var map_button := Button.new()
 var leave_practice_button := Button.new()
+const FOUNTAIN_APPROACH := Vector3(41,0,39.5)
 const MAP_STOREFRONTS := ["Pizzeria","Sweet shop","Momo & Bori"]
-const MAP_NAMES := ["Town square","Clinic","Marina","School","Petrol station","Hot dog stand","Bakery","Boule court","Pizzeria","Sweet shop","Momo & Bori"]
+const MAP_NAMES := ["Town square","Clinic","Marina","School","Petrol station","Hot dog stand","Bakery","Boule court","Pizzeria","Sweet shop","Momo & Bori","Fountain"]
 var free_drive := true
 var mission_index := 0
 const FireLocker := preload("res://scripts/fire_locker.gd")
@@ -7366,6 +7367,9 @@ func _update_route_arrows() -> void:
 	var walking_to_grill := grill_destination and walker.visible
 	var arrived := shops.at_grill_counter(origin) if walking_to_grill else origin.distance_to(target) < _arrival_radius()
 	var bench_destination := free_drive and target == BOULE_BENCH_APPROACH
+	var fountain_destination := free_drive and target == FOUNTAIN_APPROACH
+	if fountain_destination and walker.visible:
+		arrived = origin.distance_to(target) < 1.6
 	var shop_destination := -1
 	if free_drive:
 		for shop_name: String in MAP_STOREFRONTS:
@@ -7380,7 +7384,7 @@ func _update_route_arrows() -> void:
 	if free_drive and target == FIRE_RETURN_BAY:
 		arrived = _parked_in_fire_bay()
 	if free_drive and arrived:
-		if walker.visible or not (grill_destination or bench_destination or is_shop_destination):
+		if walker.visible or not (grill_destination or bench_destination or is_shop_destination or fountain_destination):
 			map_goal = Vector3.INF
 			if target == FIRE_RETURN_BAY and is_instance_valid(driven_fire_locker):
 				driven_fire_locker.set_destination("")
@@ -7413,7 +7417,7 @@ func _update_route_arrows() -> void:
 	if not walker.visible and not paused and not boating and not operating_excavator:
 		turn_preview.text = navigator.turn_preview(points, car_forward, show_turn_street)
 		turn_preview.visible = not turn_preview.text.is_empty()
-	var gap := minf(3.5, start.distance_to(goal) * .5) if walker.visible and (grill_destination or bench_destination or is_shop_destination) else 3.5
+	var gap := minf(3.5, start.distance_to(goal) * .5) if walker.visible and (grill_destination or bench_destination or is_shop_destination or fountain_destination) else 3.5
 	var used := 0
 	for i in range(1,points.size()):
 		var segment := points[i]-points[i-1]
@@ -8338,7 +8342,7 @@ func _build_town_map() -> void:
 	body.add_child(chart)
 	var counter := shops.grill_counter()
 	chart.water_bounds = CANAL_BOUNDS
-	chart.configure(navigator,PackedVector3Array([TARGETS[0],TARGETS[1],TARGETS[2],SCHOOL_CURB,STATION_DROP,counter,FLOUR_CURB,BOULE_BENCH_APPROACH,shops.pizzeria_entrance(),shops.storefront_entrance("Sweet shop"),shops.storefront_entrance("Momo & Bori")]),MAP_NAMES)
+	chart.configure(navigator,PackedVector3Array([TARGETS[0],TARGETS[1],TARGETS[2],SCHOOL_CURB,STATION_DROP,counter,FLOUR_CURB,BOULE_BENCH_APPROACH,shops.pizzeria_entrance(),shops.storefront_entrance("Sweet shop"),shops.storefront_entrance("Momo & Bori"),FOUNTAIN_APPROACH]),MAP_NAMES)
 	dialog.window_input.connect(func(event: InputEvent):
 		if not event is InputEventKey or not event.pressed or event.echo or event.is_command_or_control_pressed() or event.alt_pressed:
 			return

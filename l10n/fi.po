@@ -1930,3 +1930,6 @@ msgstr "Avaa kaupunkikartta F11-näppäimellä"
 
 msgid "Use 1 for warning lights and 2 for vehicle sound"
 msgstr "Käytä varoitusvaloihin 1 ja ajoneuvon ääneen 2"
+
+msgid "Fountain"
+msgstr "Suihkulähde"
