@@ -7113,6 +7113,12 @@ func _load_vehicle_model() -> void:
 		var display := _make_box("Bus dashboard screen",Vector3(.355,.173,.017),Vector3(.58,1.745,4.70),Color("#14272b"),false,vehicle_model)
 		display.rotation.x = -2.20
 		display.rotate_object_local(Vector3.BACK,PI)
+		var housing := Color("#252a2d")
+		_make_box("Bus display housing", Vector3(.388,.206,.041), Vector3(0,0,-.024), housing, false, display)
+		_make_box("Bus display sun visor", Vector3(.394,.022,.065), Vector3(0,.094,.005), housing, false, display)
+		for side in [-1.0, 1.0]:
+			_make_box("Bus display bezel", Vector3(.018,.185,.036), Vector3(side * .187,0,.001), housing, false, display)
+		_make_box("Bus display lower bezel", Vector3(.388,.023,.038), Vector3(0,-.092,0), housing, false, display)
 		dash_speed = _station_sign("",Vector3(0,-.004,.011),.00135,Color("#def4f7"),0,display)
 		dash_speed.font_size = 44
 		dash_direction = _station_sign("",Vector3(0,.051,.011),.00115,Color("#def4f7"),0,display)
