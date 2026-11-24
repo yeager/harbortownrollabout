@@ -7021,7 +7021,7 @@ func _load_vehicle_model() -> void:
 	if vehicle_index == BUS:
 		_fit_bus_interior()
 		for end in [-1,1]:
-			var lamp := _make_box("Left departure indicator",Vector3(.19,.12,.09),Vector3(1.04,.96,end*5.29),Color("#ff9d17"),false,vehicle_model)
+			var lamp := _make_box("Left departure indicator",Vector3(.19,.085,.027),Vector3(1.04,.96,5.29) if end == 1 else Vector3(1.01,1.11,-5.302),Color("#ff9d17"),false,vehicle_model)
 			lamp.material_override = _material(Color("#ff9d17"),.25,true)
 			lamp.hide()
 			bus_departure_lamps.append(lamp)
