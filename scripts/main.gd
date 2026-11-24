@@ -1455,7 +1455,7 @@ func _drive(delta: float) -> void:
 	var bounds := _play_bounds(ambulance.position)
 	pos.x = clampf(pos.x, bounds.position.x + extent.x, bounds.end.x - extent.x)
 	pos.z = clampf(pos.z, bounds.position.y + extent.y, bounds.end.y - extent.y)
-	if not pos.is_equal_approx(destination):
+	if pos.x != destination.x or pos.z != destination.z:
 		speed = 0.0
 	pos.y = _surface_height(pos.x, pos.z)
 	_update_vehicle_dirt(pos,previous_pose.origin,delta)

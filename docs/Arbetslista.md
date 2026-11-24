@@ -32,7 +32,7 @@ Listan innehåller 100 jobb. En tom ruta är öppen. En punkt bockas av när bet
 
 - [x] 21. Grävmaskinen kan ta sand ur en hög och tippa den i en grop eller på ett flak.
 - [x] 22. Ploga vägen till skolan och visa den öppnade passagen.
-- [x] 23. Klipp en avgränsad picknickäng och visa när arbetet är färdigt. Åkgräsklipparen stannade innanför samtliga fyra spelgränser vid körning framåt och bakåt, både i staden och på övningsbanan. När den parkerades längs varje kant gick det att kliva av mot insidan och sedan kliva på igen.
+- [x] 23. Klipp en avgränsad picknickäng och visa när arbetet är färdigt. Åkgräsklipparen stannade innanför samtliga fyra spelgränser vid körning framåt och bakåt, både i staden och på övningsbanan. När den parkerades längs varje kant gick det att kliva av mot insidan och sedan kliva på igen. Även diagonal körning framåt och bakåt mot alla fyra hörn har provats i båda områdena efter korrigering av kvarvarande fart vid gränsen.
 - [x] 24. Sorteringsrunda med kärl märkta med både bild och färg.
 - [x] 25. Visa hur verkstaden lagar den bärgade bilen.
 - [x] 26. Barnvänligt brandbilsuppdrag med slang och vatten.

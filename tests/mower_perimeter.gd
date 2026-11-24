@@ -11,7 +11,7 @@ func check_perimeter() -> void:
 	for practice in [false, true]:
 		game.practice_active = practice
 		var bounds: Rect2 = game.PRACTICE_YARD if practice else game.CITY_INTERIOR
-		for outward: Vector2 in [Vector2.LEFT, Vector2.RIGHT, Vector2.UP, Vector2.DOWN]:
+		for outward: Vector2 in [Vector2.LEFT, Vector2.RIGHT, Vector2.UP, Vector2.DOWN, Vector2(-1,-1), Vector2(-1,1), Vector2(1,-1), Vector2(1,1)]:
 			for reverse in [false, true]:
 				var facing := -outward if reverse else outward
 				game.ambulance.rotation = Vector3(0, atan2(-facing.x, -facing.y), 0)
@@ -25,8 +25,8 @@ func check_perimeter() -> void:
 				for frame in 20:
 					game._drive(.025)
 					var pos: Vector3 = game.ambulance.position
-					var gap := outward.dot(limit - Vector2(pos.x,pos.z))
-					if gap < -.001:
+					var gap := (limit - Vector2(pos.x,pos.z)) * outward
+					if minf(gap.x, gap.y) < -.001:
 						printerr("Mower crossed perimeter: ", bounds, outward, reverse, gap)
 						quit(1)
 						return
@@ -35,6 +35,8 @@ func check_perimeter() -> void:
 					printerr("Mower did not reach and stop at perimeter: ",outward,reverse,end,limit,game.speed)
 					quit(1)
 					return
+			if outward.x != 0 and outward.y != 0:
+				continue
 			# Park parallel with the first-choice exit facing out of bounds.
 			game.ambulance.rotation.y = atan2(-outward.y, outward.x)
 			var side_extent: Vector2 = game._player_extent()
@@ -52,5 +54,5 @@ func check_perimeter() -> void:
 				printerr("Could not get back onto the mower")
 				quit(1)
 				return
-	print("Mower stopped inside all four edges, forward and in reverse, in both play areas.")
+	print("Mower stopped inside all four edges and corners, forward and in reverse, in both play areas.")
 	quit()
