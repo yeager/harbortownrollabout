@@ -6803,7 +6803,7 @@ func _rig_wheels(model: Node3D) -> Array[Node3D]:
 	for part: MeshInstance3D in pieces:
 		var title := String(part.name)
 		var is_wheel_part := false
-		for prefix in ["Mower tread", "Bicycle spoke", "Wheel hub", "Five double spokes", "Fälghål", "Wheel bolt", "Rear axle alloy", "Sidewall ring", "Alloy wheel", "Center cap", "Aluminiumfälg", "Diamond cut rim", "Anthracite wheel barrel", "Brake disc", "Red brake caliper", "Centre cap", "Blue hub enamel"]:
+		for prefix in ["Mower tread", "Bicycle spoke", "Wheel hub", "Five double spokes", "Fälghål", "Wheel bolt", "Rear axle alloy", "Sidewall ring", "Alloy wheel", "Front axle hub cover", "Center cap", "Aluminiumfälg", "Diamond cut rim", "Anthracite wheel barrel", "Brake disc", "Red brake caliper", "Centre cap", "Blue hub enamel"]:
 			if title.begins_with(prefix):
 				is_wheel_part = true
 				break
