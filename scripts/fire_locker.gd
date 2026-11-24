@@ -73,6 +73,7 @@ func fit(model: Node3D) -> void:
 		part.set_meta("closed_y",part.position.y)
 		fittings.append(part)
 	panel.set_meta("closed_y",panel.position.y)
+	_shape_side_lockers(carrier)
 	# Show the wound supply hose against the dark liner as the panel retracts.
 	var rubber := StandardMaterial3D.new()
 	rubber.albedo_color = Color("#bf9656")
@@ -90,6 +91,27 @@ func fit(model: Node3D) -> void:
 		coil.scale.y = .26
 		coil.position = Vector3(-1.151,1.64,panel.position.z)
 		add_child(coil)
+
+func _shape_side_lockers(carrier: Node3D) -> void:
+	# Longitudinal bay boundaries, measured in the model's local coordinates.
+	var old_edges := PackedFloat32Array([.78, -.88, -2.09, -3.27])
+	var new_edges := PackedFloat32Array([.78, -1.41, -2.66, -3.27])
+	for part in carrier.get_children():
+		if not part is MeshInstance3D: continue
+		var label := String(part.name)
+		if not (label.begins_with("Locker ") or label.begins_with("Roller shutter") or label.begins_with("Shutter ") or label.begins_with("Lift handle bracket")): continue
+		var bounds: AABB = part.transform * part.get_aabb()
+		var centre := bounds.get_center()
+		var bay := 0 if centre.z > old_edges[1] else 1 if centre.z > old_edges[2] else 2
+		var stretch := (new_edges[bay+1]-new_edges[bay]) / (old_edges[bay+1]-old_edges[bay])
+		var moved: Transform3D = part.transform
+		moved = moved.scaled(Vector3(1,1,stretch))
+		moved.origin.z += new_edges[bay]-old_edges[bay]*stretch
+		if bay == 2 and not label.begins_with("Locker reflective"):
+			# Extend the rear shutter down to the sill, keeping its roof line fixed.
+			moved = moved.scaled(Vector3(1,1.16,1))
+			moved.origin.y -= 2.88*.16
+		part.transform = moved
 
 func _fit_rear_pull_bar(blind: MeshInstance3D) -> void:
 	var bounds := blind.get_aabb()
