@@ -32,11 +32,12 @@ func check_layout() -> void:
 			var receipt_height := inbox.get_minimum_size().y
 			inbox.text = history
 			var view: Rect2 = phone.history_scroll.get_global_rect()
-			if not history.begins_with(game.tr(receipt)) or not phone.handset.is_visible_in_tree() or inbox.get_theme_font_size("font_size") != 22 or inbox.size.x > view.size.x or root.size != Vector2i(800, 600) or receipt_height > view.size.y or not root.get_visible_rect().encloses(view):
+			var screen_view: Rect2 = phone.history_scroll.get_global_transform_with_canvas() * Rect2(Vector2.ZERO, view.size)
+			if not history.begins_with(game.tr(receipt)) or not phone.handset.is_visible_in_tree() or inbox.get_theme_font_size("font_size") != 22 or inbox.size.x > view.size.x or root.size.x > 800 or root.size.y > 600 or receipt_height > view.size.y or not root.get_visible_rect().encloses(screen_view):
 				printerr(locale, " leg ", leg, " receipt height ", receipt_height, " viewport ", view)
 				quit(1)
 				return
-	print("All 21 parcel receipt layouts fit at 800 × 600 with large text.")
+	print("All 21 parcel receipt layouts fit in %s pixels with large text." % str(root.size))
 	var recorded_job := "Stop the flatbed at the square in the morning to collect flour."
 	var missing_job := "Unrecorded job fixture"
 	for locale in ["sv", "en", "de", "es", "fr", "fi", "nb"]:
@@ -56,4 +57,45 @@ func check_layout() -> void:
 			quit(1)
 			return
 	print("Mission read-aloud availability and language verified in all seven locales.")
+	game.queue_free()
+	await process_frame
+	game = load("res://main.tscn").instantiate()
+	root.add_child(game)
+	game._on_vehicle_selected(game.RECOVERY)
+	game.start_button.pressed.emit()
+	game.free_drive = true
+	game.time_mode = 2
+	game.day_phase = .8
+	game.ambulance.position = game.TARGETS[0]
+	game._update_flour_delivery()
+	game.ambulance.position = game.FLOUR_CURB
+	game._update_flour_delivery()
+	game.queue_free()
+	await process_frame
+	game = load("res://main.tscn").instantiate()
+	root.add_child(game)
+	game.start_button.pressed.emit()
+	phone = game.phone
+	phone.open_button.pressed.emit()
+	if phone.delivery_receipts.count(phone.FLOUR_RECEIPT) != 1:
+		printerr("Bakery receipt was not saved exactly once")
+		quit(1)
+		return
+	for locale in ["sv", "en", "de", "es", "fr", "fi", "nb"]:
+		TranslationServer.set_locale(locale)
+		phone.receipt_menu.about_to_popup.emit()
+		var menu: PopupMenu = phone.receipt_menu.get_popup()
+		var bakery_index := -1
+		for index in menu.item_count:
+			if menu.get_item_text(index).ends_with(game.tr("Bakery")):
+				bakery_index = index
+				break
+		if bakery_index >= 0:
+			menu.id_pressed.emit(menu.get_item_id(bakery_index))
+		if bakery_index < 0 or not phone.receipt_dialog.visible or phone.receipt_dialog.dialog_text != game.tr(phone.FLOUR_RECEIPT):
+			printerr(locale, " could not open the saved bakery receipt")
+			quit(1)
+			return
+		phone.receipt_dialog.hide()
+	print("Bakery receipt persisted and opened in all seven locales.")
 	game._finish_quit()

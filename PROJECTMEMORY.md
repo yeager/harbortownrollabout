@@ -23,9 +23,10 @@
 
 - A wooden pier with bollards and ropes connects Lotten’s two landings. Four steps link each end to the western quay.
 
+- The flatbed collects three flour sacks at the square in the morning. The sacks ride visibly on the bed and add 75 kg to the payload. Stop by the bakery to unload the sacks and receive a delivery receipt on the phone.
+
 ## Outstanding requests
 
-- freight transportation with visible load and receipt when delivered.
 - Refine vehicle shapes, especially the BMW front, the fire truck, the police car, the Tvärbanan and the sitting driver. Improve water and window reflections, architecture and boardwalk based on image references.
 - Extend the pedestrian and traffic signals to the other crossings. Playtest routes, dialogue, readability, sound levels and frame rate throughout town.
 - Follow up on the request for Blender MCP and verify actual connection before it counts as clear.

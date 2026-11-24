@@ -1955,3 +1955,6 @@ msgstr "Fontaine"
 
 msgid "City bus 74"
 msgstr "Bus urbain 74"
+
+msgid "Hold left mouse to accelerate or right mouse to brake."
+msgstr "Maintiens le bouton gauche de la souris pour accélérer ou le droit pour freiner."

@@ -107,15 +107,34 @@ func check_exits() -> void:
 		quit(1)
 		return
 	var landing: Vector3 = game.walker.position
+	game.map_button.pressed.emit()
+	var town_map: AcceptDialog = game.get_node("TownMap")
+	var town_chart = town_map.get_child(0).get_child(0)
+	var outbound: PackedVector2Array = town_chart.route_preview
+	var pier_exit := Vector2(game.LAUNCH_PIER.end.x + .5, game.LAUNCH_LANDING.y)
+	if outbound.size() <= 3 or not outbound[0].is_equal_approx(Vector2(landing.x, landing.z)) or not outbound[2].is_equal_approx(pier_exit):
+		printerr("Map route from the boat did not begin along the pier toward the quay")
+		quit(1)
+		return
+	town_map.hide()
 	Input.action_press("ui_up")
 	for direction in [1.0, -1.0]:
 		if direction < 0:
 			game.map_button.pressed.emit()
 			var map: AcceptDialog = game.get_node("TownMap")
 			var chart = map.get_child(0).get_child(0)
-			chart.picked.emit(chart.stops.size() - 1)
+			var pin := chart.get_child(chart.stops.find(game.LAUNCH_MAP_STOP)) as Button
+			pin.pressed.emit()
 			if game.map_goal != game.LAUNCH_MAP_STOP:
 				printerr("The motorboat map pin did not select the landing")
+				quit(1)
+				return
+			game.map_button.pressed.emit()
+			var preview: PackedVector2Array = chart.route_preview
+			var pier_entrance := Vector2(game.LAUNCH_PIER.end.x + .5, game.LAUNCH_LANDING.y)
+			var player_point := Vector2(game.walker.position.x, game.walker.position.z)
+			if preview.size() < 3 or not preview[0].is_equal_approx(player_point) or not preview[-2].is_equal_approx(pier_entrance) or not preview[-1].is_equal_approx(game.LAUNCH_LANDING):
+				printerr("Map preview did not follow the pier from the quay to the motorboat")
 				quit(1)
 				return
 		game.walker.rotation.y = -direction * PI * .5
@@ -138,13 +157,12 @@ func check_exits() -> void:
 		quit(1)
 		return
 	var saved_landing: Vector3 = game.walker.position
-	game._save_checkpoint()
 	game.queue_free()
 	await process_frame
 	game = load("res://main.tscn").instantiate()
 	root.add_child(game)
 	game._resume_road_checkpoint()
-	if game.boating or not game.walker.visible or not game.walker.position.is_equal_approx(saved_landing) or not game._feet_supported(game.walker.position):
+	if game.map_goal.is_finite() or game.boating or not game.walker.visible or not game.walker.position.is_equal_approx(saved_landing) or not game._feet_supported(game.walker.position):
 		printerr("Saved walking position on the motorboat pier was not restored")
 		quit(1)
 		return

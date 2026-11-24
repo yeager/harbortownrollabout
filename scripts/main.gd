@@ -7567,6 +7567,23 @@ func _parked_in_fire_bay() -> bool:
 				return false
 	return true
 
+func _launch_pier_exit_path(start: Vector2) -> PackedVector2Array:
+	var quay := Vector2(LAUNCH_PIER.end.x + .5, LAUNCH_LANDING.y)
+	return PackedVector2Array([start, Vector2(start.x, quay.y), quay])
+
+func _ferry_pier_exit_path(start: Vector2) -> PackedVector2Array:
+	var landing_z: float = FERRY_LANDINGS[0] if start.y < (FERRY_LANDINGS[0] + FERRY_LANDINGS[1]) * .5 else FERRY_LANDINGS[1]
+	return PackedVector2Array([start, Vector2(start.x, landing_z), Vector2(48, landing_z)])
+
+func _launch_walking_path(start: Vector2) -> PackedVector2Array:
+	if LAUNCH_PIER.has_point(start):
+		return PackedVector2Array([start, Vector2(start.x, LAUNCH_LANDING.y), LAUNCH_LANDING])
+	var quay := Vector2(LAUNCH_PIER.end.x + .5, LAUNCH_LANDING.y)
+	var path := PackedVector2Array([start])
+	path.append_array(navigator.path(start, quay))
+	path.append(LAUNCH_LANDING)
+	return path
+
 func _update_route_arrows() -> void:
 	turn_preview.hide()
 	for arrow in route_arrows: arrow.visible = false
@@ -7606,32 +7623,23 @@ func _update_route_arrows() -> void:
 			map_goal = Vector3.INF
 			if target == FIRE_RETURN_BAY and is_instance_valid(driven_fire_locker):
 				driven_fire_locker.set_destination("")
+			_save_checkpoint()
 		return
 	var start := Vector2(origin.x, origin.z)
 	var points := PackedVector2Array()
 	if walker.visible and LAUNCH_PIER.has_point(start) and not launch_destination:
-		points.append(start)
-		points.append(Vector2(start.x, LAUNCH_LANDING.y))
-		start = Vector2(LAUNCH_PIER.end.x + .5, LAUNCH_LANDING.y)
-		points.append(start)
+		points = _launch_pier_exit_path(start)
+		start = points[-1]
 	elif walker.visible and not is_nan(_pier_height(start.x, start.y)):
-		var landing_z: float = FERRY_LANDINGS[0] if start.y < (FERRY_LANDINGS[0]+FERRY_LANDINGS[1])*.5 else FERRY_LANDINGS[1]
-		points.append(start)
-		points.append(Vector2(start.x, landing_z))
-		start = Vector2(48, landing_z)
-		points.append(start)
+		points = _ferry_pier_exit_path(start)
+		start = points[-1]
 	var goal := Vector2(target.x, target.z)
 	if walker.visible:
 		navigator.remaining_lane.clear()
 		var near_counter := walking_to_grill and origin.z <= shops.FRONT_Z
 		var near_bench := bench_destination and origin.x <= BOULE_BENCH.x
 		if launch_destination:
-			var quay := Vector2(LAUNCH_PIER.end.x + .5, LAUNCH_LANDING.y)
-			if LAUNCH_PIER.has_point(start):
-				points = PackedVector2Array([start, Vector2(start.x, goal.y), goal])
-			else:
-				points.append_array(navigator.path(start, quay))
-				points.append(goal)
+			points.append_array(_launch_walking_path(start))
 		elif is_shop_destination and origin.z <= shops.FRONT_Z and start.distance_to(goal) <= 5.0:
 			# Approach along the pavement, then turn through the open doorway.
 			points = PackedVector2Array([start, Vector2(goal.x, start.y), goal])
@@ -8598,6 +8606,7 @@ func _build_town_map() -> void:
 		map_goal = chart.stops[index]
 		dialog.hide()
 		_update_route_arrows()
+		_save_checkpoint()
 	)
 	leave_practice_button.text = "Return to town"
 	phone.add_child(leave_practice_button)
@@ -8616,7 +8625,18 @@ func _build_town_map() -> void:
 			if map_goal == LAUNCH_MAP_STOP and not walker.visible:
 				target = Vector2(LAUNCH_ROAD_STOP.x,LAUNCH_ROAD_STOP.z)
 			var heading := Vector2.ZERO if walker.visible else Vector2(forward.x,forward.z).normalized()
-			chart.route_preview = navigator.path(origin,target,heading,vehicle_index in [2,RECOVERY,BUS,REFUSE])
+			if walker.visible and not LAUNCH_PIER.has_point(origin) and not is_nan(_pier_height(origin.x, origin.y)):
+				chart.route_preview = _ferry_pier_exit_path(origin)
+				origin = chart.route_preview[-1]
+			if walker.visible and map_goal == LAUNCH_MAP_STOP:
+				chart.route_preview.append_array(_launch_walking_path(origin))
+			elif walker.visible and LAUNCH_PIER.has_point(origin):
+				chart.route_preview = _launch_pier_exit_path(origin)
+				chart.route_preview.append_array(navigator.path(chart.route_preview[-1], target))
+			else:
+				if walker.visible and chart.route_preview.is_empty():
+					chart.route_preview.append(origin)
+				chart.route_preview.append_array(navigator.path(origin,target,heading,vehicle_index in [2,RECOVERY,BUS,REFUSE]))
 		var focused_stop := legend.get_child(0) as Button
 		for i in MAP_NAMES.size():
 			var caption := tr(MAP_NAMES[i])
@@ -10641,7 +10661,9 @@ func _refresh_ui() -> void:
 		hints.text = _walking_hint()
 	if tram_mode == 0 and not (walker.visible or boating or operating_excavator or ferry_passenger):
 		hints.text += "\n" + tr("Hold left to accelerate or right to brake. To reverse, stop, release and hold right again.")
-	if boating:
+	if tram_mode == 2:
+		hints.text += "\n" + tr("Hold left mouse to accelerate or right mouse to brake.")
+	elif boating:
 		hints.text += "\n" + tr("Hold left to speed up or right to slow down and reverse. Move the mouse sideways to steer, or use {left}/{right} or the arrow keys.")
 	elif tram_mode == 0 and not ferry_passenger and (operating_excavator or not walker.visible):
 		hints.text += "\n" + tr("Hold the left or right mouse button and move the mouse sideways to steer.")
@@ -10729,7 +10751,7 @@ func _refresh_status() -> void:
 		status_label.text = message
 	elif ferry_passenger:
 		if _ferry_stop() >= 0:
-			status_label.text = tr("Step ashore · F")
+			status_label.text = tr("Step ashore · F") + (" / F3" if seat_f3 else "")
 		else:
 			var remaining := ceili(29.0-fmod(wave_time,29.0))
 			status_label.text = tr("Stepping ashore in %d s") % remaining if ferry_exit_requested else tr("Next landing in %d s") % remaining

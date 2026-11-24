@@ -1869,3 +1869,6 @@ msgstr ""
 
 msgid "City bus 74"
 msgstr ""
+
+msgid "Hold left mouse to accelerate or right mouse to brake."
+msgstr ""

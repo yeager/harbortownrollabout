@@ -1870,3 +1870,6 @@ msgstr "Fontänen"
 
 msgid "City bus 74"
 msgstr "Stadsbuss 74"
+
+msgid "Hold left mouse to accelerate or right mouse to brake."
+msgstr "Håll vänster musknapp för att gasa eller höger för att bromsa."

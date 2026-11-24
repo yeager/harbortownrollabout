@@ -1940,3 +1940,6 @@ msgstr "Fontenen"
 
 msgid "City bus 74"
 msgstr "Bybuss 74"
+
+msgid "Hold left mouse to accelerate or right mouse to brake."
+msgstr "Hold inne venstre museknapp for å gi gass eller høyre for å bremse."

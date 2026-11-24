@@ -43,13 +43,26 @@ func check_crossings() -> void:
 		game._update_moorings(0.0)
 		if not check_localized_button(game, "Board Lotten · F"):
 			return
-		game._change_seat()
+		var seat_binding := game.find_child("SeatF3", true, false) as CheckButton
+		seat_binding.button_pressed = false
+		var seat_key := InputEventKey.new()
+		seat_key.pressed = true
+		seat_key.keycode = KEY_F3
+		game._unhandled_key_input(seat_key)
+		if game.ferry_passenger:
+			printerr("F3 boarded Lotten with the shortcut disabled")
+			quit(1)
+			return
+		var alternate: bool = departure == 1
+		seat_binding.button_pressed = alternate
+		seat_key.keycode = KEY_F3 if alternate else KEY_F
+		game._unhandled_key_input(seat_key)
 		if not check_localized_button(game, "Step ashore · F"):
 			return
 		game._update_moorings(10.0)
 		if not check_localized_button(game, "Get off at next landing · F"):
 			return
-		game._change_seat()
+		game._unhandled_key_input(seat_key)
 		if not check_localized_button(game, "Stay on board · F"):
 			return
 		if not game.ferry_passenger:
@@ -66,12 +79,15 @@ func check_crossings() -> void:
 			quit(1)
 			return
 		chart.picked.emit(0)
-		game._save_checkpoint()
 		game.queue_free()
 		await process_frame
 		game = load("res://main.tscn").instantiate()
 		root.add_child(game)
 		game._resume_road_checkpoint()
+		if game.seat_f3 != alternate:
+			printerr("F3 setting did not survive reloading the game aboard Lotten")
+			quit(1)
+			return
 		if not game.ferry_passenger or not game.ferry_exit_requested or not game.walker.position.is_equal_approx(deck_position):
 			printerr("Lost passenger position or requested landing during restart")
 			quit(1)
@@ -90,6 +106,17 @@ func check_crossings() -> void:
 			printerr("Walking guidance did not resume after leaving Lotten")
 			quit(1)
 			return
+		game.map_button.pressed.emit()
+		var reopened_map: AcceptDialog = game.get_node("TownMap")
+		var reopened_chart = reopened_map.get_child(0).get_child(0)
+		var route: PackedVector2Array = reopened_chart.route_preview
+		var arrival_z: float = game.FERRY_LANDINGS[1 - departure]
+		var start := Vector2(game.walker.position.x, game.walker.position.z)
+		if route.size() <= 3 or not route[0].is_equal_approx(start) or not route[2].is_equal_approx(Vector2(48, arrival_z)):
+			printerr("Map did not route from Lotten's landing through the quay")
+			quit(1)
+			return
+		reopened_map.hide()
 	var hull: AABB = game._model_bounds(game.ferry, game.ferry)
 	var bridge := []
 	for part in game.get_children():
@@ -114,13 +141,21 @@ func check_crossings() -> void:
 
 func check_localized_button(game: Node, key: String) -> bool:
 	var original := TranslationServer.get_locale()
+	var original_seat_f3: bool = game.seat_f3
 	for locale in ["de", "es", "fi", "fr", "nb", "sv", "en"]:
 		TranslationServer.set_locale(locale)
-		game._update_entry_button()
-		var expected := String(TranslationServer.translate(key))
-		if game.seat_button.disabled or game.seat_button.atr(game.seat_button.text) != expected or (locale != "en" and expected == key):
-			printerr("Incorrect ferry action in ", locale, " for ", key)
-			quit(1)
-			return false
+		for alternate in [false, true]:
+			game.seat_f3 = alternate
+			game._update_entry_button()
+			game._refresh_status()
+			var translated := String(TranslationServer.translate(key))
+			var expected := translated + (" / F3" if alternate else "")
+			var action: String = game.seat_button.atr(game.seat_button.text)
+			var status_matches: bool = key != "Step ashore · F" or game.status_label.text == expected
+			if game.seat_button.disabled or action != expected or not status_matches or (locale != "en" and translated == key):
+				printerr("Incorrect ferry action in ", locale, " for ", key, ", F3 enabled: ", alternate)
+				quit(1)
+				return false
+	game.seat_f3 = original_seat_f3
 	TranslationServer.set_locale(original)
 	return true

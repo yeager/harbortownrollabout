@@ -27,18 +27,34 @@ func check_rounds() -> void:
 		quit(1)
 		return
 	var chart_node := court_pin.get_parent()
-	for pin: Button in chart_node.get_children():
-		for other: Button in chart_node.get_children():
+	var pins := chart_node.get_children().filter(func(child): return child is Button)
+	for pin: Button in pins:
+		for other: Button in pins:
 			if pin != other and pin.get_rect().intersects(other.get_rect()):
 				printerr("Overlapping map destinations: ", pin.text, " and ", other.text)
 				quit(1)
 				return
 	court_pin.pressed.emit()
+	var court_goal: Vector3 = game.map_goal
+	var map_binding := game.find_child("MapF11", true, false) as CheckButton
+	for alternate in [false, true]:
+		map_binding.button_pressed = alternate
+		map_key.keycode = KEY_F11 if alternate else KEY_F5
+		game._unhandled_key_input(map_key)
+		if not dialog.visible or not game.paused:
+			printerr("Configured shortcut failed to open the town map")
+			quit(1)
+			return
+		dialog.window_input.emit(map_key)
+		if dialog.visible or game.paused or game.map_goal != court_goal:
+			printerr("Closing the town map did not preserve the route and resume play")
+			quit(1)
+			return
 	for first_key in [KEY_1, KEY_KP_1]:
-		for index in game.MAP_NAMES.size():
+		for index in [9, 0, 1, 2, 3, 4, 5, 6, 7, 8]:
 			game.map_button.pressed.emit()
 			var number := InputEventKey.new()
-			number.keycode = first_key + index
+			number.keycode = first_key - 1 if index == 9 else first_key + index
 			number.pressed = true
 			dialog.window_input.emit(number)
 			var chart = court_pin.get_parent()

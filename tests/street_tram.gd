@@ -123,6 +123,14 @@ func verify() -> void:
 	if world.map_goal != destination_after_tram or not world.route_arrows.any(func(arrow): return arrow.visible):
 		fail("Walking guidance did not resume after leaving the tram")
 		return
+	world.map_button.pressed.emit()
+	var route: PackedVector2Array = chart.route_preview
+	var platform_position := Vector2(world.walker.position.x, world.walker.position.z)
+	var destination_point := Vector2(destination_after_tram.x, destination_after_tram.z)
+	if route.size() < 2 or not route[0].is_equal_approx(platform_position) or not route[-1].is_equal_approx(destination_point):
+		fail("Map route did not connect the player's position on the platform to the destination")
+		return
+	map.hide()
 	# Stand on the track and verify service stops before the train reaches the player.
 	var ahead: Vector3 = train.track.sample_baked(16)
 	world.walker.position = ahead
@@ -148,6 +156,10 @@ func verify() -> void:
 		train = world.tram
 		if world.tram_mode != role or not is_equal_approx(saved_distance, train.distance) or train.next_stop != destination:
 			fail("Lost tram trip after restart")
+			return
+		var mouse_hint := tr("Hold left mouse to accelerate or right mouse to brake.")
+		if world.driving_hints.text.contains(mouse_hint) != (role == 2):
+			fail("Tram mouse help does not match the player's role")
 			return
 		for frame in 60:
 			train.advance(.05, role == 2, role == 2, false)
