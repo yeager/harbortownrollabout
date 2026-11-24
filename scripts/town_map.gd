@@ -4,6 +4,7 @@ signal picked(index: int)
 var player := Vector2.ZERO
 var navigator
 var stops := PackedVector3Array()
+var route_preview := PackedVector2Array()
 
 func plot(point: Vector2) -> Vector2:
 	return Vector2(22,22) + (point + Vector2(520,85)) * (size - Vector2(44,44)) / Vector2(700,155)
@@ -54,5 +55,18 @@ func _draw() -> void:
 	if not navigator: return
 	for edge: Vector2i in navigator.edges:
 		draw_line(plot(navigator.graph.get_point_position(edge.x)),plot(navigator.graph.get_point_position(edge.y)),Color("#b6ccbd"),3,true)
+	if route_preview.size() >= 2:
+		var points := PackedVector2Array()
+		for point in route_preview:
+			points.append(plot(point))
+		draw_polyline(points,Color("#162e2c"),7.0,true)
+		draw_polyline(points,Color("#ffd369"),3.5,true)
+	for i in stops.size():
+		var pin := get_child(i) as Button
+		var anchor := plot(Vector2(stops[i].x,stops[i].z))
+		if not pin.get_rect().has_point(anchor):
+			var tint := Color("#ffd369") if pin.button_pressed else Color("#90ada5")
+			draw_line(anchor,pin.get_rect().get_center(),tint,1.5,true)
+			draw_circle(anchor,3.0,tint,true,-1,true)
 	draw_circle(plot(player),8,Color("#242831"),true,-1,true)
 	draw_circle(plot(player),5,Color("#ffd369"),true,-1,true)

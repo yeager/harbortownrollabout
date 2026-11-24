@@ -415,6 +415,7 @@ var steering := 0.0
 var map_goal := Vector3.INF
 var map_button := Button.new()
 var leave_practice_button := Button.new()
+const MAP_STOREFRONTS := ["Pizzeria","Sweet shop","Momo & Bori"]
 const MAP_NAMES := ["Town square","Clinic","Marina","School","Petrol station","Hot dog stand","Bakery","Boule court","Pizzeria","Sweet shop","Momo & Bori"]
 var free_drive := true
 var mission_index := 0
@@ -7309,15 +7310,21 @@ func _update_route_arrows() -> void:
 	var walking_to_grill := grill_destination and walker.visible
 	var arrived := shops.at_grill_counter(origin) if walking_to_grill else origin.distance_to(target) < _arrival_radius()
 	var bench_destination := free_drive and target == BOULE_BENCH_APPROACH
-	var pizza_destination := free_drive and target == shops.pizzeria_entrance()
-	if pizza_destination and walker.visible:
-		arrived = shops.inside == shops.SHOPS.find("Pizzeria")
+	var shop_destination := -1
+	if free_drive:
+		for shop_name: String in MAP_STOREFRONTS:
+			if target == shops.storefront_entrance(shop_name):
+				shop_destination = shops.SHOPS.find(shop_name)
+				break
+	var is_shop_destination := shop_destination >= 0
+	if is_shop_destination and walker.visible:
+		arrived = shops.inside == shop_destination
 	if bench_destination and walker.visible:
 		arrived = _at_boule_bench()
 	if free_drive and target == FIRE_RETURN_BAY:
 		arrived = _parked_in_fire_bay()
 	if free_drive and arrived:
-		if walker.visible or not (grill_destination or bench_destination or pizza_destination):
+		if walker.visible or not (grill_destination or bench_destination or is_shop_destination):
 			map_goal = Vector3.INF
 			if target == FIRE_RETURN_BAY and is_instance_valid(driven_fire_locker):
 				driven_fire_locker.set_destination("")
@@ -7335,7 +7342,7 @@ func _update_route_arrows() -> void:
 		navigator.remaining_lane.clear()
 		var near_counter := walking_to_grill and origin.z <= shops.FRONT_Z
 		var near_bench := bench_destination and origin.x <= BOULE_BENCH.x
-		if pizza_destination and origin.z <= shops.FRONT_Z and start.distance_to(goal) <= 5.0:
+		if is_shop_destination and origin.z <= shops.FRONT_Z and start.distance_to(goal) <= 5.0:
 			# Approach along the pavement, then turn through the open doorway.
 			points = PackedVector2Array([start, Vector2(goal.x, start.y), goal])
 		elif (near_counter or near_bench) and start.distance_to(goal) <= 5.0:
@@ -7350,7 +7357,7 @@ func _update_route_arrows() -> void:
 	if not walker.visible and not paused and not boating and not operating_excavator:
 		turn_preview.text = navigator.turn_preview(points, car_forward, show_turn_street)
 		turn_preview.visible = not turn_preview.text.is_empty()
-	var gap := minf(3.5, start.distance_to(goal) * .5) if walker.visible and (grill_destination or bench_destination or pizza_destination) else 3.5
+	var gap := minf(3.5, start.distance_to(goal) * .5) if walker.visible and (grill_destination or bench_destination or is_shop_destination) else 3.5
 	var used := 0
 	for i in range(1,points.size()):
 		var segment := points[i]-points[i-1]
@@ -8311,6 +8318,12 @@ func _build_town_map() -> void:
 	map_button.pressed.connect(func():
 		var actor := walker if walker.visible else ambulance
 		chart.player = Vector2(actor.position.x,actor.position.z)
+		chart.route_preview = PackedVector2Array()
+		if map_goal.is_finite():
+			var origin := Vector2(actor.position.x,actor.position.z)
+			var target := Vector2(map_goal.x,map_goal.z)
+			var heading := Vector2.ZERO if walker.visible else Vector2(-ambulance.global_basis.z.x,-ambulance.global_basis.z.z).normalized()
+			chart.route_preview = navigator.path(origin,target,heading,vehicle_index in [2,RECOVERY,BUS,REFUSE])
 		for i in MAP_NAMES.size():
 			var caption := tr(MAP_NAMES[i])
 			var selected: bool = map_goal == chart.stops[i]
