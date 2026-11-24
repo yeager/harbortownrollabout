@@ -1300,7 +1300,7 @@ msgstr ""
 msgid "Hold the left or right mouse button and move the mouse sideways to steer."
 msgstr ""
 
-msgid "Hold left to accelerate or right to brake. To reverse, stop, release and hold right again."
+msgid "Hold the left mouse button to accelerate or the right to brake. To reverse, stop, release the brake and hold it again."
 msgstr ""
 
 msgid "Our ice creams"

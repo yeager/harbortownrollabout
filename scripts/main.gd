@@ -127,6 +127,7 @@ var insert_help := false
 var ctrl_run := false
 var radio_keys: Array[int] = [KEY_J, KEY_N]
 var driving_hints := Label.new()
+var driving_footer_margin := MarginContainer.new()
 var large_text := false
 var extra_reading_time := false
 var greeting := Label3D.new()
@@ -8467,12 +8468,22 @@ func _build_ui() -> void:
 	pause_button = _button("Pause", 95)
 	pause_button.pressed.connect(_toggle_pause)
 	row.add_child(pause_button)
+	ui.add_child(driving_footer_margin)
+	driving_footer_margin.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_WIDE)
+	driving_footer_margin.offset_bottom = -8
+	driving_footer_margin.grow_vertical = Control.GROW_DIRECTION_BEGIN
+	driving_footer_margin.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var footer_panel := PanelContainer.new()
+	footer_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var footer_style := _style(Color("#111b25c9"), 10)
+	footer_style.content_margin_left = 10
+	footer_style.content_margin_right = 10
+	footer_style.content_margin_top = 4
+	footer_style.content_margin_bottom = 5
+	footer_panel.add_theme_stylebox_override("panel", footer_style)
+	driving_footer_margin.add_child(footer_panel)
 	var footer := VBoxContainer.new()
-	ui.add_child(footer)
-	footer.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_WIDE)
-	footer.offset_left = 12
-	footer.offset_right = -12
-	footer.grow_vertical = Control.GROW_DIRECTION_BEGIN
+	footer_panel.add_child(footer)
 	footer.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	footer.add_child(arrival_progress)
 	status_label = Label.new()
@@ -10622,6 +10633,7 @@ func _refresh_ui() -> void:
 		driven_fire_locker.set_destination(destination)
 	fire_bay_button.visible = mode == "complete" and vehicle_index == 2
 	var show_overlay := mode == "menu" or mode == "complete" or paused
+	driving_footer_margin.visible = mode == "playing"
 	status_label.visible = mode == "playing"
 	if show_overlay or vehicle_index != ICE_CREAM: ice_order.hide()
 	ui.get_node("DrivingHeader").visible = mode != "menu"
@@ -10652,8 +10664,8 @@ func _refresh_ui() -> void:
 	driving_controls.show_wheel = tram_mode == 0 and not operating_excavator
 	driving_controls.visible = not show_overlay and (tram_mode == 2 or (tram_mode == 0 and (boating or not walker.visible)))
 	var hints := driving_hints
-	hints.offset_right = -228 if driving_controls.visible else -12
-	hints.offset_left = 142 if driving_controls.visible and driving_controls.show_wheel else 12
+	driving_footer_margin.add_theme_constant_override("margin_right", 228 if driving_controls.visible else 12)
+	driving_footer_margin.add_theme_constant_override("margin_left", 142 if driving_controls.visible and driving_controls.show_wheel else 12)
 	hints.visible = not show_overlay and not shops.shop_card.is_visible_in_tree()
 	if tram_mode == 1:
 		hints.text = "Passenger ride · {pause} to pause"
@@ -10678,7 +10690,7 @@ func _refresh_ui() -> void:
 	elif walker.visible and not scooter.visible and not ferry_passenger and not boating and tram_mode == 0:
 		hints.text = _walking_hint()
 	if tram_mode == 0 and not (walker.visible or boating or operating_excavator or ferry_passenger):
-		hints.text += "\n" + tr("Hold left to accelerate or right to brake. To reverse, stop, release and hold right again.")
+		hints.text += "\n" + tr("Hold the left mouse button to accelerate or the right to brake. To reverse, stop, release the brake and hold it again.")
 	if tram_mode == 2:
 		hints.text += "\n" + tr("Hold left mouse to accelerate or right mouse to brake.")
 	elif boating:

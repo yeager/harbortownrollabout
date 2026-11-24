@@ -1367,8 +1367,8 @@ msgstr "%d km/h"
 msgid "Hold the left or right mouse button and move the mouse sideways to steer."
 msgstr "Pidä hiiren vasenta tai oikeaa painiketta pohjassa ja ohjaa liikuttamalla hiirtä sivulle."
 
-msgid "Hold left to accelerate or right to brake. To reverse, stop, release and hold right again."
-msgstr "Kaasuta pitämällä hiiren vasenta painiketta pohjassa. Jarruta oikealla. Kun olet pysähtynyt, vapauta oikea painike ja pidä sitä uudelleen pohjassa, niin peruutat."
+msgid "Hold the left mouse button to accelerate or the right to brake. To reverse, stop, release the brake and hold it again."
+msgstr "Kaasuta pitämällä hiiren vasenta painiketta pohjassa ja jarruta oikealla. Kun olet pysähtynyt, vapauta jarru ja pidä sitä uudelleen pohjassa peruuttaaksesi."
 
 msgid "Our ice creams"
 msgstr "Jäätelömme"

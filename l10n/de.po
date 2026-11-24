@@ -1388,8 +1388,8 @@ msgstr "%d km/h"
 msgid "Hold the left or right mouse button and move the mouse sideways to steer."
 msgstr "Halte die linke oder rechte Maustaste gedrückt und bewege die Maus zum Lenken seitwärts."
 
-msgid "Hold left to accelerate or right to brake. To reverse, stop, release and hold right again."
-msgstr "Halte die linke Maustaste zum Gasgeben oder die rechte zum Bremsen. Zum Rückwärtsfahren halte an, lass die rechte Taste los und halte sie erneut gedrückt."
+msgid "Hold the left mouse button to accelerate or the right to brake. To reverse, stop, release the brake and hold it again."
+msgstr "Halte die linke Maustaste zum Gasgeben oder die rechte zum Bremsen. Zum Rückwärtsfahren lass die Bremse im Stand los und halte sie erneut gedrückt."
 
 msgid "Our ice creams"
 msgstr "Unser Eis"

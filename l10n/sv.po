@@ -1301,8 +1301,8 @@ msgstr "%d km/h"
 msgid "Hold the left or right mouse button and move the mouse sideways to steer."
 msgstr "Håll ner vänster eller höger musknapp och rör musen i sidled för att styra."
 
-msgid "Hold left to accelerate or right to brake. To reverse, stop, release and hold right again."
-msgstr "Håll vänster musknapp för att gasa eller höger för att bromsa. För att backa, stanna, släpp högerknappen och håll den nere igen."
+msgid "Hold the left mouse button to accelerate or the right to brake. To reverse, stop, release the brake and hold it again."
+msgstr "Håll vänster musknapp för att gasa eller höger för att bromsa. När du står still, släpp bromsen och håll den nere igen för att backa."
 
 msgid "Our ice creams"
 msgstr "Våra glassar"

@@ -92,18 +92,26 @@ func check_gallery() -> void:
 					printerr("Stationary shopping trike wheel while driving")
 					quit(1)
 					return
-		game.ambulance.transform = start
-		game.speed = 0.0
+		Input.action_press("ui_down")
+		for frame in 90:
+			game._drive(1.0/60.0)
+		Input.action_release("ui_down")
+		if not is_zero_approx(game.speed):
+			printerr("Holding the brake did not stop ", tile.text, " speed=", game.speed)
+			quit(1)
+			return
+		game._drive(1.0/60.0)
+		var stopped: Transform3D = game.ambulance.transform
 		Input.action_press("ui_down")
 		for frame in 60:
 			game._drive(1.0/60.0)
 		Input.action_release("ui_down")
-		var reverse_travel: float = (game.ambulance.position - start.origin).dot(start.basis.z)
+		var reverse_travel: float = (game.ambulance.position - stopped.origin).dot(stopped.basis.z)
 		if reverse_travel < .3 or game.speed >= 0:
 			printerr("Reverse failed for ", tile.text, " distance=", reverse_travel)
 			quit(1)
 			return
-	print("All ",game.VEHICLE_NAMES_ALL.size()," road vehicles started, moved, steered and reversed from the picture menu.")
+	print("All ",game.VEHICLE_NAMES_ALL.size()," road vehicles started, moved, steered, braked and reversed from the picture menu.")
 	for extra in game.EXTRA_GALLERY_NAMES.size():
 		game.mode = "menu"
 		var tile: Button = game.vehicle_selector.get_child(game.VEHICLE_NAMES_ALL.size() + extra)
