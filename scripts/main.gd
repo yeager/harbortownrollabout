@@ -8128,6 +8128,9 @@ func _build_ui() -> void:
 			_release_mouse_pedals()
 	)
 	phone.take_job.pressed.connect(func():
+		if leave_practice_button.visible:
+			_leave_practice()
+			if leave_practice_button.visible: return
 		map_goal = Vector3.INF
 		free_drive = false
 		phone.toggle()

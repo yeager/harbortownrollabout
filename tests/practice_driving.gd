@@ -56,5 +56,18 @@ func verify() -> void:
 		if not game.CITY_INTERIOR.has_point(Vector2(actor.position.x,actor.position.z)) or game.leave_practice_button.visible:
 			quit(1)
 			return
+	game.queue_free()
+	await process_frame
+	game = load("res://main.tscn").instantiate()
+	root.add_child(game)
+	game._on_vehicle_selected(game.TAXI)
+	game._start_practice()
+	game.phone.open_button.pressed.emit()
+	game.phone.take_job.pressed.emit()
+	var taxi_position: Vector3 = game.ambulance.position
+	if game.practice_active or game.free_drive or not game.CITY_INTERIOR.has_point(Vector2(taxi_position.x,taxi_position.z)) or game.phone.current_job != "Taxi requested at the square.":
+		printerr("Accepting a town job from practice should take the driver to town.")
+		quit(1)
+		return
 	print("Practice course acceleration, braking, reverse, recovery and boarding passed.")
 	quit()
