@@ -9274,8 +9274,12 @@ func _resume_road_checkpoint() -> void:
 	practice_active = road_checkpoint.get("practice", PRACTICE_YARD.has_point(saved_point))
 	var bounds := PRACTICE_YARD if practice_active else CITY_INTERIOR
 	if bounds.has_point(saved_point):
-		ambulance.global_position = saved_position
 		ambulance.rotation.y = road_checkpoint.heading
+		var extent := _player_extent()
+		var center := saved_point.clamp(bounds.position + extent, bounds.end - extent)
+		if center != saved_point:
+			saved_position = Vector3(center.x, _surface_height(center.x, center.y), center.y)
+		ambulance.global_position = saved_position
 	elif practice_active:
 		ambulance.position = PRACTICE_START
 		ambulance.rotation.y = -PI * .5
