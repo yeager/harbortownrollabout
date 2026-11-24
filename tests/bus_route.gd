@@ -184,11 +184,35 @@ func check_route() -> void:
 		printerr("Fresh start unavailable after incomplete checkpoint")
 		quit(1)
 		return
+	if not check_traffic_lights(game):
+		quit(1)
+		return
 	game.queue_free()
 	await process_frame
 	await create_timer(.4).timeout
 	print("Both bus displays followed the six stops and three completed journeys paid once each.")
 	quit()
+
+func check_traffic_lights(game: Node) -> bool:
+	var bus: Node3D = game._spawn_traffic(game.VEHICLE_SCENES_ALL[game.BUS], -30, 2.35, 1, 5.0, .8)
+	# This fixture checks lights in place and has no traffic route.
+	game.traffic_data.pop_back()
+	var beams := bus.find_children("*", "SpotLight3D", false, false)
+	var lenses := bus.find_children("Bus headlight lens*", "MeshInstance3D", true, false)
+	if beams.size() != 2 or lenses.size() != 4:
+		printerr("The traffic bus should have two beams and four lenses")
+		return false
+	for beam: SpotLight3D in beams:
+		if not lenses.any(func(lens: MeshInstance3D): return lens.to_global(lens.get_aabb().get_center()).distance_to(beam.global_position) < .05):
+			printerr("A traffic bus beam is detached from its lens")
+			return false
+	for night in [true, false]:
+		game.time_mode = 1 if night else 0
+		game._update_daylight(0)
+		if not beams.all(func(beam: SpotLight3D): return beam.visible == night) or not lenses.all(func(lens: MeshInstance3D): return (lens.get_active_material(0).emission_energy_multiplier > 0) == night):
+			printerr("Traffic bus beams or lenses did not follow the day cycle")
+			return false
+	return true
 
 func write_incomplete_checkpoint(game: Node) -> void:
 	var damaged: Dictionary = game.road_checkpoint.duplicate(true)
