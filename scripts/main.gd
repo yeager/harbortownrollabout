@@ -667,7 +667,12 @@ func _ready() -> void:
 	_color_action(quit_dialog.get_ok_button(), true)
 	_color_action(quit_dialog.get_cancel_button(), false)
 	quit_dialog.confirmed.connect(_finish_quit)
-	quit_dialog.canceled.connect(func(): get_tree().paused = false)
+	quit_dialog.canceled.connect(func():
+		get_tree().paused = false
+		if paused:
+			radio.stream_paused = true
+			greeting_voice.stream_paused = true
+	)
 	_build_brake_effects()
 	_update_mission_marker()
 	_refresh_ui()
