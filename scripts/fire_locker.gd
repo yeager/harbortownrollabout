@@ -118,6 +118,29 @@ func _shape_side_lockers(carrier: Node3D) -> void:
 			moved = moved.scaled(Vector3(1,1.16,1))
 			moved.origin.y -= 2.88*.16
 		part.transform = moved
+		if label.begins_with("Locker reflective"):
+			fittings.erase(part)
+			part.hide()
+		elif label.begins_with("Roller shutter"):
+			var shutter_bounds: AABB = moved * part.get_aabb()
+			_fit_checker_band(carrier, shutter_bounds, part == panel)
+
+func _fit_checker_band(carrier: Node3D, bounds: AABB, retracts: bool) -> void:
+	var band := MeshInstance3D.new()
+	var strip := BoxMesh.new()
+	strip.size = Vector3(.006, .34, bounds.size.z - .015)
+	band.mesh = strip
+	band.position = bounds.get_center()
+	band.position.x += signf(band.position.x) * (bounds.size.x * .5 + .004)
+	band.position.y = 1.72
+	var tape := ShaderMaterial.new()
+	tape.shader = preload("res://environment/fire_checker.gdshader")
+	tape.set_shader_parameter("offset_z", band.position.z)
+	band.material_override = tape
+	carrier.add_child(band)
+	if retracts:
+		band.set_meta("closed_y", band.position.y)
+		fittings.append(band)
 
 func _fit_rear_pull_bar(blind: MeshInstance3D) -> void:
 	var bounds := blind.get_aabb()
