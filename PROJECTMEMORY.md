@@ -32,6 +32,8 @@
 
 ## Sources and verification
 
+- Godot 4.7 dev5 on Linux with the Compatibility renderer and Mesa reported two GLES texture allocations at exit (87,376 and 65,532 bytes). The normal quit confirmation reproduced this from the menu and during play. A standalone SceneTree with only a current Camera3D, three rendered frames and then quit reproduced both allocations without any game scene or assets. The same SceneTree without the camera exited cleanly. Retest that minimal case when changing engine versions.
+
 README.md contains the English playing instructions. Blender sources are in `source_blender/` and build scripts in `tools/`. Local reference photos retain their original filenames under `.local-memory/references/`. The tow truck reference filename starts with `codex-clipboard-56557bc1`. These photos are excluded from Git.
 
 The project was originally published in the private yeager/axels-emergency-vehicles repository. Run Gitleaks before pushing. Check the current scenes, source and running game before updating an entry.
