@@ -62,6 +62,23 @@ func check_exits() -> void:
 		printerr("Walking guidance did not lead along the motorboat pier toward the east bank")
 		quit(1)
 		return
+	var landing: Vector3 = game.walker.position
+	Input.action_press("ui_up")
+	for direction in [1.0, -1.0]:
+		game.walker.rotation.y = -direction * PI * .5
+		game.walking_velocity = Vector3.ZERO
+		for frame in 300:
+			game._walk(1.0 / 60.0)
+			if direction > 0 and game.walker.position.x > game.LAUNCH_PIER.end.x + .4:
+				break
+			if direction < 0 and game.walker.position.distance_to(landing) < .4:
+				break
+		if (direction > 0 and game.walker.position.x <= game.LAUNCH_PIER.end.x + .4) or (direction < 0 and game.walker.position.distance_to(landing) >= .4):
+			Input.action_release("ui_up")
+			printerr("Could not walk between the motorboat landing and the quay")
+			quit(1)
+			return
+	Input.action_release("ui_up")
 	game._change_seat()
 	if not game.boating or game.walker.visible or game.listener.get_parent() != game.launch:
 		printerr("Could not reboard the motorboat from the landing")
