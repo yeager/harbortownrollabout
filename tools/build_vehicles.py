@@ -884,18 +884,19 @@ def shape_fire_cab_roof(root):
 
 
 def make_fire_engine():
+    cab_red = material("Fire appliance vermilion enamel", (.62, .027, .021), .025, .44)
     root = bpy.data.objects.new("Fire engine | Swedish Rescue Pumper", None)
     bpy.context.collection.objects.link(root)
     root.empty_display_type = "CUBE"
     # Heavy chassis, tall cab, side equipment lockers and deck-mounted hose reels.
-    chassis=cube("Ladder chassis", (0, 0.12, 1.11), (2.32, 5.95, 0.91), PAINT_RED, 0.18, root)
+    chassis=cube("Ladder chassis", (0, 0.12, 1.11), (2.32, 5.95, 0.91), cab_red, 0.18, root)
     # Rolled shoulders and raised parapets enclose the equipment deck.
     deck=[]
     for y,w in ((-.70,1.065),(-.65,1.103),(-.56,1.114),(2.74,1.114),(2.91,1.10),(2.98,1.065)):
         deck.append([(x*w,y,z) for x,z in ((-.98,1.32),(-1,1.40),(-1,2.53),
                    (-.985,2.61),(-.93,2.64),(-.89,2.63),(-.87,2.55),
                    (.87,2.55),(.89,2.63),(.93,2.64),(.985,2.61),(1,2.53),(1,1.40),(.98,1.32))])
-    profile_loft("Rescue body with raised roof edges",deck,PAINT_RED,root)
+    profile_loft("Rescue body with raised roof edges",deck,cab_red,root)
     # Share edges between the glass and the cab skin. The windshield bends
     # around the front pillars and rakes back under the roof header.
     vertices,faces,finishes=[],[],[]
@@ -934,7 +935,7 @@ def make_fire_engine():
     truck_glass=material("Laminated panoramic truck glass",(.015,.034,.048),.045,.095)
     shader=next(node for node in truck_glass.node_tree.nodes if node.type=="BSDF_PRINCIPLED")
     shader.inputs["Alpha"].default_value=.60
-    for finish in (PAINT_RED,truck_glass,RUBBER):
+    for finish in (cab_red,truck_glass,RUBBER):
         mesh.materials.append(finish)
     mesh.polygons.foreach_set("material_index",finishes)
     for face in mesh.polygons:
@@ -987,7 +988,7 @@ def make_fire_engine():
             cube("Roller shutter",(side*1.147,y,(high+low)/2),(.041,1.11,high-low-.045),shutter_finish,.015,root)
             for row in range(2):
                 for col in range(4):
-                    finish = PAINT_YELLOW if (row+col)%2 else PAINT_RED
+                    finish = PAINT_YELLOW if (row+col)%2 else cab_red
                     cube("Locker reflective check",(side*1.171,y+(col-1.5)*.274,1.63+row*.155),
                          (.007,.274,.155),finish,.001,root)
             for rib in range(1,int((high-low)/.081)):
@@ -996,7 +997,7 @@ def make_fire_engine():
         for row in range(2):
             for col in range(8):
                 y = -2.63+col*.246
-                finish = PAINT_YELLOW if (row+col)%2 else PAINT_RED
+                finish = PAINT_YELLOW if (row+col)%2 else cab_red
                 for front,rear in ((-2.735,-1.623),(-1.597,-.755)):
                     start=max(front+.009,y-.119)
                     end=min(rear-.009,y+.119)
@@ -1019,7 +1020,7 @@ def make_fire_engine():
                 courses.append([(side*x,y,z) for x,y in
                     ((1.093,front+inset),(d-.005,front+inset),(d,front+inset+.022),
                      (d,rear-inset-.022),(d-.005,rear-inset),(1.093,rear-inset))])
-            panel=profile_loft("Pressed crew door panel",courses,PAINT_RED,root)
+            panel=profile_loft("Pressed crew door panel",courses,cab_red,root)
             handle_y=rear-.147
             pocket=cube("Handle pocket former",(side*1.134,handle_y,1.656),
                         (.050,.202,.095),None,.021)
@@ -1084,14 +1085,14 @@ def make_fire_engine():
         profile_loft("Crew cab wiper blade",blade,RUBBER,root)
     # The pumper carries one front axle and one rear axle.
     pumper_running_gear(root,chassis)
-    cube("Rear pump compartment",(0,2.75,1.81),(2.15,.46,1.22),PAINT_RED,.065,root)
+    cube("Rear pump compartment",(0,2.75,1.81),(2.15,.46,1.22),cab_red,.065,root)
     for side in (-1,1):
         x = side*.51
         cube("Rear shutter surround",(x,3.065,1.80),(.998,.08,1.57),BLACK,.025,root)
         cube("Rear roller blind",(x,3.115,1.80),(.952,.03,1.51),shutter_finish,.014,root)
         for row in range(2):
             for col in range(4):
-                finish = PAINT_YELLOW if (row+col)%2 else PAINT_RED
+                finish = PAINT_YELLOW if (row+col)%2 else cab_red
                 cube("Rear reflective check",(x+(col-1.5)*.23,3.135,1.72+row*.145),
                      (.23,.008,.145),finish,.001,root)
         # A shallow folded lip catches light along each aluminium slat.
@@ -1148,7 +1149,7 @@ def make_fire_engine():
                 (inner,.12),(inner,.022),(inner+.016,.003),
                 (inner+(outer-inner)*.65,.018),(outer-.016,.056),
                 (outer,.094),(outer,.24),(inner,.24))])
-        profile_loft("Sculpted cab corner apron",cheek,PAINT_RED,root)
+        profile_loft("Sculpted cab corner apron",cheek,cab_red,root)
         seal = []
         for z,w,y in ((1.78,1.099,-2.937),(2.04,1.09,-2.873),(2.425,1.06,-2.765)):
             seal.append([(side*w*x,y+dy,z) for x,dy in
@@ -1158,7 +1159,7 @@ def make_fire_engine():
     fascia("Windshield scuttle",1.075,1.79,.085,-3.015,.025,RUBBER)
     fascia("Cab brow over windshield",1.05,2.465,.08,-2.84,.012,BLACK)
     fascia("Reflective eyebrow",1.035,2.512,.030,-2.828,.012,PAINT_YELLOW)
-    fascia("Upper cab pressing",1.09,1.64,.25,-3.065,.085,PAINT_RED)
+    fascia("Upper cab pressing",1.09,1.64,.25,-3.065,.085,cab_red)
     radiator_finish = material("Shadowed radiator core",(.012,.014,.016),.03,.87)
     for z,width,depth in ((1.37,.80,-3.086),(1.124,.73,-3.115)):
         # A rolled trapezoidal mouth surrounds a perforated, recessed insert.
@@ -1303,7 +1304,7 @@ def make_fire_engine():
         pocket = [light_ring(.866,1.424,.499,.302,d) for d in (-3.24,-2.94)]
         headlamp_pockets.append(profile_loft("Lamp pocket cutter",pocket,RUBBER,root))
         shell=[light_ring(.866,1.424,w,h,d) for w,h,d in
-               ((.490,.296,-2.93),(.494,.297,-3.030),(.468,.264,-3.052),(.426,.223,-3.044))]
+               ((.490,.296,-2.93),(.494,.297,-3.030),(.482,.280,-3.052),(.455,.246,-3.044))]
         profile_loft("Cab headlamp seal",shell,RUBBER,root)
         for cx,w in ((.763,.179),(.945,.156)):
             optic=[light_ring(cx,1.448,w*f,.155*f,d) for f,d in
@@ -1313,7 +1314,7 @@ def make_fire_engine():
                 light_ring(cx,1.448,w*f,.155*f,d) for f,d in
                 ((.64,-3.036),(.52,-3.052),(.26,-3.061))],projector_glass,root)
         cover_rings=[light_ring(.861,1.447,w,h,d) for w,h,d in
-                     ((.447,.224,-3.060),(.443,.222,-3.067),(.427,.213,-3.073))]
+                     ((.469,.252,-3.060),(.465,.248,-3.067),(.452,.239,-3.073))]
         profile_loft("Swept transparent headlamp cover",cover_rings,cover,root)
         amber=material("Amber cab signal",(.88,.235,.012),.12,.23)
         profile_loft("Cab amber signal",[
@@ -1334,7 +1335,7 @@ def make_fire_engine():
         bumper.append([(x,-3.115+setback+dy,z) for dy,z in
                        ((.265,low+.029),(.064,low),(.015,low+.025),(-.012,low+.078),
                         (-.018,.934),(-.007,1.013),(.021,1.052),(.060,1.062),(.264,1.030))])
-    bumper_shell = profile_loft("Wraparound crew cab bumper",bumper,PAINT_RED,root)
+    bumper_shell = profile_loft("Wraparound crew cab bumper",bumper,cab_red,root)
     aprons = [part for part in root.children if part.name.startswith("Sculpted cab corner apron")]
     for pocket in headlamp_pockets:
         for panel in [bumper_shell, *aprons]:
@@ -1397,8 +1398,8 @@ def make_fire_engine():
         bpy.context.view_layer.objects.active=bars[0]
         bpy.ops.object.join()
         bars[0].name="Galvanized rear footboard"
-    cube("Tow hitch flange",(0,3.143,.79),(.23,.065,.194),PAINT_RED,.014,root)
-    cube("Tow hitch drawbar",(0,3.255,.743),(.12,.246,.065),PAINT_RED,.015,root)
+    cube("Tow hitch flange",(0,3.143,.79),(.23,.065,.194),cab_red,.014,root)
+    cube("Tow hitch drawbar",(0,3.255,.743),(.12,.246,.065),cab_red,.015,root)
     cylinder("Tow ball neck",(0,3.344,.800),.024,.099,METAL,False,24,root)
     bpy.ops.mesh.primitive_uv_sphere_add(segments=24,ring_count=12,radius=.043,
                                          location=(0,3.344,.856))
