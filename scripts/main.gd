@@ -7715,8 +7715,8 @@ func _update_camera(delta: float, snap_to_car := false) -> void:
 		var curb_yaw := 0.0
 		match vehicle_index:
 			2:
-				camera.global_position = vehicle_model.to_global(Vector3(-.57, 2.50, 2.40))
-				pitch = -2.35
+				camera.global_position = vehicle_model.to_global(Vector3(-.57, 2.55, 2.45))
+				pitch = -2.68
 			BUS, REFUSE:
 				# These models have solid cab fronts. Place the lens just beyond the glass.
 				var eye := Vector3(-.55,2.12,-5.32) if vehicle_index == BUS else Vector3(-.52,2.60,-4.02)
