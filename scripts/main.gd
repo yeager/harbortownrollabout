@@ -5469,27 +5469,36 @@ func _spawn_traffic(scene_path: String, x: float, lane_z: float, direction: floa
 	model.scale = Vector3.ONE * model_scale
 	model.rotation.y = PI
 	actor.add_child(model)
-	if scene_path == VEHICLE_SCENES_ALL[BUS]:
+	var is_bus := scene_path == VEHICLE_SCENES_ALL[BUS]
+	if is_bus:
 		_fit_bus_exterior(model)
 		_add_bus_destination_boards(model)
 	var half_size := _vehicle_half_size(actor, model)
 	var is_bicycle := scene_path.ends_with("cyklist.glb")
 	if not is_bicycle:
-		# A single beam represents the overlapping pools from the two dipped lamps.
-		var beam := SpotLight3D.new()
-		beam.name = "Dipped beam"
-		beam.position = Vector3(0,.7,-half_size.y)
-		beam.rotation.x = deg_to_rad(-9)
-		beam.spot_angle = 30
-		beam.spot_range = 21
-		beam.light_color = Color("#fff1dc")
-		beam.distance_fade_enabled = true
-		beam.distance_fade_begin = 32
-		beam.distance_fade_length = 14
-		beam.visible = last_night>.05
-		beam.light_energy = 2.8*maxf(last_night,0.0)
-		actor.add_child(beam)
-		traffic_headlights.append(beam)
+		var beam_origins: Array[Vector3] = []
+		if is_bus:
+			for lens: MeshInstance3D in model.find_children("Bus headlight lens*", "MeshInstance3D", true, false):
+				if absf(lens.position.x) > .89:
+					beam_origins.append(actor.to_local(lens.to_global(lens.get_aabb().get_center())) + Vector3.FORWARD * .035)
+		else:
+			# A shared beam represents the overlapping light pools on ordinary traffic.
+			beam_origins.append(Vector3(0,.7,-half_size.y))
+		for origin in beam_origins:
+			var beam := SpotLight3D.new()
+			beam.name = "Dipped beam"
+			beam.position = origin
+			beam.rotation.x = deg_to_rad(-9)
+			beam.spot_angle = 30
+			beam.spot_range = 21
+			beam.light_color = Color("#fff1dc")
+			beam.distance_fade_enabled = true
+			beam.distance_fade_begin = 32
+			beam.distance_fade_length = 14
+			beam.visible = last_night>.05
+			beam.light_energy = 2.8*maxf(last_night,0.0)
+			actor.add_child(beam)
+			traffic_headlights.append(beam)
 	else:
 		for front in [true,false]:
 			var mount := Vector3(0,1.08,-.66) if front else Vector3(0,1.09,.41)
