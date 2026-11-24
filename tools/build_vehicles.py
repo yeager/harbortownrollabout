@@ -903,7 +903,9 @@ def make_fire_engine():
             (1.62,1.105,-2.958,-.71),(1.73,1.104,-2.948,-.71),
             (1.78,1.099,-2.937,-.71),(2.04,1.09,-2.873,-.715),
             (2.425,1.06,-2.765,-.731),(2.469,1.054,-2.746,-.737),
-            (2.55,1.047,-2.720,-.748),(2.60,.997,-2.677,-.78)):
+            (2.51,1.051,-2.736,-.740),(2.55,1.044,-2.721,-.748),
+            (2.576,1.031,-2.704,-.759),(2.598,1.007,-2.680,-.775),
+            (2.610,.973,-2.650,-.796),(2.617,.930,-2.615,-.822)):
         half=[(0,front-.039),(.53*w,front-.031),(.84*w,front),
               (.92*w,front+.036),(.973*w,front+.103),(w,front+.188),
               (w,-1.615),(w,-1.542),(w,-.858),(.985*w,rear)]
@@ -936,7 +938,7 @@ def make_fire_engine():
         mesh.materials.append(finish)
     mesh.polygons.foreach_set("material_index",finishes)
     for face in mesh.polygons:
-        face.use_smooth = face.material_index == 1
+        face.use_smooth = face.material_index == 1 or face.center.z > 2.47
     cabin=bpy.data.objects.new("Fire crew cab",mesh)
     bpy.context.collection.objects.link(cabin)
     cabin.parent=root
