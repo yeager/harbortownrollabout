@@ -5,10 +5,22 @@ var reflector_finish := StandardMaterial3D.new()
 var panel: MeshInstance3D
 var fittings: Array[MeshInstance3D] = []
 var closed_height := 0.0
+var dispatch := Label3D.new()
 var speed_needle: Node3D
 var lift := 0.0
 
 func fit(model: Node3D) -> void:
+	var display: MeshInstance3D = model.find_child("Dispatch terminal display", true, false)
+	var screen := display.get_aabb()
+	display.add_child(dispatch)
+	dispatch.position = screen.get_center()
+	dispatch.position.z = screen.position.z - .002
+	dispatch.rotation.y = PI
+	dispatch.font_size = 48
+	dispatch.pixel_size = .0007
+	dispatch.modulate = Color("#122f37")
+	dispatch.outline_size = 0
+	dispatch.text = "711"
 	speed_needle = model.find_child("Fire speed needle", true, false)
 	panel = model.find_child("Roller shutter",true,false)
 	var carrier := panel.get_parent()
@@ -80,6 +92,11 @@ func _fit_rear_reflector(blind: MeshInstance3D) -> void:
 	var outside := signf(blind.position.x)
 	reflector.position = Vector3(outside * (bounds.size.x * .5 + .045), bounds.position.y - .025, bounds.position.z - .008)
 	blind.add_child(reflector)
+
+func set_destination(destination: String) -> void:
+	dispatch.text = "711" if destination.is_empty() else "711\n" + destination
+	var width := ThemeDB.fallback_font.get_string_size(destination, HORIZONTAL_ALIGNMENT_LEFT, -1, dispatch.font_size).x
+	dispatch.pixel_size = minf(.0007, .245 / maxf(1, width))
 
 func set_road_speed(metres_per_second: float) -> void:
 	speed_needle.rotation.z = deg_to_rad(-135.0 + 270.0 * clampf(absf(metres_per_second) * 3.6 / 120.0, 0.0, 1.0))

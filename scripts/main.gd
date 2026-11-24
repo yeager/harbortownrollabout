@@ -9999,6 +9999,11 @@ func _refresh_ui() -> void:
 		mission_label.text = tr("MISSION %d / %d   ·   %s") % [mission_index + 1, TARGET_NAMES.size(), tr(_vehicle_tasks()[_mission_stop()])]
 	else:
 		mission_label.text = "ALL MISSIONS COMPLETE"
+	if is_instance_valid(driven_fire_locker):
+		var destination := ""
+		if not free_drive and mission_index < FIRE_TASKS.size():
+			destination = tr(MAP_NAMES[_mission_stop()])
+		driven_fire_locker.set_destination(destination)
 	fire_bay_button.visible = mode == "complete" and vehicle_index == 2
 	var show_overlay := mode == "menu" or mode == "complete" or paused
 	if show_overlay or vehicle_index != ICE_CREAM: ice_order.hide()
