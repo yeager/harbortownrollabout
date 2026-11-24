@@ -67,6 +67,7 @@ var traffic_running_lenses: Array[StandardMaterial3D] = []
 var bus_plate_finish: StandardMaterial3D
 var bus_plate_lamp_finish: StandardMaterial3D
 var bus_side_marker_finish: StandardMaterial3D
+var bus_rear_marker_finish: StandardMaterial3D
 var traffic_headlights: Array[SpotLight3D] = []
 var quay_finish := ShaderMaterial.new()
 var soil_finish: ShaderMaterial
@@ -7091,10 +7092,18 @@ func _fit_bus_exterior(model: Node3D) -> void:
 		bus_side_marker_finish.emission = Color("#ffaa43")
 		bus_side_marker_finish.emission_energy_multiplier = 3.0 * maxf(last_night,0)
 		traffic_running_lenses.append(bus_side_marker_finish)
+	if not bus_rear_marker_finish:
+		bus_rear_marker_finish = _material(Color("#7e1723"), .32, true)
+		bus_rear_marker_finish.emission = Color("#ff2338")
+		bus_rear_marker_finish.emission_energy_multiplier = 3.0 * maxf(last_night, 0)
+		traffic_running_lenses.append(bus_rear_marker_finish)
 	for side in [-1.0,1.0]:
 		for z in [-3.15,1.0,3.5]:
 			var marker := _make_box("Bus side marker lens",Vector3(.018,.064,.152),Vector3(side*1.231,1.13,z),Color.WHITE,false,model)
 			marker.material_override = bus_side_marker_finish
+		var housing := _make_box("Bus rear upper marker housing", Vector3(.15,.074,.058), Vector3(side*1.02,2.955,-5.083), window_seal.albedo_color, false, model)
+		var lens := _make_box("Bus rear upper marker lens", Vector3(.115,.042,.012), Vector3(0,0,-.033), Color.WHITE, false, housing)
+		lens.material_override = bus_rear_marker_finish
 	var brake_housing := _make_box("Bus centre brake housing",Vector3(.58,.078,.028),Vector3(0,1.395,-5.249),window_seal.albedo_color,false,model)
 	var brake_glass := _make_box("Centre brake lamp",Vector3(.51,.038,.012),Vector3(0,0,-.017),Color("#921517"),false,brake_housing)
 	var brake_finish := brake_glass.material_override as StandardMaterial3D
@@ -7112,8 +7121,12 @@ func _fit_bus_exterior(model: Node3D) -> void:
 	for edge in [Vector3(0,2.92,5.006),Vector3(0,2.92,-4.99),Vector3(0,1.451,-5.205)]:
 		var trim := _make_box("Cross-window seal",Vector3(2.27,.047,.034),edge,window_seal.albedo_color,false,model)
 		trim.material_override = window_seal
+	var heater_color := Color("#806958")
 	for row in 6:
-		_make_box("Rear window heating wire",Vector3(1.92,.005,.005),Vector3(0,1.66+row*.12,-5.211),Color("#806958"),false,model)
+		_make_box("Rear window heating wire",Vector3(1.92,.005,.005),Vector3(0,1.66+row*.12,-5.211),heater_color,false,model)
+	for side in [-1.0, 1.0]:
+		_make_box("Rear window heater busbar",Vector3(.018,.626,.006),Vector3(side*.958,1.96,-5.211),heater_color,false,model)
+		_make_box("Rear window heater terminal",Vector3(.034,.035,.012),Vector3(side*.958,1.645,-5.214),window_seal.albedo_color,false,model)
 	var plate := _make_box("Bus rear number plate",Vector3(.46,.105,.018),Vector3(0,.57,-5.282),Color("#eeeee4"),false,model)
 	if not bus_plate_finish:
 		bus_plate_finish = _material(Color("#eeeee4"),.55,true)

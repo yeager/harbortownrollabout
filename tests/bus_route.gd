@@ -51,9 +51,18 @@ func check_route() -> void:
 		printerr("The bus centre brake light stayed on after releasing the brake")
 		quit(1)
 		return
+	var rear_markers: Array[Node] = game.vehicle_model.find_children("Bus rear upper marker lens*", "MeshInstance3D", true, false)
+	if rear_markers.size() != 2:
+		printerr("The city bus needs two upper rear position lights")
+		quit(1)
+		return
 	for night in [false,true,false]:
 		game.time_mode = 1 if night else 0
 		game._update_daylight(0.0)
+		if not rear_markers.all(func(lens: MeshInstance3D): return (lens.material_override.emission_energy_multiplier > 0.0) == night):
+			printerr("Upper rear position lights did not follow the time of day")
+			quit(1)
+			return
 		if (game.bus_plate_finish.emission_energy_multiplier > 0) != night or (game.bus_plate_lamp_finish.emission_energy_multiplier > 0) != night:
 			printerr("The rear registration plate lights did not follow the time of day")
 			quit(1)
@@ -228,6 +237,10 @@ func check_traffic_lights(game: Node) -> bool:
 	var beams := bus.find_children("*", "SpotLight3D", false, false)
 	var lenses := bus.find_children("Bus headlight lens*", "MeshInstance3D", true, false)
 	for body: Node3D in [bus, game.parked_cars[game.BUS]]:
+		var markers := body.find_children("Bus rear upper marker lens*", "MeshInstance3D", true, false)
+		if markers.size() != 2 or not markers.all(func(lens: MeshInstance3D): return lens.material_override == game.bus_rear_marker_finish):
+			printerr("A bus variant did not use the shared rear position lights")
+			return false
 		var plate := body.find_child("Bus rear number plate", true, false) as MeshInstance3D
 		if plate == null or plate.material_override != game.bus_plate_finish:
 			printerr("A bus variant did not use the day-controlled registration plate")
