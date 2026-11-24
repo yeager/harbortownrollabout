@@ -33,7 +33,7 @@
 
 ## Sources and verification
 
-- The water-exit and excavator tests verify recovery onto land when a saved bus or excavator pose is inside the canal. The city perimeter test treats the motorboat parking bay as a parking area and verifies that its east edge joins the carriageway. It also verifies 32 junctions, 49 street segments and all four perimeter walls.
+- The water-exit and excavator tests verify recovery onto land when a saved bus or excavator pose is inside the canal. The water-exit test also reloads the bus on both bridge decks and verifies that each valid position remains intact. The city perimeter test treats the motorboat parking bay as a parking area and verifies that its east edge joins the carriageway. It also verifies 32 junctions, 49 street segments and all four perimeter walls.
 
 - The Godot 4.7 dev5 weather transition test verifies that switching from winter to summer removes the tractor plough, tyre tracks, footprints and visible snow. Fresh winter snowfall restores the plough and snow footsteps and covers the previously cleared strip. A forward drive from the tractor selected in the gallery clears snow in the path of the cutting edge while leaving snow outside the blade.
 

@@ -7,6 +7,7 @@ In-game renders from Harbor Town Rollabout. Select a vehicle to open its full-si
 - [Bicycle](bicycle.jpg)
 - [Blue traffic sedan](blue-traffic-sedan.jpg)
 - [City bus · Route 74 to Sickla Udde](city-bus-74.jpg)
+  · [Front view](city-bus-74-front.jpg)
   · [Rear view at night](city-bus-74-rear-night.jpg)
 - [Classic cruiser](classic-cruiser.jpg)
 - [Classic moped](classic-moped.jpg)

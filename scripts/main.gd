@@ -7075,8 +7075,9 @@ func _add_bus_destination_boards(model: Node3D) -> Array[Label3D]:
 	var bus_board := Label3D.new()
 	bus_board.outline_size = 0
 	bus_board.modulate=Color("#ffbb47")
-	bus_board.position=Vector3(0,2.68,5.28)
-	model.add_child(bus_board)
+	var front_panel := _make_box("Front destination mask", Vector3(2.02,.31,.028), Vector3(0,2.68,5.276), Color("#151c1e"), false, model)
+	bus_board.position = Vector3(0,0,.018)
+	front_panel.add_child(bus_board)
 	var rear_panel := _make_box("Rear destination panel",Vector3(1.88,.34,.08),Vector3(0,2.68,-5.22),Color("#182126"),false,model)
 	var rear_bus_board := bus_board.duplicate() as Label3D
 	rear_bus_board.name = "RearDestination"
@@ -7149,6 +7150,10 @@ func _fit_bus_exterior(model: Node3D) -> void:
 				trim.scale.z *= 1.32
 			elif trim.name.begins_with("Window sill graphite trim"):
 				trim.scale.y *= 1.7
+			elif trim.name.begins_with("Windscreen outer seal"):
+				trim.scale.x *= 1.35
+			elif trim.name.begins_with("Lower windscreen gasket"):
+				trim.scale.y *= 1.45
 			elif trim.name.begins_with("Passenger door upright"):
 				trim.scale.z *= 1.28
 			elif trim.name.begins_with("Passenger doorway header"):
