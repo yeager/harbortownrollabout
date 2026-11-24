@@ -1045,7 +1045,7 @@ func _notification(what: int) -> void:
 
 func _unhandled_key_input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed and not event.echo:
-		if event.keycode == jump_key:
+		if event.keycode == jump_key or (jump_key == KEY_0 and event.keycode == KEY_KP_0):
 			if mode == "playing" and not paused and walker.visible and not boule_seated and not scooter.visible and not ferry_passenger and tram_mode == 0 and not operating_excavator and not boating and not phone.handset.is_visible_in_tree() and walk_jump_left <= 0:
 				walk_jump_left = WALK_JUMP_TIME
 			return
@@ -5024,7 +5024,12 @@ func _walk(delta: float) -> void:
 		scooter.ride(self,-clampf(keys.y,-1,1),clampf(keys.x,-1,1),delta)
 		return
 	if _can_capture_camera():
-		var height_input := int(Input.is_key_pressed(KEY_9 if number_camera else KEY_PAGEUP)) - int(Input.is_key_pressed(KEY_3 if number_camera else KEY_PAGEDOWN))
+		var raise_camera := Input.is_key_pressed(KEY_PAGEUP)
+		var lower_camera := Input.is_key_pressed(KEY_PAGEDOWN)
+		if number_camera:
+			raise_camera = Input.is_key_pressed(KEY_9) or Input.is_key_pressed(KEY_KP_9)
+			lower_camera = Input.is_key_pressed(KEY_3) or Input.is_key_pressed(KEY_KP_3)
+		var height_input := int(raise_camera) - int(lower_camera)
 		walk_camera_height = clampf(walk_camera_height + height_input*delta*2.0,-1.5,3.5)
 	walker.rotate_y(-clampf(keys.x,-1,1)*2.5*delta)
 	walk_basis = Basis(Vector3.UP,walker.rotation.y)
