@@ -7085,6 +7085,12 @@ func _add_bus_destination_boards(model: Node3D) -> Array[Label3D]:
 
 func _fit_bus_exterior(model: Node3D) -> void:
 	var window_seal := _material(Color("#22292c"), .64)
+	var brake_housing := _make_box("Bus centre brake housing",Vector3(.58,.078,.028),Vector3(0,1.395,-5.249),window_seal.albedo_color,false,model)
+	var brake_glass := _make_box("Centre brake lamp",Vector3(.51,.038,.012),Vector3(0,0,-.017),Color("#921517"),false,brake_housing)
+	var brake_finish := brake_glass.material_override as StandardMaterial3D
+	brake_finish.resource_name = "Tail lamp centre strip"
+	brake_glass.mesh.material = brake_finish
+	brake_glass.material_override = null
 	for pattern in ["Window pillar*", "Roof rail*", "Window sill graphite trim*", "Windscreen outer seal*", "Lower windscreen gasket*", "Passenger door upright*", "Passenger door cross rail*", "Passenger doorway header*"]:
 		for trim: MeshInstance3D in model.find_children(pattern, "MeshInstance3D", true, false):
 			trim.material_override = window_seal

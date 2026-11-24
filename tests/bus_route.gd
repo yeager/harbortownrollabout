@@ -32,6 +32,25 @@ func check_route() -> void:
 		quit(1)
 		return
 	var original_time: int = game.time_mode
+	var centre_brake: StandardMaterial3D = game.player_brake_lens.get_meta("centre_lamp", null)
+	if centre_brake == null or centre_brake.emission_enabled:
+		printerr("The bus centre brake light should be present and initially off")
+		quit(1)
+		return
+	game.speed = 3.0
+	game.mouse_brake = true
+	game._drive(.016)
+	game.mouse_brake = false
+	if not centre_brake.emission_enabled:
+		printerr("The bus centre brake light did not turn on under braking")
+		quit(1)
+		return
+	game.speed = 0.0
+	game._drive(.016)
+	if centre_brake.emission_enabled:
+		printerr("The bus centre brake light stayed on after releasing the brake")
+		quit(1)
+		return
 	for night in [false,true,false]:
 		game.time_mode = 1 if night else 0
 		game._update_daylight(0.0)
