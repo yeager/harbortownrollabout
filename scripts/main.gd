@@ -10962,7 +10962,10 @@ func _noise_material(dark_color: Color, light_color: Color, frequency: float, st
 		float broad = mix(noise(p), .5, smoothstep(.25, 1., footprint));
 		float grain = mix(noise(p * 12.), .5, smoothstep(.25, 1., footprint * 12.));
 		ALBEDO = mix(dark_color.rgb, light_color.rgb, clamp(0.5 + (broad - 0.5) * strength * 3.0 + (grain - 0.5) * strength * 0.4, 0.0, 1.0));
-		vec2 worked = texture(work_map,(world_position.xz-work_bounds.xy)/work_bounds.zw).rg;
+		vec2 worked = vec2(0.0);
+		if (is_grass || snow_cover > 0.0) {
+			worked = texture(work_map,(world_position.xz-work_bounds.xy)/work_bounds.zw).rg;
+		}
 		if (is_grass) {
 			vec3 short_grass = light_color.rgb * vec3(1.06,1.15,.93) * (.96 + .08 * grain);
 			ALBEDO = mix(ALBEDO, short_grass, worked.g);
