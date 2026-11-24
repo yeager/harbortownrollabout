@@ -39,6 +39,28 @@ func check_rounds() -> void:
 				printerr("Number key selected the wrong map destination: ", number.keycode)
 				quit(1)
 				return
+	if game.map_goal != game.shops.pizzeria_entrance():
+		printerr("Destination 9 should lead to the pizzeria")
+		quit(1)
+		return
+	game.ambulance.position = game.map_goal + Vector3.FORWARD * 3
+	game._update_route_arrows()
+	if game.map_goal == Vector3.INF:
+		printerr("Parking cleared the pizzeria destination")
+		quit(1)
+		return
+	game.walker.show()
+	game.walker.position = game.map_goal
+	game.shops.update_customer(true,game.walker.position,true)
+	game._update_route_arrows()
+	if game.map_goal != Vector3.INF or game.shops.inside != 2:
+		printerr("Entering the pizzeria should finish the walking route")
+		quit(1)
+		return
+	game.walker.hide()
+	game.shops.update_customer(false,game.walker.position,true)
+	game.map_button.pressed.emit()
+	court_pin.pressed.emit()
 	game._save_checkpoint()
 	game.queue_free()
 	await process_frame

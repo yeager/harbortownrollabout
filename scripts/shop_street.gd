@@ -286,6 +286,9 @@ func build_menu(ui: CanvasLayer) -> void:
 	layout.add_child(receipt)
 	shop_card.hide()
 
+func pizzeria_entrance() -> Vector3:
+	return Vector3(storefront_x(SHOPS.find("Pizzeria")), 0, FRONT_Z + .6)
+
 func grill_counter() -> Vector3:
 	return Vector3(storefront_x(SHOPS.find("Hot dog stand")), 0, FRONT_Z - 0.9)
 

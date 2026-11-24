@@ -398,7 +398,7 @@ var steering := 0.0
 var map_goal := Vector3.INF
 var map_button := Button.new()
 var leave_practice_button := Button.new()
-const MAP_NAMES := ["Town square","Clinic","Marina","School","Petrol station","Hot dog stand","Bakery","Boule court"]
+const MAP_NAMES := ["Town square","Clinic","Marina","School","Petrol station","Hot dog stand","Bakery","Boule court","Pizzeria"]
 var free_drive := true
 var mission_index := 0
 const FireLocker := preload("res://scripts/fire_locker.gd")
@@ -830,6 +830,7 @@ func _process(delta: float) -> void:
 	var entrance_target := -1
 	if mode == "playing" and not paused and walker.visible and tram_mode == 0 and not ferry_passenger and not boating and not phone.handset.is_visible_in_tree():
 		if free_drive and map_goal == shops.grill_counter(): entrance_target = 6
+		elif free_drive and map_goal == shops.pizzeria_entrance(): entrance_target = 2
 		elif courier_stage == FootQuest.SEARCHING and absf(walker.position.x-shops.storefront_x(4)) < 6.6: entrance_target = 4
 		elif figurine_stage == FootQuest.RETURNING: entrance_target = 5
 	shops.update_entrance_picture(entrance_target,walker.position)
@@ -7261,12 +7262,15 @@ func _update_route_arrows() -> void:
 	var walking_to_grill := grill_destination and walker.visible
 	var arrived := shops.at_grill_counter(origin) if walking_to_grill else origin.distance_to(target) < _arrival_radius()
 	var bench_destination := free_drive and target == BOULE_BENCH_APPROACH
+	var pizza_destination := free_drive and target == shops.pizzeria_entrance()
+	if pizza_destination and walker.visible:
+		arrived = shops.inside == shops.SHOPS.find("Pizzeria")
 	if bench_destination and walker.visible:
 		arrived = _at_boule_bench()
 	if free_drive and target == FIRE_RETURN_BAY:
 		arrived = _parked_in_fire_bay()
 	if free_drive and arrived:
-		if walker.visible or not (grill_destination or bench_destination):
+		if walker.visible or not (grill_destination or bench_destination or pizza_destination):
 			map_goal = Vector3.INF
 			if target == FIRE_RETURN_BAY and is_instance_valid(driven_fire_locker):
 				driven_fire_locker.set_destination("")
@@ -8217,7 +8221,7 @@ func _build_town_map() -> void:
 	var chart := preload("res://scripts/town_map.gd").new()
 	body.add_child(chart)
 	var counter := shops.grill_counter()
-	chart.configure(navigator,PackedVector3Array([TARGETS[0],TARGETS[1],TARGETS[2],SCHOOL_CURB,STATION_DROP,counter,FLOUR_CURB,BOULE_BENCH_APPROACH]),MAP_NAMES)
+	chart.configure(navigator,PackedVector3Array([TARGETS[0],TARGETS[1],TARGETS[2],SCHOOL_CURB,STATION_DROP,counter,FLOUR_CURB,BOULE_BENCH_APPROACH,shops.pizzeria_entrance()]),MAP_NAMES)
 	dialog.window_input.connect(func(event: InputEvent):
 		if not event is InputEventKey or not event.pressed or event.echo or event.is_command_or_control_pressed() or event.alt_pressed:
 			return
