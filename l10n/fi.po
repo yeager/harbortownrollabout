@@ -1903,3 +1903,27 @@ msgstr "Paloasema"
 
 msgid "Red means stop. Orange means slow down. Green means go."
 msgstr "Punaisella pysähdy. Oranssilla hidasta. Vihreällä aja."
+
+msgid "Driving school"
+msgstr "Autokoulu"
+
+msgid "Slow down. The limit is 20 km/h."
+msgstr "Hidasta. Nopeusrajoitus on 20 km/h."
+
+msgid "Speed exercise complete."
+msgstr "Nopeusharjoitus on valmis."
+
+msgid "Drive 15 m at 20 km/h or less."
+msgstr "Aja 15 m enintään 20 km/h."
+
+msgid "You passed the stop line. Go back and try again."
+msgstr "Ylitit pysäytysviivan. Palaa takaisin ja yritä uudelleen."
+
+msgid "Come to a full stop at the stop line."
+msgstr "Pysähdy kokonaan pysäytysviivalle."
+
+msgid "Driving lesson complete."
+msgstr "Ajotunti on suoritettu."
+
+msgid "Green light. Drive across the line."
+msgstr "Vihreä valo. Aja viivan yli."

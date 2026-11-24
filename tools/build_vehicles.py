@@ -1262,7 +1262,7 @@ def make_fire_engine():
                 sections.append([(side*u,depth+dy,z+height*dz) for dy,dz in
                                  ((0,-.45),(-.004,.29),(.004,.5),(.027,.45),(.027,-.5))])
             profile_loft(name, sections, finish, root)
-    badge = text_obj("Raised Scania grille lettering","SCANIA",(0,-3.082,1.585),.19,METAL,root=root)
+    badge = text_obj("Raised Skania grille lettering","SKANIA",(0,-3.082,1.585),.19,METAL,root=root)
     badge.location.x = -(min(v.co.x for v in badge.data.vertices) + max(v.co.x for v in badge.data.vertices)) * .5
     badge.rotation_euler = (math.pi/2,0,0)
     for x in [-.56,.56]:
@@ -1412,12 +1412,24 @@ def make_fire_engine():
         cube("Fog lens",(side*.862,-3.101,.606),(.164,.016,.077),GLASS_HI,.018,root)
     cube("Number plate plinth",(0,-3.147,.49),(.49,.035,.13),BLACK,.014,root)
     cube("Reflective registration plate",(0,-3.170,.49),(.46,.010,.104),PAINT_WHITE,.007,root)
-    plate = text_obj("Fleet registration","SJT 711",(-.192,-3.179,.457),.085,BLACK,root=root)
-    plate.rotation_euler = (math.pi/2,0,0)
     cube("Rear registration plinth",(-.63,3.15,.89),(.51,.026,.137),BLACK,.009,root)
     cube("Rear registration plate",(-.63,3.168,.89),(.484,.012,.114),PAINT_WHITE,.005,root)
-    rear_letters = text_obj("Rear fleet registration","SJT 711",(-.44,3.180,.858),.085,BLACK,root=root)
-    rear_letters.rotation_euler = (math.pi/2,0,math.pi)
+    plate_blue = material("Registration blue", (.015,.07,.43), .12, .35)
+    for center_x, face_y, center_z, facing in ((0,-3.175,.49,1),(-.63,3.174,.89,-1)):
+        heading = 0 if facing == 1 else math.pi
+        strip_x = center_x - facing*.204
+        cube("Blue country band",(strip_x,face_y-facing*.001,center_z),
+             (.039,.003,.096),plate_blue,.002,root)
+        for label, value, x, z, size, ink in (
+                ("Fleet registration","SJT 711",center_x-facing*.161,center_z-.030,.078,BLACK),
+                ("Country code","S",strip_x-facing*.008,center_z-.035,.023,PAINT_WHITE)):
+            letters = text_obj(label,value,(x,face_y-facing*.006,z),size,ink,root=root)
+            letters.rotation_euler = (math.pi/2,0,heading)
+        for star in range(12):
+            angle = star*math.tau/12
+            cube("European plate emblem",
+                 (strip_x+.011*math.cos(angle),face_y-facing*.004,center_z+.018+.011*math.sin(angle)),
+                 (.003,.002,.003),PAINT_YELLOW,0,root)
     cube("Rear step crossmember",(0,3.05,.81),(2.19,.16,.14),DARK,.022,root)
     for side in (-1,1):
         x=side*.65

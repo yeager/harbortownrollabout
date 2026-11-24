@@ -1907,3 +1907,27 @@ msgstr "Brannstasjonen"
 
 msgid "Red means stop. Orange means slow down. Green means go."
 msgstr "Rødt betyr stopp. Oransje betyr senk farten. Grønt betyr kjør."
+
+msgid "Driving school"
+msgstr "Trafikkskole"
+
+msgid "Slow down. The limit is 20 km/h."
+msgstr "Senk farten. Grensen er 20 km/t."
+
+msgid "Speed exercise complete."
+msgstr "Fartsøvelsen er fullført."
+
+msgid "Drive 15 m at 20 km/h or less."
+msgstr "Kjør 15 m i maks 20 km/t."
+
+msgid "You passed the stop line. Go back and try again."
+msgstr "Du passerte stopplinjen. Kjør tilbake og prøv igjen."
+
+msgid "Come to a full stop at the stop line."
+msgstr "Stopp helt ved stopplinjen."
+
+msgid "Driving lesson complete."
+msgstr "Kjøretimen er fullført."
+
+msgid "Green light. Drive across the line."
+msgstr "Grønt lys. Kjør over linjen."

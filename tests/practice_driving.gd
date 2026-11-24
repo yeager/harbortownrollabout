@@ -8,6 +8,11 @@ func verify() -> void:
 	root.add_child(game)
 	game._on_vehicle_selected(game.MOWER)
 	game.find_child("PracticeDriving", true, false).pressed.emit()
+	var roof_sign: Node3D = game.vehicle_model.get_node_or_null("SchoolCarSign")
+	if game.vehicle_index != game.SCHOOL_CAR or not is_instance_valid(roof_sign) or not roof_sign.is_visible_in_tree():
+		printerr("Practice menu did not start in a marked school car")
+		quit(1)
+		return
 	var start: Vector3 = game.ambulance.position
 	game.mouse_gas = true
 	for frame in 90: game._drive(1.0/60)
@@ -29,15 +34,94 @@ func verify() -> void:
 		printerr("Practice car did not brake and reverse")
 		quit(1)
 		return
+	game.mouse_brake = false
+	game.ambulance.position = start
+	game.speed = 4.0
+	game._drive(.1)
+	if game.practice_speed_distance <= 0:
+		printerr("Legal forward driving did not count for the speed exercise")
+		quit(1)
+		return
+	game.speed = 7.0
+	game._drive(.1)
+	if game.practice_speed_distance != 0:
+		printerr("Exceeding the limit did not reset the speed exercise")
+		quit(1)
+		return
+	for frame in 50:
+		game.speed = 4.0
+		game._drive(.1)
+	if game.practice_speed_distance < game.PRACTICE_SPEED_DISTANCE:
+		printerr("Could not complete the speed exercise at a legal speed")
+		quit(1)
+		return
+	var line_x: float = game.PRACTICE_STOP_X
+	var lane_z: float = game.PRACTICE_STOP_LANE_Z
+	var before := Vector3(line_x-3.0,0,lane_z)
+	var over := Vector3(line_x-1.5,0,lane_z)
+	game.speed = .1
+	game._track_practice_stop(before,2.0,1.0)
+	game._track_practice_stop(over+Vector3.BACK*6.0,2.0,1.0)
+	if not game.practice_stop_missed or game.practice_stop_complete:
+		printerr("Driving around the stop line did not trigger a retry")
+		quit(1)
+		return
+	game.speed = 0.0
+	var retry := before-Vector3.RIGHT
+	game._track_practice_stop(retry,2.0,1.0)
+	game._track_practice_stop(before,2.0,1.0)
+	if game.practice_stop_missed or not game.practice_stop_complete:
+		printerr("A full stop at the line was not accepted")
+		quit(1)
+		return
+	var signal_x: float = game.PRACTICE_SIGNAL_X
+	var signal_wait := Vector3(signal_x-2.5,0,lane_z)
+	var signal_cross := Vector3(signal_x-1.5,0,lane_z)
+	game.speed = 2.0
+	game._track_practice_signal(signal_wait,signal_cross,2.0,1.0,.2)
+	if not game.practice_signal_missed or game.practice_signal_complete:
+		printerr("Crossing the practice signal on red was accepted")
+		quit(1)
+		return
+	var signal_retry := signal_wait-Vector3.RIGHT*4.0
+	game._track_practice_signal(signal_cross,signal_retry,2.0,1.0,.1)
+	game.speed = 0.0
+	for frame in 21:
+		game._track_practice_signal(signal_wait,signal_wait,2.0,1.0,.1)
+	if game.practice_signal_phase != 2 or game.practice_signal_missed:
+		printerr("Stopping at the practice signal did not produce green")
+		quit(1)
+		return
+	game.speed = 2.0
+	game._track_practice_signal(signal_wait,signal_cross+Vector3.BACK*6.0,2.0,1.0,.2)
+	if not game.practice_signal_missed or game.practice_signal_complete:
+		printerr("Driving around the practice signal on green was accepted")
+		quit(1)
+		return
+	game._track_practice_signal(signal_cross,signal_retry,2.0,1.0,.1)
+	game.speed = 0.0
+	for frame in 21:
+		game._track_practice_signal(signal_wait,signal_wait,2.0,1.0,.1)
+	game.speed = 2.0
+	game._track_practice_signal(signal_wait,signal_cross,2.0,1.0,.2)
+	if not game.practice_signal_complete:
+		printerr("Crossing on green did not complete the lesson")
+		quit(1)
+		return
 	game.ambulance.position.z = game.PRACTICE_YARD.end.y + 1
 	game._recover_position()
 	if game.ambulance.position != start:
-		printerr("Mower displaced beyond the course did not recover at its start")
+		printerr("Car displaced beyond the course did not recover at its start")
 		quit(1)
 		return
 	game._change_seat()
 	if not game.walker.visible or game._play_bounds() != game.PRACTICE_YARD:
 		printerr("Could not get out inside practice yard")
+		quit(1)
+		return
+	var parked_sign: Node3D = game.parked_cars[game.SCHOOL_CAR].find_child("SchoolCarSign",true,false)
+	if not parked_sign.is_visible_in_tree():
+		printerr("Parked school car lost its roof sign")
 		quit(1)
 		return
 	game._recover_position()
@@ -59,6 +143,10 @@ func verify() -> void:
 		game.leave_practice_button.pressed.emit()
 		var actor=game.walker if on_foot else game.ambulance
 		if not game.CITY_INTERIOR.has_point(Vector2(actor.position.x,actor.position.z)) or game.leave_practice_button.visible:
+			quit(1)
+			return
+		if not on_foot and (game.vehicle_model.get_node("SchoolCarSign").visible or parked_sign.visible):
+			printerr("School marking remained after leaving practice")
 			quit(1)
 			return
 	game.find_child("BackspaceRecovery", true, false).button_pressed = true
@@ -99,6 +187,33 @@ func verify() -> void:
 	var taxi_position: Vector3 = game.ambulance.position
 	if game.practice_active or game.free_drive or not game.CITY_INTERIOR.has_point(Vector2(taxi_position.x,taxi_position.z)) or game.phone.current_job != "Taxi requested at the square.":
 		printerr("Accepting a town job from practice should take the driver to town.")
+		quit(1)
+		return
+	game.free()
+	game = load("res://main.tscn").instantiate()
+	root.add_child(game)
+	game.find_child("PracticeDriving", true, false).pressed.emit()
+	game.practice_speed_distance = game.PRACTICE_SPEED_DISTANCE
+	game.practice_stop_complete = true
+	game._save_checkpoint()
+	game.queue_free()
+	await process_frame
+	game = load("res://main.tscn").instantiate()
+	root.add_child(game)
+	game.find_child("ResumeCheckpoint", true, false).pressed.emit()
+	if not game.practice_active or not game.practice_stop_complete or game.practice_signal_phase != 0:
+		printerr("Resuming a lesson lost its completed stages or did not restart at red")
+		quit(1)
+		return
+	game.practice_signal_complete = true
+	game._save_checkpoint()
+	game.queue_free()
+	await process_frame
+	game = load("res://main.tscn").instantiate()
+	root.add_child(game)
+	game.find_child("ResumeCheckpoint", true, false).pressed.emit()
+	if not game.practice_signal_complete:
+		printerr("Resuming a completed lesson lost its result")
 		quit(1)
 		return
 	print("Practice course acceleration, braking, reverse, recovery and boarding passed.")

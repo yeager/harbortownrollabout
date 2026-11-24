@@ -57,6 +57,13 @@ func _build_street_crossing(center: Vector3) -> void:
 		get_parent()._make_box("Crossing stop line",Vector3(.21,.016,3.25),
 			center+Vector3(-3*direction,.016,1.85*direction),Color("#eee9d9"),false,self)
 
+func add_practice_head(at: Vector3) -> Array:
+	var mast := Node3D.new()
+	add_child(mast)
+	mast.position = at
+	mast.rotation.y = -PI*.5
+	return _vehicle_head(mast,true).lamps
+
 func _vehicle_head(mast: Node3D, east_west: bool) -> Dictionary:
 	get_parent()._make_roadside_solid("Signal mast",Vector3(.12,3.7,.12),Vector3.UP*1.85,Color("#777e78"),false,mast)
 	if visor_mesh == null:

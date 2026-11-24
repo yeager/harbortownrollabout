@@ -1914,3 +1914,27 @@ msgstr "Parque de bomberos"
 
 msgid "Red means stop. Orange means slow down. Green means go."
 msgstr "En rojo, para. En naranja, reduce la velocidad. En verde, avanza."
+
+msgid "Driving school"
+msgstr "Autoescuela"
+
+msgid "Slow down. The limit is 20 km/h."
+msgstr "Reduce la velocidad. El límite es de 20 km/h."
+
+msgid "Speed exercise complete."
+msgstr "Ejercicio de velocidad completado."
+
+msgid "Drive 15 m at 20 km/h or less."
+msgstr "Conduce 15 m a 20 km/h o menos."
+
+msgid "You passed the stop line. Go back and try again."
+msgstr "Has cruzado la línea de detención. Vuelve e inténtalo de nuevo."
+
+msgid "Come to a full stop at the stop line."
+msgstr "Detente por completo en la línea de detención."
+
+msgid "Driving lesson complete."
+msgstr "Clase de conducción completada."
+
+msgid "Green light. Drive across the line."
+msgstr "Luz verde. Cruza la línea."

@@ -1836,3 +1836,27 @@ msgstr ""
 
 msgid "Red means stop. Orange means slow down. Green means go."
 msgstr ""
+
+msgid "Driving school"
+msgstr ""
+
+msgid "Slow down. The limit is 20 km/h."
+msgstr ""
+
+msgid "Speed exercise complete."
+msgstr ""
+
+msgid "Drive 15 m at 20 km/h or less."
+msgstr ""
+
+msgid "You passed the stop line. Go back and try again."
+msgstr ""
+
+msgid "Come to a full stop at the stop line."
+msgstr ""
+
+msgid "Driving lesson complete."
+msgstr ""
+
+msgid "Green light. Drive across the line."
+msgstr ""

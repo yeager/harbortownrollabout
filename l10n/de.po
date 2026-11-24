@@ -1924,3 +1924,27 @@ msgstr "Feuerwache"
 
 msgid "Red means stop. Orange means slow down. Green means go."
 msgstr "Rot heißt anhalten. Orange heißt langsamer fahren. Grün heißt fahren."
+
+msgid "Driving school"
+msgstr "Fahrschule"
+
+msgid "Slow down. The limit is 20 km/h."
+msgstr "Fahr langsamer. Das Limit liegt bei 20 km/h."
+
+msgid "Speed exercise complete."
+msgstr "Tempoübung abgeschlossen."
+
+msgid "Drive 15 m at 20 km/h or less."
+msgstr "Fahre 15 m mit höchstens 20 km/h."
+
+msgid "You passed the stop line. Go back and try again."
+msgstr "Du hast die Haltelinie überfahren. Fahr zurück und versuch es erneut."
+
+msgid "Come to a full stop at the stop line."
+msgstr "Halte an der Haltelinie vollständig an."
+
+msgid "Driving lesson complete."
+msgstr "Fahrstunde abgeschlossen."
+
+msgid "Green light. Drive across the line."
+msgstr "Grünes Licht. Fahr über die Linie."

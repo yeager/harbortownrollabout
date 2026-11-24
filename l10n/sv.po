@@ -1837,3 +1837,27 @@ msgstr "Brandstationen"
 
 msgid "Red means stop. Orange means slow down. Green means go."
 msgstr "Rött betyder stopp. Orange betyder sakta in. Grönt betyder kör."
+
+msgid "Driving school"
+msgstr "Trafikskola"
+
+msgid "Slow down. The limit is 20 km/h."
+msgstr "Sakta in. Gränsen är 20 km/h."
+
+msgid "Speed exercise complete."
+msgstr "Hastighetsövningen är klar."
+
+msgid "Drive 15 m at 20 km/h or less."
+msgstr "Kör 15 m i högst 20 km/h."
+
+msgid "You passed the stop line. Go back and try again."
+msgstr "Du passerade stopplinjen. Åk tillbaka och försök igen."
+
+msgid "Come to a full stop at the stop line."
+msgstr "Stanna helt vid stopplinjen."
+
+msgid "Driving lesson complete."
+msgstr "Körlektionen är klar."
+
+msgid "Green light. Drive across the line."
+msgstr "Grönt ljus. Kör över linjen."

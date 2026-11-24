@@ -20,6 +20,12 @@ const Gait := preload("res://characters/walking_gait.gd")
 const ROAD_HALF := 4.8
 # Inside faces of the continuous perimeter wall, in world X/Z.
 const PRACTICE_YARD := Rect2(-130, 89, 64, 40)
+const SCHOOL_CAR := 3
+const PRACTICE_SPEED_LIMIT := 20
+const PRACTICE_SPEED_DISTANCE := 15.0
+const PRACTICE_STOP_X := -84.0
+const PRACTICE_SIGNAL_X := -73.0
+const PRACTICE_STOP_LANE_Z := 109.0
 const PRACTICE_START := Vector3(-119, 0, 109)
 const CITY_INTERIOR := Rect2(-520, -92, 690, 172)
 const VEHICLE_NAMES := ["Ambulance", "Police car", "Fire engine"]
@@ -93,6 +99,15 @@ var scooter_key := KEY_U
 var horn_f4 := false
 var quit_key := KEY_F10
 var practice_active := false
+var practice_speed_distance := 0.0
+var practice_stop_complete := false
+var practice_stop_missed := false
+var practice_signal_lamps: Array
+var practice_signal_elapsed := 0.0
+var practice_signal_phase := 0
+var practice_signal_waited := false
+var practice_signal_missed := false
+var practice_signal_complete := false
 var recovery_key := KEY_R
 var jump_key := KEY_E
 var look_key := KEY_V
@@ -854,6 +869,12 @@ func _save_checkpoint() -> void:
 			"recovery": recovery_leg, "taxi": taxi_leg, "bus": bus_leg,
 			"free_drive": free_drive, "progress": vehicle_progress.duplicate()
 		}
+		if practice_active and vehicle_index == SCHOOL_CAR:
+			road_checkpoint["lesson"] = {
+				"speed_distance": minf(practice_speed_distance,PRACTICE_SPEED_DISTANCE),
+				"stop_complete": practice_stop_complete,
+				"signal_complete": practice_signal_complete,
+			}
 		if free_drive and map_goal.is_finite():
 			road_checkpoint["map_goal"] = map_goal
 		if tram_mode != 0:
@@ -1491,6 +1512,9 @@ func _drive(delta: float) -> void:
 		bridge_jump_left = maxf(0, bridge_jump_left-delta)
 		pos.y += 4.905*bridge_jump_left*(bridge_jump_time-bridge_jump_left)
 	ambulance.global_position = pos
+	_track_practice_speed((pos-previous_pose.origin).dot(forward))
+	_track_practice_stop(pos,extent.x,forward.x)
+	_track_practice_signal(previous_pose.origin,pos,extent.x,forward.x,delta)
 	_align_model_to_bridge(ambulance, vehicle_model, wheelbase)
 	if bridge_jump_left <= 0 and previous_pose.origin.distance_squared_to(pos) > .000001:
 		if vehicle_index == MOWER and weather.snow < .12:
@@ -1949,6 +1973,8 @@ func _build_world() -> void:
 	tail_rotor = helicopter.find_child("TailRotor",true,false)
 	_update_patrol(0)
 	add_child(street_signals)
+	practice_signal_lamps = street_signals.add_practice_head(Vector3(PRACTICE_SIGNAL_X,0,PRACTICE_STOP_LANE_Z-3.1))
+	_set_practice_signal(0)
 	_build_lampposts()
 	_update_daylight(0)
 
@@ -4299,6 +4325,8 @@ func _build_depot() -> void:
 		var model := (load(VEHICLE_SCENES_ALL[i]) as PackedScene).instantiate() as Node3D
 		model.rotation.y = PI
 		body.add_child(model)
+		if i == SCHOOL_CAR:
+			_add_school_car_sign(model)
 		_park_at_home(body, i)
 		if i == 2:
 			parked_fire_locker = FireLocker.new()
@@ -6803,7 +6831,7 @@ func _rig_wheels(model: Node3D) -> Array[Node3D]:
 	for part: MeshInstance3D in pieces:
 		var title := String(part.name)
 		var is_wheel_part := false
-		for prefix in ["Mower tread", "Bicycle spoke", "Wheel hub", "Five double spokes", "Fälghål", "Wheel bolt", "Rear axle alloy", "Sidewall ring", "Alloy wheel", "Front axle hub cover", "Center cap", "Aluminiumfälg", "Diamond cut rim", "Anthracite wheel barrel", "Brake disc", "Red brake caliper", "Centre cap", "Blue hub enamel"]:
+		for prefix in ["Mower tread", "Bicycle spoke", "Wheel hub", "Five double spokes", "Fälghål", "Wheel bolt", "Rear axle alloy", "Sidewall ring", "Alloy wheel", "Front axle hub cover", "Center cap", "Aluminiumfälg", "Diamond cut rim", "Anthracite wheel barrel", "Brake disc", "Red brake caliper", "Centre cap", "Blue hub enamel", "Pressed steel wheel", "Wheel centre dish", "Raised hub cap", "Wheel lug nut"]:
 			if title.begins_with(prefix):
 				is_wheel_part = true
 				break
@@ -7001,6 +7029,8 @@ func _load_vehicle_model() -> void:
 	vehicle_model.name = VEHICLE_NAMES_ALL[vehicle_index] + "_BlenderModel"
 	vehicle_model.rotation.y = PI
 	ambulance.add_child(vehicle_model)
+	if vehicle_index == SCHOOL_CAR:
+		_add_school_car_sign(vehicle_model)
 	muddy_parts.clear()
 	mud_finish = ShaderMaterial.new()
 	mud_finish.shader = preload("res://environment/road_mud.gdshader")
@@ -7039,7 +7069,7 @@ func _load_vehicle_model() -> void:
 		var fire := vehicle_index == 2
 		var arms := vehicle_model.find_children("Cab wiper linkage*" if fire else "Wiper arm*","MeshInstance3D",true,false)
 		var blades := vehicle_model.find_children("Crew cab wiper blade*" if fire else "Windscreen wiper blade*","MeshInstance3D",true,false)
-		var spindles := vehicle_model.find_children("Cab wiper spindle cap*","MeshInstance3D",true,false) if fire else []
+		var spindles := vehicle_model.find_children("Cab wiper spindle cap*","MeshInstance3D",true,false)
 		for i in mini(arms.size(),blades.size()):
 			var arm := arms[i] as MeshInstance3D
 			var bounds := arm.get_aabb()
@@ -7745,12 +7775,13 @@ func _update_camera(delta: float, snap_to_car := false) -> void:
 			2:
 				camera.global_position = vehicle_model.to_global(Vector3(.57, 2.55, 2.45))
 				pitch = -2.68
-			BUS, REFUSE:
-				# These models have solid cab fronts. Place the lens just beyond the glass.
-				var eye := Vector3(-.55,2.12,-5.32) if vehicle_index == BUS else Vector3(-.52,2.60,-4.02)
-				camera.global_position = ambulance.to_global(eye)
+			BUS:
+				camera.global_position = vehicle_model.to_global(Vector3(.58,2.08,4.16))
+				pitch = -.57
+			REFUSE:
+				camera.global_position = ambulance.to_global(Vector3(-.52,2.60,-4.02))
 				curb_yaw = -.20
-				pitch = -.85 if vehicle_index == BUS else -1.35
+				pitch = -1.35
 			FARM_TRACTOR:
 				camera.global_position = ambulance.to_global(Vector3(0,2.77,.40))
 				pitch = -2.2
@@ -8504,7 +8535,7 @@ func _build_overlay() -> void:
 		_update_route_arrows()
 		_refresh_ui()
 	)
-	practice_button.pressed.connect(_start_practice)
+	practice_button.pressed.connect(_start_driving_school)
 	practice_button.visibility_changed.connect(func():
 		if mode != "menu" and practice_button.visible: practice_button.hide()
 	)
@@ -9202,8 +9233,23 @@ func _build_practice_yard() -> void:
 		_make_box("Course edge", Vector3(.14,.02,38), Vector3(x,.01,center.y), Color.WHITE)
 	for x in range(-120,-72,6):
 		_make_box("Lane marking", Vector3(3,.02,.16), Vector3(x,.01,112), Color.WHITE)
-	for z in [105,115]:
-		_make_box("Stop line", Vector3(.4,.02,5), Vector3(-75,.01,z), Color.WHITE)
+	_make_box("Practice stop line",Vector3(.36,.02,5),Vector3(PRACTICE_STOP_X,.01,PRACTICE_STOP_LANE_Z),Color.WHITE)
+	_make_box("Practice signal stop line",Vector3(.26,.02,5),Vector3(PRACTICE_SIGNAL_X,.01,PRACTICE_STOP_LANE_Z),Color.WHITE)
+	var post := _signpost(Vector3(PRACTICE_STOP_X,0,PRACTICE_STOP_LANE_Z-3.1),-PI*.5)
+	for inner in [false,true]:
+		var plate := MeshInstance3D.new()
+		var mesh := CylinderMesh.new()
+		mesh.top_radius = .49 if inner else .56
+		mesh.bottom_radius = mesh.top_radius
+		mesh.height = .035
+		mesh.radial_segments = 8
+		plate.mesh = mesh
+		plate.rotation.x = PI*.5
+		plate.rotate_object_local(Vector3.UP,PI/8)
+		plate.position = Vector3(0,2.52,.08 if inner else .055)
+		plate.material_override = _material(Color("#b52429") if inner else Color.WHITE)
+		post.add_child(plate)
+	_road_sign_text(post,"STOP",Vector3(0,2.52,.115),.005,Color.WHITE)
 
 	var cone := Node3D.new()
 	cone.name = "Practice cone"
@@ -9232,6 +9278,89 @@ func _build_practice_yard() -> void:
 			var copy := cone.duplicate() as Node3D
 			add_child(copy)
 			copy.position = spot
+
+	_build_driving_school()
+
+func _build_driving_school() -> void:
+	var site := Vector3(-119,0,96)
+	var school := Node3D.new()
+	school.name = "DrivingSchool"
+	school.position = site
+	add_child(school)
+	var footprint := Vector3(12,3.3,6)
+	_make_roadside_solid("School building",footprint,Vector3.UP*1.65,Color("#ddd8cd"),true,school)
+	_make_box("Roof flashing",Vector3(12.44,.25,6.43),Vector3.UP*3.37,Color("#293c42"),false,school)
+	_make_box("Entrance canopy",Vector3(5.0,.16,1.40),Vector3(0,2.72,3.59),Color("#225c63"),false,school)
+	_make_box("Entrance frame",Vector3(1.56,2.34,.14),Vector3(0,1.19,3.035),Color("#263e43"),false,school)
+	_make_box("Entrance glazing",Vector3(1.32,1.94,.04),Vector3(0,1.31,3.12),Color("#415961"),false,school)
+	for side in [-1,1]:
+		_make_box("Window frame",Vector3(3.25,1.55,.13),Vector3(side*3.55,1.71,3.03),Color("#263e43"),false,school)
+		_make_box("Classroom glazing",Vector3(3.02,1.33,.035),Vector3(side*3.55,1.71,3.11),Color("#566e73"),false,school)
+		_make_box("Window mullion",Vector3(.07,1.33,.05),Vector3(side*3.55,1.71,3.14),Color("#263e43"),false,school)
+	var fascia := _make_box("School sign board",Vector3(5.10,.72,.12),Vector3(0,3.03,3.10),Color("#225c63"),false,school)
+	_size_world_sign(_station_sign("Driving school",Vector3(0,0,.07),.010,Color("#fff1c8"),0,fascia),4.84)
+	_make_driving_surface("School entrance pavement",Vector3(12,.14,2.5),site+Vector3(0,-.068,4.26),Color("#a4a7a4"))
+	_speed_sign(Vector3(-110,0,103.5),-PI*.5,PRACTICE_SPEED_LIMIT)
+
+func _add_school_car_sign(model: Node3D) -> void:
+	var mount := _make_box("Roof sign mount",Vector3(.84,.055,.33),Vector3(0,1.78,.14),Color("#252f33"),false,model)
+	mount.name = "SchoolCarSign"
+	var plate := _make_box("Driving school roof sign",Vector3(.80,.24,.26),Vector3.UP*.134,Color("#ffde62"),false,mount)
+	for side in [-1,1]:
+		var face := _station_sign("Driving school",Vector3(0,0,side*.133),.0018,Color("#253031"),PI if side == -1 else 0.0,plate)
+		_size_world_sign(face,.74)
+	mount.hide()
+
+func _start_driving_school() -> void:
+	if mode != "menu": return
+	_on_vehicle_selected(SCHOOL_CAR)
+	_start_practice()
+
+func _track_practice_speed(forward_distance: float) -> void:
+	if not practice_active or vehicle_index != SCHOOL_CAR or practice_speed_distance >= PRACTICE_SPEED_DISTANCE:
+		return
+	if absf(speed)*3.6 > PRACTICE_SPEED_LIMIT:
+		practice_speed_distance = 0.0
+	elif speed > 0.0:
+		practice_speed_distance += maxf(0.0,forward_distance)
+
+func _track_practice_stop(after: Vector3, front_reach: float, heading_x: float) -> void:
+	if not practice_active or vehicle_index != SCHOOL_CAR or practice_stop_complete or practice_speed_distance < PRACTICE_SPEED_DISTANCE:
+		return
+	var gap := PRACTICE_STOP_X - after.x - front_reach
+	if gap >= 1.5:
+		practice_stop_missed = false
+	if gap < 0.0:
+		practice_stop_missed = true
+	elif gap <= 1.0 and heading_x >= .85 and absf(after.z-PRACTICE_STOP_LANE_Z) <= 2.25 and is_zero_approx(speed):
+		practice_stop_complete = true
+
+func _set_practice_signal(phase: int) -> void:
+	practice_signal_phase = phase
+	for index in practice_signal_lamps.size():
+		practice_signal_lamps[index].visible = index == phase
+
+func _track_practice_signal(before: Vector3, after: Vector3, front_reach: float, heading_x: float, delta: float) -> void:
+	if not practice_active or vehicle_index != SCHOOL_CAR or not practice_stop_complete or practice_signal_complete:
+		return
+	var gap := PRACTICE_SIGNAL_X - after.x - front_reach
+	if gap >= 3.0:
+		practice_signal_missed = false
+		practice_signal_waited = false
+		practice_signal_elapsed = 0.0
+		_set_practice_signal(0)
+	var in_approach_lane := heading_x >= .85 and absf(after.z-PRACTICE_STOP_LANE_Z) <= 2.25
+	if gap < 0.0:
+		practice_signal_complete = in_approach_lane and before.x+front_reach <= PRACTICE_SIGNAL_X and practice_signal_phase == 2 and practice_signal_waited
+		practice_signal_missed = not practice_signal_complete
+		return
+	if not in_approach_lane:
+		return
+	if gap <= 1.0 and is_zero_approx(speed) and practice_signal_phase == 0:
+		practice_signal_waited = true
+	if practice_signal_waited:
+		practice_signal_elapsed = fmod(practice_signal_elapsed+delta,9.0)
+		_set_practice_signal(0 if practice_signal_elapsed < 2.0 else 2 if practice_signal_elapsed < 8.0 else 1)
 
 func _start_practice() -> void:
 	if mode != "menu": return
@@ -9313,6 +9442,11 @@ func _resume_road_checkpoint() -> void:
 	var saved_position: Vector3 = road_checkpoint.position
 	var saved_point := Vector2(saved_position.x, saved_position.z)
 	practice_active = road_checkpoint.get("practice", PRACTICE_YARD.has_point(saved_point))
+	if practice_active and vehicle_index == SCHOOL_CAR and road_checkpoint.has("lesson"):
+		var lesson: Dictionary = road_checkpoint.lesson
+		practice_speed_distance = lesson.speed_distance
+		practice_stop_complete = lesson.stop_complete
+		practice_signal_complete = lesson.signal_complete
 	var bounds := PRACTICE_YARD if practice_active else CITY_INTERIOR
 	if bounds.has_point(saved_point):
 		ambulance.rotation.y = road_checkpoint.heading
@@ -9407,6 +9541,14 @@ func _resume_road_checkpoint() -> void:
 
 func _start_game() -> void:
 	practice_active = false
+	practice_speed_distance = 0.0
+	practice_stop_complete = false
+	practice_stop_missed = false
+	practice_signal_elapsed = 0.0
+	practice_signal_waited = false
+	practice_signal_missed = false
+	practice_signal_complete = false
+	_set_practice_signal(0)
 	boule_seated = false
 	boule_choices.hide()
 	boule_guest_turn = false
@@ -9621,6 +9763,14 @@ func _valid_checkpoint(saved: Variant) -> bool:
 	var optional := {"practice": TYPE_BOOL, "boule_bench": TYPE_BOOL, "scooter": TYPE_BOOL, "exit_at_landing": TYPE_BOOL, "ferry_time": TYPE_FLOAT, "launch_transform": TYPE_TRANSFORM3D}
 	for key in optional:
 		if saved.has(key) and not _checkpoint_fields(saved, {key: optional[key]}):
+			return false
+	if saved.has("lesson"):
+		if not _checkpoint_fields(saved.lesson, {"speed_distance": TYPE_FLOAT, "stop_complete": TYPE_BOOL, "signal_complete": TYPE_BOOL}):
+			return false
+		var lesson: Dictionary = saved.lesson
+		if not is_finite(lesson.speed_distance) or lesson.speed_distance < 0.0 or lesson.speed_distance > PRACTICE_SPEED_DISTANCE:
+			return false
+		if (lesson.stop_complete and lesson.speed_distance < PRACTICE_SPEED_DISTANCE) or (lesson.signal_complete and not lesson.stop_complete):
 			return false
 	if saved.has("excavator") and not _checkpoint_fields(saved.excavator, {"base": TYPE_TRANSFORM3D, "slew": TYPE_FLOAT, "arm": TYPE_VECTOR3}):
 		return false
@@ -9984,6 +10134,12 @@ func _refresh_dispatch() -> void:
 		phone.refresh()
 
 func _refresh_ui() -> void:
+	if is_instance_valid(vehicle_model):
+		var school_sign := vehicle_model.get_node_or_null("SchoolCarSign") as Node3D
+		if school_sign: school_sign.visible = practice_active
+	if parked_cars.size() > SCHOOL_CAR:
+		var parked_school_sign := parked_cars[SCHOOL_CAR].find_child("SchoolCarSign",true,false) as Node3D
+		parked_school_sign.visible = practice_active and vehicle_index == SCHOOL_CAR
 	phone.recovery_hint.text = _recovery_hint()
 	if road_driver:
 		for avatar in [walker, road_driver]:
@@ -10251,6 +10407,27 @@ func _refresh_status() -> void:
 			status_label.text = "Stop here to help."
 		else:
 			status_label.text = "Helping …" if gentle_driving else _movement_hint(tr("Press {help} to help"))
+	elif practice_active and vehicle_index == SCHOOL_CAR and not walker.visible and not paused:
+		if absf(speed)*3.6 > PRACTICE_SPEED_LIMIT:
+			status_label.text = tr("Slow down. The limit is 20 km/h.")
+		elif practice_signal_complete:
+			status_label.text = tr("Driving lesson complete.")
+		elif practice_signal_missed:
+			status_label.text = tr("You passed the stop line. Go back and try again.")
+		elif practice_stop_complete:
+			if practice_signal_phase == 2:
+				status_label.text = tr("Green light. Drive across the line.")
+			elif practice_signal_phase == 1:
+				status_label.text = tr("Orange light. Slow down.")
+			else:
+				status_label.text = tr("Red light! Stop at the line and wait for green.")
+		elif practice_stop_missed:
+			status_label.text = tr("You passed the stop line. Go back and try again.")
+		elif practice_speed_distance >= PRACTICE_SPEED_DISTANCE:
+			status_label.text = tr("Come to a full stop at the stop line.")
+		else:
+			status_label.text = tr("Drive 15 m at 20 km/h or less.")
+		status_label.text += " · " + tr("%d km/h") % roundi(absf(speed)*3.6)
 	elif slowing_for_amber and mode == "playing" and not paused and not walker.visible and not boating:
 		status_label.text = tr("Orange light. Slow down.")
 	elif waiting_for_signal and mode=="playing" and not paused and not walker.visible and not boating:
