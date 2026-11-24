@@ -64,6 +64,8 @@ var headlights: Array[SpotLight3D] = []
 var tractor_beacon: StandardMaterial3D
 var projector_finish: StandardMaterial3D
 var traffic_running_lenses: Array[StandardMaterial3D] = []
+var bus_plate_finish: StandardMaterial3D
+var bus_plate_lamp_finish: StandardMaterial3D
 var traffic_headlights: Array[SpotLight3D] = []
 var quay_finish := ShaderMaterial.new()
 var soil_finish: ShaderMaterial
@@ -3911,6 +3913,9 @@ func _update_daylight(delta: float) -> void:
 	if night == last_night or (night > 0.0 and night < 1.0 and absf(night-last_night) < .006):
 		return
 	last_night = night
+	if bus_plate_finish:
+		bus_plate_finish.emission_energy_multiplier = .28 * night
+		bus_plate_lamp_finish.emission_energy_multiplier = 1.1 * night
 	_update_bus_ceiling_lights(night)
 	for lens in navigation_lenses:
 		lens.emission_energy_multiplier = night*3.2
@@ -7080,13 +7085,16 @@ func _add_bus_destination_boards(model: Node3D) -> Array[Label3D]:
 
 func _fit_bus_exterior(model: Node3D) -> void:
 	var plate := _make_box("Bus rear number plate",Vector3(.46,.105,.018),Vector3(0,.57,-5.282),Color("#eeeee4"),false,model)
-	var lit_plate := _material(Color("#eeeee4"),.55,true)
-	lit_plate.emission_energy_multiplier = .28
-	plate.material_override = lit_plate
-	var lamp_finish := _material(Color("#fff1d1"),.4,true)
+	if not bus_plate_finish:
+		bus_plate_finish = _material(Color("#eeeee4"),.55,true)
+		bus_plate_lamp_finish = _material(Color("#7c807b"),.4,true)
+		bus_plate_lamp_finish.emission = Color("#fff1d1")
+		bus_plate_finish.emission_energy_multiplier = .28 * maxf(last_night,0)
+		bus_plate_lamp_finish.emission_energy_multiplier = 1.1 * maxf(last_night,0)
+	plate.material_override = bus_plate_finish
 	for side in [-1.0,1.0]:
 		var lamp := _make_box("Bus rear plate lamp",Vector3(.061,.012,.024),Vector3(side*.15,.061,-.012),Color.WHITE,false,plate)
-		lamp.material_override = lamp_finish
+		lamp.material_override = bus_plate_lamp_finish
 	_make_box("Bus rear plate country band",Vector3(.045,.094,.006),Vector3(.203,0,-.012),Color("#254883"),false,plate)
 	var number := _station_sign("HBR 074",Vector3(-.016,0,-.013),.0014,Color("#162028"),PI,plate)
 	number.outline_size = 0

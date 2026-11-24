@@ -35,6 +35,10 @@ func check_route() -> void:
 	for night in [false,true,false]:
 		game.time_mode = 1 if night else 0
 		game._update_daylight(0.0)
+		if (game.bus_plate_finish.emission_energy_multiplier > 0) != night or (game.bus_plate_lamp_finish.emission_energy_multiplier > 0) != night:
+			printerr("The rear registration plate lights did not follow the time of day")
+			quit(1)
+			return
 		if game.projector_finish == null or (game.projector_finish.emission_energy_multiplier > 0.0) != night:
 			printerr("The bus headlight lenses did not follow the time of day")
 			quit(1)
