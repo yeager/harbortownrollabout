@@ -1,11 +1,13 @@
 extends SceneTree
-## Run with --windowed --resolution 960x600 --rendering-method gl_compatibility.
+## Run with --rendering-method gl_compatibility. The benchmark opens a 960 × 600 window.
 ## Use a fresh XDG_DATA_HOME so saved game preferences do not influence the run.
 
 func _initialize() -> void:
 	run.call_deferred()
 
 func run() -> void:
+	root.mode = Window.MODE_WINDOWED
+	root.size = Vector2i(960, 600)
 	seed(74)
 	var game = load("res://main.tscn").instantiate()
 	root.add_child(game)

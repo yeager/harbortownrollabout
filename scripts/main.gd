@@ -376,6 +376,7 @@ var excavator_work_view := false
 var cockpit_view := false
 var camera_button: Button
 var camera: Camera3D
+var long_view_distance := false
 var navigator := preload("res://scripts/street_route.gd").new()
 var turn_preview := Label.new()
 var route_arrows: Array[Node3D] = []
@@ -8038,6 +8039,7 @@ func _build_target_marker() -> void:
 
 func _build_camera() -> void:
 	camera = Camera3D.new()
+	camera.far = 4000.0 if long_view_distance else 220.0
 	camera.current = true
 	camera.fov = 58
 	add_child(camera)
@@ -9159,6 +9161,17 @@ func _build_overlay() -> void:
 	renderer_note.text = "Renderer changes apply next time you start the game."
 	pages[0].add_child(renderer_choices)
 	pages[0].add_child(renderer_note)
+	var view_distance := CheckButton.new()
+	view_distance.name = "LongViewDistance"
+	view_distance.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	view_distance.text = "Show more of the city in the distance"
+	view_distance.button_pressed = long_view_distance
+	view_distance.toggled.connect(func(enabled: bool):
+		long_view_distance = enabled
+		camera.far = 4000.0 if enabled else 220.0
+		_save_preferences()
+	)
+	pages[0].add_child(view_distance)
 	var save_renderer := func(index: int):
 		var fsr: bool = methods[index]=="fsr2"
 		var dlss: bool = methods[index]=="dlss"
@@ -10322,6 +10335,7 @@ func _load_preferences() -> void:
 	recovery_key = KEY_BACKSPACE if config.get_value("keyboard","backspace_recovery",false) == true else KEY_R
 	number_movement = config.get_value("keyboard","number_movement",false) == true
 	extra_reading_time = config.get_value("accessibility", "extra_reading_time", false) == true
+	long_view_distance = config.get_value("graphics", "long_view_distance", false) == true
 	large_text = config.get_value("accessibility", "large_text", false) == true
 	play_as_alma = config.get_value("player","alma",false) == true
 	separate_profiles = config.get_value("player","separate_profiles",false) == true
@@ -10354,6 +10368,7 @@ func _save_preferences() -> void:
 	var volume := 0.0 if AudioServer.is_bus_mute(0) else db_to_linear(AudioServer.get_bus_volume_db(0))*100
 	config.set_value("accessibility", "extra_reading_time", extra_reading_time)
 	config.set_value("accessibility", "large_text", large_text)
+	config.set_value("graphics", "long_view_distance", long_view_distance)
 	config.set_value("player","alma",play_as_alma)
 	config.set_value("player","separate_profiles",separate_profiles)
 	_store_player_progress(config, _profile_section())

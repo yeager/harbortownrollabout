@@ -1939,3 +1939,6 @@ msgstr "Kaupunkibussi 74"
 
 msgid "Hold left mouse to accelerate or right mouse to brake."
 msgstr "Kiihdytä pitämällä hiiren vasenta painiketta pohjassa tai jarruta oikealla painikkeella."
+
+msgid "Show more of the city in the distance"
+msgstr "Näytä kauempana olevia kaupunginosia"

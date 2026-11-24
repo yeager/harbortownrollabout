@@ -1943,3 +1943,6 @@ msgstr "Bybuss 74"
 
 msgid "Hold left mouse to accelerate or right mouse to brake."
 msgstr "Hold inne venstre museknapp for å gi gass eller høyre for å bremse."
+
+msgid "Show more of the city in the distance"
+msgstr "Vis mer av byen i det fjerne"

@@ -1950,3 +1950,6 @@ msgstr "Autobús urbano 74"
 
 msgid "Hold left mouse to accelerate or right mouse to brake."
 msgstr "Mantén pulsado el botón izquierdo del ratón para acelerar o el derecho para frenar."
+
+msgid "Show more of the city in the distance"
+msgstr "Mostrar más de la ciudad a lo lejos"

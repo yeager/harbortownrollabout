@@ -1872,3 +1872,6 @@ msgstr ""
 
 msgid "Hold left mouse to accelerate or right mouse to brake."
 msgstr ""
+
+msgid "Show more of the city in the distance"
+msgstr ""

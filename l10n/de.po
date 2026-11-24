@@ -1960,3 +1960,6 @@ msgstr "Stadtbus 74"
 
 msgid "Hold left mouse to accelerate or right mouse to brake."
 msgstr "Halte die linke Maustaste zum Beschleunigen oder die rechte zum Bremsen gedrückt."
+
+msgid "Show more of the city in the distance"
+msgstr "Mehr von der Stadt in der Ferne anzeigen"
