@@ -7084,6 +7084,18 @@ func _add_bus_destination_boards(model: Node3D) -> Array[Label3D]:
 	return [bus_board,rear_bus_board,side_bus_board]
 
 func _fit_bus_exterior(model: Node3D) -> void:
+	var window_seal := _material(Color("#22292c"), .64)
+	for pattern in ["Window pillar*", "Roof rail*", "Window sill graphite trim*", "Windscreen outer seal*", "Lower windscreen gasket*", "Passenger door upright*"]:
+		for trim: MeshInstance3D in model.find_children(pattern, "MeshInstance3D", true, false):
+			trim.material_override = window_seal
+			if trim.name.begins_with("Roof rail") and trim.position.z < -4.9:
+				trim.scale = Vector3(.70,1,.70)
+	for side in [-1.0,1.0]:
+		var trim := _make_box("Upper side window seal",Vector3(.035,.052,9.96),Vector3(side*1.166,2.92,.01),window_seal.albedo_color,false,model)
+		trim.material_override = window_seal
+	for edge in [Vector3(0,2.92,5.006),Vector3(0,2.92,-4.99),Vector3(0,1.451,-5.205)]:
+		var trim := _make_box("Cross-window seal",Vector3(2.27,.047,.034),edge,window_seal.albedo_color,false,model)
+		trim.material_override = window_seal
 	for row in 6:
 		_make_box("Rear window heating wire",Vector3(1.92,.005,.005),Vector3(0,1.66+row*.12,-5.211),Color("#806958"),false,model)
 	var plate := _make_box("Bus rear number plate",Vector3(.46,.105,.018),Vector3(0,.57,-5.282),Color("#eeeee4"),false,model)
