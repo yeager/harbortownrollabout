@@ -80,6 +80,16 @@ func check_exits() -> void:
 		printerr("The motorboat bow passed through the pier")
 		quit(1)
 		return
+	var stopped_x: float = game.launch.position.x
+	game.mouse_gas = false
+	game.mouse_brake = true
+	for frame in 60:
+		game._drive_launch(1.0 / 60.0)
+	game.mouse_brake = false
+	if game.launch.position.x >= stopped_x - .5 or game.launch_speed >= 0.0:
+		printerr("The motorboat could not reverse away from the pier")
+		quit(1)
+		return
 	game._recover_position()
 	if not game.seat_button.visible or game.seat_button.disabled:
 		printerr("The disembark button was unavailable at the berth")
