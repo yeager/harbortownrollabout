@@ -7993,7 +7993,10 @@ func _build_ice_order() -> void:
 
 func _build_song_card() -> void:
 	ui.add_child(song_card)
-	song_card.position = Vector2(22,104)
+	song_card.set_anchors_and_offsets_preset(Control.PRESET_TOP_RIGHT)
+	song_card.grow_horizontal = Control.GROW_DIRECTION_BEGIN
+	song_card.offset_right = -22
+	song_card.offset_left = -22
 	song_card.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	song_card.add_theme_stylebox_override("panel",_style(Color(.055,.09,.11,.94),12))
 	var row := HBoxContainer.new()
@@ -8049,14 +8052,19 @@ func _build_ui() -> void:
 	title.text = "Harbor Town Rollabout"
 	title.add_theme_font_size_override("font_size", 24)
 	title.add_theme_color_override("font_color", Color("#f4f1e8"))
-	row.add_child(title)
+	var heading := VBoxContainer.new()
+	heading.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	heading.alignment = BoxContainer.ALIGNMENT_CENTER
+	row.add_child(heading)
+	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	heading.add_child(title)
 	mission_label = Label.new()
 	mission_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	mission_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	mission_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	mission_label.add_theme_font_size_override("font_size", 20)
 	mission_label.add_theme_color_override("font_color", Color("#c5efce"))
-	row.add_child(mission_label)
+	heading.add_child(mission_label)
 	wallet_label=Label.new()
 	row.add_child(wallet_label)
 	light_button = _button("Lights OFF", 140)
@@ -8129,6 +8137,13 @@ func _build_ui() -> void:
 	driving_controls.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	shops.build_menu(ui)
 	ui.add_child(phone)
+	var align_below_header := func():
+		var below := top.position.y + top.size.y + 12
+		phone.position.y = below
+		song_card.position = Vector2(top.position.x + top.size.x - song_card.size.x, below)
+	top.resized.connect(align_below_header)
+	song_card.resized.connect(align_below_header)
+	align_below_header.call()
 	_build_town_map()
 	radio_button = _button(tr("Turn radio on · %s") % OS.get_keycode_string(radio_keys[0]), 180)
 	radio_button.add_theme_constant_override("icon_max_width",32)
