@@ -193,6 +193,11 @@ func check_driver(game: Node) -> bool:
 	if not wheel or bus.to_local(wheel.global_position).x >= 0.0:
 		printerr("Bus steering wheel is missing or is on the wrong side")
 		return false
+	var door_sills: Array[Node] = game.vehicle_model.find_children("Passenger door sill*","MeshInstance3D",true,false)
+	var tyres: Array[Node] = game.vehicle_model.find_children("Däck*","MeshInstance3D",true,false)
+	if door_sills.size() != 3 or tyres.size() != 4:
+		printerr("Bus door or wheel geometry is missing: ",door_sills.size()," sills, ",tyres.size()," tyres")
+		return false
 	for alma in [true,false]:
 		game.play_as_alma = alma
 		game._apply_player_appearance()
@@ -200,9 +205,26 @@ func check_driver(game: Node) -> bool:
 		if not driver.is_visible_in_tree() or absf(bus.to_local(driver.global_position).x-bus.to_local(wheel.global_position).x) > .03:
 			printerr("Bus driver is not seated behind the wheel")
 			return false
-		for turn in [-.8,.8,0.0]:
+		for turn in [-1.0,1.0,0.0]:
 			game.mouse_steering = turn
-			game._drive(.3)
+			game.steering = turn
+			game._drive(1.0/60.0)
+			if game.front_knuckles.size() != 2:
+				printerr("Both front wheels must steer")
+				return false
+			for joint: Node3D in game.front_knuckles:
+				if not is_equal_approx(joint.rotation.y,-turn*deg_to_rad(33.0)):
+					printerr("Front wheel did not reach the tested steering angle")
+					return false
+			var bus_inverse := bus.global_transform.affine_inverse()
+			for sill: MeshInstance3D in door_sills:
+				var door_bounds: AABB = (bus_inverse*sill.global_transform)*sill.get_aabb()
+				for tyre: MeshInstance3D in tyres:
+					var tyre_bounds: AABB = (bus_inverse*tyre.global_transform)*tyre.get_aabb()
+					var longitudinal_gap := maxf(door_bounds.position.z-tyre_bounds.end.z,tyre_bounds.position.z-door_bounds.end.z)
+					if longitudinal_gap < .06:
+						printerr("A bus door is too close to a wheel: ",longitudinal_gap)
+						return false
 			var arms: Array = driver.get_meta("arms")
 			for index in arms.size():
 				var hand: Node3D = arms[index].get_node("Hand")
