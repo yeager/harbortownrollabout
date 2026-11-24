@@ -3848,9 +3848,11 @@ func _update_daylight(delta: float) -> void:
 	school_minute_hand.rotation.z = -fmod(clock_hours, 1.0) * TAU
 	var night := 1.0 if time_mode == 1 else (smoothstep(-.4,.4,-cos(day_phase*TAU)) if time_mode == 2 else 0.0)
 	if night >= .5:
-		if not paused:
+		if calm_mode:
+			chimney_beacon_phase = 0.0
+		elif not paused:
 			chimney_beacon_phase = fmod(chimney_beacon_phase + delta, 2.0)
-		chimney_beacon.emission_enabled = calm_mode or chimney_beacon_phase < .5
+		chimney_beacon.emission_enabled = chimney_beacon_phase < .5
 	else:
 		chimney_beacon_phase = 0.0
 		chimney_beacon.emission_enabled = false
