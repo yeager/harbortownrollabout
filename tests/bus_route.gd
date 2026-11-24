@@ -46,6 +46,10 @@ func check_route() -> void:
 				return
 	game.time_mode = original_time
 	game._update_daylight(0.0)
+	if game.driver_bus_stop_board.visible:
+		printerr("The dashboard stop display should be off in free drive")
+		quit(1)
+		return
 	game.phone.open_button.pressed.emit()
 	if not game.free_drive or not game.phone.take_job.is_visible_in_tree():
 		printerr("The vehicle must start in free exploration and offer a job in the phone")
@@ -77,7 +81,7 @@ func check_route() -> void:
 				await process_frame
 				var school: String = game.tr("HARBOR TOWN SCHOOL")
 				var expected: String = game.tr("Next stop: %s") % school
-				if game.next_bus_stop_board.text != expected or game.bus_leg != leg:
+				if game.next_bus_stop_board.text != expected or game.driver_bus_stop_board.text != expected or game.bus_leg != leg:
 					printerr("Interior display lost the current stop after switching to ", locale)
 					quit(1)
 					return

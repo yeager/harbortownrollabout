@@ -269,6 +269,7 @@ var bus_stop_request: Label3D
 var bus_request_arm: Node3D
 var bus_press_time := 0.0
 var next_bus_stop_board: Label3D
+var driver_bus_stop_board: Label3D
 var rear_bus_board: Label3D
 var side_bus_board: Label3D
 var seated_bus_riders: Node3D
@@ -7047,6 +7048,7 @@ func _load_vehicle_model() -> void:
 	bus_ceiling_lights.clear()
 	bus_ceiling_diffuser = null
 	bus_board = null
+	driver_bus_stop_board = null
 	rear_bus_board = null
 	if vehicle_index == BUS:
 		_fit_bus_interior()
@@ -7111,12 +7113,16 @@ func _load_vehicle_model() -> void:
 		var display := _make_box("Bus dashboard screen",Vector3(.355,.173,.017),Vector3(.58,1.745,4.70),Color("#14272b"),false,vehicle_model)
 		display.rotation.x = -2.20
 		display.rotate_object_local(Vector3.BACK,PI)
-		dash_speed = _station_sign("",Vector3(0,-.022,.011),.00135,Color("#def4f7"),0,display)
+		dash_speed = _station_sign("",Vector3(0,-.004,.011),.00135,Color("#def4f7"),0,display)
 		dash_speed.font_size = 44
-		dash_direction = _station_sign("",Vector3(0,.046,.011),.00115,Color("#def4f7"),0,display)
+		dash_direction = _station_sign("",Vector3(0,.051,.011),.00115,Color("#def4f7"),0,display)
 		dash_direction.font_size = 32
 		_size_world_sign(dash_speed,.31)
 		_size_world_sign(dash_direction,.31)
+		driver_bus_stop_board = _station_sign("",Vector3(0,-.055,.011),.00086,Color("#ffd46c"),0,display)
+		driver_bus_stop_board.font_size = 31
+		_size_world_sign(driver_bus_stop_board,.31)
+		_update_bus_board()
 	if vehicle_index == SHOPPER:
 		for part_name in ["Wiper arm","Wiper blade lower","Wiper blade upper"]:
 			var part := vehicle_model.find_child(part_name,true,false) as MeshInstance3D
@@ -7962,6 +7968,10 @@ func _update_bus_board() -> void:
 		next_bus_stop_board.text = tr("Next stop: %s") % tr(BUS_STOP_NAMES[stop])
 		var size := font.get_string_size(next_bus_stop_board.text,HORIZONTAL_ALIGNMENT_LEFT,-1,next_bus_stop_board.font_size)
 		next_bus_stop_board.pixel_size = minf(1.61/size.x,.22/size.y)
+		if is_instance_valid(driver_bus_stop_board):
+			driver_bus_stop_board.visible = not free_drive
+			driver_bus_stop_board.text = next_bus_stop_board.text
+			_fit_world_sign(driver_bus_stop_board)
 
 func _update_mission_marker() -> void:
 	_update_bus_board()
