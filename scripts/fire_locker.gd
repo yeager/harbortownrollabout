@@ -14,6 +14,10 @@ func fit(model: Node3D) -> void:
 	for pattern in ["Cab headlamp seal*", "Cab projector*", "Cab reflector*", "Cab amber signal*", "Swept transparent headlamp cover*"]:
 		for part: MeshInstance3D in model.find_children(pattern, "MeshInstance3D", true, false):
 			part.position.z -= .010
+	# The service steps sit below the fog lamps on both bumper corners.
+	for pattern in ["Cab bumper foothold recess*", "Cab bumper step lip*", "Step tread ridge*"]:
+		for part: MeshInstance3D in model.find_children(pattern, "MeshInstance3D", true, false):
+			part.position += Vector3(0, -.66, -.055)
 	var mirror_housing := StandardMaterial3D.new()
 	mirror_housing.albedo_color = Color("#242628")
 	mirror_housing.roughness = .76
