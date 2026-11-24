@@ -273,6 +273,8 @@ var rear_bus_board: Label3D
 var side_bus_board: Label3D
 var seated_bus_riders: Node3D
 var bus_board: Label3D
+var bus_ceiling_lights: Array[SpotLight3D] = []
+var bus_ceiling_diffuser: StandardMaterial3D
 const BUS_STOP_NAMES := ["THE SQUARE","HEALTH CENTRE","MARINA","HARBOR TOWN SCHOOL","VÄSTRA TORGET","SICKLA UDDE"]
 var bus_leg := 0
 const TAXI := 4
@@ -3862,6 +3864,7 @@ func _update_daylight(delta: float) -> void:
 	if night == last_night or (night > 0.0 and night < 1.0 and absf(night-last_night) < .006):
 		return
 	last_night = night
+	_update_bus_ceiling_lights(night)
 	for lens in navigation_lenses:
 		lens.emission_energy_multiplier = night*3.2
 	water_finish.set_shader_parameter("dusk",night)
@@ -6937,6 +6940,15 @@ func _shopper_screen_point(uv: Vector2, angle: float) -> Vector3:
 	var t := projected.y
 	return Vector3(u*(.418-.026*t), .916+.603*t-.018*u*u, .448-.33*t-.09*u*u)
 
+func _update_bus_ceiling_lights(night: float) -> void:
+	if not bus_ceiling_diffuser:
+		return
+	var glow := smoothstep(.05,.75,night)
+	bus_ceiling_diffuser.emission_energy_multiplier = glow*1.55
+	for lamp in bus_ceiling_lights:
+		lamp.visible = glow > .001
+		lamp.light_energy = glow*1.1
+
 func _fit_bus_interior() -> void:
 	var cabin := vehicle_model.find_child("Cabin",true,false) as MeshInstance3D
 	for surface in cabin.mesh.get_surface_count():
@@ -6946,6 +6958,20 @@ func _fit_bus_interior() -> void:
 			glass.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
 			glass.albedo_color = Color(.40,.62,.68,.22)
 			cabin.set_surface_override_material(surface,glass)
+	bus_ceiling_diffuser = _material(Color("#ded9c9"),.42,true)
+	for z in [-2.55,0.0,2.15]:
+		var fitting := _make_box("Saloon ceiling light",Vector3(.29,.045,1.12),Vector3(0,2.89,z),Color("#404b4d"),false,vehicle_model)
+		var diffuser := _make_box("Saloon light diffuser",Vector3(.23,.018,1.05),Vector3.DOWN*.026,Color("#ded9c9"),false,fitting)
+		diffuser.material_override = bus_ceiling_diffuser
+		var lamp := SpotLight3D.new()
+		fitting.add_child(lamp)
+		lamp.position.y = -.045
+		lamp.rotation.x = -PI*.5
+		lamp.spot_range = 2.35
+		lamp.spot_angle = 51
+		lamp.light_color = Color("#fff4df")
+		bus_ceiling_lights.append(lamp)
+	_update_bus_ceiling_lights(maxf(last_night,0.0))
 	var panel := _make_box("Interior stop display",Vector3(1.72,.30,.065),Vector3(0,2.60,3.54),Color("#172124"),false,vehicle_model)
 	next_bus_stop_board = Label3D.new()
 	next_bus_stop_board.rotation.y = PI
@@ -7017,6 +7043,8 @@ func _load_vehicle_model() -> void:
 	if vehicle_index == 2:
 		driven_fire_locker = FireLocker.new()
 		driven_fire_locker.fit(vehicle_model)
+	bus_ceiling_lights.clear()
+	bus_ceiling_diffuser = null
 	bus_board = null
 	rear_bus_board = null
 	if vehicle_index == BUS:

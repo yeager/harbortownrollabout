@@ -31,6 +31,21 @@ func check_route() -> void:
 		printerr("The side display must show the bus line and destination")
 		quit(1)
 		return
+	var original_time: int = game.time_mode
+	for night in [false,true,false]:
+		game.time_mode = 1 if night else 0
+		game._update_daylight(0.0)
+		if game.bus_ceiling_lights.size() != 3:
+			printerr("The bus must have three saloon lights")
+			quit(1)
+			return
+		for lamp: SpotLight3D in game.bus_ceiling_lights:
+			if lamp.visible != night or (lamp.light_energy > 0.0) != night:
+				printerr("The bus saloon lights did not follow the time of day")
+				quit(1)
+				return
+	game.time_mode = original_time
+	game._update_daylight(0.0)
 	game.phone.open_button.pressed.emit()
 	if not game.free_drive or not game.phone.take_job.is_visible_in_tree():
 		printerr("The vehicle must start in free exploration and offer a job in the phone")
