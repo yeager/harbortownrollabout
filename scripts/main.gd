@@ -1900,7 +1900,7 @@ func _build_stars() -> void:
 		star.modulate = Color("#ffdb52")
 		star.outline_modulate = Color("#794510")
 		star.font_size = 96
-		star.pixel_size = .016
+		star.pixel_size = .008
 		star.position = Vector3(site.x, _surface_height(site.x, site.y) + 1.35, site.y)
 		add_child(star)
 		star_markers[id] = star
