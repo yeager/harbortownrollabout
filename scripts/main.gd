@@ -7096,6 +7096,20 @@ func _load_vehicle_model() -> void:
 			arm.reparent(pivot)
 			blades[i].reparent(pivot)
 			wiper_pivots.append(pivot)
+	if vehicle_index == BUS:
+		var arms := vehicle_model.find_children("Windscreen wiper arm*","MeshInstance3D",true,false)
+		var blades := vehicle_model.find_children("Windscreen wiper blade*","MeshInstance3D",true,false)
+		var spindles := vehicle_model.find_children("Windscreen wiper mounting cap*","MeshInstance3D",true,false)
+		for spindle: MeshInstance3D in spindles:
+			var side := signf(spindle.position.x)
+			var pivot := Node3D.new()
+			spindle.get_parent().add_child(pivot)
+			pivot.global_position = spindle.to_global(spindle.get_aabb().get_center())
+			pivot.set_meta("sweep_axis",Vector3.BACK*side)
+			for part: MeshInstance3D in arms+blades:
+				if signf(part.position.x) == side:
+					part.reparent(pivot)
+			wiper_pivots.append(pivot)
 	if vehicle_index in [2, 3, PORSCHE, MOWER, BUS]:
 		var rim_name := "Steering wheel" if vehicle_index == MOWER else "Steering wheel rim*"
 		if vehicle_index == 2: rim_name = "Crew cab steering rim*"

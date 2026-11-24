@@ -178,6 +178,30 @@ func check_driver(game: Node) -> bool:
 				if hand.to_global(game.PALM_GRIP).distance_to(grip) > .01:
 					printerr("Bus driver lost their grip while steering")
 					return false
+	var blades := bus.find_children("Windscreen wiper blade*","MeshInstance3D",true,false)
+	if blades.size() != 2 or game.wiper_pivots.size() != 2:
+		printerr("Both bus wipers must have a working pivot")
+		return false
+	var parked_heights: Array[float] = []
+	game.weather.intensity = Vector2.ZERO
+	game._advance_wipers(TAU)
+	for blade: MeshInstance3D in blades:
+		parked_heights.append(blade.to_global(blade.get_aabb().get_center()).y)
+	for precipitation in [Vector2.RIGHT,Vector2.DOWN]:
+		game.weather.intensity = precipitation
+		game._advance_wipers(PI/5.4)
+		for index in blades.size():
+			var blade := blades[index] as MeshInstance3D
+			if blade.to_global(blade.get_aabb().get_center()).y <= parked_heights[index]+.1:
+				printerr("Precipitation did not lift both bus wipers")
+				return false
+		game.weather.intensity = Vector2.ZERO
+		game._advance_wipers(TAU)
+		for index in blades.size():
+			var blade := blades[index] as MeshInstance3D
+			if not is_equal_approx(blade.to_global(blade.get_aabb().get_center()).y,parked_heights[index]):
+				printerr("A bus wiper did not return to its parked position")
+				return false
 	game._toggle_camera_view()
 	if not game.cockpit_view or driver.visible:
 		printerr("Bus driver obstructed the cockpit camera")
