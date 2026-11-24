@@ -46,6 +46,8 @@ func fit(model: Node3D) -> void:
 	for pattern in ["Rear indicator lens*", "Tail lamp*", "Reversing lens*"]:
 		for lens: MeshInstance3D in model.find_children(pattern, "MeshInstance3D", true, false):
 			lens.material_overlay = ribbed_glass
+			lens.tree_entered.connect(func(): lens.material_overlay = ribbed_glass)
+			lens.tree_exiting.connect(func(): lens.material_overlay = null)
 	for blind: MeshInstance3D in model.find_children("Rear roller blind*", "MeshInstance3D", true, false):
 		_fit_rear_reflector(blind)
 	closed_height = -2.0*panel.get_aabb().position.y # The mesh origin is halfway up the closed blind.
