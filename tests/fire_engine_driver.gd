@@ -22,6 +22,30 @@ func check_driver() -> void:
 			printerr("Driver and steering wheel are in different seats")
 			quit(1)
 			return
+	var blades := truck.find_children("Crew cab wiper blade*", "MeshInstance3D", true, false)
+	if blades.size() != 2:
+		printerr("Both fire engine wiper blades must be present")
+		quit(1)
+		return
+	var parked: Array[Transform3D] = []
+	for blade: MeshInstance3D in blades:
+		parked.append(blade.global_transform)
+	game.weather.intensity.x = 1.0
+	game._advance_wipers(PI / 5.4)
+	for i in blades.size():
+		var blade := blades[i] as MeshInstance3D
+		var centre := blade.get_aabb().get_center()
+		if blade.to_global(centre).y < (parked[i] * centre).y + .1:
+			printerr("Rain should sweep each blade up the glass")
+			quit(1)
+			return
+	game.weather.intensity = Vector2.ZERO
+	game._advance_wipers(2.0)
+	for i in blades.size():
+		if not blades[i].global_transform.is_equal_approx(parked[i]):
+			printerr("Both blades must park after rain stops")
+			quit(1)
+			return
 	game._toggle_camera_view()
 	if not game.cockpit_view or absf(truck.to_local(game.camera.global_position).x - wheel_x) > .02:
 		printerr("Cab camera must face the road from the driver's seat")

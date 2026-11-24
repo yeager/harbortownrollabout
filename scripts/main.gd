@@ -6867,7 +6867,8 @@ func _advance_wipers(delta: float) -> void:
 	wiper_phase = 0.0 if precipitation < .06 and next_phase >= TAU else fmod(next_phase,TAU)
 	var sweep := .64*(1.0-cos(wiper_phase))
 	for pivot in wiper_pivots:
-		pivot.basis = Basis(Vector3(0,.77,.64).normalized(),sweep)
+		var axis: Vector3 = pivot.get_meta("sweep_axis")
+		pivot.basis = Basis(axis,sweep)
 
 	# Follow the Shopper's curved acrylic in the opening shell's local space.
 	if not shopper_wiper_parts.is_empty():
@@ -7034,15 +7035,23 @@ func _load_vehicle_model() -> void:
 			var part := vehicle_model.find_child(part_name,true,false) as MeshInstance3D
 			part.set_meta("parked_transform",part.transform)
 			shopper_wiper_parts.append(part)
-	if vehicle_index == 3:
-		var arms := vehicle_model.find_children("Wiper arm*","MeshInstance3D",true,false)
-		var blades := vehicle_model.find_children("Windscreen wiper blade*","MeshInstance3D",true,false)
+	if vehicle_index in [2, 3]:
+		var fire := vehicle_index == 2
+		var arms := vehicle_model.find_children("Cab wiper linkage*" if fire else "Wiper arm*","MeshInstance3D",true,false)
+		var blades := vehicle_model.find_children("Crew cab wiper blade*" if fire else "Windscreen wiper blade*","MeshInstance3D",true,false)
+		var spindles := vehicle_model.find_children("Cab wiper spindle cap*","MeshInstance3D",true,false) if fire else []
 		for i in mini(arms.size(),blades.size()):
 			var arm := arms[i] as MeshInstance3D
 			var bounds := arm.get_aabb()
 			var pivot := Node3D.new()
 			arm.get_parent().add_child(pivot)
-			pivot.global_position = arm.to_global(Vector3(bounds.position.x,bounds.position.y,bounds.end.z))
+			if fire:
+				var spindle := spindles[i] as MeshInstance3D
+				pivot.global_position = spindle.to_global(spindle.get_aabb().get_center())
+				pivot.set_meta("sweep_axis", Vector3(0,.15,1).normalized() * signf(pivot.position.x))
+			else:
+				pivot.global_position = arm.to_global(Vector3(bounds.position.x,bounds.position.y,bounds.end.z))
+				pivot.set_meta("sweep_axis", Vector3(0,.77,.64).normalized())
 			arm.reparent(pivot)
 			blades[i].reparent(pivot)
 			wiper_pivots.append(pivot)
