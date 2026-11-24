@@ -816,7 +816,10 @@ def rear_prismatic_lens(name, x, z, height, finish, root):
 
 
 def fit_fire_speedometer(root):
-    x, y, z = -.57, -2.823, 2.005
+    x, y, z = -.57, -2.823, 2.125
+    # Keep the dial above the steering rim from the seated driving position.
+    binnacle = next(part for part in root.children if part.name.startswith("Driver instrument binnacle"))
+    binnacle.location.z += .12
     for name, depth, radius, finish in (
             ("Speedometer bezel", 0, .110, METAL),
             ("Speedometer dial", .006, .102, BLACK)):

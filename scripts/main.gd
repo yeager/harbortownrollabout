@@ -7668,6 +7668,7 @@ func _toggle_camera_view() -> void:
 
 func _update_camera(delta: float, snap_to_car := false) -> void:
 	if not is_instance_valid(camera) or not is_instance_valid(ambulance): return
+	camera.fov = 78 if cockpit_view and vehicle_index == 2 and not walker.visible and not boating and tram_mode == 0 and not operating_excavator and not ferry_passenger else 58
 	if ferry_passenger:
 		var focus := walker.position + Vector3.UP*.95
 		camera.position = focus + Vector3(5,3.3+orbit_height,7).rotated(Vector3.UP,orbit_angle)
