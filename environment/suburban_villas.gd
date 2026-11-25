@@ -75,7 +75,7 @@ func _build_lot(index: int) -> void:
 	lot.position = Vector3(LOTS[index], -.19, FRONT_Z + setback)
 	add_child(lot)
 	var width: float = [9.0, 8.5, 10.0, 8.8][index]
-	var depth := 8.0 + .4 * (index % 3)
+	var depth: float = [7.6, 8.8, 6.6, 8.0][index]
 	var two_storeys := index % 2 == 1
 	var wall_height := 5.55 if two_storeys else 3.17
 	var pitch: float = [.49, .34, .19, .61][index]
@@ -103,21 +103,38 @@ func _build_lot(index: int) -> void:
 	var front_windows := [
 		[Vector4(-4.45, 1.94, 1.68, 1.52), Vector4(1.1, 1.94, 1.68, 1.52)],
 		[Vector4(-4.30, 1.90, 1.36, 1.65), Vector4(.83, 1.90, 1.36, 1.65)],
-		[Vector4(-4.56, 1.77, 2.64, 1.52), Vector4(.87, 2.04, 2.21, .99)],
+		[Vector4(-4.56, 1.69, 2.64, 1.39), Vector4(.87, 2.04, 2.21, .99)],
 		[Vector4(-4.35, 1.86, 2.08, 1.42), Vector4(.53, 2.07, .77, 1.36), Vector4(1.62, 2.07, .77, 1.36)]
 	]
 	for window: Vector4 in front_windows[index]:
-		_window(lot, Vector3(window.x, window.y, .06), Vector2(window.z, window.w))
+		var window_z := .06
+		if index == 2 and window.x < 0:
+			_box(lot, "Projecting bay", Vector3(2.90, 2.10, .48), Vector3(window.x, 1.47, .22), siding.darkened(.08))
+			var cap := _box(lot, "Bay roof", Vector3(3.02, .12, .62), Vector3(window.x, 2.55, .21), roof)
+			cap.material_override = roof_finish
+			window_z = .47
+		_window(lot, Vector3(window.x, window.y, window_z), Vector2(window.z, window.w))
 		if index == 0:
 			for side in [-1, 1]:
 				_box(lot, "Painted shutter", Vector3(.28, 1.30, .08), Vector3(window.x + side * .98, window.y, .091), Color("#77909a"))
 	if two_storeys:
 		_box(lot, "Storey band", Vector3(width, .085, .116), Vector3(-1.65, 3.13, .055), siding.darkened(.12))
-		for window_x in ([-4.14, -1.65, 1.0] if index == 1 else [-4.18, .96]):
+		for window_x in ([-1.65, 1.0] if index == 1 else [-4.18, .96]):
 			var size := Vector2(1.32, 1.24) if index == 1 else Vector2(1.91, 1.38)
 			_window(lot, Vector3(window_x, 4.34, .06), size)
 	elif index == 0:
 		_window(lot, Vector3(-1.65, eave + .55, .066), Vector2(.74, .67))
+	if index == 1:
+		_box(lot, "Balcony door frame", Vector3(1.18, 1.82, .13), Vector3(-4.06, 4.47, .06), TRIM)
+		_box(lot, "Balcony door glazing", Vector3(.94, 1.53, .035), Vector3(-4.06, 4.53, .132), Color.WHITE).material_override = window_glass
+		_box(lot, "Balcony slab", Vector3(3.16, .18, 1.02), Vector3(-4.06, 3.48, .50), Color("#827463"))
+		_box(lot, "Balcony handrail", Vector3(3.16, .09, .09), Vector3(-4.06, 4.41, .97), TRIM)
+		for i in 13:
+			_box(lot, "Balcony baluster", Vector3(.047, .89, .047), Vector3(-5.57 + i * .25, 3.94, .97), TRIM)
+		for end in [-1, 1]:
+			_box(lot, "Balcony side railing", Vector3(.09, .09, .91), Vector3(-4.06 + end * 1.53, 4.41, .50), TRIM)
+			for i in 3:
+				_box(lot, "Balcony side baluster", Vector3(.047, .89, .047), Vector3(-4.06 + end * 1.53, 3.94, .24 + i * .23), TRIM)
 	var door_x := -1.65
 	_box(lot, "Front door frame", Vector3(1.31, 2.26, .16), Vector3(door_x, 1.39, .06), TRIM)
 	_box(lot, "Front door", Vector3(1.09, 2.10, .09), Vector3(door_x, 1.34, .17), [Color("#314d58"), Color("#6c352b"), Color("#343c3e"), Color("#4d6153")][index])
@@ -284,7 +301,12 @@ func _grounds(lot: Node3D, index: int) -> void:
 	var spruce_site: Vector3 = [Vector3(1.87, .04, 5.40), Vector3(-5.75, .04, 5.90),
 		Vector3(1.85, .04, 7.15), Vector3(2.15, .04, 4.35)][index]
 	_yard_spruce(lot.to_global(spruce_site), index)
-	if index == 1:
+	if index == 0:
+		_box(lot, "Kitchen garden soil", Vector3(2.5, .11, 1.48), Vector3(-4.58, .09, 5.64), Color("#503b2c"))
+		for row in 3:
+			for plant in 7:
+				_plant(flower_heads, lot.to_global(Vector3(-5.55 + plant * .32, .23, 5.20 + row * .42)), Vector3(.24, .23, .26), Color("#57823e").lightened(.08 * row))
+	elif index == 1:
 		_garden_bench(lot, Vector3(1.68, .03, 3.1))
 	elif index == 3:
 		_box(lot, "Raised herb bed", Vector3(2.1, .36, .85), Vector3(-4.8, .18, 4.6), TIMBER)
