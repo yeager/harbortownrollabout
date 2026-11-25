@@ -11299,6 +11299,8 @@ func _toggle_pause() -> void:
 		_end_skid()
 		for item in traffic_data:
 			item.horn.stop()
+	elif boating or operating_excavator or tram_mode == 2 or not walker.visible:
+		release_pedal_keys = _keyboard_pedal_pressed()
 	greeting_voice.stream_paused = paused
 	_update_traffic_signals(0)
 	_update_siren()

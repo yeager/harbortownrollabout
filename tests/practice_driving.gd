@@ -306,11 +306,27 @@ func verify() -> void:
 		quit(1)
 		return
 	pause_key.keycode = KEY_P
+	Input.action_press("ui_up")
 	game._unhandled_key_input(pause_key)
+	game._drive(.1)
+	Input.action_release("ui_up")
 	if game.paused or not game.pause_button.text.ends_with(" · P / F7"):
 		printerr("The original pause key did not resume with F7 enabled")
 		quit(1)
 		return
+	if not is_zero_approx(game.speed):
+		printerr("The car took off with the accelerator held while resuming")
+		quit(1)
+		return
+	game._drive(.01)
+	Input.action_press("ui_up")
+	game._drive(.1)
+	Input.action_release("ui_up")
+	if game.speed <= 0.0:
+		printerr("A fresh accelerator press did not work after resuming")
+		quit(1)
+		return
+	game.speed = 0.0
 	game.ambulance.position.z += 3
 	var displaced: Vector3 = game.ambulance.position
 	var key := InputEventKey.new()
