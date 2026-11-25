@@ -91,9 +91,7 @@ func _build_lot(index: int) -> void:
 	for side in [-1, 1]:
 		_box(lot, "Painted corner board", Vector3(.14, wall_height, .12), Vector3(-1.65 + side * (width * .5 - .05), wall_height * .5 + .25, .058), TRIM)
 	if index != 2:
-		var top := eave + tan(pitch) * width * .5
-		_box(lot, "Brick chimney", Vector3(.71, 1.45, .62), Vector3(-.24, top - .15, -depth + 2.0), Color("#8c5141"))
-		_box(lot, "Chimney cap", Vector3(.85, .13, .76), Vector3(-.24, top + .61, -depth + 2.0), Color("#615652"))
+		_fit_chimney(lot, index, width, depth, eave, pitch)
 	for side in [-1, 1]:
 		var cladding_x: float = -1.65 + side * width * .5
 		if index == 0:
@@ -188,6 +186,26 @@ func _build_lot(index: int) -> void:
 	lot.add_child(light)
 	entry_lights.append(light)
 	_grounds(lot, index)
+
+func _fit_chimney(lot: Node3D, index: int, width: float, depth: float, eave: float, pitch: float) -> void:
+	var offset: float = {0: 1.05, 1: -1.15, 3: 1.22}[index]
+	var roof_run := width * .5 + (.40 if index == 1 else 0.0)
+	var peak := tan(pitch) * width * .5
+	var slope := atan(peak / roof_run)
+	var roof_y := eave + peak - absf(offset) * tan(slope)
+	if index != 1:
+		roof_y += .085 / cos(pitch)
+	var base := Vector3(-1.65 + offset, roof_y, -depth * .58)
+	var brick: Color = {0: Color("#995a47"), 1: Color("#b27957"), 3: Color("#82524a")}[index]
+	var flashing := _box(lot, "Chimney flashing", Vector3(.99, .055, .88), base + Vector3.UP * .018, Color("#586164"))
+	flashing.rotation.z = -signf(offset) * slope
+	_box(lot, "Brick chimney", Vector3(.69, 1.41, .61), base + Vector3.UP * .31, brick)
+	for joint in 6:
+		_box(lot, "Chimney mortar joint", Vector3(.697, .018, .617),
+			base + Vector3.UP * (.19 + .138 * joint), brick.lightened(.28))
+	_box(lot, "Chimney cap", Vector3(.84, .094, .75), base + Vector3.UP * 1.04, Color("#625c55"))
+	for flue_x in ([-.17, .17] if index == 3 else [0.0]):
+		_box(lot, "Chimney flue", Vector3(.24, .15, .25), base + Vector3(flue_x, 1.14, 0), Color("#383532"))
 
 func _side_window(lot: Node3D, at: Vector3, side: int, size: Vector2) -> void:
 	_box(lot, "Side window frame", Vector3(.12, size.y, size.x), at + Vector3.RIGHT * side * .023, TRIM)
