@@ -9671,6 +9671,8 @@ func _build_ui() -> void:
 		if phone.handset.is_visible_in_tree():
 			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 			_release_mouse_pedals()
+		elif mode == "playing" and not walker.visible and not (boating or operating_excavator or tram_mode != 0):
+			release_walk_keys = _walk_pedal_pressed()
 	)
 	phone.take_job.pressed.connect(func():
 		if leave_practice_button.visible:

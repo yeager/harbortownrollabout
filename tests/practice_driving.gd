@@ -70,7 +70,23 @@ func verify() -> void:
 			printerr("Road controls moved the car while the phone was open")
 			quit(1)
 			return
+	Input.action_press("ui_up")
 	game.phone.toggle()
+	game._drive(.25)
+	Input.action_release("ui_up")
+	if not is_zero_approx(game.speed):
+		printerr("The car accelerated from a key held while closing the phone")
+		quit(1)
+		return
+	game._drive(.01)
+	Input.action_press("ui_up")
+	game._drive(.1)
+	Input.action_release("ui_up")
+	if game.speed <= 0.0:
+		printerr("The car ignored a fresh accelerator press after closing the phone")
+		quit(1)
+		return
+	game.speed = 0.0
 	game.shops.shop_card.show()
 	game._unhandled_input(pedal)
 	if game.mouse_brake:
