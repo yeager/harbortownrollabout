@@ -44,5 +44,19 @@ func verify() -> void:
 				printerr("Freight checkpoint did not restore the pickup, stop and load after stop ", leg)
 				quit(1)
 				return
+	game.phone.receipt_menu.about_to_popup.emit()
+	var receipts: PopupMenu = game.phone.receipt_menu.get_popup()
+	if receipts.item_count != expected_receipts.size():
+		printerr("The phone did not list both saved receipts")
+		quit(1)
+		return
+	for index in receipts.item_count:
+		var receipt_id := receipts.get_item_id(index)
+		receipts.id_pressed.emit(receipt_id)
+		if game.phone.receipt_dialog.dialog_text != game.tr(expected_receipts[receipt_id]):
+			printerr("The phone did not reopen the selected receipt")
+			quit(1)
+			return
+		game.phone.receipt_dialog.hide()
 	print("Two visible parcels, decreasing payload, mid-route resume and both persistent delivery receipts verified.")
 	game._finish_quit(false)
