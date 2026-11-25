@@ -203,9 +203,19 @@ for y in (-.91,.91):
     for side in [-1,1]:
         cylinder("Steel wheel",(side*.72,y,.29),.27,.13,steel,True,24,root)
         cylinder("Axle bearing",(side*.86,y,.29),.13,.12,black,True,16,root)
-cube("Roof equipment housing",(0,1.28,2.72),(1.37,1.14,.18),steel,.065,root)
-for y in (.89,1.04,1.19,1.34,1.49,1.64):
-    cube("Roof louvre",(0,y,2.815),(1.05,.049,.024),black,.008,root)
+cube("Roof ventilation gasket", (0, 1.28, 2.648), (1.30, 1.09, .052), black, .025, root)
+cube("Roof ventilation housing", (0, 1.28, 2.736), (1.37, 1.14, .19), steel, .057, root)
+cube("Inset outlet grille", (0, 1.28, 2.832), (1.13, .86, .018), black, .023, root)
+for row in range(9):
+    cube("Roof outlet grille slat", (0, .90 + .095 * row, 2.845), (1.08, .044, .018), steel, .005, root)
+for side in (-1, 1):
+    cube("Recessed intake", (side * .686, 1.28, 2.733), (.016, .83, .095), black, .010, root)
+    for row in range(5):
+        cube("Intake grille divider", (side * .696, .95 + .165 * row, 2.733),
+             (.016, .025, .086), steel, .004, root)
+for x in (-.57, .57):
+    for y in (.82, 1.74):
+        cylinder("Roof panel fastener", (x, y, 2.832), .022, .012, silver, False, 12, root)
 # Batch opaque geometry by material to keep the three-car consist inexpensive.
 for mat in (blue,silver,steel,black,frame,seat,yellow,cream,floor_mat,shell,light):
     bpy.ops.object.select_all(action="DESELECT")
