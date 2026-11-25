@@ -316,14 +316,26 @@ func _ready() -> void:
 		if i==1:
 			_mark_stroller_bay(car)
 			var steel := Color("#384448")
-			world._make_box("Pantograph base",Vector3(1.05,.18,1.26),Vector3(0,2.78,.25),steel,false,car)
+			world._make_box("Pantograph mounting tray", Vector3(1.05, .075, 1.26), Vector3(0, 2.735, .25), steel, false, car)
+			for mount_x in [-.37, .37]:
+				for mount_z in [-.15, .65]:
+					world._make_box("Pantograph insulated mounting foot", Vector3(.21, .095, .23),
+						Vector3(mount_x, 2.805, mount_z), Color("#c2bba7"), false, car)
+			world._make_box("Pantograph hinge bed", Vector3(.94, .07, 1.05),
+				Vector3(0, 2.88, .25), steel, false, car)
+			beam(Vector3(-.40, 3.53, -.54), Vector3(.40, 3.53, -.54), .095, .095, steel.lightened(.17), car)
+			beam(Vector3(-.43, 4.13, 0), Vector3(.43, 4.13, 0), .065, .065, steel.lightened(.17), car)
 			for side in [-1,1]:
 				var heel := Vector3(side*.33,2.87,.67)
 				var elbow := Vector3(side*.28,3.53,-.54)
 				var crown := Vector3(side*.39,4.13,0)
 				beam(heel,elbow,.065,.083,steel,car)
 				beam(elbow,crown,.048,.065,steel,car)
-			world._make_box("Contact shoe",Vector3(1.22,.065,.13),Vector3(0,4.16,0),steel,false,car)
+			world._make_box("Contact shoe carrier", Vector3(1.22, .047, .17), Vector3(0, 4.145, 0), steel, false, car)
+			for z in [-.049, .049]:
+				world._make_box("Carbon contact strip", Vector3(1.18, .024, .045), Vector3(0, 4.178, z), Color("#262a2a"), false, car)
+			for side in [-1, 1]:
+				beam(Vector3(side * .59, 4.174, 0), Vector3(side * .75, 4.08, 0), .037, .051, steel, car)
 		if i in [0, 2]:
 			var cab := preload("res://vehicles/tram_cab.glb").instantiate() as Node3D
 			var end := -1 if i == 0 else 1
