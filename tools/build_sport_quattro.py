@@ -20,7 +20,7 @@ def build():
     root = bpy.data.objects.new("Audi Sport quattro", None)
     bpy.context.collection.objects.link(root)
     red = material("Tornado red enamel", (.67, .021, .031), .26, .23)
-    red.node_tree.nodes["Principled BSDF"].inputs["Coat Weight"].default_value = .45
+    next(node for node in red.node_tree.nodes if node.type == "BSDF_PRINCIPLED").inputs["Coat Weight"].default_value = .45
     trim = material("Satin black ABS", (.022, .024, .028), .08, .42)
     recess = material("Dark grille recess", (.008, .010, .012), .05, .73)
     rubber = material("Carbon black tyre rubber", (.012, .014, .017), .0, .82)
@@ -28,7 +28,7 @@ def build():
     chrome = material("Polished metal", (.64, .69, .74), .86, .19)
     lamp = material("Headlamp reflector glass", (.67, .72, .69), .32, .20, .13)
     lens = material("Clear pressed headlamp glass", (.83, .91, .92), .05, .18)
-    lens.node_tree.nodes["Principled BSDF"].inputs["Alpha"].default_value = .31
+    next(node for node in lens.node_tree.nodes if node.type == "BSDF_PRINCIPLED").inputs["Alpha"].default_value = .31
     amber = material("Amber indicator lens", (.92, .33, .025), .08, .25, .13)
     ruby = material("Tail lamp red smoked lens", (.32, .018, .021), .13, .25, .1)
     clear = material("Reverse lamp prism", (.20, .24, .25), .12, .22)
@@ -36,7 +36,7 @@ def build():
     smoked_ruby = material("Smoked red reflector", (.17, .021, .024), .12, .30)
     glass = material("Blue-green laminated glazing", (.17, .33, .39), .13, .13)
     glass.diffuse_color = (.17, .33, .39, .35)
-    glass.node_tree.nodes["Principled BSDF"].inputs["Alpha"].default_value = .35
+    next(node for node in glass.node_tree.nodes if node.type == "BSDF_PRINCIPLED").inputs["Alpha"].default_value = .35
     cloth = material("Charcoal seat cloth", (.069, .074, .076), 0, .91)
     leather = material("Graphite leather bolsters", (.104, .109, .114), 0, .63)
     carpet = material("Dark woven floor", (.027, .030, .031), 0, .94)
@@ -370,13 +370,16 @@ def build():
         vent.rotation_euler.x = .105
         for i in [-1,1]:
             box("Bonnet vent vane",(x,-1.749+i*.028,.831+i*.003),(width-.018,.007,.006),trim,.002)
-    for y, z in [(-2.066,.284),(2.078,.657)]:
+    plate_white = material("Registration plate enamel", (.87,.87,.82), .03, .47)
+    plate_blue = material("Registration country field", (.025,.12,.42), .03, .47)
+    for y, z, outward in [(-2.084,.284,-1), (2.078,.657,1)]:
         box("Number plate frame",(0,y,z),(.308,.015,.099),trim,.008)
-        outward = 1 if y > 0 else -1
-        box("Number plate insert",(0,y+outward*.010,z),(.280,.007,.077),alloy,.006)
-        text_x = .109 if outward == 1 else -.109
-        plate = text_obj("Number plate characters","SQ  084",(text_x,y+outward*.015,z-.019),.049,recess,root=root,flat=True)
+        box("Number plate insert",(0,y+outward*.010,z),(.280,.007,.077),plate_white,.006)
+        box("Number plate country field",(outward*.121,y+outward*.014,z),(.028,.002,.069),plate_blue,.002)
+        plate = text_obj("Number plate characters","SQ  084",(outward*.088,y+outward*.016,z-.017),.062,recess,root=root,flat=True)
         plate.rotation_euler.z = math.pi if outward == 1 else 0
+        country = text_obj("Number plate country letter","S",(outward*.127,y+outward*.016,z-.020),.021,plate_white,root=root,flat=True)
+        country.rotation_euler.z = plate.rotation_euler.z
     badge = text_obj("Quattro script","quattro",(-.335,2.029,.774),.055,trim,root=root)
     badge.rotation_euler.z = math.pi
     export_vehicle(root,"sport_quattro.glb")
