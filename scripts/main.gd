@@ -5693,7 +5693,7 @@ func _movement_hint(text: String) -> String:
 	keys["seat"] = "F / F3" if seat_f3 else "F"
 	keys["horn"] = "H / F4" if horn_f4 else "H"
 	keys["pause"] = "P / F7" if pause_f7 else "P"
-	keys["help"] = tr("Insert") if insert_help else tr("Space")
+	keys["help"] = tr("Space") + (" / " + tr("Insert") if insert_help else "")
 	return text.format(keys)
 
 func _with_recovery_hint(controls: String) -> String:

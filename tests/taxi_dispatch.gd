@@ -68,7 +68,7 @@ func check_fare() -> void:
 	game.message_timer = 0
 	game.gentle_driving = false
 	game._refresh_ui()
-	if not game.driving_hints.text.contains("Insert för att hjälpa") or game.status_label.text != "Tryck på Insert för att släppa av passageraren.":
+	if not game.driving_hints.text.contains("Mellanslag / Insert för att hjälpa") or game.status_label.text != "Tryck på Mellanslag / Insert för att släppa av passageraren.":
 		printerr("Unexpected Swedish driving or drop-off hint: ", game.status_label.text, " / ", game.driving_hints.text)
 		quit(1)
 		return
