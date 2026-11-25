@@ -294,6 +294,16 @@ func check_controls() -> void:
 	if not game.radio.playing or game.radio_track != restored_song or game.radio.get_playback_position() < 7.0:
 		fail("The saved song did not resume near its playback position")
 		return
+	game.queue_free()
+	await process_frame
+	game = load("res://main.tscn").instantiate()
+	root.add_child(game)
+	TranslationServer.set_locale("de")
+	game._resume_road_checkpoint()
+	var expected_tracks: PackedStringArray = game.L10n.radio_tracks("en")
+	if not game.radio.playing or game.radio_track not in expected_tracks or game.radio_track == restored_song or game.radio.get_playback_position() >= 7.0:
+		fail("Resuming in German did not start a fresh track from the English fallback playlist")
+		return
 	press(KEY_B)
 	if game.radio.playing:
 		fail("The saved radio key did not turn off the radio")
