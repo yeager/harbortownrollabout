@@ -12,8 +12,11 @@ const WOOD := Color("#a46943")
 const TEAL := Color("#13635f")
 const CREAM := Color("#fff0cb")
 const PAINT := Color("#f0eee4")
+const SIGN_LIGHT := Color("#ffad64")
 var city: Node3D
 var order_pending := false
+var sign_glow: StandardMaterial3D
+var ad_glow: StandardMaterial3D
 
 func build(world: Node3D) -> void:
 	city = world
@@ -39,6 +42,9 @@ func build(world: Node3D) -> void:
 	_box("Flat roof", Vector3(16.8, .38, 13.85), Vector3(0, 3.92, 0), DARK)
 	_box("Timber fascia", Vector3(16.05, .82, 13.05), Vector3(0, 3.47, 0), WOOD)
 	_box("Roof parapet", Vector3(11.2, .52, 8), Vector3(1, 4.16, 1.2), DARK)
+	sign_glow = city._material(SIGN_LIGHT, .5, true)
+	ad_glow = city._material(Color("#963f2b"), .55, true)
+	_roof_signs()
 	for x in [-2.0, 4.0]:
 		_box("Roof ventilation", Vector3(1.6, .45, 1.13), Vector3(x, 4.62, 2), Color("#6b7471"))
 	for wall_x in [-7.92, 7.92]:
@@ -71,10 +77,45 @@ func build(world: Node3D) -> void:
 		_box("Terrace planter", Vector3(1.14, .56, .61), Vector3(x, .28, -11.68), DARK)
 		for offset in [-.32, 0.0, .32]:
 			_ball("Terrace shrub", Vector3(x + offset, .70, -11.68), Vector3(.48, .43, .46), Color("#59814c"))
+	_burger_ad()
 	_order_station()
 	_obstacle(Vector3(16, 4.1, 13), Vector3(0, 2.0, 0))
 	for x in [-5.4, -2.7, 5.0]:
 		_obstacle(Vector3(1.6, 1.0, 1.65), Vector3(x, .5, -9.6))
+
+func update_lights(night: float) -> void:
+	sign_glow.emission_energy_multiplier = lerpf(.22, 2.1, night)
+	ad_glow.emission_energy_multiplier = lerpf(.12, .72, night)
+
+func _roof_signs() -> void:
+	for side in [-1.0, 1.0]:
+		var z: float = side * 3.8
+		for x in [-1.95, 1.95]:
+			_box("Roof sign support", Vector3(.16, .75, .22), Vector3(x, 4.42, z), DARK)
+		_box("Roof lightbox housing", Vector3(5.40, 1.34, .32), Vector3(0, 5.25, z), DARK)
+		var frame := _box("Illuminated roof sign trim", Vector3(5.26, 1.22, .055), Vector3(0, 5.25, z + side * .174), SIGN_LIGHT)
+		frame.material_override = sign_glow
+		_box("Roof sign face", Vector3(5.12, 1.08, .068), Vector3(0, 5.25, z + side * .207), TEAL)
+		_sign("Dax", Vector3(0, 5.28, z + side * .25), 4.8, PI if side < 0 else 0.0, CREAM, .023)
+
+func _burger_ad() -> void:
+	var at := Vector3(5.90, 1.68, -6.58)
+	_box("Burger advertisement frame", Vector3(2.36, 2.66, .17), at, DARK)
+	var panel := _box("Backlit burger advertisement", Vector3(2.24, 2.54, .05), at + Vector3.FORWARD * .10, Color("#d1734c"))
+	panel.material_override = ad_glow
+	_sign("Dax burger", at + Vector3(0, .92, -.14), 1.98, PI)
+	for layer in [
+		[.15, .48, 1.68, Color("#e8a257")],
+		[-.08, .12, 1.80, Color("#78a34d")],
+		[-.18, .15, 1.70, Color("#ffc367")],
+		[-.30, .22, 1.67, Color("#673925")],
+		[-.48, .21, 1.60, Color("#cf8748")],
+	]:
+		_ball("Burger poster relief", at + Vector3(0, layer[0], -.147), Vector3(layer[2], layer[1], .055), layer[3])
+	for seed in [Vector2(-.39, .20), Vector2(-.19, .26), Vector2(.06, .18), Vector2(.29, .24), Vector2(.43, .15)]:
+		_ball("Sesame seed", at + Vector3(seed.x, seed.y, -.181), Vector3(.088, .025, .02), CREAM)
+	var price: Label3D = city._station_sign(str(PRICE), at + Vector3(0, -.92, -.147), .009, CREAM, PI, self)
+	city._size_world_sign(price, 1.0)
 
 func _order_station() -> void:
 	_box("Menu pedestal", Vector3(.28, 1.04, 1.36), Vector3(-8.46, .54, -3), DARK)
@@ -135,8 +176,8 @@ func _asphalt(size: Vector2, at: Vector2) -> void:
 func _obstacle(size: Vector3, at: Vector3) -> void:
 	city.building_bounds.append(AABB(to_global(at - size * .5) - Vector3.UP, size + Vector3.UP))
 
-func _sign(caption: String, at: Vector3, width: float, yaw := 0.0, tint := CREAM) -> void:
-	var label: Label3D = city._station_sign(caption, at, .011, tint, yaw, self)
+func _sign(caption: String, at: Vector3, width: float, yaw := 0.0, tint := CREAM, text_size := .011) -> void:
+	var label: Label3D = city._station_sign(caption, at, text_size, tint, yaw, self)
 	city._size_world_sign(label, width)
 
 func _glass(at: Vector3, size: Vector3) -> void:

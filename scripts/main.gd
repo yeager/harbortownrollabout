@@ -4462,6 +4462,7 @@ func _update_daylight(delta: float) -> void:
 		chimney_beacon_phase = 0.0
 		chimney_beacon.emission_enabled = false
 	suburban_villas.update_lights(weather.season == 4, night, weather.snow)
+	dax.update_lights(night)
 	christmas_spruce.update_lights(weather.season == 4 and weather.snow > .02, night)
 	shops.candy_blade_glow.emission_enabled = night >= .35
 	midsummer_pole.set_summer(weather.season == 2)
