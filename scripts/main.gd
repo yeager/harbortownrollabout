@@ -972,6 +972,8 @@ func _save_checkpoint() -> void:
 		}
 		if vehicle_index == BUS and not free_drive and bus_leg % 2 == 1 and bus_stop_request.visible:
 			road_checkpoint["bus_stop_requested"] = true
+		if vehicle_index == BUS and not free_drive and not walker.visible and bus_departure_pending:
+			road_checkpoint["bus_departure_pending"] = true
 		if cockpit_view and not walker.visible and vehicle_index in DRIVER_VIEW_VEHICLES and not boating and tram_mode == 0 and not operating_excavator:
 			road_checkpoint["cockpit_view"] = true
 		if practice_active and vehicle_index == SCHOOL_CAR:
@@ -11051,6 +11053,9 @@ func _resume_road_checkpoint() -> void:
 	if vehicle_index == BUS and not free_drive and bus_leg % 2 == 1 and road_checkpoint.get("bus_stop_requested", false):
 		bus_press_time = 1.2
 		_update_bus_stop_request(0.0)
+	if vehicle_index == BUS and not free_drive and not road_checkpoint.has("walk_position") and road_checkpoint.get("bus_departure_pending", false):
+		bus_departure_pending = true
+		bus_merge_time = BUS_MERGE_SECONDS
 	vehicle_progress = road_checkpoint.progress.duplicate()
 	if tram_mode != 0:
 		var trip: Dictionary = road_checkpoint.tram
@@ -11359,7 +11364,7 @@ func _valid_checkpoint(saved: Variant) -> bool:
 		if not vehicle is int or not step is int or step < 0 or step > TARGETS.size(): return false
 	if saved.has("walk_position") and not _checkpoint_fields(saved, {"walk_position": TYPE_VECTOR3, "walk_heading": TYPE_FLOAT, "door_offset": TYPE_VECTOR3}):
 		return false
-	var optional := {"practice": TYPE_BOOL, "boule_bench": TYPE_BOOL, "scooter": TYPE_BOOL, "exit_at_landing": TYPE_BOOL, "ferry_time": TYPE_FLOAT, "launch_transform": TYPE_TRANSFORM3D, "bus_stop_requested": TYPE_BOOL}
+	var optional := {"practice": TYPE_BOOL, "boule_bench": TYPE_BOOL, "scooter": TYPE_BOOL, "exit_at_landing": TYPE_BOOL, "ferry_time": TYPE_FLOAT, "launch_transform": TYPE_TRANSFORM3D, "bus_stop_requested": TYPE_BOOL, "bus_departure_pending": TYPE_BOOL}
 	for key in optional:
 		if saved.has(key) and not _checkpoint_fields(saved, {key: optional[key]}):
 			return false
