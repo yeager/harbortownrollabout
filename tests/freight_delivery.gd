@@ -30,12 +30,11 @@ func verify() -> void:
 			printerr("Freight stop did not advance, pay and record its receipt exactly once: ", leg)
 			quit(1)
 			return
-		game._save_checkpoint()
 		game.queue_free()
 		await process_frame
 		game = preload("res://main.tscn").instantiate()
 		root.add_child(game)
-		if game.phone.delivery_receipts != expected_receipts.slice(0, leg):
+		if game.phone.delivery_receipts != expected_receipts.slice(0, leg) or game.wallet != starting_wallet + 10 * (leg + 1):
 			printerr("Freight receipts changed on restart after stop ", leg)
 			quit(1)
 			return
@@ -45,6 +44,10 @@ func verify() -> void:
 				printerr("Freight checkpoint did not restore the pickup, stop and load after stop ", leg)
 				quit(1)
 				return
+	if game.find_child("ResumeCheckpoint", true, false):
+		printerr("Completed freight run remained resumable")
+		quit(1)
+		return
 	game.phone.receipt_menu.about_to_popup.emit()
 	var receipts: PopupMenu = game.phone.receipt_menu.get_popup()
 	if receipts.item_count != expected_receipts.size():

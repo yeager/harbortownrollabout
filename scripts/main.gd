@@ -2037,12 +2037,10 @@ func _show_mission_reward(kind: String, cell: int, points: int, coins: int) -> v
 	reward_badge.show()
 	reward_seconds = 4.0
 
-func _reward_delivery(amount: int, save_now := true) -> void:
+func _reward_delivery(amount: int) -> void:
 	_show_mission_reward("vehicle",phone.vehicle_action,amount,amount)
 	wallet += amount
 	delivery_points += amount
-	if save_now:
-		_save_preferences()
 
 func _help_at_target(ice_choice := -1) -> void:
 	if operating_excavator: return
@@ -2055,7 +2053,7 @@ func _help_at_target(ice_choice := -1) -> void:
 			parked_at_target = 0
 			message = "Passengers on board." if bus_leg%2 else "Bus journey complete. You earned 15 points and 15 coins."
 			if bus_leg%2==0:
-				_reward_delivery(15, false)
+				_reward_delivery(15)
 				phone.receive(message)
 			message_timer = 3
 			_update_mission_marker()
@@ -2068,7 +2066,7 @@ func _help_at_target(ice_choice := -1) -> void:
 			parked_at_target=0
 			if recovery_leg%2==0:
 				_repair_at_workshop(recovery_leg % 4 == 0)
-				_reward_delivery(20, false)
+				_reward_delivery(20)
 				message = "Recovery complete. You earned 20 points and 20 coins."
 				phone.receive(message)
 			else:
@@ -2083,7 +2081,7 @@ func _help_at_target(ice_choice := -1) -> void:
 			taxi_leg += 1
 			if taxi_leg%2==0:
 				phone.receive("Fare complete. You earned 15 points and 15 coins.")
-				_reward_delivery(15, false)
+				_reward_delivery(15)
 			parked_at_target = 0
 			message = "Passenger on board." if taxi_leg%2 else "Thank you for the ride!"
 			if _school_fare(taxi_leg-1):
@@ -2140,6 +2138,7 @@ func _help_at_target(ice_choice := -1) -> void:
 		if mode == "complete":
 			start_button.grab_focus()
 		_update_mission_marker()
+		_save_checkpoint()
 	else:
 		if _mission_stop() == 2:
 			message = "Cross a bridge to the east side." if (walker.position.x if walker.visible else ambulance.position.x) < 87 else "Follow the quay to the green marker by the boats."
