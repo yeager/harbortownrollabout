@@ -3426,6 +3426,36 @@ func _build_canal_bridge(z: float, asphalt: Color, rail_mesh: CylinderMesh) -> v
 			drip.material_override = drip_finish
 			for h in [.54,1.06]:
 				_add_bridge_rail(rail_mesh, edge + Vector3.UP * h, length + .015, angle)
+	var outlet_lip := TorusMesh.new()
+	outlet_lip.inner_radius = .043
+	outlet_lip.outer_radius = .057
+	outlet_lip.rings = 16
+	outlet_lip.ring_segments = 8
+	outlet_lip.material = rail_mesh.material
+	var outlet_interior := CylinderMesh.new()
+	outlet_interior.top_radius = .044
+	outlet_interior.bottom_radius = .044
+	outlet_interior.height = .018
+	outlet_interior.radial_segments = 16
+	outlet_interior.material = _material(Color("#20282b"), .96)
+	for drain_x in [59.0, 68.0, 75.0, 84.0]:
+		var drain_y := _bridge_rise(drain_x, z) - .32
+		for side in [-1, 1]:
+			var outlet_z: float = z + side * 6.095
+			_make_box("Bridge drain flange", Vector3(.159, .15, .036),
+				Vector3(drain_x, drain_y, z + side * 6.06), Color.WHITE).material_override = rail_mesh.material
+			var recess := MeshInstance3D.new()
+			recess.name = "Bridge drain recess"
+			recess.mesh = outlet_interior
+			recess.position = Vector3(drain_x, drain_y, outlet_z - side * .018)
+			recess.rotation.x = PI * .5
+			add_child(recess)
+			var lip := MeshInstance3D.new()
+			lip.name = "Bridge drain mouth"
+			lip.mesh = outlet_lip
+			lip.position = Vector3(drain_x, drain_y, outlet_z)
+			lip.rotation.x = PI * .5
+			add_child(lip)
 	for x in range(52, 99, 2):
 		var slope := atan2(_bridge_rise(x + .1, z) - _bridge_rise(x - .1, z), .2)
 		var along := Vector3.RIGHT.rotated(Vector3.BACK, slope)
