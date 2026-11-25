@@ -7993,6 +7993,7 @@ func _fit_bus_exterior(model: Node3D) -> void:
 		panel.material_override = lower_door_finish
 	var door_jamb := _material(Color("#0e1517"), .79)
 	var tread := _material(Color("#545e61"), .72)
+	var step_edge := _material(Color("#d9b747"), .78)
 	var button_cap := CylinderMesh.new()
 	button_cap.top_radius = .026
 	button_cap.bottom_radius = .026
@@ -8006,6 +8007,9 @@ func _fit_bus_exterior(model: Node3D) -> void:
 		var threshold := _make_box("Passenger door threshold", Vector3(.072, .036, 1.04),
 			Vector3(-1.262, .447, door_center), tread.albedo_color, false, model)
 		threshold.material_override = tread
+		var nosing := _make_box("Passenger door step edge", Vector3(.018, .014, 1.0),
+			Vector3(-1.296, .460, door_center), step_edge.albedo_color, false, model)
+		nosing.material_override = step_edge
 		# Bring the solid lower edge of the door glass up to the adjacent window belt.
 		for leaf_offset in [-.267, .267]:
 			var sill := _make_box("Passenger door window sill", Vector3(.048, .180, .490),
