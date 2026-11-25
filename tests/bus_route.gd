@@ -331,13 +331,22 @@ func check_route() -> void:
 					quit(1)
 					return
 				game.walker.hide()
-				game._update_bus_stop_request(.3)
+				# Finish the press in short frames on one leg and a single long frame on the other.
+				var frames := 18 if leg == 3 else 1
+				for frame in frames:
+					game._update_bus_stop_request(.3 / frames)
 				if not game.bus_stop_request.is_visible_in_tree() or game.bus_request_arm.rotation.x < 1.0 or button_finish.emission_energy_multiplier <= 0.0:
 					printerr("Passengers did not signal the upcoming stop")
 					quit(1)
 					return
 				if game.driver_bus_stop_board.text != game.tr("Stop requested") or game.driver_bus_stop_board.modulate != game.bus_stop_request.modulate:
 					printerr("The dashboard did not show the passenger stop request")
+					quit(1)
+					return
+				game.ambulance.position = curb + Vector3.RIGHT * 30
+				game._update_bus_stop_request(1.0)
+				if not game.bus_stop_request.visible or button_finish.emission_energy_multiplier <= 0.0 or not is_zero_approx(game.bus_request_arm.rotation.x):
+					printerr("An active stop request was lost after the bus passed the stop")
 					quit(1)
 					return
 			game.ambulance.position = game._mission_destination()
