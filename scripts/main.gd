@@ -891,8 +891,9 @@ func _process(delta: float) -> void:
 		street_signals.advance(delta)
 		shops.advance_grill_sign(delta, calm_mode)
 		_update_fire_station_door(delta)
-		var tram_gas := mouse_gas or _movement_pressed(KEY_W) or Input.is_action_pressed("ui_up")
-		var tram_brake := mouse_brake or brake_pedal_held or _movement_pressed(KEY_S) or Input.is_action_pressed("ui_down")
+		var tram_controls := tram_mode == 2 and _world_controls_available()
+		var tram_gas := tram_controls and (mouse_gas or _movement_pressed(KEY_W) or Input.is_action_pressed("ui_up"))
+		var tram_brake := tram_controls and (mouse_brake or brake_pedal_held or _movement_pressed(KEY_S) or Input.is_action_pressed("ui_down"))
 		tram.advance(delta, tram_mode == 2, tram_gas, tram_brake)
 		if tram_mode == 2 and tram_driver_exit_requested and tram.open_station() >= 0:
 			_change_seat()
@@ -1306,12 +1307,15 @@ func _update_patrol(delta: float) -> void:
 	medical_helicopter.advance(delta)
 
 func _drive_launch(delta: float) -> void:
-	var gas := mouse_gas or Input.is_action_pressed("ui_up") or _movement_pressed(KEY_W)
-	var brake := mouse_brake or brake_pedal_held or Input.is_action_pressed("ui_down") or _movement_pressed(KEY_S)
-	var turn := Input.get_axis("ui_left","ui_right")
-	if is_zero_approx(turn): turn = mouse_steering
-	if _movement_pressed(KEY_A): turn=-1
-	if _movement_pressed(KEY_D): turn=1
+	var controls_available := _world_controls_available()
+	var gas := controls_available and (mouse_gas or Input.is_action_pressed("ui_up") or _movement_pressed(KEY_W))
+	var brake := controls_available and (mouse_brake or brake_pedal_held or Input.is_action_pressed("ui_down") or _movement_pressed(KEY_S))
+	var turn := 0.0
+	if controls_available:
+		turn = Input.get_axis("ui_left","ui_right")
+		if is_zero_approx(turn): turn = mouse_steering
+		if _movement_pressed(KEY_A): turn = -1
+		if _movement_pressed(KEY_D): turn = 1
 	var reverse_requested := brake and not gas
 	var target := 0.0
 	if reverse_requested:

@@ -174,6 +174,15 @@ func verify() -> void:
 		fail("The shared brake action did not slow the driven tram")
 		return
 	velocity_before = train.velocity
+	world.phone.toggle()
+	Input.action_press("ui_up")
+	world._process(.25)
+	Input.action_release("ui_up")
+	world.phone.toggle()
+	if train.velocity > velocity_before:
+		fail("The tram accelerated with the phone open")
+		return
+	velocity_before = train.velocity
 	Input.action_press("ui_up")
 	world._process(.25)
 	Input.action_release("ui_up")
