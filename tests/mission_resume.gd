@@ -42,7 +42,18 @@ func check_routes() -> void:
 			game.ambulance.position = target
 			game._help_at_target()
 			if vehicle == 2 and step == 2:
-				game._update_arrival(2.5)
+				game._update_arrival(1.0)
+				game._save_checkpoint()
+				game.queue_free()
+				await process_frame
+				game = scene.instantiate()
+				root.add_child(game)
+				game._resume_road_checkpoint()
+				if not game.practice_hose.visible or not game.practice_spray.emitting or not is_equal_approx(game.hose_seconds, 1.0):
+					printerr("The partially completed hose task did not resume")
+					quit(1)
+					return
+				game._update_arrival(1.5)
 			if game.wallet != balance + 10 * (step + 1) or game.delivery_points != points + 10 * (step + 1):
 				printerr("Incorrect reward after restart for vehicle ", vehicle, " step ", step)
 				quit(1)

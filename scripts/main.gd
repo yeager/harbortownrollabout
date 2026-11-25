@@ -970,6 +970,8 @@ func _save_checkpoint() -> void:
 			"recovery": recovery_leg, "taxi": taxi_leg, "bus": bus_leg,
 			"free_drive": free_drive, "progress": vehicle_progress.duplicate()
 		}
+		if vehicle_index == 2 and mission_index == 2 and practice_hose.visible:
+			road_checkpoint["hose_seconds"] = hose_seconds
 		if vehicle_index == BUS and not free_drive and bus_leg % 2 == 1 and bus_stop_request.visible:
 			road_checkpoint["bus_stop_requested"] = true
 		if vehicle_index == BUS and not free_drive and not walker.visible and bus_departure_pending:
@@ -11129,6 +11131,11 @@ func _resume_road_checkpoint() -> void:
 			_hold_lost_shoe()
 		socked_foot.visible = shoe_quest != FootQuest.FINISHED
 		returned_trainer.visible = shoe_quest == FootQuest.FINISHED
+	var saved_hose: float = road_checkpoint.get("hose_seconds", -1.0)
+	var resume_hose := vehicle_index == 2 and mission_index == 2 and saved_hose >= 0.0 and _at_target()
+	hose_seconds = saved_hose if resume_hose else 0.0
+	practice_hose.visible = resume_hose
+	practice_spray.emitting = resume_hose
 	release_pedal_keys = _keyboard_pedal_pressed()
 	_sync_radio()
 	_update_route_arrows()
@@ -11138,6 +11145,9 @@ func _resume_road_checkpoint() -> void:
 	_refresh_ui()
 
 func _start_game() -> void:
+	hose_seconds = 0.0
+	practice_hose.hide()
+	practice_spray.emitting = false
 	cockpit_view = false
 	cockpit_look = Vector2.ZERO
 	practice_active = false
@@ -11371,6 +11381,10 @@ func _valid_checkpoint(saved: Variant) -> bool:
 	var optional := {"practice": TYPE_BOOL, "boule_bench": TYPE_BOOL, "scooter": TYPE_BOOL, "exit_at_landing": TYPE_BOOL, "ferry_time": TYPE_FLOAT, "launch_transform": TYPE_TRANSFORM3D, "bus_stop_requested": TYPE_BOOL, "bus_departure_pending": TYPE_BOOL}
 	for key in optional:
 		if saved.has(key) and not _checkpoint_fields(saved, {key: optional[key]}):
+			return false
+	if saved.has("hose_seconds"):
+		var seconds: Variant = saved.hose_seconds
+		if not seconds is float or not is_finite(seconds) or seconds < 0.0 or seconds >= 2.5:
 			return false
 	if saved.has("cockpit_view") and not saved.cockpit_view is bool:
 		return false
