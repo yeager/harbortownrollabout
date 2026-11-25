@@ -5174,6 +5174,16 @@ func _build_lampposts() -> void:
 	arm_mesh.radial_segments = 16
 	arm_mesh.rings = 0
 	arm_mesh.material = housing_mesh.material
+	var anchor_nut := CylinderMesh.new()
+	anchor_nut.top_radius = .019
+	anchor_nut.bottom_radius = .019
+	anchor_nut.height = .022
+	anchor_nut.radial_segments = 6
+	anchor_nut.rings = 0
+	var nut_finish := _material(Color("#899293"), .51)
+	nut_finish.metallic = .65
+	anchor_nut.material = nut_finish
+	var footing_finish := _material(Color("#929087"), .9, false, "mineral")
 	for p in sites:
 		var on_course := p in course_lamps
 		p.y = _surface_height(p.x,p.z)
@@ -5181,14 +5191,23 @@ func _build_lampposts() -> void:
 		var inward := Vector3(street.x - p.x, 0, street.y - p.z).normalized()
 		if on_course:
 			inward = Vector3.BACK if p.z < PRACTICE_YARD.get_center().y else Vector3.FORWARD
-		var post_color := Color("#45524e")
 		var post := MeshInstance3D.new()
 		post.name = "Lamp post"
 		post.mesh = post_mesh
 		post.position = p + Vector3.UP * 2.215
 		add_child(post)
 		roadside_solids.append(AABB(p - Vector3(.08, 2.0, .08), Vector3(.16, 6.5, .16)))
-		_make_box("Lamp post foot", Vector3(.28, .075, .28), p + Vector3.UP * .038, post_color.darkened(.15), false)
+		_make_box("Lamp post concrete footing", Vector3(.32, .069, .32), p + Vector3.UP * .014,
+			Color.WHITE).material_override = footing_finish
+		_make_box("Lamp post foot plate", Vector3(.267, .026, .267), p + Vector3.UP * .061,
+			Color.WHITE).material_override = post_mesh.material
+		for anchor in [Vector2(-.099, -.099), Vector2(.099, -.099),
+				Vector2(-.099, .099), Vector2(.099, .099)]:
+			var nut := MeshInstance3D.new()
+			nut.name = "Lamp post anchor nut"
+			nut.mesh = anchor_nut
+			nut.position = p + Vector3(anchor.x, .084, anchor.y)
+			add_child(nut)
 		var yaw := atan2(inward.x, inward.z)
 		var arm := MeshInstance3D.new()
 		arm.name = "Lamp arm"

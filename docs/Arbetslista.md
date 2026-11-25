@@ -312,5 +312,6 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - De lägre parklyktorna, bland annat längs kajen, fick en avsmalnande sockel och en toppknopp på armaturens huv. Granskat på östra kajen i Godot. Väderprovet passerade.
   - De höga gatlyktorna fick rundade armaturhus och välvda ljusspridare. Granskat i närbild vid kanalen i Godot. Väderprovet passerade.
   - De höga gatlyktorna fick runda, avsmalnande stolpar och armar. Granskat vid kanalen i Godot. Övningsbaneprovet passerade.
+  - Gatlyktornas fotplattor fick betongsocklar och fyra sexkantiga ankarmuttrar. Granskat vid övningsbanan i Godot. Övningsbaneprovet passerade.
   - Kajens låga lyktor fick sockel, kant under huven och tre smala stag runt ljusspridaren. Granskat vid färjebryggan i Godot. Väderprovet passerade.
 - [ ] Boulebana, spelfigurer och klot
