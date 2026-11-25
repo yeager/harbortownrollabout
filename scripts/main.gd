@@ -3650,6 +3650,23 @@ func _build_marina() -> void:
 	var galvanised := _material(Color("#797e7d"), .35)
 	galvanised.metallic = .65
 	eye_mesh.material = galvanised
+	for anchor_z in [-38.8, -30.0, -22.0, -14.0, -8.8]:
+		var wall_plate := _make_box("Quay anchor plate", Vector3(.045, .25, .28),
+			Vector3(EAST_QUAY_WATER_EDGE - .018, -.57, anchor_z), Color.WHITE)
+		wall_plate.material_override = galvanised
+		var dock_plate := _make_box("Dock anchor plate", Vector3(.06, .17, .23),
+			Vector3(86.49, -.61, anchor_z), Color.WHITE)
+		dock_plate.material_override = galvanised
+		for lug_z in [-.065, .065]:
+			_make_box("Hinged dock tie arm", Vector3(.26, .047, .031),
+				Vector3(86.62, -.605, anchor_z + lug_z), dock_join)
+		for hinge_x in [86.51, 86.73]:
+			_add_moored_round_fitting(self, "Dock tie hinge pin",
+				Vector3(hinge_x, -.605, anchor_z - .091),
+				Vector3(hinge_x, -.605, anchor_z + .091), .024, galvanised)
+		for bolt_z in [-.096, .096]:
+			_make_box("Quay anchor bolt head", Vector3(.022, .027, .027),
+				Vector3(86.704, -.487, anchor_z + bolt_z), dock_join)
 	var buoy_band := CylinderMesh.new()
 	buoy_band.top_radius = MOORING_BUOY_RADIUS + .002
 	buoy_band.bottom_radius = MOORING_BUOY_RADIUS + .002
