@@ -207,6 +207,14 @@ func _ready() -> void:
 			var paint := world._make_box("Pedestrian access",Vector3(.40,.014,1.95),paint_at,Color.WHITE,false,station) as MeshInstance3D
 			paint.material_override = world.marking_finish
 		world._make_box("Shelter roof",Vector3(2.1,.12,5.2),Vector3(3,2.7,0),Color("#475963"),false,station)
+		for edge_x in [1.95, 4.05]:
+			world._make_box("Canopy folded edge", Vector3(.055, .18, 5.20), Vector3(edge_x, 2.71, 0), Color("#35464d"), false, station)
+		for z in [-2.60, 2.60]:
+			world._make_box("Canopy end cap", Vector3(2.14, .18, .054), Vector3(3, 2.71, z), Color("#35464d"), false, station)
+		for seam in range(-4, 5):
+			world._make_box("Canopy standing seam", Vector3(2.03, .022, .031), Vector3(3, 2.763, .52 * seam), Color("#687981"), false, station)
+		for y in [.46, 2.56]:
+			world._make_box("Glazing channel", Vector3(.077, .055, 4.02), Vector3(3.8, y, 0), Color("#46565a"), false, station)
 		for z in [-1.55,1.55]:
 			var fixture := world._make_box("Shelter ceiling light",Vector3(.13,.035,.95),Vector3(2.85,2.622,z),Color.WHITE,false,station) as MeshInstance3D
 			fixture.material_override = world.entrance_diffuser
@@ -221,6 +229,7 @@ func _ready() -> void:
 			station.add_child(light)
 			world.entrance_lights.append(light)
 		for z in [-2,2]:
+			world._make_box("Shelter post base plate", Vector3(.22, .026, .22), Vector3(3.8, .305, z), Color("#57666b"), false, station)
 			world._make_roadside_solid("Shelter post",Vector3(.1,2.4,.1),Vector3(3.8,1.5,z),Color("#697778"),false,station)
 		# The posts and glass make one continuous barrier behind the bench.
 		var screen_bounds := AABB(Vector3(3.75,.29,-2.05),Vector3(.10,2.35,4.10))
@@ -233,7 +242,9 @@ func _ready() -> void:
 			for height in [1.30,1.39]:
 				world._make_box("Glass visibility band",Vector3(.033,.024,1.93),Vector3(3.8,height,z),Color("#e3e6df"),false,station)
 		world._make_roadside_solid("Bench seat",Vector3(.43,.085,2.5),Vector3(3.53,.80,0),Color("#a87547"),false,station)
-		world._make_box("Bench back",Vector3(.07,.29,2.5),Vector3(3.72,1.06,0),Color("#a87547"),false,station)
+		for slat in 3:
+			world._make_box("Bench back slat", Vector3(.067, .083, 2.5),
+				Vector3(3.72, .962 + .098 * slat, 0), Color("#a87547").lightened(.06 * slat), false, station)
 		for z in [-.9,.9]:
 			world._make_box("Bench leg",Vector3(.25,.44,.08),Vector3(3.53,.55,z),Color("#49565c"),false,station)
 		world._make_box("Station name board",Vector3(.08,.43,3.8),Vector3(2.15,2.45,0),Color("#16496a"),false,station)

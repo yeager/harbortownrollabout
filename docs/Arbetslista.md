@@ -173,3 +173,5 @@ Listan innehåller 100 jobb. En tom ruta är öppen. En punkt bockas av när bet
 
 - [ ] Gå igenom samtliga modeller i spelet, också byggnader, fordon, figurer, rekvisita och procedurgenererade objekt. Målet är minst 99/100 per modell. De 56 GLB-filerna i miljö-, fordons- och figurmapparna är en första inventering. Komplettera med modeller som byggs i kod och med varianter som skiljer sig visuellt eller funktionellt.
 - [ ] För varje modell, dokumentera referens och spelvy, bedöm silhuett, proportioner, material, detaljer och funktion där de är tillämpliga. Kontrollera närbilder och normala spelavstånd. Kör relevanta prov för animation, kollision eller användning. Markera modellen godkänd först när den är granskad och når målbetyget.
+
+- [x] Förfina väderskydden vid Tvärbanans fyra hållplatser med falsat tak, glaskanaler, stolpfötter och bänkar med separata ryggbrädor. Granskat vid Verkstadstorget i Godot. Spårvagnsprovet verifierade alla fyra stopp och på- och avstigning.
