@@ -334,6 +334,16 @@ func check_controls() -> void:
 	if not game.radio.playing or game.radio_track != expected_next:
 		fail("Turning the radio back on did not follow the saved shuffle order")
 		return
+	var song_before_exit: String = game.radio_track
+	game.radio.seek(8.0)
+	game._change_seat()
+	if not game.walker.visible or not game.radio.stream_paused or game.radio_button.visible:
+		fail("Leaving the vehicle did not pause its radio")
+		return
+	game._change_seat()
+	if game.walker.visible or not game.radio.playing or game.radio.stream_paused or game.radio_track != song_before_exit or game.radio.get_playback_position() < 7.0:
+		fail("Re-entering the same vehicle did not resume the song")
+		return
 	print("Radio rotation, language changes, pause, vehicle audio and speech attenuation verified.")
 	phase = "done"
 	game._finish_quit()

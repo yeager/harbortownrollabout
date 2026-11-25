@@ -1238,7 +1238,7 @@ func _sync_radio() -> void:
 		elif tram_mode > 0: current_vehicle = "tram"
 		elif ferry_passenger: current_vehicle = "ferry"
 		else: current_vehicle = VEHICLE_NAMES_ALL[vehicle_index]
-	if current_vehicle != radio_vehicle:
+	if current_vehicle != radio_vehicle and (aboard or mode != "playing"):
 		radio_vehicle = current_vehicle
 		radio.stop()
 		radio_enabled = aboard
@@ -1258,7 +1258,7 @@ func _sync_radio() -> void:
 		radio_button.tooltip_text = ""
 		radio.stop()
 		radio.stream_paused = false
-	elif paused:
+	elif paused or not aboard:
 		radio.stream_paused = true
 	else:
 		radio.stream_paused = false
@@ -11157,7 +11157,7 @@ func _resume_road_checkpoint() -> void:
 	_update_mission_marker()
 	_update_camera(0.0, true)
 	_refresh_ui()
-	if road_checkpoint.has("radio") and not radio_vehicle.is_empty():
+	if road_checkpoint.has("radio") and radio_button.visible:
 		var station: Dictionary = road_checkpoint.radio
 		radio_enabled = station.enabled
 		if station.track in radio_tracks:
@@ -11172,6 +11172,8 @@ func _resume_road_checkpoint() -> void:
 	_sync_radio()
 
 func _start_game() -> void:
+	radio_vehicle = ""
+	radio.stop()
 	hose_seconds = 0.0
 	practice_hose.hide()
 	practice_spray.emitting = false
