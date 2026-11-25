@@ -40,11 +40,25 @@ func check_rounds() -> void:
 	for alternate in [false, true]:
 		map_binding.button_pressed = alternate
 		map_key.keycode = KEY_F11 if alternate else KEY_F5
+		map_key.alt_pressed = true
+		game._unhandled_key_input(map_key)
+		if dialog.visible or game.paused:
+			printerr("A modified shortcut opened the town map")
+			quit(1)
+			return
+		map_key.alt_pressed = false
 		game._unhandled_key_input(map_key)
 		if not dialog.visible or not game.paused:
 			printerr("Configured shortcut failed to open the town map")
 			quit(1)
 			return
+		map_key.alt_pressed = true
+		dialog.window_input.emit(map_key)
+		if not dialog.visible or not game.paused:
+			printerr("A modified shortcut closed the town map")
+			quit(1)
+			return
+		map_key.alt_pressed = false
 		dialog.window_input.emit(map_key)
 		if dialog.visible or game.paused or game.map_goal != court_goal:
 			printerr("Closing the town map did not preserve the route and resume play")

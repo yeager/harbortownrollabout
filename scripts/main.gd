@@ -1159,7 +1159,7 @@ func _unhandled_key_input(event: InputEvent) -> void:
 			_toggle_scooter()
 			return
 		if event.keycode == map_key:
-			if mode == "playing" and not paused and map_button.is_visible_in_tree() and not phone.handset.is_visible_in_tree():
+			if _world_controls_available() and map_button.is_visible_in_tree() and not (event.ctrl_pressed or event.alt_pressed or event.meta_pressed):
 				map_button.pressed.emit()
 			return
 		if number_vehicle_switches and event.keycode in [KEY_7, KEY_KP_7]:
@@ -9731,7 +9731,7 @@ func _build_town_map() -> void:
 	chart.water_bounds = CANAL_BOUNDS
 	chart.configure(navigator,PackedVector3Array([TARGETS[0],TARGETS[1],TARGETS[2],SCHOOL_CURB,STATION_DROP,counter,FLOUR_CURB,BOULE_BENCH_APPROACH,shops.pizzeria_entrance(),shops.storefront_entrance("Sweet shop"),shops.storefront_entrance("Momo & Bori"),FOUNTAIN_APPROACH,LAUNCH_MAP_STOP,shops.storefront_entrance("Toy Harbour"),suburban_villas.MAP_STOP]),MAP_NAMES)
 	dialog.window_input.connect(func(event: InputEvent):
-		if not event is InputEventKey or not event.pressed or event.echo or event.is_command_or_control_pressed() or event.alt_pressed:
+		if not event is InputEventKey or not event.pressed or event.echo or event.ctrl_pressed or event.alt_pressed or event.meta_pressed:
 			return
 		if event.keycode == map_key:
 			dialog.set_input_as_handled()
