@@ -3393,6 +3393,7 @@ func _build_canal_bridge(z: float, asphalt: Color, rail_mesh: CylinderMesh) -> v
 		var count := 1 if i == 1 else ceili((end-start) / 1.25)
 		for step in range(1, count+1):
 			sections.append(lerpf(start, end, float(step)/count))
+	var drain_stations := [59.0, 68.0, 75.0, 84.0]
 	var beam_finish := _material(Color("#858683"), .87, false, "mineral")
 	var drip_finish := _material(Color("#525858"), .88)
 	for i in sections.size()-1:
@@ -3426,6 +3427,20 @@ func _build_canal_bridge(z: float, asphalt: Color, rail_mesh: CylinderMesh) -> v
 			drip.material_override = drip_finish
 			for h in [.54,1.06]:
 				_add_bridge_rail(rail_mesh, edge + Vector3.UP * h, length + .015, angle)
+		for drain_x: float in drain_stations:
+			if drain_x < x0 or drain_x >= x1:
+				continue
+			var grate_y := mid.y + (drain_x - mid.x) * tan(angle)
+			for side in [-1, 1]:
+				var grate := _make_box("Bridge storm drain bed", Vector3(.34, .014, .22),
+					Vector3(drain_x, grate_y + .004, z + side * 4.80), Color("#21272a"))
+				grate.rotation.z = angle
+				for bar in 7:
+					_make_box("Storm grate bar", Vector3(.018, .009, .207),
+						Vector3((bar - 3) * .045, .011, 0), Color.WHITE, false, grate).material_override = rail_mesh.material
+				for edge in [-1, 1]:
+					_make_box("Storm grate rim", Vector3(.34, .01, .017),
+						Vector3(0, .011, edge * .104), Color.WHITE, false, grate).material_override = rail_mesh.material
 	var outlet_lip := TorusMesh.new()
 	outlet_lip.inner_radius = .043
 	outlet_lip.outer_radius = .057
@@ -3438,7 +3453,7 @@ func _build_canal_bridge(z: float, asphalt: Color, rail_mesh: CylinderMesh) -> v
 	outlet_interior.height = .018
 	outlet_interior.radial_segments = 16
 	outlet_interior.material = _material(Color("#20282b"), .96)
-	for drain_x in [59.0, 68.0, 75.0, 84.0]:
+	for drain_x: float in drain_stations:
 		var drain_y := _bridge_rise(drain_x, z) - .32
 		for side in [-1, 1]:
 			var outlet_z: float = z + side * 6.095
