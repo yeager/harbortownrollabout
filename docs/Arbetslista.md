@@ -287,6 +287,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - De öppna småbåtarna fick en aktermonterad utombordare med motorkåpa, akterspegelfästen och växelhus. Granskat från bryggan i Godot. Kanalprovet passerade.
   - Östra flytbryggan fick kantlister, ändbeslag och skarvplåtar med bultar mellan bryggsektionerna. Granskat i Godot. Kanalprovet passerade.
   - Fyra trappsteg med handledare förbinder östra kajpromenaden med flytbryggan. Granskat i Godot. Gångytan kontrollerades längs hela anslutningen och kanalprovet passerade.
+  - Flytbryggans sektioner fick dubbla pontoner med tvärstag under däcket. Granskat från vattennivå i Godot. Kanalprovet passerade.
 - [ ] Trafikljus, gatlyktor, vägskyltar och parkeringsskyltar
   - Gatlyktsmodellen fick fotplatta, separat armaturhus och en tunnare ljusspridare. Granskat vid kanalen i dagsljus och nattläge. Övningsbaneprovet passerade.
   - Kajens låga lyktor fick sockel, kant under huven och tre smala stag runt ljusspridaren. Granskat vid färjebryggan i Godot. Väderprovet passerade.

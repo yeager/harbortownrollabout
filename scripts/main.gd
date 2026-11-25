@@ -3601,8 +3601,24 @@ func _build_marina() -> void:
 		handrail.rotation.z = atan2(.42, 1.02)
 	var dock_edge := Color("#615344")
 	var dock_join := Color("#535c60")
+	var dock_float := CapsuleMesh.new()
+	dock_float.radius = .23
+	dock_float.height = 3.84
+	dock_float.radial_segments = 16
+	dock_float.rings = 4
+	dock_float.material = _material(Color("#303b40"), .78)
 	for section in 8:
 		var segment_z := -38.0 + section * 4.0
+		for float_x in [85.34, 86.26]:
+			var pontoon := MeshInstance3D.new()
+			pontoon.name = "Floating dock pontoon"
+			pontoon.mesh = dock_float
+			pontoon.position = Vector3(float_x, -.936, segment_z)
+			pontoon.rotation.x = PI * .5
+			add_child(pontoon)
+		for offset in [-1.20, 1.20]:
+			_make_box("Floating dock pontoon cross brace", Vector3(1.34, .085, .12),
+				Vector3(85.8, -.778, segment_z + offset), dock_join)
 		for edge_x in [85.11, 86.49]:
 			_make_box("Floating dock rubbing strip", Vector3(.055, .11, 3.97),
 				Vector3(edge_x, -.589, segment_z), dock_edge)
