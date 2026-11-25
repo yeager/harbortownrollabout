@@ -2107,3 +2107,34 @@ msgstr "Nallekarhu"
 
 msgid "Villa district"
 msgstr "Omakotitaloalue"
+
+msgid "Dax"
+msgstr "Dax"
+
+msgid "Drive-through"
+msgstr "Autokaista"
+
+msgid "1 · Order here"
+msgstr "1 · Tilaa tästä"
+
+msgid "2 · Pick up here"
+msgstr "2 · Nouda tästä"
+
+msgid "Dax burger"
+msgstr "Dax-hampurilainen"
+
+msgid "Order Dax burger"
+msgstr "Tilaa Dax-hampurilainen"
+
+msgid "Pick up Dax burger"
+msgstr "Nouda Dax-hampurilainen"
+
+#, python-format
+msgid "Dax burger costs %d coins"
+msgstr "Dax-hampurilainen maksaa %d kolikkoa"
+
+msgid "Order received. Drive to the pickup window."
+msgstr "Tilaus vastaanotettu. Aja noutoluukulle."
+
+msgid "Dax burger picked up."
+msgstr "Dax-hampurilainen noudettu."

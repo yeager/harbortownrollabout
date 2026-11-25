@@ -2111,3 +2111,34 @@ msgstr "Teddybjørn"
 
 msgid "Villa district"
 msgstr "Villakvarteret"
+
+msgid "Dax"
+msgstr "Dax"
+
+msgid "Drive-through"
+msgstr "Drive-in"
+
+msgid "1 · Order here"
+msgstr "1 · Bestill her"
+
+msgid "2 · Pick up here"
+msgstr "2 · Hent her"
+
+msgid "Dax burger"
+msgstr "Dax-burger"
+
+msgid "Order Dax burger"
+msgstr "Bestill Dax-burger"
+
+msgid "Pick up Dax burger"
+msgstr "Hent Dax-burger"
+
+#, python-format
+msgid "Dax burger costs %d coins"
+msgstr "Dax-burgeren koster %d mynter"
+
+msgid "Order received. Drive to the pickup window."
+msgstr "Bestillingen er mottatt. Kjør til utleveringsluken."
+
+msgid "Dax burger picked up."
+msgstr "Dax-burgeren er hentet."

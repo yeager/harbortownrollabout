@@ -2040,3 +2040,34 @@ msgstr ""
 
 msgid "Villa district"
 msgstr ""
+
+msgid "Dax"
+msgstr ""
+
+msgid "Drive-through"
+msgstr ""
+
+msgid "1 · Order here"
+msgstr ""
+
+msgid "2 · Pick up here"
+msgstr ""
+
+msgid "Dax burger"
+msgstr ""
+
+msgid "Order Dax burger"
+msgstr ""
+
+msgid "Pick up Dax burger"
+msgstr ""
+
+#, python-format
+msgid "Dax burger costs %d coins"
+msgstr ""
+
+msgid "Order received. Drive to the pickup window."
+msgstr ""
+
+msgid "Dax burger picked up."
+msgstr ""

@@ -2128,3 +2128,34 @@ msgstr "Teddybär"
 
 msgid "Villa district"
 msgstr "Einfamilienhausviertel"
+
+msgid "Dax"
+msgstr "Dax"
+
+msgid "Drive-through"
+msgstr "Drive-in"
+
+msgid "1 · Order here"
+msgstr "1 · Hier bestellen"
+
+msgid "2 · Pick up here"
+msgstr "2 · Hier abholen"
+
+msgid "Dax burger"
+msgstr "Dax-Burger"
+
+msgid "Order Dax burger"
+msgstr "Dax-Burger bestellen"
+
+msgid "Pick up Dax burger"
+msgstr "Dax-Burger abholen"
+
+#, python-format
+msgid "Dax burger costs %d coins"
+msgstr "Der Dax-Burger kostet %d Münzen"
+
+msgid "Order received. Drive to the pickup window."
+msgstr "Bestellung aufgenommen. Fahr zum Abholfenster."
+
+msgid "Dax burger picked up."
+msgstr "Dax-Burger abgeholt."

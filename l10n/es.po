@@ -2118,3 +2118,34 @@ msgstr "Osito de peluche"
 
 msgid "Villa district"
 msgstr "Barrio residencial"
+
+msgid "Dax"
+msgstr "Dax"
+
+msgid "Drive-through"
+msgstr "Autoservicio"
+
+msgid "1 · Order here"
+msgstr "1 · Pide aquí"
+
+msgid "2 · Pick up here"
+msgstr "2 · Recoge aquí"
+
+msgid "Dax burger"
+msgstr "Hamburguesa Dax"
+
+msgid "Order Dax burger"
+msgstr "Pedir hamburguesa Dax"
+
+msgid "Pick up Dax burger"
+msgstr "Recoger hamburguesa Dax"
+
+#, python-format
+msgid "Dax burger costs %d coins"
+msgstr "La hamburguesa Dax cuesta %d monedas"
+
+msgid "Order received. Drive to the pickup window."
+msgstr "Pedido recibido. Conduce hasta la ventanilla de recogida."
+
+msgid "Dax burger picked up."
+msgstr "Hamburguesa Dax recogida."

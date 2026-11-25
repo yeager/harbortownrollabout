@@ -41,6 +41,8 @@ Wait before a junction if there’s a queue on the other side. When you drive an
 
 ## Things to try
 
+- **Stop at Dax.** Select Dax on the town map and follow the drive-through arrows. Stop at the speaker to order, then drive around to the pickup window. A burger costs eight coins.
+
 - **Bring a patient to the hospital.** Take an ambulance assignment and collect the patient at the square. Follow the arrows to the covered ambulance bay on Östra allén, drive inside and stop. The drop-off receipt appears on your phone. Look up to see the air ambulance land on the roof.
 - **Drive bus 74 to Sickla udde.** Pick up your first passengers at the square and drop them off at the school. The display inside the bus shows the next stop.
 - **Take the garbage truck on its rounds.** Empty the bins at the square and the clinic, then unload at the marina. A full truck takes longer to get moving.

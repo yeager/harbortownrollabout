@@ -2126,3 +2126,34 @@ msgstr "Nounours"
 
 msgid "Villa district"
 msgstr "Quartier pavillonnaire"
+
+msgid "Dax"
+msgstr "Dax"
+
+msgid "Drive-through"
+msgstr "Service au volant"
+
+msgid "1 · Order here"
+msgstr "1 · Commandez ici"
+
+msgid "2 · Pick up here"
+msgstr "2 · Retirez ici"
+
+msgid "Dax burger"
+msgstr "Burger Dax"
+
+msgid "Order Dax burger"
+msgstr "Commander un burger Dax"
+
+msgid "Pick up Dax burger"
+msgstr "Retirer le burger Dax"
+
+#, python-format
+msgid "Dax burger costs %d coins"
+msgstr "Le burger Dax coûte %d pièces"
+
+msgid "Order received. Drive to the pickup window."
+msgstr "Commande reçue. Avancez jusqu’au guichet de retrait."
+
+msgid "Dax burger picked up."
+msgstr "Burger Dax retiré."

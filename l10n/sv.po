@@ -2041,3 +2041,34 @@ msgstr "Nalle"
 
 msgid "Villa district"
 msgstr "Villakvarteret"
+
+msgid "Dax"
+msgstr "Dax"
+
+msgid "Drive-through"
+msgstr "Drive-in"
+
+msgid "1 · Order here"
+msgstr "1 · Beställ här"
+
+msgid "2 · Pick up here"
+msgstr "2 · Hämta här"
+
+msgid "Dax burger"
+msgstr "Daxburgare"
+
+msgid "Order Dax burger"
+msgstr "Beställ Daxburgare"
+
+msgid "Pick up Dax burger"
+msgstr "Hämta Daxburgare"
+
+#, python-format
+msgid "Dax burger costs %d coins"
+msgstr "Daxburgaren kostar %d mynt"
+
+msgid "Order received. Drive to the pickup window."
+msgstr "Beställningen är mottagen. Kör till utlämningsluckan."
+
+msgid "Dax burger picked up."
+msgstr "Daxburgaren är hämtad."

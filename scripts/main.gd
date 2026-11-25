@@ -186,6 +186,8 @@ var santa: Node3D
 var santa_encounters := {}
 var field_fountain := preload("res://environment/field_fountain.gd").new()
 var midsummer_pole := preload("res://environment/midsummer_pole.gd").new()
+var dax := preload("res://environment/dax_restaurant.gd").new()
+var dax_button: Button
 var suburban_villas := preload("res://environment/suburban_villas.gd").new()
 var christmas_spruce := preload("res://environment/christmas_spruce.gd").new()
 var last_night := -1.0
@@ -464,7 +466,7 @@ var map_button := Button.new()
 var leave_practice_button := Button.new()
 const FOUNTAIN_APPROACH := Vector3(41,0,39.5)
 const MAP_STOREFRONTS := ["Pizzeria","Sweet shop","Momo & Bori","Toy Harbour"]
-const MAP_NAMES := ["Town square","Clinic","Marina","School","Fuel and tyre service","Hot dog stand","Bakery","Boule court","Pizzeria","Sweet shop","Momo & Bori","Fountain","Motorboat","Toy Harbour","Villa district"]
+const MAP_NAMES := ["Town square","Clinic","Marina","School","Fuel and tyre service","Hot dog stand","Bakery","Boule court","Pizzeria","Sweet shop","Momo & Bori","Fountain","Motorboat","Toy Harbour","Villa district","Dax"]
 var free_drive := true
 var mission_index := 0
 const FireLocker := preload("res://scripts/fire_locker.gd")
@@ -1205,7 +1207,8 @@ func _unhandled_key_input(event: InputEvent) -> void:
 			KEY_SPACE, KEY_INSERT:
 				if event.keycode == KEY_INSERT and not insert_help: return
 				if mode == "playing" and not paused and not phone.handset.is_visible_in_tree():
-					_help_at_target()
+					if not _serve_dax():
+						_help_at_target()
 			KEY_ENTER, KEY_KP_ENTER:
 				if mode in ["menu", "complete"]: _start_game()
 			KEY_R:
@@ -2242,6 +2245,8 @@ func _build_world() -> void:
 	_build_west_district()
 	add_child(suburban_villas)
 	suburban_villas.build(self)
+	add_child(dax)
+	dax.build(self)
 	_build_city_wall()
 	_build_waterfront()
 	_build_trees()
@@ -2405,6 +2410,13 @@ func _build_west_district() -> void:
 			if median:
 				_make_driving_surface("Tram avenue", Vector3(block_length,.12,16.8),Vector3(block_center,-.078,z), Color.WHITE).material_override = road_finish
 			for side in [-1,1]:
+				if z == 35 and side == 1 and dax.LOCATION.x > junction_x[i-1] and dax.LOCATION.x < junction_x[i]:
+					var west := dax.LOCATION.x - dax.LANE_OFFSET
+					var east := dax.LOCATION.x + dax.LANE_OFFSET
+					var half_lane := dax.LANE_WIDTH * .5
+					for span: Vector2 in [Vector2(junction_x[i-1]+4.8, west-half_lane), Vector2(west+half_lane, east-half_lane), Vector2(east+half_lane, junction_x[i]-4.8)]:
+						_make_driving_surface("Dax pavement", Vector3(span.y-span.x,.12,2.8), Vector3((span.x+span.y)*.5,.005,z+paving_offset), Color.WHITE).material_override = sidewalk_finish
+					continue
 				if z == 0 and side == 1 and STATION_DROP.x > junction_x[i-1] and STATION_DROP.x < junction_x[i]:
 					var entry_left := STATION_DROP.x - 3.0
 					var entry_right := STATION_DROP.x + 3.0
@@ -9668,6 +9680,15 @@ func _build_ui() -> void:
 			_set_spreader_active(false)
 		_refresh_ui()
 	)
+	dax_button = _button("Order Dax burger", 170)
+	dax_button.auto_translate_mode = Node.AUTO_TRANSLATE_MODE_DISABLED
+	ui.add_child(dax_button)
+	dax_button.set_anchors_and_offsets_preset(Control.PRESET_CENTER_RIGHT)
+	dax_button.offset_left = -270
+	dax_button.offset_right = -22
+	dax_button.offset_top = -200
+	dax_button.offset_bottom = -152
+	dax_button.pressed.connect(_serve_dax)
 	_build_boule_choices()
 	seat_button = _button("Get out · F", 135)
 	ui.add_child(seat_button)
@@ -9770,7 +9791,7 @@ func _build_town_map() -> void:
 	body.add_child(chart)
 	var counter := shops.grill_counter()
 	chart.water_bounds = CANAL_BOUNDS
-	chart.configure(navigator,PackedVector3Array([TARGETS[0],TARGETS[1],TARGETS[2],SCHOOL_CURB,STATION_DROP,counter,FLOUR_CURB,BOULE_BENCH_APPROACH,shops.pizzeria_entrance(),shops.storefront_entrance("Sweet shop"),shops.storefront_entrance("Momo & Bori"),FOUNTAIN_APPROACH,LAUNCH_MAP_STOP,shops.storefront_entrance("Toy Harbour"),suburban_villas.MAP_STOP]),MAP_NAMES)
+	chart.configure(navigator,PackedVector3Array([TARGETS[0],TARGETS[1],TARGETS[2],SCHOOL_CURB,STATION_DROP,counter,FLOUR_CURB,BOULE_BENCH_APPROACH,shops.pizzeria_entrance(),shops.storefront_entrance("Sweet shop"),shops.storefront_entrance("Momo & Bori"),FOUNTAIN_APPROACH,LAUNCH_MAP_STOP,shops.storefront_entrance("Toy Harbour"),suburban_villas.MAP_STOP,dax.MAP_STOP]),MAP_NAMES)
 	dialog.window_input.connect(func(event: InputEvent):
 		if not event is InputEventKey or not event.pressed or event.echo or event.ctrl_pressed or event.alt_pressed or event.meta_pressed:
 			return
@@ -11019,6 +11040,7 @@ func _starting_position() -> Vector3:
 	return Vector3(best_x, _surface_height(best_x, lane), lane)
 
 func _resume_road_checkpoint() -> void:
+	dax.order_pending = false
 	map_goal = Vector3.INF
 	if mode != "menu" or road_checkpoint.is_empty():
 		return
@@ -11185,6 +11207,7 @@ func _resume_road_checkpoint() -> void:
 	_sync_radio()
 
 func _start_game() -> void:
+	dax.order_pending = false
 	radio_vehicle = ""
 	radio.stop()
 	hose_seconds = 0.0
@@ -12078,8 +12101,38 @@ func _swap_workshop_tyres() -> void:
 	_save_preferences()
 	_refresh_status()
 
+func _dax_action() -> String:
+	if not _world_controls_available() or practice_active or walker.visible or boating or operating_excavator or tram_mode != 0 or ferry_passenger or absf(speed) >= .12:
+		return ""
+	return dax.action_at(ambulance.global_position)
+
+func _serve_dax() -> bool:
+	var action := _dax_action()
+	if action.is_empty():
+		return false
+	if not dax.order_pending:
+		dax.order_pending = true
+		message = "Order received. Drive to the pickup window."
+	elif wallet >= dax.PRICE:
+		dax.order_pending = false
+		wallet -= dax.PRICE
+		purchases["Dax burger"] = int(purchases.get("Dax burger", 0)) + 1
+		message = "Dax burger picked up."
+		_save_checkpoint()
+		_refresh_ui()
+	else:
+		return true
+	message_timer = 4.0
+	_refresh_status()
+	return true
+
 func _refresh_status() -> void:
 	if not is_instance_valid(status_label): return
+	var dax_action := _dax_action()
+	dax_button.visible = not dax_action.is_empty()
+	if dax_button.visible:
+		dax_button.disabled = dax.order_pending and wallet < dax.PRICE
+		dax_button.text = tr("Dax burger costs %d coins") % dax.PRICE if dax_button.disabled else tr(dax_action)
 	tyre_service_button.visible = _can_swap_workshop_tyres()
 	if tyre_service_button.visible:
 		var has_winter_tyres: bool = VEHICLE_SCENES_ALL[vehicle_index] in winter_tyre_models
