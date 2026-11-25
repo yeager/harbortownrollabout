@@ -289,6 +289,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Fyra trappsteg med handledare förbinder östra kajpromenaden med flytbryggan. Granskat i Godot. Gångytan kontrollerades längs hela anslutningen och kanalprovet passerade.
   - Flytbryggans sektioner fick dubbla pontoner med tvärstag under däcket. Granskat från vattennivå i Godot. Kanalprovet passerade.
   - Flytbryggan fick fem ledade kajfästen med förankringsplåtar och ledtappar. Granskat i Godot. Kanalprovet passerade.
+  - Kajmurarna fick förskjutna granitskift, fogar och mörkare sten vid vattenlinjen. Granskat i Godot. Kanalprovet passerade.
 - [ ] Trafikljus, gatlyktor, vägskyltar och parkeringsskyltar
   - Gatlyktsmodellen fick fotplatta, separat armaturhus och en tunnare ljusspridare. Granskat vid kanalen i dagsljus och nattläge. Övningsbaneprovet passerade.
   - Kajens låga lyktor fick sockel, kant under huven och tre smala stag runt ljusspridaren. Granskat vid färjebryggan i Godot. Väderprovet passerade.
