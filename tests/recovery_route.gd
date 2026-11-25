@@ -38,12 +38,8 @@ func check_route() -> void:
 				return
 			game.speed = 0
 			game._update_arrival(game.HELP_DURATION)
-		elif leg == 1:
-			drive_to_station(game, leg)
 		else:
-			game.ambulance.position = game._mission_destination()
-			game.speed = 0.0
-			game._update_arrival(game.HELP_DURATION)
+			drive_to_station(game, leg)
 		if game.delivery_points != starting_points + 20*floori((leg+1)/2.0) or game.recovery_leg != leg+1 or game.wallet != starting_balance + 20*floori((leg+1)/2.0):
 			printerr("Recovery leg %d ended at leg %d, position %s, speed %.2f, balance %d, status %s" % [
 				leg, game.recovery_leg, game.ambulance.position, game.speed, game.wallet, game.status_label.text])
@@ -102,18 +98,47 @@ func drive_to_station(game: Node, leg: int) -> void:
 	var forward: Vector3 = -game.ambulance.basis.z
 	var goal := Vector2(game.STATION_DROP.x, game.STATION_DROP.z)
 	var route := Curve2D.new()
-	for point in game.navigator.driving_path(Vector2(origin.x, origin.z), goal, Vector2(forward.x, forward.z), true):
-		route.add_point(point)
+	var start := Vector2(origin.x, origin.z)
+	var heading := Vector2(forward.x, forward.z)
+	# Use Stationsallén on the return from the east to avoid the busy depot junction.
+	var waypoints := [Vector2(-2.35, 18), Vector2(-80, 32.65), goal] if leg == 3 else [goal]
+	for waypoint: Vector2 in waypoints:
+		var segment: PackedVector2Array = game.navigator.driving_path(start, waypoint, heading, true)
+		for point in segment:
+			# Keep the loaded truck farther from the east curb on Mackvägen.
+			if leg == 3 and is_equal_approx(point.x, -144.0): point.x = -146.0
+			if route.point_count == 0 or not point.is_equal_approx(route.get_point_position(route.point_count - 1)):
+				route.add_point(point)
+		heading = segment[-2].direction_to(segment[-1])
+		start = segment[-1]
 	# Aim five metres ahead on the route as the live traffic simulation advances.
-	for frame in 2800:
+	var last_position := Vector2(origin.x, origin.z)
+	var stopped_frames := 0
+	var reverse_frames := 0
+	var yielded := false
+	for frame in 4000:
 		var position := Vector2(game.ambulance.position.x, game.ambulance.position.z)
+		if leg == 3 and not yielded:
+			stopped_frames = stopped_frames + 1 if position.distance_to(last_position) < .005 else 0
+			if stopped_frames >= 160:
+				yielded = true
+				reverse_frames = 38
+		last_position = position
+		if reverse_frames > 0:
+			# Reverse briefly to let the crossing vehicle clear the lane.
+			for action in ["ui_right", "ui_left", "ui_up"]:
+				Input.action_release(action)
+			game.mouse_brake = reverse_frames < 30 and reverse_frames > 12
+			game._process(.05)
+			reverse_frames -= 1
+			continue
 		var target := route.sample_baked(minf(route.get_closest_offset(position) + 5, route.get_baked_length()))
 		forward = -game.ambulance.basis.z
 		var angle := Vector2(forward.x, forward.z).angle_to(position.direction_to(target))
 		Input.action_press("ui_right", clampf(angle * 2.6, 0, 1))
 		Input.action_press("ui_left", clampf(-angle * 2.6, 0, 1))
 		game.mouse_brake = position.distance_to(goal) < 1.7
-		Input.action_press("ui_up", 0 if game.mouse_brake else .65)
+		Input.action_press("ui_up", 0 if game.mouse_brake else (.40 if leg == 3 else .65))
 		game._process(.05)
 		if game.recovery_leg != leg:
 			break
