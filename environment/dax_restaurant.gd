@@ -50,6 +50,7 @@ func build(world: Node3D) -> void:
 	_box("Roof parapet", Vector3(11.2, .52, 8), Vector3(1, 4.16, 1.2), DARK)
 	sign_glow = city._material(SIGN_LIGHT, .5, true)
 	ad_glow = city._material(Color("#963f2b"), .55, true)
+	_fit_timber_fascia()
 	_roof_signs()
 	for x in [-2.0, 4.0]:
 		_box("Roof ventilation", Vector3(1.6, .45, 1.13), Vector3(x, 4.62, 2), Color("#6b7471"))
@@ -87,6 +88,33 @@ func build(world: Node3D) -> void:
 	_obstacle(Vector3(16, 4.1, 13), Vector3(0, 2.0, 0))
 	for x in [-5.4, -2.7, 5.0]:
 		_obstacle(Vector3(1.6, 1.0, 1.65), Vector3(x, .5, -9.6))
+
+func _fit_timber_fascia() -> void:
+	var slat := BoxMesh.new()
+	slat.size = Vector3(.16, .61, .045)
+	slat.material = city._material(Color("#bc8258"), .88)
+	slat.material.vertex_color_use_as_albedo = true
+	var panels := MultiMesh.new()
+	panels.mesh = slat
+	panels.transform_format = MultiMesh.TRANSFORM_3D
+	panels.use_colors = true
+	panels.instance_count = 288
+	var index := 0
+	for side in [-1, 1]:
+		for board in 80:
+			panels.set_instance_transform(index, Transform3D(Basis.IDENTITY,
+				Vector3(-7.90 + .20 * board, 3.41, side * 6.531)))
+			panels.set_instance_color(index, Color.WHITE.lerp(Color("#d2b7a0"), (board * 7 % 11) / 16.0))
+			index += 1
+		for board in 64:
+			panels.set_instance_transform(index, Transform3D(Basis(Vector3.UP, PI / 2),
+				Vector3(side * 8.031, 3.41, -6.30 + .20 * board)))
+			panels.set_instance_color(index, Color.WHITE.lerp(Color("#d2b7a0"), (board * 7 % 11) / 16.0))
+			index += 1
+	var cladding := MultiMeshInstance3D.new()
+	cladding.name = "Vertical timber fascia boards"
+	cladding.multimesh = panels
+	add_child(cladding)
 
 func _fit_pickup_window() -> void:
 	var metal := Color("#6b7978")
@@ -171,18 +199,17 @@ func _order_menu() -> void:
 		face.material_override = screen
 		_box("Menu colour band", Vector3(.045, .34, 1.67), Vector3(-8.22, 2.25, z), [TEAL, Color("#72547c"), Color("#9c482f")][column])
 		_sign(headings[column], Vector3(-8.258, 2.25, z), 1.51, -PI / 2, CREAM, .0055)
-		match column:
-			0:
-				for layer in [[1.79, .23, .67, Color("#d88b3e")], [1.65, .075, .72, Color("#6b913c")], [1.58, .10, .68, Color("#633b26")], [1.49, .10, .64, WOOD]]:
-					_ball("Menu burger illustration", Vector3(-8.235, layer[0], z), Vector3(.038, layer[1], layer[2]), layer[3])
-			1:
-				_box("Menu shake cup", Vector3(.05, .38, .29), Vector3(-8.243, 1.64, z), Color("#8b639c"))
-				_ball("Menu whipped topping", Vector3(-8.273, 1.85, z), Vector3(.05, .15, .34), Color("#fff7e6"))
-				_box("Menu shake straw", Vector3(.03, .24, .038), Vector3(-8.281, 1.92, z + .08), TEAL)
-			2:
-				for fry in 5:
-					_box("Menu fries illustration", Vector3(.035, .34 + .07 * (fry % 3), .055), Vector3(-8.245, 1.70, z + .073 * (fry - 2)), Color("#e6a348"))
-				_box("Menu fries carton", Vector3(.06, .21, .40), Vector3(-8.263, 1.57, z), Color("#b45237"))
+		var food := Sprite3D.new()
+		food.name = "Menu food photograph"
+		var crop := AtlasTexture.new()
+		crop.atlas = preload("res://art/dax/menu-food.jpg")
+		crop.region = Rect2(column * 512, 0, 512, 512)
+		crop.filter_clip = true
+		food.texture = crop
+		food.pixel_size = .00105
+		food.position = Vector3(-8.234, 1.71, z)
+		food.rotation.y = -PI / 2
+		add_child(food)
 		for row in listings[column].size():
 			_sign(listings[column][row], Vector3(-8.252, 1.30 - row * .18, z), 1.51, -PI / 2, DARK, .004)
 
