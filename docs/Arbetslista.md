@@ -299,6 +299,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Träpromenadens repräcke fick rundade rep med jämnt nedhäng och metallhylsor vid stolparna. Granskat i Godot. Kanalprovet passerade.
   - Kanalbroarna fick landfästen i betong med lagerhyllor och separata brolager. Granskat från vattennivå vid norra bron i Godot. Båtpassage under båda broarna verifierades i kanalprovet.
   - Båda kanalbroarna fick kantbalkar som följer broprofilen och en droppkant under gångkanterna. Granskat från kanalen i Godot. Kanalprovet verifierade båtpassage i båda riktningarna.
+  - Bropelarna fick avsmalnande pelarhuvuden, separata lager och kragar vid vattenlinjen. Norra bron granskades från vattnet. Kanalprovet passerade.
 - [ ] Trafikljus, gatlyktor, vägskyltar och parkeringsskyltar
   - Gatlyktsmodellen fick fotplatta, separat armaturhus och en tunnare ljusspridare. Granskat vid kanalen i dagsljus och nattläge. Övningsbaneprovet passerade.
   - Kajens låga lyktor fick sockel, kant under huven och tre smala stag runt ljusspridaren. Granskat vid färjebryggan i Godot. Väderprovet passerade.

@@ -3444,11 +3444,17 @@ func _build_canal_bridge(z: float, asphalt: Color, rail_mesh: CylinderMesh) -> v
 	var cap_mesh := CylinderMesh.new()
 	cap_mesh.top_radius = .59
 	cap_mesh.bottom_radius = .5
-	cap_mesh.height = .22
+	cap_mesh.height = .15
 	cap_mesh.radial_segments = 24
 	cap_mesh.material = concrete
+	var collar_mesh := CylinderMesh.new()
+	collar_mesh.top_radius = .51
+	collar_mesh.bottom_radius = .53
+	collar_mesh.height = .20
+	collar_mesh.radial_segments = 24
+	collar_mesh.material = _material(Color("#767971"), .84)
 	for x in [63.0,80.0]:
-		var height := _bridge_rise(x, z)+.81
+		var height := _bridge_rise(x, z) + .70
 		var shaft_mesh := CylinderMesh.new()
 		shaft_mesh.top_radius = .5
 		shaft_mesh.bottom_radius = .5
@@ -3468,8 +3474,18 @@ func _build_canal_bridge(z: float, asphalt: Color, rail_mesh: CylinderMesh) -> v
 			bridge_pier_footprints.append(Rect2(center - half_size, half_size * 2.0))
 			var cap := MeshInstance3D.new()
 			cap.mesh = cap_mesh
-			cap.position = Vector3.UP * (height*.5+.11)
+			cap.position = Vector3.UP * (height * .5 + .075)
 			shaft.add_child(cap)
+			var pier_head := Vector3(x, _bridge_rise(x, z) - .615, shaft.position.z)
+			var pad := _make_box("Pier neoprene bearing", Vector3(.48, .095, .58),
+				pier_head, Color.WHITE)
+			pad.material_override = bearing_finish
+			pad.rotation.z = atan2(_bridge_rise(x + .1, z) - _bridge_rise(x - .1, z), .2)
+			var collar := MeshInstance3D.new()
+			collar.name = "Bridge pier waterline collar"
+			collar.mesh = collar_mesh
+			collar.position.y = -.94 - shaft.position.y
+			shaft.add_child(collar)
 
 func _build_quay_lane_markings() -> void:
 	var dashes: Array[Transform3D] = []
