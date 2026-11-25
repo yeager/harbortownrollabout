@@ -7958,8 +7958,8 @@ func _fit_bus_exterior(model: Node3D) -> void:
 	button_cap.radial_segments = 16
 	button_cap.material = _material(Color("#9bce52"), .48)
 	for door_center in [4.4, -.30, -4.11]:
-		var seal := _make_box("Passenger door centre gasket", Vector3(.024, 1.91, .043),
-			Vector3(-1.272, 1.41, door_center), door_jamb.albedo_color, false, model)
+		var seal := _make_box("Passenger door centre gasket", Vector3(.024, 2.25, .043),
+			Vector3(-1.272, 1.58, door_center), door_jamb.albedo_color, false, model)
 		seal.material_override = door_jamb
 		var threshold := _make_box("Passenger door threshold", Vector3(.072, .036, 1.04),
 			Vector3(-1.262, .447, door_center), tread.albedo_color, false, model)
