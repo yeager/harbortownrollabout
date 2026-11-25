@@ -11158,12 +11158,14 @@ func _resume_road_checkpoint() -> void:
 	if road_checkpoint.has("radio") and not radio_vehicle.is_empty():
 		var station: Dictionary = road_checkpoint.radio
 		radio_enabled = station.enabled
-		if radio_enabled and station.track in radio_tracks:
+		if station.track in radio_tracks:
 			radio_bag.clear()
 			for track: String in station.get("remaining", PackedStringArray()):
 				if track != station.track and track in radio_tracks and track not in radio_bag:
 					radio_bag.append(track)
-			_play_radio_track(station.track, station.position)
+			radio_track = station.track
+			if radio_enabled:
+				_play_radio_track(station.track, station.position)
 		_sync_radio()
 
 func _start_game() -> void:

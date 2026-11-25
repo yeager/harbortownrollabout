@@ -312,6 +312,7 @@ func check_controls() -> void:
 	if not game.radio.playing or game.radio_track not in expected_tracks or game.radio_track == restored_song or game.radio.get_playback_position() >= 7.0:
 		fail("Resuming in German did not start a fresh track from the English fallback playlist")
 		return
+	var expected_next: String = game.radio_bag.back()
 	press(KEY_B)
 	if game.radio.playing:
 		fail("The saved radio key did not turn off the radio")
@@ -321,9 +322,14 @@ func check_controls() -> void:
 	await process_frame
 	game = load("res://main.tscn").instantiate()
 	root.add_child(game)
+	TranslationServer.set_locale("de")
 	game._resume_road_checkpoint()
 	if game.radio_enabled or game.radio.playing or game.next_song_button.visible:
 		fail("A radio switched off before saving came back on")
+		return
+	press(KEY_B)
+	if not game.radio.playing or game.radio_track != expected_next:
+		fail("Turning the radio back on did not follow the saved shuffle order")
 		return
 	print("Radio rotation, language changes, pause, vehicle audio and speech attenuation verified.")
 	phase = "done"
