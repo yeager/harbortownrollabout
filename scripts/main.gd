@@ -319,6 +319,7 @@ var next_song_button: Button
 var radio_button: Button
 var radio := AudioStreamPlayer.new()
 var radio_enabled := false
+var restoring_radio := false
 var radio_vehicle := ""
 var radio_language := ""
 var radio_tracks := PackedStringArray()
@@ -1261,7 +1262,7 @@ func _sync_radio() -> void:
 		radio.stream_paused = true
 	else:
 		radio.stream_paused = false
-		if not radio.playing: _next_radio_track()
+		if not radio.playing and not restoring_radio: _next_radio_track()
 
 # Gain offsets for tracks more than 1 LU from the song library's -16 LUFS target.
 const RADIO_GAIN_DB := {
@@ -11013,6 +11014,7 @@ func _resume_road_checkpoint() -> void:
 		excavation_sand.remaining = sand.x
 		excavation_sand.delivered = sand.y
 		excavation_sand.refresh()
+	restoring_radio = true
 	_on_vehicle_selected(road_checkpoint.vehicle)
 	if road_checkpoint.has("tram"):
 		_select_gallery_activity(road_checkpoint.tram.mode + 1)
@@ -11166,7 +11168,8 @@ func _resume_road_checkpoint() -> void:
 			radio_track = station.track
 			if radio_enabled:
 				_play_radio_track(station.track, station.position)
-		_sync_radio()
+	restoring_radio = false
+	_sync_radio()
 
 func _start_game() -> void:
 	hose_seconds = 0.0
