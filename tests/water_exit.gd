@@ -301,7 +301,14 @@ func check_exits() -> void:
 		printerr("The motorboat did not advertise the configured boarding shortcut")
 		quit(1)
 		return
+	Input.action_press("ui_up")
 	game._unhandled_key_input(board_key)
+	game._drive_launch(.25)
+	Input.action_release("ui_up")
+	if game.launch.transform != docked_pose or not is_zero_approx(game.launch_speed):
+		printerr("Motorboat moved with a key carried over from walking")
+		quit(1)
+		return
 	if not game.boating or game.walker.visible or game.listener.get_parent() != game.launch:
 		printerr("Could not reboard the motorboat from the landing")
 		quit(1)

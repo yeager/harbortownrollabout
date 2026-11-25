@@ -188,8 +188,16 @@ func check_gallery() -> void:
 	for extra in game.EXTRA_GALLERY_NAMES.size():
 		game.mode = "menu"
 		var tile: Button = game.vehicle_selector.get_child(game.VEHICLE_NAMES_ALL.size() + extra)
+		Input.action_press("ui_up")
 		tile.pressed.emit()
 		game.start_button.pressed.emit()
+		var pedal_armed: bool = game._keyboard_pedals_available()
+		Input.action_release("ui_up")
+		game._keyboard_pedals_available()
+		if pedal_armed:
+			printerr("The special vehicle accepted a pedal already held on entry")
+			quit(1)
+			return
 		if not tile.button_pressed or game.mode != "playing" or game.operating_excavator != (extra == 0) or (game.tram_mode == 2) != (extra == 1) or game.boating != (extra == 2):
 			printerr("Wrong activity after selecting ", tile.text)
 			quit(1)

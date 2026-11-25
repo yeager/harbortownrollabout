@@ -5487,6 +5487,7 @@ func _change_seat() -> void:
 		var landing := Vector3(LAUNCH_LANDING.x,_foot_height(LAUNCH_LANDING.x,LAUNCH_LANDING.y),LAUNCH_LANDING.y)
 		if not _launch_at_berth() or not _on_foot_clear(landing): return
 		boating = not boating
+		if boating: release_pedal_keys = _keyboard_pedal_pressed()
 		walker.position = landing
 		walker.visible = not boating
 		walking_velocity = Vector3.ZERO
@@ -5525,6 +5526,7 @@ func _change_seat() -> void:
 		_release_mouse_pedals()
 		crawler_speed = 0.0
 		operating_excavator = not operating_excavator
+		if operating_excavator: release_pedal_keys = _keyboard_pedal_pressed()
 		listener.reparent(cab_turntable if operating_excavator else walker, false)
 		listener.position = Vector3.UP * (2.5 if operating_excavator else 1.6)
 		_update_siren()
@@ -11194,6 +11196,7 @@ func _start_game() -> void:
 		listener.reparent(cab_turntable,false)
 		listener.position = Vector3.UP*2.5
 		operating_excavator = true
+		release_pedal_keys = _keyboard_pedal_pressed()
 		start_in_excavator = false
 	_update_camera(0.0, true)
 	speed = 0
@@ -11212,6 +11215,7 @@ func _select_gallery_activity(index: int) -> void:
 	boating = index==4
 	if mode == "menu" and index >= 2: siren_player.stop()
 	tram_mode = index-1 if index in [2,3] else 0
+	if boating or tram_mode == 2: release_pedal_keys = _keyboard_pedal_pressed()
 	tram_driver_exit_requested = false
 	launch_speed = 0
 	var ear: Node3D = tram.sections[0] if tram_mode > 0 else launch if boating else (walker if walker.visible else ambulance)
