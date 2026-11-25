@@ -212,6 +212,17 @@ func _side_window(lot: Node3D, at: Vector3, side: int, size: Vector2) -> void:
 	_box(lot, "Side glazing", Vector3(.13, size.y - .22, size.x - .23), at + Vector3.RIGHT * side * .034,
 		Color.WHITE).material_override = window_glass
 
+func _downspout(lot: Node3D, inlet: Vector3, wall: Vector3, color: Color) -> void:
+	var finish: StandardMaterial3D = world._material(color, .55)
+	var offset := Vector3(wall.x, inlet.y - .38, wall.z)
+	var outlet := Vector3(wall.x, .29, wall.z)
+	world._tube_between(lot, inlet, offset, .043, finish)
+	world._tube_between(lot, offset, outlet, .043, finish)
+	world._tube_between(lot, outlet, outlet + Vector3(0, -.09, .17), .043, finish)
+	for fraction in [.25, .65]:
+		var at := outlet.lerp(offset, fraction)
+		_box(lot, "Downspout wall bracket", Vector3(.125, .044, .15), at - Vector3.BACK * .026, color.darkened(.13))
+
 func _roof(lot: Node3D, index: int, width: float, depth: float, eave: float, pitch: float, siding: Color, roof: Color) -> ShaderMaterial:
 	var finish := ShaderMaterial.new()
 	finish.shader = preload("res://environment/villa_roof.gdshader")
@@ -229,12 +240,19 @@ func _roof(lot: Node3D, index: int, width: float, depth: float, eave: float, pit
 		var front_peak := Vector3(-1.65, eave + peak, -depth * .25)
 		var rear_peak := Vector3(-1.65, eave + peak, -depth * .75)
 		_triangles(lot, "Hipped tile roof", [a,front_peak,b, b,rear_peak,c, b,front_peak,rear_peak, c,rear_peak,d, d,front_peak,a, d,rear_peak,front_peak], roof).material_override = finish
-		_box(lot, "Front gutter", Vector3(width + .83, .13, .15), Vector3(-1.65, eave - .06, .45), TRIM)
+		for z in [.45, -depth - .45]:
+			_box(lot, "Hip roof gutter", Vector3(width + .83, .13, .15), Vector3(-1.65, eave - .06, z), TRIM)
+		for x in [left - .40, right + .40]:
+			_box(lot, "Hip roof gutter", Vector3(.15, .13, depth + .90), Vector3(x, eave - .06, -depth * .5), TRIM)
+		_downspout(lot, Vector3(right + .40, eave - .12, .37), Vector3(right - .17, 0, .13), TRIM)
 	elif index == 2:
 		var step := tan(pitch) * width
 		var panel := _box(lot, "Single-slope metal roof", Vector3((width + .86) / cos(pitch), .22, depth + 1.0), Vector3(-1.65, eave + step * .5 + .07, -depth * .5), roof)
 		panel.material_override = finish
 		panel.rotation.z = -pitch
+		var gutter_y := eave - .43 * tan(pitch) - .08
+		_box(lot, "Metal roof gutter", Vector3(.15, .14, depth + .92), Vector3(right + .44, gutter_y, -depth * .5), roof)
+		_downspout(lot, Vector3(right + .44, gutter_y - .06, .38), Vector3(right - .20, 0, .12), roof)
 		_box(lot, "Tall side wall", Vector3(.13, step, depth), Vector3(left, eave + step * .5, -depth * .5), siding)
 		for z in [0.0, -depth]:
 			_triangles(lot, "Sloping wall head", [Vector3(left,eave,z), Vector3(right,eave,z), Vector3(left,eave + step,z)], siding)
@@ -252,7 +270,11 @@ func _roof(lot: Node3D, index: int, width: float, depth: float, eave: float, pit
 			panel.rotation.z = -side * pitch
 			var fascia := _box(lot, "Painted verge", Vector3(run / cos(pitch), .15, .11), roof_at + Vector3.BACK * (depth * .50 + .42), TRIM)
 			fascia.rotation.z = panel.rotation.z
-			_box(lot, "Eave gutter", Vector3(.14, .13, depth + .8), Vector3(-1.65 + side * run, eave - .18, -depth * .5), Color("#575754"))
+			var gutter_y := eave - .40 * tan(pitch) - .09
+			var gutter_x: float = -1.65 + side * run
+			_box(lot, "Eave gutter", Vector3(.14, .13, depth + .8), Vector3(gutter_x, gutter_y, -depth * .5), Color("#575754"))
+			var wall_x: float = -1.65 + side * (width * .50 - .19)
+			_downspout(lot, Vector3(gutter_x, gutter_y - .06, .32), Vector3(wall_x, 0, .12), Color("#575754"))
 	for i in 29:
 		var x := lerpf(left - .34, right + .34, i / 28.0)
 		var y := eave + tan(pitch) * (width * .5 - absf(x + 1.65))
