@@ -281,6 +281,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Småbåtarnas skrov har en lutande stäv med mjukare övergång längs sidorna och en tydlig däckskant. Granskat i Godot och kanalprovet passerade.
   - Småbåtarnas vindrutor består nu av tre glaspartier med vinklade sidor och en ram som följer däcket. Granskat i Godot och kanalprovet passerade.
   - Kapellen fick två rörbågar med däcksbeslag och en vävstruktur som följer tyget. Granskat från sidan i Godot. Kanalprovet passerade.
+  - Förluckorna fick karm, tätning, två gångjärn och ett lågt handtag. Kapellbågarna flyttades ned under tyget. Granskat i närbild i Godot. Kanalprovet passerade.
 - [ ] Trafikljus, gatlyktor, vägskyltar och parkeringsskyltar
   - Gatlyktsmodellen fick fotplatta, separat armaturhus och en tunnare ljusspridare. Granskat vid kanalen i dagsljus och nattläge. Övningsbaneprovet passerade.
   - Kajens låga lyktor fick sockel, kant under huven och tre smala stag runt ljusspridaren. Granskat vid färjebryggan i Godot. Väderprovet passerade.
