@@ -3325,7 +3325,7 @@ func _build_waterfront() -> void:
 		var windows := MultiMeshInstance3D.new()
 		windows.multimesh = batch
 		add_child(windows)
-	_build_marina()
+	_build_marina(metal)
 
 func _make_quay_entrance(base: Vector3) -> void:
 	var aluminium := Color("#637273")
@@ -3513,7 +3513,7 @@ func _foot_height(x: float,z: float) -> float:
 	var deck := _pier_height(x,z)
 	return _surface_height(x,z) if is_nan(deck) else deck
 
-func _build_marina() -> void:
+func _build_marina(rail_metal: Material) -> void:
 	launch = Node3D.new()
 	add_child(launch)
 	var launch_model := preload("res://vehicles/motorboat.glb").instantiate() as Node3D
@@ -3664,14 +3664,24 @@ func _build_marina() -> void:
 			Vector3(tread_x - .138, top - .008, access_z), Color("#576267"))
 	_make_box("Dock access retaining riser", Vector3(.09, .14, 1.64),
 		Vector3(87.02, -.26, access_z), Color("#726657"))
-	var rail_color := Color("#626c6e")
-	for edge in [-.82, .82]:
-		for end in [Vector2(86.60, -.48), Vector2(87.62, -.06)]:
-			_make_box("Dock access rail post", Vector3(.065, .88, .065),
-				Vector3(end.x, end.y + .44, access_z + edge), rail_color)
-		var handrail := _make_box("Dock access handrail", Vector3(1.15, .06, .065),
-			Vector3(87.11, .59, access_z + edge), rail_color)
-		handrail.rotation.z = atan2(.42, 1.02)
+	for side in [-1.0, 1.0]:
+		var rail_z: float = access_z + side * .78
+		var lower := Vector3(86.60, -.45, rail_z)
+		var upper := Vector3(87.61, -.105, rail_z)
+		var lower_top := Vector3(lower.x, .39, rail_z)
+		var upper_top := Vector3(upper.x, .82, rail_z)
+		for foot in [lower, upper]:
+			var rail_top := lower_top.y if foot == lower else upper_top.y
+			var height: float = rail_top - foot.y
+			_make_box("Dock access rail post", Vector3(.077, height, .078),
+				foot + Vector3.UP * height * .5, Color.WHITE).material_override = rail_metal
+			_make_box("Dock access foot plate", Vector3(.145, .024, .079),
+				foot + Vector3.UP * .012, Color.WHITE).material_override = rail_metal
+		_add_moored_round_fitting(self, "Dock access handrail", lower_top, upper_top, .036, rail_metal)
+		_add_moored_round_fitting(self, "Handrail transition", upper_top,
+			Vector3(87.5, .82, access_z + side * .93), .036, rail_metal)
+		_add_moored_round_fitting(self, "Dock access lower rail", lower_top - Vector3.UP * .47,
+			upper_top - Vector3.UP * .47, .021, rail_metal)
 	var dock_edge := Color("#615344")
 	var dock_join := Color("#535c60")
 	var dock_float := CapsuleMesh.new()
