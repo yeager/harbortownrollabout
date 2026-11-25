@@ -265,9 +265,20 @@ func _add_crossing(center: Vector3, east_west: bool, pavement_offset := 5.45) ->
 			_add_crossing_light(mast, center)
 		var signs: Array = []
 		for j in 2:
+			var panel_y := 2.43 - .45 * j
+			var surround := Color("#404946")
+			get_parent()._make_box("Pedestrian signal panel", Vector3(.342, .361, .014),
+				Vector3(0, panel_y, .095), Color("#111716"), false, mast)
+			for edge in [-1, 1]:
+				get_parent()._make_box("Pedestrian signal side rim", Vector3(.026, .389, .043),
+					Vector3(edge * .179, panel_y, .109), surround, false, mast)
+			get_parent()._make_box("Pedestrian signal upper visor", Vector3(.385, .029, .136),
+				Vector3(0, panel_y + .192, .14), surround, false, mast)
+			get_parent()._make_box("Pedestrian signal lower rim", Vector3(.385, .025, .043),
+				Vector3(0, panel_y - .192, .109), surround, false, mast)
 			var figure := Node3D.new()
 			mast.add_child(figure)
-			figure.position=Vector3(0,2.43-.45*j,.115)
+			figure.position = Vector3(0, panel_y, .115)
 			var color := Color.RED if j==0 else Color.LIME_GREEN
 			lens(figure,Vector3(0,.12,0),color).scale=Vector3.ONE*.27
 			for segment in [[0,.015,.0,.16],[-.05,-.09,.48*j,.14],[.05,-.09,-.48*j,.14],[-.065,.02,-.5,.11],[.065,.02,.55,.11]]:
