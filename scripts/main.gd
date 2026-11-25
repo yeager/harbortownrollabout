@@ -11985,6 +11985,8 @@ func _refresh_status() -> void:
 			status_label.text = "Stop here to help."
 		else:
 			status_label.text = "Helping …" if gentle_driving else _movement_hint(tr("Press {help} to help"))
+	elif tyre_service_button.visible:
+		status_label.text = tyre_service_button.tooltip_text
 	elif practice_active and vehicle_index == SCHOOL_CAR and not walker.visible and not paused:
 		if practice_signal_missed or practice_stop_missed:
 			status_label.text = tr("You passed the line. Reverse until this message clears.")
