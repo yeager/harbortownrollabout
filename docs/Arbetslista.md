@@ -293,6 +293,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Östra kajmuren fick separata täckstenar med fogar, nyansvariation och överhäng. Granskat i Godot. Kanalprovet passerade.
   - Östra kajräcket fick rund ledstång, nedre rör och stolpar med fotplattor och infästningar. Granskat vid flytbryggans trappa i Godot. Kanalprovet passerade.
   - Bryggtrappan fick runda handledare som ansluter till kajräcket, nedre rör och fotplattor. Granskat i Godot med fri gångyta. Kanalprovet passerade.
+  - Livbojarna fick fyra ljusa band, hållare och fotplattor. Två ställ placerades längs östra kajen. Granskat i Godot. Kanalprovet passerade.
 - [ ] Trafikljus, gatlyktor, vägskyltar och parkeringsskyltar
   - Gatlyktsmodellen fick fotplatta, separat armaturhus och en tunnare ljusspridare. Granskat vid kanalen i dagsljus och nattläge. Övningsbaneprovet passerade.
   - Kajens låga lyktor fick sockel, kant under huven och tre smala stag runt ljusspridaren. Granskat vid färjebryggan i Godot. Väderprovet passerade.

@@ -9517,10 +9517,17 @@ func _build_target_marker() -> void:
 	square_neighbour.position.y = _foot_height(square_neighbour.position.x,square.z)
 	square_neighbour.rotation.y = 0
 	var quay := WALK_TARGETS[2]
-	var lifebuoy := preload("res://environment/marina_lifebuoy.tscn").instantiate() as Node3D
+	var lifebuoy_scene := preload("res://environment/marina_lifebuoy.tscn")
+	var lifebuoy := lifebuoy_scene.instantiate() as Node3D
 	lifebuoy.position = Vector3(quay.x,_foot_height(quay.x,quay.z-.9),quay.z-.9)
 	add_child(lifebuoy)
 	building_bounds.append(AABB(lifebuoy.position-Vector3(.38,.1,.23),Vector3(.76,1.7,.35)))
+	for safety_z in [-35.4, -16.6]:
+		var safety_ring := lifebuoy_scene.instantiate() as Node3D
+		safety_ring.position = Vector3(87.79, _foot_height(87.79, safety_z), safety_z)
+		safety_ring.rotation.y = -PI * .5
+		add_child(safety_ring)
+		building_bounds.append(AABB(safety_ring.position - Vector3(.12, 0, .38), Vector3(.36, 1.55, .76)))
 	_make_walker("Marina attendant",quay.x+.8,quay.z,1,Color("#e18a39"),Color("#314755"))
 	marina_recipient = walker_data.pop_back().actor
 	marina_recipient.position.y = _foot_height(marina_recipient.position.x,quay.z)

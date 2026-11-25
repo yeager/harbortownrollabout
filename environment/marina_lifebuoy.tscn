@@ -1,8 +1,21 @@
 [gd_scene format=3]
 
-[sub_resource type="StandardMaterial3D" id="Orange"]
-albedo_color = Color(0.94, 0.18, 0.025, 1)
-roughness = 0.61
+[sub_resource type="Shader" id="RingFinish"]
+code = "shader_type spatial;
+varying vec2 ring_plane;
+void vertex() {
+	ring_plane = VERTEX.xz;
+}
+void fragment() {
+	float angle = atan(ring_plane.y, ring_plane.x);
+	float offset = abs(fract(angle * 0.63661977) - .5);
+	float band = 1.0 - smoothstep(.082, .098, offset);
+	ALBEDO = mix(vec3(.94, .18, .025), vec3(.88, .86, .71), band);
+	ROUGHNESS = mix(.61, .34, band);
+}"
+
+[sub_resource type="ShaderMaterial" id="RingMaterial"]
+shader = SubResource("RingFinish")
 
 [sub_resource type="StandardMaterial3D" id="Metal"]
 albedo_color = Color(0.38, 0.43, 0.46, 1)
@@ -10,7 +23,7 @@ metallic = 0.68
 roughness = 0.5
 
 [sub_resource type="TorusMesh" id="Ring"]
-material = SubResource("Orange")
+material = SubResource("RingMaterial")
 inner_radius = 0.21
 outer_radius = 0.38
 rings = 32
@@ -24,6 +37,18 @@ height = 1.5
 radial_segments = 12
 rings = 1
 
+[sub_resource type="BoxMesh" id="Base"]
+material = SubResource("Metal")
+size = Vector3(0.24, 0.035, 0.24)
+
+[sub_resource type="BoxMesh" id="Cradle"]
+material = SubResource("Metal")
+size = Vector3(0.29, 0.035, 0.18)
+
+[sub_resource type="BoxMesh" id="Retainer"]
+material = SubResource("Metal")
+size = Vector3(0.055, 0.11, 0.038)
+
 [node name="Marina lifebuoy" type="Node3D"]
 
 [node name="Post" type="MeshInstance3D" parent="."]
@@ -34,3 +59,21 @@ mesh = SubResource("Pole")
 position = Vector3(0, 1.13, -0.12)
 rotation = Vector3(1.5708, 0, 0)
 mesh = SubResource("Ring")
+
+[node name="Foot plate" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.0175, 0)
+mesh = SubResource("Base")
+
+[node name="Cradle shelf" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.746, -0.095)
+mesh = SubResource("Cradle")
+
+[node name="Left retainer" type="MeshInstance3D" parent="."]
+position = Vector3(-0.105, 0.818, -0.18)
+rotation = Vector3(0, 0, -0.24)
+mesh = SubResource("Retainer")
+
+[node name="Right retainer" type="MeshInstance3D" parent="."]
+position = Vector3(0.105, 0.818, -0.18)
+rotation = Vector3(0, 0, 0.24)
+mesh = SubResource("Retainer")
