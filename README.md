@@ -25,6 +25,8 @@ Click a vehicle picture, choose Axel or Alma, then select **Start driving**. Hol
 
 Choose **Practice driving** on the main menu to start in a marked driving-school car on a traffic-free course. Practise staying within 20 km/h, stopping at the STOP sign and waiting for green. If you get stuck there, **R** returns you to a safe spot on the course. Select **Return to town** when you’re ready to explore.
 
+![The marked driving-school car on the practice course](examples/driving-school-car.jpg)
+
 On snowy roads, a sharp turn above about 22 km/h can make a vehicle slide sideways and leave tyre marks. Ease off and straighten the wheel to regain grip. Ploughed lanes also give the tyres more grip. Drive the farm tractor forward in winter snow to plough and spread grit and salt. Other vehicles get extra grip on the treated strip. Use the **Spreader on/off** button to keep ploughing without spreading. To toggle the spreader with **7** on the main keyboard or number pad, enable the numbered vehicle shortcuts under **Settings → Driving**.
 
 At a traffic light, stop on red, slow down on orange and go on green. By default, the game helps you stop at the line. If you enable **Allow driving through red lights** in Driving settings, crossing on red brings up a reminder.
