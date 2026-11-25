@@ -271,6 +271,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Kontaktledningsstolparna fick fotplattor, stag och isolatorer. Granskat vid Västra torget i Godot efter godkänt spårvagnsprov.
   - Spårvagnens strömavtagare fick isolerade takfästen, ledaxlar och dubbla kolslitskenor. Granskat i närbild i Godot och spårvagnsprovet passerade.
   - Alla tre vagnsdelar fick omarbetade ventilationskåpor med sidointag, takgaller och synliga fästen. Granskat i Godot och spårvagnsprovet passerade.
+  - Boggierna fick separata hjulaxlar, hjulflänsar, lagerkåpor och fjädringsdetaljer. Granskat från rälsnivå i Godot. Spårvagnsprovet passerade.
 - [ ] Broarna, kajerna, träpromenaderna, bryggorna och förtöjningsbojarna
 - [ ] Trafikljus, gatlyktor, vägskyltar och parkeringsskyltar
 - [ ] Boulebana, spelfigurer och klot
