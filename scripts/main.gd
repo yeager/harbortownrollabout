@@ -3704,6 +3704,7 @@ func _build_marina() -> void:
 		var cover := [Color("#253b51"),Color("#b7afa0"),Color("#365b64")][berth%3] as Color
 		if berth % 3 == 2:
 			_add_moored_boat_helm(boat, galvanised)
+			_add_moored_outboard(boat, galvanised)
 			for seat_x in [.10, 1.36]:
 				var frame_color := Color("#3b4244")
 				var piping_color := Color("#987e64")
@@ -3876,6 +3877,42 @@ func _add_moored_boat_helm(boat: Node3D, metal: Material) -> void:
 		var angle := TAU * i / 3.0
 		var spoke_tip := hub + Vector3(0, -cos(angle), sin(angle)) * .112
 		_add_moored_round_fitting(helm, "Wheel spoke", hub, spoke_tip, .009, metal)
+
+
+func _add_moored_outboard(boat: Node3D, metal: Material) -> void:
+	var motor := Node3D.new()
+	motor.name = "Stern outboard"
+	motor.position = Vector3(2.55, .57, 0)
+	boat.add_child(motor)
+	var graphite := Color("#2d373d")
+	for clamp_z in [-.12, .12]:
+		_make_box("Transom clamp", Vector3(.14, .15, .055),
+			Vector3(.004, -.052, clamp_z), graphite, false, motor)
+		_make_box("Clamp pad", Vector3(.083, .035, .078),
+			Vector3(-.052, .017, clamp_z), Color.WHITE, false, motor).material_override = metal
+	_add_moored_round_fitting(motor, "Outboard hinge", Vector3(.063, .018, -.143),
+		Vector3(.063, .018, .143), .027, metal)
+	var leg := _make_box("Outboard leg", Vector3(.082, .26, .10),
+		Vector3(.124, -.088, 0), graphite, false, motor)
+	leg.rotation.z = .25
+	_make_box("Anti-ventilation plate", Vector3(.20, .019, .18),
+		Vector3(.144, -.196, 0), graphite, false, motor)
+	_add_moored_round_fitting(motor, "Gearcase", Vector3(.064, -.238, 0),
+		Vector3(.199, -.238, 0), .031, metal)
+	var cowl := MeshInstance3D.new()
+	cowl.name = "Outboard cowl"
+	var shell := CapsuleMesh.new()
+	shell.radius = .135
+	shell.height = .39
+	shell.radial_segments = 20
+	shell.rings = 6
+	shell.material = _material(graphite, .34)
+	cowl.mesh = shell
+	cowl.scale = Vector3(.80, .68, 1)
+	cowl.position = Vector3(.106, .127, 0)
+	motor.add_child(cowl)
+	_make_box("Cowl seam", Vector3(.172, .018, .238), Vector3(.106, .063, 0),
+		Color("#60717a"), false, motor)
 
 
 func _add_moored_round_fitting(parent: Node3D, part_name: String, start: Vector3, end: Vector3,
