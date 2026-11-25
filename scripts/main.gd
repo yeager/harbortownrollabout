@@ -8190,7 +8190,22 @@ func _fit_bus_interior() -> void:
 	var contact := rider.transform * bus_request_arm.transform * (bus_request_arm.get_child(1) as Node3D).position
 	bus_request_arm.rotation.x = 0
 	_make_box("Passenger handrail",Vector3(.045,1.65,.045),Vector3(contact.x,1.84,contact.z+.05),Color("#eabc4e"),false,vehicle_model)
-	_make_box("Stop button",Vector3(.085,.095,.046),contact,Color("#ec3536"),false,vehicle_model)
+	var button_housing := _make_box("Stop button housing", Vector3(.085,.095,.046), contact, Color("#24282a"), false, vehicle_model)
+	var stop_button := MeshInstance3D.new()
+	stop_button.name = "Stop button"
+	var cap := CylinderMesh.new()
+	cap.top_radius = .030
+	cap.bottom_radius = .030
+	cap.height = .010
+	cap.radial_segments = 16
+	stop_button.mesh = cap
+	stop_button.rotation.x = PI * .5
+	stop_button.position.z = -.026
+	button_housing.add_child(stop_button)
+	var button_finish := _material(Color("#a52c32"), .43, true).duplicate() as StandardMaterial3D
+	button_finish.emission = Color("#ff4036")
+	button_finish.emission_energy_multiplier = 0.0
+	stop_button.material_override = button_finish
 	var request_panel := _make_box("Stop request panel",Vector3(.76,.19,.055),Vector3(0,2.34,3.54),Color("#291c20"),false,vehicle_model)
 	bus_stop_request = Label3D.new()
 	bus_stop_request.text = "Stop requested"
@@ -8202,6 +8217,10 @@ func _fit_bus_interior() -> void:
 	request_panel.add_child(bus_stop_request)
 	_size_world_sign(bus_stop_request,.70)
 	bus_stop_request.hide()
+	var request_signal := bus_stop_request
+	request_signal.visibility_changed.connect(func():
+		button_finish.emission_energy_multiplier = .95 if request_signal.visible else 0.0
+	)
 	bus_press_time = 0
 
 func _update_bus_stop_request(delta: float) -> void:

@@ -220,6 +220,12 @@ func check_route() -> void:
 			printerr("Wrong passenger count or visibility at stop ", leg)
 			quit(1)
 			return
+		var stop_button: MeshInstance3D = game.vehicle_model.find_child("Stop button", true, false)
+		var button_finish := stop_button.material_override as StandardMaterial3D
+		if (button_finish.emission_energy_multiplier > 0.0) != (leg == 1):
+			printerr("The stop button did not follow the saved or cleared request")
+			quit(1)
+			return
 		if game.bus_stop_request.visible != (leg == 1) or not is_zero_approx(game.bus_request_arm.rotation.x):
 			printerr("A stop request carried over to leg ", leg)
 			quit(1)
@@ -286,7 +292,7 @@ func check_route() -> void:
 					return
 				game.ambulance.position = curb + Vector3.RIGHT * 15
 				game._update_bus_stop_request(.5)
-				if not game.bus_stop_request.is_visible_in_tree() or game.bus_request_arm.rotation.x < 1.0:
+				if not game.bus_stop_request.is_visible_in_tree() or game.bus_request_arm.rotation.x < 1.0 or button_finish.emission_energy_multiplier <= 0.0:
 					printerr("Passengers did not signal the upcoming stop")
 					quit(1)
 					return
