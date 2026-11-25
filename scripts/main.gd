@@ -7964,6 +7964,11 @@ func _fit_bus_exterior(model: Node3D) -> void:
 		var threshold := _make_box("Passenger door threshold", Vector3(.072, .036, 1.04),
 			Vector3(-1.262, .447, door_center), tread.albedo_color, false, model)
 		threshold.material_override = tread
+		# Bring the solid lower edge of the door glass up to the adjacent window belt.
+		for leaf_offset in [-.267, .267]:
+			var sill := _make_box("Passenger door window sill", Vector3(.048, .180, .490),
+				Vector3(-1.249, 1.402, door_center + leaf_offset), window_seal.albedo_color, false, model)
+			sill.material_override = window_seal
 		if door_center < 0.0:
 			var housing := _make_box("Passenger door request housing", Vector3(.028, .11, .093),
 				Vector3(-1.267, 1.12, door_center + .38), Color("#1b2427"), false, model)
