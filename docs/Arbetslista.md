@@ -309,5 +309,6 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Båda kanalbroarna fick dagvattenbrunnar med modellerade galler i vägkanten. Granskat i närbild i Godot. Kanalprovet passerade.
 - [ ] Trafikljus, gatlyktor, vägskyltar och parkeringsskyltar
   - Gatlyktsmodellen fick fotplatta, separat armaturhus och en tunnare ljusspridare. Granskat vid kanalen i dagsljus och nattläge. Övningsbaneprovet passerade.
+  - De lägre parklyktorna, bland annat längs kajen, fick en avsmalnande sockel och en toppknopp på armaturens huv. Granskat på östra kajen i Godot. Väderprovet passerade.
   - Kajens låga lyktor fick sockel, kant under huven och tre smala stag runt ljusspridaren. Granskat vid färjebryggan i Godot. Väderprovet passerade.
 - [ ] Boulebana, spelfigurer och klot
