@@ -67,13 +67,13 @@ func build(world: Node3D) -> void:
 	_fit_pickup_window()
 	for x in [-8, -6, -4, -2, 0, 2, 4, 6, 8]:
 		_box("Window mullion", Vector3(.10, 3.20, .15), Vector3(x, 1.72, -6.48), DARK)
-	for x in [-7, -5, -3, -1, 1, 3, 5, 7]:
+	for x in [-7, -5, -3, -1, 3, 5, 7]:
 		_glass(Vector3(x, 1.78, -6.48), Vector3(1.90, 2.56, .055))
 		_box("Timber window base", Vector3(1.9, .37, .13), Vector3(x, .32, -6.48), WOOD)
-	_box("Entrance handle", Vector3(.055, .45, .07), Vector3(1.8, 1.28, -6.56), CREAM)
+	_fit_entrance()
 	_box("Entrance canopy", Vector3(4.4, .22, 1.7), Vector3(1.0, 3.03, -6.94), TEAL)
-	_box("Dax sign panel", Vector3(3.8, .77, .20), Vector3(1, 3.57, -6.63), TEAL)
-	_sign("Dax", Vector3(1, 3.59, -6.75), 3.45, PI)
+	_box("Dax sign panel", Vector3(3.8, .77, .20), Vector3(1, 3.49, -6.63), TEAL)
+	_sign("Dax", Vector3(1, 3.50, -6.75), 3.45, PI)
 	_sign("Dax", Vector3(-1, 3.48, 6.58), 2.4)
 	for x in [-5.4, -2.7, 5.0]:
 		_table(Vector3(x, .08, -9.6), true)
@@ -115,6 +115,24 @@ func _fit_timber_fascia() -> void:
 	cladding.name = "Vertical timber fascia boards"
 	cladding.multimesh = panels
 	add_child(cladding)
+
+func _fit_entrance() -> void:
+	_glass(Vector3(1.0, 2.77, -6.48), Vector3(1.89, .44, .055))
+	_box("Entrance transom", Vector3(1.9, .11, .14), Vector3(1, 2.49, -6.49), DARK)
+	_box("Entrance threshold", Vector3(1.91, .08, .32), Vector3(1, .20, -6.56), Color("#747b7a"))
+	for side in [-1, 1]:
+		var leaf_x: float = 1.0 + side * .47
+		_box("Door frame rail", Vector3(.91, .16, .12), Vector3(leaf_x, .33, -6.51), DARK)
+		_box("Door frame rail", Vector3(.91, .09, .12), Vector3(leaf_x, 2.40, -6.51), DARK)
+		for edge in [-1, 1]:
+			_box("Door frame stile", Vector3(.052, 2.10, .12), Vector3(leaf_x + edge * .428, 1.38, -6.51), DARK)
+		_glass(Vector3(leaf_x, 1.40, -6.50), Vector3(.82, 1.98, .045))
+		var handle_x: float = 1.0 + side * .12
+		var steel := Color("#b9c0ba")
+		for y in [1.03, 1.45]:
+			_box("Door pull mount", Vector3(.042, .046, .10), Vector3(handle_x, y, -6.61), steel)
+		_box("Door pull", Vector3(.047, .46, .055), Vector3(handle_x, 1.24, -6.68), steel)
+	_box("Entrance mat", Vector3(1.56, .02, .86), Vector3(1, .062, -7.12), DARK)
 
 func _fit_pickup_window() -> void:
 	var metal := Color("#6b7978")
