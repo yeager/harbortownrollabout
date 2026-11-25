@@ -4,6 +4,7 @@ In-game renders from Harbor Town Rollabout. Select a vehicle to open its full-si
 
 - [A tractor](a-tractor.jpg)
 - [Ambulance](ambulance.jpg)
+- [Ambulance helicopter on the hospital roof](ambulance-helicopter.jpg)
 - [Bicycle](bicycle.jpg)
 - [Blue traffic sedan](blue-traffic-sedan.jpg)
 - [City bus · Route 74 to Sickla Udde](city-bus-74.jpg)
@@ -19,6 +20,7 @@ In-game renders from Harbor Town Rollabout. Select a vehicle to open its full-si
 - [Electric sedan](electric-sedan.jpg)
 - [Farm tractor](farm-tractor.jpg)
   · [Snow plough in winter](farm-tractor-winter.jpg)
+  · [Spreading grit and salt](farm-tractor-spreader.jpg)
 - [Fire engine](fire-engine.jpg)
 - [Food truck serving](food-truck-serving.jpg)
 - [Food truck](food-truck.jpg)
@@ -44,6 +46,7 @@ In-game renders from Harbor Town Rollabout. Select a vehicle to open its full-si
   · [Headlights at night](sport-quattro-night.jpg)
   · [Rear view](sport-quattro-rear.jpg)
 - [SUV](suv.jpg)
+  · [Driving-school car at the practice course](driving-school-car.jpg)
 - [Taxi](taxi.jpg)
 - [Track sports car](track-sports-car.jpg)
 - [Tracked excavator](tracked-excavator.jpg)
