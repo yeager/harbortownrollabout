@@ -5209,6 +5209,14 @@ func _build_lampposts() -> void:
 			nut.position = p + Vector3(anchor.x, .084, anchor.y)
 			add_child(nut)
 		var yaw := atan2(inward.x, inward.z)
+		var hatch := _make_box("Lamp service hatch gasket", Vector3(.081, .236, .024),
+			p + Vector3.UP * .69 + inward * .074, Color("#222d2d"))
+		hatch.rotation.y = yaw
+		_make_box("Lamp service hatch", Vector3(.071, .218, .015),
+			Vector3(0, 0, .015), Color.WHITE, false, hatch).material_override = post_mesh.material
+		for screw_y in [-.085, .085]:
+			_make_box("Lamp service hatch screw", Vector3(.013, .013, .006),
+				Vector3(0, screw_y, .023), Color.WHITE, false, hatch).material_override = nut_finish
 		var arm := MeshInstance3D.new()
 		arm.name = "Lamp arm"
 		arm.mesh = arm_mesh
