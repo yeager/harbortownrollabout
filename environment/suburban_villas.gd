@@ -239,14 +239,26 @@ func _grounds(lot: Node3D, index: int) -> void:
 			var x: float = span.x + .16 + .37 * i
 			_bulb(lot.to_global(Vector3(x, .70 - .06 * sin(i * .63), 8.48)), _house_light(index, i))
 		world.roadside_solids.append(AABB(lot.to_global(Vector3(span.x, -.45, 8.34)), Vector3(span.y - span.x, 1.55, .16)))
-	for bed_x in [-4.6, 1.0]:
-		_box(lot, "Flower bed mulch", Vector3(2.46, .16, .94), Vector3(bed_x, .09, 1.03), Color("#503b2c"))
-		_box(lot, "Bed edging", Vector3(2.52, .13, .10), Vector3(bed_x, .115, 1.53), TIMBER)
-		for i in 8:
-			var x: float = bed_x + (i - 3.5) * .28
-			var z := 1.19 + .20 * sin(i * 2.46)
+	var bed_widths := [Vector2(2.60, 1.87), Vector2(2.17, 2.80), Vector2(2.98, 2.44), Vector2(2.28, 1.66)][index] as Vector2
+	var flowers: Array = [
+		[Color("#e4a0b9"), Color("#fff1da")],
+		[Color("#ffd574"), Color("#e59a4b")],
+		[Color("#9c8ad2"), Color("#d6b7e9")],
+		[Color("#e89978"), Color("#f8edce")]
+	][index]
+	for side in 2:
+		var bed_x := -4.6 if side == 0 else 1.0
+		var width := bed_widths[side]
+		var depth := .80 + .12 * ((index + side) % 3)
+		var bed_z := .55 + depth * .5
+		_box(lot, "Flower bed mulch", Vector3(width, .16, depth), Vector3(bed_x, .09, bed_z), Color("#503b2c"))
+		_box(lot, "Bed edging", Vector3(width + .06, .13, .10), Vector3(bed_x, .115, bed_z + depth * .5), TIMBER)
+		var count := roundi(width / .31)
+		for plant_index in count:
+			var x := bed_x + ((plant_index + .5) / count - .5) * width
+			var z := bed_z + .16 * sin(plant_index * 2.46)
 			_plant(lot, Vector3(x, .34, z), Vector3(.32, .40, .32), Color("#4d7047"))
-			var petal: Color = [Color("#d68fba"), Color("#ffd574"), Color("#c790d9")][(i + index) % 3]
+			var petal: Color = flowers[(plant_index / 2) % 2]
 			_plant(flower_heads, lot.to_global(Vector3(x, .58, z)), Vector3(.20, .13, .21), petal)
 	for i in 5:
 		_plant(lot, Vector3(-6.6 + i * .54, .40, 7.72), Vector3(1.0, .80 + .15 * sin(i), .83), Color("#50704b"))
