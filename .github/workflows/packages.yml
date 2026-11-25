@@ -89,7 +89,7 @@ jobs:
           export XDG_DATA_HOME="$RUNNER_TEMP/game-graphics-test"
           mkdir -p "$XDG_DATA_HOME"
           cd export/linux
-          LIBGL_ALWAYS_SOFTWARE=1 xvfb-run -a ./harbortown --resolution 800x600 -- --check-startup 2>&1 | tee "$RUNNER_TEMP/game-graphics.log"
+          LIBGL_ALWAYS_SOFTWARE=1 xvfb-run -a ./harbortown --audio-driver Dummy --resolution 800x600 -- --check-startup 2>&1 | tee "$RUNNER_TEMP/game-graphics.log"
           grep -Fx 'Harbortown main menu ready.' "$RUNNER_TEMP/game-graphics.log"
           # The compatibility renderer reports these texture cleanup messages after a successful startup.
           if grep -E '^(SCRIPT )?ERROR:' "$RUNNER_TEMP/game-graphics.log" |
