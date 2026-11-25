@@ -6372,7 +6372,7 @@ func _update_traffic(delta: float) -> void:
 		var turn := 0.0
 		if not walker.visible and not boating and tram_mode == 0 and not operating_excavator and ambulance.visible:
 			turn = steering
-			if bus_merge_time > 0 and absf(turn) < .12:
+			if bus_merge_time > 0 and speed >= -.12 and absf(turn) < .12:
 				turn = -1.0
 		driven_turn_signals.advance(turn, delta, calm_mode or steady_player_lights)
 	if not operating_excavator:
@@ -6408,7 +6408,7 @@ func _update_traffic(delta: float) -> void:
 			clearance=minf(clearance,_traffic_gap(item,casualty.position,Vector2(2.1,.9)))
 		if ambulance.visible:
 			clearance=minf(clearance,_traffic_gap(item,ambulance.position,player_size))
-			if bus_merge_time > 0 and driven_turn_signals.direction < 0 and actor.basis.z.dot(ambulance.basis.z) > .85 and ambulance.to_local(actor.position).z > player_half_size.y:
+			if bus_merge_time > 0 and speed >= -.12 and driven_turn_signals.direction < 0 and actor.basis.z.dot(ambulance.basis.z) > .85 and ambulance.to_local(actor.position).z > player_half_size.y:
 				var merge_center := ambulance.position-ambulance.basis.x*2.0
 				clearance=minf(clearance,_traffic_gap(item,merge_center,player_size)-3.0)
 		for i in parked_cars.size():

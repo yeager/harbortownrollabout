@@ -433,6 +433,17 @@ func check_departure_indicator(game: Node) -> bool:
 	if arrow.visible or lamps.any(func(lamp: MeshInstance3D): return lamp.visible):
 		printerr("Departure lights did not blink together while waiting")
 		return false
+	var departure_time: float = game.bus_merge_time
+	game.speed = -1.0
+	game._update_traffic(.1)
+	if not game.bus_departure_pending or game.bus_merge_time != departure_time or game.driven_turn_signals.direction != 0:
+		printerr("Reversing started or cancelled the bus departure")
+		return false
+	game.speed = 0.0
+	game._update_traffic(.1)
+	if game.driven_turn_signals.direction != -1 or not arrow.visible:
+		printerr("The departure signal did not resume after reversing")
+		return false
 	game.speed = 2.0
 	for tick in 60:
 		game._update_traffic(.1)
