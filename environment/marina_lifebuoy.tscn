@@ -29,6 +29,32 @@ outer_radius = 0.38
 rings = 32
 ring_segments = 12
 
+[sub_resource type="Shader" id="GrabLineFinish"]
+code = "shader_type spatial;
+varying vec3 rope_point;
+void vertex() {
+	rope_point = VERTEX;
+	float angle = atan(VERTEX.z, VERTEX.x);
+	float span = .5 + .5 * cos(4.0 * angle);
+	VERTEX.xz += normalize(VERTEX.xz) * mix(-.027, .037, span);
+	VERTEX.y -= .008 + .015 * span;
+}
+void fragment() {
+	float strands = .5 + .5 * sin(atan(rope_point.z, rope_point.x) * 144.0 + rope_point.y * 400.0);
+	ALBEDO = mix(vec3(.43, .37, .25), vec3(.76, .69, .52), strands);
+	ROUGHNESS = .94;
+}"
+
+[sub_resource type="ShaderMaterial" id="GrabLineMaterial"]
+shader = SubResource("GrabLineFinish")
+
+[sub_resource type="TorusMesh" id="GrabLine"]
+material = SubResource("GrabLineMaterial")
+inner_radius = 0.361
+outer_radius = 0.379
+rings = 80
+ring_segments = 8
+
 [sub_resource type="CylinderMesh" id="Pole"]
 material = SubResource("Metal")
 top_radius = 0.045
@@ -59,6 +85,10 @@ mesh = SubResource("Pole")
 position = Vector3(0, 1.13, -0.12)
 rotation = Vector3(1.5708, 0, 0)
 mesh = SubResource("Ring")
+
+[node name="Grab line" type="MeshInstance3D" parent="Life ring"]
+extra_cull_margin = 0.05
+mesh = SubResource("GrabLine")
 
 [node name="Foot plate" type="MeshInstance3D" parent="."]
 position = Vector3(0, 0.0175, 0)
