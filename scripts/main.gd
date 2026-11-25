@@ -3442,6 +3442,17 @@ func _build_canal_bridge(z: float, asphalt: Color, rail_mesh: CylinderMesh) -> v
 				var anchor := _make_box("Bridge railing anchor", Vector3(.028, .019, .028),
 					foot + along * offset + up * .032, Color("#909a9b"))
 				anchor.rotation.z = slope
+	for end in [-1, 1]:
+		var x: float = HIGH_BRIDGE_X.front() if end < 0 else HIGH_BRIDGE_X.back()
+		for side in [-1, 1]:
+			var hub := Vector3(x, _bridge_rise(x, z) + .78, z + side * 5.5)
+			var previous := hub + Vector3.UP * .26
+			for i in range(1, 13):
+				var angle := PI * i / 12.0
+				var point := hub + Vector3(end * sin(angle), cos(angle), 0) * .26
+				_add_moored_round_fitting(self, "Bridge handrail return", previous, point,
+					rail_mesh.top_radius, rail_mesh.material)
+				previous = point
 	var concrete := _material(Color("#918d83"), .91)
 	var bearing_finish := _material(Color("#354146"), .61)
 	for bank_x: float in [54.40, 87.35]:
