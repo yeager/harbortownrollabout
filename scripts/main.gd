@@ -1446,6 +1446,9 @@ func _drive(delta: float) -> void:
 		throttle = 0.0
 	if _movement_pressed(KEY_A): steer_input = -1.0
 	if _movement_pressed(KEY_D): steer_input = 1.0
+	if not _world_controls_available():
+		throttle = 0.0
+		steer_input = 0.0
 	var road_cover := _road_coverage()
 	var road_snow := road_cover.x * (1.0-.55*road_cover.y)
 	var winter_tyres: bool = VEHICLE_SCENES_ALL[vehicle_index] in winter_tyre_models

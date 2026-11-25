@@ -59,6 +59,17 @@ func verify() -> void:
 		printerr("Mouse pedals responded while the phone was open")
 		quit(1)
 		return
+	var parked_pose: Transform3D = game.ambulance.transform
+	for direction in ["ui_up", "ui_down"]:
+		Input.action_press(direction)
+		Input.action_press("ui_left")
+		game._drive(.25)
+		Input.action_release("ui_left")
+		Input.action_release(direction)
+		if not game.ambulance.transform.is_equal_approx(parked_pose) or not is_zero_approx(game.speed):
+			printerr("Road controls moved the car while the phone was open")
+			quit(1)
+			return
 	game.phone.toggle()
 	game.shops.shop_card.show()
 	game._unhandled_input(pedal)
