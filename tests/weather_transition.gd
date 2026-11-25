@@ -313,6 +313,10 @@ func check_transition() -> void:
 			printerr("Fountain nozzles or winter covers are missing")
 			quit(1)
 			return
+		if fountain.nozzle_lights.get_child_count() != 16 or fountain.nozzle_lights.visible != (summer or season == 4):
+			printerr("Fountain nozzle lighting is wrong in season ", season)
+			quit(1)
+			return
 		for jet in fountain.jets:
 			if jet.emitting != summer or jet.visible != summer:
 				printerr("Fountain spray is wrong in season ", season)

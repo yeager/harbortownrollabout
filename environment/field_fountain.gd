@@ -3,6 +3,7 @@ extends Node3D
 # Fält, Thomas Nordström (2003). https://sv.wikipedia.org/wiki/Fält_(fontän)
 var jets: Array[CPUParticles3D] = []
 var covers := Node3D.new()
+var nozzle_lights := Node3D.new()
 var spray_audio := AudioStreamPlayer3D.new()
 var season := -1
 var elapsed := 0.0
@@ -21,6 +22,7 @@ func place(parent: Node3D, mesh: Mesh, position_local: Vector3) -> void:
 
 func _ready() -> void:
 	add_child(covers)
+	add_child(nozzle_lights)
 	var water := preload("res://audio/fountain_water.wav").duplicate() as AudioStreamWAV
 	water.loop_mode = AudioStreamWAV.LOOP_FORWARD
 	water.loop_end = roundi(water.get_length() * water.mix_rate)
@@ -46,6 +48,16 @@ func _ready() -> void:
 	var glass := finish(Color(.68,.9,.96,.36),.15)
 	glass.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
 	lid.material = glass
+	var ring := TorusMesh.new()
+	ring.inner_radius = .45
+	ring.outer_radius = .48
+	ring.rings = 24
+	ring.ring_segments = 6
+	var diffuser := finish(Color("#77b1a7"), .32)
+	diffuser.emission_enabled = true
+	diffuser.emission = Color("#83d9cd")
+	diffuser.emission_energy_multiplier = .8
+	ring.material = diffuser
 	var drop := SphereMesh.new()
 	drop.radius = .034
 	drop.height = .13
@@ -57,6 +69,7 @@ func _ready() -> void:
 			var base := Vector3((column-1.5)*2.5,.045,(row-1.5)*2.5)
 			place(self,slab,base)
 			place(self,dome,base+Vector3.UP*.03)
+			place(nozzle_lights, ring, base + Vector3.UP * .041)
 			place(covers,lid,base+Vector3.UP*.03)
 			var jet := CPUParticles3D.new()
 			jet.emitting = false
@@ -78,6 +91,7 @@ func set_season(value: int) -> void:
 	season = value
 	var spraying := value == 2
 	covers.visible = value == 4
+	nozzle_lights.visible = spraying or covers.visible
 	set_process(spraying)
 	if spraying:
 		elapsed = 0.0
