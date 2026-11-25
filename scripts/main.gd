@@ -3634,18 +3634,21 @@ func _build_marina(rail_metal: Material) -> void:
 		_make_box("Boardwalk pile", Vector3(.14, 1.80, .14), Vector3(59.08, -.54, post_z), Color("#6b5948"))
 	for height in [-.22, .25]:
 		_make_box("Boardwalk rail", Vector3(.09, .11, rail_end-south_end), Vector3(59.08, height, (south_end+rail_end)*.5), Color("#877461"))
-	for i in range(8):
-		var post_z := rail_end+i*2.94
+	var rope_finish := _material(Color("#c9b38e"), .95, false, "weave")
+	var barrier_rope := _boardwalk_rope_mesh(rope_finish)
+	for i in 8:
+		var post_z := rail_end + i * 2.94
 		support_positions.append(post_z)
-		_make_box("Timber bollard",Vector3(.14,1.70,.14),Vector3(59.08,-.53,post_z),Color("#6b5948"))
-		if i<7:
-			for segment in 6:
-				var a := segment/6.
-				var b := (segment+1)/6.
-				var start := Vector3(59.08,.22-.60*a*(1-a),post_z+2.94*a)
-				var end := Vector3(59.08,.22-.60*b*(1-b),post_z+2.94*b)
-				var rope_span := _make_box("Hemp rope",Vector3(.032,.032,start.distance_to(end)),(start+end)*.5,Color("#c9b38e"))
-				rope_span.look_at(end)
+		_make_box("Timber bollard", Vector3(.14, 1.70, .14),
+			Vector3(59.08, -.53, post_z), Color("#6b5948"))
+		_add_moored_round_fitting(self, "Rope guide ferrule",
+			Vector3(59.08, .22, post_z - .078), Vector3(59.08, .22, post_z + .078), .033, rail_metal)
+		if i < 7:
+			var span := MeshInstance3D.new()
+			span.name = "Boardwalk hemp rope"
+			span.mesh = barrier_rope
+			span.position = Vector3(59.08, .22, post_z)
+			add_child(span)
 	var boardwalk_edge := Color("#79634f")
 	var edge_sections := ceili(promenade_length / 3.6)
 	var edge_span := promenade_length / edge_sections
@@ -4020,6 +4023,32 @@ func _build_marina(rail_metal: Material) -> void:
 		moorings.append({"boat":boat, "buoy":buoy, "eye":eye, "cleats":cleats, "bow_line":bow_line, "lines":lines, "phase":berth*1.7,
 			"heading":boat.rotation.y, "hull_bounds":hull_bounds})
 	_update_moorings(0.0)
+
+func _boardwalk_rope_mesh(finish: Material) -> ArrayMesh:
+	const LENGTH := 2.94
+	const SAG := .60
+	const SIDES := 10
+	const SEGMENTS := 18
+	var surface := SurfaceTool.new()
+	surface.begin(Mesh.PRIMITIVE_TRIANGLES)
+	surface.set_material(finish)
+	for station in SEGMENTS + 1:
+		var t := float(station) / SEGMENTS
+		var center := Vector3(0, -SAG * t * (1.0 - t), LENGTH * t)
+		var across := Vector3(0, LENGTH, SAG * (1.0 - 2.0 * t)).normalized()
+		for side in SIDES:
+			var angle := TAU * side / SIDES
+			var normal := Vector3.RIGHT * cos(angle) + across * sin(angle)
+			surface.set_normal(normal)
+			surface.add_vertex(center + normal * .019)
+	for station in SEGMENTS:
+		for side in SIDES:
+			var first := station * SIDES + side
+			var next := station * SIDES + (side + 1) % SIDES
+			for index in [first, first + SIDES, next, next, first + SIDES, next + SIDES]:
+				surface.add_index(index)
+	return surface.commit()
+
 
 func _add_moored_windscreen_trim(boat: Node3D, start: Vector3, end: Vector3, color: Color) -> void:
 	var span := end - start
