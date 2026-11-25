@@ -159,6 +159,7 @@ func check_route() -> void:
 	TranslationServer.set_locale("sv")
 	await process_frame
 	var stops := ["TORGET", "SJÖSTADSSKOLAN", "SMÅBÅTSHAMNEN", "VÅRDCENTRALEN", "VÄSTRA TORGET", "SICKLA UDDE"]
+	var clear_road_pose := Transform3D(Basis(Vector3.UP, -PI * .5), Vector3(-35, 0, 0))
 	var starting_balance: int = game.wallet
 	for leg in range(stops.size() + 1):
 		if leg == 1:
@@ -184,7 +185,26 @@ func check_route() -> void:
 				printerr("Missing resume button on the main menu")
 				quit(1)
 				return
+			Input.action_press("ui_up")
 			resume.pressed.emit()
+			var resumed_pose: Transform3D = game.ambulance.transform
+			game.ambulance.transform = clear_road_pose
+			game._drive(.1)
+			Input.action_release("ui_up")
+			if not is_zero_approx(game.speed):
+				printerr("The bus accelerated using a key held while resuming")
+				quit(1)
+				return
+			game._drive(.01)
+			Input.action_press("ui_up")
+			game._drive(.1)
+			Input.action_release("ui_up")
+			if game.speed <= 0.0:
+				printerr("The resumed bus did not respond to a fresh accelerator press")
+				quit(1)
+				return
+			game.ambulance.transform = resumed_pose
+			game.speed = 0.0
 			if not game.cockpit_view or game.road_driver.visible or not game.cockpit_look.is_zero_approx():
 				printerr("The saved bus did not resume in driver view")
 				quit(1)
