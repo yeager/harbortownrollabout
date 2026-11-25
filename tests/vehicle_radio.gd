@@ -260,6 +260,33 @@ func check_controls() -> void:
 		fail("Traffic or radio did not recover when the phone instruction finished")
 		return
 	game.phone.handset.hide()
+	var toggle_keys: HBoxContainer = game.find_child("RadioToggleKeys", true, false)
+	var next_keys: HBoxContainer = game.find_child("RadioNextTrackKeys", true, false)
+	toggle_keys.get_child(2).pressed.emit()
+	next_keys.get_child(2).pressed.emit()
+	phase = "done"
+	game.queue_free()
+	await process_frame
+	game = load("res://main.tscn").instantiate()
+	root.add_child(game)
+	game._start_game()
+	if game.radio_keys != [KEY_B, KEY_M] or not game.radio_button.text.ends_with(" · B") or not game.next_song_button.text.ends_with(" · M"):
+		fail("Saved radio choices and button labels did not restore")
+		return
+	var restored_song: String = game.radio_track
+	press(KEY_J)
+	press(KEY_N)
+	if not game.radio.playing or game.radio_track != restored_song:
+		fail("An old radio key remained active after rebinding")
+		return
+	press(KEY_M)
+	if game.radio_track == restored_song:
+		fail("The saved next-song key did not change tracks")
+		return
+	press(KEY_B)
+	if game.radio.playing:
+		fail("The saved radio key did not turn off the radio")
+		return
 	print("Radio rotation, language changes, pause, vehicle audio and speech attenuation verified.")
 	phase = "done"
 	game._finish_quit()

@@ -10531,6 +10531,7 @@ func _build_overlay() -> void:
 		pages[1].add_child(row)
 	for index in RADIO_KEYS.size():
 		var row := HBoxContainer.new()
+		row.name = "RadioToggleKeys" if index == 0 else "RadioNextTrackKeys"
 		row.alignment = BoxContainer.ALIGNMENT_CENTER
 		var label := Label.new()
 		label.text = ["Radio key", "Next song key"][index]
