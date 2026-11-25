@@ -3223,9 +3223,24 @@ func _build_waterfront() -> void:
 			rail_spans = [Vector2(span.x, FLOATING_DOCK_ACCESS_Z - .86),
 				Vector2(FLOATING_DOCK_ACCESS_Z + .86, span.y)]
 		for rail_span: Vector2 in rail_spans:
-			for z in range(ceili(rail_span.x),ceili(rail_span.y),3):
-				_make_box("Kajstolpe",Vector3(.12,.86,.12),Vector3(87.5,.40,z),Color("#525d60"))
-			_make_box("Handledare",Vector3(.065,.07,rail_span.y-rail_span.x),Vector3(87.5,.82,(rail_span.x+rail_span.y)*.5),Color("#626c6e"))
+			var rail_start := rail_span.x + .07
+			var rail_end := rail_span.y - .07
+			var intervals := ceili((rail_end - rail_start) / 2.7)
+			for i in intervals + 1:
+				var z := lerpf(rail_start, rail_end, float(i) / intervals)
+				var post := _make_box("Quay railing post", Vector3(.077, .82, .078),
+					Vector3(87.5, .393, z), Color.WHITE)
+				post.material_override = metal
+				var base := _make_box("Quay railing foot plate", Vector3(.18, .023, .16),
+					Vector3(87.5, -.023, z), Color.WHITE)
+				base.material_override = metal
+				for offset_z in [-.053, .053]:
+					_make_box("Quay railing anchor", Vector3(.025, .014, .025),
+						Vector3(87.5, -.005, z + offset_z), Color("#858f91"))
+			_add_moored_round_fitting(self, "Quay handrail",
+				Vector3(87.5, .82, rail_start), Vector3(87.5, .82, rail_end), .036, metal)
+			_add_moored_round_fitting(self, "Quay lower rail",
+				Vector3(87.5, .33, rail_start), Vector3(87.5, .33, rail_end), .021, metal)
 	var balcony_glass := StandardMaterial3D.new()
 	balcony_glass.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
 	balcony_glass.albedo_color = Color(.53,.72,.72,.36)
