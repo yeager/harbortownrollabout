@@ -5160,6 +5160,20 @@ func _build_lampposts() -> void:
 	lens_mesh.radial_segments = 24
 	lens_mesh.rings = 8
 	lens_mesh.material = lamp_glass
+	var post_mesh := CylinderMesh.new()
+	post_mesh.top_radius = .048
+	post_mesh.bottom_radius = .08
+	post_mesh.height = 4.43
+	post_mesh.radial_segments = 16
+	post_mesh.rings = 0
+	post_mesh.material = housing_mesh.material
+	var arm_mesh := CylinderMesh.new()
+	arm_mesh.top_radius = .036
+	arm_mesh.bottom_radius = .054
+	arm_mesh.height = .81
+	arm_mesh.radial_segments = 16
+	arm_mesh.rings = 0
+	arm_mesh.material = housing_mesh.material
 	for p in sites:
 		var on_course := p in course_lamps
 		p.y = _surface_height(p.x,p.z)
@@ -5168,11 +5182,20 @@ func _build_lampposts() -> void:
 		if on_course:
 			inward = Vector3.BACK if p.z < PRACTICE_YARD.get_center().y else Vector3.FORWARD
 		var post_color := Color("#45524e")
-		_make_roadside_solid("Lamp post", Vector3(.16, 4.5, .16), p + Vector3.UP * 2.25, post_color, false)
+		var post := MeshInstance3D.new()
+		post.name = "Lamp post"
+		post.mesh = post_mesh
+		post.position = p + Vector3.UP * 2.215
+		add_child(post)
+		roadside_solids.append(AABB(p - Vector3(.08, 2.0, .08), Vector3(.16, 6.5, .16)))
 		_make_box("Lamp post foot", Vector3(.28, .075, .28), p + Vector3.UP * .038, post_color.darkened(.15), false)
 		var yaw := atan2(inward.x, inward.z)
-		var arm := _make_box("Lamp arm", Vector3(.115, .115, .86), p + Vector3.UP * 4.35 + inward * .34, post_color, false)
-		arm.rotation.y = yaw
+		var arm := MeshInstance3D.new()
+		arm.name = "Lamp arm"
+		arm.mesh = arm_mesh
+		arm.position = p + Vector3.UP * 4.35 + inward * .36
+		arm.basis = Basis(Vector3.UP, yaw) * Basis(Vector3.RIGHT, PI * .5)
+		add_child(arm)
 		var fixture := p + Vector3.UP * 4.32 + inward * .73
 		var housing := MeshInstance3D.new()
 		housing.name = "Lamp housing"
