@@ -24,6 +24,7 @@ func configure(route, landmarks: PackedVector3Array, captions: Array) -> void:
 	for i in stops.size():
 		var pin := Button.new()
 		pin.toggle_mode = true
+		pin.focus_mode = Control.FOCUS_CLICK
 		pin.text = str(pin_number(i))
 		pin.tooltip_text = tr(captions[i])
 		pin.accessibility_name = tr(captions[i])

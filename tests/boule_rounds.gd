@@ -76,6 +76,23 @@ func check_rounds() -> void:
 				printerr("Number key selected the wrong map destination: ", number.keycode)
 				quit(1)
 				return
+	game.map_button.pressed.emit()
+	await process_frame
+	var last_stop: Button
+	for button: Button in dialog.find_children("*", "Button", true, false):
+		if button.text.begins_with("15 · "):
+			last_stop = button
+			break
+	if last_stop == null or last_stop.find_prev_valid_focus().get_parent() != last_stop.get_parent():
+		printerr("The last destination was not reachable through the legend's tab order")
+		quit(1)
+		return
+	var villa_pin: Button = court_pin.get_parent().get_child(14)
+	if villa_pin.focus_mode != Control.FOCUS_CLICK:
+		printerr("The map duplicates the villa destination in the keyboard tab order")
+		quit(1)
+		return
+	dialog.hide()
 	if game.map_goal != game.shops.pizzeria_entrance():
 		printerr("Destination 9 should lead to the pizzeria")
 		quit(1)
