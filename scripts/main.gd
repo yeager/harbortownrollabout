@@ -3621,18 +3621,32 @@ func _build_marina() -> void:
 		hull_material.cull_mode = BaseMaterial3D.CULL_DISABLED
 		hull.set_material(hull_material)
 		var previous: Array[Vector3] = []
-		for section in [Vector2(-2.8,.025),Vector2(-2.15,.61),Vector2(-1.25,.91),Vector2(.5,1.02),Vector2(2.55,.85)]:
-			var x: float = section.x
-			var w: float = section.y
-			var ring: Array[Vector3] = [Vector3(x,.58,-w),Vector3(x,.08,-w*.8),Vector3(x,-.18,0),Vector3(x,.08,w*.8),Vector3(x,.58,w)]
+		for section: Vector3 in [
+			Vector3(-2.8, 0, .34), Vector3(-2.54, .32, .21),
+			Vector3(-2.15, .61, .09), Vector3(-1.25, .91, 0),
+			Vector3(.5, 1.02, 0), Vector3(2.55, .85, 0),
+		]:
+			var x := section.x
+			var w := section.y
+			var rake := section.z
+			var ring: Array[Vector3] = [
+				Vector3(x, .58, -w), Vector3(x + rake * (.50 / .76), .08, -w * .8),
+				Vector3(x + rake, -.18, 0), Vector3(x + rake * (.50 / .76), .08, w * .8), Vector3(x, .58, w),
+			]
 			if not previous.is_empty():
-				for k in range(5):
-					var n := (k+1)%5
-					for point in [previous[k],ring[k],ring[n],previous[k],ring[n],previous[n]]:
+				for k in 5:
+					var n := (k + 1) % 5
+					hull.set_smooth_group(0 if k < 4 else -1)
+					for point in [previous[k], ring[n], ring[k]]:
 						hull.add_vertex(point)
-			if x == 2.55 or x == -2.8:
-				for k in range(1,4):
-					for point in [ring[0],ring[k],ring[k+1]]: hull.add_vertex(point)
+					if previous[k] != previous[n]:
+						for point in [previous[k], previous[n], ring[n]]:
+							hull.add_vertex(point)
+			if x == 2.55:
+				hull.set_smooth_group(-1)
+				for k in range(1, 4):
+					for point in [ring[0], ring[k], ring[k + 1]]:
+						hull.add_vertex(point)
 			previous = ring
 		hull.generate_normals()
 		var shell := MeshInstance3D.new()
