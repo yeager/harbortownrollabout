@@ -429,7 +429,7 @@ var quattro_speed_needle: Node3D
 var player_wheels: Array[Node3D] = []
 var player_brake_lens: StandardMaterial3D
 var driving_controls := preload("res://scripts/driving_controls.gd").new()
-var release_walk_keys := false
+var release_pedal_keys := false
 var mouse_steering := 0.0
 var mouse_gas := false
 var mouse_brake := false
@@ -892,8 +892,9 @@ func _process(delta: float) -> void:
 		shops.advance_grill_sign(delta, calm_mode)
 		_update_fire_station_door(delta)
 		var tram_controls := tram_mode == 2 and _world_controls_available()
-		var tram_gas := tram_controls and (mouse_gas or _movement_pressed(KEY_W) or Input.is_action_pressed("ui_up"))
-		var tram_brake := tram_controls and (mouse_brake or brake_pedal_held or _movement_pressed(KEY_S) or Input.is_action_pressed("ui_down"))
+		var tram_keys := tram_controls and _keyboard_pedals_available()
+		var tram_gas := tram_controls and (mouse_gas or (tram_keys and (Input.is_action_pressed("ui_up") or _movement_pressed(KEY_W))))
+		var tram_brake := tram_controls and (mouse_brake or brake_pedal_held or (tram_keys and (Input.is_action_pressed("ui_down") or _movement_pressed(KEY_S))))
 		tram.advance(delta, tram_mode == 2, tram_gas, tram_brake)
 		if tram_mode == 2 and tram_driver_exit_requested and tram.open_station() >= 0:
 			_change_seat()
@@ -1309,8 +1310,9 @@ func _update_patrol(delta: float) -> void:
 
 func _drive_launch(delta: float) -> void:
 	var controls_available := _world_controls_available()
-	var gas := controls_available and (mouse_gas or Input.is_action_pressed("ui_up") or _movement_pressed(KEY_W))
-	var brake := controls_available and (mouse_brake or brake_pedal_held or Input.is_action_pressed("ui_down") or _movement_pressed(KEY_S))
+	var pedal_keys := controls_available and _keyboard_pedals_available()
+	var gas := controls_available and (mouse_gas or (pedal_keys and (Input.is_action_pressed("ui_up") or _movement_pressed(KEY_W))))
+	var brake := controls_available and (mouse_brake or brake_pedal_held or (pedal_keys and (Input.is_action_pressed("ui_down") or _movement_pressed(KEY_S))))
 	var turn := 0.0
 	if controls_available:
 		turn = Input.get_axis("ui_left","ui_right")
@@ -1382,7 +1384,13 @@ func _launch_obstacle_overlap(position_on_water: Vector3, yaw: float) -> float:
 	var ferry_footprint := Rect2(ferry_bounds.position.x, ferry_bounds.position.z, ferry_bounds.size.x, ferry_bounds.size.z)
 	return overlap + ferry_footprint.intersection(hull).get_area()
 
-func _walk_pedal_pressed() -> bool:
+func _keyboard_pedals_available() -> bool:
+	if not release_pedal_keys:
+		return true
+	release_pedal_keys = _keyboard_pedal_pressed()
+	return false
+
+func _keyboard_pedal_pressed() -> bool:
 	return Input.is_action_pressed("ui_up") or Input.is_action_pressed("ui_down") or _movement_pressed(KEY_W) or _movement_pressed(KEY_S)
 
 func _parcel_load() -> Vector2:
@@ -1438,8 +1446,7 @@ func _drive(delta: float) -> void:
 	if is_zero_approx(steer_input): steer_input = mouse_steering
 	if _movement_pressed(KEY_W): throttle = 1.0
 	if _movement_pressed(KEY_S): throttle = -1.0
-	if release_walk_keys:
-		release_walk_keys = _walk_pedal_pressed()
+	if not _keyboard_pedals_available():
 		throttle = 0.0
 	if mouse_gas: throttle = 1.0
 	if mouse_brake or brake_pedal_held: throttle = -1.0
@@ -5381,7 +5388,8 @@ func _drive_excavator(delta: float) -> void:
 	if controls_available:
 		steer = Input.get_axis("ui_left","ui_right") + int(_movement_pressed(KEY_D))-int(_movement_pressed(KEY_A))
 		if is_zero_approx(steer): steer = mouse_steering
-		drive = Input.get_axis("ui_down","ui_up") + int(_movement_pressed(KEY_W))-int(_movement_pressed(KEY_S))
+		if _keyboard_pedals_available():
+			drive = Input.get_axis("ui_down","ui_up") + int(_movement_pressed(KEY_W))-int(_movement_pressed(KEY_S))
 		if mouse_gas: drive = 1
 		if mouse_brake or brake_pedal_held: drive = -1
 	driving_controls.set_controls(steer, drive > 0, drive < 0, drive < 0)
@@ -5649,7 +5657,7 @@ func _change_seat() -> void:
 			var parked := parked_cars[next]
 			await _swing_shopper(parked,true)
 			await _step_through_shopper(parked,walker.position,true)
-		release_walk_keys = _walk_pedal_pressed()
+		release_pedal_keys = _keyboard_pedal_pressed()
 		_change_mission_vehicle(next)
 		sound_on = parked_sound_settings[next]
 		lights_on = parked_light_settings[next]
@@ -9671,8 +9679,8 @@ func _build_ui() -> void:
 		if phone.handset.is_visible_in_tree():
 			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 			_release_mouse_pedals()
-		elif mode == "playing" and not walker.visible and not (boating or operating_excavator or tram_mode != 0):
-			release_walk_keys = _walk_pedal_pressed()
+		elif mode == "playing" and (boating or operating_excavator or tram_mode == 2 or not walker.visible):
+			release_pedal_keys = _keyboard_pedal_pressed()
 	)
 	phone.take_job.pressed.connect(func():
 		if leave_practice_button.visible:

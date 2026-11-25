@@ -177,11 +177,13 @@ func verify() -> void:
 	world.phone.toggle()
 	Input.action_press("ui_up")
 	world._process(.25)
-	Input.action_release("ui_up")
 	world.phone.toggle()
+	world._process(.25)
+	Input.action_release("ui_up")
 	if train.velocity > velocity_before:
-		fail("The tram accelerated with the phone open")
+		fail("The tram accelerated with the phone open or before the accelerator was released")
 		return
+	world._process(.01)
 	velocity_before = train.velocity
 	Input.action_press("ui_up")
 	world._process(.25)

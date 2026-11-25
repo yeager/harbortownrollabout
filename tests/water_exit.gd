@@ -137,9 +137,10 @@ func check_exits() -> void:
 	Input.action_press("ui_up")
 	Input.action_press("ui_left")
 	game._drive_launch(.25)
-	Input.action_release("ui_up")
 	Input.action_release("ui_left")
 	game.phone.toggle()
+	game._drive_launch(.25)
+	Input.action_release("ui_up")
 	if not game.launch.transform.is_equal_approx(phone_pose) or not is_zero_approx(game.launch_speed):
 		printerr("Motorboat responded to driving keys while the phone was open")
 		quit(1)
