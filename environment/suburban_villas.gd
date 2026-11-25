@@ -227,14 +227,17 @@ func _grounds(lot: Node3D, index: int) -> void:
 		_box(lot, "Granite driveway edging", Vector3(.13, .09, slab.z - .7), Vector3(x, .24, (front + back) * .5 - .35), Color("#a0998c"))
 	var path: MeshInstance3D = world._make_driving_surface("Garden path", Vector3(1.28, .07, front - 1.42), Vector3(-1.65, .225, (front + 1.42) * .5), Color.WHITE, false, lot)
 	path.material_override = world.sidewalk_finish
+	var fence_paint: Color = [TRIM, Color("#b48d58"), Color("#66786a"), Color("#c4b5a6")][index]
+	var picket_width: float = [.093, .115, .078, .135][index]
+	var picket_height: float = [.73, .80, .87, .75][index]
 	# Gaps in front of the driveway and path leave both open to the street.
 	for span in [Vector2(-8.1, -2.60), Vector2(-.70, 3.30), Vector2(7.32, 8.45)]:
 		var count := ceili((span.y - span.x) / .30)
 		for i in count:
 			var x := lerpf(span.x, span.y, float(i) / count)
-			_box(lot, "Garden picket", Vector3(.093, .73 + .05 * (i % 3), .06), Vector3(x, .53, 8.42), TRIM)
+			_box(lot, "Garden picket", Vector3(picket_width, picket_height + .035 * (i % 3), .06), Vector3(x, .53, 8.42), fence_paint)
 		for y in [.36, .71]:
-			_box(lot, "Garden fence rail", Vector3(span.y - span.x, .067, .076), Vector3(span.x + (span.y - span.x) * .5, y, 8.39), TRIM)
+			_box(lot, "Garden fence rail", Vector3(span.y - span.x, .067, .076), Vector3(span.x + (span.y - span.x) * .5, y, 8.39), fence_paint)
 		for i in ceili((span.y - span.x) / .37):
 			var x: float = span.x + .16 + .37 * i
 			_bulb(lot.to_global(Vector3(x, .70 - .06 * sin(i * .63), 8.48)), _house_light(index, i))
