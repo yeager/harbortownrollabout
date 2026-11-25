@@ -1087,6 +1087,8 @@ func _input(event: InputEvent) -> void:
 		if not (mouse_gas or mouse_brake or brake_pedal_held): mouse_steering = 0.0
 
 func _release_mouse_pedals() -> void:
+	if (mouse_brake or brake_pedal_held) and not (Input.is_action_pressed("ui_down") or _movement_pressed(KEY_S)):
+		brake_held = false
 	mouse_steering = 0.0
 	mouse_gas = false
 	mouse_brake = false

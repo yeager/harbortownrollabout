@@ -44,8 +44,13 @@ func verify() -> void:
 	if not is_zero_approx(game.speed):
 		quit(1)
 		return
-	game.mouse_brake = false
-	game._drive(1.0/60)
+	# Opening and closing the phone can release the pedal between physics ticks.
+	game.phone.open_button.pressed.emit()
+	if game.mouse_brake or game.brake_held:
+		printerr("Opening the phone left the mouse brake latched")
+		quit(1)
+		return
+	game.phone.toggle()
 	game.mouse_brake = true
 	for frame in 60: game._drive(1.0/60)
 	if game.speed >= 0:
