@@ -3601,6 +3601,8 @@ func _build_marina() -> void:
 	windscreen_glass.roughness = .16
 	windscreen_glass.disable_receive_shadows = true
 	windscreen_glass.cull_mode = BaseMaterial3D.CULL_DISABLED
+	var canopy_tube_material := _material(Color("#9aa4a7"), .31)
+	canopy_tube_material.metallic = .7
 	var windscreen_trim := Color("#323d43")
 	for berth in MOORING_COUNT:
 		var z := MOORING_START_Z + berth*MOORING_SPACING
@@ -3702,15 +3704,26 @@ func _build_marina() -> void:
 				if frames.size()>0:
 					var last: Array = frames.back()
 					for k in 4:
-						for pt in [last[k],arch[k],arch[k+1],last[k],arch[k+1],last[k+1]]:
+						for pt: Vector3 in [last[k],arch[k],arch[k+1],last[k],arch[k+1],last[k+1]]:
+							fabric.set_uv(Vector2(pt.x, pt.z))
 							fabric.add_vertex(pt)
 				frames.append(arch)
 			fabric.generate_normals()
 			var canopy := MeshInstance3D.new()
 			canopy.mesh = fabric.commit()
 			boat.add_child(canopy)
-			for side in [-.72,.72]:
-				_make_box("Kapellstöd",Vector3(.035,.68,.035),Vector3(.70,.93,side),Color("#909694"),false,boat)
+			for frame_index in [1, 2]:
+				var arch: Array[Vector3] = []
+				for corner: Vector3 in frames[frame_index]:
+					arch.append(corner - Vector3.UP * .024)
+				for segment in 4:
+					_add_moored_canopy_tube(boat, arch[segment], arch[segment + 1], canopy_tube_material)
+				for edge in [0, 4]:
+					var corner: Vector3 = arch[edge]
+					var foot := Vector3(corner.x + .13, .61, corner.z * .91)
+					_add_moored_canopy_tube(boat, foot, corner, canopy_tube_material)
+					_make_box("Canopy mounting plate", Vector3(.12, .034, .075), foot,
+						Color("#3d494e"), false, boat)
 		var buoy := MeshInstance3D.new()
 		var float_mesh := CapsuleMesh.new()
 		float_mesh.radius=MOORING_BUOY_RADIUS
@@ -3782,6 +3795,22 @@ func _add_moored_windscreen_trim(boat: Node3D, start: Vector3, end: Vector3, col
 	var frame := _make_box("Windscreen frame", Vector3(.031, .031, span.length() + .023),
 		(start + end) * .5, color, false, boat)
 	frame.basis = Basis.looking_at(span)
+
+func _add_moored_canopy_tube(boat: Node3D, start: Vector3, end: Vector3, material: Material) -> void:
+	var span := end - start
+	var tube := CylinderMesh.new()
+	tube.top_radius = .017
+	tube.bottom_radius = .017
+	tube.height = span.length() + .02
+	tube.radial_segments = 10
+	tube.material = material
+	var support := MeshInstance3D.new()
+	support.name = "Canopy support tube"
+	support.mesh = tube
+	support.position = (start + end) * .5
+	support.quaternion = Quaternion(Vector3.UP, span.normalized())
+	boat.add_child(support)
+
 
 func _build_quay_windsock() -> void:
 	var foot := Vector3(54.6,0,-16.5)
