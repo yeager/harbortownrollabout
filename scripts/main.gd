@@ -8255,7 +8255,7 @@ func _fit_bus_interior() -> void:
 	bus_press_time = 0
 
 func _update_bus_stop_request(delta: float) -> void:
-	if bus_press_time == 0 and (walker.visible or ambulance.position.distance_to(_mission_destination()) > 28):
+	if (walker.visible and bus_press_time < .4) or (bus_press_time == 0 and ambulance.position.distance_to(_mission_destination()) > 28):
 		return
 	bus_press_time = minf(1.2,bus_press_time+delta)
 	bus_request_arm.rotation.x = PI/2 * smoothstep(0,.4,bus_press_time) * (1-smoothstep(.65,1.2,bus_press_time))

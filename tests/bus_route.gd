@@ -315,7 +315,15 @@ func check_route() -> void:
 					quit(1)
 					return
 				game.ambulance.position = curb + Vector3.RIGHT * 15
+				game._update_bus_stop_request(.2)
+				game.walker.show()
 				game._update_bus_stop_request(.5)
+				if game.bus_stop_request.visible or button_finish.emission_energy_multiplier > 0.0:
+					printerr("A partially pressed stop button activated after the driver stepped out")
+					quit(1)
+					return
+				game.walker.hide()
+				game._update_bus_stop_request(.3)
 				if not game.bus_stop_request.is_visible_in_tree() or game.bus_request_arm.rotation.x < 1.0 or button_finish.emission_energy_multiplier <= 0.0:
 					printerr("Passengers did not signal the upcoming stop")
 					quit(1)
