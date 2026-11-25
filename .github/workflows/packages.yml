@@ -55,11 +55,12 @@ jobs:
         shell: bash
         run: |
           scenarios=(
-            player_gait profile_resume toy_shop suburban_villas
+            player_gait profile_resume toy_shop suburban_villas boule_rounds
             ferry_passenger water_exit
             junction_queue emergency_traffic traffic_turn_indicators street_parking
             street_tram city_perimeter mower_perimeter
             hospital_handoff hospital_helicopter world_name_signs
+            fire_engine_driver fire_engine_locker
             vehicle_gallery_drive kiosk_and_shopper pump_prices bus_route
             vehicle_radio weather_transition
             snow_slide workshop_tyres tractor_grit
