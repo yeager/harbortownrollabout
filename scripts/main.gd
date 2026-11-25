@@ -2037,11 +2037,12 @@ func _show_mission_reward(kind: String, cell: int, points: int, coins: int) -> v
 	reward_badge.show()
 	reward_seconds = 4.0
 
-func _reward_delivery(amount: int) -> void:
+func _reward_delivery(amount: int, save_now := true) -> void:
 	_show_mission_reward("vehicle",phone.vehicle_action,amount,amount)
 	wallet += amount
 	delivery_points += amount
-	_save_preferences()
+	if save_now:
+		_save_preferences()
 
 func _help_at_target(ice_choice := -1) -> void:
 	if operating_excavator: return
@@ -2054,10 +2055,11 @@ func _help_at_target(ice_choice := -1) -> void:
 			parked_at_target = 0
 			message = "Passengers on board." if bus_leg%2 else "Bus journey complete. You earned 15 points and 15 coins."
 			if bus_leg%2==0:
-				_reward_delivery(15)
+				_reward_delivery(15, false)
 				phone.receive(message)
 			message_timer = 3
 			_update_mission_marker()
+			_save_checkpoint()
 			_refresh_ui()
 		return
 	if vehicle_index == RECOVERY:

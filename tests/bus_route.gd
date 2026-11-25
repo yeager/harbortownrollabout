@@ -351,12 +351,16 @@ func check_route() -> void:
 					return
 			game.ambulance.position = game._mission_destination()
 			game._update_arrival(game.HELP_DURATION)
-	game._save_checkpoint()
+	# Simulate leaving without a second save after the final fare.
 	game.queue_free()
 	await process_frame
 	game = load("res://main.tscn").instantiate()
 	root.add_child(game)
 	game._resume_road_checkpoint()
+	if game.bus_leg != stops.size() or game.wallet != starting_balance + 45:
+		printerr("The last fare and its completed bus leg did not restore together")
+		quit(1)
+		return
 	if not game.bus_departure_pending or not is_equal_approx(game.bus_merge_time, game.BUS_MERGE_SECONDS):
 		printerr("A waiting bus departure was lost on resume")
 		quit(1)
