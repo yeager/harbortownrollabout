@@ -94,12 +94,27 @@ func _build_lot(index: int) -> void:
 		var top := eave + tan(pitch) * width * .5
 		_box(lot, "Brick chimney", Vector3(.71, 1.45, .62), Vector3(-.24, top - .15, -depth + 2.0), Color("#8c5141"))
 		_box(lot, "Chimney cap", Vector3(.85, .13, .76), Vector3(-.24, top + .61, -depth + 2.0), Color("#615652"))
-	# Battens on the side elevations follow the timber colour without crossing front openings.
 	for side in [-1, 1]:
-		for board in range(1, floori(depth / .36)):
-			_box(lot, "Siding batten", Vector3(.034, wall_height - .06, .045), Vector3(-1.65 + side * width * .50, wall_height * .50 + .25, -.36 * board), siding.lightened(.10))
-		_box(lot, "Side window frame", Vector3(.12, 1.16, 1.38), Vector3(-1.65 + side * (width * .5 + .023), 2.07, -depth * .73), TRIM)
-		_box(lot, "Side glazing", Vector3(.13, .94, 1.15), Vector3(-1.65 + side * (width * .5 + .034), 2.07, -depth * .73), Color.WHITE).material_override = window_glass
+		var cladding_x: float = -1.65 + side * width * .5
+		if index == 0:
+			for board in range(1, floori(depth / .36)):
+				_box(lot, "Vertical siding batten", Vector3(.034, wall_height - .06, .045),
+					Vector3(cladding_x, wall_height * .50 + .25, -.36 * board), siding.lightened(.10))
+		elif index in [2, 3]:
+			var first_course := .49 if index == 2 else 3.31
+			var course_height := .19 if index == 2 else .23
+			for row in floori((eave - first_course) / course_height):
+				var y := first_course + course_height * row
+				_box(lot, "Horizontal weatherboard lap", Vector3(.033, .032, depth - .06),
+					Vector3(cladding_x, y, -depth * .50), siding.darkened(.09))
+				if side == 1:
+					_box(lot, "Front weatherboard lap", Vector3(width - .20, .032, .031),
+						Vector3(-1.65, y, .007), siding.darkened(.09))
+		var window_at := Vector3(cladding_x, 2.07, -depth * .73)
+		_side_window(lot, window_at, side, Vector2(1.38, 1.16))
+		if two_storeys:
+			_side_window(lot, Vector3(cladding_x, 4.34, -depth * .38), side,
+				Vector2(1.25, 1.44) if index == 1 else Vector2(.96, 1.24))
 	var front_windows := [
 		[Vector4(-4.45, 1.94, 1.68, 1.52), Vector4(1.1, 1.94, 1.68, 1.52)],
 		[Vector4(-4.30, 1.90, 1.36, 1.65), Vector4(.83, 1.90, 1.36, 1.65)],
@@ -173,6 +188,11 @@ func _build_lot(index: int) -> void:
 	lot.add_child(light)
 	entry_lights.append(light)
 	_grounds(lot, index)
+
+func _side_window(lot: Node3D, at: Vector3, side: int, size: Vector2) -> void:
+	_box(lot, "Side window frame", Vector3(.12, size.y, size.x), at + Vector3.RIGHT * side * .023, TRIM)
+	_box(lot, "Side glazing", Vector3(.13, size.y - .22, size.x - .23), at + Vector3.RIGHT * side * .034,
+		Color.WHITE).material_override = window_glass
 
 func _roof(lot: Node3D, index: int, width: float, depth: float, eave: float, pitch: float, siding: Color, roof: Color) -> ShaderMaterial:
 	var finish := ShaderMaterial.new()
