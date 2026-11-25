@@ -8,6 +8,7 @@ func verify() -> void:
 	root.add_child(game)
 	game._on_vehicle_selected(game.DAM_PICKUP)
 	game.start_button.pressed.emit()
+	game.phone.open_button.pressed.emit()
 	game.phone.take_job.pressed.emit()
 	var expected_receipts := PackedStringArray([game.phone.CLINIC_RECEIPT, game.phone.MARINA_RECEIPT])
 	var starting_wallet: int = game.wallet

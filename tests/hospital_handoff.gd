@@ -12,6 +12,7 @@ func verify() -> void:
 	root.add_child(game)
 	game._on_vehicle_selected(0)
 	game.start_button.pressed.emit()
+	game.phone.open_button.pressed.emit()
 	game.phone.take_job.pressed.emit()
 	game.traffic_data.clear()
 	var square: Vector3 = game._mission_destination()

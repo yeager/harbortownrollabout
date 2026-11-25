@@ -61,7 +61,7 @@ jobs:
             street_tram city_perimeter mower_perimeter practice_driving tram_signals
             hospital_handoff hospital_helicopter world_name_signs freight_delivery
             fire_engine_driver fire_engine_locker
-            vehicle_gallery_drive kiosk_and_shopper pump_prices bus_route taxi_dispatch
+            vehicle_gallery_drive kiosk_and_shopper pump_prices bus_route taxi_dispatch recovery_route
             vehicle_radio weather_transition
             snow_slide workshop_tyres tractor_grit
           )
