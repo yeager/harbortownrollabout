@@ -11,6 +11,7 @@ func check_routes() -> void:
 	for vehicle in [0, 1, 2, 3, game.XC60_POLICE, game.FARM_TRACTOR, game.FOOD_TRUCK, game.SNOWMOBILE, game.DAM_PICKUP]:
 		game._on_vehicle_selected(vehicle)
 		game.start_button.pressed.emit()
+		game.phone.open_button.pressed.emit()
 		game.phone.take_job.pressed.emit()
 		var balance: int = game.wallet
 		var points: int = game.delivery_points
@@ -18,12 +19,16 @@ func check_routes() -> void:
 		for step in game.TARGETS.size():
 			var target: Vector3 = game._mission_destination()
 			var instruction: String = game.phone.current_job
-			game._save_checkpoint()
 			game.queue_free()
 			await process_frame
 			game = scene.instantiate()
 			root.add_child(game)
-			game.find_child("ResumeCheckpoint", true, false).pressed.emit()
+			var resume := game.find_child("ResumeCheckpoint", true, false) as Button
+			if not resume:
+				printerr("Missing automatic checkpoint for vehicle ", vehicle, " step ", step)
+				quit(1)
+				return
+			resume.pressed.emit()
 			if game.vehicle_index != vehicle or game.mission_index != step or game._mission_destination() != target or game.phone.current_job != instruction:
 				printerr("Lost instruction or destination for vehicle ", vehicle, " step ", step)
 				quit(1)
@@ -48,7 +53,6 @@ func check_routes() -> void:
 			return
 		if vehicle == game.DAM_PICKUP:
 			receipt_count_after_pickup = receipt_count + 2
-		game._save_checkpoint()
 		game.queue_free()
 		await process_frame
 		game = scene.instantiate()

@@ -9703,6 +9703,7 @@ func _build_ui() -> void:
 		phone.toggle()
 		_update_mission_marker()
 		_update_route_arrows()
+		_save_checkpoint()
 		_refresh_ui()
 	)
 	cat_hint = _button("Listen for the cat",180)
