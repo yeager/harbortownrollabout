@@ -175,6 +175,15 @@ func _vehicle_head(mast: Node3D, east_west: bool) -> Dictionary:
 		hinge_mesh.radial_segments = 12
 		hinge_mesh.rings = 0
 		hinge_mesh.material = get_parent()._material(Color("#505552"), .36)
+	var clamp_color := Color("#515a56")
+	for level in [3.29, 3.61]:
+		get_parent()._make_box("Signal mounting plate", Vector3(.23, .087, .025),
+			Vector3(0, level, -.011), clamp_color, false, mast)
+		get_parent()._make_box("Signal mast clamp", Vector3(.155, .064, .146),
+			Vector3(0, level, 0), clamp_color, false, mast)
+		for side in [-1, 1]:
+			get_parent()._make_box("Signal clamp bolt", Vector3(.027, .027, .014),
+				Vector3(side * .065, level, -.079), Color("#969d96"), false, mast)
 	var lamps: Array = []
 	var colors := [Color("#ff2622"),Color("#ffab16"),Color("#15d279")]
 	for j in 3:

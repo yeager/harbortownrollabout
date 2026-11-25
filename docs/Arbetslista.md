@@ -315,5 +315,6 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Gatlyktornas fotplattor fick betongsocklar och fyra sexkantiga ankarmuttrar. Granskat vid övningsbanan i Godot. Övningsbaneprovet passerade.
   - Gatlyktornas stolpar fick serviceluckor med tätning och skruvar. Granskat vid övningsbanan i Godot. Övningsbaneprovet passerade.
   - Trafikljusens tre linser fick fästringar runt visiren. Granskat vid övningsbanan i Godot. Övningsbaneprovet passerade.
+  - Trafikljusens signalhus fick två stolpbeslag med fästplattor och bultar. Granskat bakifrån i Godot. Övningsbaneprovet passerade.
   - Kajens låga lyktor fick sockel, kant under huven och tre smala stag runt ljusspridaren. Granskat vid färjebryggan i Godot. Väderprovet passerade.
 - [ ] Boulebana, spelfigurer och klot
