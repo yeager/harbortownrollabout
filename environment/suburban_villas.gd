@@ -69,7 +69,8 @@ func update_lights(winter: bool, night: float, snow_cover := 0.0) -> void:
 
 func _build_lot(index: int) -> void:
 	var lot := Node3D.new()
-	lot.name = "Villa %d" % (12 + index * 2)
+	var number := str(12 + index * 2)
+	lot.name = "Villa " + number
 	var setback: float = [0.0, -.8, .55, -1.15][index]
 	lot.position = Vector3(LOTS[index], -.19, FRONT_Z + setback)
 	add_child(lot)
@@ -122,6 +123,9 @@ func _build_lot(index: int) -> void:
 	_box(lot, "Front door", Vector3(1.09, 2.10, .09), Vector3(door_x, 1.34, .17), roof.darkened(.22))
 	_box(lot, "Door fanlight", Vector3(.70, .40, .035), Vector3(door_x, 2.03, .229), Color.WHITE).material_override = window_glass
 	_box(lot, "Door handle", Vector3(.14, .05, .062), Vector3(door_x + .39, 1.35, .25), Color("#b39665"))
+	var plate := _box(lot, "House number plate", Vector3(.31, .22, .047), Vector3(door_x - .88, 1.91, .067), Color("#303e4b"))
+	var address: Label3D = world._station_sign(number, Vector3(0, 0, .026), .0030, Color("#fff4df"), 0, plate)
+	address.auto_translate_mode = Node.AUTO_TRANSLATE_MODE_DISABLED
 	var canopy := _box(lot, "Entrance canopy", Vector3(2.56, .18, 1.82), Vector3(door_x, 2.74, .77), roof)
 	canopy.rotation.x = .095
 	canopy.material_override = roof_finish
