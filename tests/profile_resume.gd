@@ -30,9 +30,15 @@ func check_profiles() -> void:
 		root.add_child(game)
 	for i in 2:
 		choose_driver(game, ["Axel", "Alma"][i])
+		Input.action_press("ui_up")
 		game.find_child("ResumeCheckpoint", true, false).pressed.emit()
 		assert(game.vehicle_index == i)
 		assert(game.ambulance.global_position.is_equal_approx(positions[i]))
+		game._drive(.1)
+		Input.action_release("ui_up")
+		assert(is_zero_approx(game.speed), "Resuming must ignore the previously held accelerator")
+		game._drive(.01)
+		assert(game._keyboard_pedals_available(), "Releasing the accelerator must restore pedal control")
 		game._change_seat()
 		game.walker.position = game.BOULE_BENCH_APPROACH
 		game._set_boule_seated(true)

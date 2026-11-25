@@ -11115,6 +11115,7 @@ func _resume_road_checkpoint() -> void:
 			_hold_lost_shoe()
 		socked_foot.visible = shoe_quest != FootQuest.FINISHED
 		returned_trainer.visible = shoe_quest == FootQuest.FINISHED
+	release_pedal_keys = _keyboard_pedal_pressed()
 	_sync_radio()
 	_update_route_arrows()
 
@@ -11196,8 +11197,8 @@ func _start_game() -> void:
 		listener.reparent(cab_turntable,false)
 		listener.position = Vector3.UP*2.5
 		operating_excavator = true
-		release_pedal_keys = _keyboard_pedal_pressed()
 		start_in_excavator = false
+	release_pedal_keys = _keyboard_pedal_pressed()
 	_update_camera(0.0, true)
 	speed = 0
 	steering = 0
