@@ -268,6 +268,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
 - [ ] Lekhamnen och varorna i butikens fönster
 - [ ] Fontänen, midsommarstången och julgranen
 - [ ] Tvärbanans perrong, väderskydd och övriga hållplatsdetaljer
+  - Kontaktledningsstolparna fick fotplattor, stag och isolatorer. Granskat vid Västra torget i Godot efter godkänt spårvagnsprov.
 - [ ] Broarna, kajerna, träpromenaderna, bryggorna och förtöjningsbojarna
 - [ ] Trafikljus, gatlyktor, vägskyltar och parkeringsskyltar
 - [ ] Boulebana, spelfigurer och klot

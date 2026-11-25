@@ -158,9 +158,19 @@ func _build_trackbed() -> void:
 			grass.append(Transform3D(heading.scaled_local(Vector3(3.25,.06,span)),mid-Vector3.UP*.05))
 		wires.append(Transform3D(heading.scaled_local(Vector3(.027,.03,span)),mid+Vector3.UP*4.2))
 		if i%19==0 and not _cross_street(mid):
-			var pole := mid-heading.x*1.57
-			get_parent()._make_roadside_solid("Contact mast",Vector3(.11,4.53,.11),pole+Vector3.UP*2.18,Color("#698076"),false,self)
-			beam(pole+Vector3.UP*4.39,mid+Vector3.UP*4.24,.07,.06,Color("#66746f"))
+			var pole := mid - heading.x * 1.57
+			var arm_color := Color("#66746f")
+			get_parent()._make_roadside_solid("Contact mast", Vector3(.11, 4.79, .11),
+				pole + Vector3.UP * 2.31, Color("#698076"), false, self)
+			get_parent()._make_box("Contact mast base plate", Vector3(.24, .055, .24),
+				pole + Vector3.UP * .01, arm_color, false, self)
+			beam(pole + Vector3.UP * 4.39, mid + Vector3.UP * 4.24, .07, .06, arm_color)
+			beam(pole + Vector3.UP * 4.65, mid - heading.x * .38 + Vector3.UP * 4.28,
+				.035, .032, arm_color)
+			var insulator := mid - heading.x * .21 + Vector3.UP * 4.26
+			for ring in [-1, 0, 1]:
+				beam(insulator + heading.x * (.046 * ring - .015),
+					insulator + heading.x * (.046 * ring + .015), .115, .10, Color("#c9c4ae"))
 	_rail_batch("Grooved street rails",rails,Color("#97a3a9"))
 	_rail_batch("Grass reservation",grass,Color("#778c5e"))
 	_rail_batch("Contact wire",wires,Color("#464e4c"))
