@@ -3415,6 +3415,21 @@ func _build_canal_bridge(z: float, asphalt: Color, rail_mesh: CylinderMesh) -> v
 		for side in [-1,1]:
 			_make_box("Räckesstolpe",Vector3(.09,1.05,.09),Vector3(x,_bridge_rise(x, z)+.51,z+side*5.5),Color.WHITE).material_override = rail_mesh.material
 	var concrete := _material(Color("#918d83"), .91)
+	var bearing_finish := _material(Color("#354146"), .61)
+	for bank_x: float in [54.40, 87.35]:
+		var deck_height := _bridge_rise(bank_x, z) - .58
+		var seat_top := deck_height - .14
+		var wall_height := seat_top + 1.42
+		_make_box("Bridge abutment stem", Vector3(.94, wall_height, 10.84),
+			Vector3(bank_x, seat_top - wall_height * .5, z), Color.WHITE).material_override = concrete
+		_make_box("Bridge abutment bearing shelf", Vector3(1.20, .16, 11.10),
+			Vector3(bank_x, seat_top - .045, z), Color.WHITE).material_override = concrete
+		var slope := atan2(_bridge_rise(bank_x + .1, z) - _bridge_rise(bank_x - .1, z), .2)
+		for bearing_z in [-4.1, -1.4, 1.4, 4.1]:
+			var pad := _make_box("Abutment bearing", Vector3(.53, .113, .57),
+				Vector3(bank_x, deck_height - .018, z + bearing_z), Color.WHITE)
+			pad.material_override = bearing_finish
+			pad.rotation.z = slope
 	var cap_mesh := CylinderMesh.new()
 	cap_mesh.top_radius = .59
 	cap_mesh.bottom_radius = .5

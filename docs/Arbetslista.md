@@ -297,6 +297,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Livbojarna fick ett flätat grepprep med fyra bågar mellan banden. Granskat i närbild i Godot. Kanalprovet passerade.
   - Västra träpromenaden fick fogade kantbrädor och bultade beslag vid trästolparna. Granskat från vattnet i Godot. Kanalprovet passerade.
   - Träpromenadens repräcke fick rundade rep med jämnt nedhäng och metallhylsor vid stolparna. Granskat i Godot. Kanalprovet passerade.
+  - Kanalbroarna fick landfästen i betong med lagerhyllor och separata brolager. Granskat från vattennivå vid norra bron i Godot. Båtpassage under båda broarna verifierades i kanalprovet.
 - [ ] Trafikljus, gatlyktor, vägskyltar och parkeringsskyltar
   - Gatlyktsmodellen fick fotplatta, separat armaturhus och en tunnare ljusspridare. Granskat vid kanalen i dagsljus och nattläge. Övningsbaneprovet passerade.
   - Kajens låga lyktor fick sockel, kant under huven och tre smala stag runt ljusspridaren. Granskat vid färjebryggan i Godot. Väderprovet passerade.
