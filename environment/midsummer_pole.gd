@@ -30,6 +30,15 @@ func _ready() -> void:
 	finish.vertex_color_is_srgb = true
 	finish.cull_mode = BaseMaterial3D.CULL_DISABLED
 	add_foliage(finish)
+	var town := get_parent()
+	town._make_box("Flag staff", Vector3(.025, .43, .025), top + Vector3.UP * .215, Color("#7a654c"), false, self)
+	var flag := Node3D.new()
+	flag.name = "Swedish flag"
+	flag.position = top + Vector3(.015, .25, 0)
+	add_child(flag)
+	town._make_box("Blue flag cloth", Vector3(.48, .30, .012), Vector3(.24, 0, 0), Color("#1264a0"), false, flag)
+	town._make_box("Yellow horizontal band", Vector3(.48, .06, .015), Vector3(.24, 0, 0), Color("#f5c638"), false, flag)
+	town._make_box("Yellow vertical band", Vector3(.06, .30, .016), Vector3(.18, 0, 0), Color("#f5c638"), false, flag)
 	for side: float in [-1, 1]:
 		foliage.clear()
 		foliage.begin(Mesh.PRIMITIVE_TRIANGLES)
