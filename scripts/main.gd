@@ -3725,8 +3725,22 @@ func _build_marina() -> void:
 			anchor.position.y = .062
 			cleat.add_child(anchor)
 			cleats.append(anchor)
-		moorings.append({"boat":boat, "buoy":buoy, "eye":eye, "cleats":cleats, "lines":lines, "phase":berth*1.7,
-			"heading":boat.rotation.y, "hull_bounds":_model_bounds(boat, boat)})
+		var hull_bounds := _model_bounds(boat, boat)
+		var bow_cleat := _make_box("Bow cleat mounting plate", Vector3(.145, .025, .105),
+			Vector3(-2.54, .59, 0), Color.WHITE, false, boat)
+		bow_cleat.material_override = galvanised
+		for x in [-.045, .045]:
+			var foot := _make_box("Bow cleat foot", Vector3(.039, .055, .034),
+				Vector3(x, .031, 0), Color.WHITE, false, bow_cleat)
+			foot.material_override = galvanised
+		var horns := _make_box("Bow cleat horns", Vector3(.195, .029, .041),
+			Vector3(0, .061, 0), Color.WHITE, false, bow_cleat)
+		horns.material_override = galvanised
+		var bow_line := Marker3D.new()
+		bow_line.position = Vector3(-.027, .046, 0)
+		bow_cleat.add_child(bow_line)
+		moorings.append({"boat":boat, "buoy":buoy, "eye":eye, "cleats":cleats, "bow_line":bow_line, "lines":lines, "phase":berth*1.7,
+			"heading":boat.rotation.y, "hull_bounds":hull_bounds})
 	_update_moorings(0.0)
 
 func _build_quay_windsock() -> void:
@@ -3832,7 +3846,7 @@ func _update_moorings(delta: float) -> void:
 			if i > 0:
 				end = berth.cleats[i-1].global_position
 			if i == 0:
-				start = boat.to_global(Vector3(-2.71,.53,0))
+				start = berth.bow_line.global_position
 				end = berth.eye.global_position
 			var axis := end-start
 			var line: MeshInstance3D = berth.lines[i]
