@@ -50,8 +50,28 @@ func verify() -> void:
 		printerr("Opening the phone left the mouse brake latched")
 		quit(1)
 		return
+	var pedal := InputEventMouseButton.new()
+	pedal.pressed = true
+	for button in [MOUSE_BUTTON_LEFT, MOUSE_BUTTON_RIGHT]:
+		pedal.button_index = button
+		game._unhandled_input(pedal)
+	if game.mouse_gas or game.mouse_brake or game.brake_pedal_held:
+		printerr("Mouse pedals responded while the phone was open")
+		quit(1)
+		return
 	game.phone.toggle()
-	game.mouse_brake = true
+	game.shops.shop_card.show()
+	game._unhandled_input(pedal)
+	if game.mouse_brake:
+		printerr("Mouse brake responded through the shop card")
+		quit(1)
+		return
+	game.shops.shop_card.hide()
+	game._unhandled_input(pedal)
+	if not game.mouse_brake:
+		printerr("Right mouse did not respond after closing the phone")
+		quit(1)
+		return
 	for frame in 60: game._drive(1.0/60)
 	if game.speed >= 0:
 		printerr("Practice car did not brake and reverse")

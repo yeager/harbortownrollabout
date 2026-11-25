@@ -1070,7 +1070,7 @@ func _input(event: InputEvent) -> void:
 			return
 		orbit_angle -= event.relative.x*.007
 		orbit_height = clampf(orbit_height+event.relative.y*.022,-1.8,5)
-	if event is InputEventMouseButton and event.pressed and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
+	if event is InputEventMouseButton and event.pressed and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED and _world_controls_available():
 		if tram_mode == 2 or (tram_mode == 0 and (boating or not walker.visible)):
 			if event.button_index == MOUSE_BUTTON_LEFT:
 				mouse_gas = true
@@ -1099,8 +1099,8 @@ func _world_controls_available() -> bool:
 	return mode == "playing" and not paused and not phone.handset.is_visible_in_tree() and not shops.shop_card.is_visible_in_tree()
 
 func _unhandled_input(event: InputEvent) -> void:
-	if phone.handset.is_visible_in_tree(): return
-	if mode == "playing" and not paused and (tram_mode == 2 or (tram_mode == 0 and (boating or not walker.visible))) and event is InputEventMouseButton and event.pressed:
+	if not _world_controls_available(): return
+	if (tram_mode == 2 or (tram_mode == 0 and (boating or not walker.visible))) and event is InputEventMouseButton and event.pressed:
 		if event.button_index == MOUSE_BUTTON_LEFT:
 			brake_pedal_held = driving_controls.over_brake_pedal(driving_controls.get_global_transform_with_canvas().affine_inverse() * event.position)
 			mouse_gas = not brake_pedal_held
