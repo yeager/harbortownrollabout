@@ -617,6 +617,7 @@ var tram_driver_exit_requested := false
 var water_finish := ShaderMaterial.new()
 var saloon_glazing: StandardMaterial3D
 const EAST_QUAY_WATER_EDGE := 86.75
+const FLOATING_DOCK_ACCESS_Z := -10.5
 const MOORING_BUOY_OFFSET := 7.5
 const MOORING_START_Z := -38.0
 const MOORING_SPACING := 4.5
@@ -3092,8 +3093,13 @@ func _build_waterfront() -> void:
 		MOORING_START_Z+MOORING_BUOY_Z_OFFSET, MOORING_SPACING, MOORING_COUNT))
 	water_finish.set_shader_parameter("bridge_rises", Vector2(HIGH_BRIDGE_RISE, SOUTH_BRIDGE_RISE))
 	canal.material_override = water_finish
-	for bank in [55.0,EAST_QUAY_WATER_EDGE+.25]:
-		_make_box("Kajmur", Vector3(.5,1.5,174), Vector3(bank,-.86,-6), Color("#807b70"))
+	var quay_wall_color := Color("#807b70")
+	_make_box("Kajmur", Vector3(.5, 1.5, 174), Vector3(55, -.86, -6), quay_wall_color)
+	for span in [Vector2(-93, FLOATING_DOCK_ACCESS_Z - .82), Vector2(FLOATING_DOCK_ACCESS_Z + .82, 81)]:
+		_make_box("Kajmur", Vector3(.5, 1.5, span.y - span.x),
+			Vector3(EAST_QUAY_WATER_EDGE + .25, -.86, (span.x + span.y) * .5), quay_wall_color)
+	_make_box("Quay stair foundation", Vector3(.5, 1.06, 1.64),
+		Vector3(EAST_QUAY_WATER_EDGE + .25, -1.08, FLOATING_DOCK_ACCESS_Z), quay_wall_color)
 	var metal := _material(Color("#43565a"), .42, false, "brushed")
 	metal.metallic = .65
 	var rail_mesh := CylinderMesh.new()
@@ -3142,11 +3148,22 @@ func _build_waterfront() -> void:
 		_make_driving_surface("Granitkant",Vector3(.12,.26,length),Vector3(106.86,-.05,middle),Color("#999893"))
 	for span in [Vector2(-90,-54), Vector2(-42,-6), Vector2(6,77)]:
 		var middle: float = (span.x + span.y) / 2
-		var promenade := _make_driving_surface("Strandpromenad", Vector3(6,.15,span.y-span.x), Vector3(90,-.11,middle), Color("#b7afa2"))
-		promenade.material_override = quay_finish
+		if span.x < FLOATING_DOCK_ACCESS_Z and span.y > FLOATING_DOCK_ACCESS_Z:
+			for section in [Vector2(span.x, FLOATING_DOCK_ACCESS_Z - .82),
+					Vector2(FLOATING_DOCK_ACCESS_Z + .82, span.y)]:
+				_make_driving_surface("Strandpromenad", Vector3(6, .15, section.y - section.x),
+					Vector3(90, -.11, (section.x + section.y) * .5), Color.WHITE).material_override = quay_finish
+			_make_driving_surface("Quay stair approach", Vector3(5.35, .15, 1.64),
+				Vector3(90.325, -.11, FLOATING_DOCK_ACCESS_Z), Color.WHITE).material_override = quay_finish
+		else:
+			_make_driving_surface("Strandpromenad", Vector3(6, .15, span.y - span.x),
+				Vector3(90, -.11, middle), Color.WHITE).material_override = quay_finish
 		var rail_spans := [span]
 		if span.x < LAUNCH_PIER.position.y and span.y > LAUNCH_PIER.end.y:
 			rail_spans = [Vector2(span.x,LAUNCH_PIER.position.y), Vector2(LAUNCH_PIER.end.y,span.y)]
+		if span.x < FLOATING_DOCK_ACCESS_Z and span.y > FLOATING_DOCK_ACCESS_Z:
+			rail_spans = [Vector2(span.x, FLOATING_DOCK_ACCESS_Z - .86),
+				Vector2(FLOATING_DOCK_ACCESS_Z + .86, span.y)]
 		for rail_span: Vector2 in rail_spans:
 			for z in range(ceili(rail_span.x),ceili(rail_span.y),3):
 				_make_box("Kajstolpe",Vector3(.12,.86,.12),Vector3(87.5,.40,z),Color("#525d60"))
@@ -3560,7 +3577,28 @@ func _build_marina() -> void:
 		var joist := _make_box("Boardwalk cross beam", Vector3(2.14,.16,.18),
 			Vector3(58.03,-1.025,support_z), Color.WHITE)
 		joist.material_override = timber_frame
-	_make_box("Flytbrygga",Vector3(1.4,.25,32),Vector3(85.8,-.63,-24),Color("#877962")).material_override = _deck_material(Color("#877962"))
+	var dock_color := Color("#877962")
+	var floating_dock_deck := _deck_material(dock_color)
+	_pier_section("Flytbrygga", Vector3(1.4, .25, 32), Vector3(85.8, -.63, -24),
+		dock_color, floating_dock_deck)
+	var access_z := FLOATING_DOCK_ACCESS_Z
+	for tread in 4:
+		var top: float = [-.105, -.19, -.33, -.45][tread]
+		var tread_x := 87.50 - .30 * tread
+		_pier_section("Floating dock access tread", Vector3(.302, .17, 1.64),
+			Vector3(tread_x, top - .085, access_z), dock_color, floating_dock_deck)
+		_make_box("Access tread nosing", Vector3(.026, .022, 1.64),
+			Vector3(tread_x - .138, top - .008, access_z), Color("#576267"))
+	_make_box("Dock access retaining riser", Vector3(.09, .14, 1.64),
+		Vector3(87.02, -.26, access_z), Color("#726657"))
+	var rail_color := Color("#626c6e")
+	for edge in [-.82, .82]:
+		for end in [Vector2(86.60, -.48), Vector2(87.62, -.06)]:
+			_make_box("Dock access rail post", Vector3(.065, .88, .065),
+				Vector3(end.x, end.y + .44, access_z + edge), rail_color)
+		var handrail := _make_box("Dock access handrail", Vector3(1.15, .06, .065),
+			Vector3(87.11, .59, access_z + edge), rail_color)
+		handrail.rotation.z = atan2(.42, 1.02)
 	var dock_edge := Color("#615344")
 	var dock_join := Color("#535c60")
 	for section in 8:
