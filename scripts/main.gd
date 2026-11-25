@@ -11872,13 +11872,13 @@ func _refresh_ui() -> void:
 	else:
 		hints.text = "{up} / ↑  Drive     {left} {right} / ← →  Steer     {down} / ↓  Brake or reverse\nRelease to slow down   ·   {help} to help   ·   {pause} to pause"
 	var camera_hint := (tr("Hold %s and move the mouse to look around") % OS.get_keycode_string(look_key))
-	if walker.visible and tram_mode == 0 and not boating and not ferry_passenger and shops.inside < 0:
+	if walker.visible and tram_mode == 0 and not boating and not ferry_passenger and not operating_excavator and shops.inside < 0:
 		camera_hint = tr("{up} / ↑ Accelerate · {down} / ↓ Brake · {left} / {right} Steer · {scooter} Fold scooter") if scooter.visible else tr("{scooter} Unfold scooter") + "   ·   " + camera_hint
 		camera_hint = camera_hint.replace("{scooter}",OS.get_keycode_string(scooter_key))
 	hints.text = camera_hint if walker.visible and tram_mode == 0 and not boating else tr(hints.text) + "   ·   " + camera_hint
 	if operating_excavator:
 		hints.text = tr("Arrows or {up}{left}{down}{right}: drive and steer · Q/E: turn the cab · {seat}: get out\nI/K: raise or lower the boom · Y/G: move the outer arm · O/L: tilt the bucket")
-		hints.text += "\n" + tr("Hold left mouse to drive forward or right mouse to reverse.")
+		hints.text += "\n" + tr("Hold left mouse to drive forward or right mouse to reverse.") + "   ·   " + camera_hint
 		for control in [horn_button, light_button, siren_button]:
 			control.hide()
 	elif walker.visible and not scooter.visible and not ferry_passenger and not boating and tram_mode == 0:

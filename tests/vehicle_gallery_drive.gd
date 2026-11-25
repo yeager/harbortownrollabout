@@ -195,6 +195,16 @@ func check_gallery() -> void:
 			quit(1)
 			return
 		if extra == 0:
+			var original_look_key: int = game.look_key
+			for look_key in [KEY_V, KEY_F12]:
+				game.look_key = look_key
+				game._refresh_ui()
+				var expected_hint: String = game.tr("Hold %s and move the mouse to look around") % OS.get_keycode_string(look_key)
+				if not game.driving_hints.text.contains(expected_hint):
+					printerr("The excavator did not display its configured camera control")
+					quit(1)
+					return
+			game.look_key = original_look_key
 			var origin: Vector3 = game.excavator.position
 			Input.action_press("ui_up")
 			for frame in 240:
