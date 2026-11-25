@@ -3411,6 +3411,10 @@ func _build_canal_bridge(z: float, asphalt: Color, rail_mesh: CylinderMesh) -> v
 			var edge: Vector3 = mid + Vector3.BACK*side*5.5
 			var kerb := _make_box("Brons gångkant",Vector3(length,.16,1.1),edge+normal*.08,Color("#bab6aa"))
 			kerb.rotation.z = angle
+			var paving := _make_box("Bridge footway paving", Vector3(length, .013, .88),
+				edge + normal * .162 + Vector3.BACK * side * .025, Color.WHITE)
+			paving.rotation.z = angle
+			paving.material_override = quay_finish
 			var fascia: Vector3 = mid + Vector3.BACK * side * 5.89
 			var beam := _make_box("Bridge edge beam", Vector3(length + .016, .53, .32),
 				fascia - normal * .236, Color.WHITE)
