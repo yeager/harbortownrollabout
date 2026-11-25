@@ -51,6 +51,8 @@ func check() -> void:
 	if not game.tyre_service_button.visible or game.tyre_service_button.text != "Fit winter tyres":
 		fail("Stopped car at the workshop could not select winter tyres")
 		return
+	if not check_fitted_tyres_label(game, "Summer tyres fitted."):
+		return
 	game.phone.toggle()
 	game._refresh_status()
 	game.tyre_service_button.pressed.emit()
@@ -65,6 +67,8 @@ func check() -> void:
 	game.tyre_service_button.pressed.emit()
 	if game.tyre_service_button.text != "Fit summer tyres":
 		fail("Workshop did not install winter tyres")
+		return
+	if not check_fitted_tyres_label(game, "Winter tyres fitted."):
 		return
 	var winter := measure_grip(game)
 	var winter_launch := measure_launch(game)
@@ -207,3 +211,17 @@ func measure_grip(game) -> Vector2:
 		game._drive(1.0/60.0)
 	game.mouse_brake = false
 	return Vector2(slide,game.speed)
+
+func check_fitted_tyres_label(game: Node, key: String) -> bool:
+	var previous_locale := TranslationServer.get_locale()
+	for locale in ["sv", "en", "de", "es", "fi", "fr", "nb"]:
+		TranslationServer.set_locale(locale)
+		game._refresh_status()
+		var fitted := game.tr(key)
+		if game.tyre_service_button.tooltip_text != fitted or game.tyre_service_button.accessibility_description != fitted:
+			TranslationServer.set_locale(previous_locale)
+			fail("The installed tyre type was not available in " + locale)
+			return false
+	TranslationServer.set_locale(previous_locale)
+	game._refresh_status()
+	return true

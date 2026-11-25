@@ -11918,7 +11918,11 @@ func _refresh_status() -> void:
 	if not is_instance_valid(status_label): return
 	tyre_service_button.visible = _can_swap_workshop_tyres()
 	if tyre_service_button.visible:
-		tyre_service_button.text = "Fit summer tyres" if VEHICLE_SCENES_ALL[vehicle_index] in winter_tyre_models else "Fit winter tyres"
+		var has_winter_tyres: bool = VEHICLE_SCENES_ALL[vehicle_index] in winter_tyre_models
+		tyre_service_button.text = "Fit summer tyres" if has_winter_tyres else "Fit winter tyres"
+		var fitted_tyres := tr("Winter tyres fitted." if has_winter_tyres else "Summer tyres fitted.")
+		tyre_service_button.tooltip_text = fitted_tyres
+		tyre_service_button.accessibility_description = fitted_tyres
 	if reverse_monitor:
 		var reversing := cockpit_view and not walker.visible and speed < -.12 and mode == "playing" and not paused
 		reverse_monitor.visible = reversing
