@@ -3426,9 +3426,22 @@ func _build_canal_bridge(z: float, asphalt: Color, rail_mesh: CylinderMesh) -> v
 			drip.material_override = drip_finish
 			for h in [.54,1.06]:
 				_add_bridge_rail(rail_mesh, edge + Vector3.UP * h, length + .015, angle)
-	for x in range(52,99,2):
-		for side in [-1,1]:
-			_make_box("Räckesstolpe",Vector3(.09,1.05,.09),Vector3(x,_bridge_rise(x, z)+.51,z+side*5.5),Color.WHITE).material_override = rail_mesh.material
+	for x in range(52, 99, 2):
+		var slope := atan2(_bridge_rise(x + .1, z) - _bridge_rise(x - .1, z), .2)
+		var along := Vector3.RIGHT.rotated(Vector3.BACK, slope)
+		var up := Vector3.UP.rotated(Vector3.BACK, slope)
+		for side in [-1, 1]:
+			var foot := Vector3(x, _bridge_rise(x, z) + .15, z + side * 5.5)
+			_make_box("Bridge railing post", Vector3(.083, .89, .083),
+				foot + Vector3.UP * .445, Color.WHITE).material_override = rail_mesh.material
+			var plate := _make_box("Bridge railing foot plate", Vector3(.201, .028, .157),
+				foot + up * .012, Color.WHITE)
+			plate.rotation.z = slope
+			plate.material_override = rail_mesh.material
+			for offset in [-.065, .065]:
+				var anchor := _make_box("Bridge railing anchor", Vector3(.028, .019, .028),
+					foot + along * offset + up * .032, Color("#909a9b"))
+				anchor.rotation.z = slope
 	var concrete := _material(Color("#918d83"), .91)
 	var bearing_finish := _material(Color("#354146"), .61)
 	for bank_x: float in [54.40, 87.35]:
