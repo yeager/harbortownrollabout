@@ -108,6 +108,10 @@ func check_route() -> void:
 				printerr("The bus headlight beams did not follow the time of day")
 				quit(1)
 				return
+		if (game.bus_dashboard_backlight.emission_energy_multiplier > 0.0) != night:
+			printerr("The bus dashboard backlight did not follow the time of day")
+			quit(1)
+			return
 		if game.bus_ceiling_lights.size() != 3:
 			printerr("The bus must have three saloon lights")
 			quit(1)

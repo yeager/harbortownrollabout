@@ -309,6 +309,7 @@ var seated_bus_riders: Node3D
 var bus_board: Label3D
 var bus_ceiling_lights: Array[SpotLight3D] = []
 var bus_ceiling_diffuser: StandardMaterial3D
+var bus_dashboard_backlight: StandardMaterial3D
 const BUS_STOP_NAMES := ["THE SQUARE","HEALTH CENTRE","MARINA","HARBOR TOWN SCHOOL","VÄSTRA TORGET","SICKLA UDDE"]
 var bus_leg := 0
 const TAXI := 4
@@ -7853,6 +7854,8 @@ func _update_bus_ceiling_lights(night: float) -> void:
 	for lamp in bus_ceiling_lights:
 		lamp.visible = glow > .001
 		lamp.light_energy = glow*1.1
+	if bus_dashboard_backlight:
+		bus_dashboard_backlight.emission_energy_multiplier = glow * .42
 
 func _add_bus_destination_boards(model: Node3D) -> Array[Label3D]:
 	var bus_board := Label3D.new()
@@ -8262,6 +8265,7 @@ func _load_vehicle_model() -> void:
 		driven_fire_locker.fit(vehicle_model)
 	bus_ceiling_lights.clear()
 	bus_ceiling_diffuser = null
+	bus_dashboard_backlight = null
 	bus_board = null
 	driver_bus_stop_board = null
 	rear_bus_board = null
@@ -8309,6 +8313,10 @@ func _load_vehicle_model() -> void:
 	shopper_grip_points.clear()
 	if vehicle_index == BUS:
 		var display := _make_box("Bus dashboard screen",Vector3(.355,.173,.017),Vector3(.58,1.745,4.70),Color("#14272b"),false,vehicle_model)
+		bus_dashboard_backlight = _material(Color("#14272b"), .74, true).duplicate() as StandardMaterial3D
+		bus_dashboard_backlight.emission = Color("#254750")
+		display.material_override = bus_dashboard_backlight
+		_update_bus_ceiling_lights(maxf(last_night, 0.0))
 		display.rotation.x = -2.20
 		display.rotate_object_local(Vector3.BACK,PI)
 		var housing := Color("#252a2d")
