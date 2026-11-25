@@ -53,13 +53,24 @@ func verify() -> void:
 		fail("Walk access must reach the intake and stop at the hospital ward")
 		return
 	var receipt: String = game.phone.HOSPITAL_RECEIPT
-	game._save_checkpoint()
 	game.queue_free()
 	await process_frame
 	game = preload("res://main.tscn").instantiate()
 	root.add_child(game)
 	if game.phone.delivery_receipts.count(receipt) != 1:
 		fail("The hospital receipt was lost or duplicated on reload")
+		return
+	var resume := game.find_child("ResumeCheckpoint", true, false) as Button
+	if not resume:
+		fail("Patient handoff did not save the next mission step")
+		return
+	resume.pressed.emit()
+	if game.vehicle_index != 0 or game.mission_index != 2 or game.wallet != coins + 10 or game._vehicle_payload() != 0.0:
+		fail("The saved ambulance did not resume with the patient handed off and reward paid")
+		return
+	game._help_at_target()
+	if game.mission_index != 2 or game.wallet != coins + 10 or game.phone.delivery_receipts.count(receipt) != 1:
+		fail("The previous patient could be handed off again after resuming")
 		return
 	print("Ambulance drove into the hospital, handed off its patient once, and left a receipt. The ward stays closed.")
 	quit()
