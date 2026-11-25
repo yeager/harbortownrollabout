@@ -4574,10 +4574,17 @@ func _build_lampposts() -> void:
 		var inward := Vector3(street.x - p.x, 0, street.y - p.z).normalized()
 		if on_course:
 			inward = Vector3.BACK if p.z < PRACTICE_YARD.get_center().y else Vector3.FORWARD
-		_make_roadside_solid("Lamp post", Vector3(0.16, 4.5, 0.16), p + Vector3(0,2.25,0), Color("#45524e"), false)
-		var arm := _make_box("Lamp arm", Vector3(.13, .13, .85), p + Vector3.UP * 4.35 + inward * .34, Color("#45524e"), false)
-		arm.rotation.y = atan2(inward.x, inward.z)
-		var lens := _make_box("Lamp", Vector3(0.52, 0.15, 0.42), p + Vector3.UP * 4.24 + inward * .66, Color("#e5d9ad"), false)
+		var post_color := Color("#45524e")
+		_make_roadside_solid("Lamp post", Vector3(.16, 4.5, .16), p + Vector3.UP * 2.25, post_color, false)
+		_make_box("Lamp post foot", Vector3(.28, .075, .28), p + Vector3.UP * .038, post_color.darkened(.15), false)
+		var yaw := atan2(inward.x, inward.z)
+		var arm := _make_box("Lamp arm", Vector3(.115, .115, .86), p + Vector3.UP * 4.35 + inward * .34, post_color, false)
+		arm.rotation.y = yaw
+		var fixture := p + Vector3.UP * 4.32 + inward * .73
+		var housing := _make_box("Lamp housing", Vector3(.29, .11, .55), fixture, post_color, false)
+		housing.rotation.y = yaw
+		var lens := _make_box("Lamp diffuser", Vector3(.235, .048, .46), fixture - Vector3.UP * .062, Color("#e5d9ad"), false)
+		lens.rotation.y = yaw
 		lens.material_override = lamp_glass
 		var light := SpotLight3D.new()
 		light.position = lens.position-Vector3.UP*.12
