@@ -9808,6 +9808,7 @@ func _build_town_map() -> void:
 	map_button.auto_translate_mode = Node.AUTO_TRANSLATE_MODE_DISABLED
 	phone.add_child(map_button)
 	map_button.pressed.connect(func():
+		dialog.set_meta("return_focus", get_viewport().gui_get_focus_owner())
 		var actor := _player_actor()
 		chart.player = Vector2(actor.global_position.x,actor.global_position.z)
 		var forward := -actor.global_basis.z
@@ -9855,7 +9856,15 @@ func _build_town_map() -> void:
 		focused_stop.grab_focus.call_deferred()
 	)
 	dialog.visibility_changed.connect(func():
-		if not dialog.visible and paused and mode == "playing": _toggle_pause()
+		if dialog.visible:
+			return
+		if paused and mode == "playing":
+			_toggle_pause()
+		if dialog.has_meta("return_focus"):
+			var previous: Variant = dialog.get_meta("return_focus")
+			dialog.remove_meta("return_focus")
+			if is_instance_valid(previous) and previous.is_visible_in_tree():
+				previous.grab_focus()
 	)
 
 func _build_menu_footer() -> void:

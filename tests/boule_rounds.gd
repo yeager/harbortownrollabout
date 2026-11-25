@@ -64,6 +64,14 @@ func check_rounds() -> void:
 			printerr("Closing the town map did not preserve the route and resume play")
 			quit(1)
 			return
+	game.map_button.grab_focus()
+	game.map_button.pressed.emit()
+	await process_frame
+	dialog.hide()
+	if root.gui_get_focus_owner() != game.map_button:
+		printerr("Closing the town map did not restore focus to the map button")
+		quit(1)
+		return
 	for first_key in [KEY_1, KEY_KP_1]:
 		for index in [9, 0, 1, 2, 3, 4, 5, 6, 7, 8]:
 			game.map_button.pressed.emit()
