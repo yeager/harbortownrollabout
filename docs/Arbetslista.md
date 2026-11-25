@@ -272,6 +272,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Spårvagnens strömavtagare fick isolerade takfästen, ledaxlar och dubbla kolslitskenor. Granskat i närbild i Godot och spårvagnsprovet passerade.
   - Alla tre vagnsdelar fick omarbetade ventilationskåpor med sidointag, takgaller och synliga fästen. Granskat i Godot och spårvagnsprovet passerade.
   - Boggierna fick separata hjulaxlar, hjulflänsar, lagerkåpor och fjädringsdetaljer. Granskat från rälsnivå i Godot. Spårvagnsprovet passerade.
+  - Dörrbladen fick mötestätningar, nedre kantlister och sparkskydd på insidan. Granskat från gatan i Godot. Spårvagnsprovet verifierade fortsatt på- och avstigning.
 - [ ] Broarna, kajerna, träpromenaderna, bryggorna och förtöjningsbojarna
 - [ ] Trafikljus, gatlyktor, vägskyltar och parkeringsskyltar
 - [ ] Boulebana, spelfigurer och klot

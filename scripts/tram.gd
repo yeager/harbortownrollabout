@@ -309,6 +309,13 @@ func _ready() -> void:
 				leaf.position = Vector3(s*1.21,1.49,.13+opening_direction*.26)
 				world._make_box("Door panel",Vector3(.08,1.875,.50),Vector3(0,-.1475,0),Color("#147db0"),false,leaf)
 				world._make_box("Interior door lining", Vector3(.008,1.865,.49), Vector3(-s*.043,-.1475,0), Color("#dbd1b4"),false,leaf)
+				var seal_z: float = -opening_direction * .249
+				world._make_box("Door meeting-edge seal", Vector3(.092, 1.875, .018),
+					Vector3(0, -.148, seal_z), Color("#232b2c"), false, leaf)
+				world._make_box("Door lower edge trim", Vector3(.022, .068, .471),
+					Vector3(s * .041, -1.043, 0), Color("#31515e"), false, leaf)
+				world._make_box("Interior kick plate", Vector3(.021, .24, .445),
+					Vector3(-s * .049, -.91, 0), Color("#989d9b"), false, leaf)
 				_door_window(s, opening_direction, leaf)
 				_door_window(-s, opening_direction, leaf)
 				if s==1:
