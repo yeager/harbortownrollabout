@@ -5604,6 +5604,15 @@ func _signpost(at: Vector3, heading: float) -> Node3D:
 	_make_roadside_solid("Signpost", Vector3(.09,2.85,.09), Vector3.UP*1.425, Color("#879398"), false, post)
 	return post
 
+func _add_sign_mount(post: Node3D, rail_y: float, width: float, aluminium: Material) -> void:
+	_make_box("Sign rear mounting channel", Vector3(width, .043, .026),
+		Vector3(0, rail_y, -.011), Color.WHITE, false, post).material_override = aluminium
+	_make_box("Signpost clamp", Vector3(.177, .063, .034),
+		Vector3(0, rail_y, -.047), Color("#657175"), false, post)
+	for bolt_x in [-.073, .073]:
+		_make_box("Signpost clamp bolt", Vector3(.025, .025, .016),
+			Vector3(bolt_x, rail_y, -.069), Color.WHITE, false, post).material_override = aluminium
+
 func _speed_sign(at: Vector3, heading: float, limit: int) -> void:
 	var post := _signpost(at, heading)
 	var aluminium := _material(Color("#929da0"), .54, false, "brushed")
@@ -5622,13 +5631,7 @@ func _speed_sign(at: Vector3, heading: float, limit: int) -> void:
 	backing.position = Vector3(0, 2.58, .010)
 	post.add_child(backing)
 	for rail_y in [2.38, 2.76]:
-		_make_box("Sign rear mounting channel", Vector3(.60, .043, .026),
-			Vector3(0, rail_y, -.011), Color.WHITE, false, post).material_override = aluminium
-		_make_box("Signpost clamp", Vector3(.177, .063, .034),
-			Vector3(0, rail_y, -.047), Color("#657175"), false, post)
-		for bolt_x in [-.073, .073]:
-			_make_box("Signpost clamp bolt", Vector3(.025, .025, .016),
-				Vector3(bolt_x, rail_y, -.069), Color.WHITE, false, post).material_override = aluminium
+		_add_sign_mount(post, rail_y, .60, aluminium)
 	for inner in [false,true]:
 		var disc := CylinderMesh.new()
 		disc.top_radius = .46 if inner else .55
@@ -5664,6 +5667,8 @@ func _build_road_signs() -> void:
 	_make_box("Depot sign border",Vector3(2.8,.68,.08),Vector3(0,2.62,.06),Color.WHITE,false,depot_sign)
 	_make_box("Depot sign face",Vector3(2.74,.62,.03),Vector3(0,2.62,.11),Color("#205786"),false,depot_sign)
 	_size_world_sign(_road_sign_text(depot_sign,"Ice cream depot",Vector3(0,2.62,.14),.006,Color.WHITE),2.55)
+	var parking_aluminium := _material(Color("#a4adaf"), .65)
+	parking_aluminium.metallic = .42
 	var rules := ["Ducks park free", "Hats on wheels only", "Save a spot for a snail", "Park with a smile", "Bananas need a ticket"]
 	for index in DISTRICT_PARKING.size():
 		var center: Vector2 = DISTRICT_PARKING[index][0]
@@ -5675,6 +5680,11 @@ func _build_road_signs() -> void:
 		_make_box("Blue parking panel", Vector3(.77,.87,.03), Vector3(0,2.65,.11), Color("#215997"),false,post)
 		_road_sign_text(post,"P",Vector3(0,2.65,.133),.016,Color.WHITE)
 		_make_box("Parking rule", Vector3(2.55,.54,.08), Vector3(0,1.89,.06), Color("#fff8df"),false,post)
+		for panel: Vector3 in [Vector3(.84, .94, 2.65), Vector3(2.55, .54, 1.89)]:
+			_make_box("Parking board aluminium back", Vector3(panel.x, panel.y, .024),
+				Vector3(0, panel.z, .010), Color.WHITE, false, post).material_override = parking_aluminium
+			for edge in [-1, 1]:
+				_add_sign_mount(post, panel.z + edge * panel.y * .24, panel.x - .13, parking_aluminium)
 		var rule_label := _road_sign_text(post,rules[index],Vector3(0,1.89,.11),.0035,Color("#182531"))
 		rule_label.width = 2.42 / rule_label.pixel_size
 		rule_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
