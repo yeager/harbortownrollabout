@@ -8322,7 +8322,7 @@ func _load_vehicle_model() -> void:
 		dash_direction = _station_sign("",Vector3(0,.051,.011),.00115,Color("#def4f7"),0,display)
 		dash_direction.font_size = 32
 		_size_world_sign(dash_speed,.31)
-		_size_world_sign(dash_direction,.31)
+		_size_world_sign(dash_direction,.235)
 		driver_bus_stop_board = _station_sign("",Vector3(0,-.055,.011),.00086,Color("#ffd46c"),0,display)
 		driver_bus_stop_board.font_size = 31
 		_size_world_sign(driver_bus_stop_board,.31)
@@ -8452,6 +8452,15 @@ func _load_vehicle_model() -> void:
 	driven_turn_signals.fit(ambulance, vehicle_model, _model_bounds(ambulance, vehicle_model))
 	if vehicle_index == BUS:
 		bus_departure_lamps = driven_turn_signals.left
+		var display := dash_speed.get_parent() as Node3D
+		for side in [-1, 1]:
+			var lamps := driven_turn_signals.left if side < 0 else driven_turn_signals.right
+			var lamp := lamps[0]
+			var arrow := _station_sign("◀" if side < 0 else "▶", Vector3(side * .144,.063,.012), .00068, Color("#80ec8c"), 0, display)
+			arrow.name = "Dashboard left indicator" if side < 0 else "Dashboard right indicator"
+			arrow.auto_translate_mode = Node.AUTO_TRANSLATE_MODE_DISABLED
+			arrow.visible = lamp.visible
+			lamp.visibility_changed.connect(func(): arrow.visible = lamp.visible)
 	for beam in headlights:
 		beam.queue_free()
 	headlights.clear()

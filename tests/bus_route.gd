@@ -371,12 +371,17 @@ func check_departure_indicator(game: Node) -> bool:
 		game._update_traffic(.4)
 	game._update_traffic(.1)
 	var lamps: Array[MeshInstance3D] = game.bus_departure_lamps
+	var arrow: Label3D = game.vehicle_model.find_child("Dashboard left indicator", true, false)
+	var right_arrow: Label3D = game.vehicle_model.find_child("Dashboard right indicator", true, false)
+	if not arrow.visible or right_arrow.visible:
+		printerr("Dashboard did not indicate the left turn")
+		return false
 	if not game.bus_departure_pending or lamps.size() != 3 or not lamps.all(func(lamp: MeshInstance3D): return lamp.visible):
 		printerr("Departure indicators expired before the bus could move: ", game.bus_departure_pending,
 			", ", lamps.size(), " lamps, phase ", game.driven_turn_signals.phase)
 		return false
 	game._update_traffic(.4)
-	if lamps.any(func(lamp: MeshInstance3D): return lamp.visible):
+	if arrow.visible or lamps.any(func(lamp: MeshInstance3D): return lamp.visible):
 		printerr("Departure lights did not blink together while waiting")
 		return false
 	game.speed = 2.0
@@ -389,6 +394,11 @@ func check_departure_indicator(game: Node) -> bool:
 	if game.bus_departure_pending or game.bus_merge_time != 0 or lamps.any(func(lamp: MeshInstance3D): return lamp.visible):
 		printerr("Departure indicators stayed on after leaving the stop")
 		return false
+	game.driven_turn_signals.advance(1.0, .1, false)
+	if arrow.visible or not right_arrow.visible:
+		printerr("Dashboard did not indicate the right turn")
+		return false
+	game.driven_turn_signals.advance(0.0, 0.0, false)
 	print("All three departure indicators blinked through the wait and switched off after moving.")
 	return true
 
