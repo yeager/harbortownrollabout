@@ -92,9 +92,9 @@ jobs:
           cd export/linux
           LIBGL_ALWAYS_SOFTWARE=1 xvfb-run -a ./harbortown --audio-driver Dummy --resolution 800x600 -- --check-startup 2>&1 | tee "$RUNNER_TEMP/game-graphics.log"
           grep -Fx 'Harbortown main menu ready.' "$RUNNER_TEMP/game-graphics.log"
-          # The compatibility renderer reports these texture cleanup messages after a successful startup.
+          # Godot 4.7 dev5 also reports these two texture cleanup messages in a minimal compatibility scene with a procedural sky.
           if grep -E '^(SCRIPT )?ERROR:' "$RUNNER_TEMP/game-graphics.log" |
-            grep -Ev "^(ERROR: Texture with GL ID of [0-9]+: leaked [0-9]+ bytes\.|ERROR: [0-9]+ RID allocations of type 'N5GLES37TextureE' were leaked at exit\.)$"; then exit 1; fi
+            grep -Ev "^(ERROR: Texture with GL ID of [0-9]+: leaked (87376|65532) bytes\.|ERROR: 2 RID allocations of type 'N5GLES37TextureE' were leaked at exit\.)$"; then exit 1; fi
       - uses: actions/upload-artifact@v4
         with:
           name: exports
