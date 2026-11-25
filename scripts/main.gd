@@ -5367,11 +5367,15 @@ func _crawler_clear() -> bool:
 
 func _drive_excavator(delta: float) -> void:
 	var old := excavator.transform
-	var steer := Input.get_axis("ui_left","ui_right") + int(_movement_pressed(KEY_D))-int(_movement_pressed(KEY_A))
-	if is_zero_approx(steer): steer = mouse_steering
-	var drive := Input.get_axis("ui_down","ui_up") + int(_movement_pressed(KEY_W))-int(_movement_pressed(KEY_S))
-	if mouse_gas: drive = 1
-	if mouse_brake or brake_pedal_held: drive = -1
+	var controls_available := _world_controls_available()
+	var steer := 0.0
+	var drive := 0.0
+	if controls_available:
+		steer = Input.get_axis("ui_left","ui_right") + int(_movement_pressed(KEY_D))-int(_movement_pressed(KEY_A))
+		if is_zero_approx(steer): steer = mouse_steering
+		drive = Input.get_axis("ui_down","ui_up") + int(_movement_pressed(KEY_W))-int(_movement_pressed(KEY_S))
+		if mouse_gas: drive = 1
+		if mouse_brake or brake_pedal_held: drive = -1
 	driving_controls.set_controls(steer, drive > 0, drive < 0, drive < 0)
 	if steer != 0:
 		excavator.rotate_y(-clampf(steer,-1,1)*delta)
@@ -5396,10 +5400,11 @@ func _drive_excavator(delta: float) -> void:
 	building_bounds[excavator_wall] = _crawler_bounds()
 	var previous_slew := cab_turntable.rotation.y
 	var previous_arm := Vector3(boom_joint.rotation.x, stick_joint.rotation.x, bucket_joint.rotation.x)
-	cab_turntable.rotate_y((int(Input.is_key_pressed(KEY_Q))-int(Input.is_key_pressed(KEY_E)))*delta)
-	boom_joint.rotation.x = clampf(boom_joint.rotation.x + (int(Input.is_key_pressed(KEY_K))-int(Input.is_key_pressed(KEY_I)))*delta*.50,-.82,0)
-	stick_joint.rotation.x = clampf(stick_joint.rotation.x + (int(Input.is_key_pressed(KEY_Y))-int(Input.is_key_pressed(KEY_G)))*delta*.65,-.62,.65)
-	bucket_joint.rotation.x = clampf(bucket_joint.rotation.x + (int(Input.is_key_pressed(KEY_O))-int(Input.is_key_pressed(KEY_L)))*delta*.85,-.95,.95)
+	if controls_available:
+		cab_turntable.rotate_y((int(Input.is_key_pressed(KEY_Q))-int(Input.is_key_pressed(KEY_E)))*delta)
+		boom_joint.rotation.x = clampf(boom_joint.rotation.x + (int(Input.is_key_pressed(KEY_K))-int(Input.is_key_pressed(KEY_I)))*delta*.50,-.82,0)
+		stick_joint.rotation.x = clampf(stick_joint.rotation.x + (int(Input.is_key_pressed(KEY_Y))-int(Input.is_key_pressed(KEY_G)))*delta*.65,-.62,.65)
+		bucket_joint.rotation.x = clampf(bucket_joint.rotation.x + (int(Input.is_key_pressed(KEY_O))-int(Input.is_key_pressed(KEY_L)))*delta*.85,-.95,.95)
 	_support_bucket()
 	excavation_sand.move_bucket(bucket_joint, bucket_joint.rotation.x - previous_arm.z)
 	var arm_pose := Vector3(boom_joint.rotation.x, stick_joint.rotation.x, bucket_joint.rotation.x)

@@ -205,6 +205,19 @@ func check_gallery() -> void:
 					quit(1)
 					return
 			game.look_key = original_look_key
+			var parked_pose: Transform3D = game.excavator.transform
+			game.phone.toggle()
+			Input.action_press("ui_up")
+			Input.action_press("ui_left")
+			game._drive_excavator(.1)
+			Input.action_release("ui_up")
+			Input.action_release("ui_left")
+			var moved_behind_phone: bool = not game.excavator.transform.is_equal_approx(parked_pose)
+			game.phone.toggle()
+			if moved_behind_phone:
+				printerr("Excavator responded to driving controls behind the phone")
+				quit(1)
+				return
 			var origin: Vector3 = game.excavator.position
 			Input.action_press("ui_up")
 			for frame in 240:
