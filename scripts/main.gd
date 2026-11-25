@@ -3539,6 +3539,12 @@ func _build_marina() -> void:
 	fender_mesh.radial_segments = 12
 	fender_mesh.rings = 4
 	fender_mesh.material = _material(Color("#30373b"), .86)
+	var windscreen_glass := StandardMaterial3D.new()
+	windscreen_glass.albedo_color = Color(.43, .68, .76, .29)
+	windscreen_glass.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	windscreen_glass.roughness = .16
+	windscreen_glass.disable_receive_shadows = true
+	var windscreen_trim := Color("#323d43")
 	for berth in MOORING_COUNT:
 		var z := MOORING_START_Z + berth*MOORING_SPACING
 		for side in [-1.0, 1.0]:
@@ -3576,8 +3582,13 @@ func _build_marina() -> void:
 		var shell := MeshInstance3D.new()
 		shell.mesh = hull.commit()
 		boat.add_child(shell)
-		var pane := _make_box("Vindruta",Vector3(.07,.56,1.46),Vector3(-.57,.86,0),Color("#44616a"),false,boat)
+		var pane := _make_box("Vindruta", Vector3(.014, .56, 1.46), Vector3(-.57, .86, 0), Color.WHITE, false, boat)
 		pane.rotation.z = -.29
+		pane.material_override = windscreen_glass
+		pane.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+		for side in [-1.0, 1.0]:
+			_make_box("Windscreen rail", Vector3(.041, .031, 1.49), Vector3(0, side * .28, 0), windscreen_trim, false, pane)
+			_make_box("Windscreen upright", Vector3(.041, .56, .034), Vector3(0, 0, side * .73), windscreen_trim, false, pane)
 		_make_box("Förlucka",Vector3(.54,.04,.42),Vector3(-1.52,.605,0),Color("#41535b"),false,boat)
 		var cover := [Color("#253b51"),Color("#b7afa0"),Color("#365b64")][berth%3] as Color
 		if berth % 3 == 2:
