@@ -3561,6 +3561,26 @@ func _build_marina() -> void:
 			Vector3(58.03,-1.025,support_z), Color.WHITE)
 		joist.material_override = timber_frame
 	_make_box("Flytbrygga",Vector3(1.4,.25,32),Vector3(85.8,-.63,-24),Color("#877962")).material_override = _deck_material(Color("#877962"))
+	var dock_edge := Color("#615344")
+	var dock_join := Color("#535c60")
+	for section in 8:
+		var segment_z := -38.0 + section * 4.0
+		for edge_x in [85.11, 86.49]:
+			_make_box("Floating dock rubbing strip", Vector3(.055, .11, 3.97),
+				Vector3(edge_x, -.589, segment_z), dock_edge)
+		if section > 0:
+			var seam_z := segment_z - 2.0
+			_make_box("Floating dock deck joint", Vector3(1.35, .004, .025),
+				Vector3(85.8, -.504, seam_z), dock_join)
+			for edge_x in [85.19, 86.41]:
+				_make_box("Floating dock splice plate", Vector3(.115, .018, .24),
+					Vector3(edge_x, -.498, seam_z), dock_join)
+				for offset in [-.076, .076]:
+					_make_box("Floating dock splice bolt", Vector3(.025, .009, .025),
+						Vector3(edge_x, -.484, seam_z + offset), Color("#929b9b"))
+	for end_z in [-39.98, -8.02]:
+		_make_box("Floating dock end trim", Vector3(1.42, .11, .048),
+			Vector3(85.8, -.589, end_z), dock_edge)
 	var rope := CylinderMesh.new()
 	rope.top_radius = 0.018
 	rope.bottom_radius = 0.018
