@@ -310,5 +310,6 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
 - [ ] Trafikljus, gatlyktor, vägskyltar och parkeringsskyltar
   - Gatlyktsmodellen fick fotplatta, separat armaturhus och en tunnare ljusspridare. Granskat vid kanalen i dagsljus och nattläge. Övningsbaneprovet passerade.
   - De lägre parklyktorna, bland annat längs kajen, fick en avsmalnande sockel och en toppknopp på armaturens huv. Granskat på östra kajen i Godot. Väderprovet passerade.
+  - De höga gatlyktorna fick rundade armaturhus och välvda ljusspridare. Granskat i närbild vid kanalen i Godot. Väderprovet passerade.
   - Kajens låga lyktor fick sockel, kant under huven och tre smala stag runt ljusspridaren. Granskat vid färjebryggan i Godot. Väderprovet passerade.
 - [ ] Boulebana, spelfigurer och klot

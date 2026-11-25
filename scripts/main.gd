@@ -5152,6 +5152,14 @@ func _build_lampposts() -> void:
 		for z in [PRACTICE_YARD.position.y-1, PRACTICE_YARD.end.y+1]:
 			course_lamps.append(Vector3(x,0,z))
 	sites.append_array(course_lamps)
+	var housing_mesh := SphereMesh.new()
+	housing_mesh.radial_segments = 24
+	housing_mesh.rings = 10
+	housing_mesh.material = _material(Color("#45524e"), .63)
+	var lens_mesh := SphereMesh.new()
+	lens_mesh.radial_segments = 24
+	lens_mesh.rings = 8
+	lens_mesh.material = lamp_glass
 	for p in sites:
 		var on_course := p in course_lamps
 		p.y = _surface_height(p.x,p.z)
@@ -5166,11 +5174,20 @@ func _build_lampposts() -> void:
 		var arm := _make_box("Lamp arm", Vector3(.115, .115, .86), p + Vector3.UP * 4.35 + inward * .34, post_color, false)
 		arm.rotation.y = yaw
 		var fixture := p + Vector3.UP * 4.32 + inward * .73
-		var housing := _make_box("Lamp housing", Vector3(.29, .11, .55), fixture, post_color, false)
+		var housing := MeshInstance3D.new()
+		housing.name = "Lamp housing"
+		housing.mesh = housing_mesh
+		housing.position = fixture
 		housing.rotation.y = yaw
-		var lens := _make_box("Lamp diffuser", Vector3(.235, .048, .46), fixture - Vector3.UP * .062, Color("#e5d9ad"), false)
+		housing.scale = Vector3(.33, .145, .60)
+		add_child(housing)
+		var lens := MeshInstance3D.new()
+		lens.name = "Lamp diffuser"
+		lens.mesh = lens_mesh
+		lens.position = fixture - Vector3.UP * .061
 		lens.rotation.y = yaw
-		lens.material_override = lamp_glass
+		lens.scale = Vector3(.243, .055, .468)
+		add_child(lens)
 		var light := SpotLight3D.new()
 		light.position = lens.position-Vector3.UP*.12
 		light.basis = Basis.looking_at(inward * 2.5 + Vector3.DOWN * 4.24, Vector3.UP)
