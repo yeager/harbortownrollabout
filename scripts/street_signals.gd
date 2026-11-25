@@ -315,6 +315,15 @@ func _add_crossing(center: Vector3, east_west: bool, pavement_offset := 5.45) ->
 func _add_crossing_light(mast: Node3D, center: Vector3) -> void:
 	var world := get_parent()
 	world._make_box("Crossing mast extension",Vector3(.09,1.36,.09),Vector3.UP*3.1,Color("#737d7a"),false,mast)
+	var bracket_color := Color("#505d5e")
+	world._make_box("Crossing luminaire mounting collar", Vector3(.121, .145, .122),
+		Vector3(0, 3.63, 0), bracket_color, false, mast)
+	var bracket: MeshInstance3D = world._make_box("Crossing luminaire support arm",
+		Vector3(.068, .068, .29), Vector3(0, 3.699, .131), bracket_color, false, mast)
+	bracket.rotation.x = -.24
+	for side in [-1, 1]:
+		world._make_box("Crossing bracket bolt", Vector3(.020, .031, .031),
+			Vector3(side * .063, 3.625, .02), Color("#9aa3a1"), false, mast)
 	world._make_box("Crossing luminaire",Vector3(.28,.12,.56),Vector3(0,3.75,.19),Color("#424b4c"),false,mast)
 	var diffuser = world._make_box("Crossing diffuser",Vector3(.22,.025,.34),Vector3(0,3.68,.26),Color.WHITE,false,mast)
 	diffuser.material_override = world.lamp_glass
