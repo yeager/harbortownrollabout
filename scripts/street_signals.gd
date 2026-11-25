@@ -160,6 +160,13 @@ func _vehicle_head(mast: Node3D, east_west: bool) -> Dictionary:
 	get_parent()._make_roadside_solid("Signal mast",Vector3(.12,3.7,.12),Vector3.UP*1.85,Color("#777e78"),false,mast)
 	if visor_mesh == null:
 		visor_mesh = _make_visor()
+	if bezel_mesh == null:
+		bezel_mesh = TorusMesh.new()
+		bezel_mesh.inner_radius = .136
+		bezel_mesh.outer_radius = .150
+		bezel_mesh.rings = 32
+		bezel_mesh.ring_segments = 8
+		bezel_mesh.material = get_parent()._material(Color("#4a504f"), .49)
 	if hinge_mesh == null:
 		hinge_mesh = CylinderMesh.new()
 		hinge_mesh.top_radius = .014
@@ -183,6 +190,12 @@ func _vehicle_head(mast: Node3D, east_west: bool) -> Dictionary:
 			mast.add_child(hinge)
 		get_parent()._make_box("Cover latch", Vector3(.016,.045,.029),
 			pos+Vector3(-.162,0,-.018), Color("#454947"), false, mast)
+		var bezel := MeshInstance3D.new()
+		bezel.name = "Signal lens retaining ring"
+		bezel.mesh = bezel_mesh
+		bezel.position = pos
+		bezel.rotation.x = PI * .5
+		mast.add_child(bezel)
 		var glass := lens(mast,pos,colors[j])
 		glass.material_override = get_parent()._material(colors[j].darkened(.79),.33)
 		var visor := MeshInstance3D.new()
@@ -200,6 +213,7 @@ func _vehicle_head(mast: Node3D, east_west: bool) -> Dictionary:
 	return {"lamps":lamps,"east_west":east_west}
 
 var lit_finishes: Dictionary = {}
+var bezel_mesh: TorusMesh
 var hinge_mesh: CylinderMesh
 var lens_mesh: SphereMesh
 var visor_mesh: ArrayMesh
