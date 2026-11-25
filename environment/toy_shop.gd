@@ -60,8 +60,17 @@ func build(shop: Node3D, x: float, front_z: float) -> Node3D:
 					_round("Box racing car wheel", at + Vector3(side * .071, -.028, -.221), .029, .008, INK, true)
 	for i in 4:
 		_box("Aisle ceiling strip", Vector3((i - 1.5) * 1.85, 3.28, 3.70), Vector3(.86, .056, .15), PAPER)
+	var diffuser_finish := StandardMaterial3D.new()
+	diffuser_finish.albedo_color = PAPER
+	diffuser_finish.emission_enabled = true
+	diffuser_finish.emission = Color("#ffe8bc")
+	diffuser_finish.emission_energy_multiplier = .65
 	for side in [-1, 1]:
-		shop._shop_light(Vector3(x + side * 2.45, 2.57, front_z + 1.48), Color("#ffe8bc"), 1.30)
+		var position_local := Vector3(side * 2.45, 2.54, .54)
+		_box("Display light housing", position_local, Vector3(1.74, .083, .14), INK)
+		var diffuser := _box("Display light diffuser", position_local + Vector3.DOWN * .045, Vector3(1.64, .027, .098), PAPER)
+		diffuser.material_override = diffuser_finish
+		shop._shop_light(position + position_local + Vector3.DOWN * .083, Color("#ffe8bc"), 1.30)
 	shop._shop_light(Vector3(x, 2.63, front_z + 4.76), Color("#fff4db"), .75)
 	_train(Vector3(-2.66, .73, .82))
 	make_bear(self, Vector3(2.74, .75, .80))
