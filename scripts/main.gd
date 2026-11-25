@@ -4295,13 +4295,24 @@ func _build_new_blocks() -> void:
 		stack.material_override = _material(Color("#ad513c") if band % 2 == 0 else Color("#e4dacc"))
 		stack.position = p + Vector3(6, 6.25 + band * section.height, -2.8)
 		add_child(stack)
+	var beacon_mount := MeshInstance3D.new()
+	beacon_mount.name = "WorkshopChimneyBeaconMount"
+	var collar := CylinderMesh.new()
+	collar.top_radius = .20
+	collar.bottom_radius = .24
+	collar.height = .11
+	collar.radial_segments = 24
+	beacon_mount.mesh = collar
+	beacon_mount.material_override = _material(Color("#34393b"), .61)
+	beacon_mount.position = p + Vector3(6, 13.055, -2.8)
+	add_child(beacon_mount)
 	var beacon := MeshInstance3D.new()
 	beacon.name = "WorkshopChimneyBeacon"
 	var lens := SphereMesh.new()
 	lens.radius = .18
 	lens.height = .36
 	beacon.mesh = lens
-	beacon.position = p + Vector3(6,13.15,-2.8)
+	beacon.position = p + Vector3(6,13.25,-2.8)
 	chimney_beacon = _material(Color("#551119"),.28)
 	chimney_beacon.emission = Color("#ff1310")
 	chimney_beacon.emission_energy_multiplier = 4.0
