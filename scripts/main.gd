@@ -3646,10 +3646,22 @@ func _build_marina(rail_metal: Material) -> void:
 				var end := Vector3(59.08,.22-.60*b*(1-b),post_z+2.94*b)
 				var rope_span := _make_box("Hemp rope",Vector3(.032,.032,start.distance_to(end)),(start+end)*.5,Color("#c9b38e"))
 				rope_span.look_at(end)
+	var boardwalk_edge := Color("#79634f")
+	var edge_sections := ceili(promenade_length / 3.6)
+	var edge_span := promenade_length / edge_sections
+	for i in edge_sections:
+		var z := promenade_midpoint + (i + .5 - edge_sections * .5) * edge_span
+		_make_box("Boardwalk fascia plank", Vector3(.073, .186, edge_span - .012),
+			Vector3(59.006, -.771, z), boardwalk_edge)
 	for support_z in support_positions:
 		var joist := _make_box("Boardwalk cross beam", Vector3(2.14,.16,.18),
 			Vector3(58.03,-1.025,support_z), Color.WHITE)
 		joist.material_override = timber_frame
+		_make_box("Boardwalk pile strap", Vector3(.035, .215, .12),
+			Vector3(59.156, -.798, support_z), Color.WHITE).material_override = rail_metal
+		for bolt_y in [-.731, -.861]:
+			_make_box("Boardwalk strap bolt", Vector3(.022, .031, .031),
+				Vector3(59.174, bolt_y, support_z), Color("#8a9292"))
 	var dock_color := Color("#877962")
 	var floating_dock_deck := _deck_material(dock_color)
 	_pier_section("Flytbrygga", Vector3(1.4, .25, 32), Vector3(85.8, -.63, -24),
