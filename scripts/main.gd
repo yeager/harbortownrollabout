@@ -3703,9 +3703,32 @@ func _build_marina() -> void:
 			Color("#aeb5b6"), false, hatch)
 		var cover := [Color("#253b51"),Color("#b7afa0"),Color("#365b64")][berth%3] as Color
 		if berth % 3 == 2:
-			for seat_x in [.1,1.36]:
-				_make_box("Sittdyna",Vector3(.40,.09,1.40),Vector3(seat_x,.64,0),Color("#c8b299"),false,boat)
-				_make_box("Ryggdyna",Vector3(.10,.34,1.40),Vector3(seat_x+.20,.81,0),Color("#ad947a"),false,boat)
+			for seat_x in [.10, 1.36]:
+				var frame_color := Color("#3b4244")
+				var piping_color := Color("#987e64")
+				for foot_z in [-.49, .49]:
+					_make_box("Bench mounting plate", Vector3(.28, .024, .13),
+						Vector3(seat_x, .592, foot_z), frame_color, false, boat)
+					_make_box("Bench pedestal", Vector3(.19, .19, .082),
+						Vector3(seat_x, .675, foot_z), frame_color, false, boat)
+				_make_box("Bench base", Vector3(.44, .055, 1.42),
+					Vector3(seat_x, .758, 0), frame_color, false, boat)
+				var backrest := Node3D.new()
+				backrest.name = "Bench backrest"
+				backrest.position = Vector3(seat_x + .18, .788, 0)
+				backrest.rotation.z = -.14
+				boat.add_child(backrest)
+				_make_box("Backrest shell", Vector3(.055, .34, 1.42),
+					Vector3(.042, .17, 0), frame_color, false, backrest)
+				for seat_z in [-.47, 0.0, .47]:
+					_make_box("Seat cushion piping", Vector3(.417, .02, .451),
+						Vector3(seat_x - .01, .796, seat_z), piping_color, false, boat)
+					_make_box("Seat cushion", Vector3(.40, .077, .434),
+						Vector3(seat_x - .01, .832, seat_z), Color("#d7c2a9"), false, boat)
+					_make_box("Backrest piping", Vector3(.047, .317, .451),
+						Vector3(-.01, .178, seat_z), piping_color, false, backrest)
+					_make_box("Backrest cushion", Vector3(.066, .30, .434),
+						Vector3(-.035, .178, seat_z), Color("#c8b094"), false, backrest)
 		else:
 			var fabric := SurfaceTool.new()
 			fabric.begin(Mesh.PRIMITIVE_TRIANGLES)
