@@ -260,8 +260,29 @@ func verify() -> void:
 		printerr("Recovery hints did not follow the saved binding")
 		quit(1)
 		return
+	var modified_quit := InputEventKey.new()
+	modified_quit.keycode = game.quit_key
+	modified_quit.pressed = true
+	modified_quit.alt_pressed = true
+	game._input(modified_quit)
+	if game.quit_dialog.visible or game.paused:
+		printerr("The modified quit shortcut opened the quit dialog")
+		quit(1)
+		return
 	var pause_key := InputEventKey.new()
 	pause_key.pressed = true
+	pause_key.keycode = KEY_F7
+	pause_key.alt_pressed = true
+	game._unhandled_key_input(pause_key)
+	pause_key.alt_pressed = false
+	pause_key.keycode = KEY_P
+	pause_key.ctrl_pressed = true
+	game._unhandled_key_input(pause_key)
+	if game.paused:
+		printerr("A modified shortcut paused the game")
+		quit(1)
+		return
+	pause_key.ctrl_pressed = false
 	pause_key.keycode = KEY_F7
 	game._unhandled_key_input(pause_key)
 	if not game.paused or not game.pause_button.text.ends_with(" · P / F7"):

@@ -1025,7 +1025,7 @@ func _finish_quit(save_checkpoint := true) -> void:
 	queue_free()
 
 func _dialog_quit_key(event: InputEvent, dialog: Window) -> void:
-	if event is InputEventKey and event.keycode == quit_key and event.pressed and not event.echo:
+	if event is InputEventKey and event.keycode == quit_key and event.pressed and not event.echo and not (event.ctrl_pressed or event.alt_pressed or event.meta_pressed):
 		dialog.set_input_as_handled()
 		_request_quit(dialog)
 
@@ -1045,14 +1045,14 @@ func _request_quit(parent_window: Window = null) -> void:
 	quit_dialog.get_cancel_button().grab_focus()
 
 func _input(event: InputEvent) -> void:
-	if event is InputEventKey and event.keycode == quit_key and event.pressed and not event.echo:
+	if event is InputEventKey and event.keycode == quit_key and event.pressed and not event.echo and not (event.ctrl_pressed or event.alt_pressed or event.meta_pressed):
 		get_viewport().set_input_as_handled()
 		_request_quit()
 		return
 	if event is InputEventKey and event.keycode == look_key and not event.echo:
 		if not event.pressed:
 			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
-		elif _world_controls_available():
+		elif _world_controls_available() and not (event.ctrl_pressed or event.alt_pressed or event.meta_pressed):
 			Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	if event is InputEventMouseMotion and (mouse_gas or mouse_brake or brake_pedal_held) and tram_mode == 0 and Input.mouse_mode != Input.MOUSE_MODE_CAPTURED and _world_controls_available():
 		mouse_steering = clampf(mouse_steering + event.screen_relative.x / 150.0, -1.0, 1.0)
@@ -1181,6 +1181,7 @@ func _unhandled_key_input(event: InputEvent) -> void:
 			KEY_C, KEY_F6:
 				if event.keycode == KEY_C or camera_f6: _toggle_camera_view()
 			KEY_ESCAPE, KEY_P, KEY_F7:
+				if event.alt_pressed or event.meta_pressed or event.ctrl_pressed: return
 				if event.keycode == KEY_F7 and not pause_f7: return
 				if event.keycode == KEY_ESCAPE and phone.handset.is_visible_in_tree():
 					phone.toggle()
