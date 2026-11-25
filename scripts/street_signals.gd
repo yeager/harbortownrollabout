@@ -279,12 +279,35 @@ func _add_crossing(center: Vector3, east_west: bool, pavement_offset := 5.45) ->
 			var figure := Node3D.new()
 			mast.add_child(figure)
 			figure.position = Vector3(0, panel_y, .115)
-			var color := Color.RED if j==0 else Color.LIME_GREEN
-			lens(figure,Vector3(0,.12,0),color).scale=Vector3.ONE*.27
-			for segment in [[0,.015,.0,.16],[-.05,-.09,.48*j,.14],[.05,-.09,-.48*j,.14],[-.065,.02,-.5,.11],[.065,.02,.55,.11]]:
-				var limb = get_parent()._make_box("Figure",Vector3(.038,segment[3],.02),Vector3(segment[0],segment[1],0),color,false,figure)
-				limb.rotation.z=segment[2]
-				limb.material_override=get_parent()._material(color,.35,true)
+			var color := Color.RED if j == 0 else Color.LIME_GREEN
+			var finish: Material = get_parent()._material(color, .35, true)
+			var standing := [
+				[Vector2(0, .081), Vector2(0, -.052)],
+				[Vector2(-.015, .063), Vector2(-.05, -.038)],
+				[Vector2(.015, .063), Vector2(.05, -.038)],
+				[Vector2(-.024, -.025), Vector2(-.024, -.148)],
+				[Vector2(.024, -.025), Vector2(.024, -.148)],
+			]
+			var walking := [
+				[Vector2(.028, .078), Vector2(-.016, -.043)],
+				[Vector2(.013, .058), Vector2(.09, .014)],
+				[Vector2(.013, .058), Vector2(-.069, .002)],
+				[Vector2(-.016, -.037), Vector2(.05, -.086)],
+				[Vector2(.05, -.086), Vector2(.09, -.146)],
+				[Vector2(-.016, -.037), Vector2(-.071, -.098)],
+				[Vector2(-.071, -.098), Vector2(-.104, -.147)],
+			]
+			var head := lens(figure, Vector3(0 if j == 0 else .044, .117, 0), color)
+			head.scale = Vector3(.226, .226, .12)
+			head.material_override = finish
+			for segment in standing if j == 0 else walking:
+				var offset: Vector2 = segment[1] - segment[0]
+				var midpoint: Vector2 = (segment[0] + segment[1]) * .5
+				var stroke: MeshInstance3D = get_parent()._make_box("Pedestrian symbol stroke",
+					Vector3(.032, offset.length() + .015, .018),
+					Vector3(midpoint.x, midpoint.y, 0), color, false, figure)
+				stroke.rotation.z = atan2(-offset.x, offset.y)
+				stroke.material_override = finish
 			signs.append(figure)
 		signals.append({"figures":signs,"walk_phase":0 if east_west else 3})
 	return signals
