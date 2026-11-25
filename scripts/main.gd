@@ -2068,13 +2068,14 @@ func _help_at_target(ice_choice := -1) -> void:
 			parked_at_target=0
 			if recovery_leg%2==0:
 				_repair_at_workshop(recovery_leg % 4 == 0)
-				_reward_delivery(20)
+				_reward_delivery(20, false)
 				message = "Recovery complete. You earned 20 points and 20 coins."
 				phone.receive(message)
 			else:
 				message = "Car loaded onto the flatbed."
 			message_timer = 3.0
 			_update_mission_marker()
+			_save_checkpoint()
 			_refresh_ui()
 		return
 	if vehicle_index == TAXI:
@@ -2082,7 +2083,7 @@ func _help_at_target(ice_choice := -1) -> void:
 			taxi_leg += 1
 			if taxi_leg%2==0:
 				phone.receive("Fare complete. You earned 15 points and 15 coins.")
-				_reward_delivery(15)
+				_reward_delivery(15, false)
 			parked_at_target = 0
 			message = "Passenger on board." if taxi_leg%2 else "Thank you for the ride!"
 			if _school_fare(taxi_leg-1):
@@ -2092,6 +2093,7 @@ func _help_at_target(ice_choice := -1) -> void:
 					message = "Thanks! I can see my school!"
 			message_timer = 3
 			_update_mission_marker()
+			_save_checkpoint()
 			_refresh_ui()
 		return
 	if _at_target() and (walker.visible or absf(speed)<.12):

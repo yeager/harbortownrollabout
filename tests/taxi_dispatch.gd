@@ -39,7 +39,6 @@ func check_fare() -> void:
 		return
 	var dropoff: Vector3 = game._mission_destination()
 
-	game._save_checkpoint()
 	game.queue_free()
 	await process_frame
 	game = load("res://main.tscn").instantiate()
@@ -93,5 +92,12 @@ func check_fare() -> void:
 	game.queue_free()
 	await process_frame
 	await process_frame
+	game = load("res://main.tscn").instantiate()
+	root.add_child(game)
+	game._resume_road_checkpoint()
+	if game.taxi_leg != 4 or game.wallet != initial_wallet + 30:
+		printerr("The saved school fare and payment did not restore together")
+		quit(1)
+		return
 	print("Taxi resumed the correct fare, paid once, and dispatched a school pickup.")
 	quit()

@@ -38,8 +38,12 @@ func check_route() -> void:
 				return
 			game.speed = 0
 			game._update_arrival(game.HELP_DURATION)
-		else:
+		elif leg == 1:
 			drive_to_station(game, leg)
+		else:
+			game.ambulance.position = game._mission_destination()
+			game.speed = 0.0
+			game._update_arrival(game.HELP_DURATION)
 		if game.delivery_points != starting_points + 20*floori((leg+1)/2.0) or game.recovery_leg != leg+1 or game.wallet != starting_balance + 20*floori((leg+1)/2.0):
 			printerr("Recovery leg %d ended at leg %d, position %s, speed %.2f, balance %d, status %s" % [
 				leg, game.recovery_leg, game.ambulance.position, game.speed, game.wallet, game.status_label.text])
@@ -47,7 +51,6 @@ func check_route() -> void:
 			return
 		if leg == 0:
 			var saved_position: Vector3 = game.ambulance.position
-			game._save_checkpoint()
 			game.queue_free()
 			await process_frame
 			game = load("res://main.tscn").instantiate()
@@ -68,7 +71,6 @@ func check_route() -> void:
 	game.ambulance.position = game._mission_destination()
 	game.speed = 0
 	game._help_at_target()
-	game._save_checkpoint()
 	game.queue_free()
 	await process_frame
 	game = load("res://main.tscn").instantiate()
