@@ -3442,6 +3442,23 @@ func _build_canal_bridge(z: float, asphalt: Color, rail_mesh: CylinderMesh) -> v
 				var anchor := _make_box("Bridge railing anchor", Vector3(.028, .019, .028),
 					foot + along * offset + up * .032, Color("#909a9b"))
 				anchor.rotation.z = slope
+	var joint_steel := _material(Color("#747e81"), .62)
+	joint_steel.metallic = .44
+	for i in [0, sections.size() - 1]:
+		var neighbour: int = 1 if i == 0 else i - 1
+		var end_x: float = sections[i]
+		var inward: float = sections[neighbour] - end_x
+		var joint_x := end_x + signf(inward) * .24
+		var top := lerpf(_bridge_rise(end_x, z), _bridge_rise(sections[neighbour], z),
+			.24 / absf(inward)) - .017
+		_make_box("Bridge expansion joint seal", Vector3(.067, .014, 9.79),
+			Vector3(joint_x, top, z), Color("#25292b"))
+		for side in [-1, 1]:
+			_make_box("Expansion joint steel edge", Vector3(.031, .013, 9.79),
+				Vector3(joint_x + side * .048, top, z), Color.WHITE).material_override = joint_steel
+		for edge in [-1, 1]:
+			_make_box("Footway expansion joint cover", Vector3(.11, .019, .89),
+				Vector3(joint_x, top + .166, z + edge * 5.53), Color.WHITE).material_override = joint_steel
 	var return_mesh := _bridge_rail_return_mesh(rail_mesh)
 	for end in [-1, 1]:
 		var x: float = HIGH_BRIDGE_X.front() if end < 0 else HIGH_BRIDGE_X.back()
