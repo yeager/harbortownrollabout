@@ -170,16 +170,7 @@ func _burger_ad() -> void:
 	var panel := _box("Backlit burger advertisement", Vector3(2.24, 2.54, .05), at + Vector3.FORWARD * .10, Color("#d1734c"))
 	panel.material_override = ad_glow
 	_sign("Dax burger", at + Vector3(0, .92, -.14), 1.98, PI)
-	for layer in [
-		[.15, .48, 1.68, Color("#e8a257")],
-		[-.08, .12, 1.80, Color("#78a34d")],
-		[-.18, .15, 1.70, Color("#ffc367")],
-		[-.30, .22, 1.67, Color("#673925")],
-		[-.48, .21, 1.60, Color("#cf8748")],
-	]:
-		_ball("Burger poster relief", at + Vector3(0, layer[0], -.147), Vector3(layer[2], layer[1], .055), layer[3])
-	for seed in [Vector2(-.39, .20), Vector2(-.19, .26), Vector2(.06, .18), Vector2(.29, .24), Vector2(.43, .15)]:
-		_ball("Sesame seed", at + Vector3(seed.x, seed.y, -.181), Vector3(.088, .025, .02), CREAM)
+	_food_photo(0, at + Vector3(0, .01, -.15), PI, 1.47)
 	var price: Label3D = city._station_sign(str(PRICE), at + Vector3(0, -.92, -.147), .009, CREAM, PI, self)
 	city._size_world_sign(price, 1.0)
 
@@ -199,19 +190,31 @@ func _order_menu() -> void:
 		face.material_override = screen
 		_box("Menu colour band", Vector3(.045, .34, 1.67), Vector3(-8.22, 2.25, z), [TEAL, Color("#72547c"), Color("#9c482f")][column])
 		_sign(headings[column], Vector3(-8.258, 2.25, z), 1.51, -PI / 2, CREAM, .0055)
-		var food := Sprite3D.new()
-		food.name = "Menu food photograph"
-		var crop := AtlasTexture.new()
-		crop.atlas = preload("res://art/dax/menu-food.jpg")
-		crop.region = Rect2(column * 512, 0, 512, 512)
-		crop.filter_clip = true
-		food.texture = crop
-		food.pixel_size = .00105
-		food.position = Vector3(-8.234, 1.71, z)
-		food.rotation.y = -PI / 2
-		add_child(food)
 		for row in listings[column].size():
-			_sign(listings[column][row], Vector3(-8.252, 1.30 - row * .18, z), 1.51, -PI / 2, DARK, .004)
+			var y: float = 1.85 - row * .41
+			var specials_tile: int = [[-1, 0, 1], [-1, 2], [-1, 3]][column][row]
+			_food_photo(column if specials_tile < 0 else specials_tile,
+				Vector3(-8.25, y, z - .57), -PI / 2, .37, specials_tile >= 0)
+			_sign(listings[column][row], Vector3(-8.252, y, z + .19), 1.12, -PI / 2, DARK, .0042)
+			if row < listings[column].size() - 1:
+				_box("Menu row separator", Vector3(.025, .012, 1.56),
+					Vector3(-8.222, y - .206, z), Color("#baa88c"))
+
+func _food_photo(index: int, at: Vector3, yaw: float, width: float, special := false) -> void:
+	var crop := AtlasTexture.new()
+	crop.atlas = preload("res://art/dax/menu-specials.jpg") if special else preload("res://art/dax/menu-food.jpg")
+	var tile := crop.atlas.get_height() / 2.0 if special else float(crop.atlas.get_height())
+	var column := index % 2 if special else index
+	var row := floori(index / 2.0) if special else 0
+	crop.region = Rect2(column * tile, row * tile, tile, tile)
+	crop.filter_clip = true
+	var food := Sprite3D.new()
+	food.name = "Food photograph"
+	food.texture = crop
+	food.pixel_size = width / tile
+	food.position = at
+	food.rotation.y = yaw
+	add_child(food)
 
 func _order_station() -> void:
 	_order_menu()
