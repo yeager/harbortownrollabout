@@ -166,6 +166,20 @@ func verify() -> void:
 		if train.distance <= saved_distance:
 			fail("Resumed tram did not move")
 			return
+	var velocity_before: float = train.velocity
+	Input.action_press("ui_down")
+	world._process(.25)
+	Input.action_release("ui_down")
+	if train.velocity >= velocity_before:
+		fail("The shared brake action did not slow the driven tram")
+		return
+	velocity_before = train.velocity
+	Input.action_press("ui_up")
+	world._process(.25)
+	Input.action_release("ui_up")
+	if train.velocity <= velocity_before:
+		fail("The shared accelerator action did not speed up the driven tram")
+		return
 	var exit_key := InputEventKey.new()
 	exit_key.pressed = true
 	exit_key.keycode = KEY_F

@@ -890,8 +890,8 @@ func _process(delta: float) -> void:
 		street_signals.advance(delta)
 		shops.advance_grill_sign(delta, calm_mode)
 		_update_fire_station_door(delta)
-		var tram_gas := mouse_gas or _movement_pressed(KEY_W) or Input.is_key_pressed(KEY_UP)
-		var tram_brake := mouse_brake or brake_pedal_held or _movement_pressed(KEY_S) or Input.is_key_pressed(KEY_DOWN)
+		var tram_gas := mouse_gas or _movement_pressed(KEY_W) or Input.is_action_pressed("ui_up")
+		var tram_brake := mouse_brake or brake_pedal_held or _movement_pressed(KEY_S) or Input.is_action_pressed("ui_down")
 		tram.advance(delta, tram_mode == 2, tram_gas, tram_brake)
 		if tram_mode == 2 and tram_driver_exit_requested and tram.open_station() >= 0:
 			_change_seat()
