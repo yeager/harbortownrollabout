@@ -970,6 +970,8 @@ func _save_checkpoint() -> void:
 			"recovery": recovery_leg, "taxi": taxi_leg, "bus": bus_leg,
 			"free_drive": free_drive, "progress": vehicle_progress.duplicate()
 		}
+		if not radio_vehicle.is_empty():
+			road_checkpoint["radio"] = {"enabled": radio_enabled, "track": radio_track, "position": radio.get_playback_position() if radio.playing else 0.0}
 		if vehicle_index == 2 and mission_index == 2 and practice_hose.visible:
 			road_checkpoint["hose_seconds"] = hose_seconds
 		if vehicle_index == BUS and not free_drive and bus_leg % 2 == 1 and bus_stop_request.visible:
@@ -1275,7 +1277,10 @@ func _next_radio_track() -> void:
 			var last := radio_bag.size() - 1
 			radio_bag[last] = radio_bag[0]
 			radio_bag[0] = radio_track
-	radio_track = radio_bag.pop_back()
+	_play_radio_track(radio_bag.pop_back())
+
+func _play_radio_track(track: String, position := 0.0) -> void:
+	radio_track = track
 	song_title.text = L10n.radio_title_and_language(radio_track)[0]
 	radio_button.tooltip_text = tr("Now playing: %s") % song_title.text
 	var cover_path := "res://branding/radio/" + radio_track.get_basename() + ".webp"
@@ -1286,7 +1291,7 @@ func _next_radio_track() -> void:
 	radio_track_gain_db = -10.0 + float(RADIO_GAIN_DB.get(radio_track, 0.0))
 	radio.volume_db = _radio_target_gain()
 	radio.stream = load("res://audio/radio/" + radio_track)
-	radio.play()
+	radio.play(position if position < radio.stream.get_length() else 0.0)
 
 func _radio_target_gain() -> float:
 	# Hold music down across quiet syllables as well as audible ones.
@@ -11146,6 +11151,13 @@ func _resume_road_checkpoint() -> void:
 	_update_mission_marker()
 	_update_camera(0.0, true)
 	_refresh_ui()
+	if road_checkpoint.has("radio") and not radio_vehicle.is_empty():
+		var station: Dictionary = road_checkpoint.radio
+		radio_enabled = station.enabled
+		if radio_enabled and station.track in radio_tracks:
+			radio_bag.clear()
+			_play_radio_track(station.track, station.position)
+		_sync_radio()
 
 func _start_game() -> void:
 	hose_seconds = 0.0
@@ -11384,6 +11396,11 @@ func _valid_checkpoint(saved: Variant) -> bool:
 	var optional := {"practice": TYPE_BOOL, "boule_bench": TYPE_BOOL, "scooter": TYPE_BOOL, "exit_at_landing": TYPE_BOOL, "ferry_time": TYPE_FLOAT, "launch_transform": TYPE_TRANSFORM3D, "bus_stop_requested": TYPE_BOOL, "bus_departure_pending": TYPE_BOOL}
 	for key in optional:
 		if saved.has(key) and not _checkpoint_fields(saved, {key: optional[key]}):
+			return false
+	if saved.has("radio"):
+		if not _checkpoint_fields(saved.radio, {"enabled": TYPE_BOOL, "track": TYPE_STRING, "position": TYPE_FLOAT}):
+			return false
+		if not is_finite(saved.radio.position) or saved.radio.position < 0.0:
 			return false
 	if saved.has("hose_seconds"):
 		var seconds: Variant = saved.hose_seconds
