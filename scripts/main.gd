@@ -3703,6 +3703,7 @@ func _build_marina() -> void:
 			Color("#aeb5b6"), false, hatch)
 		var cover := [Color("#253b51"),Color("#b7afa0"),Color("#365b64")][berth%3] as Color
 		if berth % 3 == 2:
+			_add_moored_boat_helm(boat, galvanised)
 			for seat_x in [.10, 1.36]:
 				var frame_color := Color("#3b4244")
 				var piping_color := Color("#987e64")
@@ -3838,6 +3839,44 @@ func _add_moored_windscreen_trim(boat: Node3D, start: Vector3, end: Vector3, col
 	var frame := _make_box("Windscreen frame", Vector3(.031, .031, span.length() + .023),
 		(start + end) * .5, color, false, boat)
 	frame.basis = Basis.looking_at(span)
+
+func _add_moored_boat_helm(boat: Node3D, metal: Material) -> void:
+	var helm := Node3D.new()
+	helm.name = "Small boat helm"
+	helm.position = Vector3(-.49, .58, -.47)
+	boat.add_child(helm)
+	var graphite := Color("#29373d")
+	_make_box("Helm pedestal", Vector3(.16, .31, .32), Vector3(-.02, .155, 0),
+		Color("#c6c0ad"), false, helm)
+	_make_box("Instrument panel", Vector3(.19, .15, .34), Vector3(-.027, .31, 0),
+		graphite, false, helm)
+	for dial_z in [-.097, .097]:
+		_add_moored_round_fitting(helm, "Gauge bezel", Vector3(.064, .344, dial_z),
+			Vector3(.073, .344, dial_z), .044, metal)
+		_make_box("Gauge face", Vector3(.005, .050, .048), Vector3(.093, .344, dial_z),
+			graphite, false, helm)
+		_make_box("Gauge needle", Vector3(.004, .026, .004), Vector3(.098, .347, dial_z),
+			Color("#e7b97d"), false, helm).rotation.x = -.56
+	var wheel := MeshInstance3D.new()
+	wheel.name = "Helm wheel rim"
+	var rim := TorusMesh.new()
+	rim.inner_radius = .107
+	rim.outer_radius = .125
+	rim.rings = 24
+	rim.ring_segments = 10
+	rim.material = _material(graphite, .75)
+	wheel.mesh = rim
+	wheel.rotation.z = PI * .5
+	wheel.position = Vector3(.17, .245, 0)
+	helm.add_child(wheel)
+	var hub := wheel.position
+	_add_moored_round_fitting(helm, "Steering column", Vector3(.045, hub.y, 0),
+		hub + Vector3(.016, 0, 0), .026, metal)
+	for i in 3:
+		var angle := TAU * i / 3.0
+		var spoke_tip := hub + Vector3(0, -cos(angle), sin(angle)) * .112
+		_add_moored_round_fitting(helm, "Wheel spoke", hub, spoke_tip, .009, metal)
+
 
 func _add_moored_round_fitting(parent: Node3D, part_name: String, start: Vector3, end: Vector3,
 		radius: float, material: Material) -> void:
