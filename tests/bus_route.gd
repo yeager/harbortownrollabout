@@ -316,6 +316,14 @@ func check_route() -> void:
 					return
 				game.ambulance.position = curb + Vector3.RIGHT * 15
 				game._update_bus_stop_request(.2)
+				game.ambulance.position = curb + Vector3.RIGHT * 30
+				game._update_bus_stop_request(.5)
+				if game.bus_stop_request.visible or not is_zero_approx(game.bus_request_arm.rotation.x):
+					printerr("A partial stop request continued after leaving the stop area")
+					quit(1)
+					return
+				game.ambulance.position = curb + Vector3.RIGHT * 15
+				game._update_bus_stop_request(.2)
 				game.walker.show()
 				game._update_bus_stop_request(.5)
 				if game.bus_stop_request.visible or button_finish.emission_energy_multiplier > 0.0:
