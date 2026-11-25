@@ -10,12 +10,12 @@ Choose the download for your computer.
 
 | Platform | Download | Launch |
 | --- | --- | --- |
-| Windows (x64) | [Windows installer](https://github.com/yeager/harbortownrollabout/releases/download/v0.1.3-ci.7/harbortown-0.1.3-ci.7-windows-x64.exe) | Run the installer, choose your language, then open **harbortown** from the Start menu. |
-| Mac with Apple Silicon (M-series) | [Apple Silicon DMG](https://github.com/yeager/harbortownrollabout/releases/download/v0.1.3-ci.7/harbortown-0.1.3-ci.7-macOS-arm64.dmg) | Open the disk image and drag **harbortown** into **Applications**. |
-| Mac with an Intel processor | [Intel Mac DMG](https://github.com/yeager/harbortownrollabout/releases/download/v0.1.3-ci.7/harbortown-0.1.3-ci.7-macOS-x86_64.dmg) | Open the disk image and drag **harbortown** into **Applications**. |
-| Ubuntu or Debian (Intel or AMD, 64-bit) | [DEB package](https://github.com/yeager/harbortownrollabout/releases/download/v0.1.3-ci.7/harbortown-0.1.3-ci.7-x86_64.deb) | Install the package, then open **harbortown** from your apps. |
-| Fedora (Intel or AMD, 64-bit) | [RPM package](https://github.com/yeager/harbortownrollabout/releases/download/v0.1.3-ci.7/harbortown-0.1.3-ci.7-x86_64.rpm) | Install the package, then open **harbortown** from your apps. |
-| Linux x86-64 | [Linux tar.gz](https://github.com/yeager/harbortownrollabout/releases/download/v0.1.3-ci.7/harbortown-0.1.3-ci.7-linux-x86_64.tar.gz) | Extract the archive, then run `./harbortown` from that folder. |
+| Windows (x64) | [Windows installer](https://github.com/yeager/harbortownrollabout/releases/download/v0.1.3-ci.8/harbortown-0.1.3-ci.8-windows-x64.exe) | Run the installer, choose your language, then open **harbortown** from the Start menu. |
+| Mac with Apple Silicon (M-series) | [Apple Silicon DMG](https://github.com/yeager/harbortownrollabout/releases/download/v0.1.3-ci.8/harbortown-0.1.3-ci.8-macOS-arm64.dmg) | Open the disk image and drag **harbortown** into **Applications**. |
+| Mac with an Intel processor | [Intel Mac DMG](https://github.com/yeager/harbortownrollabout/releases/download/v0.1.3-ci.8/harbortown-0.1.3-ci.8-macOS-x86_64.dmg) | Open the disk image and drag **harbortown** into **Applications**. |
+| Ubuntu or Debian (Intel or AMD, 64-bit) | [DEB package](https://github.com/yeager/harbortownrollabout/releases/download/v0.1.3-ci.8/harbortown-0.1.3-ci.8-x86_64.deb) | Install the package, then open **harbortown** from your apps. |
+| Fedora (Intel or AMD, 64-bit) | [RPM package](https://github.com/yeager/harbortownrollabout/releases/download/v0.1.3-ci.8/harbortown-0.1.3-ci.8-x86_64.rpm) | Install the package, then open **harbortown** from your apps. |
+| Linux x86-64 | [Linux tar.gz](https://github.com/yeager/harbortownrollabout/releases/download/v0.1.3-ci.8/harbortown-0.1.3-ci.8-linux-x86_64.tar.gz) | Extract the archive, then run `./harbortown` from that folder. |
 
 On a Mac, open **Apple menu → About This Mac** if you’re unsure which download to choose. If you see an M-series chip, choose Apple Silicon. These are preview builds. The Windows installer and both Mac downloads pass an automated start check on their respective systems.
 
