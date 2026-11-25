@@ -3120,9 +3120,42 @@ func _build_waterfront() -> void:
 	wall_finish.shader = wall_shader
 	var quay_wall_color := Color("#807b70")
 	_make_box("Kajmur", Vector3(.5, 1.5, 174), Vector3(55, -.86, -6), quay_wall_color).material_override = wall_finish
-	for span in [Vector2(-93, FLOATING_DOCK_ACCESS_Z - .82), Vector2(FLOATING_DOCK_ACCESS_Z + .82, 81)]:
+	var wall_spans := [Vector2(-93, FLOATING_DOCK_ACCESS_Z - .82),
+		Vector2(FLOATING_DOCK_ACCESS_Z + .82, 81)]
+	for span: Vector2 in wall_spans:
 		_make_box("Kajmur", Vector3(.5, 1.5, span.y - span.x),
 			Vector3(EAST_QUAY_WATER_EDGE + .25, -.86, (span.x + span.y) * .5), quay_wall_color).material_override = wall_finish
+	var coping := MultiMesh.new()
+	coping.transform_format = MultiMesh.TRANSFORM_3D
+	coping.use_colors = true
+	var cap_mesh := BoxMesh.new()
+	cap_mesh.size = Vector3(.37, .092, 1.0)
+	var cap_finish := _material(Color.WHITE, .79)
+	cap_finish.vertex_color_use_as_albedo = true
+	cap_mesh.material = cap_finish
+	coping.mesh = cap_mesh
+	var cap_sizes := PackedInt32Array()
+	var cap_count := 0
+	for span: Vector2 in wall_spans:
+		var count := ceili((span.y - span.x) / 1.15)
+		cap_sizes.append(count)
+		cap_count += count
+	coping.instance_count = cap_count
+	var cap_index := 0
+	for i in wall_spans.size():
+		var span: Vector2 = wall_spans[i]
+		var step := (span.y - span.x) / cap_sizes[i]
+		for j in cap_sizes[i]:
+			var size := Basis.from_scale(Vector3(1, 1, step - .012))
+			var center := Vector3(EAST_QUAY_WATER_EDGE + .145, -.077, span.x + (j + .5) * step)
+			coping.set_instance_transform(cap_index, Transform3D(size, center))
+			var shade := .70 + .07 * sin(cap_index * 2.39)
+			coping.set_instance_color(cap_index, Color(shade, shade * .98, shade * .93))
+			cap_index += 1
+	var coping_view := MultiMeshInstance3D.new()
+	coping_view.name = "Eastern quay coping stones"
+	coping_view.multimesh = coping
+	add_child(coping_view)
 	_make_box("Quay stair foundation", Vector3(.5, 1.06, 1.64),
 		Vector3(EAST_QUAY_WATER_EDGE + .25, -1.08, FLOATING_DOCK_ACCESS_Z), quay_wall_color).material_override = wall_finish
 	var metal := _material(Color("#43565a"), .42, false, "brushed")
