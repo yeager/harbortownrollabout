@@ -174,6 +174,22 @@ func _ready() -> void:
 	shelter_glass.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
 	shelter_glass.albedo_color = Color(.64,.82,.84,.22)
 	shelter_glass.roughness = .20
+	var studs := CylinderMesh.new()
+	studs.top_radius = .017
+	studs.bottom_radius = .025
+	studs.height = .012
+	studs.radial_segments = 8
+	studs.rings = 0
+	studs.material = world._material(Color("#f3d67b"))
+	var tactile_pattern := MultiMesh.new()
+	tactile_pattern.transform_format = MultiMesh.TRANSFORM_3D
+	tactile_pattern.mesh = studs
+	const STUD_PAIRS := 185
+	tactile_pattern.instance_count = STUD_PAIRS * 2
+	for i in STUD_PAIRS:
+		for row in 2:
+			var at := Vector3(1.65 + row * .08, .314, -3.78 + i * .09)
+			tactile_pattern.set_instance_transform(i * 2 + row, Transform3D(Basis.IDENTITY, at))
 	for i in STATION_CENTRES.size():
 		var point: Vector2 = STATION_CENTRES[i]
 		var offset := track.get_closest_offset(Vector3(point.x,.04,point.y)) if i>0 else 0.0
@@ -186,6 +202,11 @@ func _ready() -> void:
 		# Stops lie on the straight portions with space for all three cars.
 		world._make_box("Island platform",Vector3(2.55,.34,17),Vector3(2.81,.12,4.5),Color("#c4bbaa"),false,station)
 		world._make_box("Tactile strip",Vector3(.18,.019,16.8),Vector3(1.69,.299,4.5),Color("#edce73"),false,station)
+		var tactile_studs := MultiMeshInstance3D.new()
+		tactile_studs.name = "Raised tactile warning studs"
+		tactile_studs.multimesh = tactile_pattern
+		tactile_studs.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+		station.add_child(tactile_studs)
 		for car_index in 3:
 			var door_z := CAR_SPACING * car_index + .13
 			for side in [-1,1]:

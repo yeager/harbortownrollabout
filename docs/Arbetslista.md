@@ -171,7 +171,103 @@ Listan innehåller 100 jobb. En tom ruta är öppen. En punkt bockas av när bet
 
 ## Modellgranskning
 
-- [ ] Gå igenom samtliga modeller i spelet, också byggnader, fordon, figurer, rekvisita och procedurgenererade objekt. Målet är minst 99/100 per modell. De 56 GLB-filerna i miljö-, fordons- och figurmapparna är en första inventering. Komplettera med modeller som byggs i kod och med varianter som skiljer sig visuellt eller funktionellt.
+- [ ] Gå igenom samtliga modeller i spelet, också byggnader, fordon, figurer, rekvisita och procedurgenererade objekt. Målet är minst 99/100 per modell. Inventeringen nedan innehåller 69 importerade resurser, inklusive delmodeller. Komplettera de kodbyggda modellerna och kontrollera vilka importer som används i den spelbara världen.
 - [ ] För varje modell, dokumentera referens och spelvy, bedöm silhuett, proportioner, material, detaljer och funktion där de är tillämpliga. Kontrollera närbilder och normala spelavstånd. Kör relevanta prov för animation, kollision eller användning. Markera modellen godkänd först när den är granskad och når målbetyget.
 
-- [x] Förfina väderskydden vid Tvärbanans fyra hållplatser med falsat tak, glaskanaler, stolpfötter och bänkar med separata ryggbrädor. Granskat vid Verkstadstorget i Godot. Spårvagnsprovet verifierade alla fyra stopp och på- och avstigning.
+- [x] Förfina väderskydden vid Tvärbanans fyra hållplatser med falsat tak, glaskanaler, stolpfötter och bänkar med separata ryggbrädor. Granskat vid Verkstadstorget i Godot. Spårvagnsprovet verifierade alla fyra stopp och på- och avstigning. Kantmarkeringen fick två rader upphöjda knoppar vid varje stopp. Granskat i närbild vid Verkstadstorget och spårvagnsprovet passerade.
+
+### Importerade modeller
+
+Resursnamnen identifierar även delar som ska bedömas i den sammansatta modellen. En öppen ruta betyder att 99/100 återstår att verifiera.
+
+#### Fordon, trafikvarianter och fordonsdelar
+
+- [ ] [`a_traktor.glb`](../vehicles/a_traktor.glb)
+- [ ] [`ambulance.glb`](../vehicles/ambulance.glb)
+- [ ] [`ambulance_helicopter.glb`](../vehicles/ambulance_helicopter.glb)
+- [ ] [`bargare.glb`](../vehicles/bargare.glb)
+- [ ] [`bmw_x5_m60i.glb`](../vehicles/bmw_x5_m60i.glb)
+- [ ] [`brandbil.glb`](../vehicles/brandbil.glb)
+- [ ] [`city_bus.glb`](../vehicles/city_bus.glb)
+- [ ] [`dam_pickup.glb`](../vehicles/dam_pickup.glb)
+- [ ] [`electric_kick_scooter.glb`](../vehicles/electric_kick_scooter.glb)
+- [ ] [`farm_tractor.glb`](../vehicles/farm_tractor.glb)
+- [ ] [`food_truck.glb`](../vehicles/food_truck.glb)
+- [ ] [`food_truck_road.glb`](../vehicles/food_truck_road.glb)
+- [ ] [`ice_cream_van.glb`](../vehicles/ice_cream_van.glb)
+- [ ] [`lotten.glb`](../vehicles/lotten.glb)
+- [ ] [`m3_e30.glb`](../vehicles/m3_e30.glb)
+- [ ] [`mini_cooper_cabriolet.glb`](../vehicles/mini_cooper_cabriolet.glb)
+- [ ] [`model_s.glb`](../vehicles/model_s.glb)
+- [ ] [`monster_truck.glb`](../vehicles/monster_truck.glb)
+- [ ] [`motorboat.glb`](../vehicles/motorboat.glb)
+- [ ] [`polisbil.glb`](../vehicles/polisbil.glb)
+- [ ] [`polishelikopter.glb`](../vehicles/polishelikopter.glb)
+- [ ] [`porsche_gt3_rs.glb`](../vehicles/porsche_gt3_rs.glb)
+- [ ] [`puch_dakota.glb`](../vehicles/puch_dakota.glb)
+- [ ] [`raggarbil.glb`](../vehicles/raggarbil.glb)
+- [ ] [`refuse_truck.glb`](../vehicles/refuse_truck.glb)
+- [ ] [`ride_on_mower.glb`](../vehicles/ride_on_mower.glb)
+- [ ] [`saab96.glb`](../vehicles/saab96.glb)
+- [ ] [`shopping_trike.glb`](../vehicles/shopping_trike.glb)
+- [ ] [`snowmobile.glb`](../vehicles/snowmobile.glb)
+- [ ] [`sport_quattro.glb`](../vehicles/sport_quattro.glb)
+- [ ] [`taxi.glb`](../vehicles/taxi.glb)
+- [ ] [`tractor_snow_blade.glb`](../vehicles/tractor_snow_blade.glb)
+- [ ] [`traffic_bmw_blue.glb`](../vehicles/traffic_bmw_blue.glb)
+- [ ] [`traffic_bmw_silver.glb`](../vehicles/traffic_bmw_silver.glb)
+- [ ] [`tram_cab.glb`](../vehicles/tram_cab.glb)
+- [ ] [`tram_saloon.glb`](../vehicles/tram_saloon.glb)
+- [ ] [`volvo240.glb`](../vehicles/volvo240.glb)
+- [ ] [`volvo_ec950f.glb`](../vehicles/volvo_ec950f.glb)
+- [ ] [`volvo_wheel_loader.glb`](../vehicles/volvo_wheel_loader.glb)
+- [ ] [`volvo_xc60_polis.glb`](../vehicles/volvo_xc60_polis.glb)
+
+#### Byggnader och miljöobjekt
+
+- [ ] [`bageri.glb`](../environment/bageri.glb)
+- [ ] [`barnvagn.glb`](../environment/barnvagn.glb)
+- [ ] [`bibliotek.glb`](../environment/bibliotek.glb)
+- [ ] [`brandstation.glb`](../environment/brandstation.glb)
+- [ ] [`bredkronigt_lovtrad.glb`](../environment/bredkronigt_lovtrad.glb)
+- [ ] [`cyklist.glb`](../environment/cyklist.glb)
+- [ ] [`gran.glb`](../environment/gran.glb)
+- [ ] [`lovtrad.glb`](../environment/lovtrad.glb)
+- [ ] [`polisstation.glb`](../environment/polisstation.glb)
+- [ ] [`pump_hose.obj`](../environment/pump_hose.obj)
+- [ ] [`pump_shell.obj`](../environment/pump_shell.obj)
+- [ ] [`rullator.glb`](../environment/rullator.glb)
+- [ ] [`school.glb`](../environment/school.glb)
+- [ ] [`sjukhus.glb`](../environment/sjukhus.glb)
+- [ ] [`vardcentral.glb`](../environment/vardcentral.glb)
+
+#### Figurer och figurdelar
+
+- [ ] [`AlmaFace.obj`](../characters/AlmaFace.obj)
+- [ ] [`AlmaPortrait.glb`](../characters/AlmaPortrait.glb)
+- [ ] [`Bob.obj`](../characters/Bob.obj)
+- [ ] [`Face.obj`](../characters/Face.obj)
+- [ ] [`GrippingHand.obj`](../characters/GrippingHand.obj)
+- [ ] [`Hair.obj`](../characters/Hair.obj)
+- [ ] [`Jacket.obj`](../characters/Jacket.obj)
+- [ ] [`JacketTrim.glb`](../characters/JacketTrim.glb)
+- [ ] [`Portrait.glb`](../characters/Portrait.glb)
+- [ ] [`RelaxedHand.obj`](../characters/RelaxedHand.obj)
+- [ ] [`RunningHand.obj`](../characters/RunningHand.obj)
+- [ ] [`Sleeve.obj`](../characters/Sleeve.obj)
+- [ ] [`Trainer.obj`](../characters/Trainer.obj)
+- [ ] [`Trouser.obj`](../characters/Trouser.obj)
+
+
+### Kodbyggda modeller som identifierats
+
+- [ ] Dax med uteservering, meny- och beställningsstation samt utlämningslucka
+- [ ] Villorna 12, 14, 16 och 18, var och en med tomt och trädgårdsdetaljer
+- [ ] Sjöstads- och Stockholmsfasadernas byggnadsvarianter
+- [ ] Sjukhusets ambulansintag och takplatta
+- [ ] Lekhamnen och varorna i butikens fönster
+- [ ] Fontänen, midsommarstången och julgranen
+- [ ] Tvärbanans perrong, väderskydd och övriga hållplatsdetaljer
+- [ ] Broarna, kajerna, träpromenaderna, bryggorna och förtöjningsbojarna
+- [ ] Trafikljus, gatlyktor, vägskyltar och parkeringsskyltar
+- [ ] Boulebana, spelfigurer och klot
