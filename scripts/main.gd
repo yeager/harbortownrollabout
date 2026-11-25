@@ -3393,6 +3393,8 @@ func _build_canal_bridge(z: float, asphalt: Color, rail_mesh: CylinderMesh) -> v
 		var count := 1 if i == 1 else ceili((end-start) / 1.25)
 		for step in range(1, count+1):
 			sections.append(lerpf(start, end, float(step)/count))
+	var beam_finish := _material(Color("#858683"), .87, false, "mineral")
+	var drip_finish := _material(Color("#525858"), .88)
 	for i in sections.size()-1:
 		var x0 := sections[i]
 		var x1 := sections[i+1]
@@ -3409,6 +3411,15 @@ func _build_canal_bridge(z: float, asphalt: Color, rail_mesh: CylinderMesh) -> v
 			var edge: Vector3 = mid + Vector3.BACK*side*5.5
 			var kerb := _make_box("Brons gångkant",Vector3(length,.16,1.1),edge+normal*.08,Color("#bab6aa"))
 			kerb.rotation.z = angle
+			var fascia: Vector3 = mid + Vector3.BACK * side * 5.89
+			var beam := _make_box("Bridge edge beam", Vector3(length + .016, .53, .32),
+				fascia - normal * .236, Color.WHITE)
+			beam.rotation.z = angle
+			beam.material_override = beam_finish
+			var drip := _make_box("Bridge edge drip strip", Vector3(length + .012, .039, .074),
+				fascia - normal * .489 + Vector3.BACK * side * .118, Color.WHITE)
+			drip.rotation.z = angle
+			drip.material_override = drip_finish
 			for h in [.54,1.06]:
 				_add_bridge_rail(rail_mesh, edge + Vector3.UP * h, length + .015, angle)
 	for x in range(52,99,2):
