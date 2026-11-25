@@ -3600,6 +3600,7 @@ func _build_marina() -> void:
 	windscreen_glass.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
 	windscreen_glass.roughness = .16
 	windscreen_glass.disable_receive_shadows = true
+	windscreen_glass.cull_mode = BaseMaterial3D.CULL_DISABLED
 	var windscreen_trim := Color("#323d43")
 	for berth in MOORING_COUNT:
 		var z := MOORING_START_Z + berth*MOORING_SPACING
@@ -3652,13 +3653,32 @@ func _build_marina() -> void:
 		var shell := MeshInstance3D.new()
 		shell.mesh = hull.commit()
 		boat.add_child(shell)
-		var pane := _make_box("Vindruta", Vector3(.014, .56, 1.46), Vector3(-.57, .86, 0), Color.WHITE, false, boat)
-		pane.rotation.z = -.29
-		pane.material_override = windscreen_glass
+		var lower_glass := [
+			Vector3(-.29, .59, -.83), Vector3(-.72, .59, -.57),
+			Vector3(-.72, .59, .57), Vector3(-.29, .59, .83),
+		]
+		var upper_glass := [
+			Vector3(-.23, 1.10, -.74), Vector3(-.55, 1.14, -.52),
+			Vector3(-.55, 1.14, .52), Vector3(-.23, 1.10, .74),
+		]
+		var glazing := SurfaceTool.new()
+		glazing.begin(Mesh.PRIMITIVE_TRIANGLES)
+		glazing.set_material(windscreen_glass)
+		for panel in 3:
+			for corner in [lower_glass[panel], upper_glass[panel], upper_glass[panel + 1],
+					lower_glass[panel], upper_glass[panel + 1], lower_glass[panel + 1]]:
+				glazing.add_vertex(corner)
+		glazing.generate_normals()
+		var pane := MeshInstance3D.new()
+		pane.name = "Vindruta"
+		pane.mesh = glazing.commit()
 		pane.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
-		for side in [-1.0, 1.0]:
-			_make_box("Windscreen rail", Vector3(.041, .031, 1.49), Vector3(0, side * .28, 0), windscreen_trim, false, pane)
-			_make_box("Windscreen upright", Vector3(.041, .56, .034), Vector3(0, 0, side * .73), windscreen_trim, false, pane)
+		boat.add_child(pane)
+		for corner in 4:
+			_add_moored_windscreen_trim(boat, lower_glass[corner], upper_glass[corner], windscreen_trim)
+		for panel in 3:
+			_add_moored_windscreen_trim(boat, lower_glass[panel], lower_glass[panel + 1], windscreen_trim)
+			_add_moored_windscreen_trim(boat, upper_glass[panel], upper_glass[panel + 1], windscreen_trim)
 		_make_box("Förlucka",Vector3(.54,.04,.42),Vector3(-1.52,.605,0),Color("#41535b"),false,boat)
 		var cover := [Color("#253b51"),Color("#b7afa0"),Color("#365b64")][berth%3] as Color
 		if berth % 3 == 2:
@@ -3756,6 +3776,12 @@ func _build_marina() -> void:
 		moorings.append({"boat":boat, "buoy":buoy, "eye":eye, "cleats":cleats, "bow_line":bow_line, "lines":lines, "phase":berth*1.7,
 			"heading":boat.rotation.y, "hull_bounds":hull_bounds})
 	_update_moorings(0.0)
+
+func _add_moored_windscreen_trim(boat: Node3D, start: Vector3, end: Vector3, color: Color) -> void:
+	var span := end - start
+	var frame := _make_box("Windscreen frame", Vector3(.031, .031, span.length() + .023),
+		(start + end) * .5, color, false, boat)
+	frame.basis = Basis.looking_at(span)
 
 func _build_quay_windsock() -> void:
 	var foot := Vector3(54.6,0,-16.5)
