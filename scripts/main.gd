@@ -4623,10 +4623,30 @@ func _build_lampposts() -> void:
 	cap.bottom_radius = .245
 	cap.top_radius = .045
 	cap.height = .11
-	cap.material = _material(Color("#384845"))
+	var iron := Color("#384845")
+	cap.material = _material(iron)
+	var collar := CylinderMesh.new()
+	collar.radial_segments = 16
+	collar.rings = 0
+	collar.bottom_radius = .077
+	collar.top_radius = .135
+	collar.height = .082
+	collar.material = cap.material
+	var rim := CylinderMesh.new()
+	rim.radial_segments = 16
+	rim.rings = 0
+	rim.bottom_radius = .193
+	rim.top_radius = .243
+	rim.height = .037
+	rim.material = cap.material
 	for point: Vector3 in park_sites:
 		point.y = _foot_height(point.x,point.z)
 		_make_roadside_solid("Park lantern post",Vector3(.12,2.55,.12),point+Vector3.UP*1.275,Color("#384845"))
+		var socket := MeshInstance3D.new()
+		socket.name = "Park lantern socket"
+		socket.mesh = collar
+		socket.position = point + Vector3.UP * 2.517
+		add_child(socket)
 		var globe := MeshInstance3D.new()
 		globe.mesh = diffuser
 		globe.position = point+Vector3.UP*2.68
@@ -4635,6 +4655,15 @@ func _build_lampposts() -> void:
 		hood.mesh = cap
 		hood.position = point+Vector3.UP*2.875
 		add_child(hood)
+		var hood_rim := MeshInstance3D.new()
+		hood_rim.name = "Park lantern hood rim"
+		hood_rim.mesh = rim
+		hood_rim.position = point + Vector3.UP * 2.813
+		add_child(hood_rim)
+		for support in 3:
+			var direction := Vector3(cos(TAU * support / 3.0), 0, sin(TAU * support / 3.0))
+			_tube_between(self, point + Vector3.UP * 2.552 + direction * .116,
+				point + Vector3.UP * 2.811 + direction * .194, .011, cap.material)
 		var lantern := SpotLight3D.new()
 		lantern.position = point+Vector3.UP*2.51
 		lantern.rotation.x = -PI/2

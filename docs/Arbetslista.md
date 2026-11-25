@@ -278,4 +278,5 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
 - [ ] Broarna, kajerna, träpromenaderna, bryggorna och förtöjningsbojarna
 - [ ] Trafikljus, gatlyktor, vägskyltar och parkeringsskyltar
   - Gatlyktsmodellen fick fotplatta, separat armaturhus och en tunnare ljusspridare. Granskat vid kanalen i dagsljus och nattläge. Övningsbaneprovet passerade.
+  - Kajens låga lyktor fick sockel, kant under huven och tre smala stag runt ljusspridaren. Granskat vid färjebryggan i Godot. Väderprovet passerade.
 - [ ] Boulebana, spelfigurer och klot
