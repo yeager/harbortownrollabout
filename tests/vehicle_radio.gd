@@ -284,6 +284,7 @@ func check_controls() -> void:
 		fail("The saved next-song key did not change tracks")
 		return
 	restored_song = game.radio_track
+	var remaining_tracks: Array[String] = game.radio_bag.duplicate()
 	game.radio.seek(8.0)
 	game._save_checkpoint()
 	game.queue_free()
@@ -293,6 +294,13 @@ func check_controls() -> void:
 	game._resume_road_checkpoint()
 	if not game.radio.playing or game.radio_track != restored_song or game.radio.get_playback_position() < 7.0:
 		fail("The saved song did not resume near its playback position")
+		return
+	if remaining_tracks.is_empty() or game.radio_bag != remaining_tracks:
+		fail("The saved shuffle order did not resume")
+		return
+	press(KEY_M)
+	if game.radio_track != remaining_tracks.back():
+		fail("Next song did not follow the saved shuffle order")
 		return
 	game.queue_free()
 	await process_frame

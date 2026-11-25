@@ -971,7 +971,11 @@ func _save_checkpoint() -> void:
 			"free_drive": free_drive, "progress": vehicle_progress.duplicate()
 		}
 		if not radio_vehicle.is_empty():
-			road_checkpoint["radio"] = {"enabled": radio_enabled, "track": radio_track, "position": radio.get_playback_position() if radio.playing else 0.0}
+			road_checkpoint["radio"] = {
+				"enabled": radio_enabled, "track": radio_track,
+				"position": radio.get_playback_position() if radio.playing else 0.0,
+				"remaining": PackedStringArray(radio_bag)
+			}
 		if vehicle_index == 2 and mission_index == 2 and practice_hose.visible:
 			road_checkpoint["hose_seconds"] = hose_seconds
 		if vehicle_index == BUS and not free_drive and bus_leg % 2 == 1 and bus_stop_request.visible:
@@ -11156,6 +11160,9 @@ func _resume_road_checkpoint() -> void:
 		radio_enabled = station.enabled
 		if radio_enabled and station.track in radio_tracks:
 			radio_bag.clear()
+			for track: String in station.get("remaining", PackedStringArray()):
+				if track != station.track and track in radio_tracks and track not in radio_bag:
+					radio_bag.append(track)
 			_play_radio_track(station.track, station.position)
 		_sync_radio()
 
@@ -11399,6 +11406,8 @@ func _valid_checkpoint(saved: Variant) -> bool:
 			return false
 	if saved.has("radio"):
 		if not _checkpoint_fields(saved.radio, {"enabled": TYPE_BOOL, "track": TYPE_STRING, "position": TYPE_FLOAT}):
+			return false
+		if saved.radio.has("remaining") and not saved.radio.remaining is PackedStringArray:
 			return false
 		if not is_finite(saved.radio.position) or saved.radio.position < 0.0:
 			return false
