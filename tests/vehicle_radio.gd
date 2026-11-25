@@ -24,9 +24,10 @@ func start() -> void:
 	TranslationServer.set_locale(LOCALES[0])
 	game._start_game()
 
-func press(key: Key) -> void:
+func press(key: Key, ctrl := false) -> void:
 	var event := InputEventKey.new()
 	event.keycode = key
+	event.ctrl_pressed = ctrl
 	event.pressed = true
 	game._unhandled_key_input(event)
 
@@ -161,6 +162,11 @@ func check_controls() -> void:
 		fail("Changing back to Swedish did not restore the next-song control")
 		return
 	var song: String = game.radio_track
+	press(KEY_J, true)
+	press(KEY_N, true)
+	if not game.radio.playing or game.radio_track != song:
+		fail("A modified shortcut changed the radio")
+		return
 	press(KEY_N)
 	if game.radio_track == song:
 		fail("Changing back to Swedish did not restore the next-song shortcut")

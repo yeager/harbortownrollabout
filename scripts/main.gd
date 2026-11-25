@@ -1151,11 +1151,13 @@ func _unhandled_key_input(event: InputEvent) -> void:
 		if event.keycode == recovery_key and mode == "playing" and not paused:
 			_recover_position()
 			return
-		if event.keycode == radio_keys[0]:
-			_toggle_radio()
-			return
-		if event.keycode == radio_keys[1]:
-			if next_song_button.is_visible_in_tree(): _next_radio_track()
+		if event.keycode in radio_keys:
+			if event.ctrl_pressed or event.alt_pressed or event.meta_pressed:
+				return
+			if event.keycode == radio_keys[0]:
+				_toggle_radio()
+			elif next_song_button.is_visible_in_tree():
+				_next_radio_track()
 			return
 		if event.keycode == phone.toggle_key:
 			if phone.visible: phone.toggle()
