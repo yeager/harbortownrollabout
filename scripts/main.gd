@@ -3442,17 +3442,16 @@ func _build_canal_bridge(z: float, asphalt: Color, rail_mesh: CylinderMesh) -> v
 				var anchor := _make_box("Bridge railing anchor", Vector3(.028, .019, .028),
 					foot + along * offset + up * .032, Color("#909a9b"))
 				anchor.rotation.z = slope
+	var return_mesh := _bridge_rail_return_mesh(rail_mesh)
 	for end in [-1, 1]:
 		var x: float = HIGH_BRIDGE_X.front() if end < 0 else HIGH_BRIDGE_X.back()
 		for side in [-1, 1]:
-			var hub := Vector3(x, _bridge_rise(x, z) + .78, z + side * 5.5)
-			var previous := hub + Vector3.UP * .26
-			for i in range(1, 13):
-				var angle := PI * i / 12.0
-				var point := hub + Vector3(end * sin(angle), cos(angle), 0) * .26
-				_add_moored_round_fitting(self, "Bridge handrail return", previous, point,
-					rail_mesh.top_radius, rail_mesh.material)
-				previous = point
+			var rail_return := MeshInstance3D.new()
+			rail_return.name = "Bridge handrail return"
+			rail_return.mesh = return_mesh
+			rail_return.position = Vector3(x, _bridge_rise(x, z) + .78, z + side * 5.5)
+			rail_return.rotation.y = PI if end < 0 else 0.0
+			add_child(rail_return)
 	var concrete := _material(Color("#918d83"), .91)
 	var bearing_finish := _material(Color("#354146"), .61)
 	for bank_x: float in [54.40, 87.35]:
@@ -3514,6 +3513,30 @@ func _build_canal_bridge(z: float, asphalt: Color, rail_mesh: CylinderMesh) -> v
 			collar.mesh = collar_mesh
 			collar.position.y = -.94 - shaft.position.y
 			shaft.add_child(collar)
+
+func _bridge_rail_return_mesh(rail: CylinderMesh) -> ArrayMesh:
+	const ARC_STEPS := 24
+	const TUBE_SIDES := 12
+	const BEND_RADIUS := .26
+	var surface := SurfaceTool.new()
+	surface.begin(Mesh.PRIMITIVE_TRIANGLES)
+	surface.set_material(rail.material)
+	for step in ARC_STEPS + 1:
+		var angle := PI * step / ARC_STEPS
+		var radial := Vector3(sin(angle), cos(angle), 0)
+		for side in TUBE_SIDES:
+			var ring_angle := TAU * side / TUBE_SIDES
+			var normal := radial * cos(ring_angle) + Vector3.BACK * sin(ring_angle)
+			surface.set_normal(normal)
+			surface.add_vertex(radial * BEND_RADIUS + normal * rail.top_radius)
+	for step in ARC_STEPS:
+		for side in TUBE_SIDES:
+			var first := step * TUBE_SIDES + side
+			var next := step * TUBE_SIDES + (side + 1) % TUBE_SIDES
+			for index in [first, first + TUBE_SIDES, next, next, first + TUBE_SIDES, next + TUBE_SIDES]:
+				surface.add_index(index)
+	return surface.commit()
+
 
 func _build_quay_lane_markings() -> void:
 	var dashes: Array[Transform3D] = []

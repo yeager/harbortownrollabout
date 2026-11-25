@@ -303,6 +303,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Kanalbroarnas gångbanor fick stenplattor mellan betongkanterna. Granskat i närbild i Godot. Kanalprovet passerade.
   - Broarnas räckesstolpar fick bultade fotplattor som följer gångbanans lutning. Granskat på norra bron i Godot. Kanalprovet passerade.
   - Kanalbroarnas räcken fick rundade röravslut som binder ihop de övre och undre rören vid broändarna. Granskat på norra bron i Godot. Kanalprovet passerade.
+  - Rörböjarna modellerades om med sammanhängande ytor och mjuk skuggning. Granskat i närbild i Godot. Kanalprovet passerade.
 - [ ] Trafikljus, gatlyktor, vägskyltar och parkeringsskyltar
   - Gatlyktsmodellen fick fotplatta, separat armaturhus och en tunnare ljusspridare. Granskat vid kanalen i dagsljus och nattläge. Övningsbaneprovet passerade.
   - Kajens låga lyktor fick sockel, kant under huven och tre smala stag runt ljusspridaren. Granskat vid färjebryggan i Godot. Väderprovet passerade.
