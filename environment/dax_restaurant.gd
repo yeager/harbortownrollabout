@@ -79,15 +79,28 @@ func build(world: Node3D) -> void:
 		_table(Vector3(x, .08, -9.6), true)
 	for x in [-5.4, -1.9, 3.65, 6.1]:
 		_table(Vector3(x, .21, -4.5), false)
-	for x in [-7.0, 7.0]:
-		_box("Terrace planter", Vector3(1.14, .56, .61), Vector3(x, .28, -11.68), DARK)
-		for offset in [-.32, 0.0, .32]:
-			_ball("Terrace shrub", Vector3(x + offset, .70, -11.68), Vector3(.48, .43, .46), Color("#59814c"))
+	_fit_terrace_edges()
 	_burger_ad()
 	_order_station()
 	_obstacle(Vector3(16, 4.1, 13), Vector3(0, 2.0, 0))
 	for x in [-5.4, -2.7, 5.0]:
 		_obstacle(Vector3(1.6, 1.0, 1.65), Vector3(x, .5, -9.6))
+
+func _fit_terrace_edges() -> void:
+	for x in [-6.1, 5.7]:
+		_box("Terrace planter", Vector3(2.65, .56, .64), Vector3(x, .33, -11.68), DARK)
+		_box("Planter soil", Vector3(2.51, .045, .53), Vector3(x, .62, -11.68), Color("#513a2c"))
+		for i in 6:
+			var shrub_at := Vector3(x - 1.0 + .4 * i, .76 + .04 * (i % 2), -11.68)
+			_ball("Terrace shrub", shrub_at, Vector3(.56, .47, .48), Color("#59814c").lightened(.045 * (i % 3)))
+		_obstacle(Vector3(2.65, .62, .64), Vector3(x, .31, -11.68))
+
+	for x in [-7.88, 7.88]:
+		_glass(Vector3(x, .80, -9.25), Vector3(.045, 1.37, 3.82))
+		for z in [-11.20, -9.25, -7.30]:
+			_box("Windbreak post", Vector3(.086, 1.52, .086), Vector3(x, .81, z), DARK)
+		_box("Windbreak rail", Vector3(.086, .064, 3.93), Vector3(x, 1.52, -9.25), DARK)
+		_obstacle(Vector3(.13, 1.53, 3.93), Vector3(x, .79, -9.25))
 
 func _fit_timber_fascia() -> void:
 	var slat := BoxMesh.new()
@@ -243,7 +256,7 @@ func _order_station() -> void:
 	_sign("1 · Order here", Vector3(-8.88, 1.66, -.40), 1.23, -PI / 2)
 	_box("Ordering station header", Vector3(.32, .21, 2.92), Vector3(-8.18, 2.70, -3.49), TEAL)
 	_sign("Drive-through", Vector3(-8.35, 2.72, -3.49), 2.55, -PI / 2, CREAM, .005)
-	_box("Entrance sign post", Vector3(.20, 2.5, .20), Vector3(-8.15, 1.25, -15.4), DARK)
+	_box("Entrance sign post", Vector3(.20, 2.23, .20), Vector3(-8.15, 1.115, -15.29), DARK)
 	_box("Entrance sign panel", Vector3(1.96, .89, .12), Vector3(-8.15, 2.46, -15.4), TEAL)
 	_sign("Dax", Vector3(-8.15, 2.65, -15.48), 1.65, PI)
 	_sign("Drive-through", Vector3(-8.15, 2.23, -15.48), 1.76, PI)
