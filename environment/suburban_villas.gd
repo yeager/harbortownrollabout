@@ -120,17 +120,28 @@ func _build_lot(index: int) -> void:
 		_window(lot, Vector3(-1.65, eave + .55, .066), Vector2(.74, .67))
 	var door_x := -1.65
 	_box(lot, "Front door frame", Vector3(1.31, 2.26, .16), Vector3(door_x, 1.39, .06), TRIM)
-	_box(lot, "Front door", Vector3(1.09, 2.10, .09), Vector3(door_x, 1.34, .17), roof.darkened(.22))
+	_box(lot, "Front door", Vector3(1.09, 2.10, .09), Vector3(door_x, 1.34, .17), [Color("#314d58"), Color("#6c352b"), Color("#343c3e"), Color("#4d6153")][index])
 	_box(lot, "Door fanlight", Vector3(.70, .40, .035), Vector3(door_x, 2.03, .229), Color.WHITE).material_override = window_glass
 	_box(lot, "Door handle", Vector3(.14, .05, .062), Vector3(door_x + .39, 1.35, .25), Color("#b39665"))
 	var plate := _box(lot, "House number plate", Vector3(.31, .22, .047), Vector3(door_x - .88, 1.91, .067), Color("#303e4b"))
 	var address: Label3D = world._station_sign(number, Vector3(0, 0, .026), .0030, Color("#fff4df"), 0, plate)
 	address.auto_translate_mode = Node.AUTO_TRANSLATE_MODE_DISABLED
-	var canopy := _box(lot, "Entrance canopy", Vector3(2.56, .18, 1.82), Vector3(door_x, 2.74, .77), roof)
-	canopy.rotation.x = .095
-	canopy.material_override = roof_finish
-	for x in [door_x - 1.06, door_x + 1.06]:
-		_box(lot, "Porch post", Vector3(.13, 2.47, .13), Vector3(x, 1.42, 1.44), TRIM)
+	var porch_width: float = [2.56, 2.90, 1.94, 3.16][index]
+	var porch_depth: float = [1.82, 1.54, 1.12, 2.05][index]
+	if index == 0 or index == 3:
+		var slope := .40 if index == 0 else .24
+		for side in [-1, 1]:
+			var panel := _box(lot, "Gabled porch roof", Vector3(porch_width * .5 / cos(slope), .16, porch_depth), Vector3(door_x + side * porch_width * .25, 2.78 + tan(slope) * porch_width * .25, porch_depth * .44), roof)
+			panel.rotation.z = -side * slope
+			panel.material_override = roof_finish
+	else:
+		var canopy := _box(lot, "Entrance canopy", Vector3(porch_width, .16, porch_depth), Vector3(door_x, 2.78, porch_depth * .44), roof)
+		canopy.rotation.x = .13 if index == 1 else .035
+		canopy.material_override = roof_finish
+	if index != 2:
+		for side in [-1, 1]:
+			var post_width := .23 if index == 3 else .13
+			_box(lot, "Porch post", Vector3(post_width, 2.52, post_width), Vector3(door_x + side * (porch_width * .5 - .19), 1.47, porch_depth * .79), TRIM)
 	for step in 3:
 		_box(lot, "Entrance step", Vector3(2.18, .12, 1.66 - .26 * step), Vector3(door_x, .06 + .11 * step, .92 - .14 * step), Color("#a49d8f"))
 	var sconce := _box(lot, "Porch lamp", Vector3(.15, .27, .16), Vector3(door_x + .83, 2.12, .19), Color("#ffdc95"))
@@ -281,15 +292,15 @@ func _grounds(lot: Node3D, index: int) -> void:
 			_plant(lot, Vector3(-5.65 + .27 * i, .44, 4.6), Vector3(.29, .25, .38), Color("#6d7850"))
 	if index % 2 == 0:
 		_park_car(lot, PARKED_CARS[index / 2], Vector3(drive_x, .278, -1.85))
-	# A wreath with a red bow hangs above each porch.
-	var wreath_at := lot.to_global(Vector3(-1.65, 2.70, 1.64))
+	# A wreath with a red bow hangs on each front door.
+	var wreath_at := lot.to_global(Vector3(-1.65, 1.63, .30))
 	for i in 18:
 		var angle := i * TAU / 18.0
-		var point := wreath_at + Vector3(cos(angle), sin(angle), 0) * .32
+		var point := wreath_at + Vector3(cos(angle), sin(angle), 0) * .23
 		_plant(winter_trim, point, Vector3(.19, .19, .113), Color("#315738"))
 		if i % 3 == 0:
 			_bulb(point + Vector3.BACK * .072, 0)
-	_box(winter_trim, "Wreath ribbon", Vector3(.35, .13, .085), wreath_at + Vector3(0, -.33, .09), Color("#b64739")).rotation.z = .13
+	_box(winter_trim, "Wreath ribbon", Vector3(.35, .13, .085), wreath_at + Vector3(0, -.24, .09), Color("#b64739")).rotation.z = .13
 
 func _garden_bench(lot: Node3D, at: Vector3) -> void:
 	for end in [-1, 1]:
