@@ -1150,7 +1150,7 @@ func _notification(what: int) -> void:
 			_toggle_pause()
 
 func _unhandled_key_input(event: InputEvent) -> void:
-	if event is InputEventKey and event.pressed and not event.echo:
+	if event is InputEventKey and event.pressed and not event.echo and not event.alt_pressed and not event.meta_pressed:
 		if event.keycode == jump_key or (jump_key == KEY_0 and event.keycode == KEY_KP_0):
 			if mode == "playing" and not paused and walker.visible and not boule_seated and not scooter.visible and not ferry_passenger and tram_mode == 0 and not operating_excavator and not boating and not phone.handset.is_visible_in_tree() and walk_jump_left <= 0:
 				walk_jump_left = WALK_JUMP_TIME
@@ -1159,7 +1159,7 @@ func _unhandled_key_input(event: InputEvent) -> void:
 			_recover_position()
 			return
 		if event.keycode in radio_keys:
-			if event.ctrl_pressed or event.alt_pressed or event.meta_pressed:
+			if event.ctrl_pressed:
 				return
 			if event.keycode == radio_keys[0]:
 				_toggle_radio()
@@ -1173,7 +1173,7 @@ func _unhandled_key_input(event: InputEvent) -> void:
 			_toggle_scooter()
 			return
 		if event.keycode == map_key:
-			if _world_controls_available() and map_button.is_visible_in_tree() and not (event.ctrl_pressed or event.alt_pressed or event.meta_pressed):
+			if _world_controls_available() and map_button.is_visible_in_tree() and not event.ctrl_pressed:
 				map_button.pressed.emit()
 			return
 		if number_vehicle_switches and event.keycode in [KEY_7, KEY_KP_7]:
@@ -1188,14 +1188,14 @@ func _unhandled_key_input(event: InputEvent) -> void:
 		match event.keycode:
 			KEY_H: _honk()
 			KEY_F4:
-				if horn_f4 and not event.alt_pressed: _honk()
+				if horn_f4: _honk()
 			KEY_F, KEY_F3:
 				if (event.keycode == KEY_F or seat_f3) and not phone.handset.is_visible_in_tree():
 					_change_seat()
 			KEY_C, KEY_F6:
 				if event.keycode == KEY_C or camera_f6: _toggle_camera_view()
 			KEY_ESCAPE, KEY_P, KEY_F7:
-				if event.alt_pressed or event.meta_pressed or event.ctrl_pressed: return
+				if event.ctrl_pressed: return
 				if event.keycode == KEY_F7 and not pause_f7: return
 				if event.keycode == KEY_ESCAPE and phone.handset.is_visible_in_tree():
 					phone.toggle()

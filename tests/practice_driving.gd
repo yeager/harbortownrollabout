@@ -338,6 +338,14 @@ func verify() -> void:
 		quit(1)
 		return
 	key.keycode = KEY_BACKSPACE
+	for modifier in ["alt_pressed", "meta_pressed"]:
+		key.set(modifier, true)
+		game._unhandled_key_input(key)
+		key.set(modifier, false)
+		if game.ambulance.position != displaced:
+			printerr("A modified shortcut recovered the vehicle")
+			quit(1)
+			return
 	game._unhandled_key_input(key)
 	if game.ambulance.position != game.PRACTICE_START:
 		printerr("Saved Backspace binding did not recover the vehicle")
