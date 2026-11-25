@@ -201,7 +201,7 @@ for side in (-1,1):
 cube("Bogie crossmember", (0, 0, .38), (1.37, .65, .24), black, .055, root)
 for side in (-1, 1):
     cube("Bogie side frame", (side * .84, 0, .385), (.13, 2.29, .207), black, .035, root)
-    cube("Bogie suspension bolster", (side * .84, 0, .477), (.19, .58, .12), steel, .025, root)
+    cube("Bogie suspension bolster", (side * .84, 0, .438), (.19, .58, .12), steel, .025, root)
 for y in (-.91, .91):
     cylinder("Wheelset axle", (0, y, .29), .063, 1.63, steel, True, 20, root)
     for side in (-1, 1):
@@ -209,8 +209,8 @@ for y in (-.91, .91):
         cylinder("Inner wheel flange", (side * .658, y, .29), .286, .028, steel, True, 28, root)
         cylinder("Recessed wheel web", (side * .793, y, .29), .199, .027, black, True, 24, root)
         cylinder("Axle bearing cover", (side * .867, y, .29), .119, .13, steel, True, 16, root)
-        cylinder("Primary suspension rubber stack", (side * .84, y, .49), .073, .19, black, False, 16, root)
-        for z in (.436, .482, .528):
+        cylinder("Primary suspension rubber stack", (side * .84, y, .421), .073, .159, black, False, 16, root)
+        for z in (.365, .416, .467):
             cylinder("Primary suspension steel plate", (side * .84, y, z), .078, .014, steel, False, 16, root)
 cube("Roof ventilation gasket", (0, 1.28, 2.648), (1.30, 1.09, .052), black, .025, root)
 cube("Roof ventilation housing", (0, 1.28, 2.736), (1.37, 1.14, .19), steel, .057, root)
