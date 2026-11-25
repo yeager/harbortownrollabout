@@ -3576,6 +3576,13 @@ func _build_marina() -> void:
 	var galvanised := _material(Color("#797e7d"), .35)
 	galvanised.metallic = .65
 	eye_mesh.material = galvanised
+	var buoy_band := CylinderMesh.new()
+	buoy_band.top_radius = MOORING_BUOY_RADIUS + .002
+	buoy_band.bottom_radius = MOORING_BUOY_RADIUS + .002
+	buoy_band.height = .058
+	buoy_band.radial_segments = 32
+	buoy_band.rings = 0
+	buoy_band.material = _material(Color("#f0dfbe"), .31)
 	var eye_mount_mesh := CylinderMesh.new()
 	eye_mount_mesh.top_radius = .068
 	eye_mount_mesh.bottom_radius = .087
@@ -3680,6 +3687,11 @@ func _build_marina() -> void:
 		buoy.position = Vector3(EAST_QUAY_WATER_EDGE-MOORING_BUOY_OFFSET,-.73,z+MOORING_BUOY_Z_OFFSET)
 		buoy.rotation.z=.13*sin(berth)
 		add_child(buoy)
+		var band := MeshInstance3D.new()
+		band.name = "Mooring buoy visibility band"
+		band.mesh = buoy_band
+		band.position.y = .226
+		buoy.add_child(band)
 		var eye_mount := MeshInstance3D.new()
 		eye_mount.name = "Mooring eye mount"
 		eye_mount.mesh = eye_mount_mesh
