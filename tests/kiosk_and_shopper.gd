@@ -21,6 +21,23 @@ func check() -> void:
 				printerr("Neon korv failed its blink cycle")
 				quit(1)
 				return
+	sign_shop.advance_grill_sign(2.8)
+	sign_shop.advance_grill_sign(0.0, true)
+	if not sign_shop.grill_neon_light.visible or not is_zero_approx(sign_shop.grill_neon_phase):
+		printerr("Calm mode did not relight and reset the neon sign")
+		quit(1)
+		return
+	sign_shop.advance_grill_sign(12.0, true)
+	for finish in sign_shop.grill_neon_finishes:
+		if not finish.emission_enabled:
+			printerr("The grill sign blinked during calm mode")
+			quit(1)
+			return
+	sign_shop.advance_grill_sign(2.9)
+	if sign_shop.grill_neon_light.visible:
+		printerr("The grill sign did not resume blinking after calm mode")
+		quit(1)
+		return
 	game.vehicle_selector.get_child(game.SHOPPER).pressed.emit()
 	game.start_button.pressed.emit()
 	var hinge = game.vehicle_model.find_child("EntryHinge",true,false)

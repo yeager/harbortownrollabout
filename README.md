@@ -29,12 +29,17 @@ On snowy roads, a sharp turn above about 22 km/h can make a vehicle slide sidewa
 
 At a traffic light, stop on red, slow down on orange and go on green. By default, the game helps you stop at the line. If you enable **Allow driving through red lights** in Driving settings, crossing on red brings up a reminder.
 
+Turn indicators come on automatically as you steer. Look for blue **P** signs on Stationsallén, Norra kajgatan and Södra kajgatan, then park parallel to the kerb with the whole vehicle inside a white box.
+
+Wait before a junction if there’s a queue on the other side. When you drive an ambulance, police car or fire engine with its blue lights or siren on, traffic gives way where there’s room. You can proceed on red once the crossing is clear.
+
 ![Choosing a vehicle on the main menu](docs/screenshots/vehicle-selection.png)
 
 **Gentle driving** keeps most vehicles below 30 km/h. With it on, you can complete a pickup or delivery by stopping at the marker. Open the phone with **T** to read where to go next.
 
 ## Things to try
 
+- **Bring a patient to the hospital.** Take an ambulance assignment and collect the patient at the square. Follow the arrows to the covered ambulance bay on Östra allén, drive inside and stop. The drop-off receipt appears on your phone. Look up to see the air ambulance land on the roof.
 - **Drive bus 74 to Sickla udde.** Pick up your first passengers at the square and drop them off at the school. The display inside the bus shows the next stop.
 - **Take the garbage truck on its rounds.** Empty the bins at the square and the clinic, then unload at the marina. A full truck takes longer to get moving.
 - **Return the ice cream crates.** In **Free exploration**, stop the ice cream van outside the kiosk on Stationsallén to collect two empty crates. Drive west along the same street and park in the bay marked **Ice cream depot**.
@@ -45,7 +50,10 @@ At a traffic light, stop on red, slow down on orange and go on green. By default
 - **Bring a cake to a birthday party.** Walk up to the pink box at the bakery door and carry it to the party table in the square. The host opens the lid when you arrive.
 - **Find the moon rabbit.** Look on the pavement outside the sweet shop. Carry the lost figurine to the counter in the clothing shop to hear the owner's thank-you.
 - **Spend your first coins.** Park near Stationsallén, press **F** to get out, then walk to the pizzeria or sweet shop. Use **Tab** to choose what you want and **Enter** to buy it.
+- **Visit the villa district.** Choose **Villa district** on the town map to find the houses beside the tram tracks on Verkstadsgatan. The arrows lead into an empty driveway. Set the season to **Winter** and the time to **Night** to see the lights along the roofs, fences and garden trees.
+- **Visit Toy Harbour.** Find the shop on the town map or walk along Stationsallén past the hot dog stand. The window displays a wooden train, building blocks and a teddy bear. You can buy all three inside.
 - **Play boule by the canal.** Follow the signs from the ferry to the gravel court. Press **F** by the throwing circle to join. On your turn, aim with **←** or **→**, use **Tab** to choose a short, medium or long throw, then press **Enter** to throw. Try to land closest to the small yellow ball.
+- **Drive the Tvärbanan tram.** Press **F** while driving to request to get off, then drive to the next station. You step onto the platform when the doors open.
 - **Cross the canal on Lotten.** Walk down the steps to a landing. When the ferry pulls alongside, press **F** to board. Press **F** during the crossing to get off at the next landing.
 - **Take the motorboat.** Choose **Motorboat** on the town map and follow the arrows to the wooden pier on the east quay. Press **F** to board or step ashore when the boat is stopped at the pier. While driving the boat, press **R** to return to its berth.
 
@@ -62,6 +70,8 @@ At a traffic light, stop on red, slow down on orange and go on green. By default
 **Cutting the grass at the picnic meadow**
 
 ![Orange ride-on mower at work on the grass](docs/screenshots/mower-meadow.jpg)
+
+[Browse the full vehicle gallery](examples/README.md).
 
 ## While you play
 

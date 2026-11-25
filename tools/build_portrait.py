@@ -58,7 +58,7 @@ def build_portrait(root, alma=False):
             return exp(-((abs(x)-cx)/wx)**2 - ((z-cz)/wz)**2)
         return (.011*bump(.058,-.018,.025,.029) - .012*bump(.043,.014,.024,.014)
                 +.009*bump(.043,.034,.030,.012) + .022*bump(0,.006,.012,.043)
-                +(.027 if alma else .035)*bump(0,-.028,.015,.012) + .015*bump(.015,-.032,.009,.008)
+                +(.024 if alma else .028)*bump(0,-.027,.018,.014) + .015*bump(.015,-.032,.009,.008)
                 +.003*bump(.006,-.049,.0038,.009) - .002*bump(0,-.051,.003,.008)
                 -.003*bump(0,-.083,.023,.006) + .008*bump(0,-.065,.036,.019) + .008*bump(0,-.108,.029,.016))
 
@@ -192,15 +192,15 @@ def build_portrait(root, alma=False):
                     faces.append((i*8+k,i*8+(k+1)%8,j*8+(k+1)%8,j*8+k))
             return mesh(name,verts,faces,acetate)
 
-        front_y = surface(.042,.013)+.017
+        front_y = surface(0,.025)+.012
         for side in (-1,1):
             ring = []
             for k in range(48):
                 a = tau*k/48
                 x = .044+.037*cos(a)
-                ring.append((side*x,front_y-.012*(x/.081)**2,.012+.033*sin(a)))
+                ring.append((side*x,front_y-.020*(x/.081)**2,.012+.033*sin(a)))
             frame_tube("Rounded spectacle rim",ring,.0033,True)
-            frame_tube("Temple",[(side*.079,front_y-.012,.021),
+            frame_tube("Temple",[(side*.079,front_y-.019,.021),
                                   (side*.099,.062,.025),(side*.11,.006,.023),
                                   (side*.109,-.025,.012)],.0033)
         frame_tube("Arched bridge",[(-.012,front_y,.022),(0,front_y+.003,.028),

@@ -14,6 +14,7 @@ const SIDE_LINE := 10.5
 const ZEBRA_OFFSET := 6.3
 var tram_crossings: Array[Dictionary] = []
 var street_crosswalks: Array[Dictionary] = []
+var junction_boxes: Array[AABB] = []
 const SHOP_CROSSING := Vector3(-39,0,35)
 const EAST_CROSSINGS := [Vector3(91,0,0),Vector3(91,0,-48),Vector3(143,0,-48)]
 const CENTRAL_BOULEVARD_CROSSINGS := [-12.0, 12.0]
@@ -35,7 +36,8 @@ func _ready() -> void:
 		var center := -forward*setback + forward.cross(Vector3.UP)*1.85
 		center.y = get_parent()._surface_height(center.x,center.z)+.016
 		var size := Vector3(.22,.018,3.3) if forward.x != 0 else Vector3(3.3,.018,.22)
-		get_parent()._make_box("Junction stop line",size,center,Color("#eee9d9"),false,self)
+		var line: MeshInstance3D = get_parent()._make_box("Junction stop line",size,center,Color.WHITE,false,self)
+		line.material_override = get_parent().marking_finish
 	_build_street_crossing(SHOP_CROSSING)
 	for center: Vector3 in EAST_CROSSINGS:
 		_build_street_crossing(center)
@@ -44,7 +46,95 @@ func _ready() -> void:
 	for z in [-6.35,6.35]:
 		heads.append_array(_street_crosswalk(Vector3(0,0,z),true,5.15))
 	_build_tram_crossings()
+	_build_junction_boxes()
 	advance(0)
+
+func _build_junction_boxes() -> void:
+	# Include stop lines so a driver waiting on green can still obey a later red.
+	var streets: AStar2D = get_parent().navigator.graph
+	for id in streets.get_point_ids():
+		var point := streets.get_point_position(id)
+		var center := Vector3(point.x, 0, point.y)
+		var half := Vector2(5.0, 5.0)
+		if center == Vector3.ZERO:
+			half = Vector2(BOULEVARD_STOP_DISTANCE, JUNCTION_STOP_DISTANCE)
+		for crossing in tram_crossings:
+			if crossing.center.is_equal_approx(center):
+				var size: Vector3 = crossing.tangent.abs() * BOULEVARD_LINE + crossing.across.abs() * SIDE_LINE
+				half = Vector2(size.x, size.z)
+				break
+		_add_junction_box(center, half)
+	for center: Vector3 in [SHOP_CROSSING] + EAST_CROSSINGS:
+		_add_junction_box(center, Vector2(3.0, 4.8))
+
+func _add_junction_box(center: Vector3, half: Vector2) -> void:
+	var extent := Vector3(half.x, 5, half.y)
+	junction_boxes.append(AABB(center - extent, 2 * extent))
+
+func vehicle_in_junction(bounds: AABB) -> bool:
+	return junction_boxes.any(func(zone: AABB): return zone.intersects(bounds))
+
+func junction_queue_gap(pos: Vector3, heading: Vector3, reach: float, length: float,
+		half_width: float, obstacles: Array[AABB], route: Curve3D = null, distance := 0.0,
+		require_clear := false) -> float:
+	const LOOKAHEAD := 55.0
+	var nearest := INF
+	var start := Vector3(pos.x, 0, pos.z)
+	var route_length := route.get_baked_length() if route else 0.0
+	if obstacles.is_empty() or heading.is_zero_approx():
+		return nearest
+	for zone in junction_boxes:
+		if zone.has_point(start) or not zone.grow(LOOKAHEAD).has_point(start):
+			continue
+		var vicinity := zone.grow(length + half_width + 1.0)
+		if not obstacles.any(func(obstacle: AABB): return vicinity.intersects(obstacle)):
+			continue
+		var approach: float = INF
+		var entry_point := Vector3.ZERO
+		var exit_point: Variant = null
+		var exit_heading := heading
+		if route_length > 0:
+			var previous := start
+			for step in range(1, int(LOOKAHEAD) + 1):
+				var sample := route.sample_baked(fposmod(distance + step, route_length))
+				sample.y = 0
+				var hit: Variant = zone.intersects_segment(previous, sample)
+				if approach == INF and hit != null:
+					approach = step - 1 + previous.distance_to(hit) / maxf(.001, previous.distance_to(sample))
+					entry_point = hit
+				if approach < INF and not zone.has_point(sample):
+					if hit != null:
+						exit_point = zone.intersects_segment(sample, previous)
+						exit_heading = previous.direction_to(sample)
+					else:
+						approach = INF
+					break
+				previous = sample
+			if exit_point == null:
+				continue
+		else:
+			var far := start + heading * LOOKAHEAD
+			if zone.has_point(far):
+				continue
+			var hit: Variant = zone.intersects_segment(start, far)
+			if hit == null:
+				continue
+			approach = start.distance_to(hit)
+			entry_point = hit
+			exit_point = zone.intersects_segment(far, start)
+		# A vehicle already entering must be able to finish crossing.
+		if approach < reach - .05 or approach - reach >= nearest:
+			continue
+		var outlet_end: Vector3 = exit_point + exit_heading * (length + 1.0)
+		for obstacle in obstacles:
+			if require_clear and zone.intersects(obstacle) and obstacle.grow(half_width).intersects_segment(entry_point, exit_point) != null:
+				nearest = maxf(0, approach - reach)
+				break
+			var outlet_obstacle := obstacle.grow(half_width)
+			if outlet_obstacle.has_point(exit_point) or outlet_obstacle.intersects_segment(exit_point, outlet_end) != null:
+				nearest = maxf(0, approach - reach)
+				break
+	return nearest
 
 func _build_street_crossing(center: Vector3) -> void:
 	center.y = get_parent()._surface_height(center.x,center.z)
@@ -55,8 +145,9 @@ func _build_street_crossing(center: Vector3) -> void:
 		mast.position = center + Vector3(-3*direction,0,4.1*direction)
 		mast.rotation.y = -direction*PI/2
 		heads.append(_vehicle_head(mast,true))
-		get_parent()._make_box("Crossing stop line",Vector3(.21,.016,3.25),
-			center+Vector3(-3*direction,.016,1.85*direction),Color("#eee9d9"),false,self)
+		var line: MeshInstance3D = get_parent()._make_box("Crossing stop line",Vector3(.21,.016,3.25),
+			center+Vector3(-3*direction,.016,1.85*direction),Color.WHITE,false,self)
+		line.material_override = get_parent().marking_finish
 
 func add_practice_head(at: Vector3) -> Array:
 	var mast := Node3D.new()
@@ -231,6 +322,7 @@ func _build_tram_crossings() -> void:
 		for stripe in range(-9,10):
 			var mark = world._make_box("Spårövergång",Vector3(2.1,.012,.49),zebra+across*stripe*.91+Vector3.UP*.006,Color("#dfdfd4"),false,self)
 			mark.basis = Basis.looking_at(across)
+			mark.material_override = world.marking_finish
 		for along_tram in [true,false]:
 			for direction in [-1,1]:
 				var forward: Vector3 = (tangent if along_tram else across)*direction
@@ -248,6 +340,7 @@ func _build_tram_crossings() -> void:
 				group.append(_vehicle_head(mast,absf(forward.x)>.9))
 				var line = world._make_box("Haltlinje",Vector3(4.4 if along_tram else 4.1,.018,.22),edge+right*(6 if along_tram else 2.3),Color("#f0eadc"),false,self)
 				line.basis = mast.basis
+				line.material_override = world.marking_finish
 		# Separate trackside head facing the tram operator.
 		var rail_mast := Node3D.new()
 		add_child(rail_mast)
@@ -374,15 +467,19 @@ func pedestrian_may_enter(from: Vector3, to: Vector3) -> bool:
 		if _enters_crosswalk(from,to,center,c.across,8.7): return false
 	return true
 
-func red_clearance(pos: Vector3, heading: Vector3, half_length: float, red_only := false, signals_only := false) -> float:
-	var nearest := _central_clearance(pos,heading,half_length,red_only)
+func red_clearance(pos: Vector3, heading: Vector3, half_length: float, red_only := false, signals_only := false, ignore_signal := false) -> float:
+	var nearest := INF if ignore_signal else _central_clearance(pos,heading,half_length,red_only)
 	for crossing in tram_crossings:
 		var tangent: Vector3 = crossing.tangent
 		var across: Vector3 = crossing.across
 		var along := absf(heading.dot(tangent)) >= absf(heading.dot(across))
 		var green := Stage.BOULEVARD if along else Stage.SIDE_STREET
-		if crossing.stage==green and (signals_only or red_only or not crossing.get("blocked_entry", false)): continue
-		if red_only and crossing.stage==green+1: continue
+		var occupied: bool = crossing.get("blocked_entry", false)
+		if ignore_signal:
+			if not occupied: continue
+		else:
+			if crossing.stage==green and (signals_only or red_only or not occupied): continue
+			if red_only and crossing.stage==green+1: continue
 		var axis := tangent if along else across
 		var gap := _line_clearance(pos,heading,half_length,crossing.center,axis,
 			BOULEVARD_LINE if along else SIDE_LINE,8.45 if along else 4.85)

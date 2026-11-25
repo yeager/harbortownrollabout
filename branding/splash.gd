@@ -12,12 +12,6 @@ func _ready() -> void:
 	$Logo.texture = Languages.logo(TranslationServer.get_locale())
 	$Logo.accessibility_name = tr("Harbor Town Rollabout")
 	get_window().title = tr("Harbor Town Rollabout")
-	ResourceLoader.load_threaded_request(GAME)
+	# Load the game on the main thread once the splash has been shown.
 	await get_tree().create_timer(1.2).timeout
-	while ResourceLoader.load_threaded_get_status(GAME) == ResourceLoader.THREAD_LOAD_IN_PROGRESS:
-		await get_tree().process_frame
-	var scene := ResourceLoader.load_threaded_get(GAME) as PackedScene
-	if scene:
-		get_tree().change_scene_to_packed(scene)
-	else:
-		get_tree().change_scene_to_file(GAME)
+	get_tree().change_scene_to_file(GAME)

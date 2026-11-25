@@ -1908,3 +1908,135 @@ msgstr ""
 
 msgid "Winter tyres fitted."
 msgstr ""
+
+msgid "Pick up the patient at the square"
+msgstr ""
+
+msgid "Drop off the patient at the hospital"
+msgstr ""
+
+msgid "Drive into the hospital ambulance bay and stop to drop off the patient."
+msgstr ""
+
+msgid "Patient dropped off at the hospital. You earned 10 points and 10 coins."
+msgstr ""
+
+msgid "Hospital"
+msgstr ""
+
+msgid "Harbor Town Hospital"
+msgstr ""
+
+msgid "Ambulance intake"
+msgstr ""
+
+msgid "Police station"
+msgstr ""
+
+msgid "Bakery & Coffee"
+msgstr ""
+
+msgid "Library"
+msgstr ""
+
+msgid "PIZZERIA"
+msgstr ""
+
+msgid "PIZZA"
+msgstr ""
+
+msgid "MOMO & BORI"
+msgstr ""
+
+msgid "Momo & Bori"
+msgstr ""
+
+msgid "Västra torget"
+msgstr ""
+
+msgid "Lindparken"
+msgstr ""
+
+msgid "Verkstadstorget"
+msgstr ""
+
+msgid "Norra allén"
+msgstr ""
+
+msgid "74  SICKLA UDDE"
+msgstr ""
+
+msgid "SICKLA UDDE"
+msgstr ""
+
+msgid "LOTTEN"
+msgstr ""
+
+msgid "Stationsallén"
+msgstr ""
+
+msgid "Norra kajgatan"
+msgstr ""
+
+msgid "Södra kajgatan"
+msgstr ""
+
+msgid "Östra allén"
+msgstr ""
+
+msgid "Storgatan"
+msgstr ""
+
+msgid "Verkstadsgatan"
+msgstr ""
+
+msgid "Ändhållplatsvägen"
+msgstr ""
+
+msgid "Lindgatan"
+msgstr ""
+
+msgid "Vagnhallsgatan"
+msgstr ""
+
+msgid "Spårgatan"
+msgstr ""
+
+msgid "Mackvägen"
+msgstr ""
+
+msgid "Depågatan"
+msgstr ""
+
+msgid "Torggatan"
+msgstr ""
+
+msgid "Parkgatan"
+msgstr ""
+
+msgid "Kajhusgatan"
+msgstr ""
+
+msgid "Strandgatan"
+msgstr ""
+
+msgid "Kajgatan"
+msgstr ""
+
+msgid "Torgets förlängning"
+msgstr ""
+
+msgid "Toy Harbour"
+msgstr ""
+
+msgid "Wooden train"
+msgstr ""
+
+msgid "Building blocks"
+msgstr ""
+
+msgid "Teddy bear"
+msgstr ""
+
+msgid "Villa district"
+msgstr ""

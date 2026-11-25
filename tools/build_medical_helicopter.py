@@ -1,0 +1,171 @@
+"""Create Harbor Town's yellow and teal ambulance helicopter and articulated rotors."""
+
+import math
+import sys
+from pathlib import Path
+
+import bpy
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from build_vehicles import SOURCE_DIR, clear_scene, cube, cylinder, export_vehicle, material, text_obj
+
+
+def pivot(name, parent=None, position=(0, 0, 0)):
+    node = bpy.data.objects.new(name, None)
+    bpy.context.collection.objects.link(node)
+    node.parent = parent
+    node.location = position
+    return node
+
+
+def shell(name, stations, finishes, paint, parent):
+    sides = 48
+    points = []
+    for y, width, center, height in stations:
+        for index in range(sides):
+            angle = math.tau * index / sides
+            points.append((width * math.cos(angle), y, center + height * math.sin(angle)))
+    faces = []
+    colors = []
+    for row in range(len(stations) - 1):
+        for index in range(sides):
+            following = (index + 1) % sides
+            faces.append((row * sides + index, (row + 1) * sides + index,
+                          (row + 1) * sides + following, row * sides + following))
+            colors.append(paint(row, index, math.sin(math.tau * (index + .5) / sides)))
+    faces.extend((tuple(range(sides)), tuple(reversed(range(len(points) - sides, len(points))))))
+    colors.extend((0, 0))
+    mesh = bpy.data.meshes.new(name)
+    mesh.from_pydata(points, [], faces)
+    mesh.update()
+    for finish in finishes:
+        mesh.materials.append(finish)
+    for polygon, color in zip(mesh.polygons, colors):
+        polygon.material_index = color
+        polygon.use_smooth = True
+    node = bpy.data.objects.new(name, mesh)
+    bpy.context.collection.objects.link(node)
+    node.parent = parent
+
+
+def pipe(name, points, radius, finish, parent):
+    curve = bpy.data.curves.new(name, "CURVE")
+    curve.dimensions = "3D"
+    curve.bevel_depth = radius
+    curve.bevel_resolution = 3
+    curve.use_fill_caps = True
+    spline = curve.splines.new("POLY")
+    spline.points.add(len(points) - 1)
+    for point, vertex in zip(spline.points, points):
+        point.co = (*vertex, 1)
+    node = bpy.data.objects.new(name, curve)
+    bpy.context.collection.objects.link(node)
+    node.parent = parent
+    curve.materials.append(finish)
+
+
+clear_scene()
+root = pivot("Ambulance Helicopter")
+yellow = material("Rescue yellow", (.88, .89, .035), .12, .31)
+teal = material("Medical teal", (.013, .23, .19), .27, .3)
+dark = material("Composite and rubber", (.019, .024, .030), .26, .36)
+glass = material("Blue-black cockpit glazing", (.024, .067, .098), .55, .14)
+white = material("White blade markings", (.8, .83, .79), .1, .45)
+metal = material("Rotor metal", (.29, .34, .36), .73, .3)
+blue = material("Medical emblem blue", (.024, .13, .39), .24, .25)
+red_lamp = material("Port navigation red", (.94, .02, .025), .08, .28, 3.0)
+green_lamp = material("Starboard navigation green", (.025, .82, .20), .08, .28, 3.0)
+white_lamp = material("Landing lamp", (.94, .95, .89), .12, .24, 2.0)
+
+fuselage = [
+    (-3.47, .08, 1.20, .08), (-3.28, .48, 1.29, .38), (-3.03, .73, 1.39, .65),
+    (-2.73, .92, 1.45, .84), (-2.42, 1.03, 1.51, .99), (-2.11, 1.10, 1.56, 1.06),
+    (-1.83, 1.145, 1.57, 1.09), (-1.76, 1.15, 1.57, 1.09), (-1.43, 1.17, 1.57, 1.10),
+    (-1.08, 1.18, 1.57, 1.1), (-.75, 1.18, 1.58, 1.1), (-.67, 1.18, 1.58, 1.1),
+    (-.34, 1.18, 1.58, 1.10), (0, 1.16, 1.58, 1.10), (.33, 1.14, 1.58, 1.09),
+    (.40, 1.14, 1.58, 1.09), (.72, 1.10, 1.59, 1.06), (1.04, 1.05, 1.60, 1.01),
+    (1.35, .96, 1.62, .90), (1.65, .83, 1.65, .76), (1.92, .65, 1.70, .58),
+    (2.28, .43, 1.79, .39), (2.54, .33, 1.86, .29),
+]
+
+
+def cabin_paint(row, index, height):
+    if row < 6 and .02 < height < .9 and index not in (11, 12):
+        return 2
+    if 7 <= row <= 17 and .09 < height < .61:
+        return 3 if row in (10, 14) else 2
+    if 4 <= row <= 19 and -.86 < height < -.38:
+        lower_band = height < -.64
+        return 1 if (row % 2 == int(lower_band)) else 0
+    if 17 <= row <= 20 and height > -.24:
+        return 1
+    return 0
+
+
+shell("Glazed ambulance fuselage", fuselage, [yellow, teal, glass, dark], cabin_paint, root)
+shell("Tail boom", [(1.92, .52, 1.78, .40), (2.62, .38, 1.88, .30),
+                    (4.05, .24, 2.02, .20), (5.16, .17, 2.10, .15)],
+      [yellow, teal], lambda row, index, height: int(height > .51), root)
+shell("Turbine fairing", [(-1.6, .11, 2.48, .11), (-1.17, .49, 2.64, .22),
+                          (-.35, .65, 2.76, .27), (.82, .64, 2.75, .25),
+                          (1.48, .52, 2.59, .23), (1.84, .25, 2.35, .14)],
+      [teal, yellow], lambda row, index, height: int(row >= 3), root)
+for side in (-1, 1):
+    text_obj("Ambulance lettering", "AMBULANS", (side * 1.17, -1.64 if side > 0 else .03, 1.14),
+             .226, teal, -side, root, flat=True)
+    for angle in (0, math.tau / 3, 2 * math.tau / 3):
+        arm = cube("Star of Life arm", (side * 1.145, .65, 1.40), (.018, .098, .39), blue, .007, root)
+        arm.rotation_euler.x = angle
+    pipe("Black tubular skid", [(side * 1.06, -2.56, .23), (side * 1.07, -2.28, .095),
+                                (side * 1.08, -2.06, .064), (side * 1.08, 1.53, .064),
+                                (side * 1.08, 1.77, .10)], .064, dark, root)
+    for y in (-1.63, 1.07):
+        pipe("Skid cross braces", [(side * .53, y, .63), (side * .79, y, .47),
+                                  (side * 1.08, y, .115)], .048, dark, root)
+    cube("Door handle", (side * 1.19, -.26, 1.66), (.055, .26, .045), metal, .012, root)
+    cube("Navigation lamp", (side * 1.2, 1.0, 1.74), (.08, .09, .047),
+         red_lamp if side < 0 else green_lamp, .015, root)
+    lamp = cylinder("Forward belly searchlight", (side * .44, -2.52, .65),
+                    .111, .075, white_lamp, False, 20, root)
+    lamp.rotation_euler.x = .63
+
+cube("Horizontal stabilizer", (0, 4.31, 2.03), (2.54, .50, .083), teal, .038, root)
+fin = cube("Swept yellow tail fin", (0, 5.48, 2.95), (.22, .72, 1.20), yellow, .09, root)
+fin.rotation_euler.x = -.30
+tip = cube("Teal tail cap", (0, 5.64, 3.53), (.235, .68, .095), teal, .03, root)
+tip.rotation_euler.x = -.04
+bpy.ops.mesh.primitive_torus_add(location=(0, 5.40, 2.11), rotation=(0, math.pi / 2, 0),
+                                major_radius=.63, minor_radius=.119, major_segments=48, minor_segments=14)
+duct = bpy.context.object
+duct.name = "Molded fenestron shroud"
+duct.parent = root
+duct.data.materials.append(yellow)
+for polygon in duct.data.polygons:
+    polygon.use_smooth = True
+tail_rotor = pivot("TailRotor", root, (0, 5.40, 2.11))
+cylinder("Fan hub", (0, 0, 0), .138, .19, yellow, True, 24, tail_rotor)
+for index in range(9):
+    angle = math.tau * index / 9
+    vane = cube("Fenestron blade", (0, -.305 * math.sin(angle), .305 * math.cos(angle)),
+                (.038, .095, .42), dark, .014, tail_rotor)
+    vane.rotation_euler.x = angle
+
+cylinder("Rotor mast", (0, -.38, 3.08), .090, .34, metal, False, 24, root)
+main_rotor = pivot("MainRotor", root, (0, -.38, 3.27))
+cylinder("Rotor hub", (0, 0, 0), .247, .12, metal, False, 28, main_rotor)
+cylinder("Main hub cap", (0, 0, .079), .22, .081, yellow, False, 28, main_rotor)
+for index in range(5):
+    angle = math.tau * index / 5
+    blade = pivot("Composite rotor assembly", main_rotor)
+    blade.rotation_euler.z = angle
+    cube("Main rotor blade", (0, 2.62, 0), (.22, 4.67, .047), dark, .02, blade)
+    cube("Blade tip stripe", (0, 4.81, .024), (.185, .165, .003), white, .001, blade)
+
+# Imported rotor children need local transforms at their rotating hubs.
+for rotor in (main_rotor, tail_rotor):
+    for component in rotor.children_recursive:
+        component.matrix_parent_inverse.identity()
+
+export_vehicle(root, "ambulance_helicopter.glb")
+bpy.context.preferences.filepaths.save_version = 0
+bpy.ops.wm.save_as_mainfile(filepath=str(Path(SOURCE_DIR) / "AmbulanceHelicopter.blend"))

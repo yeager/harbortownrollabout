@@ -1,6 +1,6 @@
 extends Node3D
 
-const SHOPS := ["Café", "Kiosk", "Pizzeria", "Sweet shop","Grocery store","Momo & Bori","Hot dog stand"]
+const SHOPS := ["Café", "Kiosk", "Pizzeria", "Sweet shop","Grocery store","Momo & Bori","Hot dog stand","Toy Harbour"]
 const SWEETS := [
 	"Pick and mix",
 	"Frog choir",
@@ -25,7 +25,10 @@ const SWEET_INGREDIENTS := [
 	"Corn twists with sweet paprika scales",
 	"Chocolate buttons with crispy rice bubbles",
 ]
-const MENUS := [["Cinnamon bun","Berry cordial"],["Ice cream","Hot dog"],["Margherita pizza", "Popcorn Party", "Pickle Carousel", "Banana Moon", "Berry Blizzard"],SWEETS,["Apple","Milk"],["Japanese haori jacket","Korean jeogori jacket","Red panda plush","Moon rabbit figurine"],["Hot dog","Moon mash dog","Pickle rocket","Crunchy onion comet"]]
+const TEDDY_BEAR := "Teddy bear"
+const MENUS := [["Cinnamon bun","Berry cordial"],["Ice cream","Hot dog"],["Margherita pizza", "Popcorn Party", "Pickle Carousel", "Banana Moon", "Berry Blizzard"],SWEETS,["Apple","Milk"],["Japanese haori jacket","Korean jeogori jacket","Red panda plush","Moon rabbit figurine"],["Hot dog","Moon mash dog","Pickle rocket","Crunchy onion comet"],["Wooden train","Building blocks",TEDDY_BEAR]]
+const TOY_SHOP := 7
+const ToyShop = preload("res://environment/toy_shop.gd")
 const SNACK_SHOPS := [1, 2, 3, 6]
 const PRODUCT_ICONS := {
 	0: preload("res://branding/cafe-products.svg"),
@@ -35,7 +38,7 @@ const PRODUCT_ICONS := {
 	3: preload("res://branding/sweet-products.png"),
 	5: preload("res://branding/boutique-products.png"),
 }
-const PRICES := [[3,2],[4,5],[8,7,8,9,10],[4,3,2,4,5,4,6,3,3,4],[2,4],[9,9,5,4],[5,7,6,8]]
+const PRICES := [[3,2],[4,5],[8,7,8,9,10],[4,3,2,4,5,4,6,3,3,4],[2,4],[9,9,5,4],[5,7,6,8],[8,5,6]]
 const GRILL_TOPPINGS := ["Grilled sausage in a soft bun", "Sausage with a moon of mash and pea craters", "Pickle fins and a carrot nose cone", "Crispy onion tail and a mustard star"]
 const PIZZA_TOPPINGS := ["Mozzarella, tomato and carrot stars", "Popcorn, sweetcorn and cheese", "Pickle wheels and crispy onions", "Banana moons and coconut snow", "Blueberries, vanilla cream and raspberry swirls"]
 const SIGNS := ["CINNAMON BUN CAFÉ","HARBOR KIOSK","PIZZERIA","GODISBODEN","HARBOR GROCER","MOMO & BORI"]
@@ -60,6 +63,7 @@ var awnings: Array[Node3D] = []
 var shop_sign_font := SystemFont.new()
 var carried_toy := ""
 var toy_in_hand: Node3D
+var toy_store: ToyShop
 var inside := -1
 var entrance_picture := TextureRect.new()
 var entrance_view := SubViewport.new()
@@ -106,6 +110,11 @@ func _ready() -> void:
 		var x:=storefront_x(i)
 		if i == 6:
 			_hot_dog_stand(x)
+			continue
+		if i == TOY_SHOP:
+			toy_store = ToyShop.new()
+			add_child(toy_store)
+			awnings.append(toy_store.build(self, x, FRONT_Z))
 			continue
 		var color:=Color(COLORS[i])
 		var cream:=Color("#e9debf")
@@ -546,7 +555,7 @@ func purchase(shop: int, item: int) -> void:
 	if shop == 5 and item in [0,1]:
 		game.boutique_jacket = product
 		game._apply_player_appearance()
-	if shop == 5 and item in [2,3]:
+	if (shop == 5 and item in [2,3]) or product == TEDDY_BEAR:
 		carried_toy = product
 		show_carried_toy()
 	refresh_basket()
@@ -877,7 +886,8 @@ func _grocery(x: float) -> void:
 	var dark := Color("#2d4d3c")
 	var ivory := Color("#f3e8c8")
 	part("Market canopy",Vector3(x,2.57,42.03),Vector3(8.3,.17,1.02),dark)
-	_lettering("FRUIT  &  VEG",Vector3(x-2.5,1.95,42.36),.0045,ivory)
+	var produce_sign := _lettering("FRUIT  &  VEG",Vector3(x-2.5,1.95,42.36),.0045,ivory)
+	get_parent()._size_world_sign(produce_sign, 3.0)
 	var fruit := SphereMesh.new()
 	fruit.radius = .11
 	fruit.height = .19
@@ -901,7 +911,8 @@ func _grocery(x: float) -> void:
 		produce.material_override = get_parent()._material([Color("#a54035"),Color("#95ac55"),Color("#df8a34")][crate])
 		add_child(produce)
 	part("Checkout screen",Vector3(x+1.8,1.35,47.72),Vector3(.56,.38,.11),dark)
-	_lettering("CHECKOUT",Vector3(x+1.8,2.55,49.20),.0058,ivory)
+	var checkout := _lettering("CHECKOUT",Vector3(x+1.8,2.55,49.20),.0058,ivory)
+	get_parent()._size_world_sign(checkout, 3.3)
 	for carton in 5:
 		var cx := x-2.2+carton*.29
 		part("Milk carton",Vector3(cx,1.29,47.69),Vector3(.20,.42,.19),ivory)
@@ -990,6 +1001,7 @@ func _pizzeria_front(x: float) -> void:
 		part("Vermilion enamel pinstripe",Vector3(x,h,41.967),Vector3(8.16,.037,.014),wine)
 	var nameplate := _lettering("HARBOR TOWN PIZZERIA",Vector3(x,3.07,41.951),.0175,wine)
 	nameplate.font = shop_sign_font
+	get_parent()._size_world_sign(nameplate, 8.0)
 	# A two-sided blade sign is readable along the pavement in either direction.
 	var blade_x := x + 3.94
 	part("Projecting sign bracket",Vector3(blade_x,3.30,41.77),Vector3(.07,.07,1.09),timber)
@@ -998,6 +1010,7 @@ func _pizzeria_front(x: float) -> void:
 		var blade := _lettering("PIZZA",Vector3(blade_x+facing*.056,2.98,41.63),.0087,gold)
 		blade.rotation.y = facing*PI*.5
 		blade.font = shop_sign_font
+		get_parent()._size_world_sign(blade, .94)
 	for side in [-1,1]:
 		var cx:float = x+side*2.52
 		var canopy := part("Wine canvas canopy",Vector3(cx,2.60,41.94),Vector3(3.41,.075,1.17),wine)
@@ -1009,12 +1022,12 @@ func _pizzeria_front(x: float) -> void:
 			bracket.rotation.x = .23
 		var window_text := "PIZZERIA" if side == 1 else "WOOD-FIRED PIZZA"
 		for inside_face in [false,true]:
-			var z := 42.58 if inside_face else 42.35
-			var letters := _lettering(window_text,Vector3(cx,1.68,z),.0081,Color("#fff1ce"))
+			var z := 42.58 if inside_face else 42.26
+			var letters := _lettering(window_text,Vector3(cx,1.42,z),.0081,Color("#fff1ce"))
 			letters.rotation.y = 0.0 if inside_face else PI
 			letters.double_sided = false
 			letters.font = shop_sign_font
-			get_parent()._size_world_sign(letters,2.9)
+			get_parent()._size_world_sign(letters,2.22)
 		part("Window menu strip",Vector3(cx,1.04,42.32),Vector3(2.97,.22,.027),wine)
 		var menu_text := _product_price(2, 0) if side == 1 else "EAT IN  ·  TAKEAWAY"
 		var menu_strip := _lettering(menu_text,Vector3(cx,1.04,42.29),.0048,Color("#fff3d5"))
@@ -1153,7 +1166,9 @@ func _sweet_shop(x: float) -> void:
 	gumdrop.rings=1
 	for i in 3:
 		_stamp_meshes(["Fruit bonbons","Sour rings","Gumdrops"][i],[bonbon,ring,gumdrop][i],shapes[i],colors[i])
-	_lettering("PICK AND MIX",Vector3(x-.85,2.63,49.24),.0155,Color("#b44364")).font = shop_sign_font
+	var pick_and_mix := _lettering("PICK AND MIX",Vector3(x-.85,2.63,49.24),.0155,Color("#b44364"))
+	pick_and_mix.font = shop_sign_font
+	get_parent()._size_world_sign(pick_and_mix, 5.5)
 	part("Candy till counter",Vector3(x+2.94,.47,47.98),Vector3(1.67,.95,.95),Color("#e7adbf"),true)
 	part("Till worktop",Vector3(x+2.94,.99,47.98),Vector3(1.74,.10,1.03),pearl)
 	part("Cash register",Vector3(x+3.03,1.12,47.91),Vector3(.43,.19,.34),frame)
@@ -1295,22 +1310,30 @@ func _boutique(x: float) -> void:
 		else:
 			_boutique_toy(pos,true)
 	part("Garment rail",Vector3(x-1.38,2.02,48.97),Vector3(2.28,.045,.045),maple)
-	_lettering("Momo & Bori",Vector3(x,2.47,49.28),.014,Color("#fff1dd"))
+	var boutique_sign := _lettering("Momo & Bori",Vector3(x,2.47,49.28),.014,Color("#fff1dd"))
+	get_parent()._size_world_sign(boutique_sign, 7.6)
 
 func show_carried_toy() -> void:
 	if is_instance_valid(toy_in_hand):
-		toy_in_hand.hide()
+		toy_in_hand.get_parent().remove_child(toy_in_hand)
 		toy_in_hand.queue_free()
 		toy_in_hand = null
 	var item: int = MENUS[5].find(carried_toy)
-	if item not in [2,3] or int(get_parent().purchases.get(carried_toy,0)) < 1:
+	if int(get_parent().purchases.get(carried_toy, 0)) < 1:
+		return
+	if item not in [2,3] and carried_toy != TEDDY_BEAR:
 		return
 	var arm: Node3D = get_parent().walker.get_meta("arms")[0]
+	var palm := arm.get_child(1) as Node3D
+	if carried_toy == TEDDY_BEAR:
+		toy_in_hand = toy_store.make_bear(palm, Vector3(.085, -.172, -.115))
+		toy_in_hand.scale = Vector3(-.34, .34, .34)
+		return
 	toy_in_hand = _boutique_toy(Vector3.ZERO,item == 3)
-	toy_in_hand.reparent(arm,false)
+	toy_in_hand.reparent(palm, false)
 	toy_in_hand.name = "MoonRabbit" if item == 3 else "RedPanda"
-	toy_in_hand.position = Vector3(-.085,-.85,-.095)
-	toy_in_hand.scale = Vector3.ONE * .8
+	toy_in_hand.position = Vector3(.085, -.162, -.070)
+	toy_in_hand.scale = Vector3(-.8, .8, .8)
 
 func _boutique_toy(base: Vector3, rabbit: bool) -> Node3D:
 	var toy := Node3D.new()

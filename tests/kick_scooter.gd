@@ -70,8 +70,16 @@ func check_scooters() -> void:
 			printerr("Handlebar input failed to steer")
 			quit(1)
 			return
+		if game.scooter.turn_signals.direction != 1 or not game.scooter.turn_signals.right[0].visible:
+			printerr("The scooter did not signal right while turning")
+			quit(1)
+			return
 		for frame in 120:
 			game.scooter.ride(game,1.0,0.0,1.0/60.0)
+		if game.scooter.turn_signals.direction != 0:
+			printerr("The scooter did not cancel its indicator after the turn")
+			quit(1)
+			return
 		var front := rider.position - rider.basis.z*.48
 		if rider.position.z < 3.0 or not game._feet_supported(front) or game.scooter.speed != 0:
 			printerr("Both wheels should stop on the bridge")

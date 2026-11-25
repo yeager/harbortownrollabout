@@ -10,6 +10,8 @@ const SOLE_HEIGHT := 0.054
 const STANCE := 0.55
 const UPPER_ARM := 0.34
 const BALANCE_FREQUENCY := 18.0
+const RELAXED_HAND = preload("res://characters/RelaxedHand.obj")
+const RUNNING_HAND = preload("res://characters/RunningHand.obj")
 static var trousers: ArrayMesh
 static var sleeve_mesh: ArrayMesh
 
@@ -17,10 +19,12 @@ var actor: Node3D
 var ground_height: Callable
 var phase := 0.0
 var walking_backwards := false
+var travel_direction := 1.0
 var weight := 0.0
 var lateral_shift := 0.0
 var wave_weight := 0.0
 var lateral_speed := 0.0
+var forward_lean := 0.0
 var hip_centres := PackedFloat32Array()
 var elbows: Array[Skeleton3D] = []
 var wrist_angles := PackedFloat32Array([0.0, 0.0])
@@ -112,10 +116,13 @@ func advance(distance: float, delta: float, pushing: bool, tuck := 0.0, crouch :
 	if delta <= 0.0:
 		return
 	var pace := absf(distance) / delta
+	var world_speed := pace * actor.scale.y
 	if not is_zero_approx(distance):
 		walking_backwards = distance < 0.0
-	var running := smoothstep(2.6, 5.8, pace) * weight if not pushing else 0.0
-	var sprint := smoothstep(WALK_SPEED, RUN_SPEED, pace * actor.scale.y) * weight
+	# Crossing zero speed gives the legs time to reverse their swing.
+	travel_direction = move_toward(travel_direction, -1.0 if walking_backwards else 1.0, delta * 16.0)
+	var running := smoothstep(2.6, 5.8, world_speed) * weight if not pushing and not walking_backwards else 0.0
+	var sprint := smoothstep(WALK_SPEED, RUN_SPEED, world_speed) * weight
 	# Running covers more ground between contacts while each planted foot
 	# remains within leg reach. Stride is measured between same-foot landings.
 	var stride := clampf(0.64 + pace * 0.41, 0.78, 1.57) + 1.55 * sprint
@@ -128,13 +135,15 @@ func advance(distance: float, delta: float, pushing: bool, tuck := 0.0, crouch :
 	var decay := exp(-BALANCE_FREQUENCY * delta)
 	lateral_shift = target_shift + (error + slope * delta) * decay
 	lateral_speed = (lateral_speed - BALANCE_FREQUENCY * slope * delta) * decay
-	var twist := cos(TAU * phase) * weight
-	if walking_backwards:
-		twist = -twist
+	var twist := cos(TAU * phase) * weight * travel_direction
 	pelvis.rotation.y = -.07 * twist
 	var shoulder_yaw := .11 * twist
 	if pushing:
 		shoulder_yaw *= .2
+	var lean_target := -running * .18 - weight * .028
+	if walking_backwards or pushing:
+		lean_target = 0.0
+	forward_lean = lerpf(forward_lean, lean_target, 1.0 - exp(-9.0 * delta))
 	jacket.rotation.y = shoulder_yaw
 	var stance := lerpf(STANCE, .30, sprint)
 	var reach := stride * stance * 0.5 * weight
@@ -161,9 +170,8 @@ func advance(distance: float, delta: float, pushing: bool, tuck := 0.0, crouch :
 			foot.y += .16 * heel_recovery
 			foot.x -= .10 * heel_recovery
 			shoe_angle = lerpf(-.36, .20, smoothstep(0.0, .78, swing)) * weight - .36 * heel_recovery
-		if walking_backwards:
-			foot.x = -foot.x
-			shoe_angle = -shoe_angle
+		foot.x *= travel_direction
+		shoe_angle *= travel_direction
 		# Raise the ankle about the heel or forefoot while that end of the sole bears weight.
 		var sole_pivot := Vector3(0, -SOLE_HEIGHT, .075 if shoe_angle >= 0.0 else -.155)
 		var ankle_offset := sole_pivot - sole_pivot.rotated(Vector3.RIGHT, shoe_angle)
@@ -194,12 +202,17 @@ func advance(distance: float, delta: float, pushing: bool, tuck := 0.0, crouch :
 		var rest: Vector3 = upper_body[child]
 		if child in arms:
 			rest = rest.rotated(Vector3.UP, shoulder_yaw)
-		if crouch > 0 and child != pelvis:
-			var lean := Basis(Vector3.RIGHT,-.95*crouch)
-			rest = Vector3.UP*HIP_HEIGHT + lean*(rest-Vector3.UP*HIP_HEIGHT)
+		if child != pelvis and (crouch > 0 or not is_zero_approx(forward_lean)):
+			var lean := Basis(Vector3.RIGHT, forward_lean - .95 * crouch)
+			rest = Vector3.UP * HIP_HEIGHT + lean * (rest - Vector3.UP * HIP_HEIGHT)
 			if child not in arms:
 				upright_bases[child] = child.basis
-				child.basis = lean*child.basis
+				# The head follows the torso while keeping the gaze nearer level.
+				var head_pitch := (forward_lean - .95 * crouch) * .36
+				if child == jacket:
+					child.rotation.x = forward_lean - .95 * crouch
+				else:
+					child.basis = Basis(Vector3.RIGHT, head_pitch) * child.basis
 		child.position = rest + Vector3(lateral_shift, hip_y - HIP_HEIGHT, 0)
 	for i in 2:
 		var foot := feet[i]
@@ -219,9 +232,15 @@ func advance(distance: float, delta: float, pushing: bool, tuck := 0.0, crouch :
 		shoes[i].basis = legs[i].basis.inverse() * Basis(Vector3.RIGHT, shoe_angles[i])
 		if not pushing:
 			arms[i].rotation.y = shoulder_yaw
-			arms[i].rotation.x = -foot.x * lerpf(1.05, 1.65, running) - .30 * running + .40 * tuck
+			arms[i].rotation.x = -foot.x * lerpf(1.05, 1.65, running) - .30 * running + .40 * tuck + forward_lean
 			# Leave room for the resting thumb beside the jacket and thigh.
 			arms[i].rotation.z = signf(hip_centres[i]) * .10
+		var palm := palms[i] as MeshInstance3D
+		# Keep authored grip meshes on the hands that hold equipment.
+		if palm.mesh == RELAXED_HAND and running >= .48:
+			palm.mesh = RUNNING_HAND
+		elif palm.mesh == RUNNING_HAND and (running <= .30 or pushing):
+			palm.mesh = RELAXED_HAND
 		var flex := .15 + .78 * running + .32 * tuck + weight * (.18 - foot.x * .52)
 		if pushing:
 			flex = .12
@@ -235,7 +254,7 @@ func advance(distance: float, delta: float, pushing: bool, tuck := 0.0, crouch :
 		# Let a relaxed hand trail the forearm as its swing reverses.
 		var target_angle := -foot.x * .42 + .09 * running
 		wrist_angles[i] = 0.0 if pushing else lerpf(wrist_angles[i], target_angle, 1.0 - exp(-12.0 * delta))
-		var wrist_rotation := Basis(Vector3.RIGHT, wrist_angles[i])
+		var wrist_rotation := Basis(Vector3.RIGHT, wrist_angles[i]) * Basis(Vector3.DOWN, signf(hip_centres[i]) * .17 * running)
 		var palm_origin := rest.origin + wrist_offset - wrist_rotation * wrist_offset
 		palms[i].transform = Transform3D(elbow_rotation * wrist_rotation * rest.basis, joint + elbow_rotation * (palm_origin - joint))
 
@@ -245,6 +264,9 @@ func wave(time: float, raised: bool, delta: float) -> void:
 	if wave_weight == 0.0:
 		return
 	var blend := smoothstep(0.0, 1.0, wave_weight)
+	var palm := palms[1] as MeshInstance3D
+	if palm.mesh == RUNNING_HAND:
+		palm.mesh = RELAXED_HAND
 	var beat := sin(time * 5.2)
 	arms[1].rotation = arms[1].rotation.lerp(Vector3(.18, 0, 1.65), blend)
 	var forearm := Basis(elbows[1].get_bone_pose_rotation(1)).slerp(Basis(Vector3.BACK, .99 + .22 * beat), blend)
@@ -274,8 +296,24 @@ func reach_with_hand(index: int, world_grip: Vector3) -> void:
 
 func sit() -> void:
 	for i in legs.size():
-		legs[i].rotation = Vector3.RIGHT * PI/2
-		knees[i].set_bone_pose_rotation(1, Quaternion(Vector3.RIGHT,-PI/2))
-		knees[i].set_bone_pose_rotation(2, Quaternion(Vector3.RIGHT,-PI/4))
-		shoes[i].position = Vector3.DOWN*THIGH + (Vector3.DOWN*SHIN).rotated(Vector3.RIGHT,-PI/2)
+		var bend := PI / 2.0
+		if ground_height.is_valid():
+			var hip := actor.to_global(legs[i].position)
+			var under_shoe := actor.to_global(legs[i].position + Vector3.FORWARD * THIGH)
+			var ground := float(ground_height.call(under_shoe.x, under_shoe.z))
+			var thigh_drop := (hip.y - ground) / actor.scale.y - SHIN - SOLE_HEIGHT
+			bend = acos(clampf(thigh_drop / THIGH, -.4, .6))
+		legs[i].rotation = Vector3.RIGHT * bend
+		knees[i].set_bone_pose_rotation(1, Quaternion(Vector3.RIGHT, -bend))
+		knees[i].set_bone_pose_rotation(2, Quaternion(Vector3.RIGHT, -.5 * bend))
+		shoes[i].position = Vector3.DOWN * THIGH + (Vector3.DOWN * SHIN).rotated(Vector3.RIGHT, -bend)
 		shoes[i].basis = legs[i].basis.inverse()
+		var thigh: Vector3 = legs[i].to_global(Vector3.DOWN * (THIGH * .52))
+		reach_with_hand(i, thigh + Vector3.UP * (.105 * actor.scale.y))
+		var palm := palms[i]
+		var cuff := Vector3.UP * .06
+		var wrist := palm.to_global(cuff)
+		var side := signf(hip_centres[i])
+		var hands_down := Basis(Vector3.BACK, side * PI / 2.0) * Basis(Vector3.RIGHT, PI / 2.0)
+		palm.global_basis = actor.global_basis * hands_down * palm_rest[i].basis
+		palm.global_position += wrist - palm.to_global(cuff)

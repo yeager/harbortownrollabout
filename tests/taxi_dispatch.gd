@@ -22,6 +22,15 @@ func check_fare() -> void:
 		quit(1)
 		return
 	game.find_child("InsertHelp", true, false).button_pressed = true
+	game.phone.open_button.pressed.emit()
+	for key in [KEY_SPACE, KEY_INSERT]:
+		help_key.keycode = key
+		game._unhandled_key_input(help_key)
+		if game._vehicle_payload() != 0:
+			printerr("A mission shortcut collected a passenger while the phone was open")
+			quit(1)
+			return
+	game.phone.toggle()
 	help_key.keycode = KEY_SPACE
 	game._unhandled_key_input(help_key)
 	if game._vehicle_payload() != 75.0:

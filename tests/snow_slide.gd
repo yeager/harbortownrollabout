@@ -43,6 +43,25 @@ func check() -> void:
 		printerr("Clearing the middle of the lane affected tyres still on snow")
 		quit(1)
 		return
+	plough_end.origin.z = 3.0
+	game.ground_work.sweep(plough_start,plough_end,Vector3.ZERO,Vector3(18,0,0),false)
+	var partial_snow_tracks: int = game.snow_cursor
+	var partial_asphalt_tracks: int = game.skid_cursor
+	game._end_skid()
+	game.speed = 12.0
+	game.steering = 0.0
+	game.mouse_steering = 0.0
+	game.mouse_gas = false
+	game.mouse_brake = true
+	for frame in 5:
+		game._drive(1.0/60.0)
+	game.mouse_brake = false
+	if game.snow_cursor == partial_snow_tracks or game.skid_cursor == partial_asphalt_tracks:
+		printerr("Braking along the plough edge should leave tracks on both surfaces")
+		quit(1)
+		return
+	game.ambulance.global_transform = parked
+	game._end_skid()
 	plough_start.origin.z = -3.0
 	plough_end.origin.z = 3.0
 	game.ground_work.sweep(plough_start,plough_end,Vector3.ZERO,Vector3(18,0,0),false)
@@ -57,6 +76,20 @@ func check() -> void:
 	game._drive(1.0/60.0)
 	if not is_zero_approx(game.snow_slip_angle):
 		printerr("Vehicle slid on cleared road")
+		quit(1)
+		return
+	var snow_tracks: int = game.snow_cursor
+	var asphalt_tracks: int = game.skid_cursor
+	game.mouse_gas = false
+	game.mouse_steering = 0.0
+	game.mouse_brake = true
+	game.steering = 0.0
+	game.speed = 12.0
+	for frame in 8:
+		game._drive(1.0/60.0)
+	game.mouse_brake = false
+	if game.snow_cursor != snow_tracks or game.skid_cursor == asphalt_tracks:
+		printerr("Braking with all tyres on the cleared strip should mark asphalt only")
 		quit(1)
 		return
 	print("Ploughed road regains grip once all tyres are over the cleared surface.")
@@ -86,6 +119,10 @@ func check_corner(game, start: Transform3D, steering: float) -> bool:
 			printerr(game.VEHICLE_NAMES_ALL[game.vehicle_index], " unexpected sideways motion for ",condition, " turn ", steering, ": ",outside_motion)
 			quit(1)
 			return false
+		if game.tire_player.playing != expects_slide:
+			printerr("Tyre scrub did not match the slide state: ", condition)
+			quit(1)
+			return false
 		if expects_slide and game.snow_marks.visible_instance_count == 0:
 			printerr(game.VEHICLE_NAMES_ALL[game.vehicle_index], " left no skid marks on snow")
 			quit(1)
@@ -93,7 +130,7 @@ func check_corner(game, start: Transform3D, steering: float) -> bool:
 	game.mouse_steering = 0.0
 	for frame in 65:
 		game._drive(1.0/60.0)
-	if absf(game.snow_slip_angle) > .01:
+	if absf(game.snow_slip_angle) > .01 or game.tire_player.playing:
 		printerr(game.VEHICLE_NAMES_ALL[game.vehicle_index], " did not recover grip")
 		quit(1)
 		return false

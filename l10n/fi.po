@@ -1975,3 +1975,135 @@ msgstr "Kesärenkaat asennettu."
 
 msgid "Winter tyres fitted."
 msgstr "Talvirenkaat asennettu."
+
+msgid "Pick up the patient at the square"
+msgstr "Nouda potilas torilta"
+
+msgid "Drop off the patient at the hospital"
+msgstr "Vie potilas sairaalaan"
+
+msgid "Drive into the hospital ambulance bay and stop to drop off the patient."
+msgstr "Aja sairaalan ambulanssihalliin ja pysähdy, jotta potilas pääsee pois kyydistä."
+
+msgid "Patient dropped off at the hospital. You earned 10 points and 10 coins."
+msgstr "Potilas on jätetty sairaalaan. Ansaitsit 10 pistettä ja 10 kolikkoa."
+
+msgid "Hospital"
+msgstr "Sairaala"
+
+msgid "Harbor Town Hospital"
+msgstr "Satamakaupungin sairaala"
+
+msgid "Ambulance intake"
+msgstr "Ambulanssien sisäänajo"
+
+msgid "Police station"
+msgstr "Poliisiasema"
+
+msgid "Bakery & Coffee"
+msgstr "Leipomo ja kahvila"
+
+msgid "Library"
+msgstr "Kirjasto"
+
+msgid "PIZZERIA"
+msgstr "PIZZERIA"
+
+msgid "PIZZA"
+msgstr "PIZZA"
+
+msgid "MOMO & BORI"
+msgstr "MOMO & BORI"
+
+msgid "Momo & Bori"
+msgstr "Momo & Bori"
+
+msgid "Västra torget"
+msgstr "Västra torget"
+
+msgid "Lindparken"
+msgstr "Lindparken"
+
+msgid "Verkstadstorget"
+msgstr "Verkstadstorget"
+
+msgid "Norra allén"
+msgstr "Norra allén"
+
+msgid "74  SICKLA UDDE"
+msgstr "74  SICKLA UDDE"
+
+msgid "SICKLA UDDE"
+msgstr "SICKLA UDDE"
+
+msgid "LOTTEN"
+msgstr "LOTTEN"
+
+msgid "Stationsallén"
+msgstr "Stationsallén"
+
+msgid "Norra kajgatan"
+msgstr "Norra kajgatan"
+
+msgid "Södra kajgatan"
+msgstr "Södra kajgatan"
+
+msgid "Östra allén"
+msgstr "Östra allén"
+
+msgid "Storgatan"
+msgstr "Storgatan"
+
+msgid "Verkstadsgatan"
+msgstr "Verkstadsgatan"
+
+msgid "Ändhållplatsvägen"
+msgstr "Ändhållplatsvägen"
+
+msgid "Lindgatan"
+msgstr "Lindgatan"
+
+msgid "Vagnhallsgatan"
+msgstr "Vagnhallsgatan"
+
+msgid "Spårgatan"
+msgstr "Spårgatan"
+
+msgid "Mackvägen"
+msgstr "Mackvägen"
+
+msgid "Depågatan"
+msgstr "Depågatan"
+
+msgid "Torggatan"
+msgstr "Torggatan"
+
+msgid "Parkgatan"
+msgstr "Parkgatan"
+
+msgid "Kajhusgatan"
+msgstr "Kajhusgatan"
+
+msgid "Strandgatan"
+msgstr "Strandgatan"
+
+msgid "Kajgatan"
+msgstr "Kajgatan"
+
+msgid "Torgets förlängning"
+msgstr "Torgets förlängning"
+
+msgid "Toy Harbour"
+msgstr "Lelusatama"
+
+msgid "Wooden train"
+msgstr "Puujuna"
+
+msgid "Building blocks"
+msgstr "Rakennuspalikat"
+
+msgid "Teddy bear"
+msgstr "Nallekarhu"
+
+msgid "Villa district"
+msgstr "Omakotitaloalue"

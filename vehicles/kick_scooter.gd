@@ -10,9 +10,13 @@ var wheels: Array[Node3D] = []
 var palm_stance: Array[Transform3D] = []
 var elbow_stance: Array[Quaternion] = []
 var stance: Array[Transform3D] = []
+var turn_signals := preload("res://scripts/turn_indicators.gd").new()
 
 func _ready() -> void:
 	add_child(preload("res://vehicles/electric_kick_scooter.glb").instantiate())
+	turn_signals.fit_anchors(self,
+		[Vector3(-.252, 1.03, -.472), Vector3(-.087, .22, .54)],
+		[Vector3(.252, 1.03, -.472), Vector3(.087, .22, .54)], Vector3(.054, .033, .027))
 	for part in ["FrontWheel","RearWheel"]:
 		wheels.append(find_child(part,true,false))
 	grips.assign(find_children("Handle grip*", "MeshInstance3D", true, false))
@@ -53,6 +57,7 @@ func dismount(rider: Node3D) -> void:
 	rider.position.y -= DECK_HEIGHT*rider.scale.y
 	speed = 0
 	yaw_input = 0
+	turn_signals.advance(0, 0, false)
 	hide()
 
 func can_stand(game: Node3D, ground: Vector3, yaw: float, actor_scale: float) -> bool:
@@ -74,6 +79,7 @@ func ride(game: Node3D, throttle: float, steer: float, delta: float) -> void:
 	var brake_force := 375.0 if throttle < 0.0 else 105.0
 	speed = move_toward(speed, MAX_SPEED if throttle > 0 else 0.0, (195.0 if throttle > 0 else brake_force)*delta/preload("res://vehicles/mass.gd").SCOOTER_KG)
 	yaw_input = move_toward(yaw_input,steer,delta*3.5)
+	turn_signals.advance(yaw_input, delta, game.calm_mode or game.steady_player_lights)
 	var steps := maxi(1,ceili(speed*delta/.12))
 	var yaw_step := -yaw_input*minf(speed,2.0)*delta/steps
 	for i in steps:

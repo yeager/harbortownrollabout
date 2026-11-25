@@ -17,6 +17,7 @@ const CAB_REACH := 2.98
 
 var track := Curve3D.new()
 var sections: Array[Node3D] = []
+var cab_indicators: Array[RefCounted] = []
 var gangways: Array[MeshInstance3D] = []
 var gangway_contour := _gangway_profile()
 var bellows_finish := StandardMaterial3D.new()
@@ -237,7 +238,8 @@ func _ready() -> void:
 			world._make_box("Bench leg",Vector3(.25,.44,.08),Vector3(3.53,.55,z),Color("#49565c"),false,station)
 		world._make_box("Station name board",Vector3(.08,.43,3.8),Vector3(2.15,2.45,0),Color("#16496a"),false,station)
 		for side in [-1,1]:
-			sign_at(station,STATION_NAMES[i],Vector3(2.15+side*.045,2.45,0),side*PI/2,.0068)
+			var nameplate := sign_at(station,STATION_NAMES[i],Vector3(2.15+side*.045,2.45,0),side*PI/2,.0068)
+			world._size_world_sign(nameplate, 3.6)
 	for i in 3:
 		var car := Node3D.new()
 		add_child(car)
@@ -253,6 +255,7 @@ func _ready() -> void:
 		var display := sign_at(car, STATION_NAMES[next_stop], Vector3(0,2.145,-2.085), 0, .0019)
 		display.modulate = Color("#ffbd58")
 		display.outline_size = 0
+		world._size_world_sign(display, 1.1)
 		interior_displays.append(display)
 		car.add_child(preload("res://vehicles/tram_saloon.glb").instantiate())
 		var step := world._make_box("Boarding threshold",Vector3(.38,.045,.99),Vector3(1.07,.30,.13),Color("#ffdf57"),false,car) as MeshInstance3D
@@ -284,6 +287,10 @@ func _ready() -> void:
 			var end := -1 if i == 0 else 1
 			cab.rotation.y = 0 if i == 0 else PI
 			car.add_child(cab)
+			var indicators := preload("res://scripts/turn_indicators.gd").new()
+			indicators.fit_anchors(car, [Vector3(-.86, .825, end * 2.89)],
+				[Vector3(.86, .825, end * 2.89)], Vector3(.14, .045, .024))
+			cab_indicators.append(indicators)
 			if i == 2:
 				var tail_lens := StandardMaterial3D.new()
 				tail_lens.albedo_color = Color("#cb2435")
@@ -301,6 +308,7 @@ func _ready() -> void:
 			var end_display := sign_at(cab,STATION_NAMES[next_stop],Vector3(0,2.335,-2.558),PI,.0034)
 			end_display.modulate = Color("#ffc267")
 			end_display.outline_size = 0
+			world._size_world_sign(end_display, 1.45)
 			if i == 0:
 				front_display = end_display
 			else:
@@ -323,6 +331,7 @@ func _ready() -> void:
 			next_stop_display = sign_at(car,STATION_NAMES[next_stop],Vector3(1.23,2.48,-1.32),PI/2,.0044)
 			next_stop_display.modulate = Color("#ffbd58")
 			next_stop_display.outline_size = 0
+			world._size_world_sign(next_stop_display, 1.64)
 			world._make_box("Door notice",Vector3(.035,.32,1.4),Vector3(1.21,1.04,1.46),Color("#174460"),false,car)
 			var notice := sign_at(car,"We don’t go to Ekerö",Vector3(1.24,1.04,1.46),PI/2,.003)
 			world._size_world_sign(notice,1.32)
@@ -417,6 +426,17 @@ func _street_users() -> Array[AABB]:
 
 func _advance_road_cars(delta: float, users: Array[AABB]) -> void:
 	var world := get_parent()
+	var responding: Array[Node3D] = world._responding_road_vehicles()
+	var road_vehicles: Array[AABB] = []
+	if world.ambulance.visible:
+		var reach: Vector2 = world._player_extent()
+		road_vehicles.append(AABB(world.ambulance.position - Vector3(reach.x, .2, reach.y),
+			Vector3(reach.x * 2, 3, reach.y * 2)))
+	for traffic in world.traffic_data:
+		road_vehicles.append(world._traffic_bounds(traffic))
+	for i in world.parked_cars.size():
+		if world.parked_cars[i].visible:
+			road_vehicles.append(world._parked_bounds(i))
 	var occupied_crossings := PackedFloat32Array()
 	for i in stations.size():
 		var crossing := stations[i].global_transform * AABB(Vector3(3.25,-.2,-9.1),Vector3(5.05,2.5,2.1))
@@ -425,7 +445,21 @@ func _advance_road_cars(delta: float, users: Array[AABB]) -> void:
 	for car in road_cars:
 		var actor: Node3D = car.actor
 		var travel := int(car.direction)
+		var turn: float = world._traffic_turn_intent(track, car.offset, travel, actor.basis.x, 11.0)
+		car.turn_signals.advance(turn, delta, world.calm_mode or world.steady_player_lights)
 		var clearance: float = world.street_signals.red_clearance(actor.position,-actor.basis.z,car.length)
+		clearance = minf(clearance, world._emergency_yield(car, responding))
+		world._move_traffic_yield(car, delta)
+		var yield_offset := float(car.get("yield_offset", 0.0))
+		if yield_offset > .001:
+			clearance = minf(clearance, 0.0)
+		var exits := road_vehicles.duplicate()
+		for other in road_cars:
+			if other.actor != actor:
+				exits.append(other.actor.transform * AABB(Vector3(-.94, -.3, -float(other.length)),
+					Vector3(1.88, 2.4, 2.0 * float(other.length))))
+		clearance = minf(clearance, world.street_signals.junction_queue_gap(
+			actor.position, -actor.basis.z, car.length, 2.0 * float(car.length), .94, exits))
 		if travel > 0:
 			for crossing_offset in occupied_crossings:
 				var gap := fposmod(crossing_offset-float(car.offset),track.get_baked_length()) - float(car.length) - .8
@@ -443,8 +477,10 @@ func _advance_road_cars(delta: float, users: Array[AABB]) -> void:
 		var step := minf(float(car.speed)*delta,maxf(0,clearance-.03))
 		var next_offset := float(car.offset) + travel * step
 		var next := _carriageway_pose(next_offset,travel)
+		next.origin += next.basis.x * yield_offset
 		var sweep := next * AABB(Vector3(-.98,-.3,-2.85),Vector3(1.96,2.6,5.2))
-		var blocked := users.any(func(body: AABB): return sweep.intersects(body))
+		var blocked := users.any(func(body: AABB): return sweep.intersects(body)) \
+			or road_vehicles.any(func(body: AABB): return sweep.intersects(body))
 		if car.brake_lens:
 			var braking := blocked or permitted < .01 or float(car.speed) < previous_speed - .0001
 			world._set_rear_lights(car.brake_lens,braking)
@@ -508,7 +544,7 @@ func crosses_boarding_edge(start: Vector3, finish: Vector3) -> bool:
 func open_station() -> int:
 	return posmod(next_stop-1, stops.size()) if dwell >= DOOR_TRAVEL_TIME and dwell <= STOP_DURATION - DOOR_TRAVEL_TIME else -1
 
-func car_bounds() -> Array[AABB]:
+func car_bounds(exclude: Node3D = null) -> Array[AABB]:
 	var bodies: Array[AABB] = []
 	for i in sections.size():
 		var front := CAB_REACH if i==0 else 2.21
@@ -516,6 +552,8 @@ func car_bounds() -> Array[AABB]:
 		bodies.append(sections[i].transform*AABB(Vector3(-1.25,-.3,-front),Vector3(2.5,3.5,front+rear)))
 	for item in road_cars:
 		var car: Node3D = item.actor
+		if car == exclude:
+			continue
 		bodies.append(car.transform*AABB(Vector3(-.94,-.3,-2.35),Vector3(1.88,2.4,4.7)))
 	return bodies
 
@@ -523,7 +561,11 @@ func distance_to_next_stop() -> float:
 	return fposmod(stops[next_stop]-distance,track.get_baked_length())
 
 func advance(delta: float, manual: bool, gas: bool, brake: bool) -> void:
-	get_parent().street_signals.advance_tram_crossings(delta)
+	var world := get_parent()
+	var turn: float = world._traffic_turn_intent(track, distance, 1.0, sections[0].basis.x, 14.0)
+	for indicators in cab_indicators:
+		indicators.advance(turn, delta, world.calm_mode or world.steady_player_lights)
+	world.street_signals.advance_tram_crossings(delta)
 	var users := _street_users()
 	_advance_road_cars(delta,users)
 	if dwell>0:
@@ -570,11 +612,10 @@ func stop_at_station(index: int) -> void:
 	distance = stops[index]
 	next_stop = (index + 1) % stops.size()
 	var destination: String = STATION_NAMES[next_stop]
-	next_stop_display.text = destination
-	front_display.text = destination
-	rear_display.text = destination
-	for display in interior_displays:
+	var world := get_parent()
+	for display: Label3D in [next_stop_display, front_display, rear_display] + interior_displays:
 		display.text = destination
+		world._fit_world_sign(display)
 	velocity = 0
 	dwell = STOP_DURATION
 	exchange_finished = false

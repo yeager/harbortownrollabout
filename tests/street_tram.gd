@@ -166,5 +166,31 @@ func verify() -> void:
 		if train.distance <= saved_distance:
 			fail("Resumed tram did not move")
 			return
+	var exit_key := InputEventKey.new()
+	exit_key.pressed = true
+	exit_key.keycode = KEY_F
+	world._unhandled_key_input(exit_key)
+	if world.tram_mode != 2 or not world.tram_driver_exit_requested:
+		fail("Driving exit request did not wait for the platform")
+		return
+	var exit_station: int = train.next_stop
+	world._save_checkpoint()
+	world.queue_free()
+	await process_frame
+	world = load("res://main.tscn").instantiate()
+	root.add_child(world)
+	world._resume_road_checkpoint()
+	train = world.tram
+	if world.tram_mode != 2 or not world.tram_driver_exit_requested or not world.seat_button.disabled:
+		fail("The pending tram exit was lost after reload")
+		return
+	world.mouse_gas = true
+	for tick in 1800:
+		world._process(.05)
+		if world.tram_mode == 0: break
+	world.mouse_gas = false
+	if world.tram_mode != 0 or not world.walker.visible or train.platform_at(world.walker.position) != exit_station:
+		fail("The driver did not leave when the doors opened at the platform")
+		return
 	print("Verified ", snappedf(length,.1), " m of at-grade track, opposing traffic lanes, four station stops, boarding, alighting and person protection.")
 	quit()

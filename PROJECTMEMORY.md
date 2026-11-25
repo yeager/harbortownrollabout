@@ -15,7 +15,9 @@
 
 - The red-and-yellow flatbed tow truck has a modeled winch. Pick up a smoking car or one missing a wheel and carry it to the workshop for 20 coins.
 
-- Police station on the main street and hospital with emergency room east of the north bridge. The doors of the fire station and the entrances of other community buildings face the street.
+- The hospital east of the north bridge has a covered ambulance intake that can be reached on foot or by vehicle. The interior ward is closed. The ambulance assignment picks up a patient at the square, drops them off in the intake, then continues to the marina with first-aid supplies. The patient handoff adds a receipt to the phone.
+- A yellow and teal medical helicopter with skids and an enclosed tail rotor approaches the hospital, lands on its lit helipad, waits on the roof and takes off again.
+- Drivers hold before a junction when its exit is blocked. Responding ambulances, police cars and fire engines can proceed on red when the crossing is clear. Automated road traffic pulls aside where there is sufficient space or waits before a conflicting crossing.
 
 - A neighbor pushing a stroller and an older pedestrian using a rollator walk along the main street at different speeds. Both accessories have editable Blender models.
 

@@ -1,5 +1,7 @@
 extends VBoxContainer
 
+signal instruction_started
+
 var toggle_key := KEY_T
 var open_button := Button.new()
 var title := Label.new()
@@ -42,6 +44,7 @@ var take_job := Button.new()
 
 const CLINIC_RECEIPT := "The clinic received its parcel. You earned 10 points and 10 coins."
 const FLOUR_RECEIPT := "The bakery received three sacks of flour."
+const HOSPITAL_RECEIPT := "Patient dropped off at the hospital. You earned 10 points and 10 coins."
 const MARINA_RECEIPT := "The marina received the last parcel. You earned 10 points and 10 coins."
 const HISTORY_LIMIT := 32
 
@@ -147,6 +150,7 @@ func _ready() -> void:
 		for i in range(delivery_receipts.size()-1,-1,-1):
 			var destination := "HEALTH CENTRE" if delivery_receipts[i] == CLINIC_RECEIPT else "MARINA"
 			if delivery_receipts[i] == FLOUR_RECEIPT: destination = "Bakery"
+			if delivery_receipts[i] == HOSPITAL_RECEIPT: destination = "Hospital"
 			menu.add_item("%d · %s" % [i+1,tr(destination)],i)
 	)
 	receipt_menu.get_popup().id_pressed.connect(func(id: int):
@@ -206,6 +210,7 @@ func _repeat_instruction() -> void:
 	spoken_jobs = jobs
 	job_voice.stream = playlist
 	job_voice.play()
+	instruction_started.emit()
 
 func _on_visibility_changed() -> void:
 	if not handset.is_visible_in_tree(): job_voice.stop()

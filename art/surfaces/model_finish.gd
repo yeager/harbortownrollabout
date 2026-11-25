@@ -1,6 +1,7 @@
 extends RefCounted
 
 const TILES := {
+	"avatar_jacket_twill": preload("res://art/surfaces/avatar_jacket_twill.jpg"),
 	"wool_boucle": preload("res://art/surfaces/wool_boucle_Diffuse.jpg"),
 	"denim_fabric_04": preload("res://art/surfaces/denim_fabric_04_Diffuse.jpg"),
 	"cotton_jersey": preload("res://art/surfaces/cotton_jersey_Diffuse.jpg"),

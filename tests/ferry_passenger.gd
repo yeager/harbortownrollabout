@@ -17,6 +17,25 @@ func check_crossings() -> void:
 			printerr("Missing boardwalk deck between the ferry landings at ", z)
 			quit(1)
 			return
+	var bridge_parts := get_nodes_in_group("north_bridge_deck")
+	for pier: MeshInstance3D in get_nodes_in_group("north_bridge_piers"):
+		bridge_parts.append(pier)
+		bridge_parts.append(pier.get_child(0))
+	var ferry: Node3D = game.ferry
+	var ferry_bounds: AABB = game._model_bounds(ferry, ferry)
+	for frame in 58:
+		game.wave_time = float(frame)
+		game._update_moorings(0.0)
+		var hull := ferry.global_transform * ferry_bounds
+		for part: MeshInstance3D in bridge_parts:
+			if hull.intersects(part.global_transform * part.get_aabb()):
+				printerr("Lotten overlaps the northern bridge at ", ferry.position, " on ", part.name)
+				quit(1)
+				return
+		if not check_mooring_lines(game):
+			quit(1)
+			return
+	print("Lotten cleared the northern bridge in both directions. All seven moorings held through 58 wave samples.")
 	var original_scale: Vector3 = game.walker.scale
 	for departure in game.FERRY_LANDINGS.size():
 		game.wave_time = departure*29.0 + 1.9
@@ -158,4 +177,23 @@ func check_localized_button(game: Node, key: String) -> bool:
 				return false
 	game.seat_f3 = original_seat_f3
 	TranslationServer.set_locale(original)
+	return true
+
+func check_mooring_lines(game: Node) -> bool:
+	for berth in game.moorings:
+		var buoy: Node3D = berth.buoy
+		var boat: Node3D = berth.boat
+		var bow := boat.to_global(Vector3(-2.71,.53,0))
+		var offset: float = game.EAST_QUAY_WATER_EDGE - buoy.position.x
+		if offset < 7.0 or offset > 8.0 or buoy.position.x >= bow.x:
+			printerr("Mooring buoy is not 7–8 metres out from the quay, beyond the bow")
+			return false
+		for index in berth.lines.size():
+			var line: MeshInstance3D = berth.lines[index]
+			var side := -1.0 if index == 1 else 1.0
+			var boat_end := bow if index == 0 else boat.to_global(Vector3(2.44,.56,.71*side))
+			var anchor: Node3D = berth.eye if index == 0 else berth.cleats[index-1]
+			if line.to_global(Vector3.DOWN*.5).distance_to(boat_end) > .001 or line.to_global(Vector3.UP*.5).distance_to(anchor.global_position) > .001:
+				printerr("Mooring line missed an attachment point at wave time ", game.wave_time)
+				return false
 	return true

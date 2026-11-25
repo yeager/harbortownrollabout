@@ -100,6 +100,12 @@ func _process(_delta: float) -> bool:
 			if song not in tracks or heard.has(song) or (tracks.size() > 1 and song == previous) or not game.radio.playing:
 				fail("Unexpected radio rotation in %s at %s" % [LOCALES[locale_index], song])
 				return false
+			if tracks.size() == 1:
+				var playback: AudioStreamPlayback = game.radio.get_stream_playback()
+				press(KEY_N)
+				if game.next_song_button.is_visible_in_tree() or game.radio.get_stream_playback() != playback:
+					fail("The next-song shortcut restarted a one-song station")
+					return false
 			var title := song.get_basename()
 			for tag: String in [LOCALES[locale_index], "en"]:
 				title = title.trim_suffix(" (%s)" % tag.to_upper())
@@ -142,7 +148,24 @@ func check_controls() -> void:
 	if not game.radio.playing or not game.siren_player.playing:
 		fail("Food truck must start with both radio and engine audio")
 		return
+	TranslationServer.set_locale("de")
+	await process_frame
+	var german: PackedStringArray = game.L10n.radio_tracks("de")
+	if not game.radio.playing or game.radio_track not in german or game.next_song_button.is_visible_in_tree() != (german.size() > 1):
+		print("German radio state: ", game.radio_track, " ", game.radio_language, " ", game.radio.playing, " ", game.next_song_button.is_visible_in_tree())
+		fail("Changing to German did not update the song and next-song control")
+		return
+	TranslationServer.set_locale("sv")
+	await process_frame
+	if not game.next_song_button.is_visible_in_tree():
+		fail("Changing back to Swedish did not restore the next-song control")
+		return
 	var song: String = game.radio_track
+	press(KEY_N)
+	if game.radio_track == song:
+		fail("Changing back to Swedish did not restore the next-song shortcut")
+		return
+	song = game.radio_track
 	game.radio.seek(8.0)
 	press(KEY_P)
 	if not game.paused or not game.radio.stream_paused or game.radio.get_playback_position() < 7.0:
@@ -190,6 +213,47 @@ func check_controls() -> void:
 	if not is_equal_approx(game.radio.volume_db, game.radio_track_gain_db):
 		fail("Radio did not restore its track volume after speech")
 		return
+	TranslationServer.set_locale("sv")
+	game.phone.current_job = game.FLOUR_ROUTE
+	game.phone.handset.show()
+	game._say(game.walker_data[0].actor, "Which ice cream would you pick?", "chat_ice")
+	game.phone._repeat_instruction()
+	var traffic_bus := AudioServer.get_bus_index("Traffic and radio")
+	if not game.phone.job_voice.playing or game.greeting_voice.playing or AudioServer.get_bus_volume_db(traffic_bus) > -9.0:
+		fail("Phone instruction did not immediately take priority over street audio")
+		return
+	if not game.radio.playing or not is_equal_approx(game.radio.volume_db, game.radio_track_gain_db - 8.0):
+		fail("Starting a phone instruction must immediately lower the radio without stopping it")
+		return
+	game._say(game.walker_data[0].actor, "Which ice cream would you pick?", "chat_ice")
+	if game.greeting_voice.playing or not game.greeting.visible:
+		fail("A street greeting interrupted the phone or lost its speech bubble")
+		return
+	game.phone.handset.hide()
+	game._say(game.walker_data[0].actor, "Which ice cream would you pick?", "chat_ice")
+	if not game.greeting_voice.playing:
+		fail("Street greetings did not return after closing the phone")
+		return
+	game.greeting_voice.stop()
+	await create_timer(.75).timeout
+	if not is_zero_approx(AudioServer.get_bus_volume_db(traffic_bus)) or not is_equal_approx(game.radio.volume_db, game.radio_track_gain_db):
+		fail("Traffic or radio volume did not recover after closing the phone")
+		return
+	game._apply_calm_mode(true)
+	game.phone.handset.show()
+	game.phone._repeat_instruction()
+	if not is_equal_approx(AudioServer.get_bus_volume_db(traffic_bus), -19.0):
+		fail("Phone ducking must preserve the calm-mode volume reduction")
+		return
+	for i in range(60):
+		if not game.phone.job_voice.playing:
+			break
+		await create_timer(.1).timeout
+	await create_timer(.75).timeout
+	if game.phone.job_voice.playing or not is_equal_approx(AudioServer.get_bus_volume_db(traffic_bus), -10.0) or not is_equal_approx(game.radio.volume_db, game.radio_track_gain_db):
+		fail("Traffic or radio did not recover when the phone instruction finished")
+		return
+	game.phone.handset.hide()
 	print("Radio rotation, language changes, pause, vehicle audio and speech attenuation verified.")
 	phase = "done"
 	game._finish_quit()

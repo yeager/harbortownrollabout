@@ -12,10 +12,8 @@ func check_prices() -> void:
 		if not check_displays(game, locale):
 			quit(1)
 			return
-	game.queue_free()
-	await game.tree_exited
 	print("All eight pump displays and twenty-four nozzle prices matched their grades in all seven languages.")
-	quit()
+	game._finish_quit()
 
 func check_displays(game: Node, locale: String) -> bool:
 	var tower := {}

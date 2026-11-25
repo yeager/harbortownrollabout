@@ -146,6 +146,27 @@ func check_rounds() -> void:
 		printerr("The bench should be usable when directions end")
 		quit(1)
 		return
+	var gait: RefCounted
+	for alma in [false, true]:
+		game.play_as_alma = alma
+		game._apply_player_appearance()
+		game._set_boule_seated(true)
+		gait = game.walker.get_meta("gait")
+		if gait.legs[0].rotation.x < .9:
+			printerr("The avatar did not sit on the bench")
+			quit(1)
+			return
+		for shoe: Node3D in gait.shoes:
+			var sole := shoe.to_global(Vector3.DOWN * gait.SOLE_HEIGHT)
+			if absf(sole.y - game._foot_height(sole.x, sole.z)) > .004:
+				printerr("A seated foot did not rest on the ground: ", sole, " ground=", game._foot_height(sole.x, sole.z), " hip=", gait.legs[0].global_position)
+				quit(1)
+				return
+	game._recover_position()
+	if game.boule_seated or absf(gait.legs[0].rotation.x) > .20:
+		printerr("Recovery left the avatar in the seated pose")
+		quit(1)
+		return
 	for step: float in [1.0/60.0, 0.1]:
 		var throws: Array[int] = []
 		var pickups: Array[int] = []
@@ -176,4 +197,4 @@ func check_rounds() -> void:
 				quit(1)
 				return
 	print("Two successive boule rounds completed at different frame rates.")
-	quit()
+	game._finish_quit(false)

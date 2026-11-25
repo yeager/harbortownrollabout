@@ -11,6 +11,8 @@ func check() -> void:
 	var game = load("res://main.tscn").instantiate()
 	root.add_child(game)
 	game._start_game()
+	game.sound_on = false
+	game.lights_on = false
 	var lights = game.street_signals
 	var train = game.tram
 	var eastern_zebra := Vector3(lights.CENTRAL_BOULEVARD_CROSSINGS[1], 0, 0)
@@ -53,6 +55,10 @@ func check() -> void:
 				if lights.pedestrian_may_enter(curb, curb - Vector3.BACK * side * .2) != (stage == 3):
 					fail("Street zebra at %s disagreed with pedestrian phase %d" % [center, stage])
 					return
+				var inside: Vector3 = center + Vector3.BACK * side * 3.8
+				if not lights.pedestrian_may_enter(inside, center - Vector3.BACK * side * 4.2):
+					fail("A pedestrian already on the street zebra at %s could not finish in phase %d" % [center, stage])
+					return
 	print("Four street zebras checked in both directions through all six street phases.")
 	var approach := Vector3(.8660254,0,.5)
 	var stop_point := Vector3(-lights.BOULEVARD_STOP_DISTANCE,0,1.85)
@@ -69,13 +75,21 @@ func check() -> void:
 		return
 	# Amber requests braking, but crossing the line is only a red-light
 	# violation once the red lens is lit.
+	var transition_times := [0.0, 6.0, 7.0, 8.0, 14.0, 15.0, 16.0]
+	var east_west_lens := [2, 1, 0, 0, 0, 0, 2]
+	var north_south_lens := [0, 0, 0, 2, 1, 0, 0]
+	for stage in transition_times.size():
+		lights.elapsed = transition_times[stage]
+		lights.advance(0)
+		for head in lights.heads:
+			if not head.has("lamps"): continue
+			var expected: int = east_west_lens[stage] if head.east_west else north_south_lens[stage]
+			for lens in 3:
+				if head.lamps[lens].visible != (lens == expected):
+					fail("Wrong vehicle lens at %.1f seconds, east-west: %s" % [transition_times[stage], head.east_west])
+					return
 	lights.elapsed = 6.5
 	lights.advance(0)
-	for head in lights.heads:
-		if head.has("lamps") and head.east_west:
-			if head.lamps[0].visible or not head.lamps[1].visible or head.lamps[2].visible:
-				fail("East-west amber must light only the middle lens")
-				return
 	var before_line := stop_point - approach*5
 	if not is_equal_approx(lights.red_clearance(before_line,approach,2),3.0):
 		fail("Amber did not request braking at the stop line")

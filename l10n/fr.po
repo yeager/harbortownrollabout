@@ -1994,3 +1994,135 @@ msgstr "Pneus été montés."
 
 msgid "Winter tyres fitted."
 msgstr "Pneus hiver montés."
+
+msgid "Pick up the patient at the square"
+msgstr "Va chercher le patient sur la place"
+
+msgid "Drop off the patient at the hospital"
+msgstr "Dépose le patient à l’hôpital"
+
+msgid "Drive into the hospital ambulance bay and stop to drop off the patient."
+msgstr "Entre dans le sas des ambulances de l’hôpital et arrête-toi pour déposer le patient."
+
+msgid "Patient dropped off at the hospital. You earned 10 points and 10 coins."
+msgstr "Le patient est arrivé à l’hôpital. Tu as gagné 10 points et 10 pièces."
+
+msgid "Hospital"
+msgstr "Hôpital"
+
+msgid "Harbor Town Hospital"
+msgstr "Hôpital de la ville portuaire"
+
+msgid "Ambulance intake"
+msgstr "Accès ambulances"
+
+msgid "Police station"
+msgstr "Commissariat"
+
+msgid "Bakery & Coffee"
+msgstr "Boulangerie et café"
+
+msgid "Library"
+msgstr "Bibliothèque"
+
+msgid "PIZZERIA"
+msgstr "PIZZERIA"
+
+msgid "PIZZA"
+msgstr "PIZZA"
+
+msgid "MOMO & BORI"
+msgstr "MOMO & BORI"
+
+msgid "Momo & Bori"
+msgstr "Momo & Bori"
+
+msgid "Västra torget"
+msgstr "Västra torget"
+
+msgid "Lindparken"
+msgstr "Lindparken"
+
+msgid "Verkstadstorget"
+msgstr "Verkstadstorget"
+
+msgid "Norra allén"
+msgstr "Norra allén"
+
+msgid "74  SICKLA UDDE"
+msgstr "74  SICKLA UDDE"
+
+msgid "SICKLA UDDE"
+msgstr "SICKLA UDDE"
+
+msgid "LOTTEN"
+msgstr "LOTTEN"
+
+msgid "Stationsallén"
+msgstr "Stationsallén"
+
+msgid "Norra kajgatan"
+msgstr "Norra kajgatan"
+
+msgid "Södra kajgatan"
+msgstr "Södra kajgatan"
+
+msgid "Östra allén"
+msgstr "Östra allén"
+
+msgid "Storgatan"
+msgstr "Storgatan"
+
+msgid "Verkstadsgatan"
+msgstr "Verkstadsgatan"
+
+msgid "Ändhållplatsvägen"
+msgstr "Ändhållplatsvägen"
+
+msgid "Lindgatan"
+msgstr "Lindgatan"
+
+msgid "Vagnhallsgatan"
+msgstr "Vagnhallsgatan"
+
+msgid "Spårgatan"
+msgstr "Spårgatan"
+
+msgid "Mackvägen"
+msgstr "Mackvägen"
+
+msgid "Depågatan"
+msgstr "Depågatan"
+
+msgid "Torggatan"
+msgstr "Torggatan"
+
+msgid "Parkgatan"
+msgstr "Parkgatan"
+
+msgid "Kajhusgatan"
+msgstr "Kajhusgatan"
+
+msgid "Strandgatan"
+msgstr "Strandgatan"
+
+msgid "Kajgatan"
+msgstr "Kajgatan"
+
+msgid "Torgets förlängning"
+msgstr "Torgets förlängning"
+
+msgid "Toy Harbour"
+msgstr "Le Port des jouets"
+
+msgid "Wooden train"
+msgstr "Train en bois"
+
+msgid "Building blocks"
+msgstr "Blocs de construction"
+
+msgid "Teddy bear"
+msgstr "Nounours"
+
+msgid "Villa district"
+msgstr "Quartier pavillonnaire"

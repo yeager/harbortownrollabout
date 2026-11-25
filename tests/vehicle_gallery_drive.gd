@@ -7,6 +7,7 @@ func _initialize() -> void:
 func check_gallery() -> void:
 	var game = load("res://main.tscn").instantiate()
 	root.add_child(game)
+	game.steady_player_lights = true
 	var expected_tiles: int = game.VEHICLE_NAMES_ALL.size() + game.EXTRA_GALLERY_NAMES.size()
 	if game.vehicle_selector.get_child_count() != expected_tiles:
 		printerr("Missing vehicle picture buttons")
@@ -42,6 +43,16 @@ func check_gallery() -> void:
 		var turn: float = start.basis.z.angle_to(game.ambulance.basis.z)
 		if game.vehicle_index != index or travel < .3 or turn < .005:
 			printerr("Menu driving failed for ",tile.text," distance=",travel," turn=",turn)
+			quit(1)
+			return
+		game._update_traffic(0.0)
+		var signals = game.driven_turn_signals
+		if signals.left.size() < 2 or signals.right.size() < 2 or signals.direction != 1:
+			printerr("Missing paired turn indicators or right turn intent on ", tile.text)
+			quit(1)
+			return
+		if not signals.right.all(func(lamp: MeshInstance3D): return lamp.visible) or signals.left.any(func(lamp: MeshInstance3D): return lamp.visible):
+			printerr("Turning right did not light only the right side of ", tile.text)
 			quit(1)
 			return
 		if index == game.DAM_PICKUP:
@@ -157,6 +168,22 @@ func check_gallery() -> void:
 				printerr("Quattro reverse lights did not activate independently")
 				quit(1)
 				return
+		Input.action_press("ui_left")
+		for frame in 20:
+			game._drive(1.0 / 60.0)
+		Input.action_release("ui_left")
+		game._update_traffic(0.0)
+		if signals.direction != -1 or not signals.left.all(func(lamp: MeshInstance3D): return lamp.visible) or signals.right.any(func(lamp: MeshInstance3D): return lamp.visible):
+			printerr("Turning left did not light only the left side of ", tile.text)
+			quit(1)
+			return
+		for frame in 45:
+			game._drive(1.0 / 60.0)
+		game._update_traffic(0.0)
+		if signals.direction != 0:
+			printerr("Indicators did not cancel after straightening ", tile.text)
+			quit(1)
+			return
 	print("All ",game.VEHICLE_NAMES_ALL.size()," road vehicles started, moved, steered, braked and reversed from the picture menu.")
 	for extra in game.EXTRA_GALLERY_NAMES.size():
 		game.mode = "menu"
@@ -178,6 +205,13 @@ func check_gallery() -> void:
 				game._drive_excavator(1.0 / 240.0)
 			if origin.distance_to(released) < 1.5 or released.distance_to(game.excavator.position) < .45 or game.crawler_speed != 0:
 				printerr("Excavator did not accelerate and coast to rest")
+				quit(1)
+				return
+			Input.action_press("ui_left")
+			game._drive_excavator(.1)
+			Input.action_release("ui_left")
+			if game.excavator_turn_signals.direction != -1 or not game.excavator_turn_signals.left[0].visible:
+				printerr("The tracked excavator did not signal left while turning")
 				quit(1)
 				return
 	print("All three special vehicle pictures launched their driving activities.")

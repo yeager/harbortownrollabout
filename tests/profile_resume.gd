@@ -33,10 +33,33 @@ func check_profiles() -> void:
 		game.find_child("ResumeCheckpoint", true, false).pressed.emit()
 		assert(game.vehicle_index == i)
 		assert(game.ambulance.global_position.is_equal_approx(positions[i]))
+		game._change_seat()
+		game.walker.position = game.BOULE_BENCH_APPROACH
+		game._set_boule_seated(true)
+		game._save_checkpoint()
+		assert(game.road_checkpoint.get("boule_bench", false))
+		if i == 1:
+			# Earlier builds stored a lowered standing origin without a bench flag.
+			game.road_checkpoint.erase("boule_bench")
+			game.road_checkpoint.walk_position.y += .20
+			game._save_preferences()
+		game.free()
+		game = scene.instantiate()
+		root.add_child(game)
+	for i in 2:
+		choose_driver(game, ["Axel", "Alma"][i])
+		game.find_child("ResumeCheckpoint", true, false).pressed.emit()
+		assert(game.walker.visible and game.boule_seated)
+		var gait = game.walker.get_meta("gait")
+		for shoe: Node3D in gait.shoes:
+			var sole := shoe.to_global(Vector3.DOWN * gait.SOLE_HEIGHT)
+			assert(absf(sole.y - game._foot_height(sole.x, sole.z)) < .004)
+		game._change_seat()
+		assert(not game.boule_seated and game.walker.position.is_equal_approx(game.BOULE_BENCH_APPROACH))
 		game.free()
 		game = scene.instantiate()
 		root.add_child(game)
 	game.find_child("SeparateProfiles", true, false).button_pressed = false
 	assert(not game.find_child("ResumeCheckpoint", true, false))
-	print("Both drivers resumed their own vehicle and position. Shared progress stayed empty.")
+	print("Both profiles restored their own vehicle and the seated bench pose. A legacy bench save also resumed seated.")
 	quit()

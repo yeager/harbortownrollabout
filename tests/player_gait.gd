@@ -10,6 +10,7 @@ func check_gait() -> void:
 	game._start_game()
 	game._change_seat()
 	var player: Node3D = game.walker
+	var axel_jog_lean := 0.0
 	for alma in [false, true]:
 		game.play_as_alma = alma
 		game._apply_player_appearance()
@@ -72,6 +73,14 @@ func check_gait() -> void:
 				quit(1)
 				return
 		gait.ground_height = func(_x: float, _z: float) -> float: return player.global_position.y
+		for frame in 90:
+			game._animate_steps(player, 4.0 / 120.0, 1.0 / 120.0)
+		if not alma:
+			axel_jog_lean = gait.forward_lean
+		elif absf(gait.forward_lean - axel_jog_lean) > .001:
+			printerr("Character height changed the lean at the same jogging speed")
+			quit(1)
+			return
 		for speed: float in [game.Gait.WALK_SPEED, game.Gait.RUN_SPEED]:
 			var double_support := false
 			var flight := false
@@ -94,7 +103,17 @@ func check_gait() -> void:
 				printerr("Unexpected walking cadence: ", measured_steps, " steps in 1.25 seconds")
 				quit(1)
 				return
+			var hand_mesh: Mesh = gait.RUNNING_HAND if speed == game.Gait.RUN_SPEED else gait.RELAXED_HAND
+			for palm: MeshInstance3D in gait.palms:
+				if palm.mesh != hand_mesh:
+					printerr("Hand did not change pose at ", speed, " m/s")
+					quit(1)
+					return
 			if speed == game.Gait.RUN_SPEED:
+				if gait.jacket.rotation.x > -.14:
+					printerr("The torso did not lean forward during the sprint")
+					quit(1)
+					return
 				print("Sprint contacts over 1.25 seconds: ", measured_steps, " Alma=", alma)
 				if measured_steps < 4 or measured_steps > 7:
 					printerr("Unexpected sprint cadence")
@@ -105,6 +124,11 @@ func check_gait() -> void:
 				quit(1)
 				return
 		var origin := player.position
+		game._animate_steps(player, -1.4 / 120.0, 1.0 / 120.0)
+		if gait.travel_direction <= 0.0 or gait.travel_direction >= 1.0:
+			printerr("Reversing direction should blend the stride across multiple frames")
+			quit(1)
+			return
 		var samples := 0
 		for frame in 150:
 			var previous_phase: float = gait.phase
@@ -124,6 +148,18 @@ func check_gait() -> void:
 			return
 		player.position = origin
 		gait.ground_height = terrain
+	# Residual momentum after a turn should not advance a forward step.
+	player.position = Vector3(26.8, game._foot_height(26.8, 40.1), 40.1)
+	player.rotation.y = 0.0
+	game.walking_velocity = Vector3.RIGHT
+	var turn_gait = player.get_meta("gait")
+	var start_phase: float = turn_gait.phase
+	var start_x := player.position.x
+	game._walk(1.0 / 60.0)
+	if player.position.x <= start_x or not is_equal_approx(start_phase, turn_gait.phase):
+		printerr("Sideways momentum after a turn was counted as a walking step")
+		quit(1)
+		return
 	print("Axel and Alma transfer weight, maintain lateral foot placement and settle at rest.")
 	var aids_tested := 0
 	for item in game.walker_data:

@@ -204,7 +204,7 @@ func turn_preview(points: PackedVector2Array, heading: Vector2, show_street := f
 			incoming = outgoing
 		distance += length
 	if turns.is_empty() or first_distance > 35: return ""
-	if show_street: return turns[0]+"  "+first_street
+	if show_street: return turns[0]+"  "+TranslationServer.translate(first_street)
 	if turns.size() == 1:
 		turns.insert(0, "↑")
 	return "   ›   ".join(turns)

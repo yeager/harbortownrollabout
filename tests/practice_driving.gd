@@ -14,6 +14,24 @@ func verify() -> void:
 		quit(1)
 		return
 	var start: Vector3 = game.ambulance.position
+	for line_name in ["Practice stop line", "Practice signal stop line"]:
+		var line := game.get_node(line_name) as MeshInstance3D
+		var expected_x: float = game.PRACTICE_STOP_X if line_name == "Practice stop line" else game.PRACTICE_SIGNAL_X
+		if not is_equal_approx(line.to_global(line.get_aabb().position).x, expected_x):
+			printerr("Practise lesson threshold does not match the visible edge of ", line_name)
+			quit(1)
+			return
+	var entrance := game.get_node("Driving school entrance light") as SpotLight3D
+	var previous_time: int = game.time_mode
+	for time in [0, 1, 0]:
+		game.time_mode = time
+		game._update_daylight(0.0)
+		if entrance.visible != (time == 1) or (entrance.light_energy > 0.0) != (time == 1):
+			printerr("The driving school entrance light did not follow the day cycle")
+			quit(1)
+			return
+	game.time_mode = previous_time
+	game._update_daylight(0.0)
 	game.mouse_gas = true
 	for frame in 90: game._drive(1.0/60)
 	if game.speed < 1 or game.ambulance.position.distance_to(start) < 1:
@@ -106,6 +124,20 @@ func verify() -> void:
 		quit(1)
 		return
 	var signal_retry := signal_wait-Vector3.RIGHT*4.0
+	game._track_practice_signal(signal_cross,signal_retry,2.0,1.0,.1)
+	game.speed = 0.0
+	for frame in 81:
+		game._track_practice_signal(signal_wait,signal_wait,2.0,1.0,.1)
+	if game.practice_signal_phase != 1:
+		printerr("The practice signal did not change to amber")
+		quit(1)
+		return
+	game.speed = 2.0
+	game._track_practice_signal(signal_wait,signal_cross,2.0,1.0,.2)
+	if not game.practice_signal_missed or game.practice_signal_complete:
+		printerr("Crossing the practice signal on amber was accepted")
+		quit(1)
+		return
 	game._track_practice_signal(signal_cross,signal_retry,2.0,1.0,.1)
 	game.speed = 0.0
 	for frame in 21:
@@ -223,13 +255,15 @@ func verify() -> void:
 	game.find_child("PracticeDriving", true, false).pressed.emit()
 	game.practice_speed_distance = game.PRACTICE_SPEED_DISTANCE
 	game.practice_stop_complete = true
+	game.practice_signal_waited = true
+	game._set_practice_signal(2)
 	game._save_checkpoint()
 	game.queue_free()
 	await process_frame
 	game = load("res://main.tscn").instantiate()
 	root.add_child(game)
 	game.find_child("ResumeCheckpoint", true, false).pressed.emit()
-	if not game.practice_active or not game.practice_stop_complete or game.practice_signal_phase != 0:
+	if not game.practice_active or game.practice_speed_distance != game.PRACTICE_SPEED_DISTANCE or not game.practice_stop_complete or game.practice_signal_complete or game.practice_signal_phase != 0 or game.practice_signal_waited:
 		printerr("Resuming a lesson lost its completed stages or did not restart at red")
 		quit(1)
 		return

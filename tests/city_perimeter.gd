@@ -24,7 +24,7 @@ func check_geometry(game) -> void:
 			if child.name == "Practice asphalt": continue # The separate training course has no street connection.
 			var bounds: AABB = child.transform * child.get_aabb()
 			asphalt.append(Rect2(bounds.position.x, bounds.position.z, bounds.size.x, bounds.size.z))
-			if child.is_in_group("north_bridge_deck"):
+			if child.is_in_group("north_bridge_deck") or child.is_in_group("south_bridge_deck"):
 				bridge_sections.append(asphalt.back())
 	# The station entrance crosses the pavement into a yard, outside the street graph.
 	var driveway_mesh: MeshInstance3D = game.get_node("Station driveway")

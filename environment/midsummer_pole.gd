@@ -3,6 +3,7 @@ extends Node3D
 var foliage := SurfaceTool.new()
 var rng := RandomNumberGenerator.new()
 var obstacle: AABB
+var wreaths: Array[MeshInstance3D] = []
 
 func _ready() -> void:
 	hide()
@@ -15,13 +16,6 @@ func _ready() -> void:
 	for side: float in [-1,1]:
 		var end := Vector3(side*2.15,5.6,0)
 		beam(top,end,.036)
-		var centre := end - Vector3.UP*.53
-		for i in 40:
-			var angle := TAU*i/40
-			var next_angle := TAU*(i+1)/40
-			var a := centre + Vector3(sin(angle),cos(angle),0)*.53
-			var b := centre + Vector3(sin(next_angle),cos(next_angle),0)*.53
-			sprigs(a,b,.075)
 	# Narrow blue and yellow bindings wind through the birch leaves.
 	for strand in 2:
 		var tint := Color("#267bb6") if strand == 0 else Color("#f5c638")
@@ -35,12 +29,34 @@ func _ready() -> void:
 	finish.vertex_color_use_as_albedo = true
 	finish.vertex_color_is_srgb = true
 	finish.cull_mode = BaseMaterial3D.CULL_DISABLED
+	add_foliage(finish)
+	for side: float in [-1, 1]:
+		foliage.clear()
+		foliage.begin(Mesh.PRIMITIVE_TRIANGLES)
+		var centre := Vector3.DOWN*.53
+		for i in 40:
+			var a := TAU*i/40
+			var b := TAU*(i+1)/40
+			sprigs(centre + Vector3(sin(a),cos(a),0)*.53,centre + Vector3(sin(b),cos(b),0)*.53,.075)
+		var wreath := add_foliage(finish)
+		wreath.position = Vector3(side*2.15,5.6,0)
+		wreaths.append(wreath)
+
+func add_foliage(finish: StandardMaterial3D) -> MeshInstance3D:
 	foliage.generate_normals()
 	foliage.index()
 	var leaves := MeshInstance3D.new()
 	leaves.mesh = foliage.commit()
 	leaves.material_override = finish
 	add_child(leaves)
+	return leaves
+
+func move_wreaths(time: float, wind_angle: float) -> void:
+	if not visible: return
+	for index in wreaths.size():
+		var sway := .065 * sin(time*1.7 + index*.65)
+		wreaths[index].rotation.x = sway * sin(wind_angle)
+		wreaths[index].rotation.z = sway * cos(wind_angle)
 
 func beam(a: Vector3,b: Vector3,radius: float) -> void:
 	var core := CylinderMesh.new()

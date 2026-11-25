@@ -42,6 +42,27 @@ func check() -> void:
 		printerr("Driving the tractor failed to spread grit; position ",game.ambulance.position)
 		quit(1)
 		return
+	game.siren_button.pressed.emit()
+	if game.spreader_audio.playing or not game.spreader_particles.emitting:
+		printerr("Vehicle mute did not silence the spreader independently of its grit")
+		quit(1)
+		return
+	game.siren_button.pressed.emit()
+	if not game.spreader_audio.playing or not game.spreader_particles.emitting:
+		printerr("Vehicle sound did not restore the active spreader")
+		quit(1)
+		return
+	game._toggle_pause()
+	if game.spreader_particles.emitting or game.spreader_audio.playing:
+		printerr("The spreader kept running while the game was paused")
+		quit(1)
+		return
+	game._toggle_pause()
+	game._drive(1.0/60.0)
+	if not game.spreader_particles.emitting or not game.spreader_audio.playing:
+		printerr("The spreader did not resume while moving")
+		quit(1)
+		return
 	game.mouse_gas = false
 	game.speed = 0.0
 	game._drive(1.0/60.0)
@@ -79,6 +100,24 @@ func check() -> void:
 		quit(1)
 		return
 	var start: Transform3D = game.ambulance.transform
+	for offset in [-4.0, 4.0]:
+		game.ambulance.position = trail + Vector3.BACK * offset
+		if not is_zero_approx(game._road_coverage().y):
+			printerr("The following car gained grip outside the gritted lane at offset ", offset)
+			quit(1)
+			return
+	var found_partial_coverage := false
+	for step in range(1, 16):
+		game.ambulance.position = trail + Vector3.BACK * step * .2
+		var fraction: float = game._road_coverage().y
+		if fraction > .0 and fraction < 1.0:
+			found_partial_coverage = true
+			break
+	if not found_partial_coverage:
+		printerr("The following car did not detect partial tyre contact at the edge of the gritted lane")
+		quit(1)
+		return
+	print("Grit coverage falls to partial tyre contact at the lane edge and zero on either side.")
 	var brake_speeds: Array[float] = []
 	for treated in [false,true]:
 		game.ground_work.has_gritted = treated
