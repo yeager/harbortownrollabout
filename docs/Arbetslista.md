@@ -273,6 +273,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Alla tre vagnsdelar fick omarbetade ventilationskåpor med sidointag, takgaller och synliga fästen. Granskat i Godot och spårvagnsprovet passerade.
   - Boggierna fick separata hjulaxlar, hjulflänsar, lagerkåpor och fjädringsdetaljer. Granskat från rälsnivå i Godot. Spårvagnsprovet passerade.
   - Dörrbladen fick mötestätningar, nedre kantlister och sparkskydd på insidan. Granskat från gatan i Godot. Spårvagnsprovet verifierade fortsatt på- och avstigning.
+  - Barnvagnsplatsen fick en vit barnvagnssymbol intill den översatta golvtexten. Granskat från mittgången i Godot. Spårvagnsprovet passerade.
 - [ ] Broarna, kajerna, träpromenaderna, bryggorna och förtöjningsbojarna
 - [ ] Trafikljus, gatlyktor, vägskyltar och parkeringsskyltar
 - [ ] Boulebana, spelfigurer och klot

@@ -582,7 +582,36 @@ func _mark_stroller_bay(car: Node3D) -> void:
 	for side in [-1,1]:
 		world._make_box("Bay edge",Vector3(1.12,.003,.018),Vector3(0,.005,side*.40),Color.WHITE,false,mat)
 		world._make_box("Bay end",Vector3(.018,.003,.80),Vector3(side*.55,.005,0),Color.WHITE,false,mat)
-	var label := sign_at(mat,"Stroller space",Vector3(0,.008,0),0,.003)
+	var icon := Node3D.new()
+	icon.name = "Stroller floor pictogram"
+	mat.add_child(icon)
+	icon.position = Vector3(.10, .008, 0)
+	var canopy := PackedVector3Array([
+		Vector3(-.14, 0, -.14), Vector3(-.22, 0, -.09), Vector3(-.25, 0, 0),
+		Vector3(-.23, 0, .10), Vector3(-.15, 0, .15), Vector3(-.15, 0, -.14)])
+	for segment in canopy.size() - 1:
+		beam(canopy[segment], canopy[segment + 1], .024, .004, Color.WHITE, icon)
+	for segment in [
+		[Vector3(-.15, 0, -.19), Vector3(-.15, 0, .20)],
+		[Vector3(-.15, 0, -.17), Vector3(-.025, 0, -.105)],
+		[Vector3(-.025, 0, -.105), Vector3(-.025, 0, .105)],
+		[Vector3(-.025, 0, .105), Vector3(-.15, 0, .18)],
+		[Vector3(-.15, 0, .18), Vector3(-.20, 0, .24)],
+	]:
+		beam(segment[0], segment[1], .024, .004, Color.WHITE, icon)
+	var wheel_mesh := CylinderMesh.new()
+	wheel_mesh.top_radius = .033
+	wheel_mesh.bottom_radius = .033
+	wheel_mesh.height = .005
+	wheel_mesh.radial_segments = 16
+	wheel_mesh.material = world._material(Color.WHITE)
+	for z in [-.11, .11]:
+		var wheel := MeshInstance3D.new()
+		wheel.name = "Stroller pictogram wheel"
+		wheel.mesh = wheel_mesh
+		wheel.position = Vector3(.03, 0, z)
+		icon.add_child(wheel)
+	var label := sign_at(mat,"Stroller space",Vector3(.37,.008,0),0,.003)
 	label.rotation = Vector3(-PI/2,0,PI/2)
 	world._size_world_sign(label,.75)
 
