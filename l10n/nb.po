@@ -2142,3 +2142,27 @@ msgstr "Bestillingen er mottatt. Kjør til utleveringsluken."
 
 msgid "Dax burger picked up."
 msgstr "Dax-burgeren er hentet."
+
+msgid "Milkshakes"
+msgstr "Milkshake"
+
+msgid "Snacks"
+msgstr "Snacks"
+
+msgid "Jam & Pickle Burger"
+msgstr "Syltetøy- og sylteagurkburger"
+
+msgid "Popcorn Burger"
+msgstr "Popkornburger"
+
+msgid "Blueberry Cloud Shake"
+msgstr "Blåbærsky-shake"
+
+msgid "Cinnamon Bun Shake"
+msgstr "Kanelbolleshake"
+
+msgid "Curly Fries"
+msgstr "Potetspiraler"
+
+msgid "Crispy Pickles"
+msgstr "Sprø sylteagurker"

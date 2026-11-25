@@ -2138,3 +2138,27 @@ msgstr "Tilaus vastaanotettu. Aja noutoluukulle."
 
 msgid "Dax burger picked up."
 msgstr "Dax-hampurilainen noudettu."
+
+msgid "Milkshakes"
+msgstr "Pirtelöt"
+
+msgid "Snacks"
+msgstr "Naposteltavaa"
+
+msgid "Jam & Pickle Burger"
+msgstr "Hillo-kurkkuburgeri"
+
+msgid "Popcorn Burger"
+msgstr "Popcornburgeri"
+
+msgid "Blueberry Cloud Shake"
+msgstr "Mustikkapilvipirtelö"
+
+msgid "Cinnamon Bun Shake"
+msgstr "Korvapuustipirtelö"
+
+msgid "Curly Fries"
+msgstr "Kierreperunat"
+
+msgid "Crispy Pickles"
+msgstr "Rapeat suolakurkut"

@@ -2072,3 +2072,27 @@ msgstr "Beställningen är mottagen. Kör till utlämningsluckan."
 
 msgid "Dax burger picked up."
 msgstr "Daxburgaren är hämtad."
+
+msgid "Milkshakes"
+msgstr "Milkshake"
+
+msgid "Snacks"
+msgstr "Snacks"
+
+msgid "Jam & Pickle Burger"
+msgstr "Sylt- och gurkburgare"
+
+msgid "Popcorn Burger"
+msgstr "Popcornburgare"
+
+msgid "Blueberry Cloud Shake"
+msgstr "Blåbärsmoln"
+
+msgid "Cinnamon Bun Shake"
+msgstr "Kanelbulleshake"
+
+msgid "Curly Fries"
+msgstr "Pommes på spiral"
+
+msgid "Crispy Pickles"
+msgstr "Krispiga gurkskivor"

@@ -2159,3 +2159,27 @@ msgstr "Bestellung aufgenommen. Fahr zum Abholfenster."
 
 msgid "Dax burger picked up."
 msgstr "Dax-Burger abgeholt."
+
+msgid "Milkshakes"
+msgstr "Milchshakes"
+
+msgid "Snacks"
+msgstr "Snacks"
+
+msgid "Jam & Pickle Burger"
+msgstr "Marmeladen-Gurken-Burger"
+
+msgid "Popcorn Burger"
+msgstr "Popcorn-Burger"
+
+msgid "Blueberry Cloud Shake"
+msgstr "Blaubeerwolken-Shake"
+
+msgid "Cinnamon Bun Shake"
+msgstr "Zimtschnecken-Shake"
+
+msgid "Curly Fries"
+msgstr "Pommes-Spiralen"
+
+msgid "Crispy Pickles"
+msgstr "Knusprige Gurkenscheiben"

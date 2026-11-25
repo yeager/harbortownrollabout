@@ -2149,3 +2149,27 @@ msgstr "Pedido recibido. Conduce hasta la ventanilla de recogida."
 
 msgid "Dax burger picked up."
 msgstr "Hamburguesa Dax recogida."
+
+msgid "Milkshakes"
+msgstr "Batidos"
+
+msgid "Snacks"
+msgstr "Tentempiés"
+
+msgid "Jam & Pickle Burger"
+msgstr "Hamburguesa de mermelada y pepinillo"
+
+msgid "Popcorn Burger"
+msgstr "Hamburguesa de palomitas"
+
+msgid "Blueberry Cloud Shake"
+msgstr "Batido nube de arándanos"
+
+msgid "Cinnamon Bun Shake"
+msgstr "Batido de rollo de canela"
+
+msgid "Curly Fries"
+msgstr "Patatas en espiral"
+
+msgid "Crispy Pickles"
+msgstr "Pepinillos crujientes"

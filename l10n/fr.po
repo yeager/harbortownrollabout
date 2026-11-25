@@ -2157,3 +2157,27 @@ msgstr "Commande reçue. Avancez jusqu’au guichet de retrait."
 
 msgid "Dax burger picked up."
 msgstr "Burger Dax retiré."
+
+msgid "Milkshakes"
+msgstr "Milk-shakes"
+
+msgid "Snacks"
+msgstr "En-cas"
+
+msgid "Jam & Pickle Burger"
+msgstr "Burger confiture-cornichons"
+
+msgid "Popcorn Burger"
+msgstr "Burger au pop-corn"
+
+msgid "Blueberry Cloud Shake"
+msgstr "Milk-shake nuage de myrtilles"
+
+msgid "Cinnamon Bun Shake"
+msgstr "Milk-shake roulé à la cannelle"
+
+msgid "Curly Fries"
+msgstr "Frites spirales"
+
+msgid "Crispy Pickles"
+msgstr "Cornichons croustillants"

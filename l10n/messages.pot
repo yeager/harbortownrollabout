@@ -2071,3 +2071,27 @@ msgstr ""
 
 msgid "Dax burger picked up."
 msgstr ""
+
+msgid "Milkshakes"
+msgstr ""
+
+msgid "Snacks"
+msgstr ""
+
+msgid "Jam & Pickle Burger"
+msgstr ""
+
+msgid "Popcorn Burger"
+msgstr ""
+
+msgid "Blueberry Cloud Shake"
+msgstr ""
+
+msgid "Cinnamon Bun Shake"
+msgstr ""
+
+msgid "Curly Fries"
+msgstr ""
+
+msgid "Crispy Pickles"
+msgstr ""

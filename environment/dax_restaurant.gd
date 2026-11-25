@@ -4,7 +4,7 @@ const LOCATION := Vector3(-468, 0, 55)
 const MAP_STOP := Vector3(-479, 0, 38)
 const LANE_OFFSET := 11.0
 const LANE_WIDTH := 5.5
-const ORDER := Vector3(-11, 0, -1)
+const ORDER := Vector3(-11, 0, -.40)
 const PICKUP := Vector3(-1, 0, 10)
 const PRICE := 8
 const DARK := Color("#263739")
@@ -14,7 +14,13 @@ const CREAM := Color("#fff0cb")
 const PAINT := Color("#f0eee4")
 const SIGN_LIGHT := Color("#ffad64")
 var city: Node3D
-var order_pending := false
+var order_pending := false:
+	set(value):
+		order_pending = value
+		if pickup_bag:
+			pickup_bag.visible = value
+var pickup_bag: Node3D
+var pickup_light: OmniLight3D
 var sign_glow: StandardMaterial3D
 var ad_glow: StandardMaterial3D
 
@@ -38,7 +44,7 @@ func build(world: Node3D) -> void:
 
 	var terrace: MeshInstance3D = city._make_driving_surface("Dax terrace", Vector3(16, .13, 5.6), Vector3(0, -.018, -9.4), Color.WHITE, false, self)
 	terrace.material_override = city.sidewalk_finish
-	_box("Dining floor", Vector3(16, .22, 13), Vector3(0, .10, 0), CREAM)
+	_box("Dining floor", Vector3(15.94, .22, 12.92), Vector3(0, .10, 0), CREAM)
 	_box("Flat roof", Vector3(16.8, .38, 13.85), Vector3(0, 3.92, 0), DARK)
 	_box("Timber fascia", Vector3(16.05, .82, 13.05), Vector3(0, 3.47, 0), WOOD)
 	_box("Roof parapet", Vector3(11.2, .52, 8), Vector3(1, 4.16, 1.2), DARK)
@@ -57,8 +63,7 @@ func build(world: Node3D) -> void:
 	_box("Pickup header", Vector3(2.2, .76, .16), Vector3(-1, 2.88, 6.42), DARK)
 	_box("Pickup canopy", Vector3(3.65, .19, 1.40), Vector3(-1, 2.56, 6.80), TEAL)
 	_sign("2 · Pick up here", Vector3(-1, 2.83, 6.53), 2.0)
-	_glass(Vector3(-.42, 1.79, 6.44), Vector3(.93, 1.25, .05))
-	_box("Takeaway bag", Vector3(.30, .36, .23), Vector3(-1.46, 1.36, 6.46), Color("#dbb682"))
+	_fit_pickup_window()
 	for x in [-8, -6, -4, -2, 0, 2, 4, 6, 8]:
 		_box("Window mullion", Vector3(.10, 3.20, .15), Vector3(x, 1.72, -6.48), DARK)
 	for x in [-7, -5, -3, -1, 1, 3, 5, 7]:
@@ -83,9 +88,42 @@ func build(world: Node3D) -> void:
 	for x in [-5.4, -2.7, 5.0]:
 		_obstacle(Vector3(1.6, 1.0, 1.65), Vector3(x, .5, -9.6))
 
+func _fit_pickup_window() -> void:
+	var metal := Color("#6b7978")
+	for x in [-2.05, .055]:
+		_box("Pickup jamb", Vector3(.09, 1.38, .123), Vector3(x, 1.86, 6.46), DARK)
+	for y in [1.20, 2.49]:
+		_box("Sliding window track", Vector3(2.15, .05, .16), Vector3(-1, y, 6.46), metal)
+	_glass(Vector3(-.48, 1.84, 6.49), Vector3(.96, 1.24, .052))
+	_box("Sliding sash stile", Vector3(.063, 1.28, .081), Vector3(-.99, 1.84, 6.50), metal)
+	_box("Sliding sash pull", Vector3(.075, .21, .07), Vector3(-.87, 1.80, 6.55), DARK)
+	_box("Kitchen worktop", Vector3(2.81, .10, .78), Vector3(-1, 1.08, 5.85), metal)
+	var fixture := _box("Pickup canopy lamp", Vector3(.98, .042, .13), Vector3(-1, 2.445, 6.91), CREAM)
+	fixture.material_override = sign_glow
+	pickup_light = OmniLight3D.new()
+	pickup_light.position = Vector3(-1, 2.30, 6.92)
+	pickup_light.omni_range = 3.6
+	pickup_light.light_color = Color("#ffe2ba")
+	pickup_light.distance_fade_enabled = true
+	pickup_light.distance_fade_begin = 25.0
+	add_child(pickup_light)
+	pickup_bag = _box("Takeaway bag", Vector3(.30, .36, .23), Vector3(-1.46, 1.36, 6.55), Color("#dbb682"))
+	pickup_bag.visible = order_pending
+	var handle := TorusMesh.new()
+	handle.inner_radius = .058
+	handle.outer_radius = .077
+	handle.rings = 12
+	handle.ring_segments = 8
+	var grip := _mesh("Paper bag handle", handle, Vector3.ZERO, Color("#b98b59"))
+	grip.reparent(pickup_bag, false)
+	grip.position.y = .188
+	grip.rotation.x = PI * .5
+
 func update_lights(night: float) -> void:
 	sign_glow.emission_energy_multiplier = lerpf(.22, 2.1, night)
 	ad_glow.emission_energy_multiplier = lerpf(.12, .72, night)
+	pickup_light.light_energy = 1.25 * night
+	pickup_light.visible = night > .01
 
 func _roof_signs() -> void:
 	for side in [-1.0, 1.0]:
@@ -96,7 +134,7 @@ func _roof_signs() -> void:
 		var frame := _box("Illuminated roof sign trim", Vector3(5.26, 1.22, .055), Vector3(0, 5.25, z + side * .174), SIGN_LIGHT)
 		frame.material_override = sign_glow
 		_box("Roof sign face", Vector3(5.12, 1.08, .068), Vector3(0, 5.25, z + side * .207), TEAL)
-		_sign("Dax", Vector3(0, 5.28, z + side * .25), 4.8, PI if side < 0 else 0.0, CREAM, .023)
+		_sign("Dax", Vector3(0, 5.32, z + side * .25), 4.8, PI if side < 0 else 0.0, CREAM, .020)
 
 func _burger_ad() -> void:
 	var at := Vector3(5.90, 1.68, -6.58)
@@ -117,25 +155,51 @@ func _burger_ad() -> void:
 	var price: Label3D = city._station_sign(str(PRICE), at + Vector3(0, -.92, -.147), .009, CREAM, PI, self)
 	city._size_world_sign(price, 1.0)
 
+func _order_menu() -> void:
+	var screen := city._material(Color("#fff1d4"), .64, true) as StandardMaterial3D
+	screen.emission_energy_multiplier = .64
+	_box("Wall menu housing", Vector3(.22, 1.87, 5.53), Vector3(-8.08, 1.62, -3.49), DARK)
+	var headings := ["BURGERS", "Milkshakes", "Snacks"]
+	var listings := [
+		["Dax burger", "Jam & Pickle Burger", "Popcorn Burger"],
+		["Blueberry Cloud Shake", "Cinnamon Bun Shake"],
+		["Curly Fries", "Crispy Pickles"]
+	]
+	for column in 3:
+		var z := -5.25 + column * 1.76
+		var face := _box("Backlit wall menu panel", Vector3(.035, 1.71, 1.67), Vector3(-8.20, 1.62, z), CREAM)
+		face.material_override = screen
+		_box("Menu colour band", Vector3(.045, .34, 1.67), Vector3(-8.22, 2.25, z), [TEAL, Color("#72547c"), Color("#9c482f")][column])
+		_sign(headings[column], Vector3(-8.258, 2.25, z), 1.51, -PI / 2, CREAM, .0055)
+		match column:
+			0:
+				for layer in [[1.79, .23, .67, Color("#d88b3e")], [1.65, .075, .72, Color("#6b913c")], [1.58, .10, .68, Color("#633b26")], [1.49, .10, .64, WOOD]]:
+					_ball("Menu burger illustration", Vector3(-8.235, layer[0], z), Vector3(.038, layer[1], layer[2]), layer[3])
+			1:
+				_box("Menu shake cup", Vector3(.05, .38, .29), Vector3(-8.243, 1.64, z), Color("#8b639c"))
+				_ball("Menu whipped topping", Vector3(-8.273, 1.85, z), Vector3(.05, .15, .34), Color("#fff7e6"))
+				_box("Menu shake straw", Vector3(.03, .24, .038), Vector3(-8.281, 1.92, z + .08), TEAL)
+			2:
+				for fry in 5:
+					_box("Menu fries illustration", Vector3(.035, .34 + .07 * (fry % 3), .055), Vector3(-8.245, 1.70, z + .073 * (fry - 2)), Color("#e6a348"))
+				_box("Menu fries carton", Vector3(.06, .21, .40), Vector3(-8.263, 1.57, z), Color("#b45237"))
+		for row in listings[column].size():
+			_sign(listings[column][row], Vector3(-8.252, 1.30 - row * .18, z), 1.51, -PI / 2, DARK, .004)
+
 func _order_station() -> void:
-	_box("Menu pedestal", Vector3(.28, 1.04, 1.36), Vector3(-8.46, .54, -3), DARK)
-	_box("Backlit menu", Vector3(.13, 1.26, 1.61), Vector3(-8.62, 1.55, -3), CREAM)
-	_sign("Dax burger", Vector3(-8.70, 1.87, -3), 1.45, -PI / 2, DARK)
-	_sign("%d" % PRICE, Vector3(-8.70, 1.12, -3), 1.0, -PI / 2, DARK)
-	for layer in [[1.48, .13, WOOD], [1.54, .05, Color("#678d32")], [1.60, .10, Color("#633b26")], [1.71, .16, Color("#d88b3e")]]:
-		_ball("Burger illustration", Vector3(-8.71, layer[0], -3), Vector3(.035, layer[1], .57), layer[2])
-	_box("Intercom pillar", Vector3(.31, 1.36, .36), Vector3(-8.67, .69, -1), TEAL)
+	_order_menu()
+	_box("Intercom pillar", Vector3(.31, 1.36, .36), Vector3(-8.67, .69, -.40), TEAL)
 	for i in 4:
-		_box("Speaker slot", Vector3(.024, .022, .21), Vector3(-8.83, 1.05 + .046 * i, -1), DARK)
-	_box("Intercom sign panel", Vector3(.14, .40, 1.35), Vector3(-8.78, 1.64, -1), TEAL)
-	_sign("1 · Order here", Vector3(-8.88, 1.66, -1), 1.23, -PI / 2)
-	_box("Ordering station header", Vector3(.32, .21, 2.92), Vector3(-8.61, 2.31, -2.27), TEAL)
-	_sign("Drive-through", Vector3(-8.78, 2.33, -2.27), 2.55, -PI / 2)
+		_box("Speaker slot", Vector3(.024, .022, .21), Vector3(-8.83, 1.05 + .046 * i, -.40), DARK)
+	_box("Intercom sign panel", Vector3(.14, .40, 1.35), Vector3(-8.78, 1.64, -.40), TEAL)
+	_sign("1 · Order here", Vector3(-8.88, 1.66, -.40), 1.23, -PI / 2)
+	_box("Ordering station header", Vector3(.32, .21, 2.92), Vector3(-8.18, 2.70, -3.49), TEAL)
+	_sign("Drive-through", Vector3(-8.35, 2.72, -3.49), 2.55, -PI / 2, CREAM, .005)
 	_box("Entrance sign post", Vector3(.20, 2.5, .20), Vector3(-8.15, 1.25, -15.4), DARK)
 	_box("Entrance sign panel", Vector3(1.96, .89, .12), Vector3(-8.15, 2.46, -15.4), TEAL)
 	_sign("Dax", Vector3(-8.15, 2.65, -15.48), 1.65, PI)
 	_sign("Drive-through", Vector3(-8.15, 2.23, -15.48), 1.76, PI)
-	_obstacle(Vector3(.55, 2.5, 3.14), Vector3(-8.57, 1.18, -2.35))
+	_obstacle(Vector3(.40, 1.84, 1.35), Vector3(-8.67, .92, -.40))
 
 func action_at(point: Vector3) -> String:
 	var local := to_local(point)
