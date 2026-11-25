@@ -1282,7 +1282,7 @@ func _radio_target_gain() -> float:
 	return radio_track_gain_db - (8.0 * radio_ducking / 100.0 if speaking else 0.0)
 
 func _honk() -> void:
-	if mode != "playing" or paused or (walker.visible and not boating and tram_mode == 0) or tram_mode == 1 or horn.playing: return
+	if not _world_controls_available() or (walker.visible and not boating and tram_mode == 0) or tram_mode == 1 or horn.playing: return
 	horn.stream = load("res://audio/horn_%s.wav" % ("tram" if tram_mode == 2 else "motorboat" if boating else HORNS[vehicle_index]))
 	horn.play()
 

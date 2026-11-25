@@ -210,6 +210,7 @@ func verify() -> void:
 			quit(1)
 			return
 	game.find_child("BackspaceRecovery", true, false).button_pressed = true
+	game.find_child("HornF4", true, false).button_pressed = true
 	game.queue_free()
 	await process_frame
 	game = load("res://main.tscn").instantiate()
@@ -238,6 +239,30 @@ func verify() -> void:
 		printerr("Saved Backspace binding did not recover the vehicle")
 		quit(1)
 		return
+	game.phone.open_button.pressed.emit()
+	for horn_key in [KEY_H, KEY_F4]:
+		key.keycode = horn_key
+		game._unhandled_key_input(key)
+		if game.horn.playing:
+			printerr("Horn interrupted the open phone")
+			quit(1)
+			return
+	game.phone.toggle()
+	key.alt_pressed = true
+	game._unhandled_key_input(key)
+	if game.horn.playing:
+		printerr("Alt+F4 sounded the horn")
+		quit(1)
+		return
+	key.alt_pressed = false
+	for horn_key in [KEY_H, KEY_F4]:
+		key.keycode = horn_key
+		game._unhandled_key_input(key)
+		if not game.horn.playing:
+			printerr("Horn binding stopped working after closing the phone")
+			quit(1)
+			return
+		game.horn.stop()
 	game.phone.open_button.pressed.emit()
 	if game.phone.take_job.tr(game.phone.take_job.text) != "Åk till staden för ett uppdrag":
 		printerr("Job button should explain that accepting leaves practice")
