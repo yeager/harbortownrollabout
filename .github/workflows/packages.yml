@@ -59,7 +59,7 @@ jobs:
             ferry_passenger water_exit
             junction_queue emergency_traffic traffic_turn_indicators street_parking
             street_tram city_perimeter mower_perimeter practice_driving tram_signals
-            hospital_handoff hospital_helicopter world_name_signs freight_delivery
+            hospital_handoff hospital_helicopter world_name_signs freight_delivery mission_resume
             fire_engine_driver fire_engine_locker
             vehicle_gallery_drive kiosk_and_shopper pump_prices bus_route taxi_dispatch recovery_route
             vehicle_radio weather_transition
