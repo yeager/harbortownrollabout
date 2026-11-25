@@ -7948,6 +7948,12 @@ func _fit_bus_exterior(model: Node3D) -> void:
 		panel.material_override = lower_door_finish
 	var door_jamb := _material(Color("#0e1517"), .79)
 	var tread := _material(Color("#545e61"), .72)
+	var button_cap := CylinderMesh.new()
+	button_cap.top_radius = .026
+	button_cap.bottom_radius = .026
+	button_cap.height = .012
+	button_cap.radial_segments = 16
+	button_cap.material = _material(Color("#9bce52"), .48)
 	for door_center in [4.4, -.30, -4.11]:
 		var seal := _make_box("Passenger door centre gasket", Vector3(.024, 1.91, .043),
 			Vector3(-1.272, 1.41, door_center), door_jamb.albedo_color, false, model)
@@ -7955,6 +7961,15 @@ func _fit_bus_exterior(model: Node3D) -> void:
 		var threshold := _make_box("Passenger door threshold", Vector3(.072, .036, 1.04),
 			Vector3(-1.262, .447, door_center), tread.albedo_color, false, model)
 		threshold.material_override = tread
+		if door_center < 0.0:
+			var housing := _make_box("Passenger door request housing", Vector3(.028, .11, .093),
+				Vector3(-1.267, 1.12, door_center + .38), Color("#1b2427"), false, model)
+			var button := MeshInstance3D.new()
+			button.name = "Passenger door request button"
+			button.mesh = button_cap
+			button.position.x = -.018
+			button.rotation.z = PI * .5
+			housing.add_child(button)
 	if not bus_side_marker_finish:
 		bus_side_marker_finish = _material(Color("#a6561d"),.32,true)
 		bus_side_marker_finish.emission = Color("#ffaa43")
