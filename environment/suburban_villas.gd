@@ -334,6 +334,7 @@ func _grounds(lot: Node3D, index: int) -> void:
 			var x: float = span.x + .16 + .37 * i
 			_bulb(lot.to_global(Vector3(x, .70 - .06 * sin(i * .63), 8.48)), _house_light(index, i))
 		world.roadside_solids.append(AABB(lot.to_global(Vector3(span.x, -.45, 8.34)), Vector3(span.y - span.x, 1.55, .16)))
+	_mailbox(lot, index)
 	var bed_widths := [Vector2(2.60, 1.87), Vector2(2.17, 2.80), Vector2(2.98, 2.44), Vector2(2.28, 1.66)][index] as Vector2
 	var flowers: Array = [
 		[Color("#e4a0b9"), Color("#fff1da")],
@@ -383,6 +384,19 @@ func _grounds(lot: Node3D, index: int) -> void:
 		if i % 3 == 0:
 			_bulb(point + Vector3.BACK * .072, 0)
 	_box(winter_trim, "Wreath ribbon", Vector3(.35, .13, .085), wreath_at + Vector3(0, -.24, .09), Color("#b64739")).rotation.z = .13
+
+func _mailbox(lot: Node3D, index: int) -> void:
+	var width: float = [.39, .48, .33, .42][index]
+	var paint: Color = [Color("#718991"), Color("#35534c"), Color("#40484d"), Color("#694039")][index]
+	var x: float = -2.96 if index in [0, 3] else -.34
+	var at := Vector3(x, 1.04, 8.25)
+	_box(lot, "Mailbox post", Vector3(.09, .99, .09), Vector3(x, .54, 8.22), TIMBER)
+	_box(lot, "Mailbox body", Vector3(width, .37, .30), at, paint)
+	var lid := _box(lot, "Mailbox lid", Vector3(width + .067, .047, .36), at + Vector3.UP * .195, paint.lightened(.15))
+	lid.rotation.x = -.08 if index in [0, 2] else -.19
+	_box(lot, "Mailbox slot", Vector3(width - .105, .045, .025), at + Vector3(0, .088, .155), Color("#20292a"))
+	var address: Label3D = world._station_sign(str(12 + index * 2), at + Vector3(0, -.065, .168), .0025, TRIM, 0, lot)
+	address.auto_translate_mode = Node.AUTO_TRANSLATE_MODE_DISABLED
 
 func _garden_bench(lot: Node3D, at: Vector3) -> void:
 	for end in [-1, 1]:
