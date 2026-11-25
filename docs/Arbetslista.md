@@ -319,5 +319,6 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Gångsignalernas röda och gröna lysfält fick separata ramar och visir. Granskat i Godot. Signalprovet för gatu- och spårvägskorsningar passerade.
   - Gångsignalernas figurer modellerades om med tydlig stående respektive gående silhuett. Båda färglägena granskades i Godot och korsningarnas signalprov passerade.
   - Övergångsställenas armaturer fick en stolpkrage, stödarm och bultar. Granskat underifrån i Godot. Korsningarnas signalprov passerade.
+  - Gångsignalernas stolpar fick sockel, fotplatta och fyra ankare i trottoarens nivå. Granskat i Godot. Korsningarnas signalprov passerade.
   - Kajens låga lyktor fick sockel, kant under huven och tre smala stag runt ljusspridaren. Granskat vid färjebryggan i Godot. Väderprovet passerade.
 - [ ] Boulebana, spelfigurer och klot

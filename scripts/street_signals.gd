@@ -260,6 +260,16 @@ func _add_crossing(center: Vector3, east_west: bool, pavement_offset := 5.45) ->
 		mast.position = center + Vector3(pavement_offset*side,0,-1.55*side) if east_west else center + Vector3(-1.55*side,0,pavement_offset*side)
 		mast.rotation.y = (-PI/2 if side==1 else PI/2) if east_west else (PI if side==1 else 0.)
 		get_parent()._make_roadside_solid("Crossing pole",Vector3(.09,2.45,.09),Vector3.UP*1.22,Color("#737d7a"),false,mast)
+		var pavement_y: float = get_parent()._surface_height(mast.global_position.x, mast.global_position.z)
+		var base_y := pavement_y - mast.global_position.y
+		get_parent()._make_box("Crossing pole plinth", Vector3(.211, .058, .211),
+			Vector3(0, base_y + .009, 0), Color("#938f83"), false, mast)
+		get_parent()._make_box("Crossing pole foot plate", Vector3(.169, .021, .169),
+			Vector3(0, base_y + .048, 0), Color("#525d56"), false, mast)
+		for corner in [Vector2(-.061, -.061), Vector2(.061, -.061),
+				Vector2(-.061, .061), Vector2(.061, .061)]:
+			get_parent()._make_box("Crossing pole anchor", Vector3(.021, .014, .021),
+				Vector3(corner.x, base_y + .065, corner.y), Color("#8e9793"), false, mast)
 		get_parent()._make_box("Pedestrian signal",Vector3(.52,.9,.18),Vector3.UP*2.2,Color("#202927"),false,mast)
 		if side == 1:
 			_add_crossing_light(mast, center)
