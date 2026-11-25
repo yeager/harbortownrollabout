@@ -2256,7 +2256,7 @@ func _build_city_wall() -> void:
 func _build_road_network() -> void:
 	marking_finish = _noise_material(Color("#ededed"), Color.WHITE, 2.3, .12)
 	marking_finish.set_shader_parameter("road_paint", true)
-	road_finish = _noise_material(Color("#171819"), Color("#303132"), 2.3, .22)
+	road_finish = _noise_material(Color("#111213"), Color("#27292b"), 4.0, .15)
 	var main_road := _make_driving_surface("Main street", Vector3(100, 0.12, 9.6), Vector3(0, -0.08, 0), Color("#3e484a"), true)
 	main_road.material_override = road_finish
 	var cross_road := _make_driving_surface("Cross street", Vector3(9.6, 0.13, 72), Vector3(0, -0.07, -12), Color("#3e484a"), true)
