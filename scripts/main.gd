@@ -11806,8 +11806,7 @@ func _refresh_ui() -> void:
 	if number_vehicle_switches:
 		light_button.text = tr(light_button.text) + " · 1"
 		siren_button.text = tr(siren_button.text) + " · 2"
-	pause_button.text = tr("Resume") if paused else tr("Pause")
-	if pause_f7: pause_button.text += " · F7"
+	pause_button.text = (tr("Resume") if paused else tr("Pause")) + _movement_hint(" · {pause}")
 	if ferry_passenger:
 		mission_label.text = "On board Lotten"
 	elif tram_mode > 0:

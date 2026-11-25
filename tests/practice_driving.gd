@@ -247,6 +247,7 @@ func verify() -> void:
 			return
 	game.find_child("BackspaceRecovery", true, false).button_pressed = true
 	game.find_child("HornF4", true, false).button_pressed = true
+	game.find_child("PauseF7", true, false).button_pressed = true
 	game.queue_free()
 	await process_frame
 	game = load("res://main.tscn").instantiate()
@@ -257,6 +258,20 @@ func verify() -> void:
 	game._refresh_ui()
 	if not game.driving_hints.text.contains("Fastnat? Tryck Backspace") or game.phone.recovery_hint.text != "Fastnat? Tryck Backspace":
 		printerr("Recovery hints did not follow the saved binding")
+		quit(1)
+		return
+	var pause_key := InputEventKey.new()
+	pause_key.pressed = true
+	pause_key.keycode = KEY_F7
+	game._unhandled_key_input(pause_key)
+	if not game.paused or not game.pause_button.text.ends_with(" · P / F7"):
+		printerr("Pause did not display both available keys")
+		quit(1)
+		return
+	pause_key.keycode = KEY_P
+	game._unhandled_key_input(pause_key)
+	if game.paused or not game.pause_button.text.ends_with(" · P / F7"):
+		printerr("The original pause key did not resume with F7 enabled")
 		quit(1)
 		return
 	game.ambulance.position.z += 3
