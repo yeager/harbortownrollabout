@@ -5606,6 +5606,29 @@ func _signpost(at: Vector3, heading: float) -> Node3D:
 
 func _speed_sign(at: Vector3, heading: float, limit: int) -> void:
 	var post := _signpost(at, heading)
+	var aluminium := _material(Color("#929da0"), .54, false, "brushed")
+	aluminium.metallic = .53
+	var backing_mesh := CylinderMesh.new()
+	backing_mesh.top_radius = .55
+	backing_mesh.bottom_radius = .55
+	backing_mesh.height = .023
+	backing_mesh.radial_segments = 64
+	backing_mesh.rings = 0
+	backing_mesh.material = aluminium
+	var backing := MeshInstance3D.new()
+	backing.name = "Speed sign aluminium back"
+	backing.mesh = backing_mesh
+	backing.rotation.x = PI * .5
+	backing.position = Vector3(0, 2.58, .010)
+	post.add_child(backing)
+	for rail_y in [2.38, 2.76]:
+		_make_box("Sign rear mounting channel", Vector3(.60, .043, .026),
+			Vector3(0, rail_y, -.011), Color.WHITE, false, post).material_override = aluminium
+		_make_box("Signpost clamp", Vector3(.177, .063, .034),
+			Vector3(0, rail_y, -.047), Color("#657175"), false, post)
+		for bolt_x in [-.073, .073]:
+			_make_box("Signpost clamp bolt", Vector3(.025, .025, .016),
+				Vector3(bolt_x, rail_y, -.069), Color.WHITE, false, post).material_override = aluminium
 	for inner in [false,true]:
 		var disc := CylinderMesh.new()
 		disc.top_radius = .46 if inner else .55
