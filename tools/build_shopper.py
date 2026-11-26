@@ -427,9 +427,33 @@ for y, z in ((.53,.559),(.78,.549)):
         chord = math.sqrt(.084**2-offset**2)
         tube("Deck grille wire",(offset,y-chord,z+.014),(offset,y+chord,z+.014),.002,v.METAL)
         tube("Deck grille wire",(-chord,y+offset,z+.016),(chord,y+offset,z+.016),.002,v.METAL)
+# The grab rail bends into its feet and carries a separate rubber grip.
+grab_path = [(-.140,1.108,.515),(-.140,1.135,.577),
+             (-.136,1.146,.592),(-.122,1.153,.600),
+             (.122,1.153,.600),(.136,1.146,.592),
+             (.140,1.135,.577),(.140,1.108,.515)]
+grab_rail = bpy.data.curves.new("Bent rear grab rail", "CURVE")
+grab_rail.dimensions = "3D"
+grab_rail.bevel_depth = .009
+grab_rail.bevel_resolution = 3
+grab_rail.use_fill_caps = True
+grab_rail.materials.append(v.METAL)
+grab_spline = grab_rail.splines.new("POLY")
+grab_spline.points.add(len(grab_path)-1)
+for point, position in zip(grab_spline.points,grab_path):
+    point.co = (*position,1)
+grab = bpy.data.objects.new("Rear grab rail",grab_rail)
+bpy.context.collection.objects.link(grab)
+grab.parent = root
+bpy.ops.object.select_all(action="DESELECT")
+grab.select_set(True)
+bpy.context.view_layer.objects.active = grab
+bpy.ops.object.convert(target="MESH")
+box("Rear grab handle grip",(0,1.153,.600),(.237,.026,.027),v.RUBBER,.011)
 for side in (-1,1):
-    tube("Grab handle mount",(side*.14,1.115,.52),(side*.13,1.155,.595),.014,v.BLACK)
-tube("Rear grab handle",(-.13,1.155,.595),(.13,1.155,.595),.016,v.BLACK)
+    box("Grab rail mounting foot",(side*.140,1.108,.515),(.046,.036,.014),v.DARK,.006)
+    v.cylinder("Grab rail mounting screw",(side*.154,1.104,.524),
+               .004,.003,v.METAL,False,12,root)
 # The rear side panels taper inward. Seat the engine vents flush on that slope.
 for side in (-1, 1):
     vent_y = .65

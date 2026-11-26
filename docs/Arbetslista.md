@@ -286,6 +286,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Varukorgen fick en bakre trådvägg och fyra fästen med gummimellanlägg och bultar. Granskat i Godot. Fordonsprovet passerade.
   - Sidornas luftintag fick rundade metallramar som följer karossens avsmalning. Trådnätet sitter innanför ramen med en mörk botten bakom. Granskat i Godot och fordonsprovet passerade.
   - Avgassystemet fick ett ihåligt slutrör med rundad kant samt separata fästen med gummiisolatorer och bultar. Granskat i Godot och fordonsprovet passerade.
+  - Det bakre handtaget fick ett böjt metallrör, separat gummigrepp och fötter med synliga skruvar. Granskat i Godot och fordonsprovet passerade.
 - [ ] [`snowmobile.glb`](../vehicles/snowmobile.glb)
 - [ ] [`sport_quattro.glb`](../vehicles/sport_quattro.glb)
   - Fordonsprovet kontrollerar att galleriet visar Audo Sport Kvattro, att bakluckan har Kvattro-emblemet och att fronten har fem ringar. Språkkontrollen passerade för alla sex översättningskataloger.
