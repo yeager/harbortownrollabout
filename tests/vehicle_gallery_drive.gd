@@ -75,6 +75,14 @@ func check_gallery() -> void:
 				printerr("Quattro driver or wheel moved off the left seat")
 				quit(1)
 				return
+			var wheel_axis: Vector3 = game.cabin_wheel_axis
+			var expected_axis := Vector3(0.0, sin(deg_to_rad(17.0)), cos(deg_to_rad(17.0)))
+			var rest_basis: Basis = game.cabin_wheel_rest_basis
+			var turned_basis: Basis = rest_basis.inverse() * game.cabin_wheel.basis
+			if not wheel_axis.is_equal_approx(expected_axis) or turned_basis.is_equal_approx(Basis.IDENTITY) or not (turned_basis * wheel_axis).is_equal_approx(wheel_axis):
+				printerr("Quattro steering wheel must lean toward the dash and turn around its tilted axis")
+				quit(1)
+				return
 			if game.quattro_speed_needle == null or game.quattro_speed_needle.rotation.z >= 0.0:
 				printerr("Quattro speedometer did not follow forward motion")
 				quit(1)
