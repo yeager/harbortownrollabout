@@ -1710,6 +1710,7 @@ def profile_loft(name, rings, finish, parent, close_ends=True):
 
 def make_bmw(color, name="BMV X5i", *, patrol=False):
     detailed_cabin = patrol or color == PAINT_BLACK
+    grille_edge_finish = material("Satin graphite grille edges", (0.12, 0.135, 0.14), 0.58, 0.33)
     root = bpy.data.objects.new(name, None)
     bpy.context.collection.objects.link(root)
     root.empty_display_type = "CUBE"
@@ -2264,8 +2265,12 @@ def make_bmw(color, name="BMV X5i", *, patrol=False):
         mesh=bpy.data.meshes.new("Cambered grille vanes")
         mesh.from_pydata(vertices,[],faces)
         mesh.materials.append(DARK)
+        mesh.materials.append(grille_edge_finish)
         for poly in mesh.polygons:
             poly.use_smooth=True
+            # The forward facets catch light while the sides stay dark.
+            if poly.index % 8 in (5, 6):
+                poly.material_index = 1
         slats=bpy.data.objects.new("Kidney grille vanes",mesh)
         bpy.context.collection.objects.link(slats)
         slats.parent=root

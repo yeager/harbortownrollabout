@@ -261,6 +261,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Baklyktorna fick skruvade hus och separata röda och bärnstensfärgade linser. Godot använder de modellerade blinkerslinserna på båda sidor. Granskat tänt och släckt i spelvyn. Fordons- och bärgningsproven passerade.
 - [ ] [`bmw_x5_m60i.glb`](../vehicles/bmw_x5_m60i.glb)
   - BMV X5i har egna diagonaldelade emaljemblem i turkost och vitt på motorhuven och bakluckan. Samma emblem används på de två trafikvarianterna. Granskat framifrån och bakifrån i Godot. Fordonsprovet, övningskörningen, trafikens blinkers och språkkontrollen passerade.
+  - Grillens välvda lameller fick satinbehandlade framkanter på spelbilen och båda trafikvarianterna. Granskat på spelbilen i Godot. Fordons- och körskoleproven passerade.
 - [ ] [`brandbil.glb`](../vehicles/brandbil.glb)
   - Dragkrokens infästning fick fyra sexkantsbultar samt ett släpvagnsuttag med fäste och väderskydd. Granskat bakifrån i Godot. Förarplats- och luckproven passerade.
 - [ ] [`city_bus.glb`](../vehicles/city_bus.glb)
