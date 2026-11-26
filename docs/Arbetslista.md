@@ -472,6 +472,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Den uppfällda paraplyduken fick rundade paneler, välvd kant och mjukare skuggning. Hämtning, återlämning och uppfällning provades på nytt i Godot.
   - Paraplyet fick ett böjt grepp med rundad ände. Granskat i ägarens hand efter återlämning. Stadsgränsprovet passerade efter att bågprofilen gjordes gemensam med broräckena.
   - Paraplyets topp fick en fast metallkrage och en mörk spets med metallhätta. Granskad både uppfälld och hopfälld. Hämtning, återlämning och väderstyrd fällning verifierades i Godot.
+  - Den hopfällda duken fick ett tygband med tryckknapp. Granskat i närbild i Godot. Provet verifierade att bandet döljs när paraplyet öppnas och visas igen när det är hopfällt.
 - [ ] Tvärbanans perrong, väderskydd och övriga hållplatsdetaljer
   - Kontaktledningsstolparna fick fotplattor, stag och isolatorer. Granskat vid Västra torget i Godot efter godkänt spårvagnsprov.
   - Spårvagnens strömavtagare fick isolerade takfästen, ledaxlar och dubbla kolslitskenor. Granskat i närbild i Godot och spårvagnsprovet passerade.

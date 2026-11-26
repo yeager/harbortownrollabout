@@ -700,6 +700,7 @@ var birthday_host: Node3D
 var umbrella_owner: Node3D
 var umbrella := Node3D.new()
 var canopy := Node3D.new()
+var umbrella_strap := Node3D.new()
 var thermos_stage := FootQuest.WAITING
 var boule_match_finished := false
 var thermos := Node3D.new()
@@ -8015,6 +8016,14 @@ func _build_lost_umbrella() -> void:
 	_tube_between(umbrella, Vector3.UP * 1.185, Vector3.UP * 1.242, .014,
 		_material(Color("#34393e"), .58))
 	_tube_between(umbrella, Vector3.UP * 1.229, Vector3.UP * 1.247, .015, hardware)
+	umbrella_strap.name = "Folded canopy strap"
+	umbrella.add_child(umbrella_strap)
+	umbrella_strap.position.y = .65
+	_tube_between(umbrella_strap, Vector3.DOWN * .016, Vector3.UP * .016, .060,
+		_material(Color("#792039"), .86))
+	_make_box("Strap overlap", Vector3(.015, .032, .044),
+		Vector3(.061, 0, 0), Color("#922640"), false, umbrella_strap)
+	_tube_between(umbrella_strap, Vector3.RIGHT * .068, Vector3.RIGHT * .073, .008, hardware)
 	var cloth := SurfaceTool.new()
 	cloth.begin(Mesh.PRIMITIVE_TRIANGLES)
 	cloth.set_material(fabric)
@@ -8061,12 +8070,16 @@ func _place_umbrella() -> void:
 	umbrella.basis = Basis.IDENTITY
 	umbrella.position = Vector3(54,_foot_height(54,-18)+.10,-18) if holder == self else PALM_GRIP
 	var spread := 1.0 if umbrella_stage == FootQuest.FINISHED and weather.intensity.x > .15 else .10
-	canopy.scale = Vector3(spread,lerpf(2.8,1.0,spread),spread)
+	_set_umbrella_spread(spread)
+
+func _set_umbrella_spread(spread: float) -> void:
+	canopy.scale = Vector3(spread, lerpf(2.8, 1.0, spread), spread)
+	umbrella_strap.visible = is_equal_approx(spread, .10)
 
 func _update_lost_umbrella(delta: float) -> void:
 	if umbrella_stage == FootQuest.FINISHED:
 		var spread := move_toward(canopy.scale.x,1.0 if weather.intensity.x > .15 else .10,delta*1.6)
-		canopy.scale = Vector3(spread,lerpf(2.8,1.0,spread),spread)
+		_set_umbrella_spread(spread)
 		umbrella.global_basis = Basis.IDENTITY
 		return
 	if not walker.visible or ferry_passenger or tram_mode != 0: return
@@ -8078,7 +8091,7 @@ func _update_lost_umbrella(delta: float) -> void:
 		_reward_foot_quest(6)
 	else: return
 	_place_umbrella()
-	canopy.scale = Vector3(.1,2.62,.1)
+	_set_umbrella_spread(.10)
 	_refresh_dispatch()
 	_save_preferences()
 
