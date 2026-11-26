@@ -267,6 +267,19 @@ for side in (-1,1):
         screw = v.cylinder("Rear lamp retaining screw",(light_x,3.679,z),
                            .008,.012,v.METAL,False,12,root)
         screw.rotation_euler.x = math.pi/2
+    for y in (-1.56,-.14):
+        box("Sideguard chassis bracket",(side*.925,y,.822),(.29,.094,.073),v.DARK,.012)
+        box("Sideguard upright",(side*1.056,y,.674),(.074,.073,.383),v.DARK,.011)
+        for z in (.54,.78):
+            v.cylinder("Sideguard mounting bolt",(side*1.152,y,z),
+                       .012,.012,v.METAL,True,12,root)
+    for z in (.54,.78):
+        box("Sideguard rail",(side*1.097,-.83,z),(.098,1.98,.106),v.METAL,.017)
+        for y in (-1.815,.155):
+            box("Sideguard end cap",(side*1.096,y,z),(.102,.044,.109),v.DARK,.014)
+    for y in (-1.46,-.24):
+        box("Side marker housing",(side*1.151,y,.78),(.028,.113,.054),v.DARK,.007)
+        box("Side marker lens",(side*1.169,y,.78),(.011,.087,.038),amber,.005)
     for axle_y in (.90,2.28):
         rear_mudguard(side, axle_y)
     for y in (-2.94,.90,2.28):
