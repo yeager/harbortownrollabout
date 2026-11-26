@@ -382,11 +382,37 @@ def build():
             box("Rear panel ribs",(side*.355,2.072,.578+i*.014),(.374,.006,.005),trim,.001)
     box("Rear painted bumper",(0,2.017,.368),(1.625,.143,.204),red,.034)
     box("Rear impact strip",(0,2.058,.423),(1.634,.058,.078),trim,.014)
-    for x in [-.578,-.485]:
-        outlet = cylinder("Polished exhaust tip",(x,2.049,.249),.038,.126,chrome,axis_x=False,vertices=32,root=root)
-        outlet.rotation_euler.x = math.pi/2
-        hole = cylinder("Recessed exhaust outlet",(x,2.114,.249),.028,.007,recess,axis_x=False,vertices=32,root=root)
-        hole.rotation_euler.x = math.pi/2
+    for x in [-.578, -.485]:
+        # The profile curls over the lip and continues down the inside wall.
+        profile = [(2.000, .033), (2.010, .038), (2.108, .038),
+                   (2.116, .035), (2.115, .031), (2.108, .028), (2.010, .027)]
+        segments = 32
+        vertices = []
+        for y, radius in profile:
+            for index in range(segments):
+                angle = math.tau * index / segments
+                vertices.append((x + radius * math.cos(angle), y, .249 + radius * math.sin(angle)))
+        faces = []
+        for ring in range(len(profile) - 1):
+            for index in range(segments):
+                first = ring * segments
+                next_index = (index + 1) % segments
+                faces.append((first + index, first + segments + index,
+                              first + segments + next_index, first + next_index))
+        mesh = bpy.data.meshes.new("Rolled exhaust tubing")
+        mesh.from_pydata(vertices, [], faces)
+        mesh.update()
+        mesh.materials.append(chrome)
+        mesh.materials.append(recess)
+        for face in mesh.polygons:
+            face.use_smooth = True
+            face.material_index = int(face.index >= 5 * segments)
+        outlet = bpy.data.objects.new("Hollow exhaust tip", mesh)
+        bpy.context.collection.objects.link(outlet)
+        attach(outlet, root)
+        throat = cylinder("Shadow at exhaust throat", (x,2.014,.249), .027,.006,
+                          recess, axis_x=False, vertices=segments, root=root)
+        throat.rotation_euler.x = math.pi / 2
 
     for i in [-1,0,1]:
         x = i*.413
