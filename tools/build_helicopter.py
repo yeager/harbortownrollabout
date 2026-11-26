@@ -72,7 +72,25 @@ def cabin_surface(side, y, z, offset):
     return (contact.x + side * offset, y, z)
 
 
+def windscreen_surface(x, z, offset):
+    hit, contact, _, _ = cabin.ray_cast((x, -4, z), (0, 1, 0))
+    if not hit:
+        raise ValueError(f"Wiper misses windscreen at {(x, z)}")
+    return (x, contact.y - offset, z)
+
+
 for side in [-1,1]:
+    pivot_point = windscreen_surface(side * .34, 1.49, .015)
+    mount = cylinder("Windscreen wiper pivot", pivot_point, .043, .046, graphite, False, 20, root)
+    mount.rotation_euler.x = math.pi / 2
+    pipe("Windscreen wiper arm", [
+        windscreen_surface(side * (.34 + .16 * step / 12), 1.49 + .40 * step / 12, .033)
+        for step in range(13)
+    ], .013, metal, root)
+    pipe("Windscreen wiper blade", [
+        windscreen_surface(side * (.45 + .12 * step / 12), 1.73 + .37 * step / 12, .018)
+        for step in range(13)
+    ], .020, graphite, root)
     text_obj("Police fuselage lettering","POLIS",(side*1.15,-side*.68,1.14),.40,blue,-side,root)
     for outline in (
         ((-2.01, 2.33), (-.78, 2.34), (-.78, .94), (-1.89, .94), (-2.01, 1.10)),
