@@ -300,6 +300,24 @@ def build(key, length, width, axles, color, belt, cabin):
                 bore.rotation_euler.x=math.pi/2
         else:
             box("Bumper",0,y,.36,width*1.96,.13,.13,RUBBER if key!="m3_e30" else paint)
+    if key == "saab96":
+        blue = material("Saav registration country blue",(.025,.106,.43),.06,.40)
+        for outward, height, offset in [(-1,.360,.079),(1,.464,.039)]:
+            y = outward*(end+offset)
+            box("Saav plate gasket",0,y,height,.510,.034,.120,RUBBER,.010)
+            box("Saav number plate",0,y+outward*.021,height,.478,.012,.105,white,.006)
+            box("Saav plate country band",outward*.211,y+outward*.029,height,
+                .039,.004,.092,blue,.003)
+            for text, x, z, size, finish in [
+                ("SJO 097",.150,-.025,.073,DARK),("S",.216,-.030,.022,white),
+            ]:
+                glyph = text_obj("Saav plate "+text,text,(outward*x,y+outward*.033,height+z),
+                                 size,finish,root=root,flat=True)
+                glyph.rotation_euler = (math.pi/2,0,math.pi if outward > 0 else 0)
+            for x in (-.161,.161):
+                screw = cylinder("Saav plate screw",(x,y+outward*.032,height+.038),
+                                 .006,.007,METAL,False,12,root)
+                screw.rotation_euler.x = math.pi/2
     if key!="model_s":
         box("Grille",0,-end-.033,belt*.74,width*.91,.05,.22,DARK)
         if key=="volvo240":

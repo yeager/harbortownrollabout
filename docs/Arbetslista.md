@@ -261,6 +261,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Saav 97 fick ett upphöjt modellemblem på bakluckan. Granskat i Godot och fordonsprovet passerade.
   - Fronten fick separata strålkastarhus med blanka ramar, en grill med fem lameller och ett SAAV-emblem. Granskat i närbild i Godot. Fordonsprovet passerade.
   - Blinkersen fick egna lamphus och blanka ramar fram samt separata bärnstensfärgade fält i baklyktorna. Fronten granskades i Godot. Fordonsprovet verifierade att spelet använder de fyra modellerade linserna.
+  - Saav 97 fick registreringsskyltar med SJO 097, blått landsfält, gummifästen och skruvar. Båda skyltarna granskades i Godot. Fordonsprovet passerade.
 - [ ] [`shopping_trike.glb`](../vehicles/shopping_trike.glb)
 - [ ] [`snowmobile.glb`](../vehicles/snowmobile.glb)
 - [ ] [`sport_quattro.glb`](../vehicles/sport_quattro.glb)
