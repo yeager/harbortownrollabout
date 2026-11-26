@@ -127,8 +127,9 @@ func _build_intake(world: Node3D) -> void:
 	var stop_line_z := 1.20
 	var lane_line_x := 2.31
 	var lane_line_width := .105
-	world._make_driving_surface("Ambulance bay and apron", Vector3(APRON_WIDTH, .12, apron_depth),
+	var apron: MeshInstance3D = world._make_driving_surface("Ambulance bay and apron", Vector3(APRON_WIDTH, .12, apron_depth),
 		Vector3(0, -.08, apron_depth * .5), Color("#777c79"), true, self)
+	apron.material_override = world._noise_material(Color("#6d7371"), Color("#858b86"), 13.0, .21)
 	var diffuser_finish: StandardMaterial3D = world._material(Color("#f4e5bd"), .38, true)
 	for side in [-1.0, 1.0]:
 		world._make_roadside_solid("Ambulance bay side wall", Vector3(.43, 4.15, 6.90),
