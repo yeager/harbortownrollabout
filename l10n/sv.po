@@ -922,8 +922,8 @@ msgstr "Elsedan"
 msgid "Police SUV"
 msgstr "Polis-SUV"
 
-msgid "Track sports car"
-msgstr "Banbil"
+msgid "Porsje GT5RS"
+msgstr "Porsje GT5RS"
 
 msgid "Small convertible"
 msgstr "Liten cabriolet"

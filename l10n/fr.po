@@ -982,8 +982,8 @@ msgstr "Berline électrique"
 msgid "Police SUV"
 msgstr "SUV de police"
 
-msgid "Track sports car"
-msgstr "Voiture de course"
+msgid "Porsje GT5RS"
+msgstr "Porsje GT5RS"
 
 msgid "Small convertible"
 msgstr "Petite décapotable"

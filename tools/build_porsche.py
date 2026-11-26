@@ -347,7 +347,7 @@ def rear_aero():
                   for dx in [-.007,.014]],carbon,True)
     cube("Registration plate",(0,2.353,.463),(.415,.018,.106),plate,.008)
     badge("S GT 525",(0,2.364,.464),(pi/2,0,pi),.068,rubber)
-    badge("P O R S C H E",(0,2.398,.565),(pi/2,0,pi),.045,alloy)
+    badge("P O R S J E",(0,2.398,.565),(pi/2,0,pi),.045,alloy)
 
 
 def badge(value,location,rotation,size,mat):
@@ -537,7 +537,11 @@ def details(front_boundary):
                           (.85,.209),(1,.222),(1,.183),(.50,.167),(.07,.163),(.012,.165)]])
     grid("Swept carbon splitter with rolled leading edge",splitter,carbon,True)
     front_intakes(front_boundary)
-    hood_patch("Bonnet crest",[(-.023,-2.05),(0,-2.083),(.023,-2.05),(.024,-2.019),(-.024,-2.019)],gold,.008)
+    hood_patch("Porsje bonnet diamond",
+               [(0,-2.085),(.032,-2.052),(0,-2.019),(-.032,-2.052)],gold,.008)
+    hood_patch("Porsje bonnet chevron",
+               [(0,-2.073),(.021,-2.052),(.014,-2.045),(0,-2.059),
+                (-.014,-2.045),(-.021,-2.052)],carbon,.009)
     for s in [-1,1]:
         # Raised outlet guide with a rolled crown, tapering into the bonnet
         # near the nose. The rear opening exposes the recessed vanes below.

@@ -966,8 +966,8 @@ msgstr "Sähkösedan"
 msgid "Police SUV"
 msgstr "Poliisin katumaasturi"
 
-msgid "Track sports car"
-msgstr "Kilpa-auto"
+msgid "Porsje GT5RS"
+msgstr "Porsje GT5RS"
 
 msgid "Small convertible"
 msgstr "Pieni avoauto"

@@ -976,8 +976,8 @@ msgstr "Sedán eléctrico"
 msgid "Police SUV"
 msgstr "SUV de policía"
 
-msgid "Track sports car"
-msgstr "Coche de carreras"
+msgid "Porsje GT5RS"
+msgstr "Porsje GT5RS"
 
 msgid "Small convertible"
 msgstr "Descapotable pequeño"

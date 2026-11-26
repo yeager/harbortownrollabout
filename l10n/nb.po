@@ -970,8 +970,8 @@ msgstr "Elektrisk sedan"
 msgid "Police SUV"
 msgstr "Politi-SUV"
 
-msgid "Track sports car"
-msgstr "Racerbil"
+msgid "Porsje GT5RS"
+msgstr "Porsje GT5RS"
 
 msgid "Small convertible"
 msgstr "Liten kabriolet"

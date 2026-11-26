@@ -207,6 +207,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
 - [ ] [`polisbil.glb`](../vehicles/polisbil.glb)
 - [ ] [`polishelikopter.glb`](../vehicles/polishelikopter.glb)
 - [ ] [`porsche_gt3_rs.glb`](../vehicles/porsche_gt3_rs.glb)
+  - Porsje GT5RS har egna bakre märkesbokstäver och en guldfärgad romb med svart vinkel på motorhuven. Båda granskades i Godot. Fordonsgalleriets körprov, banbilens körprov och språkkontrollen passerade.
 - [ ] [`puch_dakota.glb`](../vehicles/puch_dakota.glb)
 - [ ] [`raggarbil.glb`](../vehicles/raggarbil.glb)
 - [ ] [`refuse_truck.glb`](../vehicles/refuse_truck.glb)
