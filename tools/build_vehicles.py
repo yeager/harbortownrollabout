@@ -2581,6 +2581,18 @@ def make_bmw(color, name="BWM Y5 N70i", *, patrol=False):
         bpy.context.collection.objects.link(bezel)
         bezel.parent=root
         for offset in (-.066,.066):
+            if root.name.startswith("BWM Y5 N70i"):
+                tip_x = side * .735 + offset
+                rings = []
+                for depth, radius in ((2.528, .051), (2.560, .054), (2.568, .051),
+                                      (2.568, .046), (2.561, .043), (2.532, .043)):
+                    rings.append([(tip_x + radius * math.cos(i * math.tau / 24), depth,
+                                   .61 + radius * math.sin(i * math.tau / 24)) for i in range(24)])
+                profile_loft("Rolled exhaust tip", rings, METAL, root, close_ends=False)
+                bore = cylinder("Exhaust bore", (tip_x, 2.533, .61), .0435, .003, soot,
+                                axis_x=False, vertices=24, root=root)
+                bore.rotation_euler.x = math.pi / 2
+                continue
             pipe = cylinder("Rolled exhaust tip",(side*.735+offset,2.538,.61),.053,.012,DARK,
                             axis_x=False,vertices=32,root=root)
             pipe.rotation_euler.x=math.pi/2

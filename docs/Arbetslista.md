@@ -273,6 +273,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Den nedre bakluckans delningsfog följer plåtens form under registreringsskylten. Granskat bakifrån i Godot. Blinkersprovet passerade.
   - Bakrutetorkarens axelfäste fick en gummitätning mot glaset och en separat krage under torkararmen. Granskat bakifrån i Godot. Körskoleprovet passerade.
   - Det höga bromsljuset fick en välvd lins och separat infattning som följer takspoilern. Granskat tänt i Godot. Körskoleprovet passerade.
+  - De fyra avgasutblåsen fick rundade metallkanter, invändiga rörväggar och mörk botten längre in. Granskat från låg kameravinkel i Godot. Körskoleprovet passerade.
 - [ ] [`brandbil.glb`](../vehicles/brandbil.glb)
   - Dragkrokens infästning fick fyra sexkantsbultar samt ett släpvagnsuttag med fäste och väderskydd. Granskat bakifrån i Godot. Förarplats- och luckproven passerade.
 - [ ] [`city_bus.glb`](../vehicles/city_bus.glb)
