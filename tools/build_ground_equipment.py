@@ -172,7 +172,12 @@ shader = lens.node_tree.nodes.get("Principled BSDF")
 shader.inputs["Emission Color"].default_value = (.86,.94,1,1)
 shader.inputs["Emission Strength"].default_value = 1.6
 for x in (-1.28,1.28):
+    box("Work lamp mounting saddle",(x,.024,.851),(.145,.090,.070),frame,.010)
+    for offset in (-.048,.048):
+        disc("Work lamp saddle bolt",(x+offset,.074,.851),.011,.012,steel,(0,1,0))
     rod("Lamp stalk",(x,.02,.84),(x,.055,.98),.019,frame)
     box("Work lamp housing",(x,.046,1.0),(.148,.086,.097),rubber,.018)
+    box("Work lamp lens bezel",(x,.004,1.0),(.131,.020,.081),frame,.009)
+    box("Work lamp cable gland",(x,.085,.972),(.041,.035,.032),rubber,.009)
     box("Work lamp diffuser",(x,-.001,1.0),(.118,.013,.072),lens,.006)
 export("tractor_snow_blade")
