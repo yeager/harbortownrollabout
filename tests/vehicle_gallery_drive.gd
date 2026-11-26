@@ -55,12 +55,12 @@ func check_gallery() -> void:
 			printerr("Turning right did not light only the right side of ", tile.text)
 			quit(1)
 			return
-		if tile.text == "Saav 97":
+		if tile.text == "Saav 97" or index == game.SHOPPER:
 			for lamps in [signals.left, signals.right]:
 				var names: Array = lamps.map(func(lamp: MeshInstance3D): return String(lamp.get_parent().name))
 				for prefix in ["Front amber indicator", "Rear indicator lens"]:
 					if not names.any(func(lens_name: String): return lens_name.begins_with(prefix)):
-						printerr("A Saav indicator is missing its modeled lens")
+						printerr("An indicator is missing its modeled lens on ", tile.text)
 						quit(1)
 						return
 		if index == game.DAM_PICKUP:

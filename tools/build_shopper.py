@@ -165,7 +165,11 @@ for side in (-1,1):
     tube("Side window seal",screen_point(side,0),screen_point(side,1),.012,v.BLACK)
     tube("Mirror stem",(side*.40,-.42,.91),(side*.51,-.43,1.05),.009,v.METAL)
     box("Wing mirror",(side*.51,-.43,1.07),(.094,.034,.07),v.METAL)
-    box("Turn signal",(side*.46,-.46,.80),(.024,.085,.046),amber,.008)
+    mount = box("Front indicator mounting arm",(side*.343,-1.151,.544),
+                (.096,.046,.021),v.DARK,.006)
+    mount.rotation_euler.z = side*.23
+    box("Front indicator housing",(side*.380,-1.163,.544),(.103,.053,.060),v.DARK,.012)
+    box("Front amber indicator",(side*.380,-1.193,.544),(.092,.025,.049),amber,.009)
 # Both the arm and rubber blade sit on the outside of the bowed screen.
 def wiper_point(u, t):
     return Vector(screen_point(u, t)) + Vector((0, -.018, 0))
@@ -382,6 +386,9 @@ flap = box("Rear mud flap", (0,1.147,.203), (.216,.018,.211), v.RUBBER, .008)
 flap.rotation_euler.x = math.radians(13)
 box("Mud flap retaining strip", (0,1.132,.293), (.215,.025,.028), v.METAL, .004)
 box("Tail lamp",(0,1.16,.43),(.14,.035,.06),v.TAIL_LAMP)
+for side in (-1,1):
+    box("Rear indicator housing",(side*.237,1.157,.423),(.099,.037,.057),v.DARK,.009)
+    box("Rear indicator lens",(side*.237,1.18,.423),(.088,.018,.047),amber,.008)
 badge = v.text_obj("Norrsjö Shoppa rear badge", "NORRSJÖ SHOPPA",
                    (0,1.163,.476), .026, v.METAL, root=root)
 badge.rotation_euler = (math.pi/2,0,math.pi)
