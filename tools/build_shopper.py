@@ -14,7 +14,7 @@ import build_vehicles as v
 v.clear_scene()
 root = bpy.data.objects.new("Shopping tricycle", None)
 bpy.context.collection.objects.link(root)
-red = v.material("Cherry red moulded shell", (.64,.026,.034),.22,.26)
+red = v.material("Cherry red moulded shell", (.55,.021,.027),0.0,.36)
 vinyl = v.material("Saddle vinyl", (.032,.028,.027),0,.6)
 glass = v.material("Clear curved acrylic", (.65,.81,.86),.06,.15)
 next(node for node in glass.node_tree.nodes if node.type == "BSDF_PRINCIPLED").inputs["Alpha"].default_value=.26
