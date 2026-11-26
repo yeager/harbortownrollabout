@@ -7,6 +7,7 @@ func check_response() -> void:
 	var game = load("res://main.tscn").instantiate()
 	root.add_child(game)
 	game._start_game()
+	game.set_process(false)
 	game.ambulance.hide()
 	game.traffic_data.clear()
 	for parked: Node3D in game.parked_cars:
@@ -59,4 +60,89 @@ func check_response() -> void:
 		quit(1)
 		return
 	print("The player ambulance also passed the red light with blue lights and no siren.")
+	game.emergency_traffic.clear()
+	game.vehicle_index = game.A_TRACTOR
+	game._load_vehicle_model()
+	game.ambulance.position = Vector3(-80,0,2.35)
+	game.gentle_driving = false
+	game.speed = 0.0
+	for tick in 85:
+		game._drive(.05)
+		if game.speed > 30.0 / 3.6 + .001:
+			printerr("A-tractor exceeded 30 km/h")
+			quit(1)
+			return
+	if game.speed < 8.25:
+		printerr("A-tractor did not reach its speed limit: ", game.speed)
+		quit(1)
+		return
+
+	game.vehicle_index = game.QUATTRO
+	game._load_vehicle_model()
+	game.mouse_gas = false
+	game.speed = 0.0
+	var stop_x: float = -game.street_signals.BOULEVARD_STOP_DISTANCE - game.front_reach - .10
+	game.ambulance.position = Vector3(stop_x,0,2.35)
+	game._spawn_traffic(game.VEHICLE_SCENES_ALL[game.QUATTRO],stop_x-7,2.35,1,5.0)
+	var follower: Dictionary = game.traffic_data.back()
+	follower.route = route
+	follower.distance = follower.actor.position.x + 58.0
+	game._place_traffic(follower)
+	game.street_signals.phase = 3
+	game._update_traffic(.1)
+	if not game.waited_at_red or follower.horn_wait > 0.0:
+		printerr("A driver waiting legally at red was honked at")
+		quit(1)
+		return
+	game.street_signals.phase = 0
+	var honks := 0
+	for tick in 48:
+		var before: float = follower.horn_wait
+		game._update_traffic(.1)
+		if before > 0.0 and follower.horn_wait == 0.0:
+			honks += 1
+	if honks < 2:
+		printerr("Following car did not repeat its green-light horn: ", honks)
+		quit(1)
+		return
+	game.speed = 1.0
+	game._update_traffic(.1)
+	if follower.horn_wait > 0.0 or game.waiting_after_green:
+		printerr("Green-light horn persisted after moving")
+		quit(1)
+		return
+
+	game.vehicle_index = game.A_TRACTOR
+	game._load_vehicle_model()
+	game.ambulance.position = Vector3(stop_x,0,2.35)
+	game.speed = 2.0
+	game.street_signals.phase = 0
+	game._update_traffic(.1)
+	if follower.horn_wait <= 0.0:
+		printerr("Following car did not react to the slow player A-tractor")
+		quit(1)
+		return
+
+	game.traffic_data.clear()
+	game.vehicle_index = game.QUATTRO
+	game._load_vehicle_model()
+	game._spawn_emergency_traffic(1,-18,-2.35,-1)
+	var police: Dictionary = game.traffic_data.back()
+	game.street_signals.phase = 3
+	game.ambulance.position = Vector3(stop_x,0,2.35)
+	game.allow_red_lights = true
+	game.mouse_gas = true
+	game.speed = 5.0
+	game._drive(.1)
+	var stopped_at: Vector3 = game.ambulance.position
+	if game.police_stop_left <= 0.0 or game.speed != 0.0 or not police.horn.playing:
+		printerr("Nearby police did not stop a red-light runner")
+		quit(1)
+		return
+	game._drive(.1)
+	if game.ambulance.position != stopped_at:
+		printerr("Player could drive during the police stop")
+		quit(1)
+		return
+	print("A-tractor speed, repeated horn at green and nearby police stop verified.")
 	quit()

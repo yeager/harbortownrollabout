@@ -2162,3 +2162,6 @@ msgstr "Kierreperunat"
 
 msgid "Crispy Pickles"
 msgstr "Rapeat suolakurkut"
+
+msgid "Police stopped you for running a red light."
+msgstr "Poliisi pysäytti sinut, koska ajoit päin punaista."

@@ -2096,3 +2096,6 @@ msgstr "Pommes på spiral"
 
 msgid "Crispy Pickles"
 msgstr "Krispiga gurkskivor"
+
+msgid "Police stopped you for running a red light."
+msgstr "Polisen stoppade dig för att du körde mot rött."

@@ -2183,3 +2183,6 @@ msgstr "Pommes-Spiralen"
 
 msgid "Crispy Pickles"
 msgstr "Knusprige Gurkenscheiben"
+
+msgid "Police stopped you for running a red light."
+msgstr "Die Polizei hat dich angehalten, weil du bei Rot gefahren bist."

@@ -2095,3 +2095,6 @@ msgstr ""
 
 msgid "Crispy Pickles"
 msgstr ""
+
+msgid "Police stopped you for running a red light."
+msgstr ""

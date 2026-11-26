@@ -443,6 +443,11 @@ var gentle_driving := true
 var allow_crashes := true
 var show_turn_street := false
 var allow_red_lights := false
+var police_stop_left := 0.0
+var waited_at_red := false
+var waiting_after_green := false
+const A_TRACTOR := 18
+const A_TRACTOR_LIMIT := 30.0 / 3.6
 var slowing_for_amber := false
 var waiting_for_signal := false
 var waiting_for_clear_crossing := false
@@ -1463,6 +1468,11 @@ func _road_coverage() -> Vector2:
 
 func _drive(delta: float) -> void:
 	if shopper_boarding: return
+	if police_stop_left > 0.0:
+		police_stop_left = maxf(0.0, police_stop_left - delta)
+		speed = 0.0
+		if player_brake_lens: _set_rear_lights(player_brake_lens, true)
+		return
 	var throttle := Input.get_axis("ui_down", "ui_up")
 	var steer_input := Input.get_axis("ui_left", "ui_right")
 	if is_zero_approx(steer_input): steer_input = mouse_steering
@@ -1502,6 +1512,8 @@ func _drive(delta: float) -> void:
 	if vehicle_index == MOWER:
 		max_speed = 2.7 if gentle_driving else 4.0
 		acceleration = 2.0
+	if vehicle_index == A_TRACTOR:
+		max_speed = A_TRACTOR_LIMIT
 	if vehicle_index in [PUCH_DAKOTA, SHOPPER]:
 		max_speed = 30.0 / 3.6
 		acceleration = 2.2
@@ -1680,6 +1692,8 @@ func _drive(delta: float) -> void:
 		slowing_for_amber = street_signals.red_clearance(ambulance.position,approach,leading_reach,false,true) == signal_gap and street_signals.red_clearance(ambulance.position,approach,leading_reach,true) > signal_gap
 	if player_brake_lens:
 		_set_rear_lights(player_brake_lens, brake_held or assisted_braking or waiting_for_signal)
+	if vehicle_index == A_TRACTOR:
+		speed = minf(speed, A_TRACTOR_LIMIT)
 	var step := travel_direction * absf(speed) * delta
 	# In vehicle space the sweep is straight along Z. A round trunk also
 	# clears the bumper corners when passing diagonally beside a tree.
@@ -1758,11 +1772,21 @@ func _drive(delta: float) -> void:
 	if pos.y < -0.15:
 		var terrain_limit := lerpf(6.0, max_speed, weather.snow) if vehicle_index == SNOWMOBILE else 6.0
 		speed = clampf(speed, -3.0, terrain_limit)
+	if vehicle_index == A_TRACTOR:
+		speed = minf(speed, A_TRACTOR_LIMIT)
 	if allow_red_lights and not responding and signal_gap < INF:
 		var red_gap := street_signals.red_clearance(previous_pose.origin,travel_direction,leading_reach,true)
 		if red_gap >= 0 and (pos-previous_pose.origin).dot(travel_direction) > red_gap:
 			message = "Red light! Stop at the line and wait for green."
 			message_timer = 4.0
+			var patrol := _nearby_police(previous_pose.origin)
+			if not patrol.is_empty():
+				pos = previous_pose.origin + travel_direction * maxf(0.0, red_gap - .04)
+				pos.y = _surface_height(pos.x, pos.z)
+				speed = 0.0
+				police_stop_left = 3.0
+				patrol.horn.play()
+				message = "Police stopped you for running a red light."
 	if moped_speed_needle:
 		# Nine graduations span 0–40 km/h on the dial.
 		moped_speed_needle.rotation.y = deg_to_rad(-252.0) * clampf(absf(speed)*3.6/40.0,0.0,1.0)
@@ -6908,9 +6932,23 @@ func _traffic_gap(item: Dictionary, point: Vector3, extent: Vector2) -> float:
 		return INF
 	return ahead-float(item.length)-absf(actor.basis.z.x)*extent.x-absf(actor.basis.z.z)*extent.y
 
+func _nearby_police(point: Vector3) -> Dictionary:
+	var nearest := {}
+	var best_distance := 35.0
+	for unit in emergency_traffic:
+		var traffic: Dictionary = unit.traffic
+		if not traffic.get("police", false) or not traffic.actor.is_visible_in_tree():
+			continue
+		var distance: float = traffic.actor.global_position.distance_to(point)
+		if distance < best_distance:
+			nearest = traffic
+			best_distance = distance
+	return nearest
+
 func _spawn_emergency_traffic(index: int, x: float, lane: float, direction: float) -> void:
 	var actor := _spawn_traffic(VEHICLE_SCENES_ALL[index], x, lane, direction, 9.0, 1.0)
 	traffic_data.back().emergency = true
+	traffic_data.back().police = index in [1, XC60_POLICE]
 	var lamps: Array[MeshInstance3D] = []
 	var blue := _material(Color("#1679ff"), 0.2, true)
 	for node in actor.find_children("Flash*", "MeshInstance3D", true, false):
@@ -7057,7 +7095,7 @@ func _spawn_traffic(scene_path: String, x: float, lane_z: float, direction: floa
 	else:
 		turn_signals.fit(actor, model, _model_bounds(actor, model))
 	var pedals = preload("res://scripts/bicycle_pedals.gd").new(self,model) if is_bicycle else null
-	traffic_data.append({"pedals":pedals,"mass_kg": Mass.for_model(scene_path), "tractor":scene_path.ends_with("a_traktor.glb"), "horn":traffic_horn, "greeted":false, "actor": actor, "model": model, "direction": direction, "cruise": speed_value, "wheels": _rig_wheels(model), "brake_lens": _brake_lens(model),
+	traffic_data.append({"pedals":pedals,"mass_kg": Mass.for_model(scene_path), "tractor":scene_path.ends_with("a_traktor.glb"), "horn":traffic_horn, "horn_wait":0.0, "actor": actor, "model": model, "direction": direction, "cruise": speed_value, "wheels": _rig_wheels(model), "brake_lens": _brake_lens(model),
 		"speed": speed_value, "length": half_size.y,
 		"width": half_size.x, "turn_signals": turn_signals})
 	return actor
@@ -7239,6 +7277,15 @@ func _update_traffic(delta: float) -> void:
 		excavator_turn_signals.advance(0.0, delta, false)
 	var weather_pace := 1.0-.12*weather.wet-.23*weather.snow
 	var player_size := _player_extent()
+	var player_driving := ambulance.visible and not walker.visible and not boating and tram_mode == 0 and not operating_excavator
+	if not player_driving or absf(speed) > .3:
+		waited_at_red = false
+		waiting_after_green = false
+	else:
+		var red_gap := street_signals.red_clearance(ambulance.position, -ambulance.basis.z, front_reach, true, true)
+		var signal_gap := street_signals.red_clearance(ambulance.position, -ambulance.basis.z, front_reach, false, true)
+		waiting_after_green = signal_gap > 1.0 and (waited_at_red or waiting_after_green)
+		waited_at_red = red_gap <= 1.0 or (waited_at_red and signal_gap <= 1.0)
 	var pedestrians: Array = [walker, passenger, arriving_passenger, waiting_medic, marina_recipient, square_neighbour, crossing_pedestrian, shoe_owner, cat_owner]
 	pedestrians.append_array(bus_companions)
 	pedestrians.append_array(clinic_fire_team)
@@ -7266,8 +7313,12 @@ func _update_traffic(delta: float) -> void:
 			clearance=minf(clearance,gap)
 		if casualty.visible and casualty.get_parent()==self:
 			clearance=minf(clearance,_traffic_gap(item,casualty.position,Vector2(2.1,.9)))
+		var player_gap := INF
 		if ambulance.visible:
-			clearance=minf(clearance,_traffic_gap(item,ambulance.position,player_size))
+			player_gap = _traffic_gap(item,ambulance.position,player_size)
+			clearance = minf(clearance, player_gap)
+			if player_driving and vehicle_index == A_TRACTOR and speed < float(item.cruise) - .5:
+				tractor_gap = minf(tractor_gap, player_gap)
 			if bus_merge_time > 0 and speed >= -.12 and driven_turn_signals.direction < 0 and actor.basis.z.dot(ambulance.basis.z) > .85 and ambulance.to_local(actor.position).z > player_half_size.y:
 				var merge_center := ambulance.position-ambulance.basis.x*2.0
 				clearance=minf(clearance,_traffic_gap(item,merge_center,player_size)-3.0)
@@ -7279,12 +7330,15 @@ func _update_traffic(delta: float) -> void:
 			clearance=minf(clearance,_traffic_gap(item,person.position,Vector2(.45,.45)))
 			if person==walker:
 				clearance=minf(clearance,_traffic_gap(item,person.position+walking_velocity*.8,Vector2(.45,.45)))
-		if tractor_gap <= clearance and tractor_gap<8 and not item.tractor and item.speed>1:
-			if not item.greeted:
+		var held_by_tractor := tractor_gap <= clearance and tractor_gap < 8.0
+		var held_at_green := waiting_after_green and not waiting_for_clear_crossing and player_gap <= clearance and player_gap < 8.0 and actor.basis.z.dot(ambulance.basis.z) > .8
+		if (held_by_tractor or held_at_green) and not emergency and not item.tractor and not item.get("pedals"):
+			item.horn_wait += delta
+			if item.horn_wait >= 2.0:
 				item.horn.play()
-				item.greeted = true
-		elif tractor_gap>15:
-			item.greeted = false
+				item.horn_wait = 0.0
+		else:
+			item.horn_wait = 0.0
 		var free_space := maxf(0.0, clearance - 1.0)
 		var target := minf(float(item.cruise)*weather_pace, free_space * .95*weather_pace)
 		if free_space < 0.1:
@@ -9229,6 +9283,9 @@ func _update_bus_stop_request(delta: float) -> void:
 
 
 func _load_vehicle_model() -> void:
+	police_stop_left = 0.0
+	waited_at_red = false
+	waiting_after_green = false
 	snow_slip_angle = 0.0
 	bus_merge_time = 0
 	bus_departure_pending = false

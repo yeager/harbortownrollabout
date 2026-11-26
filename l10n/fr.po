@@ -2181,3 +2181,6 @@ msgstr "Frites spirales"
 
 msgid "Crispy Pickles"
 msgstr "Cornichons croustillants"
+
+msgid "Police stopped you for running a red light."
+msgstr "La police vous a arrêté pour avoir grillé un feu rouge."
