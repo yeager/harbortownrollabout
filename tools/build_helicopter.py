@@ -7,7 +7,7 @@ import bpy
 from mathutils import Vector
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from build_vehicles import clear_scene, cube, cylinder, material, export_vehicle, text_obj, SOURCE_DIR
+from build_vehicles import clear_scene, cube, cylinder, material, pipe, export_vehicle, text_obj, SOURCE_DIR
 
 clear_scene()
 def pivot(name, parent=None, position=(0,0,0)):
@@ -65,10 +65,22 @@ shell("Tapered tail boom",[(1.6,.55,1.69,.49),(2.7,.38,1.74,.36),
       (4.3,.22,1.9,.23),(4.80,.14,2.05,.15)],lambda j,i,s:0)
 for side in [-1,1]:
     text_obj("Police fuselage lettering","POLIS",(side*1.15,-side*.68,1.14),.40,blue,-side,root)
-    skid=cube("Landing runner",(side*1.08,-.39,.16),(.09,3.83,.10),blue,.045,root)
-    for y in [-1.55,.78]:
-        support=cube("Skid strut",(side*.92,y,.44),(.08,.1,.65),blue,.035,root)
-        support.rotation_euler.y=-side*.52
+    pipe("Tubular landing skid", [
+        (side * 1.08, -2.46, .35), (side * 1.08, -2.30, .23),
+        (side * 1.08, -2.13, .16), (side * 1.08, -1.94, .13),
+        (side * 1.08, 1.45, .13), (side * 1.08, 1.64, .18),
+    ], .057, graphite, root)
+    for y in (-1.55, .78):
+        pipe("Landing skid cross brace", [
+            (side * .47, y, .81), (side * .71, y, .61),
+            (side * .92, y, .38), (side * 1.08, y, .17),
+        ], .054, blue, root)
+        cube("Landing skid saddle", (side * 1.08, y, .173),
+             (.147, .167, .075), metal, .023, root)
+    cube("Cabin access step", (side * 1.08, -1.05, .195),
+         (.237, .49, .044), metal, .018, root)
+    cube("Cabin step grip", (side * 1.08, -1.05, .221),
+         (.195, .43, .014), graphite, .006, root)
 for z,y,dy,dz,finish in [(2.85,5.525,.82,.38,white),(3.09,5.57,.80,.16,red)]:
     fin=cube("Tail fin",(0,y,z),(.11,dy,dz),finish,.055,root)
     fin.rotation_euler.x=-.22

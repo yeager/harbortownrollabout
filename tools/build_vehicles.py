@@ -65,6 +65,21 @@ def attach(obj, root):
     obj.matrix_parent_inverse = root.matrix_world.inverted()
     return obj
 
+def pipe(name, points, radius, finish, parent):
+    curve = bpy.data.curves.new(name, "CURVE")
+    curve.dimensions = "3D"
+    curve.bevel_depth = radius
+    curve.bevel_resolution = 3
+    curve.use_fill_caps = True
+    spline = curve.splines.new("POLY")
+    spline.points.add(len(points) - 1)
+    for point, vertex in zip(spline.points, points):
+        point.co = (*vertex, 1)
+    node = bpy.data.objects.new(name, curve)
+    bpy.context.collection.objects.link(node)
+    node.parent = parent
+    curve.materials.append(finish)
+
 def cube(name, loc, dims, mat, bevel=0.06, root=None):
     bpy.ops.mesh.primitive_cube_add(size=1, location=loc)
     obj = bpy.context.object

@@ -7,7 +7,7 @@ from pathlib import Path
 import bpy
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from build_vehicles import SOURCE_DIR, clear_scene, cube, cylinder, export_vehicle, material, text_obj
+from build_vehicles import SOURCE_DIR, clear_scene, cube, cylinder, export_vehicle, material, pipe, text_obj
 
 
 def pivot(name, parent=None, position=(0, 0, 0)):
@@ -47,22 +47,6 @@ def shell(name, stations, finishes, paint, parent):
     bpy.context.collection.objects.link(node)
     node.parent = parent
     return node
-
-
-def pipe(name, points, radius, finish, parent):
-    curve = bpy.data.curves.new(name, "CURVE")
-    curve.dimensions = "3D"
-    curve.bevel_depth = radius
-    curve.bevel_resolution = 3
-    curve.use_fill_caps = True
-    spline = curve.splines.new("POLY")
-    spline.points.add(len(points) - 1)
-    for point, vertex in zip(spline.points, points):
-        point.co = (*vertex, 1)
-    node = bpy.data.objects.new(name, curve)
-    bpy.context.collection.objects.link(node)
-    node.parent = parent
-    curve.materials.append(finish)
 
 
 clear_scene()
