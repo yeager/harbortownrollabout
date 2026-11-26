@@ -265,6 +265,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Baklyktorna fick skruvade hus och separata röda och bärnstensfärgade linser. Godot använder de modellerade blinkerslinserna på båda sidor. Granskat tänt och släckt i spelvyn. Fordons- och bärgningsproven passerade.
 - [ ] [`luxury_suv.glb`](../vehicles/luxury_suv.glb)
   - BWM Y5 N70i har egna diagonaldelade emaljemblem i turkost och vitt på motorhuven och bakluckan. Samma emblem används på de två trafikvarianterna. Granskat framifrån och bakifrån i Godot. Fordonsprovet, övningskörningen, trafikens blinkers och språkkontrollen passerade.
+  - Bakluckan fick upphöjda metallbokstäver med modellbeteckningen Y5 N70i. Texten följer plåtens form under bakljuset. Granskat i Godot och kontrollerat i samtliga tre GLB-varianter. Fordonsprovet passerade.
   - Grillens välvda lameller fick satinbehandlade framkanter på spelbilen och båda trafikvarianterna. Granskat på spelbilen i Godot. Fordons- och körskoleproven passerade.
   - Frontblinkersen fick formpassade glas i strålkastarhusens ytterkanter på spelbilen och trafikvarianterna. Granskat tänt i Godot. Trafikprovet verifierar att BWM Y5 N70i blinkar i de modellerade glasen.
   - Bakblinkersen fick egna glas mellan baklyktornas röda ljuslister. Granskat med höger blinkers tänd. Trafikprovet verifierar de modellerade glasen fram och bak.

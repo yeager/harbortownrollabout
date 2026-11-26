@@ -2060,6 +2060,17 @@ def make_bwm(color, name="BWM Y5 N70i", *, patrol=False):
     cube("Plate frame",(0,2.509,1.204),(.59,.012,.154),BLACK,.005,root)
     cube("Registration plate",(0,2.517,1.204),(.56,.007,.132),PAINT_WHITE,.003,root)
     if root.name.startswith("BWM Y5 N70i"):
+        badge = text_obj("Y5 N70i tailgate lettering", "Y5 N70i", (0,0,0), .085, METAL, root=root)
+        badge.rotation_euler = (0,0,0)
+        glyph_x = [vertex.co.x for vertex in badge.data.vertices]
+        midpoint = (min(glyph_x) + max(glyph_x)) * .5
+        for vertex in badge.data.vertices:
+            x = .52 - (vertex.co.x - midpoint)
+            z = .958 + vertex.co.y
+            hit, point, _, _ = hatch_skin.ray_cast((x,3,z),(0,-1,0))
+            if not hit:
+                raise ValueError("Model lettering outside tailgate")
+            vertex.co = (x, point.y + .005 + vertex.co.z, z)
         seam_vertices = []
         seam_faces = []
         for station in range(29):
