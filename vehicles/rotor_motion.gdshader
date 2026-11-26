@@ -12,6 +12,9 @@ void fragment() {
 	float angle = atan(p.y, p.x + 0.00001);
 	float streak = pow(.5 + .5 * cos(angle * blade_count + radius * 2.0), 2.0);
 	float tip = tip_stripe ? smoothstep(.936, .955, radius) * (1.0 - smoothstep(.982, .996, radius)) : 0.0;
-	ALBEDO = mix(vec3(.14, .16, .18), vec3(.86, .88, .86), tip);
-	ALPHA = rim * smoothstep(.17, .8, power) * (.12 + .09 * streak + .05 * tip);
+	float blade_opacity = rim * (.12 + .09 * streak);
+	float stripe_opacity = .12 * tip;
+	float opacity = blade_opacity + stripe_opacity;
+	ALBEDO = mix(vec3(.14, .16, .18), vec3(.86, .88, .86), stripe_opacity / max(opacity, .0001));
+	ALPHA = smoothstep(.17, .8, power) * opacity;
 }

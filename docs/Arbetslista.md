@@ -186,6 +186,7 @@ Fordonsgranskningen börjar med exteriörerna. Bilarnas tillverkarnamn, modellna
 - [x] Helikopterplattans tolv gröna kantljus fick låga koniska armaturhus och separata linser. Granskat i nattläge i Godot. Ambulanshelikopterns landningsprov passerade. Sjukhustaket och plattan fick vädermaterial. Plattan får ett tunnare snötäcke så att H och kantmarkeringen syns. Vintervyn granskades i Godot och landningsprovet passerade. En vindstrut på sjukhustaket följer vädrets vindriktning. Granskad i Godot.
 
 - [x] Båda helikoptrarnas huvud- och stjärtrotorer roterar under flygning och visar rörelseoskärpa. Ambulanshelikopterns oskärpa avtar när rotorerna varvar ned på taket. Båda helikoptrarna granskades i Godot och rotor- och landningsprovet passerade. Ambulanshelikopterns ljusa bladspetsar ger ett diskret ljust spår vid flygfart. Provet kontrollerar att rörelseoskärpan försvinner vid tomgång och återkommer vid start.
+  - Bladspetsarnas ljusa rörelsespår på ambulanshelikoptern fick egen opacitet. Granskat över sjukhuset under inflygning i Godot 4.7 dev5. Rotor- och landningsprovet passerade.
 
 ### Importerade modeller
 
