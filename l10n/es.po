@@ -1960,8 +1960,8 @@ msgstr "Sombras de las farolas"
 msgid "DAM pickup"
 msgstr "Camioneta DAM"
 
-msgid "Audi Sport quattro"
-msgstr "Audi Sport quattro"
+msgid "Audo Sport Kvattro"
+msgstr "Audo Sport Kvattro"
 
 msgid "Spreader on"
 msgstr "Esparcidor activo"

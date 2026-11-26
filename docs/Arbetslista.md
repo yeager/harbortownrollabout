@@ -171,6 +171,8 @@ Listan innehåller 100 jobb. En tom ruta är öppen. En punkt bockas av när bet
 
 ## Modellgranskning
 
+Fordonsgranskningen börjar med exteriörerna. Bilarnas tillverkarnamn, modellnamn och emblem ska få egna varianter som påminner om förebilderna.
+
 - [ ] Gå igenom samtliga modeller i spelet, också byggnader, fordon, figurer, rekvisita och procedurgenererade objekt. Målet är minst 99/100 per modell. Inventeringen nedan innehåller 69 importerade resurser, inklusive delmodeller. Komplettera de kodbyggda modellerna och kontrollera vilka importer som används i den spelbara världen.
 - [ ] För varje modell, dokumentera referens och spelvy, bedöm silhuett, proportioner, material, detaljer och funktion där de är tillämpliga. Kontrollera närbilder och normala spelavstånd. Kör relevanta prov för animation, kollision eller användning. Markera modellen godkänd först när den är granskad och når målbetyget.
 
@@ -212,6 +214,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
 - [ ] [`shopping_trike.glb`](../vehicles/shopping_trike.glb)
 - [ ] [`snowmobile.glb`](../vehicles/snowmobile.glb)
 - [ ] [`sport_quattro.glb`](../vehicles/sport_quattro.glb)
+  - Bakluckan fick emblemet Kvattro och galleriet visar Audo Sport Kvattro. Båda registreringsskyltarna fick distanser och spårskruvar. Emblemet och skyltarna granskades i Godot. Fordonsprovet och språkkontrollen passerade.
 - [ ] [`taxi.glb`](../vehicles/taxi.glb)
 - [ ] [`tractor_snow_blade.glb`](../vehicles/tractor_snow_blade.glb)
 - [ ] [`traffic_bmw_blue.glb`](../vehicles/traffic_bmw_blue.glb)

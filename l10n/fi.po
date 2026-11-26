@@ -1949,8 +1949,8 @@ msgstr "Katuvalojen varjot"
 msgid "DAM pickup"
 msgstr "DAM-avolava"
 
-msgid "Audi Sport quattro"
-msgstr "Audi Sport quattro"
+msgid "Audo Sport Kvattro"
+msgstr "Audo Sport Kvattro"
 
 msgid "Spreader on"
 msgstr "Levitin päällä"

@@ -1970,8 +1970,8 @@ msgstr "Schatten von Straßenlaternen"
 msgid "DAM pickup"
 msgstr "DAM-Pick-up"
 
-msgid "Audi Sport quattro"
-msgstr "Audi Sport quattro"
+msgid "Audo Sport Kvattro"
+msgstr "Audo Sport Kvattro"
 
 msgid "Spreader on"
 msgstr "Streuer an"

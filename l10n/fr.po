@@ -1968,8 +1968,8 @@ msgstr "Ombres des lampadaires"
 msgid "DAM pickup"
 msgstr "Pick-up DAM"
 
-msgid "Audi Sport quattro"
-msgstr "Audi Sport quattro"
+msgid "Audo Sport Kvattro"
+msgstr "Audo Sport Kvattro"
 
 msgid "Spreader on"
 msgstr "Épandeur actif"

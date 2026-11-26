@@ -1882,7 +1882,7 @@ msgstr ""
 msgid "DAM pickup"
 msgstr ""
 
-msgid "Audi Sport quattro"
+msgid "Audo Sport Kvattro"
 msgstr ""
 
 msgid "Spreader on"

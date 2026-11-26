@@ -637,6 +637,9 @@ def build():
     plate_white = material("Registration plate enamel", (.87,.87,.82), .03, .47)
     plate_blue = material("Registration country field", (.025,.12,.42), .03, .47)
     for y, z, outward in [(-2.084,.284,-1), (2.078,.657,1)]:
+        for x in [-.132, .132]:
+            box("Number plate mounting spacer", (x, y - outward * .008, z),
+                (.038, .013, .066), recess, .004)
         box("Number plate frame",(0,y,z),(.308,.015,.099),trim,.008)
         box("Number plate insert",(0,y+outward*.010,z),(.280,.007,.077),plate_white,.006)
         box("Number plate country field",(outward*.121,y+outward*.014,z),(.028,.002,.069),plate_blue,.002)
@@ -644,7 +647,13 @@ def build():
         plate.rotation_euler.z = math.pi if outward == 1 else 0
         country = text_obj("Number plate country letter","S",(outward*.127,y+outward*.016,z-.020),.021,plate_white,root=root,flat=True)
         country.rotation_euler.z = plate.rotation_euler.z
-    badge = text_obj("Quattro script","quattro",(-.335,2.029,.774),.055,trim,root=root)
+        for x in [-.132, .132]:
+            screw = cylinder("Number plate screw head", (x, y + outward * .015, z + .026),
+                             .006, .004, chrome, axis_x=False, vertices=16, root=root)
+            screw.rotation_euler.x = math.pi / 2
+            box("Number plate screw slot", (x, y + outward * .0172, z + .026),
+                (.007, .001, .0014), recess, 0)
+    badge = text_obj("Kvattro badge","Kvattro",(-.335,2.029,.774),.055,trim,root=root)
     badge.rotation_euler.z = math.pi
     export_vehicle(root,"sport_quattro.glb")
     bpy.context.preferences.filepaths.save_version = 0

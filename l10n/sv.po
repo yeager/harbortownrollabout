@@ -1883,8 +1883,8 @@ msgstr "Skuggor från gatlyktor"
 msgid "DAM pickup"
 msgstr "DAM-pickup"
 
-msgid "Audi Sport quattro"
-msgstr "Audi Sport quattro"
+msgid "Audo Sport Kvattro"
+msgstr "Audo Sport Kvattro"
 
 msgid "Spreader on"
 msgstr "Spridare på"
