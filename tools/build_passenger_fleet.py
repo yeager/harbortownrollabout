@@ -6,7 +6,7 @@ import bpy
 from mathutils import Vector
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from build_vehicles import (clear_scene, cube, cylinder, material, mesh_from_rings,
-    export_vehicle, text_obj, SOURCE_DIR, DARK, RUBBER, METAL, HEADLAMP, RED_LAMP)
+    export_vehicle, profile_loft, text_obj, SOURCE_DIR, DARK, RUBBER, METAL, HEADLAMP, RED_LAMP)
 
 CLASSIC_BADGES = {
     "m3_e30": ("BMV M3 E33", .802),
@@ -186,7 +186,6 @@ def build(key, length, width, axles, color, belt, cabin):
                                      (side*(width*w1+depth),y1+.065,z1-.035),
                                      (side*(width*.91+depth),y2+.008,belt-.019),
                                      (side*(width*.91+depth),y2-.23,belt-.019)])
-            from build_vehicles import profile_loft
             profile_loft("Painted rear quarter pillar",pillar_rings,paint,root)
             for y in ([.35] if key=="m3_e30" else [.12,.94]):
                 bar("Door shut line",(side*width*.992,y,belt-.045),
@@ -230,7 +229,6 @@ def build(key, length, width, axles, color, belt, cabin):
                              (outer,opening+.022),(outer-.005,shoulder-.035),
                              (outer-.018,shoulder),(width-.050,shoulder+.073)]
                     rings.append([(side*x,axle+offset,z) for x,z in section])
-                from build_vehicles import profile_loft
                 profile_loft("Box flare shoulder",rings,paint,root)
             box("Twin lamp grille surround",side*.577,-end-.026,belt*.73,.515,.075,.267,DARK,.026)
             for x in [.461,.687]:
@@ -298,6 +296,17 @@ def build(key, length, width, axles, color, belt, cabin):
                 pipe.rotation_euler.x=math.pi/2
                 bore=cylinder("Exhaust opening",(x,y+.112,.238),.034,.006,DARK,False,24,root)
                 bore.rotation_euler.x=math.pi/2
+        elif key == "saab96":
+            outward = math.copysign(1,y)
+            profile = [(-.078,.314),(.035,.304),(.063,.320),(.067,.341),
+                       (.067,.392),(.051,.416),(.022,.424),(-.078,.412)]
+            sections = []
+            for x in (-.759,-.750,-.716,-.65,-.54,-.375,0,.375,.54,.65,.716,.750,.759):
+                corner = (abs(x)/.759)**6
+                section_height = 1.0 - .20*corner
+                sections.append([(x, y+outward*(depth-.223*corner),
+                                  .36+(z-.36)*section_height) for depth,z in profile])
+            profile_loft("Saav wraparound bumper",sections,RUBBER,root)
         else:
             box("Bumper",0,y,.36,width*1.96,.13,.13,RUBBER if key!="m3_e30" else paint)
     if key == "saab96":
