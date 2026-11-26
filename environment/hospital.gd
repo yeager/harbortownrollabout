@@ -152,6 +152,20 @@ func _build_intake(world: Node3D) -> void:
 			var diffuser: MeshInstance3D = world._make_box("Intake luminaire diffuser", Vector3(1.16, .025, .15),
 				Vector3(side * 2.1, 4.017, z), Color("#f4e5bd"), false, self)
 			diffuser.material_override = diffuser_finish
+	var arrow_mesh := SurfaceTool.new()
+	arrow_mesh.begin(Mesh.PRIMITIVE_TRIANGLES)
+	var head := Vector3(0, -.011, apron_depth - 1.92)
+	for offset in [Vector3.ZERO, Vector3(.39, 0, .57), Vector3(-.39, 0, .57)]:
+		arrow_mesh.add_vertex(head + offset)
+	arrow_mesh.generate_normals()
+	var arrow := MeshInstance3D.new()
+	arrow.name = "Ambulance entry arrowhead"
+	arrow.mesh = arrow_mesh.commit()
+	arrow.material_override = world._material(Color("#e8bc43"), .78)
+	arrow.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	add_child(arrow)
+	world._make_box("Ambulance entry arrow shaft", Vector3(.18, .006, .76),
+		head + Vector3(0, -.003, .95), Color("#e8bc43"), false, self).cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	var roof: MeshInstance3D = world._make_box("Ambulance intake roof", Vector3(9.12, .49, 7.06),
 		Vector3(0, 4.34, 3.51), METAL, true, self)
 	var roof_finish: ShaderMaterial = world._noise_material(METAL.darkened(.15), METAL.lightened(.08), 3.0, .18)
