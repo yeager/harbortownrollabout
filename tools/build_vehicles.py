@@ -721,12 +721,31 @@ def make_ambulance():
                      ((.197,low+.025),(.068,low),(.013,low+.012),
                       (-.007,low+.047),(-.013,top-.045),(.002,top-.011),
                       (.036,top),(.165,top-.006))])
-    profile_loft("Pressad kromstötfångare",rings,METAL,root)
+    bumper = profile_loft("Pressad kromstötfångare",rings,METAL,root)
     orange = material("Orange frontreflex",(.98,.16,.012),.08,.31)
     for side in (-1,1):
-        patch = box("Orange stötfångarreflex",(side*.745,-3.254,.728),
-                    (.265,.018,.111),orange,.009)
-        patch.rotation_euler.z=side*.22
+        vertices, faces = [], []
+        for row in range(13):
+            height = row/12
+            for column in range(49):
+                across = column/48
+                inner = .568+.063*abs(height-.63)
+                x = side*(inner+(.961-inner)*across)
+                z = .678+.113*height+.038*across**3
+                hit,point,_,_ = bumper.ray_cast((x,-4,z),(0,1,0))
+                if not hit:
+                    raise ValueError("Reflective marking outside ambulance bumper")
+                vertices.append(point+Vector((0,-.003,0)))
+                if row and column:
+                    i=len(vertices)-1
+                    face=(i-50,i-49,i,i-1)
+                    faces.append(face if side>0 else face[::-1])
+        mesh = bpy.data.meshes.new("Formskuren stötfångarreflex")
+        mesh.from_pydata(vertices,[],faces)
+        mesh.materials.append(orange)
+        decal = bpy.data.objects.new("Formskuren stötfångarreflex",mesh)
+        bpy.context.collection.objects.link(decal)
+        decal.parent = root
     box("LED-rampens hus",(0,-3.243,.895),(.91,.074,.075),BLACK,.016)
     for index in range(12):
         x=(index-5.5)*.071

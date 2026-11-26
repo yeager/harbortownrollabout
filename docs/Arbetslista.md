@@ -212,6 +212,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Stötfångarens nedre luftintag fick tre lameller och modellerade dimljus på båda sidor. Granskat framifrån i Godot. Fordonsprovet passerade.
   - Kylarmaskeringen fick femton profilerade öppningar i tre rader och en välvd kromribba. Granskat framifrån i Godot. Fordonsprovet passerade.
   - Strålkastarna fick fyra vinklade vita varselljus. Granskat framifrån i Godot. Fordonsprovet passerade.
+  - Stötfångarens orange reflexfält följer kromytans rundning runt båda hörnen. Granskat i Godot. Fordonsprovet passerade.
 - [ ] [`ambulance_helicopter.glb`](../vehicles/ambulance_helicopter.glb)
 - [ ] [`bargare.glb`](../vehicles/bargare.glb)
   - Vinschen fick bultade lagerbockar med axeländar och en vajerstyrning med två rullar. Granskat på flaket i Godot. Bärgningsprovet passerade.
