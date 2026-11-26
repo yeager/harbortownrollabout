@@ -15,6 +15,7 @@ v.clear_scene()
 root = bpy.data.objects.new("Harbor sanitation", None)
 bpy.context.collection.objects.link(root)
 green = v.material("Leaf green enamel", (.035, .38, .105), .35, .29)
+reverse_glass = v.material("Reverse lamp clear lens", (.70,.74,.72), .23, .17)
 amber = v.material("Amber lens", (1, .35, .015), .12, .25, .3)
 
 def box(name, pos, dims, finish, radius=.035):
@@ -257,11 +258,12 @@ for side in (-1,1):
         ram("Rear grab handle mount",(side*1.163,3.32,z),(side*1.30,3.38,z),.026,v.DARK)
     ram("Rear grab handle",(side*1.30,3.38,1.79),(side*1.30,3.38,2.29),.024,v.METAL)
     light_x = side*1.12
-    box("Rear lamp mounting plate",(light_x,3.531,1.46),(.183,.213,.367),green,.018)
-    box("Rear lamp gasket",(light_x,3.650,1.46),(.168,.052,.337),v.RUBBER,.015)
+    box("Rear lamp mounting plate",(light_x,3.531,1.423),(.183,.213,.441),green,.018)
+    box("Rear lamp gasket",(light_x,3.650,1.423),(.168,.052,.411),v.RUBBER,.015)
     box("Rear indicator lens",(light_x,3.680,1.545),(.120,.026,.104),amber,.009)
     box("Tail lamp",(light_x,3.680,1.418),(.120,.026,.135),v.TAIL_LAMP,.009)
-    for z in (1.310,1.612):
+    box("Reversing lens",(light_x,3.680,1.304),(.120,.026,.064),reverse_glass,.007)
+    for z in (1.234,1.612):
         screw = v.cylinder("Rear lamp retaining screw",(light_x,3.679,z),
                            .008,.012,v.METAL,False,12,root)
         screw.rotation_euler.x = math.pi/2

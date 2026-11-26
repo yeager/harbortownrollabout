@@ -164,6 +164,12 @@ func check_gallery() -> void:
 				printerr("Quattro brake lights did not work independently of the reverse lights")
 				quit(1)
 				return
+		if index == game.REFUSE:
+			var lenses: Array = game.vehicle_model.find_children("Reversing lens*", "MeshInstance3D", true, false)
+			if lenses.size() != 2 or not game.reverse_lens or game.reverse_lens.emission_energy_multiplier > 0.0 or not lenses.all(func(lens: MeshInstance3D): return lens.get_active_material(0) == game.reverse_lens):
+				printerr("The refuse truck must have two integrated reverse lenses that stay off when braking")
+				quit(1)
+				return
 		game._drive(1.0/60.0)
 		var stopped: Transform3D = game.ambulance.transform
 		Input.action_press("ui_down")
@@ -173,6 +179,10 @@ func check_gallery() -> void:
 		var reverse_travel: float = (game.ambulance.position - stopped.origin).dot(stopped.basis.z)
 		if reverse_travel < .3 or game.speed >= 0:
 			printerr("Reverse failed for ", tile.text, " distance=", reverse_travel)
+			quit(1)
+			return
+		if index == game.REFUSE and game.reverse_lens.emission_energy_multiplier < 1.99:
+			printerr("The refuse truck reverse lenses did not light")
 			quit(1)
 			return
 		if index == game.DAM_PICKUP:
