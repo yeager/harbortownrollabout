@@ -196,6 +196,7 @@ Fordonsgranskningen börjar med exteriörerna. Bilarnas tillverkarnamn, modellna
   - Två planteringskärl med vintergröna buskar ramar in huvudentréns gångstråk. Granskat i Godot och ambulansprovet passerade.
   - Buskarnas ovansidor samlar snö när snötäcket växer. Granskat i vinterläge i Godot och väderprovet passerade.
   - Huvudentréns tak fick vädermaterial som mörknar i regn och samlar snö på ovansidan. Granskat i vinterläge. Väder- och ambulansproven passerade.
+  - Gångplattorna framför huvudentrén får snö utanför taket. De innersta raderna ligger under tak och förblir bara. Vintervyn granskades, och väder- och ambulansproven passerade.
 
 - [x] Helikopterplattans tolv gröna kantljus fick låga koniska armaturhus och separata linser. Granskat i nattläge i Godot. Ambulanshelikopterns landningsprov passerade. Sjukhustaket och plattan fick vädermaterial. Plattan får ett tunnare snötäcke så att H och kantmarkeringen syns. Vintervyn granskades i Godot och landningsprovet passerade. En vindstrut på sjukhustaket följer vädrets vindriktning. Granskad i Godot.
 

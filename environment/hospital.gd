@@ -117,12 +117,18 @@ func _build_closed_entrance(world: Node3D, glass: Material) -> void:
 	world._make_driving_surface("Hospital entrance walk", Vector3(6.60, .14, 6.3),
 		Vector3(facade_x, -.06, 3.20), Color("#a39c8d"), false, self)
 	var paving: Array[Transform3D] = []
+	var covered_paving: Array[Transform3D] = []
 	for row in 10:
+		var target := covered_paving if row < 3 else paving
 		for column in 11:
-			paving.append(Transform3D(Basis.IDENTITY,
+			target.append(Transform3D(Basis.IDENTITY,
 				Vector3(facade_x + (column - 5) * .60, .012, .365 + row * .63)))
+	var paving_finish: ShaderMaterial = world._noise_material(Color("#afa694"), Color("#d4cbb9"), 10.0, .16)
+	world.ground_finishes.append(paving_finish)
 	_box_batch("Hospital entrance paving", Vector3(.584, .010, .614), Vector3.ZERO,
-		world._material(Color("#c7bead"), .84), paving)
+		paving_finish, paving)
+	_box_batch("Sheltered entrance paving", Vector3(.584, .010, .614), Vector3.ZERO,
+		world._material(Color("#c7bead"), .84), covered_paving)
 	var shrub_mesh := SphereMesh.new()
 	shrub_mesh.radial_segments = 10
 	shrub_mesh.rings = 5
