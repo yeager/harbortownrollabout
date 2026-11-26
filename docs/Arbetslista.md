@@ -238,6 +238,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Lyftkammen fick ledade armar. Kammen och kärlet följer samma rörelse under lyft och tippning. Tippningen granskades i Godot. Körprovet verifierade att kärlet följer kammen och sedan står upprätt på trottoaren igen.
   - Båda återvinningskärlen fick ihåliga behållare, förstärkta kanter och ledade lock med handtag. Locken öppnas när kärlen tippas och stängs innan de ställs tillbaka. Granskat i Godot och verifierat för båda kärlen i sophämtningsprovet.
   - Kärlen fick runda gummihjul med nav och genomgående axel samt en förstärkt lyftkant vid kammen. Granskat i Godot när det blå kärlet möter lyftkammen. Sophämtningsprovet passerade för båda kärlen.
+  - Lastintaget fick nitade slitplåtar på golvet och bakväggen samt en separat servicelucka med synlig skarv. Granskat bakifrån i Godot. Sophämtningsprovet passerade.
 - [ ] [`ride_on_mower.glb`](../vehicles/ride_on_mower.glb)
   - Åkgräsklipparen har en infälld kylgrill och röda baklyktor vid den bakmonterade motorn. Strålkastarna sitter på klippaggregatets främre kant. Båda ändarna granskades i Godot och samtliga fyra modellerade blinkerslinser verifierades. Fordons- och områdesproven passerade.
 - [ ] [`saab96.glb`](../vehicles/saab96.glb)

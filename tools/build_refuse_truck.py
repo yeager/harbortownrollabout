@@ -140,6 +140,19 @@ v.mesh_from_rings("Compactor body", [
     (-1.78,1.20,1.22,3.25,3.5),(-1.59,1.24,1.18,3.37,3.58),
     (2.37,1.24,1.18,3.37,3.58),(2.65,1.18,1.23,3.26,3.46)],green,root)
 box("Rear hopper floor",(0,2.97,1.12),(2.26,.96,.16),v.DARK)
+wear_steel = v.material("Hopper wear steel", (.12,.15,.15), .78, .39)
+box("Rear access panel seam",(0,2.666,2.38),(1.94,.047,1.94),v.DARK,.060)
+box("Rear access panel",(0,2.688,2.38),(1.895,.052,1.888),green,.052)
+box("Hopper floor wear plate",(0,3.057,1.208),(1.89,.836,.031),wear_steel,.012)
+box("Hopper lower wear plate",(0,2.723,1.411),(1.81,.055,.387),wear_steel,.025)
+for side in (-1,1):
+    for y in (2.71,3.37):
+        v.cylinder("Hopper floor rivet",(side*.868,y,1.226),
+                   .013,.009,v.METAL,False,12,root)
+    for z in (1.284,1.543):
+        rivet = v.cylinder("Hopper panel rivet",(side*.818,2.755,z),
+                           .013,.009,v.METAL,False,12,root)
+        rivet.rotation_euler.x = math.pi/2
 lift_pivot = bpy.data.objects.new("LoadingCombPivot", None)
 bpy.context.collection.objects.link(lift_pivot)
 lift_pivot.parent = root
