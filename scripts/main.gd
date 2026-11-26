@@ -11828,6 +11828,17 @@ func _build_driving_school() -> void:
 			.016, service_hardware)
 	_make_box("Service door threshold", Vector3(1.07, .063, .20),
 		Vector3(-2.66, .066, -3.082), Color("#a4a49a"), false, school)
+	var service_paving := _material(Color("#aaa69b"), .89)
+	for slab in 16:
+		_make_box("Rear service paving slab", Vector3(.744, .032, .88),
+			Vector3((slab - 7.5) * .75, .010, -3.452), Color.WHITE, false, school).material_override = service_paving
+	var drain_at := Vector3(-2.66, .005, -3.962)
+	_make_box("Service landing drain recess", Vector3(1.14, .033, .14),
+		drain_at, Color("#263034"), false, school)
+	for slot in 18:
+		_make_box("Service landing drain grate bar", Vector3(.026, .012, .127),
+			drain_at + Vector3((slot - 8.5) * .062, .018, 0),
+			Color.WHITE, false, school).material_override = roof_metal
 	for vent_x in [1.22, 3.64]:
 		_make_box("Rear ventilation frame", Vector3(.76, .48, .055),
 			Vector3(vent_x, 2.37, -3.029), service_color, false, school)

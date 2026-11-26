@@ -330,6 +330,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Trafikskolans tak fick plåtavtäckning, bakre hängränna och två stuprör med väggfästen. Granskat bakifrån i Godot. Övningsbaneprovet passerade.
   - Trafikskolans bakfasad fick sockel, servicedörr med tröskel och två lamellgaller. Granskat i Godot. Övningsbaneprovet passerade.
   - Trafikskolans servicedörr fick sparkplåt, gångjärn och ett separat trycke med låsskylt. Granskat i Godot. Övningsbaneprovet passerade.
+  - Bakfasaden fick en servicegång med betongplattor och ett avvattningsgaller framför dörren. Granskat i Godot. Övningsbaneprovet passerade.
   - Trafikskolans tak fick två ventilationshuvar med plåtbeslag och indragna galler. Granskat i Godot. Övningsbaneprovet passerade.
   - Trafikskolans entrétak fick två väggkonsoler, ståndfalsar och en vikt framkant. Granskat i Godot. Övningsbaneprovet passerade.
   - Trafikskolans båda gavlar fick klassrumsfönster med fönsterbleck och genomgående socklar. Granskat från övningsbanan i Godot. Övningsbaneprovet passerade.
