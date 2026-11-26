@@ -1,4 +1,4 @@
-"""Build the blue Puch Dakota moped. Blender -Y is the riding direction."""
+"""Build the blue Pusch Dakotta moped. Blender -Y is the riding direction."""
 from math import cos, pi, sin, sqrt, tau
 from pathlib import Path
 import sys
@@ -23,7 +23,7 @@ seam = material("Saddle piping", (.030,.031,.035), .01,.65)
 lamp = material("Headlamp ribbed glass", (.80,.78,.61), .18,.18,.30)
 red = material("Tail lamp ruby Dakota", (.57,.012,.007), .08,.23,.23)
 cream = material("Warm ivory transfers", (.92,.85,.60), .10,.44)
-badge_green = material("Puch crest green", (.014,.25,.073), .18,.32)
+badge_blue = material("Pusch medallion blue", (.028,.13,.28), .24,.29)
 wheel_y = (-.565,.575)
 radius = .285
 
@@ -159,10 +159,10 @@ for side in (-1,1):
 cylinder("Fuel cap",(0,-.237,.883),.036,.014,chrome,axis_x=False)
 for side in [-1,1]:
     oval("Polished tank lettering panel",(side*.134,-.151,.777),(.005,.120,.033),chrome)
-    decal("Classic tank transfer","CLASSIC",(side*.140,-.151,.777),.043,side,dark)
-    oval("Puch medallion rim",(side*.128,-.297,.786),(.006,.029,.031),chrome)
-    oval("Puch medallion enamel",(side*.134,-.297,.786),(.003,.025,.027),badge_green)
-    decal("Harbour medallion lettering","SJÖ",(side*.138,-.297,.788),.012,side,cream)
+    decal("Dakotta tank transfer","DAKOTTA",(side*.140,-.151,.777),.037,side,dark)
+    oval("Pusch medallion rim",(side*.128,-.297,.786),(.006,.029,.031),chrome)
+    oval("Pusch medallion enamel",(side*.134,-.297,.786),(.003,.025,.027),badge_blue)
+    decal("Pusch monogram","P",(side*.138,-.297,.788),.037,side,cream)
     apron_outline=[(-.346,.692),(-.253,.697),(-.085,.683),(.037,.699),
                    (.118,.739),(.334,.741),(.401,.695),(.362,.626),
                    (.271,.559),(.106,.459),(.031,.446),(-.039,.467),(-.192,.564)]

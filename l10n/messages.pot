@@ -927,7 +927,7 @@ msgstr ""
 msgid "Mino Kuper S"
 msgstr ""
 
-msgid "Classic moped"
+msgid "Pusch Dakotta"
 msgstr ""
 
 msgid "Volva L91 wheel loader"

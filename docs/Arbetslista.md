@@ -212,6 +212,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
 - [ ] [`porsche_gt3_rs.glb`](../vehicles/porsche_gt3_rs.glb)
   - Porsje GT5RS har egna bakre märkesbokstäver och en guldfärgad romb med svart vinkel på motorhuven. Båda granskades i Godot. Fordonsgalleriets körprov, banbilens körprov och språkkontrollen passerade.
 - [ ] [`puch_dakota.glb`](../vehicles/puch_dakota.glb)
+  - Pusch Dakotta fick blå P-medaljonger och DAKOTTA-text på båda tanksidorna samt sitt nya namn i fordonsgalleriet. Båda sidor granskades i Godot. Mopedprovet, fordonsprovet och språkkontrollen passerade.
 - [ ] [`raggarbil.glb`](../vehicles/raggarbil.glb)
 - [ ] [`refuse_truck.glb`](../vehicles/refuse_truck.glb)
 - [ ] [`ride_on_mower.glb`](../vehicles/ride_on_mower.glb)

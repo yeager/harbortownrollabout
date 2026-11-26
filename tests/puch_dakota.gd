@@ -7,8 +7,8 @@ func check_dakota() -> void:
 	var game = load("res://main.tscn").instantiate()
 	root.add_child(game)
 	var index: int = game.PUCH_DAKOTA
-	if game.vehicle_selector.get_child(index).text != "Classic moped":
-		printerr("Missing classic moped from the vehicle selector")
+	if game.vehicle_selector.get_child(index).text != "Pusch Dakotta":
+		printerr("Missing Pusch Dakotta from the vehicle selector")
 		quit(1)
 		return
 	for choose_alma in [false,true]:
@@ -98,7 +98,7 @@ func check_dakota() -> void:
 			var pose: Node3D = item.rider.find_child("Helmet",true,false)
 			game._update_traffic(.12)
 			if pose and pose.is_visible_in_tree() and item.wheels.size() == 2 and start.distance_to(item.actor.position) > .1:
-				print("Puch Dakota menu, Axel, Alma, grips, depot, brakes, wheels and NPC passed")
+				print("Pusch Dakotta menu, Axel, Alma, grips, depot, brakes, wheels and NPC passed")
 				game._finish_quit()
 				return
 	printerr("Missing moving Dakota with seated NPC rider")

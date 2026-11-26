@@ -982,8 +982,8 @@ msgstr "Porsje GT5RS"
 msgid "Mino Kuper S"
 msgstr "Mino Kuper S"
 
-msgid "Classic moped"
-msgstr "Ciclomotor clásico"
+msgid "Pusch Dakotta"
+msgstr "Pusch Dakotta"
 
 msgid "Volva L91 wheel loader"
 msgstr "Volva L91 (Pala cargadora)"
