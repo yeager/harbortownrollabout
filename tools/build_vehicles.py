@@ -2476,12 +2476,17 @@ def make_bmw(color, name="BMV X5i", *, patrol=False):
         stations = [(.34,2.493,.038),(.43,2.496,.078),(.64,2.499,.089),
                     (.70,2.499,.094),(.755,2.498,.118),(.83,2.497,.14),(.92,2.492,.145),(.978,2.464,.135),
                     (1.005,2.393,.105),(1.027,2.29,.065),(1.032,2.23,.012)]
-        for label, finish, band, thickness, outset in (
+        rear_lamp_layers = [
                 ("Smoked rear lamp carrier",BLACK,0,1,0),
                 ("Upper ruby light guide",TAIL_LAMP,.25,.27,.006),
-                ("Lower ruby light guide",TAIL_LAMP,-.24,.23,.006)):
+                ("Lower ruby light guide",TAIL_LAMP,-.24,.23,.006),
+        ]
+        if root.name.startswith("BMV X5i"):
+            rear_lamp_layers.append(("Rear indicator lens", indicator_finish, 0, .16, .008))
+        for label, finish, band, thickness, outset in rear_lamp_layers:
             vertices, faces = [], []
-            for x,y,h in stations:
+            lens_stations = stations[5:9] if label == "Rear indicator lens" else stations
+            for x,y,h in lens_stations:
                 # The two light guides exchange levels at the tailgate shoulder.
                 crossing = max(-1.0,min(1.0,(.755-x)/.085))
                 z = 1.395 + .055*x + h*band*crossing

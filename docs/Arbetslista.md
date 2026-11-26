@@ -263,6 +263,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - BMV X5i har egna diagonaldelade emaljemblem i turkost och vitt på motorhuven och bakluckan. Samma emblem används på de två trafikvarianterna. Granskat framifrån och bakifrån i Godot. Fordonsprovet, övningskörningen, trafikens blinkers och språkkontrollen passerade.
   - Grillens välvda lameller fick satinbehandlade framkanter på spelbilen och båda trafikvarianterna. Granskat på spelbilen i Godot. Fordons- och körskoleproven passerade.
   - Frontblinkersen fick formpassade glas i strålkastarhusens ytterkanter på spelbilen och trafikvarianterna. Granskat tänt i Godot. Trafikprovet verifierar att X5i blinkar i de modellerade glasen.
+  - Bakblinkersen fick egna glas mellan baklyktornas röda ljuslister. Granskat med höger blinkers tänd. Trafikprovet verifierar de modellerade glasen fram och bak.
 - [ ] [`brandbil.glb`](../vehicles/brandbil.glb)
   - Dragkrokens infästning fick fyra sexkantsbultar samt ett släpvagnsuttag med fäste och väderskydd. Granskat bakifrån i Godot. Förarplats- och luckproven passerade.
 - [ ] [`city_bus.glb`](../vehicles/city_bus.glb)
