@@ -42,7 +42,18 @@ for side in (-1,1):
     box("Door window",(side*1.155,-2.94,2.58),(.085,1.55,.84),v.GLASS,.075)
     box("Mirror arm",(side*1.27,-3.49,2.66),(.32,.075,.073),v.DARK)
     box("Twin mirror",(side*1.43,-3.48,2.51),(.16,.19,.43),v.BLACK)
-    box("Cab step",(side*1.04,-2.77,.64),(.38,.85,.11),v.METAL)
+    for height, step_x, width in ((.64,1.04,.38),(.91,1.10,.29)):
+        box("Cab step",(side*step_x,-2.17,height),(width,.40,.087),v.METAL,.016)
+        for stripe in (-.135,-.045,.045,.135):
+            box("Step grip rib",(side*step_x,-2.17+stripe,height+.048),
+                (width-.06,.029,.015),v.DARK,.005)
+    for y in (-2.33,-2.01):
+        box("Step support",(side*.96,y,.775),(.20,.052,.25),v.DARK,.008)
+    for z in (1.26,1.78):
+        ram("Cab grab rail mount",(side*1.16,-2.51,z),(side*1.208,-2.51,z),.018,v.DARK)
+    ram("Cab grab rail",(side*1.208,-2.51,1.26),(side*1.208,-2.51,1.78),.019,v.METAL)
+    box("Door handle recess",(side*1.176,-2.25,1.88),(.018,.203,.082),v.DARK,.012)
+    box("Door pull",(side*1.196,-2.25,1.888),(.036,.153,.030),v.METAL,.009)
     box("Front lamp carrier",(side*.89,-3.958,1.052),(.468,.156,.202),green,.030)
     box("Front lamp bezel",(side*.89,-4.034,1.052),(.444,.038,.175),v.BLACK,.016)
     box("Headlight lens",(side*.815,-4.055,1.052),(.255,.024,.126),v.HEADLAMP,.012)
