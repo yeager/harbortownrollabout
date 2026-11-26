@@ -271,6 +271,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Däcken fick rundade skuldror och tre längsgående spår i slitbanan. Granskat i närbild i Godot. Fordonsprovet passerade.
   - Bakluckan fick en skarv som följer karossen samt separat öppningshandtag och lås. Granskat bakifrån i Godot. Fordonsprovet passerade.
   - Båda baklyktorna fick vita backljus under de röda och bärnstensfärgade fälten. Granskat under backning i Godot. Fordonsprovet verifierade att båda är släckta vid bromsning och tänds vid backning.
+  - Bakrutan fick åtta synliga värmetrådar, anslutningsskenor och tätningar längs över- och nederkanten. Granskat bakifrån i Godot. Fordonsprovet passerade.
 - [ ] [`shopping_trike.glb`](../vehicles/shopping_trike.glb)
 - [ ] [`snowmobile.glb`](../vehicles/snowmobile.glb)
 - [ ] [`sport_quattro.glb`](../vehicles/sport_quattro.glb)

@@ -223,6 +223,23 @@ def build(key, length, width, axles, color, belt, cabin):
             bar("Saav wiper arm",hinge,arm_end,.012,DARK)
             bar("Saav wiper blade",glass_point(u-.063,.194),
                 glass_point(u+.253,.156),.015,RUBBER)
+        upper, lower = sections[-2:]
+        def rear_glass_point(u, t):
+            top = Vector(upper[1]).lerp(Vector(upper[2]),u)
+            bottom = Vector(lower[1]).lerp(Vector(lower[2]),u)
+            return top.lerp(bottom,t)+Vector((0,.003,.005))
+
+        for t in (.014,.980):
+            bar("Saav rear window seal",rear_glass_point(.008,t),
+                rear_glass_point(.992,t),.015,RUBBER)
+        heater = material("Saav rear glass heater",(.34,.16,.069),.20,.54)
+        for row in range(8):
+            t = .161 + row*.095
+            bar("Saav rear window heater line",rear_glass_point(.067,t),
+                rear_glass_point(.933,t),.0035,heater)
+        for u in (.067,.933):
+            bar("Saav rear window heater busbar",rear_glass_point(u,.138),
+                rear_glass_point(u,.85),.005,heater)
     mesh=bpy.data.meshes.new("Cabin panels");mesh.from_pydata(verts,[],faces);mesh.update()
     cabin_obj=bpy.data.objects.new("Cabin",mesh);bpy.context.collection.objects.link(cabin_obj);cabin_obj.parent=root
     for mat in cabin_materials: mesh.materials.append(mat)
