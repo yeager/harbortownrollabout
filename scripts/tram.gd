@@ -163,6 +163,12 @@ func _build_trackbed() -> void:
 				pole + Vector3.UP * 2.31, Color("#698076"), false, self)
 			get_parent()._make_box("Contact mast base plate", Vector3(.24, .055, .24),
 				pole + Vector3.UP * .01, arm_color, false, self)
+			world._make_box("Contact mast concrete footing", Vector3(.31, .125, .31),
+				pole - Vector3.UP * .08, Color("#969288"), false, self)
+			for bolt_x in [-.086, .086]:
+				for bolt_z in [-.086, .086]:
+					world._make_box("Contact mast anchor nut", Vector3(.027, .019, .027),
+						pole + Vector3(bolt_x, .044, bolt_z), Color("#a0a7a4"), false, self)
 			beam(pole + Vector3.UP * 4.39, mid + Vector3.UP * 4.24, .07, .06, arm_color)
 			get_parent()._make_box("Contact wire hanger", Vector3(.035, .049, .035),
 				mid + Vector3.UP * 4.2425, Color("#54635f"), false, self)
