@@ -236,6 +236,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
 - [ ] [`tractor_snow_blade.glb`](../vehicles/tractor_snow_blade.glb)
   - Plogbladets gummiskär fick tre klämlister med separata brickor och bultar. Granskat från gatunivå i Godot. Halkbekämpningsprovet passerade.
   - Båda arbetslamporna fick bultade fästen, linsramar och kabelgenomföringar. Granskat framifrån och bakifrån i Godot. Halkbekämpningsprovet passerade.
+  - Plogens hydraulcylindrar fick separata cylinderhus, kolvstänger och gaffelfästen med synliga ledtappar. Granskat från sidan i Godot. Halkbekämpningsprovet passerade.
 - [ ] [`traffic_bmw_blue.glb`](../vehicles/traffic_bmw_blue.glb)
 - [ ] [`traffic_bmw_silver.glb`](../vehicles/traffic_bmw_silver.glb)
 - [ ] [`tram_cab.glb`](../vehicles/tram_cab.glb)

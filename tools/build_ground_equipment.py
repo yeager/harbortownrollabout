@@ -149,7 +149,18 @@ for x in (-1.02,0,1.02):
     box("Cutting edge clamp strip",(x,-.272,.16),(1.013,.025,.058),steel,.007)
 for x in (-.37,.37):
     rod("Mounting arm",(x,.02,.35),(x,.72,.64),.066,frame)
-    rod("Hydraulic ram",(x,.05,.64),(x,.64,.52),.043,steel)
+    blade_pin = Vector((x,.135,.64))
+    tractor_pin = Vector((x,.64,.52))
+    gland = blade_pin.lerp(tractor_pin,.62)
+    rod("Hydraulic cylinder barrel",blade_pin,gland,.049,frame)
+    rod("Hydraulic gland",gland,gland.lerp(tractor_pin,.12),.051,steel)
+    rod("Hydraulic piston rod",gland,tractor_pin,.025,steel)
+    box("Cylinder mounting pad",(x,.085,.64),(.171,.061,.124),frame,.012)
+    for offset in (-.066,.066):
+        box("Cylinder clevis cheek",(x+offset,.128,.64),(.030,.107,.100),frame,.009)
+    disc("Blade clevis pin",blade_pin,.025,.179,steel,(1,0,0))
+    disc("Piston rod eye",tractor_pin,.041,.052,frame,(1,0,0))
+    disc("Piston pivot pin",tractor_pin,.024,.075,steel,(1,0,0))
 # Rear trip springs sit between brackets welded to the mouldboard.
 for x in (-.99,-.78,.78,.99):
     for z in (.29,.65):
