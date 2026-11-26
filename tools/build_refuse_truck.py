@@ -53,10 +53,8 @@ def wheel_surface(name, side, y, profile, finish):
     wheel.location = (side, y, .55)
 
 
-def rear_mudguard(side, axle_y):
+def wheel_arch(name, side, axle_y, profile, finish):
     sections = 24
-    profile = [(.77,.608),(.79,.632),(1.219,.632),(1.249,.611),
-               (1.249,.586),(1.221,.603),(.79,.603),(.77,.588)]
     vertices = []
     for step in range(sections + 1):
         angle = math.radians(-78 + 156 * step / sections)
@@ -74,15 +72,21 @@ def rear_mudguard(side, axle_y):
     faces.append(tuple(range(sections * width, len(vertices))))
     if side < 0:
         faces = [face[::-1] for face in faces]
-    mesh = bpy.data.meshes.new("Rear mudguard")
+    mesh = bpy.data.meshes.new(name)
     mesh.from_pydata(vertices, [], faces)
     mesh.update()
-    mesh.materials.append(v.DARK)
+    mesh.materials.append(finish)
     for face in mesh.polygons[1:-1]:
         face.use_smooth = True
-    guard = bpy.data.objects.new("Rear mudguard", mesh)
+    guard = bpy.data.objects.new(name, mesh)
     bpy.context.collection.objects.link(guard)
     guard.parent = root
+
+
+def rear_mudguard(side, axle_y):
+    profile = [(.77,.608),(.79,.632),(1.219,.632),(1.249,.611),
+               (1.249,.586),(1.221,.603),(.79,.603),(.77,.588)]
+    wheel_arch("Rear mudguard", side, axle_y, profile, v.DARK)
     for end in (-1, 1):
         ram("Mudguard support",(side*.77,axle_y+end*.39,.98),
             (side*1.18,axle_y+end*.39,1.018),.022,v.DARK)
@@ -138,7 +142,20 @@ rim_profile = [
 ]
 
 box("Ladder chassis", (0,0,.82), (1.60,7.4,.32), v.DARK)
-box("Cab shell", (0,-2.90,2.04), (2.34,1.98,2.20), green,.17)
+cab = box("Cab shell", (0,-2.90,2.04), (2.34,1.98,2.20), green,.17)
+for side in (-1,1):
+    bpy.ops.mesh.primitive_cylinder_add(vertices=64, radius=.657, depth=.85,
+        location=(side*.995,-2.94,.55), rotation=(0,math.pi/2,0))
+    cutter = bpy.context.object
+    cut = cab.modifiers.new("Steering clearance", "BOOLEAN")
+    cut.object = cutter
+    cut.operation = "DIFFERENCE"
+    bpy.context.view_layer.objects.active = cab
+    bpy.ops.object.modifier_apply(modifier=cut.name)
+    bpy.data.objects.remove(cutter, do_unlink=True)
+    wheel_arch("Front wheel arch trim", side, -2.94,
+        [(1.08,.695),(1.182,.695),(1.245,.679),(1.245,.646),
+         (1.182,.634),(1.08,.634)], v.DARK)
 gasket = box("Windshield gasket",(0,-3.862,2.57),(2.116,.123,.946),v.RUBBER,.088)
 gasket.rotation_euler.x = -.09
 glass = box("Panoramic windshield",(0,-3.87,2.57),(2.05,.12,.88),v.GLASS,.08)
@@ -214,8 +231,8 @@ for side in (-1,1):
     box("Door window gasket",(side*1.173,-2.94,2.58),(.030,1.588,.880),v.RUBBER,.040)
     box("Door window",(side*1.155,-2.94,2.58),(.085,1.55,.84),v.GLASS,.075)
     door_outline = [(-3.71,2.77),(-3.64,3.047),(-2.22,3.047),
-                    (-2.10,2.94),(-2.10,1.145),(-2.19,1.072),
-                    (-3.58,1.072),(-3.71,1.215),(-3.71,2.77)]
+                    (-2.10,2.94),(-2.10,1.322),(-2.19,1.271),
+                    (-3.58,1.271),(-3.71,1.333),(-3.71,2.77)]
     for start, end in zip(door_outline,door_outline[1:]):
         ram("Cab door shut line",(side*1.171,*start),(side*1.171,*end),.006,v.DARK)
     box("Mirror mounting foot",(side*1.17,-3.49,2.66),(.075,.145,.116),v.RUBBER,.016)

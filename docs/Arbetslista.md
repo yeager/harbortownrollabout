@@ -244,6 +244,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Takets två varningslyktor fick rundade räfflade glas, separata socklar och gummifästen. Båda glasen tändes under kärllyftet i Godot. Sophämtningsprovet passerade.
   - Baklyktorna fick separata vita backljuslinser. Granskat under backning i Godot. Fordonsprovet verifierade att båda linserna lyser vid backning och är släckta vid bromsning. Alla 28 vägfordon och tre specialaktiviteter passerade.
   - Chassit fick sidounderkörningsskydd mellan fram- och bakhjulen, med dubbla balkar, skruvade fästen och bärnstensfärgade sidomarkeringar. Granskat från sidan i Godot. Sophämtningsprovet passerade.
+  - Hytten fick utskurna främre hjulhus och separata välvda skärmkanter. Dörrskarven flyttades upp över hjulhuset. Granskat från sidan i Godot. Sophämtningsprovet passerade.
 - [ ] [`ride_on_mower.glb`](../vehicles/ride_on_mower.glb)
   - Åkgräsklipparen har en infälld kylgrill och röda baklyktor vid den bakmonterade motorn. Strålkastarna sitter på klippaggregatets främre kant. Båda ändarna granskades i Godot och samtliga fyra modellerade blinkerslinser verifierades. Fordons- och områdesproven passerade.
 - [ ] [`saab96.glb`](../vehicles/saab96.glb)
