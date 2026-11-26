@@ -192,6 +192,7 @@ Fordonsgranskningen börjar med exteriörerna. Bilarnas tillverkarnamn, modellna
   - Patientdörrarna fick sparkplåtar och draghandtag i metall. Granskat i närbild. Ambulansprovet verifierade överlämningen och att vårdbyggnaden är stängd.
   - Sjukhusets fasad fick två stuprör med knän och väggfästen vid takets gavlar. Granskat i Godot. Ambulansprovet passerade.
   - Gångytan vid huvudentrén fick stenplattor med synliga fogar. Granskat i Godot. Ambulansprovet passerade.
+  - Två armaturer under entrétaket lyser upp dörrarna och stenplattorna när det mörknar. Granskat i nattläge i Godot. Ambulansprovet passerade.
 
 - [x] Helikopterplattans tolv gröna kantljus fick låga koniska armaturhus och separata linser. Granskat i nattläge i Godot. Ambulanshelikopterns landningsprov passerade. Sjukhustaket och plattan fick vädermaterial. Plattan får ett tunnare snötäcke så att H och kantmarkeringen syns. Vintervyn granskades i Godot och landningsprovet passerade. En vindstrut på sjukhustaket följer vädrets vindriktning. Granskad i Godot.
 

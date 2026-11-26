@@ -139,6 +139,11 @@ func _build_closed_entrance(world: Node3D, glass: Material) -> void:
 		Vector3(facade_x, 3.21, 1.01), TRIM, false, self)
 	var entrance: Label3D = world._station_sign("Harbor Town Hospital", Vector3(facade_x, 3.22, 2.12), .007, METAL, 0, self)
 	world._size_world_sign(entrance, 6.15)
+	for side in [-1.0, 1.0]:
+		var fitting := Vector3(facade_x + side * 1.58, 2.942, 1.09)
+		world._make_box("Entrance luminaire housing", Vector3(.96, .055, .22),
+			fitting, METAL, false, self)
+		world._add_entry_light(ORIGIN + fitting - Vector3.UP * .038, Vector3(.84, .022, .15), 4.5)
 
 func _build_intake(world: Node3D) -> void:
 	# Meet the north edge of Östra allén at the same grade without overlapping it.
