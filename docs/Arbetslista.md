@@ -189,6 +189,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - LGF-skylten fick en profilerad reflektorkant, orange mittfält och två gummiklädda fästen. Granskad bakifrån i Godot. Fordonsprovet passerade.
   - Baklyktorna fick separata lamphus, gummipackningar och röda, vita och orange glas. Granskat i Godot. Fordonsprovet verifierade att båda backljusen tänds vid backning.
   - Frontblinkersen fick separata glas, infattningar och gummipackningar. Granskat i Godot. Fordonsprovet verifierade att rätt sidas modellerade glas blinkar både fram och bak.
+  - Strålkastarna fick räfflade glas, metallinfattningar och gummipackningar. Ljuskäglorna utgår från glasens mitt. Granskat i nattläge i Godot och verifierat i fordonsprovet.
 - [ ] [`ambulance.glb`](../vehicles/ambulance.glb)
   - Bakdörrens handtag fick separata fästen och en låscylinder med nyckelspår. Registreringsskylten fick två armaturhus med diffusorer. Detaljerna granskades i Godot. Ambulansintaget och utryckningsprovet passerade.
 - [ ] [`ambulance_helicopter.glb`](../vehicles/ambulance_helicopter.glb)

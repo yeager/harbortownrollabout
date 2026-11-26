@@ -9560,8 +9560,8 @@ func _load_vehicle_model() -> void:
 					tractor_beacon.emission = Color("#ff9a15")
 					body.set_surface_override_material(surface, tractor_beacon)
 	var beam_origins: Array[Vector3] = []
-	if vehicle_index in [2, SNOWMOBILE, PORSCHE, FARM_TRACTOR, SHOPPER, REFUSE, BUS, DAM_PICKUP, QUATTRO]:
-		var lens_pattern: String = {2:"Swept transparent headlamp cover*", PORSCHE:"Headlight lens*", SNOWMOBILE:"Headlight strip*", FARM_TRACTOR:"Projector lens*", SHOPPER:"Headlight lens*", REFUSE:"Headlight lens*", BUS:"Bus headlight lens*", DAM_PICKUP:"Projector lens*", QUATTRO:"Headlight lens*"}[vehicle_index]
+	if vehicle_index in [2, SNOWMOBILE, PORSCHE, FARM_TRACTOR, SHOPPER, REFUSE, BUS, DAM_PICKUP, QUATTRO, A_TRACTOR]:
+		var lens_pattern: String = {2:"Swept transparent headlamp cover*", PORSCHE:"Headlight lens*", SNOWMOBILE:"Headlight strip*", FARM_TRACTOR:"Projector lens*", SHOPPER:"Headlight lens*", REFUSE:"Headlight lens*", BUS:"Bus headlight lens*", DAM_PICKUP:"Projector lens*", QUATTRO:"Headlight lens*", A_TRACTOR:"Headlight lens*"}[vehicle_index]
 		var lenses := vehicle_model.find_children(lens_pattern, "MeshInstance3D", true, false)
 		for lens: MeshInstance3D in lenses:
 			var center := ambulance.to_local(lens.to_global(lens.get_aabb().get_center()))

@@ -8,7 +8,7 @@ from mathutils import Vector
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from build_vehicles import (clear_scene, cube, cylinder, material, mesh_from_rings,
                             export_vehicle, profile_loft, SOURCE_DIR, PAINT_WHITE, GLASS, DARK,
-                            RUBBER, METAL, HEADLAMP, RED_LAMP)
+                            RUBBER, METAL, RED_LAMP)
 
 clear_scene()
 root=bpy.data.objects.new("White A-traktor",None)
@@ -76,6 +76,7 @@ for side in (-1,1):
     for axle_y in (-1.45,1.39):
         wheel_part("Center cap",side*.93,axle_y,.054,.024,METAL)
 amber = material("A-tractor amber optic",(.92,.33,.032),.08,.28)
+headlamp_glass = material("A-tractor fluted headlight glass",(.58,.65,.69),.18,.24)
 for side in [-1,1]:
     box("Door handle",(side*.886,.25,.92),(.052,.15,.031),DARK)
     box("Bodyside moulding",(side*.889,-.10,.55),(.032,1.85,.055),RUBBER)
@@ -90,7 +91,12 @@ for side in [-1,1]:
         ("Rear lamp lower lens",.566,.056,RED_LAMP),
     ):
         box(label,(side*.78,2.225,z),(.126,.020,height),finish,.008)
-    box("Headlight",(side*.58,-2.323,.72),(.31,.054,.17),HEADLAMP)
+    box("Headlight gasket",(side*.58,-2.320,.72),(.332,.046,.180),RUBBER,.019)
+    box("Headlight bezel",(side*.58,-2.345,.72),(.313,.031,.165),METAL,.015)
+    box("Headlight lens",(side*.58,-2.366,.72),(.285,.022,.143),headlamp_glass,.012)
+    for flute in range(-5,6):
+        box("Headlight glass flute",(side*.58+flute*.022,-2.378,.72),
+            (.003,.003,.117),headlamp_glass,.001)
 # Cut an actual recessed bed within the rear quarters.
 bpy.ops.mesh.primitive_cube_add(size=1, location=(0,1.515,1.127))
 cutter=bpy.context.object

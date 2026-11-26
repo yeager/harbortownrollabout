@@ -104,7 +104,7 @@ func check_gallery() -> void:
 				printerr("Quattro speedometer did not follow forward motion")
 				quit(1)
 				return
-		if index in [2, game.SHOPPER, game.REFUSE, game.QUATTRO]:
+		if index in [2, game.SHOPPER, game.REFUSE, game.QUATTRO, game.A_TRACTOR]:
 			var lenses: Array = game.vehicle_model.find_children("Swept transparent headlamp cover*" if index == 2 else "Headlight lens*", "MeshInstance3D", true, false)
 			if lenses.size() != (1 if index == game.SHOPPER else 2) or lenses.size() != game.headlights.size():
 				printerr("Headlight count differs from vehicle body")
