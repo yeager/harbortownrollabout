@@ -458,6 +458,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Stadsgränsprovet kontrollerar även att underlagen till täckstenarna saknar överlapp i hörnen. Godkänt i Godot 4.7 dev5.
   - Murkropparna möts kant i kant vid de fyra hörnen. Nordöstra hörnet granskades utifrån i Godot. Stadsgränsprovet kontrollerar överlapp och kollisionsskydd i alla fyra hörn.
   - Murkrönet fick individuella täckstenar med tunna fogar och varierande ton. Granskat vid nordöstra hörnet i Godot. Stadsgränsprovet passerade.
+  - Täckstenarnas långsidor fick fasade överkanter. Granskat på båda sidor om nordöstra hörnet i Godot. Stadsgränsprovet passerade.
   - Täckstenarna samlar snö på ovansidan och fogarna syns även i vinterläget. Granskat vid nordöstra hörnet. Stadsgräns- och väderproven passerade.
   - Graniten fick en svagt grön beläggning vid kanalens vattenlinje. Granskat från vattennivå. Stadsgränsprovet passerade.
 - [ ] Uppdragsrekvisitan för cykelbud, födelsedag och upphittat paraply

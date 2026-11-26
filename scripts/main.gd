@@ -2387,6 +2387,7 @@ func _build_city_wall() -> void:
 	coping_finish.set_shader_parameter("roof_surface", true)
 	coping_finish.set_shader_parameter("use_instance_tint", true)
 	ground_finishes.append(coping_finish)
+	var slab := _city_wall_coping_mesh(coping_finish)
 	var middle := CITY_INTERIOR.get_center()
 	for along_x in [true, false]:
 		var length := CITY_INTERIOR.size.x if along_x else CITY_INTERIOR.size.y
@@ -2406,16 +2407,14 @@ func _build_city_wall() -> void:
 			var coping_size := tangent * coping_length + normal * .68
 			_make_box("Coping bedding %s %s" % [along_x, side], coping_size + Vector3.UP * .04,
 				center + Vector3.UP * 2.32, Color("#706d63"), false, wall)
-			var slab := BoxMesh.new()
-			slab.size = tangent + normal * .68 + Vector3.UP * .09
-			slab.material = coping_finish
 			var coping := MultiMesh.new()
 			coping.transform_format = MultiMesh.TRANSFORM_3D
 			coping.use_colors = true
 			coping.mesh = slab
 			coping.instance_count = ceili(coping_length / 1.44)
 			var step := coping_length / coping.instance_count
-			var axes := Basis.from_scale(Vector3.ONE + tangent * (step - .014 - 1.0))
+			var heading := 0.0 if along_x else -PI * .5
+			var axes := Basis(Vector3.UP, heading).scaled_local(Vector3(step - .014, 1, 1))
 			for index in coping.instance_count:
 				var offset := (index + .5) * step - coping_length * .5
 				coping.set_instance_transform(index, Transform3D(axes, center + tangent * offset + Vector3.UP * 2.385))
@@ -2425,6 +2424,33 @@ func _build_city_wall() -> void:
 			slabs.name = "Perimeter coping stones"
 			slabs.multimesh = coping
 			wall.add_child(slabs)
+
+func _city_wall_coping_mesh(finish: Material) -> ArrayMesh:
+	var profile := PackedVector2Array([
+		Vector2(-.045, -.34), Vector2(-.045, .34),
+		Vector2(.018, .34), Vector2(.045, .313),
+		Vector2(.045, -.313), Vector2(.018, -.34),
+	])
+	var surface := SurfaceTool.new()
+	surface.begin(Mesh.PRIMITIVE_TRIANGLES)
+	surface.set_material(finish)
+	surface.set_smooth_group(-1)
+	for i in profile.size():
+		var start := profile[i]
+		var end := profile[(i + 1) % profile.size()]
+		var left_start := Vector3(-.5, start.x, start.y)
+		var right_start := Vector3(.5, start.x, start.y)
+		var left_end := Vector3(-.5, end.x, end.y)
+		var right_end := Vector3(.5, end.x, end.y)
+		for vertex in [left_start, right_end, right_start, left_start, left_end, right_end]:
+			surface.add_vertex(vertex)
+	for i in range(1, profile.size() - 1):
+		for j in [0, i + 1, i]:
+			surface.add_vertex(Vector3(-.5, profile[j].x, profile[j].y))
+		for j in [0, i, i + 1]:
+			surface.add_vertex(Vector3(.5, profile[j].x, profile[j].y))
+	surface.generate_normals()
+	return surface.commit()
 
 func _build_road_network() -> void:
 	marking_finish = _noise_material(Color("#ededed"), Color.WHITE, 2.3, .12)
