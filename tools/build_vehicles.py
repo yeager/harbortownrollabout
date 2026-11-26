@@ -2814,9 +2814,17 @@ def make_bwm(color, name="BWM Y5 N70i", *, patrol=False):
                     valve = cylinder(label, valve_base + valve_axis * offset,
                                      radius, depth, finish, axis_x=False, vertices=12, root=root)
                     valve.rotation_euler = valve_axis.to_track_quat("Z", "Y").to_euler()
-            wheel_shell("Brake disc friction ring",[(.978,.178),(.978,.275),
-                (.982,.282),(1.002,.282),(1.006,.275),(1.006,.178),(.978,.178)],
-                material("Rotor swept steel",(.23,.22,.21),.82,.43))
+            rotor_profile = [(.978,.178),(.978,.275),(.982,.282),(1.002,.282),
+                             (1.006,.275),(1.006,.178),(.978,.178)]
+            rotor_finish = material("Rotor swept steel", (.23,.22,.21), .82, .43)
+            if root.name.startswith("BWM Y5 N70i"):
+                # Recess concentric machining lines into the swept face.
+                grooves = [(depth, radius + offset)
+                           for radius in (.264, .249, .234, .219, .204)
+                           for depth, offset in ((1.006,.002), (1.004,0), (1.006,-.002))]
+                rotor_profile[5:5] = grooves
+                rotor_finish = material("Satin brake rotor steel", (.28,.29,.30), .58, .48)
+            wheel_shell("Brake disc friction ring", rotor_profile, rotor_finish)
             cylinder("Brake disc hat",(side*1.003,y,.48),.181,.041,DARK,vertices=48,root=root)
             cube("Red brake caliper",(side*1.034,y+.225,.51),(.062,.094,.212),PAINT_RED,.029,root)
             for lug in range(5):
