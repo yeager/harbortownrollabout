@@ -278,6 +278,7 @@ def make_ambulance():
     yellow = material("Ambulans citrongul", (0.47, 0.55, 0.068), 0.06, 0.34)
     glass = material("Röktonat glas", (0.018, 0.042, 0.056), 0.36, 0.13)
     mirror_glass = material("Ambulance mirror glass",(.42,.51,.56),.88,.14)
+    cab_gap = material("Hyttens karossfog",(.12,.15,.043),0,.65)
 
     def box(name, loc, dims, mat, radius=0.025):
         return cube(name, loc, dims, mat, radius, root)
@@ -445,6 +446,30 @@ def make_ambulance():
         number.location.y-=side*(min(extents)+max(extents))*.5
         label = text_obj("Ambulansdekal","AMBULANS",(side*1.123,1.54,1.58),.185,POLICE_BLUE,-side,root)
         label.data.transform(__import__("mathutils").Matrix.Translation((-sum(v.co.x for v in label.data.vertices)/len(label.data.vertices),0,0)))
+        door_outline = [Vector((y,z)) for y,z in (
+            (-1.70,1.385),(-1.60,1.14),(-1.45,.61),(-1.35,.554),
+            (-.49,.554),(-.412,.612),(-.392,1.385))]
+        seam_vertices, seam_faces = [], []
+        for start,end in zip(door_outline,door_outline[1:]):
+            offset = (end-start).orthogonal().normalized()*.004
+            for step in range(13):
+                center = start.lerp(end,step/12)
+                for edge in (center-offset,center+offset):
+                    hit,point,_,_ = nose.ray_cast((side*2,edge.x,edge.y),(-side,0,0))
+                    if not hit:
+                        raise ValueError("Cab door seam outside pickup body")
+                    seam_vertices.append(point+Vector((side*.0045,0,0)))
+                if step:
+                    i = len(seam_vertices)-2
+                    seam_faces.append((i-2,i-1,i+1,i))
+        mesh = bpy.data.meshes.new("Hyttdörrens karossfog")
+        mesh.from_pydata(seam_vertices,[],seam_faces)
+        if mesh.polygons[0].normal.x*side < 0:
+            mesh.flip_normals()
+        mesh.materials.append(cab_gap)
+        seam = bpy.data.objects.new("Hyttdörrens karossfog",mesh)
+        bpy.context.collection.objects.link(seam)
+        seam.parent = root
         box("Spegelfästets packning",(side*.948,-1.68,1.477),(.035,.128,.105),RUBBER,.014)
         box("Spegelarm",(side*1.059,-1.68,1.494),(.245,.068,.061),BLACK,.020)
         box("Spegelarmens led",(side*1.171,-1.68,1.526),(.088,.081,.096),BLACK,.022)
