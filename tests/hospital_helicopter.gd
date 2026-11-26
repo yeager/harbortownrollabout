@@ -45,6 +45,10 @@ func check_landing() -> void:
 		quit(1)
 		return
 	var before_rotor: float = aircraft.main_rotor.rotation.y
+	if aircraft.landing_lights.size() != 2 or not aircraft.landing_lights.all(func(light: SpotLight3D): return light.visible):
+		printerr("The two landing beams did not light up on final approach")
+		quit(1)
+		return
 	game._update_patrol(8.0)
 	if not aircraft.position.is_equal_approx(pad) or is_equal_approx(aircraft.main_rotor.rotation.y, before_rotor):
 		printerr("Landing did not reach the pad with spinning blades")
@@ -53,6 +57,10 @@ func check_landing() -> void:
 	var flight_gain := audio.volume_db
 	var flight_pitch := audio.pitch_scale
 	game._update_patrol(7.0)
+	if aircraft.landing_lights.any(func(light: SpotLight3D): return light.visible):
+		printerr("The landing beams stayed on after parking")
+		quit(1)
+		return
 	if audio.pitch_scale >= flight_pitch or audio.volume_db >= flight_gain:
 		printerr("Rotor sound did not slow and soften on the roof")
 		quit(1)

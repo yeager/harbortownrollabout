@@ -14,6 +14,7 @@ var flight_seconds := 29.0
 var main_rotor: Node3D
 var tail_rotor: Node3D
 var rotor_blur: Array[MeshInstance3D] = []
+var landing_lights: Array[SpotLight3D] = []
 var rotor_audio := AudioStreamPlayer3D.new()
 
 
@@ -25,6 +26,16 @@ func configure(landing_center: Vector3) -> void:
 	main_rotor = aircraft.find_child("MainRotor", true, false) as Node3D
 	tail_rotor = aircraft.find_child("TailRotor", true, false) as Node3D
 	rotor_blur = [RotorMotion.fit(main_rotor, 4.955, 5, false, true), RotorMotion.fit(tail_rotor, .515, 9, true)]
+	for lens: MeshInstance3D in aircraft.find_children("Landing lamp lens*", "MeshInstance3D", true, false):
+		var light := SpotLight3D.new()
+		light.name = "Landing light beam"
+		light.position = to_local(lens.global_position)
+		light.basis = Basis.looking_at(Vector3(0, -.92, .39))
+		light.light_color = Color("#fff4dc")
+		light.spot_range = 26.0
+		light.spot_angle = 30.0
+		add_child(light)
+		landing_lights.append(light)
 	var rotor_loop := preload("res://audio/medical_helicopter_rotor.wav").duplicate() as AudioStreamWAV
 	rotor_loop.loop_mode = AudioStreamWAV.LOOP_FORWARD
 	rotor_loop.loop_end = roundi(rotor_loop.get_length() * rotor_loop.mix_rate)
@@ -68,6 +79,14 @@ func advance(delta: float) -> void:
 	var toward: Vector3 = waypoints[phase + 1]
 	var progress: float = remaining / SEGMENT_SECONDS[phase]
 	position = from.lerp(toward, smoothstep(0.0, 1.0, progress))
+	var beam := 0.0
+	if phase == 2:
+		beam = smoothstep(.04, .28, progress)
+	elif phase == 3:
+		beam = 1.0 - smoothstep(0.0, .19, progress)
+	for light in landing_lights:
+		light.visible = beam > .001
+		light.light_energy = 3.8 * beam
 	var track := toward - from
 	var heading := LANDING_YAW if is_zero_approx(Vector2(track.x, track.z).length_squared()) else atan2(track.x, track.z)
 	rotation.y = rotate_toward(rotation.y, heading, delta * .45)
