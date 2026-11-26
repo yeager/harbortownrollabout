@@ -244,6 +244,18 @@ def build():
                 theta = j*math.tau/15
                 spoke = box("Wheel spoke",(x+side*.143,axle+.126*math.cos(theta),.293+.126*math.sin(theta)),(.026,.119,.025),alloy,.007,wheel)
                 spoke.rotation_euler.x = theta
+            valve_angle = math.pi / 15
+            valve_direction = Vector((0, math.cos(valve_angle), math.sin(valve_angle)))
+            valve_base = Vector((x + side*.135, axle, .293)) + valve_direction * .198
+            valve_tip = valve_base - valve_direction * .019 + Vector((side*.009, 0, 0))
+            valve_axis = (valve_tip - valve_base).normalized()
+            valve = cylinder("Tyre valve stem", (valve_base + valve_tip) / 2,
+                             .0045, (valve_tip - valve_base).length, rubber,
+                             axis_x=False, vertices=12, root=wheel)
+            valve.rotation_euler = valve_axis.to_track_quat('Z', 'Y').to_euler()
+            valve_cap = cylinder("Tyre valve cap", valve_tip, .0055,.008, trim,
+                                 axis_x=False, vertices=12, root=wheel)
+            valve_cap.rotation_euler = valve.rotation_euler
             for j in range(5):
                 theta = j*math.tau/5
                 cylinder("Wheel bolt", (x+side*.163, axle+.043*math.cos(theta),.293+.043*math.sin(theta)), .009,.011,chrome,vertices=12,root=wheel)
