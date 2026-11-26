@@ -266,6 +266,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Stjärtrotorn centrerades i kåpan och fick ett roterande nav och ett fast växelhus. Fena och bom kortades vid öppningen så att bladen syns från sidan. Granskat i Godot 4.7 dev5 och rotorprovet passerade.
   - Polishelikoptern fick ett rött positionsljus på babord, ett grönt på styrbord och ett vitt på stjärtfenan. Granskade under patrullflygning i nattläge. Rotorprovet passerade i Godot 4.7 dev5.
   - Landningsmedarna fick runda rör, uppåtböjda spetsar, tvärstag med sadelfästen och halkskyddade insteg. Granskat underifrån i patrullflygning. Rotor- och landningsprovet passerade i Godot 4.7 dev5.
+  - Kabindörrarna fick formpassade fogar och separata handtag i mörka infattningar. Granskat från sidan under patrullflygning. Rotor- och landningsprovet passerade i Godot 4.7 dev5.
 - [ ] [`porsche_gt3_rs.glb`](../vehicles/porsche_gt3_rs.glb)
   - Porsje GT5RS har egna bakre märkesbokstäver och en guldfärgad romb med svart vinkel på motorhuven. Båda granskades i Godot. Fordonsgalleriets körprov, banbilens körprov och språkkontrollen passerade.
 - [ ] [`puch_dakota.glb`](../vehicles/puch_dakota.glb)

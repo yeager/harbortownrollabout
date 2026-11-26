@@ -57,14 +57,38 @@ def cabin_paint(j,i,s):
         return 2
     return 1 if -.53<s<.14 else 0
 
-shell("Glazed passenger fuselage",[(-3.45,.07,1.39,.10),(-3.22,.59,1.39,.52),
+cabin = shell("Glazed passenger fuselage",[(-3.45,.07,1.39,.10),(-3.22,.59,1.39,.52),
       (-2.75,.95,1.48,.84),(-2.05,1.09,1.54,1.01),(-1.98,1.10,1.55,1.02),
       (-1.25,1.13,1.56,1.08),(-.79,1.14,1.56,1.09),(-.71,1.14,1.56,1.09),
       (.03,1.13,1.55,1.07),(.80,1.05,1.55,.97),(1.57,.81,1.57,.75),(2.3,.40,1.64,.38)],cabin_paint)
 shell("Tapered tail boom",[(1.6,.55,1.69,.49),(2.7,.38,1.74,.36),
       (4.3,.22,1.9,.23),(4.80,.14,2.05,.15)],lambda j,i,s:0)
+
+
+def cabin_surface(side, y, z, offset):
+    hit, contact, _, _ = cabin.ray_cast((side * 2, y, z), (-side, 0, 0))
+    if not hit:
+        raise ValueError(f"Door detail misses fuselage at {(side, y, z)}")
+    return (contact.x + side * offset, y, z)
+
+
 for side in [-1,1]:
     text_obj("Police fuselage lettering","POLIS",(side*1.15,-side*.68,1.14),.40,blue,-side,root)
+    for outline in (
+        ((-2.01, 2.33), (-.78, 2.34), (-.78, .94), (-1.89, .94), (-2.01, 1.10)),
+        ((-.68, 2.34), (.67, 2.25), (.75, 1.07), (.60, .94), (-.68, .94)),
+    ):
+        seam = [
+            cabin_surface(side, y0 + (y1 - y0) * step / 16, z0 + (z1 - z0) * step / 16, .003)
+            for (y0, z0), (y1, z1) in zip(outline, outline[1:] + outline[:1])
+            for step in range(16)
+        ]
+        pipe("Cabin door seam", seam + seam[:1], .007, graphite, root)
+    for handle_y in (-1.02, .48):
+        cube("Recessed cabin handle surround", cabin_surface(side, handle_y, 1.55, .002),
+             (.027, .235, .066), graphite, .013, root)
+        cube("Cabin door pull", cabin_surface(side, handle_y, 1.55, .020),
+             (.024, .164, .028), metal, .008, root)
     pipe("Tubular landing skid", [
         (side * 1.08, -2.46, .35), (side * 1.08, -2.30, .23),
         (side * 1.08, -2.13, .16), (side * 1.08, -1.94, .13),
