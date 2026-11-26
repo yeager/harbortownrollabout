@@ -162,6 +162,10 @@ func _build_trackbed() -> void:
 			get_parent()._make_box("Contact mast base plate", Vector3(.24, .055, .24),
 				pole + Vector3.UP * .01, arm_color, false, self)
 			beam(pole + Vector3.UP * 4.39, mid + Vector3.UP * 4.24, .07, .06, arm_color)
+			get_parent()._make_box("Contact wire hanger", Vector3(.035, .049, .035),
+				mid + Vector3.UP * 4.2425, Color("#54635f"), false, self)
+			beam(mid + Vector3.UP * 4.207 - heading.z * .061,
+				mid + Vector3.UP * 4.207 + heading.z * .061, .048, .030, Color("#54635f"))
 			beam(pole + Vector3.UP * 4.65, mid - heading.x * .38 + Vector3.UP * 4.28,
 				.035, .032, arm_color)
 			var insulator := mid - heading.x * .21 + Vector3.UP * 4.26
