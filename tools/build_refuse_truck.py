@@ -126,8 +126,16 @@ for pivot_x in (-.82,.14):
         (pivot_x+.722,-3.997,2.286),.007,v.DARK)
 box("Sun visor",(0,-3.92,3.06),(2.29,.24,.12),v.DARK)
 box("Front bumper",(0,-3.90,.82),(2.34,.28,.37),v.DARK,.08)
-for i in range(4):
-    box("Radiator louvre",(0,-3.91,1.20+i*.09),(1.28,.055,.045),v.BLACK)
+box("Grille recess",(0,-3.908,1.39),(1.42,.045,.43),v.BLACK,.034)
+for z in (1.165,1.615):
+    box("Grille horizontal surround",(0,-3.939,z),(1.46,.101,.044),v.DARK,.012)
+for side in (-1,1):
+    box("Grille end surround",(side*.711,-3.939,1.39),(.045,.101,.438),v.DARK,.012)
+    box("Grille louvre support",(side*.39,-3.943,1.39),(.038,.041,.392),v.DARK,.006)
+for row in range(6):
+    z = 1.224 + row*.066
+    louvre = box("Radiator louvre",(0,-3.958,z),(1.37,.071,.029),v.DARK,.006)
+    louvre.rotation_euler.x = math.radians(-19)
 v.mesh_from_rings("Compactor body", [
     (-1.78,1.20,1.22,3.25,3.5),(-1.59,1.24,1.18,3.37,3.58),
     (2.37,1.24,1.18,3.37,3.58),(2.65,1.18,1.23,3.26,3.46)],green,root)
