@@ -7741,7 +7741,27 @@ func _build_boule_court() -> void:
 	for seam_z in [-.026, .026]:
 		_tube_between(ring, Vector3(.295, 0, seam_z - .003),
 			Vector3(.295, 0, seam_z + .003), .018, joint_finish)
-	boule_jack = _boule_ball(.024, Color("#ffb73c"), false)
+	boule_jack = _boule_ball(.024, _material(Color("#ffb73c"), .72, false, "wood"))
+	var boule_shader := Shader.new()
+	boule_shader.code = """
+	shader_type spatial;
+	varying float latitude;
+	void vertex() {
+		latitude = NORMAL.y;
+	}
+	void fragment() {
+		float row = abs(latitude);
+		float distance_to_groove = min(abs(row - .24), abs(row - .34));
+		float blur = max(fwidth(row), .003);
+		float groove = (1.0 - smoothstep(.008, .014 + blur, distance_to_groove))
+			* (1.0 - smoothstep(.03, .16, blur));
+		ALBEDO = mix(vec3(.59, .61, .61), vec3(.19, .21, .21), groove);
+		METALLIC = .84;
+		ROUGHNESS = mix(.26, .54, groove);
+	}
+	"""
+	var boule_steel := ShaderMaterial.new()
+	boule_steel.shader = boule_shader
 	boule_jack.position = BOULE_CENTRE+Vector3(0,.024,-4)
 	var result_mesh := TorusMesh.new()
 	result_mesh.inner_radius = .071
@@ -7758,7 +7778,7 @@ func _build_boule_court() -> void:
 		player.get_node("Hair").material_override = _material([Color("#bcbab0"),Color("#817970"),Color("#d3c8ae")][i])
 		boule_players.append(player)
 		_animate_steps(player,0,0)
-		var ball := _boule_ball(.044, Color("#b2b7b7"), true)
+		var ball := _boule_ball(.044, boule_steel)
 		ball.hide()
 		boules.append(ball)
 		var marker := MeshInstance3D.new()
@@ -7808,14 +7828,12 @@ func _update_thermos() -> void:
 	_refresh_dispatch()
 	_save_preferences()
 
-func _boule_ball(radius: float, tint: Color, steel: bool) -> MeshInstance3D:
+func _boule_ball(radius: float, finish: Material) -> MeshInstance3D:
 	var ball := MeshInstance3D.new()
 	var mesh := SphereMesh.new()
 	mesh.radius = radius
 	mesh.height = 2*radius
 	ball.mesh = mesh
-	var finish := _material(tint, .26 if steel else .72)
-	finish.metallic = .84 if steel else 0.0
 	ball.material_override = finish
 	add_child(ball)
 	return ball
