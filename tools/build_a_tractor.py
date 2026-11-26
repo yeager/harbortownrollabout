@@ -70,7 +70,16 @@ for side in (-1,1):
         ((.839,-.889,1.015),(.725,-.400,1.536),(.725,.312,1.536),(.757,.315,1.015))],glass)
     panel("Rear quarter glass",[(side*x,y,z) for x,y,z in
         ((.758,.376,1.015),(.725,.375,1.526),(.745,.529,1.515),(.794,.766,1.392),(.819,.766,1.015))],glass)
-    rod("Wiper blade",(side*.13,-.985,1.089),(side*.57,-.975,1.104),.009,RUBBER)
+    # Both wipers park pointing toward the passenger side.
+    spindle_x = side*.37
+    rod("Wiper spindle cap",(spindle_x,-1.022,1.018),
+        (spindle_x,-1.033,1.046),.023,DARK)
+    rod("Wiper arm",(spindle_x,-1.033,1.046),
+        (spindle_x+.169,-.993,1.115),.010,DARK)
+    rod("Wiper blade spine",(spindle_x-.067,-.999,1.106),
+        (spindle_x+.389,-.982,1.124),.009,DARK)
+    rod("Wiper rubber lip",(spindle_x-.067,-.989,1.106),
+        (spindle_x+.389,-.972,1.124),.006,RUBBER)
     rod("Door sill brightwork",(side*.884,-.88,.407),(side*.884,.51,.407),.015,METAL)
     box("Door pull escutcheon",(side*.876,.235,.855),(.034,.187,.052),RUBBER,.012)
     for axle_y in (-1.45,1.39):
