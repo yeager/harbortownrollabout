@@ -978,8 +978,8 @@ msgstr "Klassinen mopo"
 msgid "Volva L91 wheel loader"
 msgstr "Volva L91 (Pyöräkuormaaja)"
 
-msgid "Tracked excavator"
-msgstr "Telakaivinkone"
+msgid "Volva HT-16 tracked excavator"
+msgstr "Volva HT-16 (Telakaivinkone)"
 
 msgid "Tram"
 msgstr "Raitiovaunu"

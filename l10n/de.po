@@ -995,8 +995,8 @@ msgstr "Klassisches Moped"
 msgid "Volva L91 wheel loader"
 msgstr "Volva L91 (Radlader)"
 
-msgid "Tracked excavator"
-msgstr "Kettenbagger"
+msgid "Volva HT-16 tracked excavator"
+msgstr "Volva HT-16 (Kettenbagger)"
 
 msgid "Tram"
 msgstr "Straßenbahn"

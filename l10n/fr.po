@@ -994,8 +994,8 @@ msgstr "Cyclomoteur rétro"
 msgid "Volva L91 wheel loader"
 msgstr "Volva L91 (Chargeuse sur pneus)"
 
-msgid "Tracked excavator"
-msgstr "Pelle sur chenilles"
+msgid "Volva HT-16 tracked excavator"
+msgstr "Volva HT-16 (Pelle sur chenilles)"
 
 msgid "Tram"
 msgstr "Tramway"

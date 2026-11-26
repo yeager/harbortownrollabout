@@ -1,4 +1,4 @@
-"""Build the editable EC950F crawler excavator and its game mesh. Nose faces -Y."""
+"""Build the editable Volva HT-16 crawler excavator. Nose faces -Y."""
 from math import atan2, cos, pi, sin, tau
 from pathlib import Path
 import sys
@@ -10,7 +10,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import build_vehicles as v
 
 v.clear_scene()
-root = bpy.data.objects.new("Volvo EC950F", None)
+root = bpy.data.objects.new("Volva HT-16", None)
 bpy.context.collection.objects.link(root)
 gold = v.material("Construction yellow", (.95, .49, .025), .23, .32)
 graphite = v.material("Graphite machine enamel", (.07, .085, .09), .32, .34)
@@ -153,6 +153,10 @@ rings = []
 for z, scale in [(1.71,.94),(1.76,.985),(1.85,1),(2.78,1),(2.99,.986),(3.08,.95)]:
     rings.append([(x*scale,1.52+(y-1.52)*scale,z) for x,y in outline])
 v.profile_loft("Rounded cast counterweight",rings,graphite,root)
+box("Volva counterweight badge",(0,2.678,2.45),(.39,.058,.27),v.BLACK,.024)
+for side in [-1,1]:
+    tube("Volva counterweight chevron",(side*.120,2.718,2.524),
+         (0,2.718,2.379),.016,chrome)
 reflector = v.material("Ruby reflector", (.66,.022,.012), .18,.28)
 for side in [-1,1]:
     for z in [2.14,2.70]:

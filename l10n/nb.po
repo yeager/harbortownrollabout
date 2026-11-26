@@ -982,8 +982,8 @@ msgstr "Klassisk moped"
 msgid "Volva L91 wheel loader"
 msgstr "Volva L91 (Hjullaster)"
 
-msgid "Tracked excavator"
-msgstr "Beltegraver"
+msgid "Volva HT-16 tracked excavator"
+msgstr "Volva HT-16 (Beltegraver)"
 
 msgid "Tram"
 msgstr "Trikk"

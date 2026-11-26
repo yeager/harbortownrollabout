@@ -230,6 +230,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
 - [ ] [`volvo240.glb`](../vehicles/volvo240.glb)
   - Volva 241 fick ett upphöjt modellemblem på bakluckan och ett eget V-emblem i grillen. Båda granskades i Godot och fordonsprovet passerade.
 - [ ] [`volvo_ec950f.glb`](../vehicles/volvo_ec950f.glb)
+  - Volva HT-16 fick Volvas V-emblem på motvikten och nytt namn i fordonsgalleriet. Emblemet granskades i Godot. Fordonsprovet, grävarens sparprov och språkkontrollen passerade.
 - [ ] [`volvo_wheel_loader.glb`](../vehicles/volvo_wheel_loader.glb)
   - Volva L91 fick V-emblem på kylargallret, upphöjda modellskyltar på sidorna och nytt namn i fordonsgalleriet. Bakemblemet och den högra modellskylten granskades i Godot. Fordonsprovet och språkkontrollen passerade.
 - [ ] [`volvo_xc60_polis.glb`](../vehicles/volvo_xc60_polis.glb)

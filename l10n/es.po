@@ -988,8 +988,8 @@ msgstr "Ciclomotor clásico"
 msgid "Volva L91 wheel loader"
 msgstr "Volva L91 (Pala cargadora)"
 
-msgid "Tracked excavator"
-msgstr "Excavadora de orugas"
+msgid "Volva HT-16 tracked excavator"
+msgstr "Volva HT-16 (Excavadora de orugas)"
 
 msgid "Tram"
 msgstr "Tranvía"

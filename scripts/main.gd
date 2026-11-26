@@ -226,7 +226,7 @@ var boom_lifts: Array[LiftCylinder] = [LiftCylinder.new(), LiftCylinder.new()]
 var stick_cylinder := LiftCylinder.new()
 var bucket_cylinder := LiftCylinder.new()
 var bucket_profile := PackedVector2Array()
-const EXTRA_GALLERY_NAMES := ["Tracked excavator", "Tram", "Motorboat"]
+const EXTRA_GALLERY_NAMES := ["Volva HT-16 tracked excavator", "Tram", "Motorboat"]
 var start_in_excavator := false
 var crawler_speed := 0.0
 var operating_excavator := false
@@ -392,7 +392,7 @@ var traffic_volume_slider := HSlider.new()
 const GALLERY_GROUPS := {
 	"All vehicles": [],
 	"Emergency vehicles": ["Ambulance", "Police car", "Volva HT-6 police SUV", "Fire engine"],
-	"Work vehicles": ["Farm tractor", "Garbage truck", "Recovery truck", "Volva L91 wheel loader", "Tracked excavator", "Ride-on mower", "Ice cream van", "Food truck", "DAM pickup"],
+	"Work vehicles": ["Farm tractor", "Garbage truck", "Recovery truck", "Volva L91 wheel loader", "Volva HT-16 tracked excavator", "Ride-on mower", "Ice cream van", "Food truck", "DAM pickup"],
 	"Cars": ["BMV X5i", "BMV M3 E33", "Volva 241", "Saav 97", "Teslo Model Z", "Porsje GT5RS", "Mino Kuper S", "Classic cruiser", "A-tractor", "Audo Sport Kvattro"],
 	"Passenger transport": ["City bus", "Tram", "Taxi"],
 	"Leisure vehicles": ["Monster truck", "Classic moped", "Snowmobile", "Shopping trike", "Motorboat"]

@@ -933,7 +933,7 @@ msgstr ""
 msgid "Volva L91 wheel loader"
 msgstr ""
 
-msgid "Tracked excavator"
+msgid "Volva HT-16 tracked excavator"
 msgstr ""
 
 msgid "Tram"
