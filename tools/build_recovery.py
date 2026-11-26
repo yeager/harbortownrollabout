@@ -39,6 +39,19 @@ box("Headboard crossbeam",(0,-.62,2.18),(2.34,.16,.18),PAINT_RED)
 cylinder("Winch drum",(0,-.46,1.49),.19,.70,METAL,True,32,root)
 for i in range(12):
     cylinder("Wound cable",(i*.048-.27,-.46,1.49),.20,.025,DARK,True,24,root)
+for side in (-1,1):
+    x = side*.393
+    box("Winch pedestal foot",(x,-.46,1.262),(.236,.34,.054),PAINT_RED)
+    box("Winch bearing pedestal",(x,-.46,1.393),(.094,.26,.24),PAINT_RED)
+    cylinder("Winch bearing cap",(side*.449,-.46,1.49),.093,.043,METAL,True,24,root)
+    cylinder("Winch axle end",(side*.477,-.46,1.49),.044,.024,DARK,True,16,root)
+    for y in (-.575,-.345):
+        cylinder("Winch foot bolt",(side*.465,y,1.299),.019,.019,METAL,False,6,root)
+box("Cable guide saddle",(0,-.205,1.289),(.324,.15,.095),PAINT_RED)
+for z in (1.335,1.429):
+    cylinder("Cable guide roller",(0,-.185,z),.026,.25,METAL,True,24,root)
+for x in (-.143,.143):
+    box("Cable guide cheek",(x,-.185,1.384),(.038,.092,.145),DARK)
 box("Wheel lift",(0,3.68,.58),(.32,1.05,.18),DARK)
 box("Wheel lift crossbar",(0,4.08,.51),(1.71,.17,.15),METAL)
 for side in [-1, 1]:

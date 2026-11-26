@@ -189,6 +189,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Bakdörrens handtag fick separata fästen och en låscylinder med nyckelspår. Registreringsskylten fick två armaturhus med diffusorer. Detaljerna granskades i Godot. Ambulansintaget och utryckningsprovet passerade.
 - [ ] [`ambulance_helicopter.glb`](../vehicles/ambulance_helicopter.glb)
 - [ ] [`bargare.glb`](../vehicles/bargare.glb)
+  - Vinschen fick bultade lagerbockar med axeländar och en vajerstyrning med två rullar. Granskat på flaket i Godot. Bärgningsprovet passerade.
 - [ ] [`bmw_x5_m60i.glb`](../vehicles/bmw_x5_m60i.glb)
   - BMV X5i har egna diagonaldelade emaljemblem i turkost och vitt på motorhuven och bakluckan. Samma emblem används på de två trafikvarianterna. Granskat framifrån och bakifrån i Godot. Fordonsprovet, övningskörningen, trafikens blinkers och språkkontrollen passerade.
 - [ ] [`brandbil.glb`](../vehicles/brandbil.glb)
