@@ -29,7 +29,7 @@ Choose **Practice driving** on the main menu to start in a marked driving-school
 
 On snowy roads, a sharp turn above about 22 km/h can make a vehicle slide sideways and leave tyre marks. Ease off and straighten the wheel to regain grip. Ploughed lanes also give the tyres more grip. Drive the farm tractor forward in winter snow to plough and spread grit and salt. Other vehicles get extra grip on the treated strip. Use the **Spreader on/off** button to keep ploughing without spreading. To toggle the spreader with **7** on the main keyboard or number pad, enable the numbered vehicle shortcuts under **Settings → Driving**.
 
-At a traffic light, stop on red, slow down on orange and go on green. By default, the game helps you stop at the line. If you enable **Allow driving through red lights** in Driving settings, crossing on red brings up a reminder. If a police car is nearby, it stops you at the line for three seconds. If you stay stopped after the light turns green, cars queued directly behind you may honk until you move.
+At a traffic light, stop on red, slow down on orange and go on green. By default, the game helps you stop at the line. If you enable **Allow driving through red lights** in Driving settings, crossing on red brings up a reminder. If a police car is nearby, it stops you at the line for up to three seconds or until the light turns green. If you stay stopped after the light turns green, cars queued directly behind you may honk until you move.
 
 Turn indicators come on automatically as you steer. Look for blue **P** signs on Stationsallén, Norra kajgatan and Södra kajgatan, then park parallel to the kerb with the whole vehicle inside a white box.
 

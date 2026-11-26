@@ -444,6 +444,7 @@ var allow_crashes := true
 var show_turn_street := false
 var allow_red_lights := false
 var police_stop_left := 0.0
+var police_stop_reversing := false
 var waited_at_red := false
 var waiting_after_green := false
 const A_TRACTOR := 18
@@ -1469,10 +1470,15 @@ func _road_coverage() -> Vector2:
 func _drive(delta: float) -> void:
 	if shopper_boarding: return
 	if police_stop_left > 0.0:
-		police_stop_left = maxf(0.0, police_stop_left - delta)
-		speed = 0.0
-		if player_brake_lens: _set_rear_lights(player_brake_lens, true)
-		return
+		var facing := ambulance.basis.z if police_stop_reversing else -ambulance.basis.z
+		var reach := rear_reach if police_stop_reversing else front_reach
+		var signal_gap := street_signals.red_clearance(ambulance.position, facing, reach, false, true)
+		if signal_gap <= 1.0:
+			police_stop_left = maxf(0.0, police_stop_left - delta)
+			speed = 0.0
+			if player_brake_lens: _set_rear_lights(player_brake_lens, true)
+			return
+		police_stop_left = 0.0
 	var throttle := Input.get_axis("ui_down", "ui_up")
 	var steer_input := Input.get_axis("ui_left", "ui_right")
 	if is_zero_approx(steer_input): steer_input = mouse_steering
@@ -1783,6 +1789,7 @@ func _drive(delta: float) -> void:
 			if not patrol.is_empty():
 				pos = previous_pose.origin + travel_direction * maxf(0.0, red_gap - .04)
 				pos.y = _surface_height(pos.x, pos.z)
+				police_stop_reversing = speed < 0.0
 				speed = 0.0
 				police_stop_left = 3.0
 				patrol.horn.play()

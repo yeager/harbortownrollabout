@@ -160,5 +160,11 @@ func check_response() -> void:
 		printerr("Player could drive during the police stop")
 		quit(1)
 		return
+	game.street_signals.phase = 0
+	game._drive(.1)
+	if game.police_stop_left != 0.0 or game.ambulance.position.x <= stopped_at.x:
+		printerr("Player remained stopped when the light turned green")
+		quit(1)
+		return
 	print("A-tractor speed, repeated horn at green and nearby police stop verified.")
 	quit()
