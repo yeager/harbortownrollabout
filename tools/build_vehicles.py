@@ -601,13 +601,20 @@ def make_ambulance():
     rear_text("Bakre ambulansmärkning","AMBULANS",0,3.115,1.52,.255,POLICE_BLUE)
     rear_text("Enhetsnummer bak","3 26-9310",0,3.106,2.405,.128,PAINT_GREEN)
     rear_panel("Infällt dörrgrepp",-.117,3.124,1.355,.142,.085,.024,seal)
+    for x in (-.155,-.069):
+        box("Låsspakens infästning",(x,3.134,1.359),(.024,.027,.034),seal,.006)
     box("Låsspak",(-.112,3.141,1.359),(.090,.029,.024),METAL,.009)
+    lock=cylinder("Låscylinder bak",(-.116,3.132,1.327),.010,.012,METAL,False,16,root)
+    lock.rotation_euler.x=math.pi/2
+    box("Nyckelspår bak",(-.116,3.139,1.327),(.010,.003,.0025),BLACK,.001)
     # Mount the plate on one leaf so the centre seam stays clear.
     rear_panel("Skylthållare",.413,3.124,.795,.47,.117,.012,seal)
     rear_panel("Registreringsskylt bak",.413,3.128,.795,.453,.103,.009,PAINT_WHITE)
     rear_panel("Blått landsfält",.614,3.132,.795,.042,.099,.004,POLICE_BLUE)
     rear_text("Registreringsnummer ambulans","AXL 310",.392,3.129,.768,.081,BLACK)
-    box("Skyltbelysning",(.413,3.135,.884),(.185,.055,.029),DARK,.008)
+    for x in (.283,.543):
+        box("Skyltbelysningens hus",(x,3.134,.884),(.080,.048,.025),DARK,.006)
+        box("Skyltbelysningens diffusor",(x,3.141,.870),(.058,.028,.007),GLASS_HI,.003)
     box("Laststeg",(0,3.147,.502),(2.14,.244,.105),DARK,.034)
     for i in range(3):
         box("Halkskydd",(0,3.08+i*.069,.558),(1.99,.025,.009),RUBBER,.003)

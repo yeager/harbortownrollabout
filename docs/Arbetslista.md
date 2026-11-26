@@ -186,6 +186,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
 
 - [ ] [`a_traktor.glb`](../vehicles/a_traktor.glb)
 - [ ] [`ambulance.glb`](../vehicles/ambulance.glb)
+  - Bakdörrens handtag fick separata fästen och en låscylinder med nyckelspår. Registreringsskylten fick två armaturhus med diffusorer. Detaljerna granskades i Godot. Ambulansintaget och utryckningsprovet passerade.
 - [ ] [`ambulance_helicopter.glb`](../vehicles/ambulance_helicopter.glb)
 - [ ] [`bargare.glb`](../vehicles/bargare.glb)
 - [ ] [`bmw_x5_m60i.glb`](../vehicles/bmw_x5_m60i.glb)
