@@ -153,6 +153,22 @@ def build():
     for i in range(1,9):
         point = Vector(bottom_rear).lerp(Vector(top_rear),i/10)
         bar("Rear window heating trace",(-point.x+.035,point.y-.004,point.z-.008),(point.x-.035,point.y-.004,point.z-.008),.0015,.0018,trim)
+    hatch_normal = Vector((0, .442, .84)).normalized()
+    lower_glass = Vector((0, bottom_rear[1], bottom_rear[2]))
+    upper_glass = Vector((0, top_rear[1], top_rear[2]))
+    pivot = lower_glass.lerp(upper_glass, .03) + Vector((.12, 0, 0))
+    spindle = cylinder("Rear wiper spindle cap", pivot + hatch_normal * .010,
+                       .024, .022, trim, axis_x=False, vertices=24, root=root)
+    spindle.rotation_euler = hatch_normal.to_track_quat('Z', 'Y').to_euler()
+    blade_mount = lower_glass.lerp(upper_glass, .22) + Vector((-.19, 0, 0))
+    bar("Rear wiper arm", pivot + hatch_normal * .024,
+        blade_mount + hatch_normal * .019, .018, .013, trim)
+    blade_start = blade_mount + Vector((-.18, 0, 0))
+    blade_end = blade_mount + Vector((.18, 0, 0))
+    bar("Rear wiper blade carrier", blade_start + hatch_normal * .013,
+        blade_end + hatch_normal * .013, .014, .011, trim)
+    bar("Rear wiper rubber edge", blade_start + hatch_normal * .006,
+        blade_end + hatch_normal * .006, .007, .006, rubber)
     mesh_from_rings("Painted roof skin", [
         (-.174,.65,1.299,1.311,1.326),(-.07,.661,1.305,1.317,1.343),
         (.58,.658,1.306,1.319,1.345),(.688,.647,1.296,1.31,1.328),
