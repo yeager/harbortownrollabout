@@ -275,14 +275,18 @@ for side in (-1,1):
 for side in (-1, 1):
     vertices = []
     faces = []
-    for step in range(25):
-        angle = math.radians(-12 + step * 204 / 24)
-        for x, radius in ((.29,.29), (.49,.29), (.54,.274), (.54,.249)):
+    arch_profile = ((.29,.285),(.31,.290),(.47,.291),(.500,.288),
+                    (.524,.282),(.539,.272),(.544,.261),(.541,.252),
+                    (.534,.249),(.525,.251))
+    strips = len(arch_profile)
+    for step in range(49):
+        angle = math.radians(-12 + step * 204 / 48)
+        for x, radius in arch_profile:
             vertices.append((side*x, -.72-radius*math.cos(angle), .227+radius*math.sin(angle)))
         if step:
-            for strip in range(3):
-                i = (step-1)*4+strip
-                face = (i,i+1,i+5,i+4)
+            for strip in range(strips-1):
+                i = (step-1)*strips+strip
+                face = (i,i+1,i+strips+1,i+strips)
                 faces.append(face if side > 0 else face[::-1])
     mesh = bpy.data.meshes.new("Rolled wheel arch")
     mesh.from_pydata(vertices, [], faces)
@@ -293,7 +297,11 @@ for side in (-1, 1):
     for face in mesh.polygons:
         face.use_smooth = True
     shell = arch.modifiers.new("Pressed lip", 'SOLIDIFY')
-    shell.thickness = .006
+    shell.thickness = .004
+    edge = arch.modifiers.new("Rounded cut ends", 'BEVEL')
+    edge.width = .002
+    edge.segments = 3
+
 def wheel_surface(name, center, profile, material, side=1, *, tread=False):
     segments = 192 if tread else 48
     vertices = []
