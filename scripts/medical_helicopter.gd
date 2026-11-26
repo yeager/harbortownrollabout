@@ -15,6 +15,7 @@ var main_rotor: Node3D
 var tail_rotor: Node3D
 var rotor_blur: Array[MeshInstance3D] = []
 var landing_lights: Array[SpotLight3D] = []
+var landing_lens_finish: StandardMaterial3D
 var rotor_audio := AudioStreamPlayer3D.new()
 
 
@@ -27,6 +28,9 @@ func configure(landing_center: Vector3) -> void:
 	tail_rotor = aircraft.find_child("TailRotor", true, false) as Node3D
 	rotor_blur = [RotorMotion.fit(main_rotor, 4.955, 5, false, true), RotorMotion.fit(tail_rotor, .515, 9, true)]
 	for lens: MeshInstance3D in aircraft.find_children("Landing lamp lens*", "MeshInstance3D", true, false):
+		if not landing_lens_finish:
+			landing_lens_finish = lens.get_active_material(0).duplicate() as StandardMaterial3D
+		lens.material_override = landing_lens_finish
 		var light := SpotLight3D.new()
 		light.name = "Landing light beam"
 		light.position = to_local(lens.global_position)
@@ -84,9 +88,14 @@ func advance(delta: float) -> void:
 		beam = smoothstep(.04, .28, progress)
 	elif phase == 3:
 		beam = 1.0 - smoothstep(0.0, .19, progress)
+		beam += smoothstep(.87, 1.0, progress)
+	elif phase == 4:
+		beam = 1.0 - smoothstep(.35, .70, progress)
 	for light in landing_lights:
 		light.visible = beam > .001
 		light.light_energy = 3.8 * beam
+	if landing_lens_finish:
+		landing_lens_finish.emission_energy_multiplier = 2.0 * beam
 	var track := toward - from
 	var heading := LANDING_YAW if is_zero_approx(Vector2(track.x, track.z).length_squared()) else atan2(track.x, track.z)
 	rotation.y = rotate_toward(rotation.y, heading, delta * .45)

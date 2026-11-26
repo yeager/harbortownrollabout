@@ -57,7 +57,7 @@ func check_landing() -> void:
 	var flight_gain := audio.volume_db
 	var flight_pitch := audio.pitch_scale
 	game._update_patrol(7.0)
-	if aircraft.landing_lights.any(func(light: SpotLight3D): return light.visible):
+	if aircraft.landing_lights.any(func(light: SpotLight3D): return light.visible) or aircraft.landing_lens_finish.emission_energy_multiplier > .001:
 		printerr("The landing beams stayed on after parking")
 		quit(1)
 		return
@@ -84,6 +84,10 @@ func check_landing() -> void:
 	game._update_patrol(7.0)
 	if aircraft.position.y <= pad.y + 8.0 or not is_equal_approx(aircraft.position.z, pad.z):
 		printerr("Aircraft did not depart by climbing over the landing pad")
+		quit(1)
+		return
+	if not aircraft.landing_lights.all(func(light: SpotLight3D): return light.visible) or aircraft.landing_lens_finish.emission_energy_multiplier <= 0.0:
+		printerr("Landing lenses and beams did not light together at takeoff")
 		quit(1)
 		return
 	if not is_equal_approx(audio.pitch_scale, flight_pitch) or not is_equal_approx(audio.volume_db, flight_gain):
