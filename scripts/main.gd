@@ -11844,6 +11844,17 @@ func _build_driving_school() -> void:
 			Vector3(vent_x, 2.37, -3.029), service_color, false, school)
 		_make_box("Rear ventilation recess", Vector3(.66, .385, .016),
 			Vector3(vent_x, 2.37, -3.063), Color("#283438"), false, school)
+		var vent_cap := _make_box("Rear ventilation drip flashing", Vector3(.80, .022, .133),
+			Vector3(vent_x, 2.629, -3.057), Color.WHITE, false, school)
+		vent_cap.rotation.x = -.14
+		vent_cap.material_override = roof_metal
+		for edge in [-1, 1]:
+			_make_box("Rear ventilation edge trim", Vector3(.043, .441, .044),
+				Vector3(vent_x + edge * .353, 2.37, -3.070), Color.WHITE, false, school).material_override = roof_metal
+			for fastener_y in [2.178, 2.562]:
+				_add_moored_round_fitting(school, "Rear ventilation frame fastener",
+					Vector3(vent_x + edge * .353, fastener_y, -3.092),
+					Vector3(vent_x + edge * .353, fastener_y, -3.097), .009, service_hardware)
 		for slat in 5:
 			var louvre := _make_box("Rear ventilation louvre", Vector3(.665, .034, .046),
 				Vector3(vent_x, 2.229 + slat * .071, -3.081), service_color, false, school)
