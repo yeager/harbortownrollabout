@@ -161,8 +161,12 @@ func _build_intake(world: Node3D) -> void:
 	world._make_box("Intake signage fascia", Vector3(9.13, .75, .14), Vector3(0, 4.27, 7.04), METAL, false, self)
 	var intake: Label3D = world._station_sign("Ambulance intake", Vector3(.27, 4.30, 7.12), .0115, Color("#fff6e5"), 0, self)
 	world._size_world_sign(intake, 6.65)
-	for size in [Vector3(.49, .13, .055), Vector3(.13, .49, .055)]:
-		world._make_box("Intake medical cross", size, Vector3(-3.24, 4.30, 7.13), Color("#72c6b3"), false, self)
+	var cross_center := Vector3(-3.24, 4.30, 7.13)
+	var cross_color := Color("#72c6b3")
+	world._make_box("Intake crossbar", Vector3(.49, .13, .055), cross_center, cross_color, false, self)
+	for side in [-1.0, 1.0]:
+		world._make_box("Intake cross upright", Vector3(.13, .18, .055),
+			cross_center + Vector3.UP * side * .155, cross_color, false, self)
 	for section in 5:
 		world._make_box("Raised door section", Vector3(7.98, .08, .206),
 			Vector3(0, 3.99, 5.82 + section * .218), Color("#a5acab"), false, self)
