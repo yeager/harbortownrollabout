@@ -201,6 +201,16 @@ func _build_intake(world: Node3D) -> void:
 		Vector3(2.61, 1.235, .13), METAL, false, self)
 	world._make_box("Staff door meeting rail", Vector3(.026, 2.31, .035),
 		Vector3(2.61, 1.22, .218), TRIM, false, self)
+	var brushed_metal := Color("#9aa4a6")
+	for side in [-1.0, 1.0]:
+		world._make_box("Transfer door kick plate", Vector3(.88, .32, .018),
+			Vector3(2.61 + side * .50, .24, .207), brushed_metal, false, self)
+		var handle_x: float = 2.61 + side * .19
+		for height in [.94, 1.20]:
+			world._make_box("Transfer door handle bracket", Vector3(.048, .048, .075),
+				Vector3(handle_x, height, .235), brushed_metal, false, self)
+		world._make_box("Transfer door pull handle", Vector3(.039, .30, .038),
+			Vector3(handle_x, 1.07, .279), brushed_metal, false, self)
 	var transfer_sign: MeshInstance3D = world._make_box("Patient handover signboard", Vector3(2.22, .38, .09),
 		Vector3(2.61, 2.79, .11), METAL, false, self)
 	var transfer_label: Label3D = world._station_sign("Patient handover", Vector3(0, 0, .051),

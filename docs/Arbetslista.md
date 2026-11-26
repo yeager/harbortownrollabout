@@ -186,6 +186,7 @@ Fordonsgranskningen börjar med exteriörerna. Bilarnas tillverkarnamn, modellna
   - Skyltens kors lyser när det mörknar. Dags- och nattläget kontrollerades i Godot 4.7 dev5 och ambulansprovet passerade.
   - En gul körpil på infarten visar färdriktningen in i ambulansintaget. Granskad från Östra allén i Godot 4.7 dev5. Ambulansprovet passerade.
   - Dörrarna för patientöverlämning fick en lokaliserad skylt. Skyltprovet kontrollerade alla sju språk, och ambulansprovet passerade i Godot 4.7 dev5.
+  - Patientdörrarna fick sparkplåtar och draghandtag i metall. Granskat i närbild. Ambulansprovet verifierade överlämningen och att vårdbyggnaden är stängd.
 
 - [x] Helikopterplattans tolv gröna kantljus fick låga koniska armaturhus och separata linser. Granskat i nattläge i Godot. Ambulanshelikopterns landningsprov passerade. Sjukhustaket och plattan fick vädermaterial. Plattan får ett tunnare snötäcke så att H och kantmarkeringen syns. Vintervyn granskades i Godot och landningsprovet passerade. En vindstrut på sjukhustaket följer vädrets vindriktning. Granskad i Godot.
 
