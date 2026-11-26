@@ -7715,10 +7715,24 @@ func _build_courier_delivery() -> void:
 	courier.position = Vector3(shops.storefront_x(0)+2.6,0,40.4)
 	courier.rotation.y = PI*.5
 	courier.add_child(preload("res://environment/cyklist.glb").instantiate())
+	_make_box("Courier bicycle rack", Vector3(.30, .034, .38),
+		Vector3(0, .963, -.64), Color("#343d41"), false, courier)
+	for side in [-1, 1]:
+		_tube_between(courier, Vector3(side * .12, .56, -.61),
+			Vector3(side * .13, .95, -.73), .013, _material(Color("#50595c"), .49))
 	add_child(courier_parcel)
 	_make_box("Courier parcel",Vector3(.38,.25,.28),Vector3.UP*.125,Color("#ca9862"),false,courier_parcel)
 	for x in [-.09,.09]:
 		_make_box("Parcel stripe",Vector3(.045,.252,.282),Vector3(x,.125,0),Color("#295870"),false,courier_parcel)
+	_make_box("Parcel flap seam", Vector3(.372, .002, .009),
+		Vector3(0, .252, .005), Color("#9b6d46"), false, courier_parcel)
+	_make_box("Parcel packing tape", Vector3(.376, .002, .054),
+		Vector3(0, .255, .005), Color("#b7854d"), false, courier_parcel)
+	_make_box("Parcel address label", Vector3(.108, .003, .069),
+		Vector3(-.036, .258, -.079), Color("#f0e9d5"), false, courier_parcel)
+	for row in 3:
+		_make_box("Parcel label print", Vector3(.072 - row * .013, .001, .004),
+			Vector3(-.047, .260, -.098 + row * .012), Color("#455256"), false, courier_parcel)
 
 func _place_courier_parcel() -> void:
 	if not courier_parcel.is_inside_tree(): return
@@ -7729,7 +7743,7 @@ func _place_courier_parcel() -> void:
 		pos = Vector3(0,.98,-.38)
 	elif courier_stage == FootQuest.FINISHED:
 		holder = courier
-		pos = Vector3(0,.72,-.64)
+		pos = Vector3(0,.98,-.64)
 	if courier_parcel.get_parent() != holder: courier_parcel.reparent(holder,false)
 	courier_parcel.position = pos
 

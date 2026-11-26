@@ -453,6 +453,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Täckstenarna samlar snö på ovansidan och fogarna syns även i vinterläget. Granskat vid nordöstra hörnet. Stadsgräns- och väderproven passerade.
   - Graniten fick en svagt grön beläggning vid kanalens vattenlinje. Granskat från vattennivå. Stadsgränsprovet passerade.
 - [ ] Uppdragsrekvisitan för cykelbud, födelsedag och upphittat paraply
+  - Cykelbudets paket fick kartongskarv, packtejp och adressetikett. Efter leverans vilar det på en pakethållare ovanför hjulet. Hämtning, bärande och överlämning provades i Godot och pakethållaren granskades i närbild.
 - [ ] Tvärbanans perrong, väderskydd och övriga hållplatsdetaljer
   - Kontaktledningsstolparna fick fotplattor, stag och isolatorer. Granskat vid Västra torget i Godot efter godkänt spårvagnsprov.
   - Spårvagnens strömavtagare fick isolerade takfästen, ledaxlar och dubbla kolslitskenor. Granskat i närbild i Godot och spårvagnsprovet passerade.
