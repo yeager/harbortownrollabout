@@ -559,6 +559,21 @@ v.profile_loft("Tail lamp fluted lens",tail_lens_sections,v.TAIL_LAMP,root)
 for side in (-1,1):
     box("Rear indicator housing",(side*.237,1.157,.423),(.099,.037,.057),v.DARK,.009)
     box("Rear indicator lens",(side*.237,1.18,.423),(.088,.018,.047),amber,.008)
+box("Rear registration bracket",(0,1.162,.342),(.242,.015,.077),v.DARK,.006)
+box("Rear registration plate",(0,1.171,.342),(.231,.007,.068),v.PAINT_WHITE,.005)
+box("Registration blue field",(.098,1.175,.342),(.025,.002,.057),v.POLICE_BLUE,.002)
+for name, value, x, z, size, finish in (
+    ("Registration characters","SHP 073",-.012,.331,.030,v.BLACK),
+    ("Registration country letter","S",.098,.321,.014,v.PAINT_WHITE),
+):
+    glyph = v.text_obj(name,value,(x,1.178,z),size,finish,root=root,flat=True)
+    glyph.rotation_euler = (math.pi/2,0,math.pi)
+    glyph.location.x += (min(vertex.co.x for vertex in glyph.data.vertices) +
+                         max(vertex.co.x for vertex in glyph.data.vertices)) / 2
+for x in (-.106,.106):
+    screw = v.cylinder("Registration mounting screw",(x,1.177,.364),
+                       .003,.003,v.METAL,False,12,root)
+    screw.rotation_euler.x = math.pi/2
 badge = v.text_obj("Norrsjö Shoppa rear badge", "NORRSJÖ SHOPPA",
                    (0,1.163,.476), .026, v.METAL, root=root)
 badge.rotation_euler = (math.pi/2,0,math.pi)
