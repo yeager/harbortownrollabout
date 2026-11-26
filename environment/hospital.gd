@@ -258,6 +258,12 @@ func _build_intake(world: Node3D) -> void:
 	for section in 5:
 		world._make_box("Raised door section", Vector3(7.98, .08, .206),
 			Vector3(0, 3.99, 5.82 + section * .218), Color("#a5acab"), false, self)
+	var hinges: Array[Transform3D] = []
+	for joint in 4:
+		for hinge_x in [-3.70, -1.23, 1.23, 3.70]:
+			hinges.append(Transform3D(Basis.IDENTITY, Vector3(hinge_x, 3.941, 5.929 + joint * .218)))
+	_box_batch("Raised door hinge plates", Vector3(.082, .024, .135), Vector3.ZERO,
+		world._material(Color("#5e696a"), .48), hinges)
 	world._make_box("Door bottom seal", Vector3(8, .042, .065),
 		Vector3(0, 3.938, 6.72), METAL, false, self)
 	for side in [-1.0, 1.0]:
