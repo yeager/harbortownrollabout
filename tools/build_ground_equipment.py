@@ -143,7 +143,10 @@ for f in mesh.polygons: f.use_smooth=True
 box("Rubber cutting edge",(0,-.233,.106),(3.07,.073,.16),rubber,.015)
 box("Lip",(0,-.035,.89),(3.08,.078,.057),paint)
 for i in range(13):
-    disc("Cutting edge bolt",(-1.44+i*.24,-.279,.16),.017,.017,steel,(0,1,0))
+    disc("Cutting edge washer",(-1.44+i*.24,-.287,.16),.023,.008,frame,(0,1,0))
+    disc("Cutting edge bolt",(-1.44+i*.24,-.296,.16),.016,.016,steel,(0,1,0))
+for x in (-1.02,0,1.02):
+    box("Cutting edge clamp strip",(x,-.272,.16),(1.013,.025,.058),steel,.007)
 for x in (-.37,.37):
     rod("Mounting arm",(x,.02,.35),(x,.72,.64),.066,frame)
     rod("Hydraulic ram",(x,.05,.64),(x,.64,.52),.043,steel)
