@@ -243,6 +243,9 @@ def build(key, length, width, axles, color, belt, cabin):
             box("Headlamp pocket",x,-end-.029,.657,.359,.103,.237,RUBBER,.027)
             box("Headlamp bright surround",x,-end-.084,.657,.318,.032,.204,METAL,.020)
             box("Headlamp lens",x,-end-.105,.657,.281,.024,.169,HEADLAMP,.016)
+            box("Front indicator housing",x,-end-.058,.492,.225,.092,.075,RUBBER,.012)
+            box("Front indicator bezel",x,-end-.108,.492,.205,.024,.059,METAL,.007)
+            box("Front amber indicator",x,-end-.125,.492,.184,.020,.045,amber,.006)
         else:
             box("Headlamp",side*width*.68,-end-.02,belt*.72,width*.40,.065,.10 if key=="model_s" else .18,HEADLAMP)
         if key=="volvo240":
@@ -258,6 +261,12 @@ def build(key, length, width, axles, color, belt, cabin):
             for x,w,finish in [(.399,.105,clear_lens),(.544,.175,RED_LAMP),(.715,.151,amber)]:
                 box("Rear lamp upper lens",side*x,end+.062,.755,w,.032,.075,finish,.007)
             box("Rear lamp stop lens",side*.57,end+.062,.661,.443,.032,.088,RED_LAMP,.009)
+        elif key == "saab96":
+            x = side*.538
+            box("Rear combination lamp housing",x,end+.027,.657,.284,.104,.163,RUBBER,.018)
+            box("Rear lamp bezel",x,end+.083,.657,.260,.032,.139,METAL,.012)
+            box("Ruby tail lens",x-side*.039,end+.105,.657,.146,.022,.112,RED_LAMP,.009)
+            box("Rear indicator lens",x+side*.081,end+.105,.657,.079,.022,.112,amber,.008)
         else:
             box("Ruby tail lens",side*width*.66,end+.025,belt*.73,width*.44,.07,.12,RED_LAMP)
             box("Amber lens",side*width*.84,end+.03,belt*.75,.07,.07,.09,amber)

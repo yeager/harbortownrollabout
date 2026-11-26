@@ -55,6 +55,14 @@ func check_gallery() -> void:
 			printerr("Turning right did not light only the right side of ", tile.text)
 			quit(1)
 			return
+		if tile.text == "Saav 97":
+			for lamps in [signals.left, signals.right]:
+				var names: Array = lamps.map(func(lamp: MeshInstance3D): return String(lamp.get_parent().name))
+				for prefix in ["Front amber indicator", "Rear indicator lens"]:
+					if not names.any(func(lens_name: String): return lens_name.begins_with(prefix)):
+						printerr("A Saav indicator is missing its modeled lens")
+						quit(1)
+						return
 		if index == game.DAM_PICKUP:
 			if game.player_wheels.size() != 4 or game.front_knuckles.size() != 2 or game.rear_tire_contacts.size() != 2:
 				printerr("DAM pickup axle layout is incomplete")
