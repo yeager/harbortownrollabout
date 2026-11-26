@@ -371,6 +371,11 @@ flap = box("Rear mud flap", (0,1.147,.203), (.216,.018,.211), v.RUBBER, .008)
 flap.rotation_euler.x = math.radians(13)
 box("Mud flap retaining strip", (0,1.132,.293), (.215,.025,.028), v.METAL, .004)
 box("Tail lamp",(0,1.16,.43),(.14,.035,.06),v.TAIL_LAMP)
+badge = v.text_obj("Norrsjö Shoppa rear badge", "NORRSJÖ SHOPPA",
+                   (0,1.163,.476), .026, v.METAL, root=root)
+badge.rotation_euler = (math.pi/2,0,math.pi)
+badge.location.x = (min(vertex.co.x for vertex in badge.data.vertices) +
+                    max(vertex.co.x for vertex in badge.data.vertices)) / 2
 v.export_vehicle(root,"shopping_trike.glb")
 if os.getenv("SHOPPER_PORTRAIT"):
     scene=bpy.context.scene

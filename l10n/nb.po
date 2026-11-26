@@ -1551,8 +1551,8 @@ msgstr "Lever gjenvinningsavfallet i småbåthavna"
 msgid "Return to your garbage truck"
 msgstr "Gå tilbake til søppelbilen"
 
-msgid "Shopping trike"
-msgstr "Handlemoped"
+msgid "Norrsjö Shoppa"
+msgstr "Norrsjö Shoppa"
 
 msgid "Hot dog stand"
 msgstr "Pølsebod"

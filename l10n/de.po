@@ -1568,8 +1568,8 @@ msgstr "Lade das Wertstoffgut am Hafen ab"
 msgid "Return to your garbage truck"
 msgstr "Geh zurück zum Müllwagen"
 
-msgid "Shopping trike"
-msgstr "Einkaufsdreirad"
+msgid "Norrsjö Shoppa"
+msgstr "Norrsjö Shoppa"
 
 msgid "Hot dog stand"
 msgstr "Würstchenbude"

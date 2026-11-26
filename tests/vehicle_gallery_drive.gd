@@ -117,6 +117,10 @@ func check_gallery() -> void:
 					quit(1)
 					return
 		if index == game.SHOPPER:
+			if tile.text != "Norrsjö Shoppa" or not game.vehicle_model.find_child("Norrsjö Shoppa rear badge", true, false):
+				printerr("The shopping trike needs its fictional name in the gallery and on the body")
+				quit(1)
+				return
 			var mat := game.vehicle_model.find_child("Rubber foot mat*",true,false) as MeshInstance3D
 			if mat == null:
 				printerr("Shopping trike has no foot mat")

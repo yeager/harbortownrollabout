@@ -1566,8 +1566,8 @@ msgstr "Dépose les déchets recyclables au port"
 msgid "Return to your garbage truck"
 msgstr "Retourne au camion-poubelle"
 
-msgid "Shopping trike"
-msgstr "Tricycle de courses"
+msgid "Norrsjö Shoppa"
+msgstr "Norrsjö Shoppa"
 
 msgid "Hot dog stand"
 msgstr "Kiosque à hot-dogs"

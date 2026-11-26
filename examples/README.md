@@ -35,7 +35,7 @@ In-game renders from Harbor Town Rollabout. Select a vehicle to open its full-si
 - [Recovery truck](recovery-truck.jpg)
 - [Ride on mower](ride-on-mower.jpg)
   · [Cutting the picnic meadow](ride-on-mower-cutting.jpg)
-- [Shopping trike](shopping-trike.jpg)
+- [Norrsjö Shoppa](shopping-trike.jpg)
 - [Silver traffic sedan](silver-traffic-sedan.jpg)
 - [Small convertible](small-convertible.jpg)
 - [Snowmobile](snowmobile.jpg)

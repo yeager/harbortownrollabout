@@ -1480,7 +1480,7 @@ msgstr ""
 msgid "Return to your garbage truck"
 msgstr ""
 
-msgid "Shopping trike"
+msgid "Norrsjö Shoppa"
 msgstr ""
 
 msgid "Hot dog stand"

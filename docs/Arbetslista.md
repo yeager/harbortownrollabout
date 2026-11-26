@@ -273,6 +273,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Båda baklyktorna fick vita backljus under de röda och bärnstensfärgade fälten. Granskat under backning i Godot. Fordonsprovet verifierade att båda är släckta vid bromsning och tänds vid backning.
   - Bakrutan fick åtta synliga värmetrådar, anslutningsskenor och tätningar längs över- och nederkanten. Granskat bakifrån i Godot. Fordonsprovet passerade.
 - [ ] [`shopping_trike.glb`](../vehicles/shopping_trike.glb)
+  - Shoppingtrehjulingen heter Norrsjö Shoppa i fordonsgalleriet på alla sju språk. De upphöjda märkesbokstäverna ovanför baklyktan granskades i Godot. Språkkontrollen och fordonsprovet passerade.
 - [ ] [`snowmobile.glb`](../vehicles/snowmobile.glb)
 - [ ] [`sport_quattro.glb`](../vehicles/sport_quattro.glb)
   - Fordonsprovet kontrollerar att galleriet visar Audo Sport Kvattro, att bakluckan har Kvattro-emblemet och att fronten har fem ringar. Språkkontrollen passerade för alla sex översättningskataloger.

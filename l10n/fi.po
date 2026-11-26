@@ -1547,8 +1547,8 @@ msgstr "Pura kierrätyskuorma venesatamassa"
 msgid "Return to your garbage truck"
 msgstr "Palaa jäteautolle"
 
-msgid "Shopping trike"
-msgstr "Ostosmopo"
+msgid "Norrsjö Shoppa"
+msgstr "Norrsjö Shoppa"
 
 msgid "Hot dog stand"
 msgstr "Nakkikioski"

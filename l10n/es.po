@@ -1558,8 +1558,8 @@ msgstr "Descarga el reciclaje en el puerto"
 msgid "Return to your garbage truck"
 msgstr "Vuelve al camión de basura"
 
-msgid "Shopping trike"
-msgstr "Triciclo de compras"
+msgid "Norrsjö Shoppa"
+msgstr "Norrsjö Shoppa"
 
 msgid "Hot dog stand"
 msgstr "Puesto de perritos"
