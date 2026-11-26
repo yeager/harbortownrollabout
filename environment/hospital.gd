@@ -219,9 +219,29 @@ func _build_helipad(world: Node3D) -> void:
 	var lamp: StandardMaterial3D = world._material(Color("#61dca0"), .32, true)
 	lamp.emission = Color("#27e282")
 	lamp.emission_energy_multiplier = 1.5
+	var lamp_base := CylinderMesh.new()
+	lamp_base.top_radius = .105
+	lamp_base.bottom_radius = .145
+	lamp_base.height = .055
+	lamp_base.radial_segments = 16
+	lamp_base.material = world._material(METAL, .44)
+	var lens := CylinderMesh.new()
+	lens.top_radius = .062
+	lens.bottom_radius = .080
+	lens.height = .041
+	lens.radial_segments = 16
+	lens.material = lamp
 	for index in 12:
 		var angle := TAU * index / 12
-		var pos := center + Vector3(cos(angle) * 8.11, .045, sin(angle) * 8.11)
-		var marker: MeshInstance3D = world._make_box("Helipad green perimeter light", Vector3(.14, .09, .14), pos,
-			Color("#61dca0"), false, self)
-		marker.material_override = lamp
+		var pos := center + Vector3(cos(angle) * 8.11, 0, sin(angle) * 8.11)
+		var housing := MeshInstance3D.new()
+		housing.name = "Helipad light housing"
+		housing.mesh = lamp_base
+		housing.position = pos + Vector3.UP * .0275
+		add_child(housing)
+		var marker := MeshInstance3D.new()
+		marker.name = "Helipad green perimeter light"
+		marker.mesh = lens
+		marker.position = Vector3.UP * .048
+		marker.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+		housing.add_child(marker)
