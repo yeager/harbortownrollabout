@@ -11833,10 +11833,37 @@ func _add_school_car_sign(model: Node3D) -> void:
 		for end in [-1, 1]:
 			_make_box("Roof sign foot bolt", Vector3(.027, .016, .027),
 				Vector3(foot_x, -.018, end * .101), Color("#a2adae"), false, mount)
-	var plate := _make_box("Driving school roof sign",Vector3(.80,.24,.26),Vector3.UP*.134,Color("#ffde62"),false,mount)
-	for side in [-1,1]:
-		var face := _station_sign("Driving school",Vector3(0,0,side*.133),.0018,Color("#253031"),PI if side == -1 else 0.0,plate)
-		_size_world_sign(face,.74)
+	var hull := SurfaceTool.new()
+	hull.begin(Mesh.PRIMITIVE_TRIANGLES)
+	hull.set_smooth_group(-1)
+	hull.set_material(_material(Color("#eac34e"), .54))
+	var perimeter := [
+		Vector3(-.368, 0, .13), Vector3(.368, 0, .13),
+		Vector3(.40, 0, .098), Vector3(.40, 0, -.098),
+		Vector3(.368, 0, -.13), Vector3(-.368, 0, -.13),
+		Vector3(-.40, 0, -.098), Vector3(-.40, 0, .098),
+	]
+	var half_height := Vector3.UP * .12
+	for i in perimeter.size():
+		var corner: Vector3 = perimeter[i]
+		var next: Vector3 = perimeter[(i + 1) % perimeter.size()]
+		for vertex: Vector3 in [corner - half_height, corner + half_height, next - half_height,
+				next - half_height, corner + half_height, next + half_height,
+				half_height, next + half_height, corner + half_height,
+				-half_height, corner - half_height, next - half_height]:
+			hull.add_vertex(vertex)
+	hull.generate_normals()
+	var plate := MeshInstance3D.new()
+	plate.name = "Driving school roof sign"
+	plate.mesh = hull.commit()
+	plate.position.y = .134
+	mount.add_child(plate)
+	for side in [-1, 1]:
+		_make_box("Roof sign face panel", Vector3(.728, .173, .012),
+			Vector3(0, 0, side * .127), Color("#ffde62"), false, plate)
+		var face := _station_sign("Driving school", Vector3(0, 0, side * .135),
+			.0018, Color("#253031"), PI if side == -1 else 0.0, plate)
+		_size_world_sign(face, .692)
 	mount.hide()
 
 func _start_driving_school() -> void:
