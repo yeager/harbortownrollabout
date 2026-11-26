@@ -190,6 +190,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Baklyktorna fick separata lamphus, gummipackningar och röda, vita och orange glas. Granskat i Godot. Fordonsprovet verifierade att båda backljusen tänds vid backning.
   - Frontblinkersen fick separata glas, infattningar och gummipackningar. Granskat i Godot. Fordonsprovet verifierade att rätt sidas modellerade glas blinkar både fram och bak.
   - Strålkastarna fick räfflade glas, metallinfattningar och gummipackningar. Ljuskäglorna utgår från glasens mitt. Granskat i nattläge i Godot och verifierat i fordonsprovet.
+  - Bakre registreringsskylten fick fiktiv registrering, blått sidofält, separat hållare och två armaturer med diffusorer. Granskad bakifrån i Godot. Fordonsprovet passerade.
 - [ ] [`ambulance.glb`](../vehicles/ambulance.glb)
   - Bakdörrens handtag fick separata fästen och en låscylinder med nyckelspår. Registreringsskylten fick två armaturhus med diffusorer. Detaljerna granskades i Godot. Ambulansintaget och utryckningsprovet passerade.
 - [ ] [`ambulance_helicopter.glb`](../vehicles/ambulance_helicopter.glb)

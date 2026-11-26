@@ -8,7 +8,7 @@ from mathutils import Vector
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from build_vehicles import (clear_scene, cube, cylinder, material, mesh_from_rings,
                             export_vehicle, profile_loft, SOURCE_DIR, PAINT_WHITE, GLASS, DARK,
-                            RUBBER, METAL, RED_LAMP)
+                            RUBBER, METAL, RED_LAMP, text_obj)
 
 clear_scene()
 root=bpy.data.objects.new("White A-traktor",None)
@@ -118,7 +118,17 @@ for side in (-1,1):
     box("Bumper bright strip",(side*.54,-2.374,.465),(.63,.017,.024),METAL,.004)
     box("Tailgate hinge",(side*.47,2.195,.631),(.112,.027,.040),METAL,.006)
 box("Tailgate recessed pull",(0,2.197,.874),(.178,.021,.046),DARK,.010)
-box("Rear registration",(0,2.199,.73),(.43,.021,.10),PAINT_WHITE,.008)
+box("Rear registration holder",(0,2.197,.73),(.456,.025,.124),DARK,.008)
+box("Rear registration",(0,2.215,.73),(.43,.017,.10),PAINT_WHITE,.006)
+plate_blue = material("Rear registration blue enamel",(.018,.105,.48),0,.42)
+box("Rear registration blue band",(.195,2.225,.73),(.03,.003,.09),plate_blue,.001)
+registration = text_obj("Rear registration characters","AXL 30A",(.139,2.226,.703),
+                        .071,DARK,root=root,flat=True)
+registration.rotation_euler = (math.pi/2,0,math.pi)
+plate_diffuser = material("Registration lamp diffuser",(.87,.82,.69),0,.35,.45)
+for x in (-.145,.145):
+    box("Registration lamp housing",(x,2.22,.811),(.077,.045,.033),DARK,.005)
+    box("Registration lamp diffuser",(x,2.233,.792),(.059,.027,.008),plate_diffuser,.002)
 rod("Rolled exhaust pipe",(-.65,1.91,.331),(-.65,2.28,.285),.047,METAL)
 rod("Exhaust bore",(-.65,2.277,.285),(-.65,2.286,.284),.035,RUBBER)
 for i in range(-5,6): box("Bed rib",(i*.117,1.515,.747),(.034,1.085,.019),RUBBER,.008)
