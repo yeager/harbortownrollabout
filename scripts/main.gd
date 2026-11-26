@@ -5515,6 +5515,22 @@ func _fit_spreader(model: Node3D) -> void:
 	var enamel := Color("#51843b")
 	var steel := Color("#353b3c")
 	_make_box("Hitch crossmember",Vector3(1.32,.12,.65),Vector3(0,-.10,.36),steel,false,spreader)
+	var hitch_finish := _material(steel, .55)
+	var pin_finish := _material(Color("#a7aca6"), .42)
+	pin_finish.metallic = .65
+	for side in [-1.0,1.0]:
+		var clevis := Vector3(side*.53,-.085,.60)
+		var tractor_joint := Vector3(side*.39,-.16,1.02)
+		_tube_between(spreader, clevis, tractor_joint, .042, hitch_finish)
+		for joint in [clevis,tractor_joint]:
+			_make_box("Lower hitch clevis",Vector3(.085,.11,.12),joint,steel,false,spreader)
+			_tube_between(spreader, joint-Vector3.RIGHT*.064, joint+Vector3.RIGHT*.064,
+				.021, pin_finish)
+	var top_link := Vector3(0,.36,.33)
+	_make_box("Top link bracket",Vector3(.17,.16,.15),top_link,steel,false,spreader)
+	_tube_between(spreader, top_link, Vector3(0,.09,1.03), .031, hitch_finish)
+	_tube_between(spreader, top_link-Vector3.RIGHT*.10, top_link+Vector3.RIGHT*.10,
+		.024, pin_finish)
 	_make_box("Metering roller housing",Vector3(1.66,.19,.30),Vector3(0,0,-.28),steel,false,spreader)
 	_make_box("Hopper floor",Vector3(1.48,.08,.50),Vector3(0,.10,.04),enamel,false,spreader)
 	for end in [-1,1]:
