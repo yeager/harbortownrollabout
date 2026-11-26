@@ -9726,7 +9726,7 @@ func _load_vehicle_model() -> void:
 			else:
 				pivot.global_position = arm.to_global(Vector3(bounds.position.x,bounds.position.y,bounds.end.z))
 			# The Y5 windshield wraps around the sides and changes rake above the cowl.
-			var axis := Vector3(-.13,1.10,1) if i == 0 else Vector3(.09,1.28,1)
+			var axis := Vector3(-.10,1.22,1) if i == 0 else Vector3(.13,1.32,1)
 			if fire:
 				axis = Vector3(0,.15,1) * signf(pivot.position.x)
 			pivot.set_meta("sweep_axis", axis.normalized())
