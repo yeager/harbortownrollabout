@@ -322,5 +322,6 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Gångsignalernas stolpar fick sockel, fotplatta och fyra ankare i trottoarens nivå. Granskat i Godot. Korsningarnas signalprov passerade.
   - Hastighetsskyltarna fick baksidor i aluminium och två monteringsskenor med stolpklämmor. Granskat bakifrån i Godot. Övningsbaneprovet passerade.
   - Parkeringsskyltarna och deras tilläggstavlor fick aluminiumbaksidor med dubbla skenor och stolpklämmor. Granskat bakifrån i Godot. Gatuparkeringsprovet passerade.
+  - Vägvisarna till bensinstationen och glassdepån fick aluminiumbaksidor med dubbla monteringsskenor. Stationsskylten granskades i Godot. Glassrundan passerade.
   - Kajens låga lyktor fick sockel, kant under huven och tre smala stag runt ljusspridaren. Granskat vid färjebryggan i Godot. Väderprovet passerade.
 - [ ] Boulebana, spelfigurer och klot
