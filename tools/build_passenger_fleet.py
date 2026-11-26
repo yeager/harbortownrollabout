@@ -200,6 +200,14 @@ def build(key, length, width, axles, color, belt, cabin):
                               for t in [math.tau*i/20 for i in range(20)]])
             profile_loft("Aero mirror housing",shell,paint,root)
             box("Mirror glass",side*(width+.108),mount_y+.062,belt+.15,.159,.009,.077,METAL,.004)
+        elif key == "saab96":
+            mount_y = cabin[1][0] - .07
+            box("Mirror door gasket",side*.761,mount_y,.929,.048,.108,.089,RUBBER,.012)
+            bar("Mirror angled stalk",(side*.780,mount_y,.937),
+                (side*.862,mount_y-.009,.999),.036,DARK)
+            box("Mirror shell",side*.884,mount_y-.024,1.014,.183,.113,.112,DARK,.032)
+            box("Mirror glass seal",side*.884,mount_y+.034,1.014,.158,.014,.089,RUBBER,.016)
+            box("Mirror glass",side*.884,mount_y+.044,1.014,.140,.011,.075,METAL,.012)
         else:
             box("Mirror",side*(width+.065),cabin[1][0]-.07,belt+.12,.17,.22,.13,paint)
         for y in ([.10,.94] if key in ["model_s","volvo240"] else [.22]):
