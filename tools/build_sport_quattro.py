@@ -348,6 +348,19 @@ def build():
     box("Carpeted floor", (0,.32,.334), (1.23,1.95,.034),carpet,.013)
     for side in [-1,1]:
         box("Lower kick trim",(side*.549,-.256,.448),(.041,.54,.175),carpet,.018)
+    for side in [-1, 1]:
+        outline = [(side*x, y, .354) for x, y in [
+            (.174,-.486), (.215,-.565), (.485,-.565), (.520,-.506),
+            (.520,-.137), (.482,-.109), (.199,-.109), (.174,-.142),
+        ]]
+        polygon("Shaped rubber floor mat", outline, rubber, .006)
+        for start, end in zip(outline, outline[1:] + outline[:1]):
+            bar("Floor mat perimeter bead", Vector(start) + Vector((0,0,.004)),
+                Vector(end) + Vector((0,0,.004)), .008,.005,rubber)
+        for row in range(10):
+            box("Floor mat grip rib", (side*.348,-.455 + row*.032,.358),
+                (.270,.007,.004),rubber,.001)
+    box("Pedal bracket crossmember", (.35,-.583,.580), (.236,.045,.041),trim,.006)
     # Driver left, from the seated viewpoint looking along Blender -Y.
     for name, x, width, height, ribs in [
         ("Clutch", .44, .046, .052, 4),
@@ -355,6 +368,8 @@ def build():
         ("Accelerator", .26, .032, .077, 6),
     ]:
         pad_center = Vector((x, -.524, .432))
+        cylinder(name + " pedal pivot", (x,-.567,.575), .012,.024,
+                 alloy, vertices=16, root=root)
         bar(name + " pedal lever", (x,-.567,.575), (x,-.533,.434),
             .013,.016,trim)
         box(name + " pedal backing plate", pad_center + Vector((0,-.009,0)),
