@@ -5934,9 +5934,26 @@ func _build_depot() -> void:
 		var wheel_rubber := _material(Color("#242a29"), .92)
 		var hub_plastic := _material(Color("#4e5859"), .64)
 		var axle_steel := _material(Color("#7a8180"), .42)
+		var tread := MultiMesh.new()
+		tread.transform_format = MultiMesh.TRANSFORM_3D
+		var lug := BoxMesh.new()
+		lug.size = Vector3(.072, .009, .018)
+		lug.material = _material(Color("#323635"), .90)
+		tread.mesh = lug
+		tread.instance_count = 40
+		for index in tread.instance_count:
+			var angle := TAU * (index % 20) / 20
+			var axes := Basis(Vector3.RIGHT, angle)
+			var wheel_x := -.30 if index < 20 else .30
+			var lug_center := Vector3(wheel_x, .105, .21) + axes.y * .1005
+			tread.set_instance_transform(index, Transform3D(axes, lug_center))
+		var wheel_tread := MultiMeshInstance3D.new()
+		wheel_tread.name = "Bin wheel treads"
+		wheel_tread.multimesh = tread
+		bin.add_child(wheel_tread)
 		_tube_between(bin, Vector3(-.34,.105,.21), Vector3(.34,.105,.21), .023, axle_steel)
 		for side in [-1,1]:
-			_tube_between(bin, Vector3(side*.258,.105,.21), Vector3(side*.342,.105,.21), .105, wheel_rubber)
+			_tube_between(bin, Vector3(side*.258,.105,.21), Vector3(side*.342,.105,.21), .102, wheel_rubber)
 			_tube_between(bin, Vector3(side*.341,.105,.21), Vector3(side*.352,.105,.21), .069, hub_plastic)
 			_tube_between(bin, Vector3(side*.351,.105,.21), Vector3(side*.362,.105,.21), .025, axle_steel)
 		_make_box("Bin lifting lip", Vector3(.56,.047,.082), Vector3(0,.879,.313), plastic.darkened(.10), false, bin)

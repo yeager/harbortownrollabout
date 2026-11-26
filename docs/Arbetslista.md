@@ -446,6 +446,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
 - [ ] Depåns byggnader, garage och parkeringsytor
 - [ ] Sopkärlen längs sophämtningsrutten
   - Kärlens lock fick förstärkningsribbor och draghandtag med öppet grepp. Granskat med locket uppfällt i Godot och sophämtningsprovet passerade.
+  - Sopkärlens hjul fick gjutna slitbanor med tvärgående ribbor. Granskade från marknivå i Godot. Sophämtningsprovet passerade.
 - [ ] Stadens granitmur med sockel, hörn och avtäckning
   - Muren fick förskjutna granitblock med ljusvariation och mörkare sockel. Granskat från vägen i Godot. Stadsgränsprovet kontrollerade fyra väggar och hörnkollisioner. Kanalprovet passerade också.
   - Murkrönets täckplattor möts kant i kant i hörnen utan överlappande ovansidor. Granskat vid nordöstra hörnet. Stadsgränsprovet passerade.
