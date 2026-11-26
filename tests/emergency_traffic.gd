@@ -147,6 +147,14 @@ func check_response() -> void:
 		quit(1)
 		return
 
+	game.ambulance.basis = Basis.looking_at(Vector3.LEFT)
+	game._update_traffic(.1)
+	if follower.horn_wait > 0.0:
+		printerr("Following car incorrectly honked at an oncoming A-tractor")
+		quit(1)
+		return
+	game.ambulance.basis = Basis.looking_at(Vector3.RIGHT)
+
 	game.traffic_data.clear()
 	game.vehicle_index = game.QUATTRO
 	game._load_vehicle_model()
