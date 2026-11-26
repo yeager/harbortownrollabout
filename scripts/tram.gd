@@ -262,6 +262,17 @@ func _ready() -> void:
 		for z in [-2,2]:
 			world._make_box("Shelter post base plate", Vector3(.22, .026, .22), Vector3(3.8, .305, z), Color("#57666b"), false, station)
 			world._make_roadside_solid("Shelter post",Vector3(.1,2.4,.1),Vector3(3.8,1.5,z),Color("#697778"),false,station)
+			var roof_steel := Color("#53656d")
+			world._make_box("Shelter cantilever beam", Vector3(1.94, .10, .095),
+				Vector3(2.96, 2.608, z), roof_steel, false, station)
+			var brace := world._make_box("Shelter knee brace", Vector3(.65, .048, .068),
+				Vector3(3.49, 2.44, z), roof_steel, false, station) as MeshInstance3D
+			brace.rotation.z = deg_to_rad(-26.0)
+			world._make_box("Shelter brace mounting plate", Vector3(.024, .19, .086),
+				Vector3(3.74, 2.31, z), Color("#394950"), false, station)
+			for y in [2.244, 2.374]:
+				world._make_box("Shelter brace bolt", Vector3(.012, .025, .025),
+					Vector3(3.723, y, z), Color("#9ca7a9"), false, station)
 		# The posts and glass make one continuous barrier behind the bench.
 		var screen_bounds := AABB(Vector3(3.75,.29,-2.05),Vector3(.10,2.35,4.10))
 		world.building_bounds.append(station.global_transform * screen_bounds)
