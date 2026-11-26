@@ -290,6 +290,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Det bakre stänkskyddet fick en svagt böjd gummiprofil och en synlig fästlist med tre nitar. Granskat bakifrån i Godot och fordonsprovet passerade.
   - Signalhornsgallret fick en rundad metallring, sju försänkta ribbor och mörka tvärstag. Granskat framifrån i Godot och fordonsprovet passerade.
   - Bakpartiet fick en fiktiv registreringsskylt, SHP 073, med blått landsfält, skyltfäste och synliga skruvar. Granskat i Godot. Fordonsprovet passerade.
+  - Vindrutetorkaren fick separat led, axelkåpa och gummikanter som följer bladen. Granskat i Godot. Körprovet passerade och kioskprovet verifierade svep och viloläge.
 - [ ] [`snowmobile.glb`](../vehicles/snowmobile.glb)
 - [ ] [`sport_quattro.glb`](../vehicles/sport_quattro.glb)
   - Fordonsprovet kontrollerar att galleriet visar Audo Sport Kvattro, att bakluckan har Kvattro-emblemet och att fronten har fem ringar. Språkkontrollen passerade för alla sex översättningskataloger.

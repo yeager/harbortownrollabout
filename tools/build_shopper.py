@@ -28,6 +28,7 @@ def tube(name,a,b,radius,material):
     rod=v.cylinder(name,(Vector(a)+Vector(b))/2,radius,axis.length,material,False,16,root)
     rod.rotation_euler=axis.to_track_quat('Z','Y').to_euler()
     return rod
+    return rod
 
 def nose_lamp(name,y,z,radius,depth,material):
     lamp=v.cylinder(name,(0,y,z),radius,depth,material,False,48,root)
@@ -228,9 +229,21 @@ def wiper_point(u, t):
 pivot = wiper_point(-.58, 1.0)
 blade_joint = wiper_point(-.09, .65)
 tube("Wiper spindle", screen_point(-.58, 1.0), pivot, .018, v.METAL)
-tube("Wiper arm", pivot, blade_joint, .008, v.DARK)
-tube("Wiper blade lower", wiper_point(.15, .45), blade_joint, .011, v.BLACK)
-tube("Wiper blade upper", blade_joint, wiper_point(-.33, .85), .011, v.BLACK)
+tube("Wiper spindle cap",pivot,pivot+Vector((0,-.008,0)),.013,v.DARK)
+arm = tube("Wiper arm", pivot, blade_joint, .0065, v.DARK)
+joint = tube("Wiper blade swivel",blade_joint+Vector((0,-.006,0)),
+             blade_joint+Vector((0,-.016,0)),.009,v.METAL)
+bpy.context.view_layer.update()
+v.attach(joint,arm)
+for label,start,end in (
+    ("Wiper blade lower",wiper_point(.15,.45),blade_joint),
+    ("Wiper blade upper",blade_joint,wiper_point(-.33,.85)),
+):
+    carrier = tube(label,start,end,.0065,v.DARK)
+    rubber_offset = Vector((0,.006,0))
+    rubber = tube("Wiper rubber edge",start+rubber_offset,end+rubber_offset,.0045,v.BLACK)
+    bpy.context.view_layer.update()
+    v.attach(rubber,carrier)
 # The bonnet, windscreen and roof lift as one shell about the nose.
 moving_parts = set(root.children) - fixed_parts
 hinge = bpy.data.objects.new("EntryHinge",None)
