@@ -179,6 +179,8 @@ Fordonsgranskningen börjar med exteriörerna. Bilarnas tillverkarnamn, modellna
 
 - [x] Förfina väderskydden vid Tvärbanans fyra hållplatser med falsat tak, glaskanaler, stolpfötter och bänkar med separata ryggbrädor. Granskat vid Verkstadstorget i Godot. Spårvagnsprovet verifierade alla fyra stopp och på- och avstigning. Kantmarkeringen fick två rader upphöjda knoppar vid varje stopp. Granskat i närbild vid Verkstadstorget och spårvagnsprovet passerade.
 
+- [x] Brandbilen följer brons lutning i reklamfilmens omtagning. Spelmodellen justerar även höjden mellan axlarna när bron kröker. Kontrollerat i filmens brotagning och i hopp- och broprovet för båda färdriktningarna.
+
 ### Importerade modeller
 
 Resursnamnen identifierar även delar som ska bedömas i den sammansatta modellen. En öppen ruta betyder att 99/100 återstår att verifiera.

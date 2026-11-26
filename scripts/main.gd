@@ -3404,17 +3404,25 @@ func _align_model_to_bridge(actor: Node3D, model: Node3D, wheelbase: float) -> v
 	var pos := actor.position
 	var half_span := maxf(.15, absf(actor.basis.z.x) * wheelbase * .5)
 	var slope := 0.0
+	var lift := 0.0
 	if minf(absf(pos.z + 48.0), absf(pos.z)) <= 5.8 and pos.x + half_span > HIGH_BRIDGE_X[0] and pos.x - half_span < HIGH_BRIDGE_X[3]:
-		slope = atan2(_bridge_rise(pos.x + half_span, pos.z) - _bridge_rise(pos.x - half_span, pos.z), 2 * half_span)
-	if is_zero_approx(slope):
+		var east := _bridge_rise(pos.x + half_span, pos.z)
+		var west := _bridge_rise(pos.x - half_span, pos.z)
+		slope = atan2(east - west, 2 * half_span)
+		lift = (east + west) * .5 - _bridge_rise(pos.x, pos.z)
+	if is_zero_approx(slope) and is_zero_approx(lift):
 		if model.has_meta("level_basis"):
 			model.basis = model.get_meta("level_basis")
+			model.position.y = model.get_meta("level_height")
 			model.remove_meta("level_basis")
+			model.remove_meta("level_height")
 		return
 	if not model.has_meta("level_basis"):
 		model.set_meta("level_basis", model.basis)
+		model.set_meta("level_height", model.position.y)
 	var level: Basis = model.get_meta("level_basis")
 	model.basis = Basis(actor.basis.inverse() * Vector3.BACK, slope) * level
+	model.position.y = float(model.get_meta("level_height")) + lift
 
 func _add_bridge_rail(mesh: CylinderMesh, center: Vector3, length: float, slope: float) -> void:
 	var rail := MeshInstance3D.new()
