@@ -525,7 +525,7 @@ def make_ambulance():
                 lamp_loop(.708,height,w,h,d) for w,h,d in
                 ((.120,.064,.025),(.109,.060,.036),(.056,.037,.045))],HEADLAMP,root)
         turn_signal=material("Bärnstensfärgat blinkersglas",(.91,.255,.012),.12,.23)
-        profile_loft("Yttre blinkersglas",[
+        profile_loft("Front amber indicator",[
             lamp_loop(.905,1.067,w,h,d) for w,h,d in
             ((.049,.256,.017),(.048,.250,.030),(.033,.234,.036))],turn_signal,root)
         bezel=box("Främre blåljusinfattning",(side*.64,-1.093,2.377),
