@@ -11818,8 +11818,21 @@ func _add_school_window(school: Node3D, at: Vector3, yaw: float, glazing: Materi
 		Vector3(0, -.803, .17), Color("#647477"), false, window)
 
 func _add_school_car_sign(model: Node3D) -> void:
-	var mount := _make_box("Roof sign mount",Vector3(.84,.055,.33),Vector3(0,1.78,.14),Color("#252f33"),false,model)
+	var mount := Node3D.new()
 	mount.name = "SchoolCarSign"
+	mount.position = Vector3(0, 1.78, .14)
+	model.add_child(mount)
+	_make_box("Roof sign crossbar", Vector3(.82, .032, .285),
+		Vector3.UP * .010, Color("#3a4548"), false, mount)
+	for side in [-1, 1]:
+		var foot_x: float = side * .284
+		_make_box("Roof sign rubber pad", Vector3(.193, .025, .298),
+			Vector3(foot_x, -.041, 0), Color("#242a2b"), false, mount)
+		_make_box("Roof sign mounting foot", Vector3(.13, .048, .126),
+			Vector3(foot_x, -.024, 0), Color("#58676b"), false, mount)
+		for end in [-1, 1]:
+			_make_box("Roof sign foot bolt", Vector3(.027, .016, .027),
+				Vector3(foot_x, -.018, end * .101), Color("#a2adae"), false, mount)
 	var plate := _make_box("Driving school roof sign",Vector3(.80,.24,.26),Vector3.UP*.134,Color("#ffde62"),false,mount)
 	for side in [-1,1]:
 		var face := _station_sign("Driving school",Vector3(0,0,side*.133),.0018,Color("#253031"),PI if side == -1 else 0.0,plate)
