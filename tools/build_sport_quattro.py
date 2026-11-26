@@ -193,7 +193,13 @@ def build():
         bar("B pillar",divider_top,divider_bottom,.022,.023,trim)
         bar("Door front shut line", on_side((.818,-.656,.801)),on_side((.838,-.525,.256)),.009,.009,recess)
         bar("Door rear shut line", on_side((.833,.361,.810)),on_side((.835,.414,.252)),.009,.009,recess)
-        box("Door handle", (side*.838,.246,.749), (.029,.132,.032))
+        box("Door handle gasket", (side*.840,.246,.749), (.026,.146,.042), rubber,.009)
+        box("Door handle inset", (side*.852,.238,.750), (.008,.121,.030), recess,.006)
+        box("Door handle pull", (side*.858,.226,.754), (.015,.091,.019), trim,.005)
+        lock = cylinder("Door lock barrel", (side*.853,.299,.748), .009,.013,
+                        chrome, axis_x=True, vertices=20, root=root)
+        box("Door lock key slot", (lock.location.x + side*.007,.299,.748),
+            (.002,.008,.0025), recess,.001)
         box("Painted rocker trim", (side*.805,-.051,.239), (.069,.99,.059), red)
         box("Door mirror mounting gasket", (side*.763,-.562,.917),
             (.023,.117,.076), rubber,.010)
