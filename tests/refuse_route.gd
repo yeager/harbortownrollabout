@@ -8,6 +8,7 @@ func check_route() -> void:
 	root.add_child(game)
 	game.vehicle_selector.get_child(game.REFUSE).pressed.emit()
 	game.start_button.pressed.emit()
+	game.phone.open_button.pressed.emit()
 	game.phone.take_job.pressed.emit()
 	game._update_route_arrows()
 	if not game.navigator.cached_wide_turns:

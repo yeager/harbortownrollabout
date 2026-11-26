@@ -224,7 +224,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Pusch Dakotta fick blå P-medaljonger och DAKOTTA-text på båda tanksidorna samt sitt nya namn i fordonsgalleriet. Båda sidor granskades i Godot. Mopedprovet, fordonsprovet och språkkontrollen passerade.
 - [ ] [`raggarbil.glb`](../vehicles/raggarbil.glb)
 - [ ] [`refuse_truck.glb`](../vehicles/refuse_truck.glb)
-  - Sopbilens baklyktor fick skruvade hus med separata röda och bärnstensfärgade linser. Granskat bakifrån i Godot. Fordonsprovet passerade och spelet använde båda modellerade blinkerslinserna. Sophämtningsprovet gav samma accelerationsfel med föregående modell.
+  - Sopbilens baklyktor fick skruvade hus med separata röda och bärnstensfärgade linser. Granskat bakifrån i Godot. Fordonsprovet passerade och spelet använde båda modellerade blinkerslinserna. Sophämtningsprovet passerade när det öppnade telefonen före uppdragsvalet. Provet verifierade lastens inverkan på accelerationen, tömning och betalning.
 - [ ] [`ride_on_mower.glb`](../vehicles/ride_on_mower.glb)
   - Åkgräsklipparen har en infälld kylgrill och röda baklyktor vid den bakmonterade motorn. Strålkastarna sitter på klippaggregatets främre kant. Båda ändarna granskades i Godot och samtliga fyra modellerade blinkerslinser verifierades. Fordons- och områdesproven passerade.
 - [ ] [`saab96.glb`](../vehicles/saab96.glb)
