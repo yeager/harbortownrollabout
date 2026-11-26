@@ -11790,7 +11790,15 @@ func _build_driving_school() -> void:
 	var fascia := _make_box("School sign board",Vector3(5.10,.62,.12),Vector3(0,3.13,3.10),Color("#225c63"),false,school)
 	var sign := _station_sign("Driving school",Vector3(0,0,.07),.009,Color("#fff1c8"),0,fascia)
 	_size_world_sign(sign,4.84)
-	_make_driving_surface("School entrance pavement",Vector3(12,.14,2.5),site+Vector3(0,-.068,4.26),Color("#a4a7a4"))
+	_make_driving_surface("School entrance pavement", Vector3(12, .14, 2.5),
+		site + Vector3(0, -.068, 4.26), Color.WHITE).material_override = quay_finish
+	_make_box("Entrance mat surround", Vector3(1.53, .022, .69),
+		Vector3(0, .011, 3.58), Color.WHITE, false, school).material_override = door_metal
+	_make_box("Entrance rubber mat", Vector3(1.47, .017, .63),
+		Vector3(0, .020, 3.58), Color("#252927"), false, school)
+	for rib in 10:
+		_make_box("Entrance mat rib", Vector3(1.44, .006, .016),
+			Vector3(0, .029, 3.305 + rib * .061), Color("#494d47"), false, school)
 	_speed_sign(Vector3(-110,0,103.5),-PI*.5,PRACTICE_SPEED_LIMIT)
 
 func _add_school_window(school: Node3D, at: Vector3, yaw: float, glazing: Material, metal: Material) -> void:
