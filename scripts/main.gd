@@ -73,8 +73,8 @@ var bus_plate_finish: StandardMaterial3D
 var bus_plate_lamp_finish: StandardMaterial3D
 var refuse_plate_lamp_finish: StandardMaterial3D
 var refuse_plate_finish: StandardMaterial3D
-var x5_plate_lamp_finish: StandardMaterial3D
-var x5_plate_finish: StandardMaterial3D
+var rear_plate_lamp_finish: StandardMaterial3D
+var rear_plate_finish: StandardMaterial3D
 var bus_side_marker_finish: StandardMaterial3D
 var bus_rear_marker_finish: StandardMaterial3D
 var traffic_headlights: Array[SpotLight3D] = []
@@ -5239,9 +5239,9 @@ func _update_daylight(delta: float) -> void:
 	if refuse_plate_lamp_finish:
 		refuse_plate_lamp_finish.emission_energy_multiplier = 1.1 * night
 		refuse_plate_finish.emission_energy_multiplier = .32 * night
-	if x5_plate_lamp_finish:
-		x5_plate_lamp_finish.emission_energy_multiplier = 1.1 * night
-		x5_plate_finish.emission_energy_multiplier = .38 * night
+	if rear_plate_lamp_finish:
+		rear_plate_lamp_finish.emission_energy_multiplier = 1.1 * night
+		rear_plate_finish.emission_energy_multiplier = .38 * night
 	_update_bus_ceiling_lights(night)
 	var patrol_light := smoothstep(.30, .75, night)
 	for light in patrol_landing_lights:
@@ -6098,9 +6098,10 @@ func _build_depot() -> void:
 			_fit_rally_coupe_glazing(model)
 		if i == SCHOOL_CAR:
 			_add_school_car_sign(model)
-			_fit_x5_plate_lamps(model)
+			_fit_rear_plate_lamps(model)
 		_park_at_home(body, i)
 		if i == 2:
+			_fit_rear_plate_lamps(model, true)
 			parked_fire_locker = FireLocker.new()
 			parked_fire_locker.fit(model)
 		for lamp in model.find_children("Flash*", "MeshInstance3D", true, false):
@@ -7213,8 +7214,10 @@ func _spawn_traffic(scene_path: String, x: float, lane_z: float, direction: floa
 	model.scale = Vector3.ONE * model_scale
 	model.rotation.y = PI
 	actor.add_child(model)
-	if scene_path in ["res://vehicles/traffic_suv_blue.glb", "res://vehicles/traffic_suv_silver.glb"]:
-		_fit_x5_plate_lamps(model)
+	if scene_path == VEHICLE_SCENES_ALL[2]:
+		_fit_rear_plate_lamps(model, true)
+	elif scene_path in ["res://vehicles/traffic_suv_blue.glb", "res://vehicles/traffic_suv_silver.glb"]:
+		_fit_rear_plate_lamps(model)
 	var is_bus := scene_path == VEHICLE_SCENES_ALL[BUS]
 	if is_bus:
 		_fit_bus_exterior(model)
@@ -9270,19 +9273,22 @@ func _fit_refuse_plate_lamps(model: Node3D) -> void:
 		refuse_plate_finish.emission_energy_multiplier = .32 * maxf(last_night,0.0)
 	plate.material_override = refuse_plate_finish
 
-func _fit_x5_plate_lamps(model: Node3D) -> void:
-	var plate := model.find_child("Registration plate", true, false) as MeshInstance3D
-	if not x5_plate_lamp_finish:
-		x5_plate_lamp_finish = _material(Color("#c2c7c3"), .42, true)
-		x5_plate_lamp_finish.emission = Color("#fff1d1")
-		x5_plate_lamp_finish.emission_energy_multiplier = 1.1 * maxf(last_night, 0.0)
-		x5_plate_finish = plate.get_active_material(0).duplicate() as StandardMaterial3D
-		x5_plate_finish.emission_enabled = true
-		x5_plate_finish.emission = Color("#eee8d1")
-		x5_plate_finish.emission_energy_multiplier = .38 * maxf(last_night, 0.0)
-	for diffuser: MeshInstance3D in model.find_children("Rear plate lamp diffuser*", "MeshInstance3D", true, false):
-		diffuser.material_override = x5_plate_lamp_finish
-	plate.material_override = x5_plate_finish
+func _fit_rear_plate_lamps(model: Node3D, fire := false) -> void:
+	var plate := model.find_child("Rear registration plate" if fire else "Registration plate", true, false) as MeshInstance3D
+	if not plate:
+		return
+	if not rear_plate_lamp_finish:
+		rear_plate_lamp_finish = _material(Color("#c2c7c3"), .42, true)
+		rear_plate_lamp_finish.emission = Color("#fff1d1")
+		rear_plate_lamp_finish.emission_energy_multiplier = 1.1 * maxf(last_night, 0.0)
+		rear_plate_finish = plate.get_active_material(0).duplicate() as StandardMaterial3D
+		rear_plate_finish.emission_enabled = true
+		rear_plate_finish.emission = Color("#eee8d1")
+		rear_plate_finish.emission_energy_multiplier = .38 * maxf(last_night, 0.0)
+	var lens_pattern := "Pumper rear plate lamp lens*" if fire else "Rear plate lamp diffuser*"
+	for diffuser: MeshInstance3D in model.find_children(lens_pattern, "MeshInstance3D", true, false):
+		diffuser.material_override = rear_plate_lamp_finish
+	plate.material_override = rear_plate_finish
 
 func _fit_bus_exterior(model: Node3D) -> void:
 	_fit_bus_rear_bench(model)
@@ -9649,9 +9655,11 @@ func _load_vehicle_model() -> void:
 	vehicle_model.name = VEHICLE_NAMES_ALL[vehicle_index] + "_BlenderModel"
 	vehicle_model.rotation.y = PI
 	ambulance.add_child(vehicle_model)
+	if vehicle_index == 2:
+		_fit_rear_plate_lamps(vehicle_model, true)
 	if vehicle_index == SCHOOL_CAR:
 		_add_school_car_sign(vehicle_model)
-		_fit_x5_plate_lamps(vehicle_model)
+		_fit_rear_plate_lamps(vehicle_model)
 	muddy_parts.clear()
 	mud_finish = ShaderMaterial.new()
 	mud_finish.shader = preload("res://environment/road_mud.gdshader")
@@ -10215,14 +10223,14 @@ func _build_target_marker() -> void:
 	var roadside_model := preload("res://vehicles/traffic_suv_silver.glb")
 	workshop_car=roadside_model.instantiate()
 	add_child(workshop_car)
-	_fit_x5_plate_lamps(workshop_car)
+	_fit_rear_plate_lamps(workshop_car)
 	workshop_car.position=STATION_PARKING
 	workshop_car.scale=Vector3.ONE*.79
 	workshop_car.rotation.y=PI/2
 	workshop_car.hide()
 	casualty=roadside_model.instantiate()
 	add_child(casualty)
-	_fit_x5_plate_lamps(casualty)
+	_fit_rear_plate_lamps(casualty)
 	casualty.scale=Vector3.ONE*.79
 	hazard_amber = _material(Color("#ffad26"),.24,true)
 	for pattern in ["Daytime LED chevron*", "Upper ruby light guide*"]:

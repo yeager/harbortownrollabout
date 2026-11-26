@@ -9,6 +9,22 @@ func check_driver() -> void:
 	game._on_vehicle_selected(2)
 	game._start_game()
 	var truck: Node3D = game.ambulance
+	for model in [game.vehicle_model, game.parked_cars[2]]:
+		var lenses: Array[Node] = model.find_children("Pumper rear plate lamp lens*", "MeshInstance3D", true, false)
+		var plate := model.find_child("Rear registration plate", true, false) as MeshInstance3D
+		if lenses.size() != 2 or not plate:
+			printerr("The fire engine needs a rear plate and two plate lamps")
+			quit(1)
+			return
+		for mode in [1, 0]:
+			game.time_mode = mode
+			game._update_daylight(0)
+			for part: MeshInstance3D in lenses + [plate]:
+				var finish := part.material_override as StandardMaterial3D
+				if not finish or (finish.emission_energy_multiplier > 0.0) != (mode == 1):
+					printerr("The fire engine plate lights did not follow day and night")
+					quit(1)
+					return
 	var wheel_x := truck.to_local(game.cabin_wheel.global_position).x
 	if wheel_x >= 0:
 		printerr("Fire engine steering wheel must be on the left side of the cab")
