@@ -475,7 +475,20 @@ def build():
     release = cylinder("Handbrake release button", brake_tip + brake_axis*.004,
                        .009,.013,alloy,axis_x=False,vertices=24,root=root)
     release.rotation_euler = brake_axis.to_track_quat('Z', 'Y').to_euler()
-    box("Rear bench", (0,.728,.533), (1.24,.492,.155),cloth,.045)
+    box("Rear seat base", (0,.728,.533), (1.24,.492,.155),leather,.045)
+    for side in [-1, 1]:
+        x = side * .305
+        box("Rear seat cloth cushion", (x,.739,.611), (.47,.400,.028),cloth,.012)
+        backrest = box("Rear seat backrest", (x,.969,.751), (.572,.109,.326),leather,.028)
+        backrest.rotation_euler.x = -.21
+        insert = box("Rear backrest cloth insert", (x,.916,.751), (.432,.026,.258),cloth,.013)
+        insert.rotation_euler.x = -.21
+        for height in [.668, .722, .776, .830]:
+            box("Rear backrest stitched seam", (x,.901+(height-.751)*.21,height),
+                (.392,.003,.002),trim,.001)
+        box("Rear seat buckle stalk", (side*.080,.881,.629), (.018,.025,.069),rubber,.004)
+        box("Rear seat buckle casing", (side*.080,.881,.665), (.028,.032,.027),trim,.005)
+        box("Rear seat buckle release", (side*.080,.881,.679), (.018,.021,.005),red,.002)
     box("Front black grille frame",(0,-2.006,.650),(1.675,.103,.246),trim,.036)
     box("Deep grille opening",(0,-2.063,.655),(1.112,.016,.191),recess,.004)
     for i in range(8):
