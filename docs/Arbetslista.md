@@ -174,6 +174,7 @@ Listan innehåller 100 jobb. En tom ruta är öppen. En punkt bockas av när bet
 
 Prioritera fordonens exteriörer, därefter fordonens interiörer. Fortsätt sedan med byggnader och övriga objekt.
 Fordonsfiler, Blender-källor och tillhörande media använder neutrala filnamn. I spelet heter SUV:n BWM Y5 N70i.
+Byggskriptet och objektet i Blender-studion använder också BWM Y5 N70i. Kontrollerat genom att öppna källfilen och läsa in byggskriptet i Blender.
 
 Fordonsgranskningen börjar med exteriörerna. Bilarnas tillverkarnamn, modellnamn och emblem ska få egna varianter som påminner om förebilderna.
 

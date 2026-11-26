@@ -819,7 +819,7 @@ def make_ambulance():
     return root
 
 def make_taxi():
-    root=make_bmw(PAINT_BLACK,"Sjöstad kombitaxi")
+    root=make_bwm(PAINT_BLACK,"Sjöstad kombitaxi")
     # Rework the donor wheelbase into a low estate with a long, upright tail.
     for obj in list(root.children):
         if any(key in obj.name.lower() for key in ("kidney","radiator","grille surround","roundel",
@@ -880,7 +880,7 @@ def make_taxi():
     return root
 
 def make_police():
-    root = make_bmw(PAINT_WHITE, "Polis | patrullbil", patrol=True)
+    root = make_bwm(PAINT_WHITE, "Polis | patrullbil", patrol=True)
     skin = next(obj for obj in root.children if obj.name.startswith("X5 M60i continuous"))
     bpy.context.view_layer.update()
     surface = skin.evaluated_get(bpy.context.evaluated_depsgraph_get())
@@ -1708,7 +1708,7 @@ def profile_loft(name, rings, finish, parent, close_ends=True):
     obj.parent=parent
     return obj
 
-def make_bmw(color, name="BWM Y5 N70i", *, patrol=False):
+def make_bwm(color, name="BWM Y5 N70i", *, patrol=False):
     detailed_cabin = patrol or color == PAINT_BLACK
     grille_edge_finish = material("Satin graphite grille edges", (0.12, 0.135, 0.14), 0.58, 0.33)
     indicator_finish = material("Smoked amber indicator lens", (0.22, 0.10, 0.03), 0.10, 0.31)
@@ -2951,11 +2951,11 @@ def polish_scene(vehicles, traffic_variants):
     bpy.context.preferences.filepaths.save_version = 0
     bpy.ops.wm.save_as_mainfile(filepath=os.path.join(SOURCE_DIR, "Axels_Utryckningsfordon.blend"))
 
-def render_bmw_detail(root):
+def render_bwm_detail():
     """Create a high resolution close-up render from the same front three-quarter view as the reference."""
     clear_scene()
-    hero = make_bmw(PAINT_BLACK)
-    hero.name = "BMW X5 M60i | reference study"
+    hero = make_bwm(PAINT_BLACK)
+    hero.name = "BWM Y5 N70i | reference study"
     floor_mat = material("Warm grey photographic cyclorama", (0.18, 0.19, 0.19), 0.08, 0.74)
     cube("Seamless studio floor", (0, 0, -0.19), (40, 40, 0.32), floor_mat, 0.08)
     bpy.ops.object.camera_add(location=(9.6, -12.8, 6.1))
@@ -3005,19 +3005,19 @@ def main():
     ambulance = make_ambulance()
     police = make_police()
     fire = make_fire_engine()
-    bmw_black = make_bmw(PAINT_BLACK)
-    bmw_silver = make_bmw(PAINT_SILVER, "BWM Y5 N70i / Arctic silver")
-    bmw_blue = make_bmw(PAINT_BLUE_CAR, "BWM Y5 N70i / Deep blue")
+    bwm_black = make_bwm(PAINT_BLACK)
+    bwm_silver = make_bwm(PAINT_SILVER, "BWM Y5 N70i / Arctic silver")
+    bwm_blue = make_bwm(PAINT_BLUE_CAR, "BWM Y5 N70i / Deep blue")
     export_vehicle(make_taxi(), "taxi.glb")
     export_vehicle(ambulance, "ambulance.glb")
     export_vehicle(police, "polisbil.glb")
     export_vehicle(fire, "brandbil.glb")
-    export_vehicle(bmw_black, "luxury_suv.glb")
-    export_vehicle(bmw_silver, "traffic_suv_silver.glb")
-    export_vehicle(bmw_blue, "traffic_suv_blue.glb")
-    polish_scene([ambulance, police, fire, bmw_black], [bmw_silver, bmw_blue])
-    render_bmw_detail(bmw_black)
-    print("Built Blender source, three emergency vehicles, and a BMW X5 M60i with traffic variants in", OUT_DIR)
+    export_vehicle(bwm_black, "luxury_suv.glb")
+    export_vehicle(bwm_silver, "traffic_suv_silver.glb")
+    export_vehicle(bwm_blue, "traffic_suv_blue.glb")
+    polish_scene([ambulance, police, fire, bwm_black], [bwm_silver, bwm_blue])
+    render_bwm_detail()
+    print("Built Blender source, three emergency vehicles, and a BWM Y5 N70i with traffic variants in", OUT_DIR)
 
 if __name__ == "__main__":
     main()
