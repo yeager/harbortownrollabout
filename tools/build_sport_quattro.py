@@ -543,6 +543,26 @@ def build():
         (1.615,.742,.944,.963,.972),(1.736,.787,.944,.988,.996),
         (1.900,.789,.943,1.004,1.011),(1.974,.764,.949,.988,.994),
     ], trim, root, bevel=.010, section=lambda y,w,b,s,c: [(-w*.95,y,b),(-w,y,s),(-w*.86,y,c),(0,y,c+.002),(w*.86,y,c),(w,y,s),(w*.95,y,b)])
+    for side in [-1, 1]:
+        hatch_edge = []
+        for step in range(33):
+            fraction = step / 32
+            y = 1.52 + .463 * fraction
+            x = side * (.754 - .036 * fraction)
+            for offset in [-.0018, .0018]:
+                hit, point, _, _ = body_surface.ray_cast(
+                    (x + offset, y, 1.5), (0, 0, -1))
+                if not hit:
+                    raise ValueError("Rear hatch seam missed the deck")
+                hatch_edge.append(point + Vector((0, 0, .0014)))
+        faces = [(i, i + 1, i + 3, i + 2) for i in range(0, len(hatch_edge) - 2, 2)]
+        seam_mesh = bpy.data.meshes.new("Rear hatch side shut line")
+        seam_mesh.from_pydata(hatch_edge, [], faces)
+        seam_mesh.update()
+        seam_mesh.materials.append(recess)
+        seam = bpy.data.objects.new("Rear hatch side shut line", seam_mesh)
+        bpy.context.collection.objects.link(seam)
+        attach(seam, root)
     box("Dark rear cross panel",(0,2.029,.662),(1.205,.082,.203),recess,.016)
     for side in [-1,1]:
         for i in range(12):
