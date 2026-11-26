@@ -265,6 +265,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Frontblinkersen fick formpassade glas i strålkastarhusens ytterkanter på spelbilen och trafikvarianterna. Granskat tänt i Godot. Trafikprovet verifierar att X5i blinkar i de modellerade glasen.
   - Bakblinkersen fick egna glas mellan baklyktornas röda ljuslister. Granskat med höger blinkers tänd. Trafikprovet verifierar de modellerade glasen fram och bak.
   - Den främre registreringsskylten fick en separat formad hållare mot stötfångaren på spelbilen och trafikvarianterna. Granskat snett framifrån i Godot. Körskoleprovet passerade.
+  - Den bakre registreringsskylten fick två armaturhus med separata ljusspridare. Granskat i närbild i Godot. Blinkersprovet passerade.
 - [ ] [`brandbil.glb`](../vehicles/brandbil.glb)
   - Dragkrokens infästning fick fyra sexkantsbultar samt ett släpvagnsuttag med fäste och väderskydd. Granskat bakifrån i Godot. Förarplats- och luckproven passerade.
 - [ ] [`city_bus.glb`](../vehicles/city_bus.glb)

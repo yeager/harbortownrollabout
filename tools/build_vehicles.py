@@ -2006,6 +2006,12 @@ def make_bmw(color, name="BMV X5i", *, patrol=False):
     hatch_skin = hatch.evaluated_get(bpy.context.evaluated_depsgraph_get())
     cube("Plate frame",(0,2.509,1.204),(.59,.012,.154),BLACK,.005,root)
     cube("Registration plate",(0,2.517,1.204),(.56,.007,.132),PAINT_WHITE,.003,root)
+    if root.name.startswith("BMV X5i"):
+        for x in (-.18, .18):
+            cube("Rear plate lamp housing", (x, 2.526, 1.303),
+                 (.091, .040, .024), DARK, .006, root)
+            cube("Rear plate lamp diffuser", (x, 2.539, 1.291),
+                 (.069, .020, .008), PAINT_WHITE, .003, root)
     # Project the gaps onto the pressed door skin at each height.
     bpy.context.view_layer.update()
     surface = body.evaluated_get(bpy.context.evaluated_depsgraph_get())
