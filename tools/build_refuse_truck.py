@@ -39,7 +39,13 @@ v.mesh_from_rings("Compactor body", [
 box("Rear hopper floor",(0,2.97,1.12),(2.26,.96,.16),v.DARK)
 box("Loading comb",(0,3.55,1.18),(1.84,.14,.16),v.METAL)
 for side in (-1,1):
+    box("Door window gasket",(side*1.173,-2.94,2.58),(.030,1.588,.880),v.RUBBER,.040)
     box("Door window",(side*1.155,-2.94,2.58),(.085,1.55,.84),v.GLASS,.075)
+    door_outline = [(-3.71,2.77),(-3.64,3.047),(-2.22,3.047),
+                    (-2.10,2.94),(-2.10,1.145),(-2.19,1.072),
+                    (-3.58,1.072),(-3.71,1.215),(-3.71,2.77)]
+    for start, end in zip(door_outline,door_outline[1:]):
+        ram("Cab door shut line",(side*1.171,*start),(side*1.171,*end),.006,v.DARK)
     box("Mirror arm",(side*1.27,-3.49,2.66),(.32,.075,.073),v.DARK)
     box("Twin mirror",(side*1.43,-3.48,2.51),(.16,.19,.43),v.BLACK)
     for height, step_x, width in ((.64,1.04,.38),(.91,1.10,.29)):
