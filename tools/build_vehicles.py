@@ -3037,6 +3037,12 @@ def make_bwm(color, name="BWM Y5 N70i", *, patrol=False):
             # The centre projects ahead of the swept-back outer cheeks.
             nose = max(0,min(1,(-point.y-1.78)/.63))
             nose = nose*nose*(3-2*nose)
+            if root.name.startswith("BWM Y5 N70i"):
+                # The bumper sweep starts ahead of the wheel opening at its outer edge.
+                arch_side = max(0, min(1, (abs(point.x)-.64)/.09))
+                arch_radius = math.hypot(point.y-front_axle, point.z-.48)
+                arch_blend = max(0, min(1, (arch_radius-.54)/.21))
+                nose *= 1 - arch_side * (1-arch_blend*arch_blend*(3-2*arch_blend))
             across = 0 if rigid_plate else min(1,abs(point.x)/1.05)
             point.y += nose*(.23*across**2-.055)
             bonnet = max(0,min(1,(point.z-1.02)/.50))

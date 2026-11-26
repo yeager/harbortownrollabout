@@ -289,6 +289,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Grillen fick en satinerad ram, mörkare lamellsidor och matta kylribbor. Jämförelsen från samma kameravinkel visar att ramen går att skilja från lamellerna i dag- och nattläge. Materialen kontrollerades på båda grillsidorna i tre GLB-varianter. Trafikens blinkersprov passerade i Godot 4.7 dev5.
   - Karosslacken fick mjukare reflexer med högre ytråhet och lägre metallandel. Samma sidovinkel före och efter i Godot visar tydligare dörrfogar i dagsljus. I nattläge är fogarna fortfarande svåra att urskilja. De tre GLB-varianterna behåller sina färger och registreringsnummer. Körskoleprovet passerade.
   - Dörrfogarnas geometri följer karossytan tätare mellan fogens brytpunkter. Båda sidor verifierades i tre GLB-varianter. Jämförelsen i Godot visar jämnare fogar i dagsljus. De är fortfarande diskreta i nattläge. Körskoleprovet passerade.
+  - Frontens formning tonas ut runt framhjulen så att den inte plattar till däcken eller förskjuter deras centrum. Uppföljande mätning av de tre GLB-varianterna gav 0,731 m däckdiameter i höjd och längd på båda axlarna och 2,975 m hjulbas. Framhjulet granskades i Godot och körskoleprovet passerade.
 - [ ] [`brandbil.glb`](../vehicles/brandbil.glb)
   - Dragkrokens infästning fick fyra sexkantsbultar samt ett släpvagnsuttag med fäste och väderskydd. Granskat bakifrån i Godot. Förarplats- och luckproven passerade.
 - [ ] [`city_bus.glb`](../vehicles/city_bus.glb)
