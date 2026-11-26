@@ -143,7 +143,6 @@ func _rail_batch(label: String, transforms: Array[Transform3D], finish: Material
 func _build_trackbed() -> void:
 	var length := track.get_baked_length()
 	var rails: Array[Transform3D] = []
-	var rail_heads: Array[Transform3D] = []
 	var rail_lips: Array[Transform3D] = []
 	var grass: Array[Transform3D] = []
 	var wires: Array[Transform3D] = []
@@ -157,8 +156,6 @@ func _build_trackbed() -> void:
 		for side in [-1,1]:
 			var rail_center: Vector3 = mid + heading.x * .72 * side
 			rails.append(Transform3D(heading.scaled_local(Vector3(.092, .044, span)), rail_center - Vector3.UP * .0055))
-			rail_heads.append(Transform3D(heading.scaled_local(Vector3(.046, .012, span)),
-				rail_center + heading.x * .021 * side + Vector3.UP * .0215))
 			rail_lips.append(Transform3D(heading.scaled_local(Vector3(.017, .009, span)),
 				rail_center - heading.x * .035 * side + Vector3.UP * .020))
 		if not _cross_street(mid):
@@ -180,10 +177,45 @@ func _build_trackbed() -> void:
 					insulator + heading.x * (.046 * ring + .015), .115, .10, Color("#c9c4ae"))
 	var world := get_parent()
 	_rail_batch("Grooved street rails", rails, world._material(Color("#56646a")))
-	_rail_batch("Polished rail heads", rail_heads, world._material(Color("#a9b3b8"), .34))
+	_build_rail_heads(length, count, world._material(Color("#a9b3b8"), .34))
 	_rail_batch("Rail groove lips", rail_lips, world._material(Color("#77848a"), .56))
 	_rail_batch("Grass reservation", grass, world.soil_finish)
 	_rail_batch("Contact wire", wires, world._material(Color("#464e4c")))
+
+func _build_rail_heads(length: float, count: int, finish: Material) -> void:
+	const CHUNK_SIZE := 22
+	var sections: Array[Transform3D] = []
+	for i in count:
+		var offset := length * i / count
+		var before := track.sample_baked(fposmod(offset - .20, length))
+		var after := track.sample_baked(fposmod(offset + .20, length))
+		sections.append(Transform3D(Basis.looking_at(before.direction_to(after)), track.sample_baked(offset)))
+	for start in range(0, count, CHUNK_SIZE):
+		var surface := SurfaceTool.new()
+		surface.begin(Mesh.PRIMITIVE_TRIANGLES)
+		surface.set_material(finish)
+		surface.set_smooth_group(-1)
+		for i in range(start, mini(start + CHUNK_SIZE, count)):
+			var from := sections[i]
+			var to := sections[(i + 1) % count]
+			for side: float in [-1, 1]:
+				var x := .741 * side
+				var profile := [
+					Vector3(x - .023, .0155, 0), Vector3(x - .023, .0275, 0),
+					Vector3(x + .023, .0275, 0), Vector3(x + .023, .0155, 0),
+				]
+				for edge in 3:
+					var a: Vector3 = from * profile[edge]
+					var b: Vector3 = from * profile[edge + 1]
+					var c: Vector3 = to * profile[edge + 1]
+					var d: Vector3 = to * profile[edge]
+					for vertex in [a, c, b, a, d, c]:
+						surface.add_vertex(vertex)
+		surface.generate_normals()
+		var model := MeshInstance3D.new()
+		model.name = "Continuous polished rail heads"
+		model.mesh = surface.commit()
+		add_child(model, true)
 
 func _ready() -> void:
 	var world := get_parent()
