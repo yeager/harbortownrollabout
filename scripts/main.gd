@@ -11789,6 +11789,12 @@ func _build_driving_school() -> void:
 				Vector3(drain_x, strap_y, -3.065), Color.WHITE, false, school).material_override = roof_metal
 		_tube_between(school, Vector3(drain_x, .25, -3.09),
 			Vector3(drain_x, .132, -3.27), .047, roof_metal)
+		var splash := _make_box("Downpipe splash block", Vector3(.29, .039, .57),
+			Vector3(drain_x, .040, -3.55), Color("#969488"), false, school)
+		splash.rotation.x = -.055
+		for rim_side in [-1, 1]:
+			_make_box("Splash block channel edge", Vector3(.039, .025, .55),
+				Vector3(rim_side * .118, .030, 0), Color("#969488"), false, splash)
 	_make_box("Rear roof gutter", Vector3(12.24, .106, .135),
 		Vector3(0, 3.287, -3.23), Color.WHITE, false, school).material_override = roof_metal
 	for vent_at in [Vector3(-2.70, 3.495, -.87), Vector3(2.41, 3.495, -1.31)]:
