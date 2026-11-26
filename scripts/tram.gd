@@ -312,9 +312,16 @@ func _ready() -> void:
 			for slat in 3:
 				world._make_box("Bench slat fastener", Vector3(.008, .018, .018),
 					Vector3(3.686, .962 + .098 * slat, z), Color("#b4bcbf"), false, station)
-		world._make_box("Station name board",Vector3(.08,.43,3.8),Vector3(2.15,2.45,0),Color("#16496a"),false,station)
+		var sign_center := Vector3(2.15, 2.36, 0)
+		world._make_box("Station name board", Vector3(.08, .43, 3.8),
+			sign_center, Color("#16496a"), false, station)
+		for mount_z in [-1.48, 1.48]:
+			world._make_box("Station sign ceiling plate", Vector3(.16, .025, .19),
+				Vector3(sign_center.x, 2.633, mount_z), Color("#35464d"), false, station)
+			world._make_box("Station sign hanger", Vector3(.043, .077, .058),
+				Vector3(sign_center.x, 2.598, mount_z), Color("#52656d"), false, station)
 		for side in [-1,1]:
-			var nameplate := sign_at(station,STATION_NAMES[i],Vector3(2.15+side*.045,2.45,0),side*PI/2,.0068)
+			var nameplate := sign_at(station, STATION_NAMES[i], sign_center + Vector3.RIGHT * side * .045, side * PI / 2, .0068)
 			world._size_world_sign(nameplate, 3.6)
 	for i in 3:
 		var car := Node3D.new()
