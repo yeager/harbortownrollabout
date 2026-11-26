@@ -2098,3 +2098,6 @@ msgstr ""
 
 msgid "Police stopped you for running a red light."
 msgstr ""
+
+msgid "Patient handover"
+msgstr ""

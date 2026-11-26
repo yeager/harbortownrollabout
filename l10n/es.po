@@ -2176,3 +2176,6 @@ msgstr "Pepinillos crujientes"
 
 msgid "Police stopped you for running a red light."
 msgstr "La policía te ha detenido por saltarte un semáforo en rojo."
+
+msgid "Patient handover"
+msgstr "Entrega de pacientes"

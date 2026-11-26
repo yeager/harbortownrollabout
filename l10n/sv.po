@@ -2099,3 +2099,6 @@ msgstr "Krispiga gurkskivor"
 
 msgid "Police stopped you for running a red light."
 msgstr "Polisen stoppade dig för att du körde mot rött."
+
+msgid "Patient handover"
+msgstr "Patientöverlämning"

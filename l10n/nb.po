@@ -2169,3 +2169,6 @@ msgstr "Sprø sylteagurker"
 
 msgid "Police stopped you for running a red light."
 msgstr "Politiet stoppet deg fordi du kjørte på rødt lys."
+
+msgid "Patient handover"
+msgstr "Pasientoverlevering"

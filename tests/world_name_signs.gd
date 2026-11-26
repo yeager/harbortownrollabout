@@ -3,6 +3,7 @@ extends SceneTree
 const SWEDISH := {
 	"Harbor Town Hospital": "Sjöstadens sjukhus",
 	"Ambulance intake": "Ambulansintag",
+	"Patient handover": "Patientöverlämning",
 	"Police station": "Polisstationen",
 	"Bakery & Coffee": "Bageri & Kaffe",
 	"Clinic": "Vårdcentralen",
@@ -42,5 +43,5 @@ func check_signs() -> void:
 			printerr("Missing localized building signs: ", found.keys())
 			quit(1)
 			return
-	print("Hospital, intake, police, bakery, clinic, library, school and garage signs followed all seven locales.")
+	print("Building and patient handover signs followed all seven locales.")
 	quit()

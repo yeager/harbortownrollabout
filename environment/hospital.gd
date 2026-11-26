@@ -201,6 +201,11 @@ func _build_intake(world: Node3D) -> void:
 		Vector3(2.61, 1.235, .13), METAL, false, self)
 	world._make_box("Staff door meeting rail", Vector3(.026, 2.31, .035),
 		Vector3(2.61, 1.22, .218), TRIM, false, self)
+	var transfer_sign: MeshInstance3D = world._make_box("Patient handover signboard", Vector3(2.22, .38, .09),
+		Vector3(2.61, 2.79, .11), METAL, false, self)
+	var transfer_label: Label3D = world._station_sign("Patient handover", Vector3(0, 0, .051),
+		.0045, Color("#fff6e5"), 0, transfer_sign)
+	world._size_world_sign(transfer_label, 2.02)
 	for z in [2.05, 5.55]:
 		var light := OmniLight3D.new()
 		light.position = Vector3(0, 3.76, z)
