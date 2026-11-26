@@ -429,6 +429,32 @@ def build(key, length, width, axles, color, belt, cabin):
         else:
             box("Bumper",0,y,.36,width*1.96,.13,.13,RUBBER if key!="m3_e30" else paint)
     if key == "saab96":
+        outline = [(-.340,.748),(.340,.748),(.368,.699),(.357,.445),
+                   (.310,.406),(-.310,.406),(-.357,.445),(-.368,.699)]
+        seam = bpy.data.curves.new("Saav boot shut line","CURVE")
+        seam.dimensions = "3D"
+        seam.bevel_depth = .003
+        seam.bevel_resolution = 2
+        trace = seam.splines.new("POLY")
+        segments = 16
+        trace.points.add(len(outline)*segments-1)
+        trace.use_cyclic_u = True
+        for edge,(start_x,start_z) in enumerate(outline):
+            end_x,end_z = outline[(edge+1) % len(outline)]
+            for step in range(segments):
+                t = step/segments
+                x,z = start_x+(end_x-start_x)*t, start_z+(end_z-start_z)*t
+                hit,surface,normal,_ = body.ray_cast((x,end+.3,z),(0,-1,0))
+                point = surface + normal*.002 if hit else Vector((x,end,z))
+                trace.points[edge*segments+step].co = (*point,1)
+        seam.materials.append(DARK)
+        trim = bpy.data.objects.new("Saav boot shut line",seam)
+        bpy.context.collection.objects.link(trim)
+        trim.parent = root
+        box("Saav boot release gasket",0,end+.012,.635,.135,.027,.041,RUBBER,.009)
+        box("Saav boot release handle",0,end+.029,.639,.105,.023,.019,METAL,.006)
+        lock = cylinder("Saav boot lock",(0,end+.027,.622),.009,.012,METAL,False,16,root)
+        lock.rotation_euler.x = math.pi/2
         box("Saav silencer",-.460,end-.238,.229,.245,.368,.112,DARK,.041)
         box("Saav silencer clamp",-.460,end-.163,.233,.252,.033,.119,METAL,.014)
         outlet_profile = [(-.144,.034),(.062,.034),(.125,.033),(.134,.028),
