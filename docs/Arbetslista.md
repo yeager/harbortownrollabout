@@ -281,6 +281,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Hjulhusens insidor fick en matt, mörk plastfinish. Materialet verifierades i alla tre GLB-varianter och framhjulet jämfördes före och efter i Godot. Körskoleprovet passerade.
   - Bromsskivorna fick svarvspår i geometrin och en satinerad stålyta. Kontrollerat på alla fyra hjul i tre GLB-varianter. Spelbilens framhjul granskades i Godot och körskoleprovet passerade.
   - De röda bromsoken fick en gjuten profil som omsluter skivans kant. Kontrollerat på fyra hjul i alla tre GLB-varianter och granskat genom framfälgen i Godot. Körskoleprovet passerade.
+  - Backspegelkåporna fick en smal fog som följer skalets form. Verifierat på båda speglarna i tre GLB-varianter och granskat i Godot. Körskoleprovet passerade.
 - [ ] [`brandbil.glb`](../vehicles/brandbil.glb)
   - Dragkrokens infästning fick fyra sexkantsbultar samt ett släpvagnsuttag med fäste och väderskydd. Granskat bakifrån i Godot. Förarplats- och luckproven passerade.
 - [ ] [`city_bus.glb`](../vehicles/city_bus.glb)

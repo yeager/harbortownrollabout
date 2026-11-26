@@ -2181,6 +2181,15 @@ def make_bwm(color, name="BWM Y5 N70i", *, patrol=False):
              (-1.005,.092,.053),(-.965,.135,.072),(-.916,.155,.082),
              (-.855,.157,.081),(-.821,.151,.076))]
         profile_loft("Mirror painted housing",cap,color,root)
+        if root.name.startswith("BWM Y5 N70i"):
+            # Follow the housing loft so the cap joint stays flush around the shell.
+            cap_joint = [
+                mirror_ring(-.855, .157, .081),
+                mirror_ring(-.853, .158, .082),
+                mirror_ring(-.850, .158, .082),
+                mirror_ring(-.848, .156, .080),
+            ]
+            profile_loft("Mirror cap joint", cap_joint, RUBBER, root, close_ends=False)
         lip=[cap[-1],mirror_ring(-.814,.151,.076),mirror_ring(-.806,.146,.073),
              mirror_ring(-.806,.138,.065),mirror_ring(-.814,.137,.064)]
         profile_loft("Mirror glass seal",lip,RUBBER,root,close_ends=False)
