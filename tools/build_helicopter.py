@@ -73,6 +73,18 @@ for z,y,dy,dz,finish in [(2.85,5.525,.82,.38,white),(3.09,5.57,.80,.16,red)]:
     fin=cube("Tail fin",(0,y,z),(.11,dy,dz),finish,.055,root)
     fin.rotation_euler.x=-.22
 cube("Tailplane",(0,4.57,1.92),(2.22,.44,.072),white,.035,root)
+for side, position, color in [
+    (1, "Port", (.94, .018, .024)),
+    (-1, "Starboard", (.025, .82, .20)),
+]:
+    lens = material(f"{position} navigation glass", color, .08, .28, 2.6)
+    cube(f"{position} navigation lamp housing", (side * 1.09, 4.53, 1.92),
+         (.14, .20, .092), graphite, .032, root)
+    cube(f"{position} navigation lamp lens", (side * 1.165, 4.53, 1.92),
+         (.046, .143, .066), lens, .021, root)
+aft_lens = material("Aft navigation glass", (.92, .95, 1.0), .06, .26, 1.7)
+cube("Aft navigation lamp housing", (0, 5.955, 3.035), (.134, .112, .082), graphite, .025, root)
+cube("Aft navigation lamp lens", (0, 6.012, 3.035), (.094, .032, .055), aft_lens, .012, root)
 engine=cube("Turbine housing",(0,.09,2.52),(1.25,2.26,.53),blue,.24,root)
 cylinder("Mast",(0,-.27,2.99),.095,.47,metal,False,20,root)
 main=pivot("MainRotor",root,(0,-.27,3.21))
