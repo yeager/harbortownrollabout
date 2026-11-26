@@ -11747,6 +11747,18 @@ func _build_driving_school() -> void:
 				Vector3(vent_x, 2.229 + slat * .071, -3.081), service_color, false, school)
 			louvre.rotation.x = -.35
 	_make_box("Entrance canopy",Vector3(5.0,.16,1.40),Vector3(0,2.72,3.59),Color("#225c63"),false,school)
+	_make_box("Canopy folded front edge", Vector3(5.02, .059, .054),
+		Vector3(0, 2.663, 4.288), Color.WHITE, false, school).material_override = roof_metal
+	for bracket_x in [-1.96, 1.96]:
+		_make_box("Canopy wall plate", Vector3(.125, .40, .056),
+			Vector3(bracket_x, 2.471, 3.029), Color.WHITE, false, school).material_override = roof_metal
+		_tube_between(school, Vector3(bracket_x, 2.324, 3.053),
+			Vector3(bracket_x, 2.635, 4.124), .029, roof_metal)
+		_make_box("Canopy cross bracket", Vector3(.076, .053, 1.24),
+			Vector3(bracket_x, 2.622, 3.64), Color.WHITE, false, school).material_override = roof_metal
+	for seam in range(-2, 3):
+		_make_box("Canopy standing seam", Vector3(.019, .023, 1.37),
+			Vector3(seam * .90, 2.802, 3.586), Color.WHITE, false, school).material_override = roof_metal
 	var lamp := _add_entry_light(site + Vector3(0,2.61,3.66), Vector3(.72,.05,.19), 4.5)
 	lamp.name = "Driving school entrance light"
 	lamp.look_at(site + Vector3(0,0,3.35), Vector3.BACK)
