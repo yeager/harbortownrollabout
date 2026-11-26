@@ -125,8 +125,12 @@ for index in range(-2,3):
 # The screen bows toward the nose at its centre and narrows under the roof.
 def screen_point(u,t):
     return (u*(.418-.026*t),-.43+.33*t+.09*u*u,.916+.603*t-.018*u*u)
-verts=[screen_point(i/10,j/4) for j in range(5) for i in range(-10,11)]
-faces=[(j*21+i,j*21+i+1,(j+1)*21+i+1,(j+1)*21+i) for j in range(4) for i in range(20)]
+screen_columns, screen_rows = 41, 13
+verts = [screen_point(2*i/(screen_columns-1)-1,j/(screen_rows-1))
+         for j in range(screen_rows) for i in range(screen_columns)]
+faces = [(a,a+1,a+1+screen_columns,a+screen_columns)
+         for j in range(screen_rows-1) for i in range(screen_columns-1)
+         for a in [j*screen_columns+i]]
 mesh=bpy.data.meshes.new("Windscreen sheet")
 mesh.from_pydata(verts,[],faces)
 mesh.materials.append(glass)
@@ -134,9 +138,20 @@ screen=bpy.data.objects.new("Wraparound windscreen",mesh)
 bpy.context.collection.objects.link(screen)
 screen.parent=root
 for f in mesh.polygons: f.use_smooth=True
-for t in (0,1):
-    for i in range(-10,10):
-        tube("Window seal",screen_point(i/10,t),screen_point((i+1)/10,t),.012,v.BLACK)
+# A continuous rubber channel follows all four edges of the curved acrylic.
+edges = ([screen_point(i/20,0) for i in range(-20,20)] +
+         [screen_point(1,j/12) for j in range(12)] +
+         [screen_point(i/20,1) for i in range(20,-20,-1)] +
+         [screen_point(-1,j/12) for j in range(12,0,-1)])
+seal_path = [Vector(point) for point in edges]
+seal_rings = []
+for i, point in enumerate(seal_path):
+    tangent = (seal_path[(i+1)%len(seal_path)]-seal_path[i-1]).normalized()
+    across = tangent.cross(Vector((0,1,0))).normalized()
+    depth = across.cross(tangent).normalized()
+    seal_rings.append([point + across*(.013*math.cos(math.tau*j/12)) +
+                       depth*(.010*math.sin(math.tau*j/12)) for j in range(12)])
+v.profile_loft("Continuous windscreen seal",seal_rings+[seal_rings[0]],v.RUBBER,root,close_ends=False)
 v.mesh_from_rings("Overhanging canopy",[(-.12,.39,1.495,1.52,1.55),(.02,.425,1.50,1.55,1.57),
     (.29,.428,1.54,1.57,1.59),(.49,.405,1.577,1.59,1.604)],red,root,.012,panel_section)
 for side in (-1,1):
@@ -163,7 +178,6 @@ for side in (-1,1):
     edge = pillar.modifiers.new("Rounded moulding", 'BEVEL')
     edge.width = .007
     edge.segments = 3
-    tube("Side window seal",screen_point(side,0),screen_point(side,1),.012,v.BLACK)
     box("Mirror mounting pad",(side*.409,-.421,.919),(.046,.053,.025),v.RUBBER,.008)
     tube("Mirror stem",(side*.415,-.421,.923),(side*.507,-.445,1.057),.008,v.METAL)
     tube("Mirror adjustment joint",(side*.507,-.445,1.048),(side*.507,-.445,1.064),.014,v.DARK)
