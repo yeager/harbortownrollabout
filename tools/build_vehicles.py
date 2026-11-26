@@ -1956,6 +1956,16 @@ def make_bmw(color, name="BWM Y5 N70i", *, patrol=False):
         return point.y
 
     # A tapered pivot cover carries the arm above the spring-curved blade.
+    if root.name.startswith("BWM Y5 N70i"):
+        pivot_x, pivot_z = .008, 1.656
+        pivot_depth = rear_screen_depth(pivot_x, pivot_z)
+        for label, radius, thickness, outset, finish in (
+            ("Rear wiper pivot seal", .041, .021, .008, RUBBER),
+            ("Rear wiper pivot collar", .029, .029, .020, DARK),
+        ):
+            fitting = cylinder(label, (pivot_x, pivot_depth + outset, pivot_z),
+                               radius, thickness, finish, axis_x=False, vertices=24, root=root)
+            fitting.rotation_euler.x = math.pi / 2
     for name, finish, stations in [
         ("Tailgate wiper blade",RUBBER,[
             (-.22,1.669,.007,.012),(-.10,1.675,.012,.014),
