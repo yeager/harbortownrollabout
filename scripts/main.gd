@@ -2392,8 +2392,30 @@ func _build_city_wall() -> void:
 			masonry.material_override = stone
 			# One coping spans each corner. The perpendicular coping meets its inside edge.
 			var coping_length := length + 1.28 if along_x else length - .08
-			var coping_size := tangent * coping_length + normal * .68 + Vector3.UP * .13
-			_make_box("Avtäckning", coping_size, center + Vector3.UP * 2.365, Color("#a6a293"), false, wall)
+			var coping_size := tangent * coping_length + normal * .68
+			_make_box("Coping bedding", coping_size + Vector3.UP * .04,
+				center + Vector3.UP * 2.32, Color("#706d63"), false, wall)
+			var slab := BoxMesh.new()
+			slab.size = tangent + normal * .68 + Vector3.UP * .09
+			var finish := _material(Color.WHITE, .82)
+			finish.vertex_color_use_as_albedo = true
+			slab.material = finish
+			var coping := MultiMesh.new()
+			coping.transform_format = MultiMesh.TRANSFORM_3D
+			coping.use_colors = true
+			coping.mesh = slab
+			coping.instance_count = ceili(coping_length / 1.44)
+			var step := coping_length / coping.instance_count
+			var axes := Basis.from_scale(Vector3.ONE + tangent * (step - .014 - 1.0))
+			for index in coping.instance_count:
+				var offset := (index + .5) * step - coping_length * .5
+				coping.set_instance_transform(index, Transform3D(axes, center + tangent * offset + Vector3.UP * 2.385))
+				var shade := .67 + .06 * sin(index * 2.39)
+				coping.set_instance_color(index, Color(shade, shade * .98, shade * .92))
+			var slabs := MultiMeshInstance3D.new()
+			slabs.name = "Perimeter coping stones"
+			slabs.multimesh = coping
+			wall.add_child(slabs)
 
 func _build_road_network() -> void:
 	marking_finish = _noise_material(Color("#ededed"), Color.WHITE, 2.3, .12)
