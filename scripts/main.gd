@@ -8010,7 +8010,11 @@ func _build_lost_umbrella() -> void:
 	var rib_finish := _material(Color("#6c2637"), .62)
 	var hardware := _material(Color("#858c91"), .34)
 	_tube_between(canopy, Vector3.DOWN * .26, Vector3.DOWN * .20, .027, hardware)
-	_tube_between(canopy, Vector3.DOWN * .014, Vector3.UP * .049, .020, hardware)
+	# The ferrule stays rigid while the fabric and ribs fold around the shaft.
+	_tube_between(umbrella, Vector3.UP * 1.148, Vector3.UP * 1.191, .021, hardware)
+	_tube_between(umbrella, Vector3.UP * 1.185, Vector3.UP * 1.242, .014,
+		_material(Color("#34393e"), .58))
+	_tube_between(umbrella, Vector3.UP * 1.229, Vector3.UP * 1.247, .015, hardware)
 	var cloth := SurfaceTool.new()
 	cloth.begin(Mesh.PRIMITIVE_TRIANGLES)
 	cloth.set_material(fabric)
