@@ -342,5 +342,6 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Bouleringen fick en tätare rund profil, matt gummiyta och modellerad skarvhylsa. Granskat i Godot. Bouleprovet passerade.
   - Boulekloten fick ett stålmaterial med mörka spår och lillen fick träådring. Granskat i närbild i Godot. Bouleprovet passerade.
   - Termosen vid boulebanan fick borstat stål, tätning och ett räfflat kopplock. Granskat i närbild i Godot. Bouleprovet passerade.
+  - Boulebanans grus fick finare korn och mjukare kontrast. Granskat i närbild i Godot. Bouleprovet passerade.
   - Kajens låga lyktor fick sockel, kant under huven och tre smala stag runt ljusspridaren. Granskat vid färjebryggan i Godot. Väderprovet passerade.
 - [ ] Boulebana, spelfigurer och klot

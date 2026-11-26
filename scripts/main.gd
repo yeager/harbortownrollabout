@@ -7706,7 +7706,7 @@ func _build_boule_court() -> void:
 		_make_box("Back support", Vector3(.06, .65, .06),
 			BOULE_BENCH + Vector3(.23, .57, end), Color("#394944"))
 	var gravel := _make_driving_surface("Boule gravel", Vector3(3.8,.12,14), BOULE_CENTRE-Vector3.UP*.06, Color("#baa781"))
-	gravel.material_override = _noise_material(Color("#998465"), Color("#d7c7a1"), 38, .5)
+	gravel.material_override = _noise_material(Color("#9f8d72"), Color("#c0ac88"), 118.0, .36)
 	var edging_finish := _material(Color("#77644b"), .86, false, "wood")
 	var clip_finish := _material(Color("#646963"), .74)
 	for side in [-1, 1]:
