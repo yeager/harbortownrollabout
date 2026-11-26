@@ -31,13 +31,21 @@ func check_landing() -> void:
 			quit(1)
 			return
 	var hubs: Array[Node3D] = [game.main_rotor, game.tail_rotor, aircraft.main_rotor, aircraft.tail_rotor]
-	var before: Array = hubs.map(func(hub: Node3D): return hub.basis)
-	game._update_patrol(.025)
+	var blade_names := ["Main blade*", "Tail blade*", "Main rotor blade*", "Fenestron blade*"]
 	for i in hubs.size():
-		if hubs[i].basis.is_equal_approx(before[i]):
-			printerr("A helicopter rotor did not rotate in flight")
+		if not hubs[i].find_child(blade_names[i], true, false) is MeshInstance3D:
+			printerr("A rotor hub is missing its visible blade geometry: ", blade_names[i])
 			quit(1)
 			return
+	for delta in [1.0 / 30, 1.0 / 60, 1.0 / 120]:
+		var before: Array = hubs.map(func(hub: Node3D): return hub.basis)
+		game._update_patrol(delta)
+		for i in hubs.size():
+			var axis := Vector3.UP if i % 2 == 0 else Vector3.RIGHT
+			if hubs[i].basis.is_equal_approx(before[i]) or not (hubs[i].basis * axis).is_equal_approx(before[i] * axis):
+				printerr("A helicopter rotor failed to spin about its hub axis: ", blade_names[i])
+				quit(1)
+				return
 	aircraft.flight_seconds = aircraft.TOUCHDOWN_AT - 8.0
 	game._update_patrol(0.0)
 	if aircraft.position.y <= pad.y + 3.0 or not is_equal_approx(aircraft.position.x, pad.x):

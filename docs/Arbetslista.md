@@ -206,6 +206,7 @@ Fordonsgranskningen börjar med exteriörerna. Bilarnas tillverkarnamn, modellna
 
 - [x] Båda helikoptrarnas huvud- och stjärtrotorer roterar under flygning och visar rörelseoskärpa. Ambulanshelikopterns oskärpa avtar när rotorerna varvar ned på taket. Båda helikoptrarna granskades i Godot och rotor- och landningsprovet passerade. Ambulanshelikopterns ljusa bladspetsar ger ett diskret ljust spår vid flygfart. Provet kontrollerar att rörelseoskärpan försvinner vid tomgång och återkommer vid start.
   - Bladspetsarnas ljusa rörelsespår på ambulanshelikoptern fick egen opacitet. Granskat över sjukhuset under inflygning i Godot 4.7 dev5. Rotor- och landningsprovet passerade.
+  - Rotorprovet kontrollerar att alla fyra roterande nav innehåller blad och snurrar kring rätt axel vid bildsteg motsvarande 30, 60 och 120 bilder per sekund. Godkänt i Godot 4.7 dev5.
 
 ### Importerade modeller
 
