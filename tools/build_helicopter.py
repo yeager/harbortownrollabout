@@ -86,7 +86,17 @@ pipe("Windscreen center mullion", [
     for step in range(41)
 ], .023, graphite, root)
 
+landing_glass = material("Landing lamp glass", (.86, .93, 1.0), .12, .20, .65)
 for side in [-1,1]:
+    light_x = side * .39
+    for name, offset, radius, depth, finish in (
+        ("Landing lamp housing", .012, .122, .116, graphite),
+        ("Landing lamp reflector", .069, .095, .037, metal),
+        ("Landing lamp lens", .089, .075, .018, landing_glass),
+    ):
+        lamp = cylinder(name, windscreen_surface(light_x, .99, offset),
+                        radius, depth, finish, False, 24, root)
+        lamp.rotation_euler.x = 1.30
     pivot_point = windscreen_surface(side * .34, 1.49, .015)
     mount = cylinder("Windscreen wiper pivot", pivot_point, .043, .046, graphite, False, 20, root)
     mount.rotation_euler.x = math.pi / 2
