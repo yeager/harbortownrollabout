@@ -7,7 +7,7 @@ import bpy
 from mathutils import Vector
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from build_vehicles import attach, clear_scene, cube, cylinder, export_vehicle, material, mesh_from_rings, text_obj
+from build_vehicles import attach, clear_scene, cube, cylinder, export_vehicle, material, mesh_from_rings, profile_loft, text_obj
 
 PROJECT = Path(__file__).resolve().parents[1]
 AXLES = (-1.112, 1.112)
@@ -229,9 +229,19 @@ def build():
             box("Rear pillar vent", (side*.851,1.571,.826+i*.019), (.014,.24,.008),trim,.002)
         for i, axle in enumerate(AXLES):
             x = side*(.758 if i == 0 else .746)
-            wheel = cylinder("Performance tire", (x,axle,.293), .293,.207,rubber, vertices=64, root=root)
-            for radius in [.269,.279]:
-                bpy.ops.mesh.primitive_torus_add(major_segments=48,minor_segments=6,major_radius=radius,minor_radius=.0018,location=(x+side*.103,axle,.293),rotation=(0,math.pi/2,0))
+            shoulder = [(0, .293), (.023, .293), (.026, .287), (.031, .287),
+                        (.034, .293), (.064, .293), (.067, .287), (.073, .287),
+                        (.076, .292), (.089, .289), (.098, .281), (.103, .266),
+                        (.104, .245), (.098, .205)]
+            profile = [(-offset, radius) for offset, radius in reversed(shoulder[1:])] + shoulder
+            rings = [
+                [(x + offset, axle + radius * math.sin(angle * math.tau / 64),
+                  .293 + radius * math.cos(angle * math.tau / 64)) for angle in range(64)]
+                for offset, radius in profile
+            ]
+            wheel = profile_loft("Performance tire", rings, rubber, root)
+            for radius, depth in [(.269, .102), (.279, .099)]:
+                bpy.ops.mesh.primitive_torus_add(major_segments=48,minor_segments=6,major_radius=radius,minor_radius=.0018,location=(x+side*depth,axle,.293),rotation=(0,math.pi/2,0))
                 bead = bpy.context.object
                 bead.name = "Moulded sidewall line"
                 bead.data.materials.append(rubber)
