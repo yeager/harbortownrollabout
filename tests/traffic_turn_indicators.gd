@@ -24,7 +24,7 @@ func verify() -> void:
 	for lamps in [item.turn_signals.left, item.turn_signals.right]:
 		for lens_name in ["Front amber indicator", "Rear indicator lens"]:
 			if not lamps.any(func(lamp): return lamp.get_parent().name.begins_with(lens_name)):
-				fail("The X5i must use its modeled indicator lens: " + lens_name)
+				fail("The BWM Y5 N70i must use its modeled indicator lens: " + lens_name)
 				return
 	for direction in [-1, 1]:
 		var route := Curve3D.new()

@@ -56,7 +56,7 @@ HEADLAMP = material("LED headlamp", (0.95, 0.84, 0.56), 0.05, 0.15, 0.45)
 TAIL_LAMP = material("Tail lamp", (0.75, 0.025, 0.015), 0.05, 0.2, 0.2)
 BLACK = material("Lettering black", (0.025, 0.045, 0.05), 0.1, 0.35)
 HOSE = material("Fire hose", (0.82, 0.72, 0.45), 0.0, 0.62)
-PAINT_BLACK = material("BMW gloss black", (0.012, 0.017, 0.022), 0.48, 0.2)
+PAINT_BLACK = material("Gloss black body paint", (0.012, 0.017, 0.022), 0.48, 0.2)
 PAINT_SILVER = material("Traffic car silver", (0.53, 0.59, 0.61), 0.68, 0.24)
 PAINT_BLUE_CAR = material("Traffic car deep blue", (0.025, 0.11, 0.32), 0.56, 0.24)
 
@@ -2254,7 +2254,7 @@ def make_bwm(color, name="BWM Y5 N70i", *, patrol=False):
             rail.append([(x+width*math.cos(i*math.tau/12),y,
                           z+height*.48+height*.52*math.sin(i*math.tau/12)) for i in range(12)])
         profile_loft("Integrated roof rail",rail,DARK,root)
-        cube("M sport fender trim", (side * 1.08, -1.37, 1.03), (0.05, 0.18, 0.05), DARK, 0.045, root)
+        cube("Front fender trim", (side * 1.08, -1.37, 1.03), (0.05, 0.18, 0.05), DARK, 0.045, root)
     if root.name.startswith("BWM Y5 N70i"):
         antenna_seal = []
         antenna_shell = []
