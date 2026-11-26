@@ -61,11 +61,17 @@ for n in range(7):
     box("Cooling louvre",(0,.979,.533+n*.031),(.512,.020,.013),frame,.004)
 lamp_glass = finish("Mower headlight glass",(.72,.82,.83),.16,.24)
 amber_glass = finish("Mower indicator glass",(.76,.27,.019),.08,.30)
+rear_glass = finish("Mower rear lamp glass",(.59,.019,.015),.12,.28)
 for x in (-.287,.287):
-    box("Mower headlight housing",(x,.934,.778),(.157,.062,.080),frame,.015)
-    box("Mower headlight lens",(x,.968,.778),(.123,.016,.056),lamp_glass,.010)
+    box("Mower rear lamp housing",(x,.934,.778),(.157,.062,.080),frame,.015)
+    box("Mower rear lamp lens",(x,.968,.778),(.123,.016,.056),rear_glass,.010)
     box("Mower corner lamp housing",(x,.948,.707),(.073,.043,.044),frame,.008)
-    box("Front amber indicator",(x,.973,.707),(.053,.014,.029),amber_glass,.006)
+    box("Rear indicator lens",(x,.973,.707),(.053,.014,.029),amber_glass,.006)
+for side in (-1,1):
+    x = side*.46
+    box("Mower front lamp bracket",(x,-1.302,.195),(.151,.087,.093),frame,.012)
+    box("Mower headlight lens",(x-side*.032,-1.349,.213),(.064,.017,.037),lamp_glass,.006)
+    box("Front amber indicator",(x+side*.043,-1.349,.213),(.049,.017,.037),amber_glass,.006)
 for side in (-1,1):
     box("Wheel arch",(side*.37,.1,.57),(.30,.92,.17),paint,.08)
     box("Footboard",(side*.28,-.39,.36),(.30,.58,.07),frame)
