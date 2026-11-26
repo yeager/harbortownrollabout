@@ -277,6 +277,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Strålkastaren fick en profilerad kromring runt glaset och en separat gummipackning mot huven. Granskat framifrån i Godot. Fordonsprovet passerade.
   - Blinkersen fick rundade glas och separata hus fram och bak. Fram sitter husen på korta fästen mot huven. Båda ändarna granskades i Godot och fordonsprovet verifierar att de modellerade glasen blinkar på rätt sida.
   - Baklyktan fick räfflat rött glas, separat lamphus och gummipackning. Granskat i Godot. Fordonsprovet verifierar att det nya glaset lyser vid inbromsning.
+  - Backspeglarna fick rundade hus, infällda spegelytor, justerleder och gummifästen. Båda speglarna granskades i Godot och fordonsprovet passerade.
 - [ ] [`snowmobile.glb`](../vehicles/snowmobile.glb)
 - [ ] [`sport_quattro.glb`](../vehicles/sport_quattro.glb)
   - Fordonsprovet kontrollerar att galleriet visar Audo Sport Kvattro, att bakluckan har Kvattro-emblemet och att fronten har fem ringar. Språkkontrollen passerade för alla sex översättningskataloger.

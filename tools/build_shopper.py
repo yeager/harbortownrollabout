@@ -18,6 +18,7 @@ red = v.material("Cherry red moulded shell", (.64,.026,.034),.22,.26)
 vinyl = v.material("Saddle vinyl", (.032,.028,.027),0,.6)
 glass = v.material("Clear curved acrylic", (.65,.81,.86),.06,.15)
 next(node for node in glass.node_tree.nodes if node.type == "BSDF_PRINCIPLED").inputs["Alpha"].default_value=.26
+mirror_glass = v.material("Silvered mirror glass", (.53,.61,.65),.85,.15)
 amber = v.material("Amber indicator", (.95,.24,.015),.05,.25)
 def box(name,pos,size,material,bevel=.018):
     return v.cube(name,pos,size,material,bevel,root)
@@ -163,8 +164,27 @@ for side in (-1,1):
     edge.width = .007
     edge.segments = 3
     tube("Side window seal",screen_point(side,0),screen_point(side,1),.012,v.BLACK)
-    tube("Mirror stem",(side*.40,-.42,.91),(side*.51,-.43,1.05),.009,v.METAL)
-    box("Wing mirror",(side*.51,-.43,1.07),(.094,.034,.07),v.METAL)
+    box("Mirror mounting pad",(side*.409,-.421,.919),(.046,.053,.025),v.RUBBER,.008)
+    tube("Mirror stem",(side*.415,-.421,.923),(side*.507,-.445,1.057),.008,v.METAL)
+    tube("Mirror adjustment joint",(side*.507,-.445,1.048),(side*.507,-.445,1.064),.014,v.DARK)
+    # Rounded shells taper toward the front, with the silvered pane inside the rear lip.
+    for name, finish, sections in [
+        ("Wing mirror shell", v.DARK,
+         [(-.478,.036,.024),(-.469,.055,.035),(-.446,.061,.038),
+          (-.430,.059,.037),(-.427,.054,.032),(-.432,.049,.028),(-.437,.048,.027)]),
+        ("Wing mirror glass", mirror_glass,
+         [(-.438,.048,.027),(-.432,.050,.029),(-.430,.046,.026)]),
+    ]:
+        rings = []
+        for y,width,height in sections:
+            ring = []
+            for i in range(48):
+                angle = math.tau*i/48
+                x, z = math.cos(angle), math.sin(angle)
+                ring.append((side*.513+width*math.copysign(abs(x)**.65,x),
+                             y,1.084+height*math.copysign(abs(z)**.65,z)))
+            rings.append(ring)
+        v.profile_loft(name,rings,finish,root)
     mount = box("Front indicator mounting arm",(side*.343,-1.151,.544),
                 (.096,.046,.021),v.DARK,.006)
     mount.rotation_euler.z = side*.23
