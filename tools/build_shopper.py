@@ -152,8 +152,17 @@ for i, point in enumerate(seal_path):
     seal_rings.append([point + across*(.013*math.cos(math.tau*j/12)) +
                        depth*(.010*math.sin(math.tau*j/12)) for j in range(12)])
 v.profile_loft("Continuous windscreen seal",seal_rings+[seal_rings[0]],v.RUBBER,root,close_ends=False)
-v.mesh_from_rings("Overhanging canopy",[(-.12,.39,1.495,1.52,1.55),(.02,.425,1.50,1.55,1.57),
-    (.29,.428,1.54,1.57,1.59),(.49,.405,1.577,1.59,1.604)],red,root,.012,panel_section)
+roof_sections = [
+    (-.138,.365,1.490,1.510,1.540),(-.130,.386,1.489,1.513,1.548),
+    (-.110,.404,1.493,1.522,1.554),(.02,.425,1.50,1.55,1.57),
+    (.29,.428,1.54,1.57,1.59),(.45,.416,1.568,1.588,1.603),
+    (.49,.400,1.577,1.590,1.604),(.502,.383,1.580,1.590,1.601),
+]
+v.mesh_from_rings("Overhanging canopy",roof_sections,red,root,.006,panel_section)
+# An inset finishing strip closes the underside between the molded edges.
+roof_trim = [(y,width-.009,bottom-.009,bottom,bottom+.007)
+             for y,width,bottom,_,_ in roof_sections]
+v.mesh_from_rings("Canopy lower finishing strip",roof_trim,v.DARK,root,.003,panel_section)
 for side in (-1,1):
     # Front edge follows the screen. The trailing edge flares into the roof.
     pillar_rings = []
