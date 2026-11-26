@@ -325,5 +325,6 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Vägvisarna till bensinstationen och glassdepån fick aluminiumbaksidor med dubbla monteringsskenor. Stationsskylten granskades i Godot. Glassrundan passerade.
   - Övningsbanans stoppskylt fick en åttakantig aluminiumbaksida, monteringsskenor och stolpklämmor. Granskat bakifrån i Godot. Övningsbaneprovet passerade.
   - Övningsbanans trafikkoner fick formgjutna gummifötter och dubbla ljusa band. Granskat i Godot. Övningsbaneprovet passerade.
+  - Trafikskolans entré fick dubbla glasdörrar med draghandtag och aluminiumtröskel. Granskat i närbild i Godot. Övningsbaneprovet passerade.
   - Kajens låga lyktor fick sockel, kant under huven och tre smala stag runt ljusspridaren. Granskat vid färjebryggan i Godot. Väderprovet passerade.
 - [ ] Boulebana, spelfigurer och klot

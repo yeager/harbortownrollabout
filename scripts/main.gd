@@ -11698,7 +11698,22 @@ func _build_driving_school() -> void:
 	lamp.name = "Driving school entrance light"
 	lamp.look_at(site + Vector3(0,0,3.35), Vector3.BACK)
 	_make_box("Entrance frame",Vector3(1.56,2.34,.14),Vector3(0,1.19,3.035),Color("#263e43"),false,school)
-	_make_box("Entrance glazing",Vector3(1.32,1.94,.04),Vector3(0,1.31,3.12),Color("#415961"),false,school)
+	var door_metal := _material(Color("#92a1a4"), .48)
+	door_metal.metallic = .56
+	for side in [-1, 1]:
+		var door_x: float = side * .345
+		_make_box("Entrance door leaf", Vector3(.671, 2.15, .048),
+			Vector3(door_x, 1.145, 3.12), Color("#344a50"), false, school)
+		_make_box("Entrance glazing", Vector3(.566, 1.67, .023),
+			Vector3(door_x, 1.33, 3.15), Color("#526d76"), false, school)
+		var handle_x: float = side * .085
+		for support_y in [1.02, 1.26]:
+			_make_box("Door handle mount", Vector3(.027, .027, .071),
+				Vector3(handle_x, support_y, 3.181), Color.WHITE, false, school).material_override = door_metal
+		_add_moored_round_fitting(school, "Entrance pull handle",
+			Vector3(handle_x, 1.017, 3.218), Vector3(handle_x, 1.264, 3.218), .014, door_metal)
+	_make_box("Entrance aluminium threshold", Vector3(1.49, .044, .23),
+		Vector3(0, .036, 3.14), Color.WHITE, false, school).material_override = door_metal
 	for side in [-1,1]:
 		_make_box("Window frame",Vector3(3.25,1.55,.13),Vector3(side*3.55,1.71,3.03),Color("#263e43"),false,school)
 		_make_box("Classroom glazing",Vector3(3.02,1.33,.035),Vector3(side*3.55,1.71,3.11),Color("#566e73"),false,school)
