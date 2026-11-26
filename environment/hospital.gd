@@ -123,6 +123,22 @@ func _build_closed_entrance(world: Node3D, glass: Material) -> void:
 				Vector3(facade_x + (column - 5) * .60, .012, .365 + row * .63)))
 	_box_batch("Hospital entrance paving", Vector3(.584, .010, .614), Vector3.ZERO,
 		world._material(Color("#c7bead"), .84), paving)
+	var shrub_mesh := SphereMesh.new()
+	shrub_mesh.radial_segments = 10
+	shrub_mesh.rings = 5
+	shrub_mesh.material = world._material(Color("#46614a"), .92)
+	for planter_x in [-13.02, -5.58]:
+		world._make_roadside_solid("Entrance planter", Vector3(.72, .41, 1.84),
+			Vector3(planter_x, .205, 3.92), Color("#777c76"), true, self)
+		world._make_box("Planter soil", Vector3(.61, .026, 1.72),
+			Vector3(planter_x, .414, 3.92), Color("#51483b"), false, self)
+		for index in 3:
+			var shrub := MeshInstance3D.new()
+			shrub.name = "Entrance evergreen shrub"
+			shrub.mesh = shrub_mesh
+			shrub.position = Vector3(planter_x, .61, 3.40 + index * .52)
+			shrub.scale = Vector3(.63, .51 + .14 * (index % 2), .61)
+			add_child(shrub)
 	world._make_box("Entrance surround", Vector3(6.1, 3.05, .20), Vector3(facade_x, 1.525, .15), METAL, false, self)
 	for column in 4:
 		var pane: MeshInstance3D = world._make_box("Locked entrance glazing", Vector3(1.31, 2.42, .06),
