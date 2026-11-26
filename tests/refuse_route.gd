@@ -61,12 +61,17 @@ func check_route() -> void:
 				printerr("The loaded bin did not tip with the comb and its teeth")
 				quit(1)
 				return
+			var lid := bin.get_node("LidHinge") as Node3D
+			if lid.rotation.x < deg_to_rad(85.0):
+				printerr("The bin lid did not open during tipping")
+				quit(1)
+				return
 			if bin.global_position.y <= curb.y + .8:
 				printerr("Bin did not lift above the loading edge")
 				quit(1)
 				return
 			await create_timer(1.45).timeout
-			if not is_zero_approx(comb.rotation.x) or not bin.visible or bin.global_position.distance_to(curb) > .01 or absf(bin.rotation.x) > .01:
+			if not is_zero_approx(comb.rotation.x) or not is_zero_approx(lid.rotation.x) or not bin.visible or bin.global_position.distance_to(curb) > .01 or absf(bin.rotation.x) > .01:
 				printerr("Bin did not return upright to the curb")
 				quit(1)
 				return

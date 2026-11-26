@@ -2026,9 +2026,13 @@ func _empty_refuse_bin(stop: int) -> void:
 	var curb := bin.global_position
 	var comb := vehicle_model.find_child("LoadingCombPivot", true, false) as Node3D
 	var rest_rotation := bin.rotation
+	var lid := bin.get_node("LidHinge") as Node3D
 	var loading_pose := Transform3D(Basis(Vector3.UP, vehicle_model.global_rotation.y), vehicle_model.to_global(Vector3(0,.315,-3.985)))
 	var bin_mount := comb.global_transform.affine_inverse() * loading_pose
 	var move_comb := func(angle: float) -> void:
+		if not is_instance_valid(comb):
+			return
+		lid.rotation.x = smoothstep(deg_to_rad(65.0), deg_to_rad(140.0), angle) * deg_to_rad(95.0)
 		comb.rotation.x = angle
 		bin.global_transform = comb.global_transform * bin_mount
 	bin.rotation.y = vehicle_model.global_rotation.y
@@ -5783,8 +5787,23 @@ func _build_depot() -> void:
 		bin.position = _stop_pavement(i)
 		if i == 0: bin.position.z = 6.35
 		bin.position.y = _foot_height(bin.position.x, bin.position.z)
-		_make_box("Recycling bin",Vector3(.67,.84,.58),Vector3.UP*.51,Color("#20548a") if i == 0 else Color("#245d48"),false,bin)
-		_make_box("Hinged lid",Vector3(.72,.08,.64),Vector3.UP*.97,Color("#509be3") if i == 0 else Color("#74ab54"),false,bin)
+		var plastic := Color("#20548a") if i == 0 else Color("#245d48")
+		var lid_color := Color("#509be3") if i == 0 else Color("#74ab54")
+		_make_box("Bin base", Vector3(.67,.064,.58), Vector3.UP*.122, plastic, false, bin)
+		for side in [-1,1]:
+			_make_box("Bin side wall", Vector3(.033,.784,.58), Vector3(side*.3185,.538,0), plastic, false, bin)
+			_make_box("Bin end wall", Vector3(.604,.784,.032), Vector3(0,.538,side*.274), plastic, false, bin)
+			_make_box("Bin rim side", Vector3(.043,.043,.604), Vector3(side*.321,.919,0), plastic.lightened(.12), false, bin)
+			_make_box("Bin rim end", Vector3(.60,.043,.042), Vector3(0,.919,side*.281), plastic.lightened(.12), false, bin)
+			_make_box("Lid hinge bracket", Vector3(.11,.078,.052), Vector3(side*.224,.921,.287), plastic, false, bin)
+		var lid := Node3D.new()
+		lid.name = "LidHinge"
+		bin.add_child(lid)
+		lid.position = Vector3(0,.953,.302)
+		_make_box("Hinged lid", Vector3(.72,.057,.64), Vector3(0,.014,-.302), lid_color, false, lid)
+		_make_box("Lid pull", Vector3(.21,.025,.050), Vector3(0,.049,-.57), lid_color.darkened(.18), false, lid)
+		for side in [-1,1]:
+			_make_box("Lid hinge knuckle", Vector3(.082,.038,.058), Vector3(side*.224,0,0), lid_color, false, lid)
 		_add_recycling_labels(bin,i == 0)
 		for side in [-1,1]:
 			_make_box("Bin wheel",Vector3(.08,.16,.16),Vector3(side*.29,.09,.21),Color("#242a29"),false,bin)
