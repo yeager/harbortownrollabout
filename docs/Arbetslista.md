@@ -451,6 +451,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Kärlens baksida fick två lodräta förstärkningsribbor och en nedre slitlist. Granskat med öppet lock i Godot. Sophämtningsprovet passerade.
   - Insidan fick bottenribbor, hjulhus och tvärstag under locket. Granskat ovanifrån med öppet lock. Sophämtningsprovet passerade.
   - Lockens gångjärn fick runda hylsor som följer locket och fasta stålaxlar. Granskat med uppfällt lock i Godot. Sophämtningsprovet passerade.
+  - Kärlen fick två främre stödfötter med mörka slitytor vid marken. Granskade i Godot och sophämtningsprovet passerade.
 - [ ] Stadens granitmur med sockel, hörn och avtäckning
   - Muren fick förskjutna granitblock med ljusvariation och mörkare sockel. Granskat från vägen i Godot. Stadsgränsprovet kontrollerade fyra väggar och hörnkollisioner. Kanalprovet passerade också.
   - Murkrönets täckplattor möts kant i kant i hörnen utan överlappande ovansidor. Granskat vid nordöstra hörnet. Stadsgränsprovet passerade.

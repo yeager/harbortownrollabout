@@ -5909,6 +5909,12 @@ func _build_depot() -> void:
 		var plastic := Color("#20548a") if i == 0 else Color("#245d48")
 		var lid_color := Color("#509be3") if i == 0 else Color("#74ab54")
 		_make_box("Bin base", Vector3(.67,.064,.58), Vector3.UP*.122, plastic, false, bin)
+		for side in [-1, 1]:
+			var foot_x: float = side * .262
+			_make_box("Bin molded front foot", Vector3(.106, .084, .133),
+				Vector3(foot_x, .050, -.216), plastic.darkened(.08), false, bin)
+			_make_box("Bin front wear pad", Vector3(.104, .012, .127),
+				Vector3(foot_x, .006, -.216), plastic.darkened(.35), false, bin)
 		for rib_x in [-.21, -.07, .07, .21]:
 			_make_box("Bin floor reinforcing rib", Vector3(.028, .021, .49),
 				Vector3(rib_x, .159, 0), plastic.lightened(.06), false, bin)
