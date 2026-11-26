@@ -881,7 +881,7 @@ def make_taxi():
 
 def make_police():
     root = make_bwm(PAINT_WHITE, "Polis | patrullbil", patrol=True)
-    skin = next(obj for obj in root.children if obj.name.startswith("X5 M60i continuous"))
+    skin = next(obj for obj in root.children if obj.name.startswith("SUV continuous"))
     bpy.context.view_layer.update()
     surface = skin.evaluated_get(bpy.context.evaluated_depsgraph_get())
     foil_blue=material("Patrol cobalt reflective film",(.009,.058,.39),.08,.30)
@@ -1742,7 +1742,7 @@ def make_bwm(color, name="BWM Y5 N70i", *, patrol=False):
         return ([(-x*width,y,z) for x,z in flank] + [(0,y,crown+.035+.64*relief)] +
                 [(x*width,y,z) for x,z in reversed(flank)])
 
-    body = mesh_from_rings("X5 M60i continuous sculpted body", [
+    body = mesh_from_rings("SUV continuous sculpted body", [
         (-2.50, .86, .66, 1.37, 1.485), (-2.48, .94, .65, 1.38, 1.49),
         (-2.43, 1.005, .635, 1.42, 1.515), (-2.31, 1.06, 0.61, 1.48, 1.55),
         (-1.88, 1.09, 0.62, 1.49, 1.56), (-1.52, 1.13, 0.61, 1.51, 1.59), (-1.20, 1.12, 0.61, 1.52, 1.60),
