@@ -143,14 +143,17 @@ def build():
 
     def door_seam(name, side, top, bottom):
         vertices = []
-        for step in range(41):
-            y, z = Vector(top).lerp(Vector(bottom), step / 40)
+        samples = 160
+        clearance = Vector((side * .0012, 0, 0))
+        for step in range(samples + 1):
+            y, z = Vector(top).lerp(Vector(bottom), step / samples)
             for offset in [-.0018, .0018]:
-                hit, point, normal, _ = body_surface.ray_cast(
+                hit, point, _, _ = body_surface.ray_cast(
                     (side * 1.2, y + offset, z), (-side, 0, 0))
                 if not hit:
                     raise ValueError(f"{name} lost the body surface at {y:.3f}, {z:.3f}")
-                vertices.append(point + normal * .0007)
+                # Keep the projected strip outside the metal through the crease.
+                vertices.append(point + clearance)
         faces = [(i, i + 1, i + 3, i + 2) for i in range(0, len(vertices) - 2, 2)]
         if side == 1:
             faces = [face[::-1] for face in faces]
