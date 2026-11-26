@@ -617,6 +617,8 @@ var navigation_lenses: Array[StandardMaterial3D] = []
 var outboard: Node3D
 var launch_speed := 0.0
 var helicopter: Node3D
+var patrol_landing_lights: Array[SpotLight3D] = []
+var patrol_landing_lens: StandardMaterial3D
 var medical_helicopter := preload("res://scripts/medical_helicopter.gd").new()
 var main_rotor: Node3D
 var tail_rotor: Node3D
@@ -2310,6 +2312,20 @@ func _build_world() -> void:
 	add_child(tram)
 	helicopter = preload("res://vehicles/polishelikopter.glb").instantiate()
 	add_child(helicopter)
+	for lens: MeshInstance3D in helicopter.find_children("Landing lamp lens*", "MeshInstance3D", true, false):
+		if not patrol_landing_lens:
+			patrol_landing_lens = lens.get_active_material(0).duplicate() as StandardMaterial3D
+		lens.material_override = patrol_landing_lens
+		var light := SpotLight3D.new()
+		light.name = "Patrol landing beam"
+		light.position = helicopter.to_local(lens.global_position)
+		light.basis = Basis.looking_at(Vector3(0, -.88, .47))
+		light.light_color = Color("#fff4dc")
+		light.spot_range = 55.0
+		light.spot_angle = 23.0
+		light.hide()
+		helicopter.add_child(light)
+		patrol_landing_lights.append(light)
 	main_rotor = helicopter.find_child("MainRotor",true,false)
 	tail_rotor = helicopter.find_child("TailRotor",true,false)
 	RotorMotion.fit(main_rotor, 4.44, 4)
@@ -5138,6 +5154,12 @@ func _update_daylight(delta: float) -> void:
 		refuse_plate_lamp_finish.emission_energy_multiplier = 1.1 * night
 		refuse_plate_finish.emission_energy_multiplier = .32 * night
 	_update_bus_ceiling_lights(night)
+	var patrol_light := smoothstep(.30, .75, night)
+	for light in patrol_landing_lights:
+		light.visible = patrol_light > .001
+		light.light_energy = 3.0 * patrol_light
+	if patrol_landing_lens:
+		patrol_landing_lens.emission_energy_multiplier = 1.4 * patrol_light
 	for lens in navigation_lenses:
 		lens.emission_energy_multiplier = night*3.2
 	water_finish.set_shader_parameter("dusk",night)

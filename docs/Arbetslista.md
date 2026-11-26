@@ -271,6 +271,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Motorhuset fick luftintag med metallameller på båda sidor och två bakåtriktade avgasutblås. Granskat snett bakifrån under patrullflygning. Rotor- och landningsprovet passerade i Godot 4.7 dev5.
   - Framrutan fick större glasyta och en smal mörk mittkarm som följer nosens välvning. Granskat framifrån. Rotor- och landningsprovet passerade i Godot 4.7 dev5.
   - Nosen fick två modellerade landningsstrålkastare med lamphus, reflektorer och lysande linser. Granskade framifrån under patrullflygning. Rotor- och landningsprovet passerade i Godot 4.7 dev5.
+  - Strålkastarnas linser och ljuskäglor tänds gradvis när det mörknar. Dags- och nattläget kontrollerades i Godot 4.7 dev5. Rotor- och landningsprovet passerade.
 - [ ] [`porsche_gt3_rs.glb`](../vehicles/porsche_gt3_rs.glb)
   - Porsje GT5RS har egna bakre märkesbokstäver och en guldfärgad romb med svart vinkel på motorhuven. Båda granskades i Godot. Fordonsgalleriets körprov, banbilens körprov och språkkontrollen passerade.
 - [ ] [`puch_dakota.glb`](../vehicles/puch_dakota.glb)
