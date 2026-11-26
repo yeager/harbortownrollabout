@@ -2231,6 +2231,30 @@ def make_bwm(color, name="BWM Y5 N70i", *, patrol=False):
                           z+height*.48+height*.52*math.sin(i*math.tau/12)) for i in range(12)])
         profile_loft("Integrated roof rail",rail,DARK,root)
         cube("M sport fender trim", (side * 1.08, -1.37, 1.03), (0.05, 0.18, 0.05), DARK, 0.045, root)
+    if root.name.startswith("BWM Y5 N70i"):
+        antenna_seal = []
+        antenna_shell = []
+        roof_surface = shell.evaluated_get(bpy.context.evaluated_depsgraph_get())
+        for y, half_width, height in (
+            (1.42,.004,.005), (1.44,.024,.014), (1.48,.040,.037),
+            (1.54,.045,.073), (1.59,.043,.112), (1.62,.036,.120),
+            (1.655,.027,.074), (1.685,.014,.018), (1.695,.003,.005),
+        ):
+            hit, point, _, _ = roof_surface.ray_cast((0,y,3), (0,0,-1))
+            if not hit:
+                raise ValueError("Shark fin antenna outside roof")
+            z = point.z
+            antenna_seal.append([(x,y,z+offset) for x, offset in (
+                (-half_width-.003,-.003), (half_width+.003,-.003),
+                (half_width+.002,.004), (-half_width-.002,.004),
+            )])
+            antenna_shell.append([(x,y,z+offset) for x, offset in (
+                (-half_width,.002), (half_width,.002), (half_width*.82,height*.49),
+                (half_width*.31,height*.94), (0,height), (-half_width*.31,height*.94),
+                (-half_width*.82,height*.49),
+            )])
+        profile_loft("Shark fin antenna seal", antenna_seal, RUBBER, root)
+        profile_loft("Painted shark fin antenna", antenna_shell, color, root)
     def fascia(name, side, profile, y, mat, thickness=.11):
         # Return each outer corner towards the wheel arch in plan view.
         vertices = [(side*x, y+.085*x**3+depth, z)
