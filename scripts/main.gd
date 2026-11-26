@@ -2378,6 +2378,10 @@ func _build_city_wall() -> void:
 	var stone := _granite_wall_finish()
 	stone.set_shader_parameter("block_size", Vector2(1.32, .43))
 	stone.set_shader_parameter("damp_base", -.12)
+	var coping_finish := _noise_material(Color("#c8c3b5"), Color("#e0d9c6"), 6.0, .18)
+	coping_finish.set_shader_parameter("roof_surface", true)
+	coping_finish.set_shader_parameter("use_instance_tint", true)
+	ground_finishes.append(coping_finish)
 	var middle := CITY_INTERIOR.get_center()
 	for along_x in [true, false]:
 		var length := CITY_INTERIOR.size.x if along_x else CITY_INTERIOR.size.y
@@ -2397,9 +2401,7 @@ func _build_city_wall() -> void:
 				center + Vector3.UP * 2.32, Color("#706d63"), false, wall)
 			var slab := BoxMesh.new()
 			slab.size = tangent + normal * .68 + Vector3.UP * .09
-			var finish := _material(Color.WHITE, .82)
-			finish.vertex_color_use_as_albedo = true
-			slab.material = finish
+			slab.material = coping_finish
 			var coping := MultiMesh.new()
 			coping.transform_format = MultiMesh.TRANSFORM_3D
 			coping.use_colors = true
@@ -13727,6 +13729,7 @@ func _noise_material(dark_color: Color, light_color: Color, frequency: float, st
 	uniform bool is_grass = false;
 	uniform bool road_paint = false;
 	uniform bool roof_surface = false;
+	uniform bool use_instance_tint = false;
 	uniform float frequency = 2.0;
 	uniform float strength = 0.1;
 	varying vec3 world_position;
@@ -13742,6 +13745,9 @@ func _noise_material(dark_color: Color, light_color: Color, frequency: float, st
 		float broad = mix(noise(p), .5, smoothstep(.25, 1., footprint));
 		float grain = mix(noise(p * 12.), .5, smoothstep(.25, 1., footprint * 12.));
 		ALBEDO = mix(dark_color.rgb, light_color.rgb, clamp(0.5 + (broad - 0.5) * strength * 3.0 + (grain - 0.5) * strength * 0.4, 0.0, 1.0));
+		if (use_instance_tint) {
+			ALBEDO *= COLOR.rgb;
+		}
 		vec3 worked = vec3(0.0);
 		if (!roof_surface && (is_grass || snow_cover > 0.0)) {
 			worked = texture(work_map,(world_position.xz-work_bounds.xy)/work_bounds.zw).rgb;

@@ -449,6 +449,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Muren fick förskjutna granitblock med ljusvariation och mörkare sockel. Granskat från vägen i Godot. Stadsgränsprovet kontrollerade fyra väggar och hörnkollisioner. Kanalprovet passerade också.
   - Murkrönets täckplattor möts kant i kant i hörnen utan överlappande ovansidor. Granskat vid nordöstra hörnet. Stadsgränsprovet passerade.
   - Murkrönet fick individuella täckstenar med tunna fogar och varierande ton. Granskat vid nordöstra hörnet i Godot. Stadsgränsprovet passerade.
+  - Täckstenarna samlar snö på ovansidan och fogarna syns även i vinterläget. Granskat vid nordöstra hörnet. Stadsgräns- och väderproven passerade.
 - [ ] Uppdragsrekvisitan för cykelbud, födelsedag och upphittat paraply
 - [ ] Tvärbanans perrong, väderskydd och övriga hållplatsdetaljer
   - Kontaktledningsstolparna fick fotplattor, stag och isolatorer. Granskat vid Västra torget i Godot efter godkänt spårvagnsprov.
