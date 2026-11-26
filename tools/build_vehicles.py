@@ -2766,6 +2766,9 @@ def make_bwm(color, name="BWM Y5 N70i", *, patrol=False):
         vertical = normal.cross(Vector((1,0,0))).normalized()
         roundel("Tailgate enamel badge",center+normal*.003,vertical,normal,.053)
 
+    wheel_housing_finish = None
+    if root.name.startswith("BWM Y5 N70i"):
+        wheel_housing_finish = material("Textured charcoal wheel housing", (.018, .019, .020), 0, .92)
     for y in (-1.52, 1.55):
         for side in (-1, 1):
             bpy.ops.mesh.primitive_cylinder_add(vertices=64, radius=.54, depth=.62,
@@ -2774,6 +2777,9 @@ def make_bwm(color, name="BWM Y5 N70i", *, patrol=False):
             cut = body.modifiers.new("Wheel housing", "BOOLEAN")
             cut.object = cutter
             cut.operation = "DIFFERENCE"
+            if wheel_housing_finish is not None:
+                cutter.data.materials.append(wheel_housing_finish)
+                cut.material_mode = "TRANSFER"
             bpy.context.view_layer.objects.active = body
             bpy.ops.object.modifier_apply(modifier=cut.name)
             bpy.data.objects.remove(cutter, do_unlink=True)
