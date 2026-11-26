@@ -11910,6 +11910,8 @@ func _build_driving_school() -> void:
 			side * PI * .5, classroom_glass, door_metal)
 		_make_box("School end wall plinth", Vector3(.043, .29, 6.01),
 			Vector3(side * 6.009, .145, 0), Color.WHITE, false, school).material_override = plinth_finish
+		_make_box("School front plinth", Vector3(5.24, .29, .043),
+			Vector3(side * 3.399, .145, 3.007), Color.WHITE, false, school).material_override = plinth_finish
 	for mount_x in [-2.18, 0.0, 2.18]:
 		_make_box("School sign canopy bracket", Vector3(.144, .33, .18),
 			Vector3(mount_x, 2.85, 4.18), Color.WHITE, false, school).material_override = roof_metal
