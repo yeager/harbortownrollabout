@@ -2313,7 +2313,7 @@ func _build_world() -> void:
 	main_rotor = helicopter.find_child("MainRotor",true,false)
 	tail_rotor = helicopter.find_child("TailRotor",true,false)
 	RotorMotion.fit(main_rotor, 4.44, 4)
-	RotorMotion.fit(tail_rotor, .56, 7, true)
+	RotorMotion.fit(tail_rotor, .50, 7, true)
 	add_child(medical_helicopter)
 	medical_helicopter.configure(HOSPITAL_HELIPAD)
 	_update_patrol(0)

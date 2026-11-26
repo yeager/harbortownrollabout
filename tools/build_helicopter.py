@@ -62,28 +62,30 @@ shell("Glazed passenger fuselage",[(-3.45,.07,1.39,.10),(-3.22,.59,1.39,.52),
       (-1.25,1.13,1.56,1.08),(-.79,1.14,1.56,1.09),(-.71,1.14,1.56,1.09),
       (.03,1.13,1.55,1.07),(.80,1.05,1.55,.97),(1.57,.81,1.57,.75),(2.3,.40,1.64,.38)],cabin_paint)
 shell("Tapered tail boom",[(1.6,.55,1.69,.49),(2.7,.38,1.74,.36),
-      (4.3,.22,1.9,.23),(5.47,.16,2.01,.16)],lambda j,i,s:0)
+      (4.3,.22,1.9,.23),(4.80,.14,2.05,.15)],lambda j,i,s:0)
 for side in [-1,1]:
     text_obj("Police fuselage lettering","POLIS",(side*1.15,-side*.68,1.14),.40,blue,-side,root)
     skid=cube("Landing runner",(side*1.08,-.39,.16),(.09,3.83,.10),blue,.045,root)
     for y in [-1.55,.78]:
         support=cube("Skid strut",(side*.92,y,.44),(.08,.1,.65),blue,.035,root)
         support.rotation_euler.y=-side*.52
-for z,y,dy,dz,finish in [(2.47,5.44,.82,1.16,white),(3.09,5.57,.80,.16,red)]:
+for z,y,dy,dz,finish in [(2.85,5.525,.82,.38,white),(3.09,5.57,.80,.16,red)]:
     fin=cube("Tail fin",(0,y,z),(.11,dy,dz),finish,.055,root)
     fin.rotation_euler.x=-.22
 cube("Tailplane",(0,4.57,1.92),(2.22,.44,.072),white,.035,root)
 engine=cube("Turbine housing",(0,.09,2.52),(1.25,2.26,.53),blue,.24,root)
 cylinder("Mast",(0,-.27,2.99),.095,.47,metal,False,20,root)
 main=pivot("MainRotor",root,(0,-.27,3.21))
-tail=pivot("TailRotor",root,(.25,5.35,2.05))
+tail=pivot("TailRotor",root,(0,5.35,2.05))
 for name, height, radius, depth, finish in [
     ("Main rotor hub", 0, .29, .13, metal),
     ("Main rotor cap", .093, .19, .074, blue),
 ]:
     component = cylinder(name, (0, 0, height), radius, depth, finish, False, 32, main)
     component.matrix_parent_inverse.identity()
-for hub,count,length in [(main,4,4.09),(tail,7,.56)]:
+tail_hub = cylinder("Tail rotor hub", (0, 0, 0), .112, .15, metal, True, 24, tail)
+tail_hub.matrix_parent_inverse.identity()
+for hub,count,length in [(main,4,4.09),(tail,7,.50)]:
     for i in range(count):
         angle=math.tau*i/count
         if hub==main:
@@ -100,12 +102,17 @@ for hub,count,length in [(main,4,4.09),(tail,7,.56)]:
             blade.location=(0,-math.sin(angle)*length/2,math.cos(angle)*length/2)
             blade.rotation_euler.x=angle
         blade.matrix_parent_inverse.identity()
-bpy.ops.mesh.primitive_torus_add(location=(.18,5.35,2.05),rotation=(0,math.pi/2,0),
+bpy.ops.mesh.primitive_torus_add(location=(0,5.35,2.05),rotation=(0,math.pi/2,0),
                                 major_radius=.60,minor_radius=.085)
 ring=bpy.context.object
 ring.name="Shrouded tail rotor"
 ring.parent=root
+ring.scale.z = 1.8
 ring.data.materials.append(blue)
+for polygon in ring.data.polygons:
+    polygon.use_smooth = True
+cube("Tail gearbox support", (.124, 5.35, 2.05), (.067, 1.15, .077), blue, .025, root)
+cylinder("Tail gearbox cover", (.16, 5.35, 2.05), .085, .041, blue, True, 24, root)
 export_vehicle(root,"polishelikopter.glb")
 bpy.context.preferences.filepaths.save_version=0
 bpy.ops.wm.save_as_mainfile(filepath=str(Path(SOURCE_DIR)/"Polishelikopter.blend"))
