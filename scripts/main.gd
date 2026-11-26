@@ -5805,8 +5805,17 @@ func _build_depot() -> void:
 		for side in [-1,1]:
 			_make_box("Lid hinge knuckle", Vector3(.082,.038,.058), Vector3(side*.224,0,0), lid_color, false, lid)
 		_add_recycling_labels(bin,i == 0)
+		var wheel_rubber := _material(Color("#242a29"), .92)
+		var hub_plastic := _material(Color("#4e5859"), .64)
+		var axle_steel := _material(Color("#7a8180"), .42)
+		_tube_between(bin, Vector3(-.34,.105,.21), Vector3(.34,.105,.21), .023, axle_steel)
 		for side in [-1,1]:
-			_make_box("Bin wheel",Vector3(.08,.16,.16),Vector3(side*.29,.09,.21),Color("#242a29"),false,bin)
+			_tube_between(bin, Vector3(side*.258,.105,.21), Vector3(side*.342,.105,.21), .105, wheel_rubber)
+			_tube_between(bin, Vector3(side*.341,.105,.21), Vector3(side*.352,.105,.21), .069, hub_plastic)
+			_tube_between(bin, Vector3(side*.351,.105,.21), Vector3(side*.362,.105,.21), .025, axle_steel)
+		_make_box("Bin lifting lip", Vector3(.56,.047,.082), Vector3(0,.879,.313), plastic.darkened(.10), false, bin)
+		for x in [-.223,0,.223]:
+			_make_box("Bin lifting lip gusset", Vector3(.025,.055,.041), Vector3(x,.847,.306), plastic, false, bin)
 		refuse_bins.append(bin)
 		bin.hide()
 	_build_road_signs()
