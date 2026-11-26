@@ -395,6 +395,21 @@ for side in (-1,1):
     for i in range(7):
         t=.14+.72*i/6
         tube("Basket wire",(side*(.30-.055*t),.53+.52*t,.55),(side*(.345-.055*t),.49+.63*t,.72),.005,v.METAL)
+# The rear wall stops luggage sliding out, while four padded feet support the lower rail.
+for i in range(-3,4):
+    fraction = i/4
+    tube("Basket rear wire",(.245*fraction,1.05,.55),
+         (.290*fraction,1.12,.72),.005,v.METAL)
+for side in (-1,1):
+    for y, deck_top in ((.62,.556),(.96,.532)):
+        rail_x = side*(.30-.055*(y-.53)/.52)
+        foot = (rail_x-side*.025,y,deck_top)
+        box("Basket foot rubber pad",foot,(.050,.052,.009),v.RUBBER,.004)
+        box("Basket foot plate",(foot[0],y,deck_top+.006),(.043,.042,.007),v.METAL,.004)
+        tube("Basket support bracket",(foot[0],y,deck_top+.006),
+             (rail_x,y,.550),.008,v.METAL)
+        v.cylinder("Basket foot bolt",(foot[0]-side*.012,y,deck_top+.011),
+                   .005,.004,v.DARK,False,6,root)
 # The filler cap sits beside the forward air intake, inside the luggage rail.
 v.cylinder("Filler gasket",(.19,.56,.559),.040,.009,v.RUBBER,False,32,root)
 v.cylinder("Filler cap",(.19,.56,.577),.035,.030,v.METAL,False,32,root)
