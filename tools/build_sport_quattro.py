@@ -395,7 +395,15 @@ def build():
                 number.rotation_euler.z = math.pi
         bar("Gauge needle",spindle,(x-radius*.63,y+.012,z-radius*.458),.003,.002,red,pointer_root)
 
-    bar("Steering column",(.346,-.413,.761),(.346,-.155,.855),.044,.044,trim)
+    column_axis = Vector((0, -math.sin(wheel_tilt), math.cos(wheel_tilt)))
+    for name, start, end, radius, finish in [
+        ("Steering column shroud", .058, .278, .032, trim),
+        ("Steering column collar", .047, .063, .034, rubber),
+        ("Steering shaft at hub", .014, .060, .019, trim),
+    ]:
+        piece = cylinder(name, wheel_center + column_axis * ((start + end) / 2),
+                         radius, end - start, finish, axis_x=False, vertices=32, root=root)
+        piece.rotation_euler.x = wheel_tilt
     dial("Speedometer",.412,-.412,.861,.040,speedometer=True)
     dial("Main instrument",.287,-.412,.861,.040)
     box("Centre stack",(.003,-.332,.640),(.294,.238,.299),trim,.027)
