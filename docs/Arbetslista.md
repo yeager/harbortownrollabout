@@ -264,6 +264,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Saav 97 fick registreringsskyltar med SJO 097, blått landsfält, gummifästen och skruvar. Båda skyltarna granskades i Godot. Fordonsprovet passerade.
   - Stötfångarna fick rundade gummiprofiler som följer karossens hörn. Båda granskades i Godot och fordonsprovet passerade.
   - Sidospeglarna fick rundade hus, vinklade armar, dörrtätningar och separata spegelytor. Granskat i närbild i Godot. Fordonsprovet passerade.
+  - Dörrarna fick smala skarvar som följer karossytan samt separata handtag med gummifästen och låscylindrar. Granskat i sidovy i Godot. Fordonsprovet passerade.
 - [ ] [`shopping_trike.glb`](../vehicles/shopping_trike.glb)
 - [ ] [`snowmobile.glb`](../vehicles/snowmobile.glb)
 - [ ] [`sport_quattro.glb`](../vehicles/sport_quattro.glb)

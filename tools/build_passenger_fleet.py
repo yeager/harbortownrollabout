@@ -210,8 +210,37 @@ def build(key, length, width, axles, color, belt, cabin):
             box("Mirror glass",side*.884,mount_y+.044,1.014,.140,.011,.075,METAL,.012)
         else:
             box("Mirror",side*(width+.065),cabin[1][0]-.07,belt+.12,.17,.22,.13,paint)
-        for y in ([.10,.94] if key in ["model_s","volvo240"] else [.22]):
-            box("Door handle",side*width*.99,y,belt-.14,.032,.15,.04,DARK)
+        if key == "saab96":
+            # Project the shut line onto the curved outer panel.
+            outline = [(-.657,.897),(.536,.897),(.625,.815),(.611,.360),
+                       (.532,.281),(-.582,.281),(-.655,.347)]
+            seam = bpy.data.curves.new("Saav door shut line", "CURVE")
+            seam.dimensions = "3D"
+            seam.bevel_depth = .003
+            seam.bevel_resolution = 2
+            trace = seam.splines.new("POLY")
+            segments = 14
+            trace.points.add(len(outline)*segments-1)
+            trace.use_cyclic_u = True
+            for edge, (start_y,start_z) in enumerate(outline):
+                end_y,end_z = outline[(edge+1) % len(outline)]
+                for step in range(segments):
+                    t = step/segments
+                    y = start_y+(end_y-start_y)*t
+                    z = start_z+(end_z-start_z)*t
+                    hit, surface, normal, _ = body.ray_cast((side*1.1,y,z),(-side,0,0))
+                    point = surface + normal*.002 if hit else Vector((side*.737,y,z))
+                    trace.points[edge*segments+step].co = (*point,1)
+            seam.materials.append(DARK)
+            trim = bpy.data.objects.new("Saav door shut line", seam)
+            bpy.context.collection.objects.link(trim)
+            trim.parent = root
+            box("Saav handle gasket",side*.775,.384,.769,.024,.174,.058,RUBBER,.011)
+            box("Saav door pull",side*.793,.375,.777,.025,.131,.030,METAL,.008)
+            cylinder("Saav door lock",(side*.794,.450,.769),.012,.010,METAL,True,20,root)
+        else:
+            for y in ([.10,.94] if key in ["model_s","volvo240"] else [.22]):
+                box("Door handle",side*width*.99,y,belt-.14,.032,.15,.04,DARK)
         if key=="volvo240":
             box("Rectangular headlamp seal",side*.59,-end-.025,belt*.73,.39,.065,.245,DARK)
             box("Fluted rectangular headlamp",side*.59,-end-.064,belt*.73,.35,.034,.205,HEADLAMP)
