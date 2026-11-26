@@ -7095,7 +7095,7 @@ func _spawn_traffic(scene_path: String, x: float, lane_z: float, direction: floa
 	else:
 		turn_signals.fit(actor, model, _model_bounds(actor, model))
 	var pedals = preload("res://scripts/bicycle_pedals.gd").new(self,model) if is_bicycle else null
-	traffic_data.append({"pedals":pedals,"mass_kg": Mass.for_model(scene_path), "tractor":scene_path.ends_with("a_traktor.glb"), "horn":traffic_horn, "horn_wait":0.0, "actor": actor, "model": model, "direction": direction, "cruise": speed_value, "wheels": _rig_wheels(model), "brake_lens": _brake_lens(model),
+	traffic_data.append({"pedals":pedals,"mass_kg": Mass.for_model(scene_path), "tractor":scene_path.ends_with("a_traktor.glb"), "horn":traffic_horn, "horn_wait":0.0, "queue_honk":false, "actor": actor, "model": model, "direction": direction, "cruise": speed_value, "wheels": _rig_wheels(model), "brake_lens": _brake_lens(model),
 		"speed": speed_value, "length": half_size.y,
 		"width": half_size.x, "turn_signals": turn_signals})
 	return actor
@@ -7336,9 +7336,13 @@ func _update_traffic(delta: float) -> void:
 			item.horn_wait += delta
 			if item.horn_wait >= 2.0:
 				item.horn.play()
+				item.queue_honk = true
 				item.horn_wait = 0.0
 		else:
 			item.horn_wait = 0.0
+			if item.queue_honk:
+				item.horn.stop()
+				item.queue_honk = false
 		var free_space := maxf(0.0, clearance - 1.0)
 		var target := minf(float(item.cruise)*weather_pace, free_space * .95*weather_pace)
 		if free_space < 0.1:

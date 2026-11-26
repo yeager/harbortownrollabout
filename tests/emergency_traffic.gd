@@ -95,6 +95,14 @@ func check_response() -> void:
 		quit(1)
 		return
 	game.street_signals.phase = 0
+	game.waiting_for_clear_crossing = true
+	for tick in 24:
+		game._update_traffic(.1)
+	if follower.horn_wait > 0.0 or follower.horn.playing:
+		printerr("Following car honked while the crossing was blocked")
+		quit(1)
+		return
+	game.waiting_for_clear_crossing = false
 	var honks := 0
 	for tick in 48:
 		var before: float = follower.horn_wait
@@ -107,7 +115,7 @@ func check_response() -> void:
 		return
 	game.speed = 1.0
 	game._update_traffic(.1)
-	if follower.horn_wait > 0.0 or game.waiting_after_green:
+	if follower.horn_wait > 0.0 or follower.horn.playing or game.waiting_after_green:
 		printerr("Green-light horn persisted after moving")
 		quit(1)
 		return
