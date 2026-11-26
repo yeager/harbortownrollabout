@@ -15,8 +15,8 @@ root=bpy.data.objects.new("White A-traktor",None)
 bpy.context.collection.objects.link(root)
 def box(name,loc,size,finish,bevel=.025):
     return cube(name,loc,size,finish,bevel,root)
-def wheel_part(name,x,y,r,d,finish):
-    return cylinder(name,(x,y,.322),r,d,finish,True,32,root)
+def wheel_part(name,x,y,r,d,finish,*,z=.322,vertices=32):
+    return cylinder(name,(x,y,z),r,d,finish,True,vertices,root)
 
 shell=mesh_from_rings("Pressed steel body",[
     (-2.32,.78,.33,.80,.85),(-2.19,.86,.31,.84,.91),(-1.67,.89,.29,.89,.95),
@@ -41,6 +41,14 @@ for y in [-1.45,1.39]:
             bar=box("Alloy wheel spoke",(side*.917,y+.11*math.sin(angle),.322+.11*math.cos(angle)),
                     (.018,.031,.215),METAL,.008)
             bar.rotation_euler.x=-angle
+        wheel_part("Wheel hub flange",side*.929,y,.092,.013,METAL)
+        wheel_part("Center cap",side*.941,y,.044,.016,METAL)
+        for bolt in range(5):
+            angle=(bolt+.5)*math.tau/5
+            bolt_y=y+.068*math.sin(angle)
+            bolt_z=.322+.068*math.cos(angle)
+            wheel_part("Wheel bolt recess",side*.936,bolt_y,.017,.005,DARK,z=bolt_z)
+            wheel_part("Wheel lug nut",side*.943,bolt_y,.011,.012,METAL,z=bolt_z,vertices=6)
 def panel(name, vertices, finish):
     mesh = bpy.data.meshes.new(name)
     mesh.from_pydata(vertices, [], [tuple(range(len(vertices)))])
@@ -81,8 +89,6 @@ for side in (-1,1):
     rod("Wiper rubber lip",(spindle_x-.067,-.989,1.106),
         (spindle_x+.389,-.972,1.124),.006,RUBBER)
     rod("Door sill brightwork",(side*.884,-.88,.407),(side*.884,.51,.407),.015,METAL)
-    for axle_y in (-1.45,1.39):
-        wheel_part("Center cap",side*.93,axle_y,.054,.024,METAL)
 amber = material("A-tractor amber optic",(.92,.33,.032),.08,.28)
 headlamp_glass = material("A-tractor fluted headlight glass",(.58,.65,.69),.18,.24)
 mirror_glass = material("A-tractor mirror glass",(.42,.51,.56),.93,.11)
