@@ -2144,6 +2144,13 @@ def make_bwm(color, name="BWM Y5 N70i", *, patrol=False):
         ]
         vertices, faces = [], []
         for path in seams:
+            if root.name.startswith("BWM Y5 N70i"):
+                # Resample on the curved skin so long quads cannot cut through the door.
+                samples = []
+                for (y0,z0), (y1,z1) in zip(path, path[1:]):
+                    steps = math.ceil(math.hypot(y1-y0, z1-z0) / .025)
+                    samples.extend((y0+(y1-y0)*i/steps, z0+(z1-z0)*i/steps) for i in range(steps))
+                path = samples + path[-1:]
             start = len(vertices)
             for y,z in path:
                 vertices.extend(skin_point(side,y+offset,z) for offset in (-.006,.006))
