@@ -9714,19 +9714,19 @@ func _load_vehicle_model() -> void:
 		var fire := vehicle_index == 2
 		var arms := vehicle_model.find_children("Cab wiper linkage*" if fire else "Wiper arm*","MeshInstance3D",true,false)
 		var blades := vehicle_model.find_children("Crew cab wiper blade*" if fire else "Windscreen wiper blade*","MeshInstance3D",true,false)
-		var spindles := vehicle_model.find_children("Cab wiper spindle cap*","MeshInstance3D",true,false)
+		var spindles := vehicle_model.find_children("Cab wiper spindle cap*" if fire else "Windscreen wiper spindle cap*","MeshInstance3D",true,false)
 		for i in mini(arms.size(),blades.size()):
 			var arm := arms[i] as MeshInstance3D
 			var bounds := arm.get_aabb()
 			var pivot := Node3D.new()
 			arm.get_parent().add_child(pivot)
-			if fire:
+			if i < spindles.size():
 				var spindle := spindles[i] as MeshInstance3D
 				pivot.global_position = spindle.to_global(spindle.get_aabb().get_center())
-				pivot.set_meta("sweep_axis", Vector3(0,.15,1).normalized() * signf(pivot.position.x))
 			else:
 				pivot.global_position = arm.to_global(Vector3(bounds.position.x,bounds.position.y,bounds.end.z))
-				pivot.set_meta("sweep_axis", Vector3(0,.77,.64).normalized())
+			var axis := Vector3(0,.15,1) * signf(pivot.position.x) if fire else Vector3(0,.77,.64)
+			pivot.set_meta("sweep_axis", axis.normalized())
 			arm.reparent(pivot)
 			blades[i].reparent(pivot)
 			wiper_pivots.append(pivot)

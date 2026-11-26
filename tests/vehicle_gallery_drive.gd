@@ -46,6 +46,22 @@ func check_y5_wheels(game) -> bool:
 		model.free()
 	return true
 
+func check_y5_wipers(game) -> bool:
+	var spindles: Array[Node] = game.vehicle_model.find_children("Windscreen wiper spindle cap*", "MeshInstance3D", true, false)
+	var pivots: Array[Node3D] = game.wiper_pivots
+	if spindles.size() != 2 or pivots.size() != 2:
+		return false
+	for i in pivots.size():
+		var spindle := spindles[i] as MeshInstance3D
+		if not pivots[i].global_position.is_equal_approx(spindle.to_global(spindle.get_aabb().get_center())):
+			return false
+	game.weather.intensity = Vector2.RIGHT
+	game._advance_wipers(PI / 5.4)
+	var swept := pivots.all(func(pivot: Node3D): return not pivot.basis.is_equal_approx(Basis.IDENTITY))
+	game.weather.intensity = Vector2.ZERO
+	game._advance_wipers(TAU)
+	return swept and pivots.all(func(pivot: Node3D): return pivot.basis.is_equal_approx(Basis.IDENTITY))
+
 func check_gallery() -> void:
 	var game = load("res://main.tscn").instantiate()
 	root.add_child(game)
@@ -88,6 +104,10 @@ func check_gallery() -> void:
 		var turn: float = start.basis.z.angle_to(game.ambulance.basis.z)
 		if game.vehicle_index != index or travel < .3 or turn < .005:
 			printerr("Menu driving failed for ",tile.text," distance=",travel," turn=",turn)
+			quit(1)
+			return
+		if index == 3 and not check_y5_wipers(game):
+			printerr("Y5 wipers must swing around their modeled spindles and park after rain")
 			quit(1)
 			return
 		game._update_traffic(0.0)
