@@ -11957,6 +11957,15 @@ func _add_school_window(school: Node3D, at: Vector3, yaw: float, glazing: Materi
 	sill.material_override = metal
 	_make_box("Window sill drip edge", Vector3(3.32, .025, .020),
 		Vector3(0, -.803, .17), Color("#647477"), false, window)
+	for side in [-1, 1]:
+		_make_box("Window sill folded end", Vector3(.019, .035, .223),
+			Vector3(side * 1.642, .034, 0), Color.WHITE, false, sill).material_override = metal
+	var head_flashing := _make_box("Classroom window head flashing", Vector3(3.32, .035, .177),
+		Vector3(0, .804, .048), Color.WHITE, false, window)
+	head_flashing.rotation.x = .084
+	head_flashing.material_override = metal
+	_make_box("Window head folded drip edge", Vector3(3.32, .036, .018),
+		Vector3(0, .776, .133), Color.WHITE, false, window).material_override = metal
 
 func _add_school_car_sign(model: Node3D) -> void:
 	var mount := Node3D.new()

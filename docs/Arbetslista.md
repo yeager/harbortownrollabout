@@ -327,6 +327,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Övningsbanans trafikkoner fick formgjutna gummifötter och dubbla ljusa band. Granskat i Godot. Övningsbaneprovet passerade.
   - Trafikskolans entré fick dubbla glasdörrar med draghandtag och aluminiumtröskel. Granskat i närbild i Godot. Övningsbaneprovet passerade.
   - Trafikskolans klassrumsfönster fick separata bågar och lutande fönsterbleck med droppkant. Granskat i Godot. Övningsbaneprovet passerade.
+  - Klassrumsfönstren fick överbleck med droppkant och uppvikta ändar på underblecken. Granskat vid entrén i Godot. Övningsbaneprovet passerade.
   - Trafikskolans tak fick plåtavtäckning, bakre hängränna och två stuprör med väggfästen. Granskat bakifrån i Godot. Övningsbaneprovet passerade.
   - Trafikskolans bakfasad fick sockel, servicedörr med tröskel och två lamellgaller. Granskat i Godot. Övningsbaneprovet passerade.
   - Trafikskolans servicedörr fick sparkplåt, gångjärn och ett separat trycke med låsskylt. Granskat i Godot. Övningsbaneprovet passerade.
