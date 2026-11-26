@@ -201,6 +201,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
 - [ ] [`electric_kick_scooter.glb`](../vehicles/electric_kick_scooter.glb)
 - [ ] [`farm_tractor.glb`](../vehicles/farm_tractor.glb)
   - Vinterspridaren fick en modellerad trepunktsinfästning med två nedre stag, toppstag och ledtappar. Infästningen granskades i Godot och halkbekämpningsprovet passerade.
+  - De bakre reflexerna följer nu spridarens lutande bakvägg och har separata fästplattor och skruvar. Granskat bakifrån i Godot. Halkbekämpningsprovet passerade.
 - [ ] [`food_truck.glb`](../vehicles/food_truck.glb)
 - [ ] [`food_truck_road.glb`](../vehicles/food_truck_road.glb)
 - [ ] [`ice_cream_van.glb`](../vehicles/ice_cream_van.glb)

@@ -5539,7 +5539,17 @@ func _fit_spreader(model: Node3D) -> void:
 		_make_box("Rolled rim",Vector3(1.98,.057,.068),Vector3(0,.69,end*.396),enamel,false,spreader)
 		var cheek := _make_box("Hopper end cheek",Vector3(.055,.60,.70),Vector3(end*.896,.39,0),enamel,false,spreader)
 		cheek.rotation.z = -end*.23
-		_make_box("Rear reflector",Vector3(.17,.07,.025),Vector3(end*.78,.23,-.325),Color("#c43627"),false,spreader)
+		if end < 0:
+			for side in [-1.0,1.0]:
+				var center := Vector3(side*.77,-.14,-.039)
+				_make_box("Reflector backing",Vector3(.215,.091,.023),center,steel,false,wall)
+				var lens := _make_box("Rear reflector lens",Vector3(.160,.062,.011),
+					center+Vector3.FORWARD*.016,Color("#b82320"),false,wall)
+				lens.material_override = _material(Color("#b82320"),.38)
+				for offset in [-.093,.093]:
+					var screw := center + Vector3(offset,0,0)
+					_tube_between(wall,screw+Vector3.FORWARD*.009,
+						screw+Vector3.FORWARD*.014,.006,pin_finish)
 	var payload := _make_box("Grit and salt load",Vector3(1.66,.10,.54),Vector3(0,.53,0),Color("#aaa38b"),false,spreader)
 	payload.material_override = _noise_material(Color("#514a39"),Color("#e1ddd0"),18.0,.75)
 	ploughs.append(spreader)
