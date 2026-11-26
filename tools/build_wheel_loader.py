@@ -1,4 +1,4 @@
-"""Build a Volvo L90-style articulated loader. Run inside Blender from this repository."""
+"""Build the Volva L91 articulated loader inside Blender."""
 import math
 from pathlib import Path
 import sys
@@ -102,14 +102,9 @@ box("Rear radiator grille", (0,3.035,1.56),(1.50,.07,.50),charcoal,rear)
 for i in range(8):
     box("Radiator transverse bar",(0,3.078,1.36+i*.061),
         (1.41,.026,.018),v.DARK,rear,.006)
-rod("Diagonal grille brightwork",(.61,3.099,1.37),(-.61,3.099,1.76),.016,chrome,rear)
-bpy.ops.mesh.primitive_torus_add(location=(0,3.121,1.565),rotation=(math.pi/2,0,0),
-                                major_radius=.105,minor_radius=.013,major_segments=32,minor_segments=8)
-emblem=bpy.context.object
-emblem.name="Radiator emblem ring"
-emblem.data.materials.append(chrome)
-v.attach(emblem,rear)
-box("Emblem centre bar",(0,3.136,1.565),(.216,.024,.045),chrome,rear,.008)
+box("Volva radiator badge",(0,3.111,1.565),(.255,.035,.185),charcoal,rear,.014)
+for side in (-1,1):
+    rod("Volva radiator chevron",(side*.083,3.140,1.614),(0,3.140,1.516),.011,chrome,rear)
 box("Rear bumper rub rail",(0,3.01,.90),(1.87,.13,.16),charcoal,rear)
 for side in (-1,1):
     x=side*.857
@@ -120,8 +115,11 @@ for side in (-1,1):
         rod("Angled intake fin",(x+side*.041,y,1.88-.08*i/9),
             (x+side*.041,y+.049,2.01-.095*i/9),.014,v.DARK,rear)
     box("Rear combination lamp",(side*.72,2.956,1.79),(.22,.051,.10),v.TAIL_LAMP,rear)
-    obj=v.text_obj("Model sign","L90", (side*.892,2.58 if side<0 else 2.19,1.53),
-                   .15,charcoal,side=-side,root=rear)
+    box("Model plate",(side*.910,2.40,1.89),(.028,.36,.16),charcoal,rear,.012)
+    lettering = v.text_obj("Model sign","L91",(side*.928,2.40,1.845),
+                           .115,chrome,side=-side,root=rear)
+    letters = [vertex.co.x for vertex in lettering.data.vertices]
+    lettering.location.y -= side * (min(letters)+max(letters))*.5
 
 box("Cab platform", (0,.46,1.53),(1.71,1.50,.23),charcoal,rear,.08)
 profile("Central oscillating frame",[(-2.43,.75),(-1.94,.55),(-.41,.78),

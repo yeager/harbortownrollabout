@@ -991,8 +991,8 @@ msgstr "Mino Kuper S"
 msgid "Classic moped"
 msgstr "Cyclomoteur rétro"
 
-msgid "Wheel loader"
-msgstr "Chargeuse sur pneus"
+msgid "Volva L91 wheel loader"
+msgstr "Volva L91 (Chargeuse sur pneus)"
 
 msgid "Tracked excavator"
 msgstr "Pelle sur chenilles"

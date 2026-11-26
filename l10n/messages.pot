@@ -930,7 +930,7 @@ msgstr ""
 msgid "Classic moped"
 msgstr ""
 
-msgid "Wheel loader"
+msgid "Volva L91 wheel loader"
 msgstr ""
 
 msgid "Tracked excavator"

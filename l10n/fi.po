@@ -975,8 +975,8 @@ msgstr "Mino Kuper S"
 msgid "Classic moped"
 msgstr "Klassinen mopo"
 
-msgid "Wheel loader"
-msgstr "Pyöräkuormaaja"
+msgid "Volva L91 wheel loader"
+msgstr "Volva L91 (Pyöräkuormaaja)"
 
 msgid "Tracked excavator"
 msgstr "Telakaivinkone"
