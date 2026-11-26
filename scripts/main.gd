@@ -9296,10 +9296,13 @@ func _update_bus_stop_request(delta: float) -> void:
 		_update_driver_bus_stop_board()
 
 
-func _load_vehicle_model() -> void:
+func _reset_driver_traffic_state() -> void:
 	police_stop_left = 0.0
 	waited_at_red = false
 	waiting_after_green = false
+
+func _load_vehicle_model() -> void:
+	_reset_driver_traffic_state()
 	snow_slip_angle = 0.0
 	bus_merge_time = 0
 	bus_departure_pending = false
@@ -11826,6 +11829,7 @@ func _recover_position() -> void:
 	else:
 		success = _recover_road_vehicle()
 	if success:
+		_reset_driver_traffic_state()
 		if walker.visible and not scooter.visible and not ferry_passenger and tram_mode == 0 and not operating_excavator and not boating:
 			_animate_steps(walker, 0.0, 1.0)
 		speed = 0

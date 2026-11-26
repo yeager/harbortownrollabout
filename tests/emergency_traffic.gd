@@ -196,5 +196,13 @@ func check_response() -> void:
 		printerr("An amber signal triggered red-light enforcement")
 		quit(1)
 		return
+	game.waited_at_red = true
+	game.waiting_after_green = true
+	game.police_stop_left = 2.0
+	game._recover_position()
+	if game.message != "Back in a safe place." or game.waited_at_red or game.waiting_after_green or game.police_stop_left > 0.0:
+		printerr("Road recovery carried over stale traffic-light state")
+		quit(1)
+		return
 	print("A-tractor speed, repeated horn at green and nearby police stop verified.")
 	quit()
