@@ -5953,12 +5953,18 @@ func _build_depot() -> void:
 		bin.add_child(wheel_tread)
 		_tube_between(bin, Vector3(-.34,.105,.21), Vector3(.34,.105,.21), .023, axle_steel)
 		for side in [-1,1]:
+			_make_box("Bin axle support", Vector3(.052, .095, .083),
+				Vector3(side * .226, .133, .21), plastic.darkened(.13), false, bin)
+			_tube_between(bin, Vector3(side * .203, .105, .21),
+				Vector3(side * .257, .105, .21), .037, hub_plastic)
 			_tube_between(bin, Vector3(side*.258,.105,.21), Vector3(side*.342,.105,.21), .102, wheel_rubber)
 			_tube_between(bin, Vector3(side*.341,.105,.21), Vector3(side*.352,.105,.21), .069, hub_plastic)
 			_tube_between(bin, Vector3(side*.351,.105,.21), Vector3(side*.362,.105,.21), .025, axle_steel)
 		_make_box("Bin lifting lip", Vector3(.56,.047,.082), Vector3(0,.879,.313), plastic.darkened(.10), false, bin)
 		for x in [-.223,0,.223]:
 			_make_box("Bin lifting lip gusset", Vector3(.025,.055,.041), Vector3(x,.847,.306), plastic, false, bin)
+		_make_box("Rolled bin lifting lip edge", Vector3(.554, .023, .021),
+			Vector3(0, .869, .353), plastic.darkened(.18), false, bin)
 		refuse_bins.append(bin)
 		bin.hide()
 	_build_road_signs()
