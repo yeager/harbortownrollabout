@@ -2007,6 +2007,25 @@ def make_bmw(color, name="BWM Y5 N70i", *, patrol=False):
     cube("Plate frame",(0,2.509,1.204),(.59,.012,.154),BLACK,.005,root)
     cube("Registration plate",(0,2.517,1.204),(.56,.007,.132),PAINT_WHITE,.003,root)
     if root.name.startswith("BWM Y5 N70i"):
+        seam_vertices = []
+        seam_faces = []
+        for station in range(29):
+            x = .815 * (station / 14 - 1)
+            for offset in (-.0028, .0028):
+                z = 1.056 + .012 * (x / .815) ** 2 + offset
+                hit, point, _, _ = hatch_skin.ray_cast((x, 3, z), (0, -1, 0))
+                if not hit:
+                    raise ValueError("Lower tailgate seam missed the hatch skin")
+                seam_vertices.append((x, point.y + .002, z))
+            if station:
+                i = station * 2
+                seam_faces.append((i - 2, i - 1, i + 1, i))
+        seam_mesh = bpy.data.meshes.new("Lower tailgate shut line")
+        seam_mesh.from_pydata(seam_vertices, [], seam_faces)
+        seam_mesh.materials.append(BLACK)
+        seam = bpy.data.objects.new("Lower tailgate shut line", seam_mesh)
+        bpy.context.collection.objects.link(seam)
+        seam.parent = root
         for x in (-.18, .18):
             cube("Rear plate lamp housing", (x, 2.526, 1.303),
                  (.091, .040, .024), DARK, .006, root)
