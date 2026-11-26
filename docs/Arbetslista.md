@@ -186,6 +186,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
 #### Fordon, trafikvarianter och fordonsdelar
 
 - [ ] [`a_traktor.glb`](../vehicles/a_traktor.glb)
+  - LGF-skylten fick en profilerad reflektorkant, orange mittfält och två gummiklädda fästen. Granskad bakifrån i Godot. Fordonsprovet passerade.
 - [ ] [`ambulance.glb`](../vehicles/ambulance.glb)
   - Bakdörrens handtag fick separata fästen och en låscylinder med nyckelspår. Registreringsskylten fick två armaturhus med diffusorer. Detaljerna granskades i Godot. Ambulansintaget och utryckningsprovet passerade.
 - [ ] [`ambulance_helicopter.glb`](../vehicles/ambulance_helicopter.glb)

@@ -7,7 +7,7 @@ from mathutils import Vector
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from build_vehicles import (clear_scene, cube, cylinder, material, mesh_from_rings,
-                            export_vehicle, SOURCE_DIR, PAINT_WHITE, GLASS, DARK,
+                            export_vehicle, profile_loft, SOURCE_DIR, PAINT_WHITE, GLASS, DARK,
                             RUBBER, METAL, HEADLAMP, RED_LAMP)
 
 clear_scene()
@@ -110,15 +110,21 @@ for i in range(-5,6): box("Bed rib",(i*.117,1.515,.747),(.034,1.085,.019),RUBBER
 for y in [-2.30,2.20]: box("Black bumper",(0,y,.43),(1.77,.16,.16),RUBBER)
 box("Radiator grille",(0,-2.33,.73),(.73,.055,.21),DARK)
 for i in range(-6,7):box("Grille rib",(i*.052,-2.36,.73),(.016,.015,.185),METAL,.004)
-def triangle(name,y,scale,finish):
-    mesh=bpy.data.meshes.new(name)
-    mesh.from_pydata([(x*scale-.23,y,1.23+z*scale) for x,z in [(0,.22),(.22,-.15),(-.22,-.15)]],[],[(0,1,2),(2,1,0)])
-    mesh.materials.append(finish)
-    obj=bpy.data.objects.new(name,mesh)
-    bpy.context.collection.objects.link(obj)
-    obj.parent=root
-triangle("LGF reflector border",.933,1,RED_LAMP)
-triangle("Fluorescent centre",.935,.76,material("LGF orange",(1,.12,.012),0,.36))
+# Stand the sign off the cab glass on two rubber-backed brackets.
+for x in (-.34,-.12):
+    box("LGF rubber mounting pad",(x,.882,1.13),(.043,.038,.066),RUBBER,.007)
+    box("LGF mounting bracket",(x,.910,1.13),(.026,.054,.043),METAL,.004)
+
+triangle_outline = [(0,.22),(.22,-.15),(-.22,-.15)]
+def triangle_sections(sections):
+    return [[(-.23+x*scale,y,1.23+z*scale) for x,z in triangle_outline]
+            for y,scale in sections]
+
+profile_loft("LGF sign backing",triangle_sections([(.930,.975),(.938,1.012),(.947,1.012)]),DARK,root)
+reflector = material("LGF red reflector",(.64,.012,.008),.12,.29)
+profile_loft("LGF reflector border",triangle_sections([(.947,1),(.953,.987),(.955,.963)]),reflector,root)
+fluorescent = material("LGF orange", (1,.15,.012),0,.42)
+profile_loft("Fluorescent centre",triangle_sections([(.955,.74),(.958,.735)]),fluorescent,root)
 export_vehicle(root,"a_traktor.glb")
 bpy.context.preferences.filepaths.save_version=0
 bpy.ops.wm.save_as_mainfile(filepath=str(Path(SOURCE_DIR)/"A-traktor.blend"))
