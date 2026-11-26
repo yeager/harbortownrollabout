@@ -278,6 +278,12 @@ def pumper_running_gear(root,chassis):
                                          (1.295,.573),(1.28,.588),(1.15,.600),(1.02,.583))])
             profile_loft("Wheel arch moulding",arch,DARK,root)
             cube("Mud flap",(side*1.14,y+.564,.421),(.259,.026,.25),RUBBER,.011,root)
+            cube("Mud flap chassis bracket",(side*1.058,y+.575,.601),(.062,.053,.167),DARK,.008,root)
+            cube("Mud flap clamp strip",(side*1.14,y+.582,.532),(.254,.019,.044),DARK,.006,root)
+            for x in (1.046,1.14,1.234):
+                bolt = cylinder("Mud flap clamp bolt",(side*x,y+.595,.532),.010,.010,
+                                stud_finish,False,6,root)
+                bolt.rotation_euler.x = math.pi/2
 
 def lights(root, center_y=-0.85, z=2.68, length=1.15):
     cube("Roof light bar housing", (0, center_y, z), (length, 0.16, 0.19), DARK, 0.055, root)
