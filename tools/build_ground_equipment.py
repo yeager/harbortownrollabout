@@ -163,8 +163,11 @@ for x in (-.37,.37):
     disc("Piston pivot pin",tractor_pin,.024,.075,steel,(1,0,0))
 # Rear trip springs sit between brackets welded to the mouldboard.
 for x in (-.99,-.78,.78,.99):
-    for z in (.29,.65):
-        box("Spring anchor",(x,.10,z),(.115,.22,.035),frame,.009)
+    for z, blade_y, inside in ((.29,-.085,1),(.65,.063,-1)):
+        span = .215 - blade_y
+        box("Spring anchor",(x,blade_y+span/2,z),(.115,span,.035),frame,.009)
+        disc("Spring centering cup",(x,.16,z+inside*.019),.047,.018,steel)
+        disc("Spring centering pin",(x,.16,z+inside*.033),.025,.025,frame)
     coil = bpy.data.curves.new("Trip spring wire", 'CURVE')
     coil.dimensions = '3D'
     coil.bevel_depth = .009
