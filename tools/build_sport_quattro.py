@@ -195,8 +195,19 @@ def build():
         bar("Door rear shut line", on_side((.833,.361,.810)),on_side((.835,.414,.252)),.009,.009,recess)
         box("Door handle", (side*.838,.246,.749), (.029,.132,.032))
         box("Painted rocker trim", (side*.805,-.051,.239), (.069,.99,.059), red)
-        box("Square door mirror", (side*.842,-.578,.951), (.157,.155,.091))
-        box("Mirror glass", (side*.858,-.494,.951), (.120,.012,.060), chrome,.004)
+        box("Door mirror mounting gasket", (side*.763,-.562,.917),
+            (.023,.117,.076), rubber,.010)
+        bar("Door mirror support", (side*.760,-.568,.919),
+            (side*.827,-.568,.946), .042,.050,trim)
+        box("Door mirror housing", (side*.854,-.587,.951),
+            (.167,.129,.098),trim,.021)
+        box("Door mirror inset glass", (side*.854,-.518,.951),
+            (.132,.006,.067),chrome,.007)
+        for edge in [-1, 1]:
+            box("Door mirror horizontal bezel", (side*.854,-.516,.951 + edge*.039),
+                (.149,.018,.012),trim,.004)
+            box("Door mirror vertical bezel", (side*.854 + edge*.073,-.516,.951),
+                (.012,.018,.071),trim,.004)
         box("Quarter air intake", (side*.859,.685,.420), (.023,.155,.173), recess)
         for i in range(5):
             box("Quarter intake fin", (side*.868,.626+i*.026,.42), (.015,.011,.153),trim,.002)
