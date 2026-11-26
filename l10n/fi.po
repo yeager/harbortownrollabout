@@ -951,17 +951,17 @@ msgstr "Voit taas juosta! Pidä {run} pohjassa ja kävele eteenpäin."
 msgid "BMV X5i"
 msgstr "BMV X5i"
 
-msgid "Classic sports coupe"
-msgstr "Klassinen urheilucoupé"
+msgid "BMV M3 E33"
+msgstr "BMV M3 E33"
 
-msgid "Classic sedan"
-msgstr "Klassinen sedan"
+msgid "Volva 241"
+msgstr "Volva 241"
 
-msgid "Vintage compact"
-msgstr "Pieni vanha auto"
+msgid "Saav 97"
+msgstr "Saav 97"
 
-msgid "Electric sedan"
-msgstr "Sähkösedan"
+msgid "Teslo Model Z"
+msgstr "Teslo Model Z"
 
 msgid "Police SUV"
 msgstr "Poliisin katumaasturi"

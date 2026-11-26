@@ -290,6 +290,18 @@ def build(key, length, width, axles, color, belt, cabin):
             for x in [-.09,.09]: box("Kidney surround",x,-end-.074,belt*.74,.15,.035,.20,METAL)
             for x in [-.09,.09]: box("Kidney opening",x,-end-.097,belt*.74,.115,.025,.17,DARK)
         for i in range(4): box("Grille slat",0,-end-.065,belt*.65+i*.043,width*.83,.018,.011,METAL,.002)
+    else:
+        # A silver lightning stroke on a graphite mounting plate.
+        for y in [-end-.003, end+.003]:
+            z = .649 if y < 0 else .723
+            box("Teslo emblem backing",0,y,z,.102,.016,.062,DARK,.011)
+            face_y = y + math.copysign(.011,y)
+            points = [(-.026,face_y,z+.017),(.011,face_y,z+.017),
+                      (-.011,face_y,z-.016),(.026,face_y,z-.016)]
+            if y > 0:
+                points = [(-x,y,z) for x,y,z in points]
+            for start, finish in zip(points, points[1:]):
+                bar("Teslo Z emblem",start,finish,.007,METAL)
     if key=="m3_e30":
         for side in [-1,1]:
             feet=[]

@@ -203,6 +203,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
 - [ ] [`mini_cooper_cabriolet.glb`](../vehicles/mini_cooper_cabriolet.glb)
   - Mino Kuper S fick ett eget kopparfärgat M-monogram på motorhuven och bakluckan samt nytt namn i fordonsgalleriet. Emblemen granskades i Godot. Fordonsprovet och språkkontrollen passerade.
 - [ ] [`model_s.glb`](../vehicles/model_s.glb)
+  - Teslo Model Z fick silverfärgade Z-emblem fram och bak. Båda granskades i Godot. Fordonsgalleriet visar även BMV M3 E33, Volva 241 och Saav 97. Fordonsprovet och språkkontrollen passerade.
 - [ ] [`monster_truck.glb`](../vehicles/monster_truck.glb)
 - [ ] [`motorboat.glb`](../vehicles/motorboat.glb)
 - [ ] [`polisbil.glb`](../vehicles/polisbil.glb)

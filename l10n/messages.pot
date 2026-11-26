@@ -906,16 +906,16 @@ msgstr ""
 msgid "BMV X5i"
 msgstr ""
 
-msgid "Classic sports coupe"
+msgid "BMV M3 E33"
 msgstr ""
 
-msgid "Classic sedan"
+msgid "Volva 241"
 msgstr ""
 
-msgid "Vintage compact"
+msgid "Saav 97"
 msgstr ""
 
-msgid "Electric sedan"
+msgid "Teslo Model Z"
 msgstr ""
 
 msgid "Police SUV"

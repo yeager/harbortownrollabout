@@ -961,17 +961,17 @@ msgstr "¡Ya puedes correr! Mantén pulsada {run} y camina hacia delante."
 msgid "BMV X5i"
 msgstr "BMV X5i"
 
-msgid "Classic sports coupe"
-msgstr "Cupé deportivo clásico"
+msgid "BMV M3 E33"
+msgstr "BMV M3 E33"
 
-msgid "Classic sedan"
-msgstr "Sedán clásico"
+msgid "Volva 241"
+msgstr "Volva 241"
 
-msgid "Vintage compact"
-msgstr "Compacto de época"
+msgid "Saav 97"
+msgstr "Saav 97"
 
-msgid "Electric sedan"
-msgstr "Sedán eléctrico"
+msgid "Teslo Model Z"
+msgstr "Teslo Model Z"
 
 msgid "Police SUV"
 msgstr "SUV de policía"

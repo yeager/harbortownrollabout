@@ -955,17 +955,17 @@ msgstr "Du kan løpe igjen! Hold inne {run} og gå framover."
 msgid "BMV X5i"
 msgstr "BMV X5i"
 
-msgid "Classic sports coupe"
-msgstr "Klassisk sportskupé"
+msgid "BMV M3 E33"
+msgstr "BMV M3 E33"
 
-msgid "Classic sedan"
-msgstr "Klassisk sedan"
+msgid "Volva 241"
+msgstr "Volva 241"
 
-msgid "Vintage compact"
-msgstr "Liten veteranbil"
+msgid "Saav 97"
+msgstr "Saav 97"
 
-msgid "Electric sedan"
-msgstr "Elektrisk sedan"
+msgid "Teslo Model Z"
+msgstr "Teslo Model Z"
 
 msgid "Police SUV"
 msgstr "Politi-SUV"
