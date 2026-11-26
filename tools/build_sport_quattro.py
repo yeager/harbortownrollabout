@@ -381,11 +381,29 @@ def build():
             box("Bumper intake vertical mesh", (x-.167+rib*.0304,-2.094,.435), (.003,.007,.090),trim,.001)
         for vane in range(2):
             box("Lower vent vane", (x,-2.063,.279+vane*.022), (.344,.006,.004),trim,.001)
-    for x,width in [(-.443,.233),(0,.547),(.443,.233)]:
-        vent = box("Bonnet vent",(x,-1.749,.822),(width,.133,.018),recess,.011)
-        vent.rotation_euler.x = .105
-        for i in [-1,1]:
-            box("Bonnet vent vane",(x,-1.749+i*.028,.831+i*.003),(width-.018,.007,.006),trim,.002)
+    vent_y = -1.749
+    vent_angle = math.atan2(.841 - .806, -1.48 - (-1.89))
+    hood_height = sample(vent_y)[4]
+    for x, width in [(-.443, .233), (0, .547), (.443, .233)]:
+        vent = box("Bonnet vent recess", (x, vent_y, hood_height + .002),
+                   (width, .133, .016), recess, .008)
+        vent.rotation_euler.x = vent_angle
+
+        def vent_detail(name, dx, dy, lift, size, finish, bevel):
+            height = hood_height + dy * math.tan(vent_angle) + lift
+            detail = box(name, (x + dx, vent_y + dy, height), size, finish, bevel)
+            detail.rotation_euler.x = vent_angle
+            return detail
+
+        for side in [-1, 1]:
+            vent_detail("Bonnet vent side rim", side * (width / 2 - .005), 0, .011,
+                        (.010, .121, .009), trim, .002)
+            vent_detail("Bonnet vent end rim", 0, side * .061, .011,
+                        (width - .010, .010, .009), trim, .002)
+        for dy in [-.038, 0, .038]:
+            louvre = vent_detail("Bonnet vent louvre", 0, dy, .012,
+                                 (width - .026, .016, .006), trim, .002)
+            louvre.rotation_euler.x += math.radians(22)
     plate_white = material("Registration plate enamel", (.87,.87,.82), .03, .47)
     plate_blue = material("Registration country field", (.025,.12,.42), .03, .47)
     for y, z, outward in [(-2.084,.284,-1), (2.078,.657,1)]:
