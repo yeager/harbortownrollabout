@@ -5613,8 +5613,19 @@ func _add_sign_mount(post: Node3D, rail_y: float, width: float, aluminium: Mater
 		_make_box("Signpost clamp bolt", Vector3(.025, .025, .016),
 			Vector3(bolt_x, rail_y, -.069), Color.WHITE, false, post).material_override = aluminium
 
+func _add_sign_footing(post: Node3D) -> void:
+	var footing := _material(Color("#9b9990"), .94, false, "mineral")
+	_make_box("Signpost concrete footing", Vector3(.28, .16, .28),
+		Vector3(0, -.036, 0), Color.WHITE, false, post).material_override = footing
+	_make_box("Signpost socket plate", Vector3(.173, .018, .173),
+		Vector3.UP * .050, Color("#657175"), false, post)
+	for corner in [Vector2(-.064, -.064), Vector2(-.064, .064), Vector2(.064, -.064), Vector2(.064, .064)]:
+		_make_box("Signpost footing anchor", Vector3(.025, .014, .025),
+			Vector3(corner.x, .064, corner.y), Color("#929da0"), false, post)
+
 func _speed_sign(at: Vector3, heading: float, limit: int) -> void:
 	var post := _signpost(at, heading)
+	_add_sign_footing(post)
 	var aluminium := _material(Color("#929da0"), .54, false, "brushed")
 	aluminium.metallic = .53
 	var backing_mesh := CylinderMesh.new()
@@ -11694,6 +11705,7 @@ func _build_practice_yard() -> void:
 	_make_box("Practice stop line",stop_line_size,Vector3(PRACTICE_STOP_X + stop_line_size.x*.5,.01,PRACTICE_STOP_LANE_Z),Color.WHITE).material_override = marking_finish
 	_make_box("Practice signal stop line",signal_line_size,Vector3(PRACTICE_SIGNAL_X + signal_line_size.x*.5,.01,PRACTICE_STOP_LANE_Z),Color.WHITE).material_override = marking_finish
 	var post := _signpost(Vector3(PRACTICE_STOP_X,0,PRACTICE_STOP_LANE_Z-3.1),-PI*.5)
+	_add_sign_footing(post)
 	var stop_aluminium := _material(Color("#a4adaf"), .65)
 	stop_aluminium.metallic = .42
 	var stop_finishes := [stop_aluminium, _material(Color.WHITE), _material(Color("#b52429"))]
