@@ -29,6 +29,7 @@
 
 ## Outstanding requests
 
+- Prioritize vehicle models in the modeling queue. Review vehicle exteriors before interiors, then continue with buildings and other objects.
 - Refine vehicle shapes, especially the BMW front, the fire truck, the police car, the Tvärbanan and the sitting driver. Improve water and window reflections, architecture and boardwalk based on image references.
 - Review any remaining unsignalized crossings and playtest routes, dialogue, readability, sound levels and frame rate throughout town.
 - Verify the Blender MCP connection. Blender 5.3.0 opens the bus source file locally and reports 285 mesh objects. The MCP extension loads, but its bridge refuses to start while Blender’s online access is disabled.

@@ -172,6 +172,8 @@ Listan innehåller 100 jobb. En tom ruta är öppen. En punkt bockas av när bet
 
 ## Modellgranskning
 
+Prioritera fordonens exteriörer, därefter fordonens interiörer. Fortsätt sedan med byggnader och övriga objekt.
+
 Fordonsgranskningen börjar med exteriörerna. Bilarnas tillverkarnamn, modellnamn och emblem ska få egna varianter som påminner om förebilderna.
 
 - [ ] Gå igenom samtliga modeller i spelet, också byggnader, fordon, figurer, rekvisita och procedurgenererade objekt. Målet är minst 99/100 per modell. Inventeringen nedan innehåller 69 importerade resurser, inklusive delmodeller. Komplettera de kodbyggda modellerna och kontrollera vilka importer som används i den spelbara världen.
