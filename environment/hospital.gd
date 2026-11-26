@@ -269,8 +269,14 @@ func _build_intake(world: Node3D) -> void:
 	for side in [-1.0, 1.0]:
 		world._make_box("Door vertical guide", Vector3(.074, 3.68, .10),
 			Vector3(side * 4.035, 1.89, 6.66), METAL, false, self)
-		world._make_box("Door overhead guide", Vector3(.083, .085, 1.85),
-			Vector3(side * 4.035, 3.98, 5.84), METAL, false, self)
+		world._make_box("Door overhead guide", Vector3(.083, .085, 1.495),
+			Vector3(side * 4.035, 3.98, 5.6625), METAL, false, self)
+		var bend_center := Vector3(side * 4.035, 3.73, 6.41)
+		for segment in 6:
+			var angle := (segment + .5) * PI / 12.0
+			var bend: MeshInstance3D = world._make_box("Door guide bend", Vector3(.078, .078, .072),
+				bend_center + Vector3(0, sin(angle), cos(angle)) * .25, METAL, false, self)
+			bend.rotation.x = PI * .5 - angle
 	world._make_box("Ambulance stop marking", Vector3(2.0 * lane_line_x - lane_line_width, .008, .27),
 		Vector3(0, -.013, stop_line_z), Color("#e8bc43"), false, self)
 	world._make_box("Closed inner transfer doors", Vector3(2.0, 2.47, .14),
