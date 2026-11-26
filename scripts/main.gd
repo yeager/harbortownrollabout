@@ -11712,6 +11712,26 @@ func _build_driving_school() -> void:
 			Vector3(drain_x, .132, -3.27), .047, roof_metal)
 	_make_box("Rear roof gutter", Vector3(12.24, .106, .135),
 		Vector3(0, 3.287, -3.23), Color.WHITE, false, school).material_override = roof_metal
+	var service_color := Color("#46595d")
+	_make_box("Rear plinth", Vector3(12.03, .29, .043),
+		Vector3(0, .145, -3.007), Color("#93928a"), false, school)
+	_make_box("Service door frame", Vector3(1.095, 2.18, .066),
+		Vector3(-2.66, 1.13, -3.036), service_color.darkened(.22), false, school)
+	_make_box("Service door leaf", Vector3(.974, 2.052, .031),
+		Vector3(-2.66, 1.13, -3.072), service_color, false, school)
+	_make_box("Service door lever", Vector3(.113, .022, .052),
+		Vector3(-2.36, 1.02, -3.105), Color("#a4afb0"), false, school)
+	_make_box("Service door threshold", Vector3(1.07, .063, .20),
+		Vector3(-2.66, .066, -3.082), Color("#a4a49a"), false, school)
+	for vent_x in [1.22, 3.64]:
+		_make_box("Rear ventilation frame", Vector3(.76, .48, .055),
+			Vector3(vent_x, 2.37, -3.029), service_color, false, school)
+		_make_box("Rear ventilation recess", Vector3(.66, .385, .016),
+			Vector3(vent_x, 2.37, -3.063), Color("#283438"), false, school)
+		for slat in 5:
+			var louvre := _make_box("Rear ventilation louvre", Vector3(.665, .034, .046),
+				Vector3(vent_x, 2.229 + slat * .071, -3.081), service_color, false, school)
+			louvre.rotation.x = -.35
 	_make_box("Entrance canopy",Vector3(5.0,.16,1.40),Vector3(0,2.72,3.59),Color("#225c63"),false,school)
 	var lamp := _add_entry_light(site + Vector3(0,2.61,3.66), Vector3(.72,.05,.19), 4.5)
 	lamp.name = "Driving school entrance light"
