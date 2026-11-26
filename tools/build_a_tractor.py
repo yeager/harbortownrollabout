@@ -18,6 +18,21 @@ def box(name,loc,size,finish,bevel=.025):
 def wheel_part(name,x,y,r,d,finish,*,z=.322,vertices=32):
     return cylinder(name,(x,y,z),r,d,finish,True,vertices,root)
 
+def road_tire(side, axle_y):
+    # Axial offset and radius, starting at the inner bead.
+    profile = [
+        (-.090,.219),(-.090,.263),(-.085,.291),(-.074,.310),(-.059,.322),
+        (-.047,.322),(-.044,.313),(-.034,.313),(-.031,.322),
+        (-.008,.322),(-.005,.313),(.005,.313),(.008,.322),
+        (.031,.322),(.034,.313),(.044,.313),(.047,.322),
+        (.059,.322),(.074,.310),(.085,.291),(.090,.263),(.090,.219),
+    ]
+    angles = [math.tau*step/64 for step in range(64)]
+    rings = [[(side*(.80+offset), axle_y+radius*math.cos(angle),
+               .322+radius*math.sin(angle)) for angle in angles]
+             for offset,radius in profile]
+    return profile_loft("Däck",rings,RUBBER,root,close_ends=False)
+
 shell=mesh_from_rings("Pressed steel body",[
     (-2.32,.78,.33,.80,.85),(-2.19,.86,.31,.84,.91),(-1.67,.89,.29,.89,.95),
     (-.85,.89,.29,.91,.98),(.65,.89,.29,.92,.97),(2.18,.86,.34,.91,.95)],
@@ -33,7 +48,7 @@ for y in [-1.45,1.39]:
     bpy.ops.object.modifier_apply(modifier=cut.name)
     bpy.data.objects.remove(cutter,do_unlink=True)
     for side in [-1,1]:
-        wheel_part("Däck",side*.80,y,.322,.18,RUBBER)
+        road_tire(side,y)
         wheel_part("Alloy wheel",side*.89,y,.238,.021,METAL)
         wheel_part("Wheel hub recess",side*.903,y,.213,.019,DARK)
         for spoke in range(10):
