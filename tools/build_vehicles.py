@@ -172,7 +172,7 @@ def mesh_from_rings(name, rings, mat, root=None, bevel=0.035, section=None):
         attach(obj, root)
     return obj
 
-def text_obj(name, body, loc, size, mat, side=0, root=None, *, flat=False):
+def text_obj(name, body, loc, size, mat, side=0, root=None, *, flat=False, compact=False):
     curve = bpy.data.curves.new(name, "FONT")
     curve.body = body
     curve.size = size
@@ -182,6 +182,9 @@ def text_obj(name, body, loc, size, mat, side=0, root=None, *, flat=False):
     else:
         curve.extrude = 0.002
         curve.bevel_depth = 0.001
+        if compact:
+            curve.resolution_u = 5
+            curve.bevel_resolution = 1
     obj = bpy.data.objects.new(name, curve)
     bpy.context.collection.objects.link(obj)
     obj.location = loc
@@ -2060,7 +2063,7 @@ def make_bwm(color, name="BWM Y5 N70i", *, patrol=False):
     cube("Plate frame",(0,2.509,1.204),(.59,.012,.154),BLACK,.005,root)
     cube("Registration plate",(0,2.517,1.204),(.56,.007,.132),PAINT_WHITE,.003,root)
     if root.name.startswith("BWM Y5 N70i"):
-        badge = text_obj("Y5 N70i tailgate lettering", "Y5 N70i", (0,0,0), .085, METAL, root=root)
+        badge = text_obj("Y5 N70i tailgate lettering", "Y5 N70i", (0,0,0), .085, METAL, root=root, compact=True)
         badge.rotation_euler = (0,0,0)
         glyph_x = [vertex.co.x for vertex in badge.data.vertices]
         midpoint = (min(glyph_x) + max(glyph_x)) * .5
