@@ -52,6 +52,48 @@ def wheel_surface(name, side, y, profile, finish):
     wheel.location = (side, y, .55)
 
 
+def rear_mudguard(side, axle_y):
+    sections = 24
+    profile = [(.77,.608),(.79,.632),(1.219,.632),(1.249,.611),
+               (1.249,.586),(1.221,.603),(.79,.603),(.77,.588)]
+    vertices = []
+    for step in range(sections + 1):
+        angle = math.radians(-78 + 156 * step / sections)
+        for x, radius in profile:
+            vertices.append((side*x, axle_y + radius*math.sin(angle),
+                             .55 + radius*math.cos(angle)))
+    width = len(profile)
+    faces = [tuple(reversed(range(width)))]
+    for section in range(sections):
+        for corner in range(width):
+            neighbor = (corner + 1) % width
+            first = section * width
+            faces.append((first + corner, first + neighbor,
+                          first + width + neighbor, first + width + corner))
+    faces.append(tuple(range(sections * width, len(vertices))))
+    if side < 0:
+        faces = [face[::-1] for face in faces]
+    mesh = bpy.data.meshes.new("Rear mudguard")
+    mesh.from_pydata(vertices, [], faces)
+    mesh.update()
+    mesh.materials.append(v.DARK)
+    for face in mesh.polygons[1:-1]:
+        face.use_smooth = True
+    guard = bpy.data.objects.new("Rear mudguard", mesh)
+    bpy.context.collection.objects.link(guard)
+    guard.parent = root
+    for end in (-1, 1):
+        ram("Mudguard support",(side*.77,axle_y+end*.39,.98),
+            (side*1.18,axle_y+end*.39,1.018),.022,v.DARK)
+    box("Mud flap carrier",(side*1.004,axle_y+.621,.654),(.471,.082,.076),v.DARK,.012)
+    box("Rear rubber mud flap",(side*1.004,axle_y+.632,.483),(.446,.039,.339),v.RUBBER,.014)
+    box("Mud flap retaining strip",(side*1.004,axle_y+.656,.625),(.436,.017,.045),v.METAL,.007)
+    for x in (.83,1.004,1.178):
+        rivet = v.cylinder("Mud flap fastener",(side*x,axle_y+.669,.625),
+                           .009,.010,v.DARK,False,12,root)
+        rivet.rotation_euler.x = math.pi/2
+
+
 tire_profile = [
     (-.195,.350),(-.195,.454),(-.182,.503),(-.162,.537),(-.132,.550),
     (-.087,.550),(-.084,.537),(-.069,.537),(-.066,.550),
@@ -133,6 +175,8 @@ for side in (-1,1):
         screw = v.cylinder("Rear lamp retaining screw",(light_x,3.679,z),
                            .008,.012,v.METAL,False,12,root)
         screw.rotation_euler.x = math.pi/2
+    for axle_y in (.90,2.28):
+        rear_mudguard(side, axle_y)
     for y in (-2.94,.90,2.28):
         wheel_surface("Performance tire",side,y,tire_profile,v.RUBBER)
         wheel_surface("Alloy wheel dish",side,y,rim_profile,v.METAL)
