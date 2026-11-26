@@ -2,6 +2,7 @@ extends Node3D
 
 # The ward footprint ends at the intake's rear wall. Only the intake is open.
 const ORIGIN := Vector3(128, 0, -59)
+const APRON_WIDTH := 9.6
 const WALL := Color("#d7cfba")
 const BRICK := Color("#b5a389")
 const METAL := Color("#303e44")
@@ -119,7 +120,7 @@ func _build_closed_entrance(world: Node3D, glass: Material) -> void:
 func _build_intake(world: Node3D) -> void:
 	# Meet the north edge of Östra allén at the same grade without overlapping it.
 	var apron_depth := -52.8 - ORIGIN.z
-	world._make_driving_surface("Ambulance bay and apron", Vector3(9.6, .12, apron_depth),
+	world._make_driving_surface("Ambulance bay and apron", Vector3(APRON_WIDTH, .12, apron_depth),
 		Vector3(0, -.08, apron_depth * .5), Color("#777c79"), true, self)
 	for side in [-1.0, 1.0]:
 		world._make_roadside_solid("Ambulance bay side wall", Vector3(.43, 4.15, 6.90),
@@ -128,8 +129,10 @@ func _build_intake(world: Node3D) -> void:
 			Vector3(side * 4.21, 2.065, 6.75), METAL, true, self)
 		world._make_box("Wall bumper rail", Vector3(.14, .18, 6.45),
 			Vector3(side * 3.99, .77, 3.36), METAL, false, self)
-		world._make_box("Ambulance bay lane line", Vector3(.105, .008, 7.50),
-			Vector3(side * 2.31, -.013, 4.31), Color("#e8bc43"), false, self)
+		var line_start := .56
+		var line_end := apron_depth - .14
+		world._make_box("Ambulance bay lane line", Vector3(.105, .008, line_end - line_start),
+			Vector3(side * 2.31, -.013, (line_start + line_end) * .5), Color("#e8bc43"), false, self)
 		for z in [2.05, 5.55]:
 			world._make_box("Intake luminaire", Vector3(1.20, .08, .20),
 				Vector3(side * 2.1, 3.96, z), Color("#f4e5bd"), false, self)

@@ -1,6 +1,7 @@
 extends Node3D
 
 const L10n := preload("res://l10n/localization.gd")
+const Hospital := preload("res://environment/hospital.gd")
 
 const TARGETS: Array[Vector3] = [Vector3(30, 0, 3), Vector3(0, 0, -25), Vector3(99.65, 0, -24)]
 const HOSPITAL_INTAKE_STOP := Vector3(128, 0, -55.4)
@@ -3672,6 +3673,8 @@ func _build_quay_lane_markings() -> void:
 			var slope := atan2(_bridge_rise(x+.1,z)-_bridge_rise(x-.1,z),.2)
 			var basis := Basis(Vector3.BACK,slope).scaled_local(Vector3(1.0/3,1,1))
 			for side in [-1,1]:
+				if z == -48.0 and side == -1 and absf(x - Hospital.ORIGIN.x) < Hospital.APRON_WIDTH * .5 + .5:
+					continue
 				var edge_z: float = z + side*4.5
 				dashes.append(Transform3D(basis,Vector3(x,_surface_height(x,edge_z)+.014,edge_z)))
 	for x in [102.0, 162.0]:
@@ -4549,7 +4552,7 @@ func _build_city_blocks() -> void:
 	]
 	for plot in plots:
 		_build_building(plot[0], plot[1], plot[2], plot[3])
-	var hospital := preload("res://environment/hospital.gd").new()
+	var hospital := Hospital.new()
 	add_child(hospital)
 	hospital.build(self)
 	_make_driving_surface("Police forecourt",Vector3(9,.10,6.5),Vector3(-34,-.12,-7.75),Color("#a6a29a"))
