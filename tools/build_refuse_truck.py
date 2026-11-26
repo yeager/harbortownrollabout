@@ -140,7 +140,16 @@ v.mesh_from_rings("Compactor body", [
     (-1.78,1.20,1.22,3.25,3.5),(-1.59,1.24,1.18,3.37,3.58),
     (2.37,1.24,1.18,3.37,3.58),(2.65,1.18,1.23,3.26,3.46)],green,root)
 box("Rear hopper floor",(0,2.97,1.12),(2.26,.96,.16),v.DARK)
-box("Loading comb",(0,3.55,1.18),(1.84,.14,.16),v.METAL)
+box("Loading comb carrier",(0,3.54,1.177),(1.84,.16,.125),v.DARK,.017)
+box("Loading comb mounting rail",(0,3.623,1.163),(1.74,.053,.091),v.METAL,.012)
+for tooth in range(16):
+    x = (tooth - 7.5) * .105
+    tine = box("Loading comb tooth",(x,3.657,1.226),(.065,.115,.091),v.METAL,.012)
+    tine.rotation_euler.x = math.radians(17)
+for side in (-1,1):
+    box("Loading comb end bracket",(side*.913,3.548,1.168),(.092,.206,.172),green,.017)
+    v.cylinder("Loading comb bracket pin",(side*.968,3.561,1.16),
+                     .041,.025,v.METAL,True,20,root)
 for side in (-1,1):
     box("Door window gasket",(side*1.173,-2.94,2.58),(.030,1.588,.880),v.RUBBER,.040)
     box("Door window",(side*1.155,-2.94,2.58),(.085,1.55,.84),v.GLASS,.075)
