@@ -261,7 +261,11 @@ func _ready() -> void:
 		for y in [.46, 2.56]:
 			world._make_box("Glazing channel", Vector3(.077, .055, 4.02), Vector3(3.8, y, 0), Color("#46565a"), false, station)
 		for z in [-1.55,1.55]:
-			var fixture := world._make_box("Shelter ceiling light",Vector3(.13,.035,.95),Vector3(2.85,2.622,z),Color.WHITE,false,station) as MeshInstance3D
+			var fixture_center := Vector3(2.85, 2.615, z)
+			world._make_box("Shelter lamp housing", Vector3(.19, .054, 1.03),
+				fixture_center, Color("#35464d"), false, station)
+			var fixture := world._make_box("Shelter ceiling light", Vector3(.138, .012, .952),
+				fixture_center + Vector3.DOWN * .029, Color.WHITE, false, station) as MeshInstance3D
 			fixture.material_override = world.entrance_diffuser
 			var light := SpotLight3D.new()
 			light.position = fixture.position - Vector3.UP*.04
