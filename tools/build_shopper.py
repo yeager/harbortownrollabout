@@ -522,9 +522,19 @@ v.profile_loft("Rolled exhaust outlet",outlet_rings+[outlet_rings[0]],v.METAL,ro
 tube("Recessed exhaust bore",outlet_base+.007*outlet_axis,
      outlet_base+.009*outlet_axis,.017,v.BLACK)
 # A trailing rubber flap hangs from the deck behind the single rear tyre.
-flap = box("Rear mud flap", (0,1.147,.203), (.216,.018,.211), v.RUBBER, .008)
-flap.rotation_euler.x = math.radians(13)
-box("Mud flap retaining strip", (0,1.132,.293), (.215,.025,.028), v.METAL, .004)
+flap_sections = [
+    (.296,1.129,.108),(.270,1.155,.110),(.220,1.158,.109),
+    (.148,1.164,.106),(.109,1.179,.101),(.102,1.182,.093),
+]
+flap_rings = [[(-width,y-.005,z),(width,y-.005,z),
+               (width,y+.005,z),(-width,y+.005,z)]
+              for z,y,width in flap_sections]
+v.profile_loft("Curved rear mud flap",flap_rings,v.RUBBER,root)
+box("Mud flap retaining strip",(0,1.165,.270),(.222,.018,.026),v.METAL,.005)
+for x in (-.080,0,.080):
+    screw = v.cylinder("Mud flap retaining rivet",(x,1.176,.270),
+                        .004,.004,v.DARK,False,12,root)
+    screw.rotation_euler.x = math.pi/2
 box("Tail lamp gasket",(0,1.158,.43),(.161,.020,.077),v.RUBBER,.013)
 box("Tail lamp housing",(0,1.173,.43),(.153,.024,.069),v.DARK,.012)
 # Mold the vertical prisms into the red lens so they light with the whole optic.
