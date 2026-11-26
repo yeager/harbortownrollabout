@@ -462,6 +462,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Bruksbädden drogs in till murens bredd så att täckstenarna skjuter ut fyra centimeter. Granskat med snö vid nordöstra hörnet. Stadsgräns- och väderproven passerade.
   - Täckstenarna samlar snö på ovansidan och fogarna syns även i vinterläget. Granskat vid nordöstra hörnet. Stadsgräns- och väderproven passerade.
   - Graniten fick en svagt grön beläggning vid kanalens vattenlinje. Granskat från vattennivå. Stadsgränsprovet passerade.
+  - Stadsmurens och kajens granit fick oregelbundna ljusa och mörka mineralkorn, med mjukare övergång vid fogarna. Granskat i Godot och stadsgränsprovet passerade.
 - [ ] Uppdragsrekvisitan för cykelbud, födelsedag och upphittat paraply
   - Cykelbudets paket fick kartongskarv, packtejp och adressetikett. Efter leverans vilar det på en pakethållare ovanför hjulet. Hämtning, bärande och överlämning provades i Godot och pakethållaren granskades i närbild.
   - Tårtkartongens lock fick vikta kanter och en öppningsflik som följer locket. Hämtning, överlämning och öppning provades i Godot. Kartongen granskades öppen på födelsedagsbordet.
