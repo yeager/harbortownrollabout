@@ -7699,8 +7699,19 @@ func _build_boule_court() -> void:
 			_make_box("Bench backrest fastener", Vector3(.007, .019, .019),
 				BOULE_BENCH + Vector3(.193, height, end), Color("#676b62"))
 	for end in [-.68, .68]:
-		_make_roadside_solid("Bench frame", Vector3(.42, .39, .07),
-			BOULE_BENCH + Vector3(0, .20, end), Color("#394944"))
+		# Preserve the original driving clearance around the open leg frame.
+		roadside_solids.append(AABB(BOULE_BENCH + Vector3(-.21, -1.995, end - .035),
+			Vector3(.42, 2.39, .07)))
+		for leg_x in [-.17, .17]:
+			var foot := BOULE_BENCH + Vector3(leg_x * 1.16, 0, end)
+			var leg := _make_box("Bench splayed leg", Vector3(.049, .38, .055),
+				foot.lerp(BOULE_BENCH + Vector3(leg_x, .38, end), .5), Color("#394944"))
+			leg.rotation.z = atan2(leg_x * .16, .38)
+			_make_box("Bench foot plate", Vector3(.088, .018, .094),
+				foot + Vector3.UP * .009, Color("#394944"))
+			for bolt_z in [-.032, .032]:
+				_make_box("Bench foot anchor", Vector3(.015, .009, .015),
+					foot + Vector3(0, .021, bolt_z), Color("#676b62"))
 		_make_box("Seat support crossbar", Vector3(.47, .042, .106),
 			BOULE_BENCH + Vector3(0, .380, end), Color("#394944"))
 		_make_box("Back support", Vector3(.06, .65, .06),

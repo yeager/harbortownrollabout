@@ -338,6 +338,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Övningsbilen fick en bakre övningsskylt med gummifästen och lokaliserad text, kopplad till övningsläget. Svensk spelvy granskades i Godot. Övningsbaneprovet och språkkontrollen passerade.
   - Övningsskylten centrerades och vinklades efter bakrutans geometri, med kortare gummifästen. Granskat bakifrån i Godot. Övningsbaneprovet passerade.
   - Bänken vid boulebanan fick träådring, synliga skruvar och tvärstag under sitsen. Granskat i Godot. Två boulerundor passerade vid olika bildfrekvenser.
+  - Boulebänken fick utställda stålben med fotplattor och markankare. Granskat i närbild i Godot. Bouleprovet passerade vid två bildfrekvenser.
   - Boulebanans kantvirke fick träådring, skarvar och bultade hörnbeslag. Granskat i Godot. Bouleprovet passerade.
   - Bouleringen fick en tätare rund profil, matt gummiyta och modellerad skarvhylsa. Granskat i Godot. Bouleprovet passerade.
   - Boulekloten fick ett stålmaterial med mörka spår och lillen fick träådring. Granskat i närbild i Godot. Bouleprovet passerade.
