@@ -5920,7 +5920,14 @@ func _build_depot() -> void:
 		bin.add_child(lid)
 		lid.position = Vector3(0,.953,.302)
 		_make_box("Hinged lid", Vector3(.72,.057,.64), Vector3(0,.014,-.302), lid_color, false, lid)
-		_make_box("Lid pull", Vector3(.21,.025,.050), Vector3(0,.049,-.57), lid_color.darkened(.18), false, lid)
+		var lid_trim := lid_color.darkened(.18)
+		for handle_x in [-.083, .083]:
+			_make_box("Lid handle foot", Vector3(.038, .043, .039),
+				Vector3(handle_x, .060, -.567), lid_trim, false, lid)
+		_make_box("Lid pull", Vector3(.204, .024, .037), Vector3(0, .087, -.567), lid_trim, false, lid)
+		for rib_x in [-.23, -.115, 0.0, .115, .23]:
+			_make_box("Molded lid rib", Vector3(.022, .014, .37),
+				Vector3(rib_x, .047, -.298), lid_color.lightened(.07), false, lid)
 		for side in [-1,1]:
 			_make_box("Lid hinge knuckle", Vector3(.082,.038,.058), Vector3(side*.224,0,0), lid_color, false, lid)
 		_add_recycling_labels(bin,i == 0)
