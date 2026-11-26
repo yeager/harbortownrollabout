@@ -593,7 +593,8 @@ def make_ambulance():
                     ((-1,3.129),(-.94,3.138+bulge),(-.73,3.141+bulge+prism),
                      (0,3.144+bulge+prism),(.73,3.141+bulge+prism),
                      (.94,3.138+bulge),(1,3.129))])
-            profile_loft("Kombinationslykta",rings,finish,root)
+            name = "Rear indicator lens" if finish == amber else "Kombinationslykta"
+            profile_loft(name,rings,finish,root)
         rear_panel("Blåljuskassett",side*.884,3.101,2.45,.345,.131,.037,seal)
         rear_panel("Blå optik",side*.884,3.105,2.45,.295,.087,.023,glass)
         for i in range(4):
@@ -618,6 +619,13 @@ def make_ambulance():
     box("Laststeg",(0,3.147,.502),(2.14,.244,.105),DARK,.034)
     for i in range(3):
         box("Halkskydd",(0,3.08+i*.069,.558),(1.99,.025,.009),RUBBER,.003)
+    reflector = material("Röd prismareflex",(.64,.018,.011),.16,.27)
+    for side in (-1,1):
+        x=side*.871
+        box("Stötfångarreflexens ram",(x,3.265,.504),(.236,.023,.055),BLACK,.009)
+        box("Röd stötfångarreflex",(x,3.278,.504),(.205,.009,.034),reflector,.006)
+        for prism in range(-4,5):
+            box("Reflexprisma",(x+prism*.020,3.283,.504),(.004,.003,.022),reflector,.001)
     # A pressed chrome surround narrows below the stacked headlamps.
     def grille_loop(width,height,depth):
         ring=[]

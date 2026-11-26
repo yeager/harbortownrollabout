@@ -200,6 +200,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Flaket fick fyra surrningsöglor och skydd vid framstammen och bakluckan. Bakluckan fick karossfogar och ett separat grepp. Granskat i Godot. Fordonsprovet passerade.
 - [ ] [`ambulance.glb`](../vehicles/ambulance.glb)
   - Bakdörrens handtag fick separata fästen och en låscylinder med nyckelspår. Registreringsskylten fick två armaturhus med diffusorer. Detaljerna granskades i Godot. Ambulansintaget och utryckningsprovet passerade.
+  - Laststeget fick två röda prismareflexer. Bakblinkersen använder de modellerade orange glasen i baklyktorna. Granskat bakifrån i Godot. Ambulansintaget och fordonsprovet passerade.
 - [ ] [`ambulance_helicopter.glb`](../vehicles/ambulance_helicopter.glb)
 - [ ] [`bargare.glb`](../vehicles/bargare.glb)
   - Vinschen fick bultade lagerbockar med axeländar och en vajerstyrning med två rullar. Granskat på flaket i Godot. Bärgningsprovet passerade.
