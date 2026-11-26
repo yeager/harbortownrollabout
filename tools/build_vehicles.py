@@ -2942,11 +2942,34 @@ def make_bwm(color, name="BWM Y5 N70i", *, patrol=False):
             wheel.parent=root
             cylinder("Centre cap",(side*1.139,y,.48),.071,.018,BLACK,root=root)
             cylinder("Blue hub enamel",(side*1.152,y,.48),.036,.008,POLICE_BLUE,root=root)
+    glass_stations = ((-.12,.49),(-.08,.545),(.02,.563),(.62,.566),(1.17,.555),(1.24,.535),(1.27,.48))
     glass_rings=[]
-    for y,w in ((-.12,.49),(-.08,.545),(.02,.563),(.62,.566),(1.17,.555),(1.24,.535),(1.27,.48)):
+    for y,w in glass_stations:
         top=[(x*w,y,roof_height(x*w,y)+.006) for x in (-1,-.75,-.5,-.25,0,.25,.5,.75,1)]
         glass_rings.append(top+[(x,y,z-.013) for x,y,z in reversed(top)])
     profile_loft("Panoramic sunroof",glass_rings,privacy,root)
+    if root.name.startswith("BWM Y5 N70i"):
+        # Seal the perimeter along the glass crown and cover the joint between panes.
+        front_y, front_width = glass_stations[0]
+        rear_y, rear_width = glass_stations[-1]
+        perimeter = [(w,y) for y,w in reversed(glass_stations)]
+        perimeter += [(front_width*i/4,front_y) for i in range(3,-4,-1)]
+        perimeter += [(-w,y) for y,w in glass_stations]
+        perimeter += [(rear_width*i/4,rear_y) for i in range(-3,4)]
+        seal_loops = []
+        for width, height in ((-.010,.007),(0,.011),(.012,.003)):
+            seal_loops.append([
+                (x,y,roof_height(x,y)+height)
+                for x,y in ((x * (1+width/.55), .575+(y-.575)*(1+width/.695))
+                            for x,y in perimeter)
+            ])
+        profile_loft("Panoramic roof perimeter seal",seal_loops,RUBBER,root,close_ends=False)
+        pane_joint = []
+        for x in (-.561,-.425,-.283,-.142,0,.142,.283,.425,.561):
+            pane_joint.append([(x,y,roof_height(x,y)+height) for y,height in (
+                (.609,.005),(.611,.010),(.629,.010),(.631,.005),
+            )])
+        profile_loft("Panoramic roof pane divider",pane_joint,DARK,root)
     if root.name.startswith("BWM Y5 N70i"):
         cube("Front plate holder", (0, -2.531, 1.035), (.754, .108, .208), DARK, .022, root)
     cube("Front plate", (0, -2.596, 1.035), (0.72, 0.035, 0.18), PAINT_WHITE, 0.025, root)

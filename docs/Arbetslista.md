@@ -284,6 +284,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Backspegelkåporna fick en smal fog som följer skalets form. Verifierat på båda speglarna i tre GLB-varianter och granskat i Godot. Körskoleprovet passerade.
   - Framdörrarnas handtag fick modellerade sensorytor för nyckelfri upplåsning. Granskat i närbild i Godot och kontrollerat i alla tre GLB-varianter. Körskoleprovet passerade.
   - Taket fick en lackerad hajfensantenn med separat gummitätning. Verifierat i tre GLB-varianter och granskat snett bakifrån i Godot. Körskoleprovet passerade.
+  - Panoramataket fick en profilerad gummilist längs glaset och en tvärlist vid rutornas skarv. Kontrollerat i tre GLB-varianter och granskat i Godot. Körskoleprovet passerade.
 - [ ] [`brandbil.glb`](../vehicles/brandbil.glb)
   - Dragkrokens infästning fick fyra sexkantsbultar samt ett släpvagnsuttag med fäste och väderskydd. Granskat bakifrån i Godot. Förarplats- och luckproven passerade.
 - [ ] [`city_bus.glb`](../vehicles/city_bus.glb)
