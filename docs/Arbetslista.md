@@ -456,6 +456,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Muren fick förskjutna granitblock med ljusvariation och mörkare sockel. Granskat från vägen i Godot. Stadsgränsprovet kontrollerade fyra väggar och hörnkollisioner. Kanalprovet passerade också.
   - Murkrönets täckplattor möts kant i kant i hörnen utan överlappande ovansidor. Granskat vid nordöstra hörnet. Stadsgränsprovet passerade.
   - Stadsgränsprovet kontrollerar även att underlagen till täckstenarna saknar överlapp i hörnen. Godkänt i Godot 4.7 dev5.
+  - Murkropparna möts kant i kant vid de fyra hörnen. Nordöstra hörnet granskades utifrån i Godot. Stadsgränsprovet kontrollerar överlapp och kollisionsskydd i alla fyra hörn.
   - Murkrönet fick individuella täckstenar med tunna fogar och varierande ton. Granskat vid nordöstra hörnet i Godot. Stadsgränsprovet passerade.
   - Täckstenarna samlar snö på ovansidan och fogarna syns även i vinterläget. Granskat vid nordöstra hörnet. Stadsgräns- och väderproven passerade.
   - Graniten fick en svagt grön beläggning vid kanalens vattenlinje. Granskat från vattennivå. Stadsgränsprovet passerade.

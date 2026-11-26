@@ -2394,11 +2394,13 @@ func _build_city_wall() -> void:
 		var tangent := Vector3.RIGHT if along_x else Vector3.BACK
 		var normal := Vector3.BACK if along_x else Vector3.RIGHT
 		for side in [-1, 1]:
-			# Overlap the four corners and extend the foundation below the canal.
+			# The east and west walls butt against the north and south walls.
 			var center: Vector3 = Vector3(middle.x,0,middle.y) + normal * side * (half_depth + .3)
-			var size := tangent * (length + 1.2) + normal * .6
+			var masonry_length := length + 1.2 if along_x else length
+			var size := tangent * masonry_length + normal * .6
 			var masonry := _make_box("Granitmur", size + Vector3.UP * 3.8, center + Vector3.UP * .4, Color.WHITE, true, wall)
 			masonry.material_override = stone
+			masonry.add_to_group("city_perimeter_masonry")
 			# One coping spans each corner. The perpendicular coping meets its inside edge.
 			var coping_length := length + 1.28 if along_x else length - .08
 			var coping_size := tangent * coping_length + normal * .68
