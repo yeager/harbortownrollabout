@@ -446,6 +446,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
 - [ ] Depåns byggnader, garage och parkeringsytor
 - [ ] Sopkärlen längs sophämtningsrutten
 - [ ] Stadens granitmur med sockel, hörn och avtäckning
+  - Muren fick förskjutna granitblock med ljusvariation och mörkare sockel. Granskat från vägen i Godot. Stadsgränsprovet kontrollerade fyra väggar och hörnkollisioner. Kanalprovet passerade också.
 - [ ] Uppdragsrekvisitan för cykelbud, födelsedag och upphittat paraply
 - [ ] Tvärbanans perrong, väderskydd och övriga hållplatsdetaljer
   - Kontaktledningsstolparna fick fotplattor, stag och isolatorer. Granskat vid Västra torget i Godot efter godkänt spårvagnsprov.

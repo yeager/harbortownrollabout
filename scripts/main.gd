@@ -2339,11 +2339,45 @@ func _build_world() -> void:
 	_build_lampposts()
 	_update_daylight(0)
 
+func _granite_wall_finish() -> ShaderMaterial:
+	var wall_shader := Shader.new()
+	wall_shader.code = """
+	shader_type spatial;
+	uniform vec2 block_size = vec2(.91, .36);
+	uniform float damp_base = -.82;
+	varying vec3 world_point;
+	void vertex() {
+		world_point = (MODEL_MATRIX * vec4(VERTEX, 1.0)).xyz;
+	}
+	void fragment() {
+		vec3 world_normal = (INV_VIEW_MATRIX * vec4(NORMAL, 0.0)).xyz;
+		float along = abs(world_normal.x) > abs(world_normal.z) ? world_point.z : world_point.x;
+		float row_height = (world_point.y + .10) / block_size.y;
+		vec2 grid = vec2(along / block_size.x + .5 * mod(floor(row_height), 2.0), row_height);
+		vec2 inset = min(fract(grid), 1.0 - fract(grid)) * block_size;
+		float edge = min(inset.x, inset.y);
+		float aa = clamp(fwidth(edge), .001, .022);
+		float stone = smoothstep(.008 - aa, .014 + aa, edge);
+		float block = fract(sin(dot(floor(grid), vec2(43.71, 29.49))) * 437.59);
+		vec3 granite = mix(vec3(.37, .35, .31), vec3(.52, .50, .46), block);
+		float grain = fract(sin(dot(floor(vec2(world_point.y, along) * 130.0), vec2(19.3, 37.1))) * 1427.9);
+		granite *= 1.0 + (grain - .5) * .12 * (1.0 - smoothstep(.003, .012, fwidth(along)));
+		float dry = smoothstep(damp_base - .17, damp_base + .16, world_point.y);
+		ALBEDO = mix(vec3(.23, .22, .20), granite, stone) * mix(.61, 1.0, dry);
+		ROUGHNESS = mix(.66, .93, dry);
+	}
+	"""
+	var wall_finish := ShaderMaterial.new()
+	wall_finish.shader = wall_shader
+	return wall_finish
+
 func _build_city_wall() -> void:
 	var wall := Node3D.new()
 	wall.name = "CityPerimeter"
 	add_child(wall)
-	var stone := _noise_material(Color("#706e67"), Color("#a09b8c"), 1.1, .13)
+	var stone := _granite_wall_finish()
+	stone.set_shader_parameter("block_size", Vector2(1.32, .43))
+	stone.set_shader_parameter("damp_base", -.12)
 	var middle := CITY_INTERIOR.get_center()
 	for along_x in [true, false]:
 		var length := CITY_INTERIOR.size.x if along_x else CITY_INTERIOR.size.y
@@ -3155,31 +3189,7 @@ func _build_waterfront() -> void:
 		MOORING_START_Z+MOORING_BUOY_Z_OFFSET, MOORING_SPACING, MOORING_COUNT))
 	water_finish.set_shader_parameter("bridge_rises", Vector2(HIGH_BRIDGE_RISE, SOUTH_BRIDGE_RISE))
 	canal.material_override = water_finish
-	var wall_shader := Shader.new()
-	wall_shader.code = """
-	shader_type spatial;
-	varying vec3 world_point;
-	void vertex() {
-		world_point = (MODEL_MATRIX * vec4(VERTEX, 1.0)).xyz;
-	}
-	void fragment() {
-		float row = floor((world_point.y + .10) / .36);
-		vec2 grid = vec2(world_point.z / .91 + .5 * mod(row, 2.0), (world_point.y + .10) / .36);
-		vec2 inset = min(fract(grid), 1.0 - fract(grid)) * vec2(.91, .36);
-		float edge = min(inset.x, inset.y);
-		float aa = clamp(fwidth(edge), .001, .022);
-		float stone = smoothstep(.008 - aa, .014 + aa, edge);
-		float block = fract(sin(dot(floor(grid), vec2(43.71, 29.49))) * 437.59);
-		vec3 granite = mix(vec3(.37, .35, .31), vec3(.52, .50, .46), block);
-		float grain = fract(sin(dot(floor(world_point.yz * 130.0), vec2(19.3, 37.1))) * 1427.9);
-		granite *= 1.0 + (grain - .5) * .12 * (1.0 - smoothstep(.003, .012, fwidth(world_point.z)));
-		float dry = smoothstep(-.99, -.66, world_point.y);
-		ALBEDO = mix(vec3(.23, .22, .20), granite, stone) * mix(.61, 1.0, dry);
-		ROUGHNESS = mix(.66, .93, dry);
-	}
-	"""
-	var wall_finish := ShaderMaterial.new()
-	wall_finish.shader = wall_shader
+	var wall_finish := _granite_wall_finish()
 	var quay_wall_color := Color("#807b70")
 	_make_box("Kajmur", Vector3(.5, 1.5, 174), Vector3(55, -.86, -6), quay_wall_color).material_override = wall_finish
 	var wall_spans := [Vector2(-93, FLOATING_DOCK_ACCESS_Z - .82),
