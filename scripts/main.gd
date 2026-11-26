@@ -11790,6 +11790,14 @@ func _build_driving_school() -> void:
 			Vector3(0, 3.512, edge * 3.14), Color.WHITE, false, school).material_override = roof_metal
 		_make_box("Roof coping end cap", Vector3(.16, .046, 6.12),
 			Vector3(edge * 6.15, 3.512, 0), Color.WHITE, false, school).material_override = roof_metal
+		for joint_x in [-4.13, -2.07, 0.0, 2.07, 4.13]:
+			_make_box("Long roof coping joint cover", Vector3(.041, .009, .166),
+				Vector3(joint_x, 3.538, edge * 3.14), Color.WHITE, false, school).material_override = roof_metal
+			_make_box("Long roof coping folded joint edge", Vector3(.041, .046, .008),
+				Vector3(joint_x, 3.514, edge * 3.221), Color.WHITE, false, school).material_override = roof_metal
+		for joint_z in [-1.53, 0.0, 1.53]:
+			_make_box("End roof coping joint cover", Vector3(.166, .009, .041),
+				Vector3(edge * 6.15, 3.538, joint_z), Color.WHITE, false, school).material_override = roof_metal
 		var drain_x: float = edge * 5.58
 		_tube_between(school, Vector3(drain_x, 3.30, -3.23),
 			Vector3(drain_x, 3.06, -3.09), .052, roof_metal)
