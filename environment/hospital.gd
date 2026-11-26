@@ -128,6 +128,14 @@ func _build_intake(world: Node3D) -> void:
 			Vector3(side * 4.24, 2.075, 3.45), BRICK, true, self)
 		world._make_roadside_solid("Portal column", Vector3(.49, 4.13, .30),
 			Vector3(side * 4.21, 2.065, 6.75), METAL, true, self)
+		var guard := Vector3(side * 3.88, .52, 5.98)
+		world._make_roadside_solid("Intake column guard", Vector3(.20, 1.08, .20),
+			guard, Color("#dfa936"), true, self)
+		world._make_box("Guard base plate", Vector3(.31, .034, .31),
+			guard - Vector3.UP * .52, METAL, false, self)
+		for band in [.18, .37]:
+			world._make_box("Guard contrast band", Vector3(.204, .082, .204),
+				guard + Vector3.UP * band, METAL, false, self)
 		world._make_box("Wall bumper rail", Vector3(.14, .18, 6.45),
 			Vector3(side * 3.99, .77, 3.36), METAL, false, self)
 		var line_start := .56
