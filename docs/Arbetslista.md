@@ -225,6 +225,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
 - [ ] [`raggarbil.glb`](../vehicles/raggarbil.glb)
 - [ ] [`refuse_truck.glb`](../vehicles/refuse_truck.glb)
 - [ ] [`ride_on_mower.glb`](../vehicles/ride_on_mower.glb)
+  - Åkgräsklipparen fick en infälld kylgrill och separata strålkastar- och blinkershus fram. Fronten granskades i Godot och båda främre blinkerslinserna används av spelet. Fordons- och områdesproven passerade.
 - [ ] [`saab96.glb`](../vehicles/saab96.glb)
   - Saav 97 fick ett upphöjt modellemblem på bakluckan. Granskat i Godot och fordonsprovet passerade.
 - [ ] [`shopping_trike.glb`](../vehicles/shopping_trike.glb)

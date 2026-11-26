@@ -55,8 +55,17 @@ def export(name):
 box("Ladder frame",(0,.02,.36),(.61,1.52,.18),frame)
 box("Engine bonnet",(0,.64,.64),(.83,.64,.44),paint,.14)
 box("Bonnet lid",(0,.67,.855),(.61,.42,.035),frame)
+box("Cooling grille surround",(0,.949,.626),(.591,.036,.253),frame,.020)
+box("Recessed cooling grille",(0,.969,.626),(.541,.014,.219),rubber,.012)
 for n in range(7):
-    box("Cooling louvre",(0,.964,.53+n*.032),(.53,.018,.013),rubber,.004)
+    box("Cooling louvre",(0,.979,.533+n*.031),(.512,.020,.013),frame,.004)
+lamp_glass = finish("Mower headlight glass",(.72,.82,.83),.16,.24)
+amber_glass = finish("Mower indicator glass",(.76,.27,.019),.08,.30)
+for x in (-.287,.287):
+    box("Mower headlight housing",(x,.934,.778),(.157,.062,.080),frame,.015)
+    box("Mower headlight lens",(x,.968,.778),(.123,.016,.056),lamp_glass,.010)
+    box("Mower corner lamp housing",(x,.948,.707),(.073,.043,.044),frame,.008)
+    box("Front amber indicator",(x,.973,.707),(.053,.014,.029),amber_glass,.006)
 for side in (-1,1):
     box("Wheel arch",(side*.37,.1,.57),(.30,.92,.17),paint,.08)
     box("Footboard",(side*.28,-.39,.36),(.30,.58,.07),frame)
