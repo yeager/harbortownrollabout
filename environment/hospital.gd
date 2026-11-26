@@ -16,8 +16,12 @@ func build(world: Node3D) -> void:
 	world._make_box("Sealed hospital ward", Vector3(27, ward_height, 20),
 		Vector3(0, ward_height * .5, -10), WALL, true, self)
 	world.building_bounds.append(AABB(ORIGIN + Vector3(-13.5, -1, -20), Vector3(27, ward_height + 1, 20)))
-	world._make_box("Dark roof flashing", Vector3(27.18, .22, 20.16),
+	var ward_roof: MeshInstance3D = world._make_box("Dark roof flashing", Vector3(27.18, .22, 20.16),
 		Vector3(0, 10.035, -10), METAL, false, self)
+	var ward_roof_finish: ShaderMaterial = world._noise_material(METAL.darkened(.15), METAL.lightened(.08), 3.0, .18)
+	ward_roof_finish.set_shader_parameter("roof_surface", true)
+	ward_roof.material_override = ward_roof_finish
+	world.ground_finishes.append(ward_roof_finish)
 	for band in [3.82, 6.42, 9.02]:
 		world._make_box("Precast concrete course", Vector3(27.04, .15, .19),
 			Vector3(0, band, .035), TRIM, false, self)
@@ -196,7 +200,12 @@ func _build_helipad(world: Node3D) -> void:
 	var platform := MeshInstance3D.new()
 	platform.name = "Hospital rooftop helipad"
 	platform.mesh = deck
-	platform.material_override = world._material(Color("#364547"), .88)
+	var deck_finish: ShaderMaterial = world._noise_material(Color("#283639"), Color("#435355"), 3.4, .22)
+	deck_finish.set_shader_parameter("roof_surface", true)
+	# Keep enough contrast around the landing marks after snowfall.
+	deck_finish.set_shader_parameter("snow_retention", .45)
+	platform.material_override = deck_finish
+	world.ground_finishes.append(deck_finish)
 	platform.position = center - Vector3.UP * .15
 	add_child(platform)
 	var stripe := TorusMesh.new()
