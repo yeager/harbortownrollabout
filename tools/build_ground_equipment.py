@@ -68,6 +68,34 @@ box("Cooling grille surround",(0,.949,.626),(.591,.036,.253),frame,.020)
 box("Recessed cooling grille",(0,.969,.626),(.541,.014,.219),rubber,.012)
 for n in range(7):
     box("Cooling louvre",(0,.979,.533+n*.031),(.512,.020,.013),frame,.004)
+# The exhaust exits below the rear grille, with the rolled rim open.
+box("Exhaust silencer",(.307,.807,.439),(.127,.226,.110),frame,.027)
+box("Exhaust heat shield",(.307,.938,.467),(.145,.052,.097),steel,.017)
+for x in (.268,.346):
+    disc("Heat shield fastener",(x,.967,.487),.009,.010,frame,(0,1,0))
+exhaust_profile = [(.913,.028),(.997,.031),(1.018,.030),
+                   (1.025,.024),(1.016,.019),(.921,.019)]
+segments = 32
+vertices = [(.307+radius*math.cos(angle), y, .429+radius*math.sin(angle))
+            for y, radius in exhaust_profile
+            for angle in (step*math.tau/segments for step in range(segments))]
+faces = []
+for ring in range(len(exhaust_profile)):
+    following = (ring+1) % len(exhaust_profile)
+    for step in range(segments):
+        next_step = (step+1) % segments
+        faces.append((ring*segments+step, following*segments+step,
+                      following*segments+next_step, ring*segments+next_step))
+exhaust_mesh = bpy.data.meshes.new("Rolled exhaust outlet")
+exhaust_mesh.from_pydata(vertices, [], faces)
+exhaust_mesh.update()
+exhaust_mesh.materials.append(steel)
+exhaust_mesh.materials.append(frame)
+for face in exhaust_mesh.polygons:
+    face.use_smooth = True
+    if face.index >= 4*segments:
+        face.material_index = 1
+bpy.context.collection.objects.link(bpy.data.objects.new("Exhaust outlet", exhaust_mesh))
 lamp_glass = finish("Mower headlight glass",(.72,.82,.83),.16,.24)
 amber_glass = finish("Mower indicator glass",(.76,.27,.019),.08,.30)
 rear_glass = finish("Mower rear lamp glass",(.59,.019,.015),.12,.28)
