@@ -202,6 +202,9 @@ duct.parent = root
 duct.data.materials.append(yellow)
 for polygon in duct.data.polygons:
     polygon.use_smooth = True
+# The gearbox support spans the duct behind the spinning fan.
+cube("Fenestron gearbox support", (.165, 5.40, 2.11), (.092, 1.16, .085), yellow, .032, root)
+cylinder("Fenestron gearbox cover", (.211, 5.40, 2.11), .105, .052, yellow, True, 24, root)
 tail_rotor = pivot("TailRotor", root, (0, 5.40, 2.11))
 cylinder("Fan hub", (0, 0, 0), .138, .19, yellow, True, 24, tail_rotor)
 for index in range(9):
