@@ -183,7 +183,9 @@ Fordonsgranskningen börjar med exteriörerna. Bilarnas tillverkarnamn, modellna
 
 - [x] Infarten till ambulansintaget möter Östra allén i samma nivå utan överlappande vägytor. Granskad i Godot och kontrollerad i ambulansprovet, inklusive patientöverlämning. Vägens kantlinje gör uppehåll vid infarten och de gula ledlinjerna slutar före körbanan. Granskat i Godot och ambulansprovet passerade. Intagets plåttak mörknar i regn och samlar snö på ovansidan, medan golvet under taket behåller sitt material. Vintervyn granskades i Godot. Väderprovet och ambulansprovet passerade. Takarmaturerna fick separata plåthus och lysande diffusorer. Granskat i nattläge i Godot. Ambulansprovet passerade. Den upplyfta porten fick fem sektioner, bottenlist och styrskenor. Granskad i nattläge och verifierad med ambulansprovet. Portöppningen fick gulsvarta påkörningsskydd med fotplattor. Granskade i Godot. Ambulansprovet passerade.
 
-- [x] Helikopterplattans tolv gröna kantljus fick låga koniska armaturhus och separata linser. Granskat i nattläge i Godot. Ambulanshelikopterns landningsprov passerade. Sjukhustaket och plattan fick vädermaterial. Plattan får ett tunnare snötäcke så att H och kantmarkeringen syns. Vintervyn granskades i Godot och landningsprovet passerade.
+- [x] Helikopterplattans tolv gröna kantljus fick låga koniska armaturhus och separata linser. Granskat i nattläge i Godot. Ambulanshelikopterns landningsprov passerade. Sjukhustaket och plattan fick vädermaterial. Plattan får ett tunnare snötäcke så att H och kantmarkeringen syns. Vintervyn granskades i Godot och landningsprovet passerade. En vindstrut på sjukhustaket följer vädrets vindriktning. Granskad i Godot.
+
+- [x] Båda helikoptrarnas huvud- och stjärtrotorer roterar under flygning och visar rörelseoskärpa. Ambulanshelikopterns oskärpa avtar när rotorerna varvar ned på taket. Båda helikoptrarna granskades i Godot och rotor- och landningsprovet passerade.
 
 ### Importerade modeller
 

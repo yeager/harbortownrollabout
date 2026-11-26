@@ -21,10 +21,23 @@ func check_landing() -> void:
 		quit(1)
 		return
 	var skids := aircraft.find_children("Black tubular skid*", "MeshInstance3D", true, false)
-	if skids.size() != 2 or aircraft.main_rotor.get_child_count() != 7 or aircraft.tail_rotor.get_child_count() != 10:
+	if skids.size() != 2 or aircraft.main_rotor.get_child_count() != 8 or aircraft.tail_rotor.get_child_count() != 11:
 		printerr("Medical aircraft is missing skids or working rotor assemblies")
 		quit(1)
 		return
+	for hub: Node3D in [game.main_rotor, game.tail_rotor, aircraft.main_rotor, aircraft.tail_rotor]:
+		if not hub.has_node("Rotor motion blur"):
+			printerr("An airborne rotor is missing its motion blur")
+			quit(1)
+			return
+	var hubs: Array[Node3D] = [game.main_rotor, game.tail_rotor, aircraft.main_rotor, aircraft.tail_rotor]
+	var before: Array = hubs.map(func(hub: Node3D): return hub.basis)
+	game._update_patrol(.025)
+	for i in hubs.size():
+		if hubs[i].basis.is_equal_approx(before[i]):
+			printerr("A helicopter rotor did not rotate in flight")
+			quit(1)
+			return
 	aircraft.flight_seconds = aircraft.TOUCHDOWN_AT - 8.0
 	game._update_patrol(0.0)
 	if aircraft.position.y <= pad.y + 3.0 or not is_equal_approx(aircraft.position.x, pad.x):

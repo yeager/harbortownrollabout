@@ -2,6 +2,7 @@ extends Node3D
 
 ## The touchdown origin coincides with the bottom of the skids.
 const MODEL = preload("res://vehicles/ambulance_helicopter.glb")
+const RotorMotion := preload("res://scripts/rotor_motion.gd")
 const LANDING_YAW := PI * .5
 const SEGMENT_SECONDS := [20.0, 14.0, 12.0, 15.0, 11.0, 16.0, 18.0, 18.0]
 const CYCLE_SECONDS := 124.0
@@ -12,6 +13,7 @@ var pad: Vector3
 var flight_seconds := 29.0
 var main_rotor: Node3D
 var tail_rotor: Node3D
+var rotor_blur: Array[MeshInstance3D] = []
 var rotor_audio := AudioStreamPlayer3D.new()
 
 
@@ -22,6 +24,7 @@ func configure(landing_center: Vector3) -> void:
 	add_child(aircraft)
 	main_rotor = aircraft.find_child("MainRotor", true, false) as Node3D
 	tail_rotor = aircraft.find_child("TailRotor", true, false) as Node3D
+	rotor_blur = [RotorMotion.fit(main_rotor, 4.955, 5), RotorMotion.fit(tail_rotor, .515, 9, true)]
 	var rotor_loop := preload("res://audio/medical_helicopter_rotor.wav").duplicate() as AudioStreamWAV
 	rotor_loop.loop_mode = AudioStreamWAV.LOOP_FORWARD
 	rotor_loop.loop_end = roundi(rotor_loop.get_length() * rotor_loop.mix_rate)
@@ -76,5 +79,7 @@ func advance(delta: float) -> void:
 	main_rotor.rotate_y(delta * rotor_rate)
 	tail_rotor.rotate_x(delta * rotor_rate * 2.0)
 	var power := rotor_rate / 28.0
+	for motion in rotor_blur:
+		motion.material_override.set_shader_parameter("power", power)
 	rotor_audio.pitch_scale = lerpf(.48, 1.0, power)
 	rotor_audio.volume_db = lerpf(-28.0, -10.0, power)

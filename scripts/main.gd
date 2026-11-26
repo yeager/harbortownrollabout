@@ -2,6 +2,7 @@ extends Node3D
 
 const L10n := preload("res://l10n/localization.gd")
 const Hospital := preload("res://environment/hospital.gd")
+const RotorMotion := preload("res://scripts/rotor_motion.gd")
 
 const TARGETS: Array[Vector3] = [Vector3(30, 0, 3), Vector3(0, 0, -25), Vector3(99.65, 0, -24)]
 const HOSPITAL_INTAKE_STOP := Vector3(128, 0, -55.4)
@@ -720,6 +721,7 @@ var boule_clink := AudioStreamPlayer3D.new()
 var boule_collector := -1
 var boule_pickup_spot := Vector3.ZERO
 var quay_windsock := Node3D.new()
+var windsock_swivels: Array[Node3D] = []
 var boule_release := Vector3.ZERO
 var walker_data: Array[Dictionary] = []
 
@@ -2310,6 +2312,8 @@ func _build_world() -> void:
 	add_child(helicopter)
 	main_rotor = helicopter.find_child("MainRotor",true,false)
 	tail_rotor = helicopter.find_child("TailRotor",true,false)
+	RotorMotion.fit(main_rotor, 4.44, 4)
+	RotorMotion.fit(tail_rotor, .56, 7, true)
 	add_child(medical_helicopter)
 	medical_helicopter.configure(HOSPITAL_HELIPAD)
 	_update_patrol(0)
@@ -4360,7 +4364,11 @@ func _build_quay_windsock() -> void:
 	quay_windsock.name = "QuayWindsock"
 	quay_windsock.position = foot+Vector3.UP*3.76
 	add_child(quay_windsock)
-	_make_box("Swivel bracket",Vector3(.37,.045,.045),Vector3(.15,0,0),Color("#6d7777"),false,quay_windsock)
+	_build_windsock_fabric(quay_windsock)
+
+func _build_windsock_fabric(swivel: Node3D) -> void:
+	windsock_swivels.append(swivel)
+	_make_box("Swivel bracket",Vector3(.37,.045,.045),Vector3(.15,0,0),Color("#6d7777"),false,swivel)
 	for stripe in 5:
 		var tube := CylinderMesh.new()
 		tube.bottom_radius = .25-.029*stripe
@@ -4378,7 +4386,7 @@ func _build_quay_windsock() -> void:
 		fabric.material_override = finish
 		fabric.rotation.z = -PI*.5-.14
 		fabric.position = Vector3(.32,0,0)+fabric.basis.y*(stripe+.5)*tube.height
-		quay_windsock.add_child(fabric)
+		swivel.add_child(fabric)
 
 func _ferry_clock() -> float:
 	return wave_time - ferry_delay
@@ -4411,7 +4419,8 @@ func _update_moorings(delta: float) -> void:
 	if signal_on and trip_delta > 0 and floori((trip_time-2.0)/29.0) > floori((trip_time-trip_delta-2.0)/29.0):
 		ferry_boarding_chime.position = ferry_boarding_lamps[stop].position
 		ferry_boarding_chime.play()
-	quay_windsock.rotation.y = -weather.wind_angle
+	for swivel in windsock_swivels:
+		swivel.rotation.y = -weather.wind_angle
 	_update_ferry_displays()
 	var heading := Vector2(-sin(launch.rotation.y),-cos(launch.rotation.y))
 	var course := heading*signf(launch_speed)

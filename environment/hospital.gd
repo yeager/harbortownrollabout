@@ -254,3 +254,13 @@ func _build_helipad(world: Node3D) -> void:
 		marker.position = Vector3.UP * .048
 		marker.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 		housing.add_child(marker)
+	var mast_foot := Vector3(-11.55, 10.145, -16.7)
+	world._make_box("Rooftop windsock mast foot", Vector3(.34, .09, .34),
+		mast_foot + Vector3.UP * .045, METAL, false, self)
+	world._make_box("Rooftop windsock mast", Vector3(.083, 2.3, .083),
+		mast_foot + Vector3.UP * 1.15, TRIM, false, self)
+	var windsock := Node3D.new()
+	windsock.name = "Helipad windsock swivel"
+	windsock.position = mast_foot + Vector3.UP * 2.26
+	add_child(windsock)
+	world._build_windsock_fabric(windsock)
