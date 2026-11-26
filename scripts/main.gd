@@ -11712,6 +11712,20 @@ func _build_driving_school() -> void:
 			Vector3(drain_x, .132, -3.27), .047, roof_metal)
 	_make_box("Rear roof gutter", Vector3(12.24, .106, .135),
 		Vector3(0, 3.287, -3.23), Color.WHITE, false, school).material_override = roof_metal
+	for vent_at in [Vector3(-2.70, 3.495, -.87), Vector3(2.41, 3.495, -1.31)]:
+		_make_box("Roof vent flashing", Vector3(.66, .038, .55),
+			vent_at, Color.WHITE, false, school).material_override = roof_metal
+		_make_box("Roof vent riser", Vector3(.48, .226, .36),
+			vent_at + Vector3.UP * .123, Color.WHITE, false, school).material_override = roof_metal
+		_make_box("Roof vent recessed grille", Vector3(.406, .105, .304),
+			vent_at + Vector3.UP * .279, Color("#202b2f"), false, school)
+		for blade in 3:
+			_make_box("Roof vent grille slat", Vector3(.482, .012, .362),
+				vent_at + Vector3.UP * (.242 + blade * .035), Color.WHITE, false, school).material_override = roof_metal
+		var hood := _make_box("Roof vent rain hood", Vector3(.59, .055, .462),
+			vent_at + Vector3.UP * .345, Color.WHITE, false, school)
+		hood.rotation.x = .041
+		hood.material_override = roof_metal
 	var service_color := Color("#46595d")
 	_make_box("Rear plinth", Vector3(12.03, .29, .043),
 		Vector3(0, .145, -3.007), Color("#93928a"), false, school)
