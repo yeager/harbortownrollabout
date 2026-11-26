@@ -60,6 +60,15 @@ bpy.data.objects.remove(cutter,do_unlink=True)
 box("Pressed footwell floor",(0,-.315,.211),(.82,.73,.044),red,.018)
 box("Rubber foot mat",(0,-.315,.238),(.765,.64,.010),v.RUBBER,.005)
 fixed_parts = set(root.children) - {bonnet}
+# Reinforcing returns frame the footwell opening on the underside of the lifted shell.
+for side in (-1,1):
+    return_rings = []
+    for y,x,z in ((-.70,.351,.492),(-.60,.382,.508),(-.48,.402,.529),
+                  (-.36,.399,.544),(-.266,.386,.551)):
+        return_rings.append([(side*(x+dx),y,z+dz) for dx,dz in
+                             ((-.012,0),(-.010,-.011),(.008,-.013),(.014,-.006),(.014,.008))])
+    v.profile_loft("Bonnet footwell edge return",return_rings,red,root)
+    box("Bonnet rubber stop",(side*.391,-.342,.532),(.030,.038,.017),v.RUBBER,.005)
 # The rubber seat follows the bonnet; the spun bezel wraps around the glass edge.
 for name, finish, section in [
     ("Headlight rubber gasket", v.RUBBER,

@@ -55,7 +55,7 @@
 
 README.md contains the English playing instructions. Blender sources are in `source_blender/` and build scripts in `tools/`. Local reference photos retain their original filenames under `.local-memory/references/`. The tow truck reference filename starts with `codex-clipboard-56557bc1`. These photos are excluded from Git.
 
-The project was originally published in the private yeager/axels-emergency-vehicles repository. Run Gitleaks before pushing. Check the current scenes, source and running game before updating an entry.
+The public yeager/harbortownrollabout repository is the canonical project remote. The original private yeager/axels-emergency-vehicles repository is archived. Run Gitleaks before pushing. Check the current scenes, source and running game before updating an entry.
 
 - The medic hands the first-aid bag to the player during the rescue mission. The bag stays on the quay after delivery.
 
