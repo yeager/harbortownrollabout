@@ -325,6 +325,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Vägvisarna till bensinstationen och glassdepån fick aluminiumbaksidor med dubbla monteringsskenor. Stationsskylten granskades i Godot. Glassrundan passerade.
   - Övningsbanans stoppskylt fick en åttakantig aluminiumbaksida, monteringsskenor och stolpklämmor. Granskat bakifrån i Godot. Övningsbaneprovet passerade.
   - Stoppskylten på övningsbanan och hastighetsskyltarna fick betongfundament med fotplattor och fyra ankare. Stoppskyltens fundament granskades i Godot. Övningsbaneprovet passerade.
+  - Samma fundament används nu för vägvisare, parkeringsskyltar och verkstadens skyltar. Bärgningsskyltens fundament flyttades 25 cm in på asfalten och granskades i Godot. Övningskörning, gatuparkering, däckbyte, glassrundan och bärgning passerade.
   - Övningsbanans trafikkoner fick formgjutna gummifötter och dubbla ljusa band. Granskat i Godot. Övningsbaneprovet passerade.
   - Trafikskolans entré fick dubbla glasdörrar med draghandtag och aluminiumtröskel. Granskat i närbild i Godot. Övningsbaneprovet passerade.
   - Trafikskolans klassrumsfönster fick separata bågar och lutande fönsterbleck med droppkant. Granskat i Godot. Övningsbaneprovet passerade.
