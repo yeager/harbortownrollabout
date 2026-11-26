@@ -11812,8 +11812,20 @@ func _build_driving_school() -> void:
 		Vector3(-2.66, 1.13, -3.036), service_color.darkened(.22), false, school)
 	_make_box("Service door leaf", Vector3(.974, 2.052, .031),
 		Vector3(-2.66, 1.13, -3.072), service_color, false, school)
-	_make_box("Service door lever", Vector3(.113, .022, .052),
-		Vector3(-2.36, 1.02, -3.105), Color("#a4afb0"), false, school)
+	var service_hardware := _material(Color("#a4afb0"), .43)
+	service_hardware.metallic = .55
+	_make_box("Service door kick plate", Vector3(.86, .208, .015),
+		Vector3(-2.66, .255, -3.093), Color.WHITE, false, school).material_override = service_hardware
+	_make_box("Service door lock escutcheon", Vector3(.068, .174, .019),
+		Vector3(-2.36, 1.02, -3.098), Color.WHITE, false, school).material_override = service_hardware
+	_add_moored_round_fitting(school, "Service door lever spindle", Vector3(-2.36, 1.056, -3.100),
+		Vector3(-2.36, 1.056, -3.154), .014, service_hardware)
+	_add_moored_round_fitting(school, "Service door lever", Vector3(-2.36, 1.056, -3.154),
+		Vector3(-2.476, 1.056, -3.154), .013, service_hardware)
+	for hinge_y in [.48, 1.16, 1.86]:
+		_add_moored_round_fitting(school, "Service door hinge barrel",
+			Vector3(-3.152, hinge_y - .043, -3.106), Vector3(-3.152, hinge_y + .043, -3.106),
+			.016, service_hardware)
 	_make_box("Service door threshold", Vector3(1.07, .063, .20),
 		Vector3(-2.66, .066, -3.082), Color("#a4a49a"), false, school)
 	for vent_x in [1.22, 3.64]:
