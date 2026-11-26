@@ -53,6 +53,8 @@ def shell(name, stations, paint):
     return obj
 
 def cabin_paint(j,i,s):
+    if j < 3 and s > .09:
+        return 2
     if j<9 and .09<s<.91 and j not in (3,6) and i not in (9,10):
         return 2
     return 1 if -.53<s<.14 else 0
@@ -75,9 +77,14 @@ def cabin_surface(side, y, z, offset):
 def windscreen_surface(x, z, offset):
     hit, contact, _, _ = cabin.ray_cast((x, -4, z), (0, 1, 0))
     if not hit:
-        raise ValueError(f"Wiper misses windscreen at {(x, z)}")
+        raise ValueError(f"Detail misses windscreen at {(x, z)}")
     return (x, contact.y - offset, z)
 
+
+pipe("Windscreen center mullion", [
+    windscreen_surface(0, 1.49 + 1.02 * step / 40, .010)
+    for step in range(41)
+], .023, graphite, root)
 
 for side in [-1,1]:
     pivot_point = windscreen_surface(side * .34, 1.49, .015)
