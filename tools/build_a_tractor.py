@@ -133,6 +133,12 @@ rod("Rolled exhaust pipe",(-.65,1.91,.331),(-.65,2.28,.285),.047,METAL)
 rod("Exhaust bore",(-.65,2.277,.285),(-.65,2.286,.284),.035,RUBBER)
 for i in range(-5,6): box("Bed rib",(i*.117,1.515,.747),(.034,1.085,.019),RUBBER,.008)
 for y in [-2.30,2.20]: box("Black bumper",(0,y,.43),(1.77,.16,.16),RUBBER)
+box("Front registration holder",(0,-2.380,.457),(.456,.030,.124),DARK,.008)
+box("Front registration",(0,-2.401,.457),(.43,.017,.10),PAINT_WHITE,.006)
+box("Front registration blue band",(-.195,-2.411,.457),(.03,.003,.09),plate_blue,.001)
+registration = text_obj("Front registration characters","AXL 30A",(-.139,-2.412,.430),
+                        .071,DARK,root=root,flat=True)
+registration.rotation_euler = (math.pi/2,0,0)
 box("Radiator grille",(0,-2.33,.73),(.73,.055,.21),DARK)
 for i in range(-6,7):box("Grille rib",(i*.052,-2.36,.73),(.016,.015,.185),METAL,.004)
 # Stand the sign off the cab glass on two rubber-backed brackets.
