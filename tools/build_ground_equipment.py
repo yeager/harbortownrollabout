@@ -169,10 +169,13 @@ for x in (-.14,.14):
 # Stamp both blade chambers into one shell with a continuous rolled skirt.
 outline = []
 for centre, start in ((.29, -math.pi/2), (-.29, math.pi/2)):
-    for i in range(21):
-        angle = start + math.pi*i/20
+    for i in range(33):
+        angle = start + math.pi*i/32
         outline.append((centre + .36*math.cos(angle), .36*math.sin(angle)))
-rings = [(1.0, .092), (1.0, .112), (.976, .128), (.961, .209), (.925, .237)]
+rings = [
+    (.987,.092),(.997,.096),(1.0,.103),(.998,.111),(.989,.119),
+    (.976,.128),(.961,.203),(.953,.218),(.942,.229),(.925,.237),
+]
 vertices = [(x*scale, -1.04+y*scale, z) for scale,z in rings for x,y in outline]
 count = len(outline)
 faces = [tuple(reversed(range(count)))]
@@ -186,6 +189,8 @@ deck_mesh = bpy.data.meshes.new("Stamped deck shell")
 deck_mesh.from_pydata(vertices, [], faces)
 deck_mesh.update()
 deck_mesh.materials.append(frame)
+for face in deck_mesh.polygons[1:-1]:
+    face.use_smooth = True
 deck = bpy.data.objects.new("Cutting deck", deck_mesh)
 bpy.context.collection.objects.link(deck)
 for x in (-.29,.29):
