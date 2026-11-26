@@ -105,7 +105,7 @@ def cabin_paint(row, index, height):
 
 cabin = shell("Glazed ambulance fuselage", fuselage, [yellow, teal, glass, dark], cabin_paint, root)
 shell("Tail boom", [(1.92, .52, 1.78, .40), (2.62, .38, 1.88, .30),
-                    (4.05, .24, 2.02, .20), (5.16, .17, 2.10, .15)],
+                    (4.05, .24, 2.02, .20), (4.89, .14, 2.10, .15)],
       [yellow, teal], lambda row, index, height: int(height > .51), root)
 shell("Turbine fairing", [(-1.6, .11, 2.48, .11), (-1.17, .49, 2.64, .22),
                           (-.35, .65, 2.76, .27), (.82, .64, 2.75, .25),
@@ -186,7 +186,7 @@ for side in (-1, 1):
         lamp.rotation_euler.x = -.63
 
 cube("Horizontal stabilizer", (0, 4.31, 2.03), (2.54, .50, .083), teal, .038, root)
-fin = cube("Swept yellow tail fin", (0, 5.48, 2.95), (.22, .72, 1.20), yellow, .09, root)
+fin = cube("Swept yellow tail fin", (0, 5.539, 3.141), (.22, .72, .80), yellow, .09, root)
 fin.rotation_euler.x = -.30
 tip = cube("Teal tail cap", (0, 5.64, 3.53), (.235, .68, .095), teal, .03, root)
 tip.rotation_euler.x = -.04
