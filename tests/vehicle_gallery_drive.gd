@@ -4,7 +4,39 @@ extends SceneTree
 func _initialize() -> void:
 	call_deferred("check_gallery")
 
+func check_y5_wheels() -> bool:
+	for scene in [
+		preload("res://vehicles/luxury_suv.glb"),
+		preload("res://vehicles/traffic_suv_blue.glb"),
+		preload("res://vehicles/traffic_suv_silver.glb"),
+	]:
+		var model := scene.instantiate() as Node3D
+		root.add_child(model)
+		var front := 0
+		var rear := 0
+		for mesh in model.find_children("*", "MeshInstance3D", true, false):
+			if not (mesh.name.begins_with("Performance tire") or mesh.get_parent().name.begins_with("Performance tire")):
+				continue
+			var bounds: AABB = (model.global_transform.affine_inverse() * mesh.global_transform) * mesh.get_aabb()
+			var axle := bounds.get_center().z
+			if absf(bounds.size.y - bounds.size.z) > .001 or absf(absf(axle) - 1.4875) > .001 or absf(bounds.position.y) > .001:
+				printerr("Y5 tire is out of round, off its axle, or above the road in ", scene.resource_path)
+				model.free()
+				return false
+			if axle < 0.0:
+				front += 1
+			else:
+				rear += 1
+		model.free()
+		if front != 2 or rear != 2:
+			printerr("Expected two Y5 tires per axle in ", scene.resource_path)
+			return false
+	return true
+
 func check_gallery() -> void:
+	if not check_y5_wheels():
+		quit(1)
+		return
 	var game = load("res://main.tscn").instantiate()
 	root.add_child(game)
 	game.steady_player_lights = true
