@@ -81,15 +81,25 @@ for side in (-1,1):
     rod("Wiper rubber lip",(spindle_x-.067,-.989,1.106),
         (spindle_x+.389,-.972,1.124),.006,RUBBER)
     rod("Door sill brightwork",(side*.884,-.88,.407),(side*.884,.51,.407),.015,METAL)
-    box("Door pull escutcheon",(side*.876,.235,.855),(.034,.187,.052),RUBBER,.012)
     for axle_y in (-1.45,1.39):
         wheel_part("Center cap",side*.93,axle_y,.054,.024,METAL)
 amber = material("A-tractor amber optic",(.92,.33,.032),.08,.28)
 headlamp_glass = material("A-tractor fluted headlight glass",(.58,.65,.69),.18,.24)
 mirror_glass = material("A-tractor mirror glass",(.42,.51,.56),.93,.11)
+panel_gap = material("A-tractor panel gap",(.17,.18,.18),0,.7)
 for side in [-1,1]:
-    box("Door handle",(side*.886,.25,.92),(.052,.15,.031),DARK)
-    box("Bodyside moulding",(side*.889,-.10,.55),(.032,1.85,.055),RUBBER)
+    for edge_y, sill_y in ((-.94,-.81),(.393,.365)):
+        rod("Door upper seam",(side*.828,edge_y,.914),
+            (side*.891,edge_y,.748),.004,panel_gap)
+        rod("Door lower seam",(side*.891,edge_y,.748),
+            (side*.891,sill_y,.437),.004,panel_gap)
+    rod("Door sill seam",(side*.891,-.81,.437),(side*.891,.365,.437),.004,panel_gap)
+    box("Door handle gasket",(side*.856,.236,.858),(.020,.188,.050),RUBBER,.011)
+    box("Door handle grip",(side*.872,.236,.862),(.024,.151,.027),DARK,.007)
+    rod("Door lock cylinder",(side*.870,.302,.825),(side*.884,.302,.825),.011,METAL)
+    for start_y, end_y in ((-1.025,-.901),(-.883,.364),(.382,.825)):
+        box("Bodyside moulding",(side*.889,(start_y+end_y)/2,.55),
+            (.032,end_y-start_y,.055),RUBBER,.012)
     box("Mirror mounting gasket",(side*.857,-.813,1.014),(.041,.134,.106),RUBBER,.015)
     rod("Mirror support arm",(side*.864,-.812,1.014),(side*.979,-.783,1.054),.035,DARK)
     box("Mirror housing",(side*1.024,-.777,1.064),(.215,.144,.145),DARK,.035)

@@ -194,6 +194,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Främre stötfångaren fick en separat skylthållare och samma fiktiva registrering som bak. Skylten granskades framifrån i Godot. Fordonsprovet passerade.
   - Sidospeglarna fick separata stödarmar, dörrfästen, rundade hus och spegelglas med gummilist. Granskade från sidan i Godot. Fordonsprovet passerade.
   - Vindrutetorkarna fick separata spindlar, armar och blad med gummiläpp. Viloläget granskades framifrån i Godot. Fordonsprovet passerade.
+  - Dörrarna fick karossfogar, delade sidolister samt handtag med packning och separat låscylinder. Granskade i sidovy i Godot. Fordonsprovet passerade.
 - [ ] [`ambulance.glb`](../vehicles/ambulance.glb)
   - Bakdörrens handtag fick separata fästen och en låscylinder med nyckelspår. Registreringsskylten fick två armaturhus med diffusorer. Detaljerna granskades i Godot. Ambulansintaget och utryckningsprovet passerade.
 - [ ] [`ambulance_helicopter.glb`](../vehicles/ambulance_helicopter.glb)
