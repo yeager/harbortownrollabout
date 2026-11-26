@@ -2747,6 +2747,8 @@ def make_bmw(color, name="BMV X5i", *, patrol=False):
         top=[(x*w,y,roof_height(x*w,y)+.006) for x in (-1,-.75,-.5,-.25,0,.25,.5,.75,1)]
         glass_rings.append(top+[(x,y,z-.013) for x,y,z in reversed(top)])
     profile_loft("Panoramic sunroof",glass_rings,privacy,root)
+    if root.name.startswith("BMV X5i"):
+        cube("Front plate holder", (0, -2.531, 1.035), (.754, .108, .208), DARK, .022, root)
     cube("Front plate", (0, -2.596, 1.035), (0.72, 0.035, 0.18), PAINT_WHITE, 0.025, root)
     registration = {PAINT_BLUE_CAR: "AXL 061", PAINT_SILVER: "AXL 062"}.get(color, "AXL 060")
     for rear, depth, height, width in [(True,2.523,1.204,.56),(False,-2.615,1.035,.72)]:
