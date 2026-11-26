@@ -247,6 +247,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Hytten fick utskurna främre hjulhus och separata välvda skärmkanter. Dörrskarven flyttades upp över hjulhuset. Granskat från sidan i Godot. Sophämtningsprovet passerade.
 - [ ] [`ride_on_mower.glb`](../vehicles/ride_on_mower.glb)
   - Åkgräsklipparen har en infälld kylgrill och röda baklyktor vid den bakmonterade motorn. Strålkastarna sitter på klippaggregatets främre kant. Båda ändarna granskades i Godot och samtliga fyra modellerade blinkerslinser verifierades. Fordons- och områdesproven passerade.
+  - Klippaggregatets remkåpa fick tätning, fem förstärkningsribbor och fyra spårskruvar. Lyftarmarna fick separata ledtappar och fästplattor. Granskat i Godot. Provet för gräsklippning och områdesgränser passerade.
 - [ ] [`saab96.glb`](../vehicles/saab96.glb)
   - Saav 97 fick ett upphöjt modellemblem på bakluckan. Granskat i Godot och fordonsprovet passerade.
 - [ ] [`shopping_trike.glb`](../vehicles/shopping_trike.glb)

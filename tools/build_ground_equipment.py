@@ -140,7 +140,17 @@ for point, position in zip(rail.bezier_points,path):
     point.handle_left_type = point.handle_right_type = 'AUTO'
 guard.materials.append(frame)
 bpy.context.collection.objects.link(bpy.data.objects.new("Front deck guard",guard))
-box("Belt guard",(0,-1.04,.252),(.74,.42,.115),paint,.05)
+box("Belt guard gasket",(0,-1.04,.237),(.766,.448,.037),rubber,.017)
+box("Belt guard",(0,-1.04,.261),(.74,.42,.113),paint,.045)
+for x in (-.235, -.118, 0, .118, .235):
+    box("Belt cover stiffening rib",(x,-1.04,.322),(.041,.257,.018),paint,.008)
+for x in (-.286,.286):
+    for y in (-1.174,-.906):
+        disc("Belt cover captive fastener",(x,y,.318),.021,.014,steel)
+        box("Belt fastener slot",(x,y,.326),(.022,.004,.002),frame,.001)
+for side in (-1,1):
+    disc("Deck lift bracket pivot",(side*.303,-1.05,.233),.029,.079,steel,(1,0,0))
+    box("Lift bracket backing plate",(side*.287,-1.05,.215),(.075,.094,.082),frame,.009)
 export("ride_on_mower")
 
 bpy.ops.object.select_all(action='SELECT')
