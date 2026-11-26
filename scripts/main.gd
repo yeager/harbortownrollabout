@@ -11640,10 +11640,27 @@ func _build_practice_yard() -> void:
 	var cone := Node3D.new()
 	cone.name = "Practice cone"
 	add_child(cone)
-	_make_box("Weighted foot", Vector3(.44,.045,.44), Vector3.UP*.0225, Color("#292925"), false, cone)
-	var orange := _material(Color("#ff610d"),.54)
-	var white := _material(Color("#fff4de"),.31)
-	var levels := [Vector2(.045,.18), Vector2(.29,.117), Vector2(.42,.083), Vector2(.66,.022)]
+	var rubber := _material(Color("#292925"), .88, false, "rubber")
+	_make_box("Weighted foot", Vector3(.44, .045, .44),
+		Vector3.UP * .0225, Color.WHITE, false, cone).material_override = rubber
+	var seat := CylinderMesh.new()
+	seat.top_radius = .179
+	seat.bottom_radius = .203
+	seat.height = .034
+	seat.radial_segments = 24
+	seat.material = rubber
+	var shoulder := MeshInstance3D.new()
+	shoulder.name = "Moulded cone socket"
+	shoulder.mesh = seat
+	shoulder.position.y = .046
+	cone.add_child(shoulder)
+	for corner in [Vector2(-.184, -.184), Vector2(.184, -.184), Vector2(-.184, .184), Vector2(.184, .184)]:
+		_make_box("Moulded base pad", Vector3(.055, .013, .055),
+			Vector3(corner.x, .049, corner.y), Color.WHITE, false, cone).material_override = rubber
+	var orange := _material(Color("#ff610d"), .54)
+	var white := _material(Color("#fff4de"), .31)
+	var levels := [Vector2(.045, .18), Vector2(.21, .137), Vector2(.30, .114),
+		Vector2(.36, .099), Vector2(.46, .073), Vector2(.66, .022)]
 	for i in levels.size()-1:
 		var band := CylinderMesh.new()
 		band.bottom_radius = levels[i].y
@@ -11651,7 +11668,7 @@ func _build_practice_yard() -> void:
 		band.height = levels[i+1].x-levels[i].x
 		band.radial_segments = 20
 		band.rings = 0
-		band.material = white if i == 1 else orange
+		band.material = white if i in [1, 3] else orange
 		var shell := MeshInstance3D.new()
 		shell.mesh = band
 		shell.position.y = (levels[i].x+levels[i+1].x)*.5
