@@ -9725,7 +9725,10 @@ func _load_vehicle_model() -> void:
 				pivot.global_position = spindle.to_global(spindle.get_aabb().get_center())
 			else:
 				pivot.global_position = arm.to_global(Vector3(bounds.position.x,bounds.position.y,bounds.end.z))
-			var axis := Vector3(0,.15,1) * signf(pivot.position.x) if fire else Vector3(0,.77,.64)
+			# The Y5 windshield wraps around the sides and changes rake above the cowl.
+			var axis := Vector3(-.13,1.10,1) if i == 0 else Vector3(.09,1.28,1)
+			if fire:
+				axis = Vector3(0,.15,1) * signf(pivot.position.x)
 			pivot.set_meta("sweep_axis", axis.normalized())
 			arm.reparent(pivot)
 			blades[i].reparent(pivot)

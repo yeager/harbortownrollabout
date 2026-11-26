@@ -278,6 +278,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - De fyra avgasutblåsen fick rundade metallkanter, invändiga rörväggar och mörk botten längre in. Granskat från låg kameravinkel i Godot. Körskoleprovet passerade.
   - De främre torkararmarna fick axelkåpor med gummitätningar. Kontrollerat i alla tre GLB-varianter och granskat från motorhuven i Godot. Körskoleprovet passerade.
   - Spelbilens torkare roterar runt de modellerade axelkåporna. Fordonsprovet verifierar axelläget, rörelsen i regn och återgången till viloläget. Granskat i Godot. Bladens avstånd till glaset genom hela svepet återstår att mäta.
+  - Torkarna har varsin svepaxel anpassad till den välvda vindrutan. Blenderprov med 17 lägen och strålar i bilens längdriktning visar att största uppmätta intrånget i rutans yta minskade från cirka 36 till 24 mm där strålarna träffade modellen. Full kontakt genom hela svepet återstår. Svepet granskades i Godot och fordonsprovet passerade.
   - Alla fyra fälgar fick vinklade däckventiler med metallstam, gummitätning och ventilhatt. Kontrollerat i tre GLB-varianter och granskat på spelbilens framhjul i Godot. Körskoleprovet passerade.
   - Hjulhusens insidor fick en matt, mörk plastfinish. Materialet verifierades i alla tre GLB-varianter och framhjulet jämfördes före och efter i Godot. Körskoleprovet passerade.
   - Bromsskivorna fick svarvspår i geometrin och en satinerad stålyta. Kontrollerat på alla fyra hjul i tre GLB-varianter. Spelbilens framhjul granskades i Godot och körskoleprovet passerade.
