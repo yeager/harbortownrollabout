@@ -11819,8 +11819,37 @@ func _build_driving_school() -> void:
 				_add_moored_round_fitting(school, "Downpipe bracket screw",
 					Vector3(drain_x + tab_side * .054, strap_y, -3.019),
 					Vector3(drain_x + tab_side * .054, strap_y, -3.026), .008, roof_metal)
-		_tube_between(school, Vector3(drain_x, .25, -3.09),
-			Vector3(drain_x, .132, -3.27), .047, roof_metal)
+		var elbow := Vector3(drain_x, .25, -3.09)
+		var mouth := Vector3(drain_x, .132, -3.27)
+		var outlet_axis := (mouth - elbow).normalized()
+		var outlet_shell := CylinderMesh.new()
+		outlet_shell.top_radius = .047
+		outlet_shell.bottom_radius = .047
+		outlet_shell.height = elbow.distance_to(mouth)
+		outlet_shell.radial_segments = 24
+		outlet_shell.cap_top = false
+		outlet_shell.cap_bottom = false
+		var spout_finish := roof_metal.duplicate() as StandardMaterial3D
+		spout_finish.cull_mode = BaseMaterial3D.CULL_DISABLED
+		var spout := MeshInstance3D.new()
+		spout.name = "Open downpipe spout"
+		spout.mesh = outlet_shell
+		spout.material_override = spout_finish
+		spout.position = (elbow + mouth) * .5
+		spout.quaternion = Quaternion(Vector3.UP, outlet_axis)
+		school.add_child(spout)
+		var rolled_rim := TorusMesh.new()
+		rolled_rim.inner_radius = .042
+		rolled_rim.outer_radius = .049
+		rolled_rim.rings = 24
+		rolled_rim.ring_segments = 8
+		var outlet_rim := MeshInstance3D.new()
+		outlet_rim.name = "Rolled downpipe outlet rim"
+		outlet_rim.mesh = rolled_rim
+		outlet_rim.material_override = roof_metal
+		outlet_rim.position = mouth
+		outlet_rim.quaternion = spout.quaternion
+		school.add_child(outlet_rim)
 		var splash := _make_box("Downpipe splash block", Vector3(.29, .039, .57),
 			Vector3(drain_x, .040, -3.55), Color("#969488"), false, school)
 		splash.rotation.x = -.055
