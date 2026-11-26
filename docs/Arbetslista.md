@@ -293,6 +293,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Vindrutetorkaren fick separat led, axelkåpa och gummikanter som följer bladen. Granskat i Godot. Körprovet passerade och kioskprovet verifierade svep och viloläge.
   - Den uppfällbara framdelen fick en ledhylsa på den diagonala axeln, en fast ledtapp och lagersäten i en urfräsning i chassit. Leden sitter huvudsakligen dold. På- och avstigningskontrollerna och fordonsprovet passerade.
   - Huvens undersida fick invikta förstärkningskanter och gummistopp vid fotutrymmet. Granskat i öppet läge i Godot. Körprovet och på- och avstigningskontrollerna passerade.
+  - Fordonsgalleriets bild visar den uppdaterade modellen. Bildkortet granskades i Godot och fordonsprovet passerade.
 - [ ] [`snowmobile.glb`](../vehicles/snowmobile.glb)
 - [ ] [`sport_quattro.glb`](../vehicles/sport_quattro.glb)
   - Fordonsprovet kontrollerar att galleriet visar Audo Sport Kvattro, att bakluckan har Kvattro-emblemet och att fronten har fem ringar. Språkkontrollen passerade för alla sex översättningskataloger.
