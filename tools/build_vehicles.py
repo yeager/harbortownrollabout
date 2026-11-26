@@ -279,6 +279,7 @@ def make_ambulance():
     glass = material("Röktonat glas", (0.018, 0.042, 0.056), 0.36, 0.13)
     mirror_glass = material("Ambulance mirror glass",(.42,.51,.56),.88,.14)
     cab_gap = material("Hyttens karossfog",(.12,.15,.043),0,.65)
+    running_light = material("Varselljusets vita diffusor",(.84,.91,.96),.04,.25,.55)
 
     def box(name, loc, dims, mat, radius=0.025):
         return cube(name, loc, dims, mat, radius, root)
@@ -574,6 +575,14 @@ def make_ambulance():
                 lamp_loop(.708,height,w,h,d) for w,h,d in
                 ((.120,.064,.025),(.109,.060,.036),(.056,.037,.045))],HEADLAMP,root)
         turn_signal=material("Bärnstensfärgat blinkersglas",(.91,.255,.012),.12,.23)
+        for height in (.996,1.132):
+            # The white guide runs below each projector and turns up beside it.
+            outline=((.583,-.045),(.804,-.045),(.827,-.025),
+                     (.827,.032),(.813,.032),(.813,-.020),
+                     (.799,-.031),(.583,-.031))
+            sections=[[(side*x,-3.185+.135*max(0,(x-.70)/.28)**2-depth,height+z)
+                       for x,z in outline] for depth in (.039,.046)]
+            profile_loft("Vinklat varselljus",sections,running_light,root)
         profile_loft("Front amber indicator",[
             lamp_loop(.905,1.067,w,h,d) for w,h,d in
             ((.049,.256,.017),(.048,.250,.030),(.033,.234,.036))],turn_signal,root)
