@@ -180,6 +180,9 @@ func _ready() -> void:
 	_build_track()
 	_build_trackbed()
 	var length := track.get_baked_length()
+	var roof_finish: ShaderMaterial = world._noise_material(Color("#475963"), Color("#536772"), 3.2, .13)
+	roof_finish.set_shader_parameter("roof_surface", true)
+	world.ground_finishes.append(roof_finish)
 	var shelter_glass := StandardMaterial3D.new()
 	var drain_finish: StandardMaterial3D = world._material(Color("#40535c"), .58)
 	shelter_glass.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
@@ -238,7 +241,9 @@ func _ready() -> void:
 			paint_at.y = world._surface_height(street_at.x,street_at.z) - station.position.y + .012
 			var paint := world._make_box("Pedestrian access",Vector3(.40,.014,1.95),paint_at,Color.WHITE,false,station) as MeshInstance3D
 			paint.material_override = world.marking_finish
-		world._make_box("Shelter roof",Vector3(2.1,.12,5.2),Vector3(3,2.7,0),Color("#475963"),false,station)
+		var roof := world._make_box("Shelter roof", Vector3(2.1, .12, 5.2),
+			Vector3(3, 2.7, 0), Color.WHITE, false, station) as MeshInstance3D
+		roof.material_override = roof_finish
 		for edge_x in [1.95, 4.05]:
 			world._make_box("Canopy folded edge", Vector3(.055, .18, 5.20), Vector3(edge_x, 2.71, 0), Color("#35464d"), false, station)
 		for z in [-2.60, 2.60]:
