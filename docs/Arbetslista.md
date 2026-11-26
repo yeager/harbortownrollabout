@@ -457,6 +457,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Tårtkartongens lock fick vikta kanter och en öppningsflik som följer locket. Hämtning, överlämning och öppning provades i Godot. Kartongen granskades öppen på födelsedagsbordet.
   - Paraplyet fick hela spröt, stag, glidhylsa och metallspetsar. Hämtning, återlämning och uppfällning vid regn provades i Godot. Det öppna paraplyet granskades underifrån.
   - Den uppfällda paraplyduken fick rundade paneler, välvd kant och mjukare skuggning. Hämtning, återlämning och uppfällning provades på nytt i Godot.
+  - Paraplyet fick ett böjt grepp med rundad ände. Granskat i ägarens hand efter återlämning. Stadsgränsprovet passerade efter att bågprofilen gjordes gemensam med broräckena.
 - [ ] Tvärbanans perrong, väderskydd och övriga hållplatsdetaljer
   - Kontaktledningsstolparna fick fotplattor, stag och isolatorer. Granskat vid Västra torget i Godot efter godkänt spårvagnsprov.
   - Spårvagnens strömavtagare fick isolerade takfästen, ledaxlar och dubbla kolslitskenor. Granskat i närbild i Godot och spårvagnsprovet passerade.

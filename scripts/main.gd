@@ -3616,7 +3616,7 @@ func _build_canal_bridge(z: float, asphalt: Color, rail_mesh: CylinderMesh) -> v
 		for edge in [-1, 1]:
 			_make_box("Footway expansion joint cover", Vector3(.11, .019, .89),
 				Vector3(joint_x, top + .166, z + edge * 5.53), Color.WHITE).material_override = joint_steel
-	var return_mesh := _bridge_rail_return_mesh(rail_mesh)
+	var return_mesh := _semicircular_tube_mesh(rail_mesh.material, rail_mesh.top_radius, .26)
 	for end in [-1, 1]:
 		var x: float = HIGH_BRIDGE_X.front() if end < 0 else HIGH_BRIDGE_X.back()
 		for side in [-1, 1]:
@@ -3688,13 +3688,12 @@ func _build_canal_bridge(z: float, asphalt: Color, rail_mesh: CylinderMesh) -> v
 			collar.position.y = -.94 - shaft.position.y
 			shaft.add_child(collar)
 
-func _bridge_rail_return_mesh(rail: CylinderMesh) -> ArrayMesh:
+func _semicircular_tube_mesh(finish: Material, tube_radius: float, bend_radius: float) -> ArrayMesh:
 	const ARC_STEPS := 24
 	const TUBE_SIDES := 12
-	const BEND_RADIUS := .26
 	var surface := SurfaceTool.new()
 	surface.begin(Mesh.PRIMITIVE_TRIANGLES)
-	surface.set_material(rail.material)
+	surface.set_material(finish)
 	for step in ARC_STEPS + 1:
 		var angle := PI * step / ARC_STEPS
 		var radial := Vector3(sin(angle), cos(angle), 0)
@@ -3702,7 +3701,7 @@ func _bridge_rail_return_mesh(rail: CylinderMesh) -> ArrayMesh:
 			var ring_angle := TAU * side / TUBE_SIDES
 			var normal := radial * cos(ring_angle) + Vector3.BACK * sin(ring_angle)
 			surface.set_normal(normal)
-			surface.add_vertex(radial * BEND_RADIUS + normal * rail.top_radius)
+			surface.add_vertex(radial * bend_radius + normal * tube_radius)
 	for step in ARC_STEPS:
 		for side in TUBE_SIDES:
 			var first := step * TUBE_SIDES + side
@@ -7867,7 +7866,24 @@ func _build_lost_umbrella() -> void:
 	umbrella_owner.position.y = _foot_height(54,-14)
 	add_child(umbrella)
 	_tube_between(umbrella,Vector3.DOWN*.08,Vector3.UP*1.17,.014,_material(Color("#999da2"),.28))
-	_tube_between(umbrella,Vector3.DOWN*.10,Vector3.UP*.06,.024,_material(Color("#6f4532")))
+	var handle_finish := _material(Color("#6f4532"), .47)
+	_tube_between(umbrella, Vector3.DOWN * .105, Vector3.UP * .057, .020, handle_finish)
+	var hook := MeshInstance3D.new()
+	hook.name = "Curved umbrella grip"
+	hook.mesh = _semicircular_tube_mesh(handle_finish, .020, .059)
+	hook.position = Vector3(-.059, -.105, 0)
+	hook.rotation.z = -PI * .5
+	umbrella.add_child(hook)
+	var grip_cap := SphereMesh.new()
+	grip_cap.radius = .020
+	grip_cap.height = .040
+	grip_cap.radial_segments = 12
+	grip_cap.rings = 6
+	grip_cap.material = handle_finish
+	var rounded_end := MeshInstance3D.new()
+	rounded_end.mesh = grip_cap
+	rounded_end.position = Vector3(-.118, -.105, 0)
+	umbrella.add_child(rounded_end)
 	umbrella.add_child(canopy)
 	canopy.position.y = 1.16
 	var fabric := _material(Color("#af2848"),.7)
