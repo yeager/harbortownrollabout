@@ -9606,8 +9606,12 @@ func _update_bus_stop_request(delta: float) -> void:
 
 func _reset_driver_traffic_state() -> void:
 	police_stop_left = 0.0
+	police_stop_reversing = false
 	waited_at_red = false
 	waiting_after_green = false
+	slowing_for_amber = false
+	waiting_for_signal = false
+	waiting_for_clear_crossing = false
 
 func _load_vehicle_model() -> void:
 	_reset_driver_traffic_state()
@@ -12907,8 +12911,7 @@ func _start_game() -> void:
 		launch_speed = 0.0
 		outboard.rotation.y = 0.0
 	reward_seconds = 0.0
-	slowing_for_amber = false
-	waiting_for_signal = false
+	_reset_driver_traffic_state()
 	last_dispatch=""
 	happy_seconds = 0
 	phone.reset_social()

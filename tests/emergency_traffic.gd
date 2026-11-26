@@ -207,9 +207,17 @@ func check_response() -> void:
 	game.waited_at_red = true
 	game.waiting_after_green = true
 	game.police_stop_left = 2.0
+	game.police_stop_reversing = true
+	game.slowing_for_amber = true
+	game.waiting_for_signal = true
+	game.waiting_for_clear_crossing = true
 	game._recover_position()
 	if game.message != "Back in a safe place." or game.waited_at_red or game.waiting_after_green or game.police_stop_left > 0.0:
 		printerr("Road recovery carried over stale traffic-light state")
+		quit(1)
+		return
+	if game.police_stop_reversing or game.slowing_for_amber or game.waiting_for_signal or game.waiting_for_clear_crossing:
+		printerr("Road recovery carried over stale crossing or braking state")
 		quit(1)
 		return
 	print("A-tractor speed, repeated horn at green and nearby police stop verified.")
