@@ -126,7 +126,10 @@ func _build_closed_entrance(world: Node3D, glass: Material) -> void:
 	var shrub_mesh := SphereMesh.new()
 	shrub_mesh.radial_segments = 10
 	shrub_mesh.rings = 5
-	shrub_mesh.material = world._material(Color("#46614a"), .92)
+	var shrub_finish: ShaderMaterial = world._noise_material(Color("#344d37"), Color("#526c49"), 19.0, .36)
+	shrub_finish.set_shader_parameter("roof_surface", true)
+	shrub_mesh.material = shrub_finish
+	world.ground_finishes.append(shrub_finish)
 	for planter_x in [-13.02, -5.58]:
 		world._make_roadside_solid("Entrance planter", Vector3(.72, .41, 1.84),
 			Vector3(planter_x, .205, 3.92), Color("#777c76"), true, self)
