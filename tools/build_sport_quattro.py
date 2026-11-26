@@ -214,9 +214,17 @@ def build():
                 (.149,.018,.012),trim,.004)
             box("Door mirror vertical bezel", (side*.854 + edge*.073,-.516,.951),
                 (.012,.018,.071),trim,.004)
-        box("Quarter air intake", (side*.859,.685,.420), (.023,.155,.173), recess)
+        box("Quarter intake dark well", (side*.860,.685,.420),
+            (.024,.155,.173), recess,.008)
+        for edge in [-1, 1]:
+            box("Quarter intake end frame", (side*.875,.685 + edge*.073,.420),
+                (.013,.010,.165),trim,.003)
+            box("Quarter intake top and bottom frame", (side*.875,.685,.420 + edge*.080),
+                (.013,.146,.010),trim,.003)
         for i in range(5):
-            box("Quarter intake fin", (side*.868,.626+i*.026,.42), (.015,.011,.153),trim,.002)
+            fin = box("Quarter intake angled fin", (side*.872,.633 + i*.026,.420),
+                      (.015,.009,.151),trim,.002)
+            fin.rotation_euler.z = side * math.radians(24)
         for i in range(3):
             box("Rear pillar vent", (side*.851,1.571,.826+i*.019), (.014,.24,.008),trim,.002)
         for i, axle in enumerate(AXLES):
