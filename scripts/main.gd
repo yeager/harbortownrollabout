@@ -7729,10 +7729,18 @@ func _build_boule_court() -> void:
 	var torus := TorusMesh.new()
 	torus.inner_radius = .28
 	torus.outer_radius = .31
+	torus.rings = 64
+	torus.ring_segments = 12
+	ring.name = "Boule throwing ring"
 	ring.mesh = torus
-	ring.position = BOULE_CENTRE+Vector3(0,.012,4)
-	ring.material_override = _material(Color("#bc402e"))
+	ring.position = BOULE_CENTRE + Vector3(0, .012, 4)
+	ring.material_override = _material(Color("#bc402e"), .83, false, "rubber")
 	add_child(ring)
+	var joint_finish := _material(Color("#87352a"), .84)
+	_tube_between(ring, Vector3(.295, 0, -.036), Vector3(.295, 0, .036), .017, joint_finish)
+	for seam_z in [-.026, .026]:
+		_tube_between(ring, Vector3(.295, 0, seam_z - .003),
+			Vector3(.295, 0, seam_z + .003), .018, joint_finish)
 	boule_jack = _boule_ball(.024, Color("#ffb73c"), false)
 	boule_jack.position = BOULE_CENTRE+Vector3(0,.024,-4)
 	var result_mesh := TorusMesh.new()
