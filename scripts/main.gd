@@ -7684,14 +7684,27 @@ func _build_boule_court() -> void:
 	boule_clink.unit_size = 3
 	boule_clink.volume_db = -8
 	add_child(boule_clink)
-	var wood := Color("#94704c")
+	var wood := _material(Color("#94704c"), .79, false, "wood")
 	for slat in 4:
-		_make_box("Bench seat slat",Vector3(.105,.07,1.85),BOULE_BENCH+Vector3((slat-1.5)*.12,.43,0),wood)
-	for height in [.68,.85]:
-		_make_box("Bench backrest",Vector3(.075,.14,1.85),BOULE_BENCH+Vector3(.23,height,0),wood)
-	for end in [-.68,.68]:
-		_make_roadside_solid("Bench frame",Vector3(.42,.39,.07),BOULE_BENCH+Vector3(0,.20,end),Color("#394944"))
-		_make_box("Back support",Vector3(.06,.65,.06),BOULE_BENCH+Vector3(.23,.57,end),Color("#394944"))
+		var slat_x := (slat - 1.5) * .12
+		_make_box("Bench seat slat", Vector3(.105, .07, 1.85),
+			BOULE_BENCH + Vector3(slat_x, .43, 0), Color.WHITE).material_override = wood
+		for end in [-.68, .68]:
+			_make_box("Bench seat fastener", Vector3(.019, .007, .019),
+				BOULE_BENCH + Vector3(slat_x, .464, end), Color("#676b62"))
+	for height in [.68, .85]:
+		_make_box("Bench backrest", Vector3(.075, .14, 1.85),
+			BOULE_BENCH + Vector3(.23, height, 0), Color.WHITE).material_override = wood
+		for end in [-.68, .68]:
+			_make_box("Bench backrest fastener", Vector3(.007, .019, .019),
+				BOULE_BENCH + Vector3(.193, height, end), Color("#676b62"))
+	for end in [-.68, .68]:
+		_make_roadside_solid("Bench frame", Vector3(.42, .39, .07),
+			BOULE_BENCH + Vector3(0, .20, end), Color("#394944"))
+		_make_box("Seat support crossbar", Vector3(.47, .042, .106),
+			BOULE_BENCH + Vector3(0, .380, end), Color("#394944"))
+		_make_box("Back support", Vector3(.06, .65, .06),
+			BOULE_BENCH + Vector3(.23, .57, end), Color("#394944"))
 	var gravel := _make_driving_surface("Boule gravel", Vector3(3.8,.12,14), BOULE_CENTRE-Vector3.UP*.06, Color("#baa781"))
 	gravel.material_override = _noise_material(Color("#998465"), Color("#d7c7a1"), 38, .5)
 	for side in [-1,1]:
