@@ -141,6 +141,8 @@ func _rail_batch(label: String, transforms: Array[Transform3D], finish: Material
 		add_child(model,true)
 
 func _build_trackbed() -> void:
+	var world := get_parent()
+	var porcelain: StandardMaterial3D = world._material(Color("#d4ceba"), .46)
 	var length := track.get_baked_length()
 	var grass: Array[Transform3D] = []
 	var wires: Array[Transform3D] = []
@@ -169,10 +171,13 @@ func _build_trackbed() -> void:
 			beam(pole + Vector3.UP * 4.65, mid - heading.x * .38 + Vector3.UP * 4.28,
 				.035, .032, arm_color)
 			var insulator := mid - heading.x * .21 + Vector3.UP * 4.26
+			var arm_axis := (heading.x * 1.57 - Vector3.UP * .15).normalized()
+			world._tube_between(self, insulator - arm_axis * .082,
+				insulator + arm_axis * .082, .048, porcelain)
 			for ring in [-1, 0, 1]:
-				beam(insulator + heading.x * (.046 * ring - .015),
-					insulator + heading.x * (.046 * ring + .015), .115, .10, Color("#c9c4ae"))
-	var world := get_parent()
+				var fin_center: Vector3 = insulator + arm_axis * (.049 * ring)
+				world._tube_between(self, fin_center - arm_axis * .008,
+					fin_center + arm_axis * .008, .067, porcelain)
 	_build_rail_profiles(length, count)
 	_rail_batch("Grass reservation", grass, world.soil_finish)
 	_rail_batch("Contact wire", wires, world._material(Color("#464e4c")))

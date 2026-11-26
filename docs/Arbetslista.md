@@ -487,6 +487,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Även rälens bas och innerkant använder sammanhängande tvärsnitt. Granskat från rälsnivå i sydvästra kurvan. Spårvagnsprovet passerade.
   - Kontaktledningsstolparna fick fotplattor, stag och isolatorer. Granskat vid Västra torget i Godot efter godkänt spårvagnsprov.
   - Kontakttråden fick klämmor och korta upphängningar vid stolparnas konsoler. Granskat nära kontakttråden i Godot. Spårvagnsprovet passerade.
+  - Kontaktledningens isolatorer fick runda porslinskroppar med tre separata flänsar. Granskat i närbild i Godot. Spårvagnsprovet passerade.
   - Spårvagnens strömavtagare fick isolerade takfästen, ledaxlar och dubbla kolslitskenor. Granskat i närbild i Godot och spårvagnsprovet passerade.
   - Alla tre vagnsdelar fick omarbetade ventilationskåpor med sidointag, takgaller och synliga fästen. Granskat i Godot och spårvagnsprovet passerade.
   - Boggierna fick separata hjulaxlar, hjulflänsar, lagerkåpor och fjädringsdetaljer. Granskat från rälsnivå i Godot. Spårvagnsprovet passerade.
