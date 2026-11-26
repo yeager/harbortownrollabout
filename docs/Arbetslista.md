@@ -192,6 +192,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Strålkastarna fick räfflade glas, metallinfattningar och gummipackningar. Ljuskäglorna utgår från glasens mitt. Granskat i nattläge i Godot och verifierat i fordonsprovet.
   - Bakre registreringsskylten fick fiktiv registrering, blått sidofält, separat hållare och två armaturer med diffusorer. Granskad bakifrån i Godot. Fordonsprovet passerade.
   - Främre stötfångaren fick en separat skylthållare och samma fiktiva registrering som bak. Skylten granskades framifrån i Godot. Fordonsprovet passerade.
+  - Sidospeglarna fick separata stödarmar, dörrfästen, rundade hus och spegelglas med gummilist. Granskade från sidan i Godot. Fordonsprovet passerade.
 - [ ] [`ambulance.glb`](../vehicles/ambulance.glb)
   - Bakdörrens handtag fick separata fästen och en låscylinder med nyckelspår. Registreringsskylten fick två armaturhus med diffusorer. Detaljerna granskades i Godot. Ambulansintaget och utryckningsprovet passerade.
 - [ ] [`ambulance_helicopter.glb`](../vehicles/ambulance_helicopter.glb)
