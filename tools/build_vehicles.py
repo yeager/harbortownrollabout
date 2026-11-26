@@ -2795,6 +2795,19 @@ def make_bwm(color, name="BWM Y5 N70i", *, patrol=False):
                 (1.086,.375),(1.083,.364),(1.066,.359)],METAL)
             wheel_shell("Anthracite wheel barrel",[(1.077,.363),(1.042,.353),
                 (.935,.348),(.856,.354)],BLACK)
+            if root.name.startswith("BWM Y5 N70i"):
+                angle = math.pi / 5
+                radial = Vector((0, math.sin(angle), math.cos(angle)))
+                valve_base = Vector((side * 1.075, y, .48)) + radial * .365
+                valve_axis = (Vector((side, 0, 0)) - radial * .55).normalized()
+                for label, radius, depth, offset, finish in (
+                    ("Tire valve grommet", .012, .012, .003, RUBBER),
+                    ("Tire valve stem", .005, .030, .018, METAL),
+                    ("Tire valve cap", .007, .013, .033, DARK),
+                ):
+                    valve = cylinder(label, valve_base + valve_axis * offset,
+                                     radius, depth, finish, axis_x=False, vertices=12, root=root)
+                    valve.rotation_euler = valve_axis.to_track_quat("Z", "Y").to_euler()
             wheel_shell("Brake disc friction ring",[(.978,.178),(.978,.275),
                 (.982,.282),(1.002,.282),(1.006,.275),(1.006,.178),(.978,.178)],
                 material("Rotor swept steel",(.23,.22,.21),.82,.43))

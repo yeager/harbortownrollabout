@@ -277,6 +277,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Det höga bromsljuset fick en välvd lins och separat infattning som följer takspoilern. Granskat tänt i Godot. Körskoleprovet passerade.
   - De fyra avgasutblåsen fick rundade metallkanter, invändiga rörväggar och mörk botten längre in. Granskat från låg kameravinkel i Godot. Körskoleprovet passerade.
   - De främre torkararmarna fick axelkåpor med gummitätningar. Kontrollerat i alla tre GLB-varianter och granskat från motorhuven i Godot. Körskoleprovet passerade.
+  - Alla fyra fälgar fick vinklade däckventiler med metallstam, gummitätning och ventilhatt. Kontrollerat i tre GLB-varianter och granskat på spelbilens framhjul i Godot. Körskoleprovet passerade.
 - [ ] [`brandbil.glb`](../vehicles/brandbil.glb)
   - Dragkrokens infästning fick fyra sexkantsbultar samt ett släpvagnsuttag med fäste och väderskydd. Granskat bakifrån i Godot. Förarplats- och luckproven passerade.
 - [ ] [`city_bus.glb`](../vehicles/city_bus.glb)
