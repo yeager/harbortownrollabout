@@ -7872,6 +7872,10 @@ func _build_lost_umbrella() -> void:
 	canopy.position.y = 1.16
 	var fabric := _material(Color("#af2848"),.7)
 	fabric.cull_mode = BaseMaterial3D.CULL_DISABLED
+	var rib_finish := _material(Color("#6c2637"), .62)
+	var hardware := _material(Color("#858c91"), .34)
+	_tube_between(canopy, Vector3.DOWN * .26, Vector3.DOWN * .20, .027, hardware)
+	_tube_between(canopy, Vector3.DOWN * .014, Vector3.UP * .049, .020, hardware)
 	for i in 8:
 		var a := Vector3.RIGHT.rotated(Vector3.UP,i*TAU/8)
 		var b := Vector3.RIGHT.rotated(Vector3.UP,(i+1)*TAU/8)
@@ -7886,7 +7890,12 @@ func _build_lost_umbrella() -> void:
 		var panel := MeshInstance3D.new()
 		panel.mesh = mesh.commit()
 		canopy.add_child(panel)
-		_tube_between(canopy,a*.45+Vector3.DOWN*.10,a*.64+Vector3.DOWN*.28,.008,_material(Color("#6c2637")))
+		var elbow := a * .45 + Vector3.DOWN * .11
+		var tip := a * .64 + Vector3.DOWN * .28
+		_tube_between(canopy, Vector3.DOWN * .012, elbow, .007, rib_finish)
+		_tube_between(canopy, elbow, tip, .008, rib_finish)
+		_tube_between(canopy, Vector3.DOWN * .23, a * .31 + Vector3.DOWN * .079, .006, hardware)
+		_tube_between(canopy, tip - a * .023, tip + a * .016, .011, hardware)
 
 func _place_umbrella() -> void:
 	if not umbrella.is_inside_tree(): return

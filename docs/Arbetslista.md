@@ -455,6 +455,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
 - [ ] Uppdragsrekvisitan för cykelbud, födelsedag och upphittat paraply
   - Cykelbudets paket fick kartongskarv, packtejp och adressetikett. Efter leverans vilar det på en pakethållare ovanför hjulet. Hämtning, bärande och överlämning provades i Godot och pakethållaren granskades i närbild.
   - Tårtkartongens lock fick vikta kanter och en öppningsflik som följer locket. Hämtning, överlämning och öppning provades i Godot. Kartongen granskades öppen på födelsedagsbordet.
+  - Paraplyet fick hela spröt, stag, glidhylsa och metallspetsar. Hämtning, återlämning och uppfällning vid regn provades i Godot. Det öppna paraplyet granskades underifrån.
 - [ ] Tvärbanans perrong, väderskydd och övriga hållplatsdetaljer
   - Kontaktledningsstolparna fick fotplattor, stag och isolatorer. Granskat vid Västra torget i Godot efter godkänt spårvagnsprov.
   - Spårvagnens strömavtagare fick isolerade takfästen, ledaxlar och dubbla kolslitskenor. Granskat i närbild i Godot och spårvagnsprovet passerade.
