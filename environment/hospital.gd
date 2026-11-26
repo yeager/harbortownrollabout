@@ -162,11 +162,15 @@ func _build_intake(world: Node3D) -> void:
 	var intake: Label3D = world._station_sign("Ambulance intake", Vector3(.27, 4.30, 7.12), .0115, Color("#fff6e5"), 0, self)
 	world._size_world_sign(intake, 6.65)
 	var cross_center := Vector3(-3.24, 4.30, 7.13)
-	var cross_color := Color("#72c6b3")
-	world._make_box("Intake crossbar", Vector3(.49, .13, .055), cross_center, cross_color, false, self)
+	var cross_finish: StandardMaterial3D = world._material(Color("#72c6b3"), .33, true)
+	world.traffic_running_lenses.append(cross_finish)
+	var crossbar: MeshInstance3D = world._make_box("Intake crossbar", Vector3(.49, .13, .055),
+		cross_center, Color.WHITE, false, self)
+	crossbar.material_override = cross_finish
 	for side in [-1.0, 1.0]:
-		world._make_box("Intake cross upright", Vector3(.13, .18, .055),
-			cross_center + Vector3.UP * side * .155, cross_color, false, self)
+		var upright: MeshInstance3D = world._make_box("Intake cross upright", Vector3(.13, .18, .055),
+			cross_center + Vector3.UP * side * .155, Color.WHITE, false, self)
+		upright.material_override = cross_finish
 	for section in 5:
 		world._make_box("Raised door section", Vector3(7.98, .08, .206),
 			Vector3(0, 3.99, 5.82 + section * .218), Color("#a5acab"), false, self)
