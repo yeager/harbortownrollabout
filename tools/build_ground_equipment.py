@@ -113,10 +113,13 @@ for face in exhaust_mesh.polygons:
 bpy.context.collection.objects.link(bpy.data.objects.new("Exhaust outlet", exhaust_mesh))
 lamp_glass = finish("Mower headlight glass",(.72,.82,.83),.16,.24)
 amber_glass = finish("Mower indicator glass",(.76,.27,.019),.08,.30)
-rear_glass = finish("Mower rear lamp glass",(.59,.019,.015),.12,.28)
-for x in (-.287,.287):
-    box("Mower rear lamp housing",(x,.934,.778),(.157,.062,.080),frame,.015)
-    box("Mower rear lamp lens",(x,.968,.778),(.123,.016,.056),rear_glass,.010)
+rear_glass = finish("Tail lamp mower glass",(.59,.019,.015),.12,.28)
+reverse_glass = finish("Reverse lamp mower glass",(.69,.76,.77),.10,.26)
+for side in (-1,1):
+    x = side*.287
+    box("Mower rear lamp housing",(x-side*.019,.934,.778),(.194,.062,.080),frame,.015)
+    box("Mower rear lamp lens",(x+side*.019,.968,.778),(.103,.016,.056),rear_glass,.008)
+    box("Reversing lens",(x-side*.059,.968,.778),(.046,.016,.056),reverse_glass,.006)
     box("Mower corner lamp housing",(x,.948,.707),(.073,.043,.044),frame,.008)
     box("Rear indicator lens",(x,.973,.707),(.053,.014,.029),amber_glass,.006)
 for side in (-1,1):

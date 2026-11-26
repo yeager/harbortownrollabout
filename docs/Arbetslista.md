@@ -253,6 +253,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Motorhuven fick en separat servicelucka med tätning, synliga gångjärn, ett låsgrepp och två lamellfält. Granskat bakifrån i Godot. Provet för gräsklippning och områdesgränser passerade.
   - Bakpartiet fick en ljuddämpare, ett ihåligt avgasutblås med rundad kant och ett separat värmeskydd med fästskruvar. Granskat bakifrån i Godot. Provet för gräsklippning och områdesgränser passerade.
   - Åkgräsklipparen fick ett dragfäste med tvärbalk, skruvad monteringsplatta och genomgående hål för sprint. Granskat i närbild i Godot. Provet för gräsklippning och områdesgränser passerade.
+  - Baklyktorna fick separata röda bromsljus och vita backljus i gemensamma hus. Backljusen granskades i Godot och fordonsprovet verifierade båda paren vid bromsning och backning.
 - [ ] [`saab96.glb`](../vehicles/saab96.glb)
   - Saav 97 fick ett upphöjt modellemblem på bakluckan. Granskat i Godot och fordonsprovet passerade.
 - [ ] [`shopping_trike.glb`](../vehicles/shopping_trike.glb)
