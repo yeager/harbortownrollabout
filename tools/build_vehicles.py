@@ -749,7 +749,15 @@ def make_ambulance():
     box("Luftintagets mörka öppning",(0,-2.894,1.450),(.583,.009,.033),BLACK,.006)
     for vane in range(-4,5):
         box("Luftintagets lamell",(vane*.059,-2.900,1.450),(.007,.009,.030),DARK,.002)
-    box("Nedre luftintag",(0,-3.277,.692),(.72,.021,.060),RUBBER,.018)
+    box("Nedre luftintagets ram",(0,-3.275,.683),(.99,.023,.077),RUBBER,.018)
+    box("Nedre luftintagets skugga",(0,-3.288,.683),(.69,.008,.055),BLACK,.009)
+    for z in (.668,.683,.698):
+        box("Nedre luftintagets lamell",(0,-3.294,z),(.665,.011,.005),DARK,.002)
+    for side in (-1,1):
+        x=side*.409
+        box("Dimljusets infattning",(x,-3.291,.683),(.105,.023,.055),BLACK,.011)
+        box("Dimljusets reflektor",(x,-3.304,.683),(.082,.014,.041),METAL,.008)
+        box("Dimljusets glas",(x,-3.313,.683),(.064,.008,.029),GLASS_HI,.005)
     box("Främre skylthållare",(0,-3.281,.769),(.47,.028,.102),seal,.010)
     box("Registreringsskylt fram",(0,-3.301,.769),(.453,.013,.090),PAINT_WHITE,.006)
     box("Blått landsfält fram",(-.201,-3.309,.769),(.042,.004,.083),POLICE_BLUE,.003)
