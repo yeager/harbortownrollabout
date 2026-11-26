@@ -68,6 +68,21 @@ box("Cooling grille surround",(0,.949,.626),(.591,.036,.253),frame,.020)
 box("Recessed cooling grille",(0,.969,.626),(.541,.014,.219),rubber,.012)
 for n in range(7):
     box("Cooling louvre",(0,.979,.533+n*.031),(.512,.020,.013),frame,.004)
+box("Drawbar crossmember",(0,.778,.311),(.50,.114,.101),frame,.016)
+box("Drawbar mounting flange",(0,.852,.306),(.243,.051,.116),frame,.012)
+for x in (-.092,.092):
+    disc("Drawbar mounting bolt",(x,.881,.315),.016,.016,steel,(0,1,0))
+drawbar = box("Drawbar tongue",(0,.937,.262),(.129,.205,.034),steel,.016)
+bpy.ops.mesh.primitive_cylinder_add(vertices=32,radius=.024,depth=.12,
+    location=(0,.985,.262))
+pin_hole = bpy.context.object
+cut = drawbar.modifiers.new("Hitch pin opening", "BOOLEAN")
+cut.object = pin_hole
+cut.operation = 'DIFFERENCE'
+bpy.context.view_layer.objects.active = drawbar
+bpy.ops.object.modifier_apply(modifier=cut.name)
+bpy.data.objects.remove(pin_hole, do_unlink=True)
+
 # The exhaust exits below the rear grille, with the rolled rim open.
 box("Exhaust silencer",(.307,.807,.439),(.127,.226,.110),frame,.027)
 box("Exhaust heat shield",(.307,.938,.467),(.145,.052,.097),steel,.017)
