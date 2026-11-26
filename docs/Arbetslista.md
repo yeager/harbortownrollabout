@@ -497,6 +497,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Boggins fjädringsdetaljer sänktes under salongsgolvet efter att en del stack upp vid barnvagnsplatsen. Den fria golvytan granskades i Godot och spårvagnsprovet passerade.
 - [ ] Broarna, kajerna, träpromenaderna, bryggorna och förtöjningsbojarna
   - Förtöjningsbojarna fick ljusa synlighetsband som följer bojarnas rörelse. Granskat vid östra kajen i Godot. Kanalprovet passerade, inklusive passage vid de förtöjda båtarna.
+  - Bojarnas öglefästen fick tre synliga bultar runt varje ögla. Granskat från kanalen i Godot. Kanalprovet passerade.
   - De förtöjda småbåtarna fick gjutna förknapar. Linan mellan båt och boj följer knapen när båten rör sig. Granskat i närbild i Godot och kanalprovet passerade.
   - Småbåtarnas skrov har en lutande stäv med mjukare övergång längs sidorna och en tydlig däckskant. Granskat i Godot och kanalprovet passerade.
   - Småbåtarnas vindrutor består nu av tre glaspartier med vinklade sidor och en ram som följer däcket. Granskat i Godot och kanalprovet passerade.

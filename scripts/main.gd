@@ -4284,6 +4284,11 @@ func _build_marina(rail_metal: Material) -> void:
 		eye_mount.mesh = eye_mount_mesh
 		eye_mount.position.y = MOORING_BUOY_HEIGHT * .5
 		buoy.add_child(eye_mount)
+		for bolt in 3:
+			var bolt_angle := TAU * bolt / 3.0
+			var bolt_at := Vector3(cos(bolt_angle) * .053, eye_mount.position.y + .027, sin(bolt_angle) * .053)
+			_make_box("Mooring eye mount bolt", Vector3(.018, .010, .018),
+				bolt_at, Color("#798489"), false, buoy)
 		var eye := MeshInstance3D.new()
 		eye.name = "Mooring eye"
 		eye.mesh = eye_mesh
