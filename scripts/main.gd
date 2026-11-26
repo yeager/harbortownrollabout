@@ -5531,7 +5531,13 @@ func _fit_spreader(model: Node3D) -> void:
 	_tube_between(spreader, top_link, Vector3(0,.09,1.03), .031, hitch_finish)
 	_tube_between(spreader, top_link-Vector3.RIGHT*.10, top_link+Vector3.RIGHT*.10,
 		.024, pin_finish)
-	_make_box("Metering roller housing",Vector3(1.66,.19,.30),Vector3(0,0,-.28),steel,false,spreader)
+	_make_box("Metering roller cover",Vector3(1.66,.06,.30),Vector3(0,.065,-.28),steel,false,spreader)
+	for edge in [-1.0,1.0]:
+		_make_box("Outlet skirt",Vector3(1.66,.14,.045),Vector3(0,-.012,-.28+edge*.125),
+			steel,false,spreader)
+		_make_box("Roller end plate",Vector3(.061,.16,.30),Vector3(edge*.80,-.015,-.28),
+			steel,false,spreader)
+	_tube_between(spreader,Vector3(-.78,-.007,-.28),Vector3(.78,-.007,-.28),.055,pin_finish)
 	_make_box("Hopper floor",Vector3(1.48,.08,.50),Vector3(0,.10,.04),enamel,false,spreader)
 	for end in [-1,1]:
 		var wall := _make_box("Folded hopper wall",Vector3(1.93,.61,.061),Vector3(0,.39,end*.30),enamel,false,spreader)
@@ -5558,7 +5564,7 @@ func _fit_spreader(model: Node3D) -> void:
 		return
 	spreader_particles = CPUParticles3D.new()
 	spreader_particles.name = "Falling road grit"
-	spreader_particles.position = Vector3(0,-.05,-.33)
+	spreader_particles.position = Vector3(0,-.092,-.31)
 	spreader_particles.emitting = false
 	spreader_particles.amount = 90
 	spreader_particles.lifetime = .27
