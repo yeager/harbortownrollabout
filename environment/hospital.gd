@@ -52,11 +52,11 @@ func build(world: Node3D) -> void:
 					Vector3(side * 13.5, 2.62 + floor_index * 2.60, z))
 				windows.append(pose)
 				_add_panes(pose, lit_panes if (column + floor_index) % 5 == 3 else clear_panes)
-	_window_batch("Brick window panels", Vector3(1.93, 2.17, .10), Vector3.BACK * .055, world._material(BRICK), windows)
-	_window_batch("Window frames", Vector3(1.62, 1.55, .12), Vector3.BACK * .114, world._material(METAL), windows)
-	_window_batch("Cast window sills", Vector3(1.76, .10, .26), Vector3(0, -.78, .11), world._material(TRIM), windows)
-	_window_batch("Ward glazing", Vector3(.71, 1.37, .035), Vector3.ZERO, glazing, clear_panes)
-	_window_batch("Lit ward glazing", Vector3(.71, 1.37, .035), Vector3.ZERO, warm_glazing, lit_panes)
+	_box_batch("Brick window panels", Vector3(1.93, 2.17, .10), Vector3.BACK * .055, world._material(BRICK), windows)
+	_box_batch("Window frames", Vector3(1.62, 1.55, .12), Vector3.BACK * .114, world._material(METAL), windows)
+	_box_batch("Cast window sills", Vector3(1.76, .10, .26), Vector3(0, -.78, .11), world._material(TRIM), windows)
+	_box_batch("Ward glazing", Vector3(.71, 1.37, .035), Vector3.ZERO, glazing, clear_panes)
+	_box_batch("Lit ward glazing", Vector3(.71, 1.37, .035), Vector3.ZERO, warm_glazing, lit_panes)
 	_build_facade_sign(world)
 	_build_closed_entrance(world, glazing)
 	_build_intake(world)
@@ -85,7 +85,7 @@ func _add_panes(pose: Transform3D, panes: Array[Transform3D]) -> void:
 	for side in [-1.0, 1.0]:
 		panes.append(pose.translated_local(Vector3(side * .385, .025, .176)))
 
-func _window_batch(label: String, size: Vector3, offset: Vector3, finish: Material, poses: Array[Transform3D]) -> void:
+func _box_batch(label: String, size: Vector3, offset: Vector3, finish: Material, poses: Array[Transform3D]) -> void:
 	var geometry := BoxMesh.new()
 	geometry.size = size
 	geometry.material = finish
@@ -95,10 +95,10 @@ func _window_batch(label: String, size: Vector3, offset: Vector3, finish: Materi
 	batch.instance_count = poses.size()
 	for index in poses.size():
 		batch.set_instance_transform(index, poses[index].translated_local(offset))
-	var windows := MultiMeshInstance3D.new()
-	windows.name = label
-	windows.multimesh = batch
-	add_child(windows)
+	var instances := MultiMeshInstance3D.new()
+	instances.name = label
+	instances.multimesh = batch
+	add_child(instances)
 
 func _build_closed_entrance(world: Node3D, glass: Material) -> void:
 	var facade_x := -9.30
@@ -130,6 +130,15 @@ func _build_intake(world: Node3D) -> void:
 	var apron: MeshInstance3D = world._make_driving_surface("Ambulance bay and apron", Vector3(APRON_WIDTH, .12, apron_depth),
 		Vector3(0, -.08, apron_depth * .5), Color("#777c79"), true, self)
 	apron.material_override = world._noise_material(Color("#6d7371"), Color("#858b86"), 13.0, .21)
+	var drain_z := apron_depth - .22
+	var channel: MeshInstance3D = world._make_box("Intake drainage channel", Vector3(7.56, .006, .155),
+		Vector3(0, -.015, drain_z), METAL, false, self)
+	channel.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	var grate_poses: Array[Transform3D] = []
+	for slot in 108:
+		grate_poses.append(Transform3D(Basis.IDENTITY, Vector3((slot - 53.5) * .07, -.007, drain_z)))
+	_box_batch("Intake drain grate", Vector3(.042, .010, .141), Vector3.ZERO,
+		world._material(Color("#828a8e"), .53), grate_poses)
 	var diffuser_finish: StandardMaterial3D = world._material(Color("#f4e5bd"), .38, true)
 	for side in [-1.0, 1.0]:
 		world._make_roadside_solid("Ambulance bay side wall", Vector3(.43, 4.15, 6.90),
@@ -146,7 +155,7 @@ func _build_intake(world: Node3D) -> void:
 				guard + Vector3.UP * band, METAL, false, self)
 		world._make_box("Wall bumper rail", Vector3(.14, .18, 6.45),
 			Vector3(side * 3.99, .77, 3.36), METAL, false, self)
-		var line_end := apron_depth - .14
+		var line_end := drain_z - .09
 		world._make_box("Ambulance bay lane line", Vector3(lane_line_width, .008, line_end - stop_line_z),
 			Vector3(side * lane_line_x, -.013, (stop_line_z + line_end) * .5), Color("#e8bc43"), false, self)
 		for z in [2.05, 5.55]:
