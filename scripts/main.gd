@@ -5915,6 +5915,10 @@ func _build_depot() -> void:
 			_make_box("Bin rim side", Vector3(.043,.043,.604), Vector3(side*.321,.919,0), plastic.lightened(.12), false, bin)
 			_make_box("Bin rim end", Vector3(.60,.043,.042), Vector3(0,.919,side*.281), plastic.lightened(.12), false, bin)
 			_make_box("Lid hinge bracket", Vector3(.11,.078,.052), Vector3(side*.224,.921,.287), plastic, false, bin)
+			_make_box("Bin rear reinforcing rib", Vector3(.029, .63, .035),
+				Vector3(side * .257, .529, .297), plastic.lightened(.09), false, bin)
+		_make_box("Bin rear scuff rail", Vector3(.56, .039, .038),
+			Vector3(0, .263, .296), plastic.darkened(.10), false, bin)
 		var lid := Node3D.new()
 		lid.name = "LidHinge"
 		bin.add_child(lid)
