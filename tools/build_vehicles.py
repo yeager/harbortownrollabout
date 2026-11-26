@@ -659,6 +659,14 @@ def make_ambulance():
                       (.036,top),(.165,top-.006))])
     profile_loft("Pressad kromstötfångare",rings,METAL,root)
     box("Nedre luftintag",(0,-3.277,.692),(.72,.021,.060),RUBBER,.018)
+    box("Främre skylthållare",(0,-3.281,.769),(.47,.028,.102),seal,.010)
+    box("Registreringsskylt fram",(0,-3.301,.769),(.453,.013,.090),PAINT_WHITE,.006)
+    box("Blått landsfält fram",(-.201,-3.309,.769),(.042,.004,.083),POLICE_BLUE,.003)
+    plate = text_obj("Registreringsnummer fram","AXL 310",(0,-3.312,.743),.075,BLACK,
+                     root=root,flat=True)
+    plate.rotation_euler = (math.pi/2,0,0)
+    extent = [vertex.co.x for vertex in plate.data.vertices]
+    plate.location.x = .018-(min(extent)+max(extent))*.5
     return root
 
 def make_taxi():
