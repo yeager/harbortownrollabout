@@ -440,11 +440,29 @@ def build():
         for j in range(4):
             box("Vent louvre",(x,-.201,.733+j*.010),(.091,.004,.003),leather,.001)
     box("Cassette radio",(.003,-.206,.683),(.227,.017,.038),recess,.004)
-    box("Cassette slot",(.002,-.195,.688),(.113,.004,.007),trim,.001)
+    box("Cassette slot",(-.010,-.194,.688),(.109,.006,.010),trim,.002)
+    box("Cassette slot opening",(-.010,-.190,.688),(.096,.003,.004),recess,.001)
+    volume = cylinder("Radio volume knob",(-.085,-.188,.683),.011,.015,trim,
+                      axis_x=False,vertices=24,root=root)
+    volume.rotation_euler.x = math.pi / 2
+    for preset in range(5):
+        box("Radio preset key",(-.048 + preset*.019,-.192,.672),(.014,.006,.005),trim,.001)
+    box("Radio tuning display",(.076,-.194,.686),(.039,.005,.015),glass,.002)
     for x in [-.073,0,.073]:
         dial("Auxiliary gauge",x,-.205,.617,.026)
     box("Transmission tunnel",(0,.068,.422),(.251,.866,.162),trim,.038)
-    box("Gear shift gaiter",(0,-.039,.512),(.147,.138,.077),leather,.033)
+    box("Shifter surround",(0,-.039,.509),(.153,.140,.020),trim,.012)
+    gaiter_rings = [
+        [(rx * math.cos(angle * math.tau / 32),
+          y + ry * math.sin(angle * math.tau / 32), z) for angle in range(32)]
+        for z, y, rx, ry in [
+            (.516,-.039,.067,.060), (.526,-.038,.064,.055),
+            (.536,-.035,.046,.040), (.545,-.033,.050,.042),
+            (.556,-.029,.031,.027), (.563,-.027,.035,.028),
+            (.575,-.026,.017,.016),
+        ]
+    ]
+    profile_loft("Pleated gear shift gaiter", gaiter_rings, leather, root)
     bar("Gear lever",(0,-.039,.535),(.006,-.006,.655),.012,.013,chrome)
     box("Gear knob",(.006,-.006,.655),(.055,.052,.052),trim,.021)
     bar("Handbrake",(.081,.265,.495),(.081,.107,.576),.030,.030,trim)
