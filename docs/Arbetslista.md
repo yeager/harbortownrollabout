@@ -210,6 +210,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Fronten fick orange reflexfält på huv och stötfångare samt en modellerad LED-ramp med tolv optiska moduler. Granskat i Godot. Fordonsprovet passerade.
   - Motorhuven fick ett upphöjt luftintag med metallinfattning och nio lameller. Granskat framifrån i Godot. Fordonsprovet passerade.
   - Stötfångarens nedre luftintag fick tre lameller och modellerade dimljus på båda sidor. Granskat framifrån i Godot. Fordonsprovet passerade.
+  - Kylarmaskeringen fick femton profilerade öppningar i tre rader och en välvd kromribba. Granskat framifrån i Godot. Fordonsprovet passerade.
 - [ ] [`ambulance_helicopter.glb`](../vehicles/ambulance_helicopter.glb)
 - [ ] [`bargare.glb`](../vehicles/bargare.glb)
   - Vinschen fick bultade lagerbockar med axeländar och en vajerstyrning med två rullar. Granskat på flaket i Godot. Bärgningsprovet passerade.

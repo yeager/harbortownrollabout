@@ -686,10 +686,16 @@ def make_ambulance():
             (1.092,.345,-3.225),(1.045,.303,-3.225),(1.025,.289,-3.200))],
         METAL,root,close_ends=False)
     box("Kylarnätets skugga",(0,-3.184,1.059),(1.044,.019,.313),RUBBER,.024)
-    for i in range(-10,11):
-        x=i*.047
-        box("Kylarlamell",(x,-3.203+.039*x*x,1.060),(.009,.016,.274),DARK,.003)
-    for z in (.990,1.128):
+    grille_finish = material("Grafitgrå grillinsats",(.035,.041,.042),.24,.36)
+    for row in (.978,1.040,1.169):
+        for column in range(-2,3):
+            x=column*.192
+            y=-3.215+.048*x*x
+            opening=[rear_outline(x,y+offset,row,w,h,r) for offset,w,h,r in
+                     ((.027,.181,.057,.020),(0,.181,.057,.020),
+                      (-.004,.158,.038,.015),(.018,.146,.031,.012))]
+            profile_loft("Grillöppningens kant",opening,grille_finish,root,close_ends=False)
+    for z in (1.105,):
         rings=[]
         for x in (-.522,-.45,-.27,0,.27,.45,.522):
             rings.append([(x,-3.218+.048*x*x+dy,z+dz) for dy,dz in
