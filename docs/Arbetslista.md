@@ -191,6 +191,7 @@ Fordonsgranskningen börjar med exteriörerna. Bilarnas tillverkarnamn, modellna
   - Det täckta intagets golv fick en finkornig betongyta. Granskad från infarten. Ambulansprovet verifierade nivåskarven och patientöverlämningen.
   - Ambulansporten fick en dräneringsränna med galler. Ledlinjerna slutar före gallret. Granskat från förarhöjd och ambulansprovet passerade.
   - Dörrarna för patientöverlämning fick en lokaliserad skylt. Skyltprovet kontrollerade alla sju språk, och ambulansprovet passerade i Godot 4.7 dev5.
+  - Skyltprovet använder spelets ordinarie avslut och passerade utan ljudrelaterad avslutsvarning. Ambulansens överlämning och helikopterns landning provades också på nytt.
   - Patientdörrarna fick sparkplåtar och draghandtag i metall. Granskat i närbild. Ambulansprovet verifierade överlämningen och att vårdbyggnaden är stängd.
   - Sjukhusets fasad fick två stuprör med knän och väggfästen vid takets gavlar. Granskat i Godot. Ambulansprovet passerade.
   - Gångytan vid huvudentrén fick stenplattor med synliga fogar. Granskat i Godot. Ambulansprovet passerade.

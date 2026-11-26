@@ -44,4 +44,4 @@ func check_signs() -> void:
 			quit(1)
 			return
 	print("Building and patient handover signs followed all seven locales.")
-	quit()
+	game._finish_quit(false)
