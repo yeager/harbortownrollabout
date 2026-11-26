@@ -158,8 +158,21 @@ for side in (-1,1):
             a=n*math.tau/20
             tread=box("Mower tread",(x,y+.239*math.sin(a),.24+.239*math.cos(a)),(.14,.034,.019),rubber,.006)
             tread.rotation_euler.x=-a
+box("Seat pedestal",(0,.188,.507),(.279,.326,.128),frame,.023)
+for x in (-.109,.109):
+    box("Seat mounting rail",(x,.177,.589),(.045,.330,.046),steel,.009)
+    box("Seat riser bracket",(x,.190,.637),(.038,.254,.073),frame,.010)
+    for y in (.044,.305):
+        disc("Seat rail bolt",(x,y,.617),.013,.012,steel)
+box("Seat cushion pan",(0,.18,.690),(.529,.482,.039),frame,.018)
 box("Seat cushion",(0,.18,.74),(.52,.48,.105),seat,.05)
+for x in (-.218,.218):
+    box("Seat cushion bolster",(x,.168,.775),(.072,.330,.052),seat,.024)
+box("Seat back shell",(0,.441,.916),(.502,.039,.358),frame,.018).rotation_euler.x=-.15
 box("Seat back",(0,.395,.92),(.49,.10,.37),seat,.047).rotation_euler.x=-.15
+for x in (-.204,.204):
+    box("Backrest mounting lug",(x,.392,.724),(.054,.059,.102),frame,.011)
+    disc("Backrest mounting pin",(x*1.14,.399,.739),.018,.019,steel,(1,0,0))
 box("Column cover",(0,-.54,.54),(.24,.24,.38),paint,.065).rotation_euler.x=-.16
 rod("Column",(0,-.56,.55),(0,-.39,.94),.029,frame)
 bpy.ops.mesh.primitive_torus_add(location=(0,-.39,.94),major_radius=.156,minor_radius=.015)
