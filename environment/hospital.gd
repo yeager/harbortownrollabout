@@ -151,7 +151,16 @@ func _build_intake(world: Node3D) -> void:
 	world._size_world_sign(intake, 6.65)
 	for size in [Vector3(.49, .13, .055), Vector3(.13, .49, .055)]:
 		world._make_box("Intake medical cross", size, Vector3(-3.24, 4.30, 7.13), Color("#72c6b3"), false, self)
-	world._make_box("Raised sectional door", Vector3(8.0, .14, 1.0), Vector3(0, 3.93, 6.29), Color("#989e9c"), false, self)
+	for section in 5:
+		world._make_box("Raised door section", Vector3(7.98, .08, .206),
+			Vector3(0, 3.99, 5.82 + section * .218), Color("#a5acab"), false, self)
+	world._make_box("Door bottom seal", Vector3(8, .042, .065),
+		Vector3(0, 3.938, 6.72), METAL, false, self)
+	for side in [-1.0, 1.0]:
+		world._make_box("Door vertical guide", Vector3(.074, 3.68, .10),
+			Vector3(side * 4.035, 1.89, 6.66), METAL, false, self)
+		world._make_box("Door overhead guide", Vector3(.083, .085, 1.85),
+			Vector3(side * 4.035, 3.98, 5.84), METAL, false, self)
 	world._make_box("Ambulance stop marking", Vector3(4.6, .008, .12),
 		Vector3(0, -.012, 1.20), Color("#e8bc43"), false, self)
 	world._make_box("Closed inner transfer doors", Vector3(2.0, 2.47, .14),
