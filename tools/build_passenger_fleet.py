@@ -14,6 +14,39 @@ CLASSIC_BADGES = {
     "saab96": ("SAAV 97", .567),
 }
 
+def saav_tire(side, x, y, radius, root):
+    # Section through the bead, rounded shoulders and three tread grooves.
+    profile = [
+        (-.105,.68),(-.105,.84),(-.099,.93),(-.085,.981),(-.069,1.0),
+        (-.052,1.0),(-.049,.969),(-.035,.969),(-.032,1.0),
+        (-.010,1.0),(-.007,.969),(.007,.969),(.010,1.0),
+        (.032,1.0),(.035,.969),(.049,.969),(.052,1.0),
+        (.069,1.0),(.085,.981),(.099,.93),(.105,.84),(.105,.68),
+    ]
+    segments = 64
+    points = [(side*offset,radius*scale*math.cos(angle),radius*scale*math.sin(angle))
+              for offset,scale in profile
+              for angle in (math.tau*step/segments for step in range(segments))]
+    faces = []
+    for ring in range(len(profile)):
+        start = ring*segments
+        following = ((ring+1) % len(profile))*segments
+        for step in range(segments):
+            neighbor = (step+1) % segments
+            face = (start+step,start+neighbor,following+neighbor,following+step)
+            faces.append(face if side > 0 else face[::-1])
+    mesh = bpy.data.meshes.new("Saav tire tread")
+    mesh.from_pydata(points,[],faces)
+    mesh.materials.append(RUBBER)
+    mesh.update()
+    for face in mesh.polygons:
+        face.use_smooth = True
+    tire = bpy.data.objects.new("Däck",mesh)
+    bpy.context.collection.objects.link(tire)
+    tire.parent = root
+    tire.location = (side*x,y,radius)
+
+
 def build(key, length, width, axles, color, belt, cabin):
     clear_scene()
     root=bpy.data.objects.new(key,None)
@@ -51,7 +84,11 @@ def build(key, length, width, axles, color, belt, cabin):
         bpy.ops.object.modifier_apply(modifier=mod.name)
         bpy.data.objects.remove(cutter,do_unlink=True)
         for side in [-1,1]:
-            for name,x,r,d,mat in [("Däck",width-.12,wheel,.21,RUBBER),("Alloy wheel",width-.012,wheel*.74,.04,DARK if key=="saab96" else METAL),("Wheel hub",width+.012,wheel*.43,.036,DARK)]:
+            if key == "saab96":
+                saav_tire(side,width-.12,y,wheel,root)
+            else:
+                cylinder("Däck",(side*(width-.12),y,wheel),wheel,.21,RUBBER,True,48,root)
+            for name,x,r,d,mat in [("Alloy wheel",width-.012,wheel*.74,.04,DARK if key=="saab96" else METAL),("Wheel hub",width+.012,wheel*.43,.036,DARK)]:
                 cylinder(name,(side*x,y,wheel),r,d,mat,True,48,root)
             if key=="m3_e30":
                 cylinder("Anthracite wheel barrel",(side*(width+.019),y,wheel),.208,.029,DARK,True,48,root)
