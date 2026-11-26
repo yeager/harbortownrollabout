@@ -69,6 +69,8 @@ var projector_finish: StandardMaterial3D
 var traffic_running_lenses: Array[StandardMaterial3D] = []
 var bus_plate_finish: StandardMaterial3D
 var bus_plate_lamp_finish: StandardMaterial3D
+var refuse_plate_lamp_finish: StandardMaterial3D
+var refuse_plate_finish: StandardMaterial3D
 var bus_side_marker_finish: StandardMaterial3D
 var bus_rear_marker_finish: StandardMaterial3D
 var traffic_headlights: Array[SpotLight3D] = []
@@ -5081,6 +5083,9 @@ func _update_daylight(delta: float) -> void:
 	if bus_plate_finish:
 		bus_plate_finish.emission_energy_multiplier = .28 * night
 		bus_plate_lamp_finish.emission_energy_multiplier = 1.1 * night
+	if refuse_plate_lamp_finish:
+		refuse_plate_lamp_finish.emission_energy_multiplier = 1.1 * night
+		refuse_plate_finish.emission_energy_multiplier = .32 * night
 	_update_bus_ceiling_lights(night)
 	for lens in navigation_lenses:
 		lens.emission_energy_multiplier = night*3.2
@@ -5871,6 +5876,8 @@ func _build_depot() -> void:
 		if i == BUS:
 			_fit_bus_exterior(model)
 			_add_bus_destination_boards(model)
+		if i == REFUSE:
+			_fit_refuse_plate_lamps(model)
 		if i == QUATTRO:
 			_fit_quattro_glazing(model)
 		if i == SCHOOL_CAR:
@@ -8892,6 +8899,21 @@ func _update_quattro_gauge_light(night: float) -> void:
 		quattro_gauge_marks.emission_energy_multiplier = lerpf(.06,.67,night)
 		quattro_gauge_needle.emission_energy_multiplier = lerpf(.02,.51,night)
 
+func _fit_refuse_plate_lamps(model: Node3D) -> void:
+	if not refuse_plate_lamp_finish:
+		refuse_plate_lamp_finish = _material(Color("#a3ada6"), .42, true)
+		refuse_plate_lamp_finish.emission = Color("#fff1d1")
+		refuse_plate_lamp_finish.emission_energy_multiplier = 1.1 * maxf(last_night,0.0)
+	for lens: MeshInstance3D in model.find_children("Rear plate lamp lens*", "MeshInstance3D", true, false):
+		lens.material_override = refuse_plate_lamp_finish
+	var plate := model.find_child("Rear registration plate face", true, false) as MeshInstance3D
+	if not refuse_plate_finish:
+		refuse_plate_finish = plate.get_active_material(0).duplicate() as StandardMaterial3D
+		refuse_plate_finish.emission_enabled = true
+		refuse_plate_finish.emission = Color("#eee8d1")
+		refuse_plate_finish.emission_energy_multiplier = .32 * maxf(last_night,0.0)
+	plate.material_override = refuse_plate_finish
+
 func _fit_bus_exterior(model: Node3D) -> void:
 	_fit_bus_rear_bench(model)
 	var badge := _station_sign("SKANIA", Vector3(0,1.04,5.287), .002, Color("#dce0df"), 0, model)
@@ -9246,6 +9268,8 @@ func _load_vehicle_model() -> void:
 		rear_bus_board = boards[1]
 		side_bus_board = boards[2]
 		_update_bus_board()
+	if vehicle_index == REFUSE:
+		_fit_refuse_plate_lamps(vehicle_model)
 	vehicle_model.name = VEHICLE_NAMES_ALL[vehicle_index] + "_BlenderModel"
 	vehicle_model.rotation.y = PI
 	ambulance.add_child(vehicle_model)

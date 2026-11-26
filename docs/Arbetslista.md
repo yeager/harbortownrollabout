@@ -239,6 +239,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Båda återvinningskärlen fick ihåliga behållare, förstärkta kanter och ledade lock med handtag. Locken öppnas när kärlen tippas och stängs innan de ställs tillbaka. Granskat i Godot och verifierat för båda kärlen i sophämtningsprovet.
   - Kärlen fick runda gummihjul med nav och genomgående axel samt en förstärkt lyftkant vid kammen. Granskat i Godot när det blå kärlet möter lyftkammen. Sophämtningsprovet passerade för båda kärlen.
   - Lastintaget fick nitade slitplåtar på golvet och bakväggen samt en separat servicelucka med synlig skarv. Granskat bakifrån i Godot. Sophämtningsprovet passerade.
+  - Sopbilen fick registreringsskyltar med ECO 024 och blått landsfält fram och bak. Två lampor och skyltens bakgrund lyser i nattläge. Bakskylten granskades i Godot i mörker. Sophämtningsprovet passerade.
 - [ ] [`ride_on_mower.glb`](../vehicles/ride_on_mower.glb)
   - Åkgräsklipparen har en infälld kylgrill och röda baklyktor vid den bakmonterade motorn. Strålkastarna sitter på klippaggregatets främre kant. Båda ändarna granskades i Godot och samtliga fyra modellerade blinkerslinser verifierades. Fordons- och områdesproven passerade.
 - [ ] [`saab96.glb`](../vehicles/saab96.glb)

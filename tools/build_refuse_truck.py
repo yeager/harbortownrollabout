@@ -247,6 +247,24 @@ for side in (-1,1):
             bolt_y, bolt_z = y + .222*math.cos(a), .55 + .222*math.sin(a)
             v.cylinder("Wheel bolt washer",(side*1.193,bolt_y,bolt_z),.040,.026,v.DARK,True,16,root)
             v.cylinder("Wheel bolt",(side*1.214,bolt_y,bolt_z),.027,.033,v.METAL,True,6,root)
+plate_white = v.material("Reflective plate enamel", (.86,.87,.80), .66, .10)
+plate_blue = v.material("Swedish plate band", (.026,.11,.43), .65, .05)
+plate_lens = v.material("Refuse plate lamp glass", (.64,.68,.65), .42, .12)
+for outward, y, z in ((-1,-4.057,.825),(1,3.823,.825)):
+    box("Registration plate bracket",(0,y-outward*.058,z),(.51,.128,.123),v.DARK,.019)
+    box("Rear registration plate face" if outward > 0 else "Front registration plate face",(0,y+outward*.009,z),(.475,.016,.105),plate_white,.008)
+    box("Registration plate country band",(outward*.209,y+outward*.019,z),
+        (.047,.005,.091),plate_blue,.004)
+    registration = v.text_obj("Registration characters","ECO 024",
+        (outward*.156,y+outward*.022,z-.027),.079,v.BLACK,root=root,flat=True)
+    registration.rotation_euler.z = math.pi if outward > 0 else 0
+    country = v.text_obj("Registration country letter","S",
+        (outward*.217,y+outward*.022,z-.031),.023,plate_white,root=root,flat=True)
+    country.rotation_euler.z = registration.rotation_euler.z
+for x in (-.154,.154):
+    box("Rear plate lamp housing",(x,3.824,.895),(.084,.075,.038),v.DARK,.008)
+    box("Rear plate lamp lens",(x,3.856,.882),(.064,.024,.012),plate_lens,.004)
+
 v.export_vehicle(root,"refuse_truck.glb")
 if os.getenv("TRUCK_PORTRAIT"):
     scene=bpy.context.scene
