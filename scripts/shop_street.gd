@@ -628,15 +628,14 @@ func _staff_grill_hatch(x: float) -> void:
 	serving_dish.position = Vector3(0,-.70,-.075)
 	serving_dish.pixel_size = .005
 	serving_dish.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+	serving_dish.texture = PRODUCT_ICONS[6]
+	serving_dish.region_enabled = true
 	serving_dish.hide()
 
 func _serve_grill_order(item: int) -> void:
 	if serving_motion:
 		serving_motion.kill()
-	var picture := AtlasTexture.new()
-	picture.atlas = PRODUCT_ICONS[6]
-	picture.region = Rect2(item*64,0,64,64)
-	serving_dish.texture = picture
+	serving_dish.region_rect = Rect2(item*64,0,64,64)
 	serving_motion = create_tween()
 	serving_arm.rotation.x = .55
 	serving_dish.show()

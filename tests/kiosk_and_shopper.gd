@@ -132,7 +132,7 @@ func check() -> void:
 	game.purchases.clear()
 	for i in 4:
 		shops.purchase(6,i)
-		if not shops.serving_dish.is_visible_in_tree() or shops.serving_dish.texture.region.position.x != i*64:
+		if not shops.serving_dish.is_visible_in_tree() or shops.serving_dish.region_rect.position.x != i*64:
 			printerr("Cook is holding the wrong dish")
 			quit(1)
 			return
