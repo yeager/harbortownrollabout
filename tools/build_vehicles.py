@@ -1947,7 +1947,24 @@ def make_bmw(color, name="BWM Y5 N70i", *, patrol=False):
                                  ((1.72,2.224),(1.76,2.281),(1.91,2.294),
                                   (2.056,2.264),(2.044,2.222),(1.94,2.215))])
     profile_loft("Tailgate roof spoiler",spoiler_sections,color,root)
-    cube("Centre brake lamp",(0,2.04,2.25),(.62,.015,.022),TAIL_LAMP,.007,root)
+    if root.name.startswith("BWM Y5 N70i"):
+        for label, finish, half_width, half_height, outset in (
+            ("Centre stop lamp bezel", DARK, .326, .017, .010),
+            ("Centre brake lamp", TAIL_LAMP, .310, .010, .015),
+        ):
+            rings = []
+            for station in range(9):
+                x = half_width * (station / 4 - 1)
+                taper = (abs(x) / .83) ** 3
+                depth = 2.052 - .085 * taper + outset
+                height = 2.249 - .028 * taper
+                edge = half_height * (.65 if station in (0, 8) else 1.0)
+                rings.append([(x, depth + y, height + z) for y, z in (
+                    (-.022, -edge), (0, -edge), (0, edge), (-.022, edge),
+                )])
+            profile_loft(label, rings, finish, root)
+    else:
+        cube("Centre brake lamp",(0,2.04,2.25),(.62,.015,.022),TAIL_LAMP,.007,root)
     rear_screen = shell.evaluated_get(bpy.context.evaluated_depsgraph_get())
     def rear_screen_depth(x, z):
         hit, point, _, _ = rear_screen.ray_cast((x,3,z),(0,-1,0))
