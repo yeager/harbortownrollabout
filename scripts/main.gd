@@ -11778,6 +11778,13 @@ func _build_driving_school() -> void:
 	_make_box("Roof flashing",Vector3(12.44,.25,6.43),Vector3.UP*3.37,Color("#293c42"),false,school)
 	var roof_metal := _material(Color("#435357"), .63)
 	roof_metal.metallic = .38
+	var membrane := _material(Color("#414446"), .94, false, "mineral")
+	membrane.uv2_scale = Vector3.ONE * 2.2
+	_make_box("School roof waterproofing", Vector3(12.13, .018, 6.10),
+		Vector3(0, 3.500, 0), Color.WHITE, false, school).material_override = membrane
+	for seam in range(-3, 4):
+		_make_box("Roof membrane lap seam", Vector3(12.10, .006, .027),
+			Vector3(0, 3.509, seam * .84), Color("#34383a"), false, school)
 	for edge in [-1, 1]:
 		_make_box("Roof coping longitudinal cap", Vector3(12.46, .046, .16),
 			Vector3(0, 3.512, edge * 3.14), Color.WHITE, false, school).material_override = roof_metal

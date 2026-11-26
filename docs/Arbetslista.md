@@ -335,6 +335,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Ventilationsgallren på bakfasaden fick droppbleck, kantprofiler och synliga fästen. Granskat i Godot. Övningsbaneprovet passerade.
   - Båda stuprören fick lutande vattenavledare med upphöjda kanter. Granskat vid bakfasaden i Godot. Övningsbaneprovet passerade.
   - Trafikskolans tak fick två ventilationshuvar med plåtbeslag och indragna galler. Granskat i Godot. Övningsbaneprovet passerade.
+  - Takytan fick ett finkornigt tätskikt med synliga överlappsskarvar. Granskat ovanifrån i Godot. Övningsbaneprovet passerade.
   - Trafikskolans entrétak fick två väggkonsoler, ståndfalsar och en vikt framkant. Granskat i Godot. Övningsbaneprovet passerade.
   - Entréarmaturen fick metallhus, gavlar och en ram runt ljusspridaren. Granskat tänd i Godot. Övningsbaneprovet verifierade dag- och nattväxlingen.
   - Den lokaliserade fasadskylten flyttades till entrétakets framkant och fick kantprofiler och fästen. Hela texten granskades från marken i Godot. Övningsbaneprovet passerade.
