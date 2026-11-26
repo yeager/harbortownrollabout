@@ -143,6 +143,8 @@ func _rail_batch(label: String, transforms: Array[Transform3D], finish: Material
 func _build_trackbed() -> void:
 	var length := track.get_baked_length()
 	var rails: Array[Transform3D] = []
+	var rail_heads: Array[Transform3D] = []
+	var rail_lips: Array[Transform3D] = []
 	var grass: Array[Transform3D] = []
 	var wires: Array[Transform3D] = []
 	var count := ceili(length/1.1)
@@ -153,7 +155,12 @@ func _build_trackbed() -> void:
 		var mid := (from+to)*.5
 		var span := from.distance_to(to)+.055
 		for side in [-1,1]:
-			rails.append(Transform3D(heading.scaled_local(Vector3(.075,.055,span)),mid+heading.x*.72*side))
+			var rail_center: Vector3 = mid + heading.x * .72 * side
+			rails.append(Transform3D(heading.scaled_local(Vector3(.092, .044, span)), rail_center - Vector3.UP * .0055))
+			rail_heads.append(Transform3D(heading.scaled_local(Vector3(.046, .012, span)),
+				rail_center + heading.x * .021 * side + Vector3.UP * .0215))
+			rail_lips.append(Transform3D(heading.scaled_local(Vector3(.017, .009, span)),
+				rail_center - heading.x * .035 * side + Vector3.UP * .020))
 		if not _cross_street(mid):
 			grass.append(Transform3D(heading.scaled_local(Vector3(3.25,.06,span)),mid-Vector3.UP*.05))
 		wires.append(Transform3D(heading.scaled_local(Vector3(.027,.03,span)),mid+Vector3.UP*4.2))
@@ -172,7 +179,9 @@ func _build_trackbed() -> void:
 				beam(insulator + heading.x * (.046 * ring - .015),
 					insulator + heading.x * (.046 * ring + .015), .115, .10, Color("#c9c4ae"))
 	var world := get_parent()
-	_rail_batch("Grooved street rails", rails, world._material(Color("#97a3a9")))
+	_rail_batch("Grooved street rails", rails, world._material(Color("#56646a")))
+	_rail_batch("Polished rail heads", rail_heads, world._material(Color("#a9b3b8"), .34))
+	_rail_batch("Rail groove lips", rail_lips, world._material(Color("#77848a"), .56))
 	_rail_batch("Grass reservation", grass, world.soil_finish)
 	_rail_batch("Contact wire", wires, world._material(Color("#464e4c")))
 

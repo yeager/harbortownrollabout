@@ -482,6 +482,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Väderskyddens plåttak fick vädermaterial. Snö lägger sig på takets ovansida och ståndfalsarna är synliga. Granskat vid Verkstadstorget i Godot. Spårvagns- och väderproven passerade.
   - Perrongerna och ramperna fick betongmaterial med väderrespons. Den gula taktila kanten och påstigningsmarkeringarna syns i snön. Granskat vid Verkstadstorget i Godot. Spårvagns- och väderproven passerade.
   - Gräset mellan rälerna använder samma vädermaterial som marken runtom. Snön granskades vid Verkstadstorget och rälerna syns genom vintervyn. Spårvagns- och väderproven passerade.
+  - Rälerna fick blanka löpytor och separata innerkanter som bildar spår för hjulflänsarna. Granskat från rälsnivå i vinterläge. Spårvagns- och signalproven passerade.
   - Kontaktledningsstolparna fick fotplattor, stag och isolatorer. Granskat vid Västra torget i Godot efter godkänt spårvagnsprov.
   - Spårvagnens strömavtagare fick isolerade takfästen, ledaxlar och dubbla kolslitskenor. Granskat i närbild i Godot och spårvagnsprovet passerade.
   - Alla tre vagnsdelar fick omarbetade ventilationskåpor med sidointag, takgaller och synliga fästen. Granskat i Godot och spårvagnsprovet passerade.
