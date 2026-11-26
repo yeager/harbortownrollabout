@@ -294,6 +294,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Den uppfällbara framdelen fick en ledhylsa på den diagonala axeln, en fast ledtapp och lagersäten i en urfräsning i chassit. Leden sitter huvudsakligen dold. På- och avstigningskontrollerna och fordonsprovet passerade. Ledtappen flyttades 65 mm bakåt så att den stängda huvens front är fri. Granskat i Godot och kioskprovet passerade utan motorfel.
   - Huvens undersida fick invikta förstärkningskanter och gummistopp vid fotutrymmet. Granskat i öppet läge i Godot. Körprovet och på- och avstigningskontrollerna passerade.
   - Fordonsgalleriets bild visar den uppdaterade modellen. Bildkortet granskades i Godot och fordonsprovet passerade. Bildgalleriet visar också den nya modellen i stadsmiljö.
+  - Den nedre fronten fick rundade hörn som övergår i framskärmarna. Granskat snett framifrån i Godot. Körprovet passerade.
 - [ ] [`snowmobile.glb`](../vehicles/snowmobile.glb)
 - [ ] [`sport_quattro.glb`](../vehicles/sport_quattro.glb)
   - Fordonsprovet kontrollerar att galleriet visar Audo Sport Kvattro, att bakluckan har Kvattro-emblemet och att fronten har fem ringar. Språkkontrollen passerade för alla sex översättningskataloger.

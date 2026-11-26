@@ -39,8 +39,12 @@ def panel_section(y, width, bottom, shoulder, crown):
         (-.93,0),(-1,.14),(-1,.77),(-.94,.92),(-.72,.99),(0,1),
         (.72,.99),(.94,.92),(1,.77),(1,.14),(.93,0)]]
 
-chassis = v.mesh_from_rings("Pressed chassis",[(-1.15,.37,.19,.46,.52),(-.94,.47,.17,.53,.59),
-    (-.66,.46,.20,.50,.57)],red,root,.018,panel_section)
+chassis = v.mesh_from_rings("Pressed chassis",[
+    (-1.150,.332,.202,.46,.52),(-1.144,.352,.196,.46,.521),
+    (-1.129,.371,.191,.467,.524),(-1.102,.391,.187,.477,.534),
+    (-1.067,.414,.183,.492,.550),(-1.017,.444,.179,.509,.571),
+    (-.94,.47,.17,.53,.59),(-.66,.46,.20,.50,.57),
+],red,root,.012,panel_section)
 v.mesh_from_rings("Seat pedestal and rear deck",[(.005,.42,.21,.50,.55),(.42,.425,.22,.52,.56),(.78,.385,.23,.51,.54),
     (1.02,.345,.24,.50,.525),(1.16,.315,.25,.48,.51)],red,root,.018,panel_section)
 # The central lamp sits on a flat panel. Close-set sections roll its outer
