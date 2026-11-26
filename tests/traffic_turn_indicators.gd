@@ -21,6 +21,10 @@ func verify() -> void:
 	game.steady_player_lights = false
 	var actor: Node3D = game._spawn_traffic("res://vehicles/traffic_bmw_blue.glb", -103, 2.35, 1, 0.0)
 	var item: Dictionary = game.traffic_data.back()
+	for lamps in [item.turn_signals.left, item.turn_signals.right]:
+		if not lamps.any(func(lamp): return lamp.get_parent().name.begins_with("Front amber indicator")):
+			fail("The X5i must use its modeled front indicator lenses")
+			return
 	for direction in [-1, 1]:
 		var route := Curve3D.new()
 		route.add_point(Vector3(-103, 0, 2.35))

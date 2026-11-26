@@ -1711,6 +1711,7 @@ def profile_loft(name, rings, finish, parent, close_ends=True):
 def make_bmw(color, name="BMV X5i", *, patrol=False):
     detailed_cabin = patrol or color == PAINT_BLACK
     grille_edge_finish = material("Satin graphite grille edges", (0.12, 0.135, 0.14), 0.58, 0.33)
+    indicator_finish = material("Smoked amber indicator lens", (0.22, 0.10, 0.03), 0.10, 0.31)
     root = bpy.data.objects.new(name, None)
     bpy.context.collection.objects.link(root)
     root.empty_display_type = "CUBE"
@@ -2344,6 +2345,9 @@ def make_bmw(color, name="BMV X5i", *, patrol=False):
                        (u+.23,.68),(u+.14,.68),(u+.12,.52)],.020,METAL)
             lamp_patch("Projector lens",[(u+.15,.34),(u+.225,.34),(u+.238,.53),
                        (u+.22,.62),(u+.15,.62),(u+.138,.52)],.026,GLASS,dome=.026)
+        if root.name.startswith("BMV X5i"):
+            lamp_patch("Front amber indicator", [(.73,.75),(.90,.73),(.94,.78),
+                       (.91,.86),(.73,.87)], .024, indicator_finish)
         duct = [(.015,1.005),(.49,1.014),(.68,1.09),(.80,1.145),(.85,1.115),
                 (.845,.755),(.75,.695),(.045,.695)]
         # Blend each corner over a fixed distance so the long lower edge
