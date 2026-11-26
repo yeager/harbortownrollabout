@@ -2402,7 +2402,7 @@ func _build_city_wall() -> void:
 			# One coping spans each corner. The perpendicular coping meets its inside edge.
 			var coping_length := length + 1.28 if along_x else length - .08
 			var coping_size := tangent * coping_length + normal * .68
-			_make_box("Coping bedding", coping_size + Vector3.UP * .04,
+			_make_box("Coping bedding %s %s" % [along_x, side], coping_size + Vector3.UP * .04,
 				center + Vector3.UP * 2.32, Color("#706d63"), false, wall)
 			var slab := BoxMesh.new()
 			slab.size = tangent + normal * .68 + Vector3.UP * .09

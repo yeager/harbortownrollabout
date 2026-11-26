@@ -78,6 +78,18 @@ func check_geometry(game) -> void:
 	if wall.find_children("*", "StaticBody3D", false, false).size() != 4:
 		fail("Missing perimeter collision")
 		return
+	var coping_runs: Array[AABB] = []
+	for bedding: MeshInstance3D in wall.find_children("Coping bedding*", "MeshInstance3D", false, false):
+		coping_runs.append(bedding.global_transform * bedding.get_aabb())
+	if coping_runs.size() != 4:
+		fail("Missing a perimeter coping run")
+		return
+	for first in coping_runs.size():
+		for second in range(first + 1, coping_runs.size()):
+			var overlap := coping_runs[first].intersection(coping_runs[second])
+			if overlap.size.x > .001 and overlap.size.z > .001:
+				fail("Perimeter coping runs overlap at a corner")
+				return
 	var area: Rect2 = game.CITY_INTERIOR
 	var space: PhysicsDirectSpaceState3D = game.get_world_3d().direct_space_state
 	for x in [area.position.x, area.end.x]:
