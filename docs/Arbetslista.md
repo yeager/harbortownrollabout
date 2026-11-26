@@ -288,6 +288,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Avgassystemet fick ett ihåligt slutrör med rundad kant samt separata fästen med gummiisolatorer och bultar. Granskat i Godot och fordonsprovet passerade.
   - Det bakre handtaget fick ett böjt metallrör, separat gummigrepp och fötter med synliga skruvar. Granskat i Godot och fordonsprovet passerade.
   - Det bakre stänkskyddet fick en svagt böjd gummiprofil och en synlig fästlist med tre nitar. Granskat bakifrån i Godot och fordonsprovet passerade.
+  - Signalhornsgallret fick en rundad metallring, sju försänkta ribbor och mörka tvärstag. Granskat framifrån i Godot och fordonsprovet passerade.
 - [ ] [`snowmobile.glb`](../vehicles/snowmobile.glb)
 - [ ] [`sport_quattro.glb`](../vehicles/sport_quattro.glb)
   - Fordonsprovet kontrollerar att galleriet visar Audo Sport Kvattro, att bakluckan har Kvattro-emblemet och att fronten har fem ringar. Språkkontrollen passerade för alla sex översättningskataloger.

@@ -114,13 +114,21 @@ shader.links.new(color.outputs["Color"],next(n for n in shader.nodes if n.type==
 lens = bpy.data.objects.new("Headlight lens",mesh)
 bpy.context.collection.objects.link(lens)
 lens.parent = root
-nose_lamp("Horn grille rim",-1.153,.33,.059,.025,v.METAL)
-nose_lamp("Horn grille recess",-1.168,.33,.051,.006,v.BLACK)
-for index in range(-2,3):
-    offset = index*.017
-    half_height = math.sqrt(.048**2-offset**2)
-    tube("Horn grille rib",(offset,-1.173,.33-half_height),
-         (offset,-1.173,.33+half_height),.003,v.METAL)
+horn_profile = [(.052,-1.145),(.061,-1.145),(.061,-1.162),
+                (.058,-1.170),(.055,-1.173),(.049,-1.173),(.047,-1.167)]
+horn_rings = [[(radius*math.cos(math.tau*i/48), y, .33+radius*math.sin(math.tau*i/48))
+               for i in range(48)] for radius,y in horn_profile]
+v.profile_loft("Horn grille rolled rim",horn_rings+[horn_rings[0]],v.METAL,root,close_ends=False)
+nose_lamp("Horn grille recess",-1.153,.33,.051,.008,v.BLACK)
+for index in range(-3,4):
+    offset = index*.012
+    half_height = math.sqrt(.049**2-offset**2)
+    box("Horn grille vertical slat",(offset,-1.166,.33),
+        (.0035,.006,2*half_height),v.METAL,.001)
+for height in (-.020,.020):
+    half_width = math.sqrt(.049**2-height**2)
+    tube("Horn grille backing rail",(-half_width,-1.162,.33+height),
+         (half_width,-1.162,.33+height),.002,v.DARK)
 
 # The screen bows toward the nose at its centre and narrows under the roof.
 def screen_point(u,t):
