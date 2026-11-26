@@ -323,5 +323,6 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Hastighetsskyltarna fick baksidor i aluminium och två monteringsskenor med stolpklämmor. Granskat bakifrån i Godot. Övningsbaneprovet passerade.
   - Parkeringsskyltarna och deras tilläggstavlor fick aluminiumbaksidor med dubbla skenor och stolpklämmor. Granskat bakifrån i Godot. Gatuparkeringsprovet passerade.
   - Vägvisarna till bensinstationen och glassdepån fick aluminiumbaksidor med dubbla monteringsskenor. Stationsskylten granskades i Godot. Glassrundan passerade.
+  - Övningsbanans stoppskylt fick en åttakantig aluminiumbaksida, monteringsskenor och stolpklämmor. Granskat bakifrån i Godot. Övningsbaneprovet passerade.
   - Kajens låga lyktor fick sockel, kant under huven och tre smala stag runt ljusspridaren. Granskat vid färjebryggan i Godot. Väderprovet passerade.
 - [ ] Boulebana, spelfigurer och klot

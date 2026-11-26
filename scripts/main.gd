@@ -11615,19 +11615,26 @@ func _build_practice_yard() -> void:
 	_make_box("Practice stop line",stop_line_size,Vector3(PRACTICE_STOP_X + stop_line_size.x*.5,.01,PRACTICE_STOP_LANE_Z),Color.WHITE).material_override = marking_finish
 	_make_box("Practice signal stop line",signal_line_size,Vector3(PRACTICE_SIGNAL_X + signal_line_size.x*.5,.01,PRACTICE_STOP_LANE_Z),Color.WHITE).material_override = marking_finish
 	var post := _signpost(Vector3(PRACTICE_STOP_X,0,PRACTICE_STOP_LANE_Z-3.1),-PI*.5)
-	for inner in [false,true]:
+	var stop_aluminium := _material(Color("#a4adaf"), .65)
+	stop_aluminium.metallic = .42
+	var stop_finishes := [stop_aluminium, _material(Color.WHITE), _material(Color("#b52429"))]
+	var stop_depths := [.019, .055, .08]
+	for layer in stop_finishes.size():
 		var plate := MeshInstance3D.new()
+		plate.name = "Stop sign layer"
 		var mesh := CylinderMesh.new()
-		mesh.top_radius = .49 if inner else .56
+		mesh.top_radius = .49 if layer == 2 else .56
 		mesh.bottom_radius = mesh.top_radius
-		mesh.height = .035
+		mesh.height = .039 if layer == 0 else .035
 		mesh.radial_segments = 8
 		plate.mesh = mesh
-		plate.rotation.x = PI*.5
-		plate.rotate_object_local(Vector3.UP,PI/8)
-		plate.position = Vector3(0,2.52,.08 if inner else .055)
-		plate.material_override = _material(Color("#b52429") if inner else Color.WHITE)
+		plate.rotation.x = PI * .5
+		plate.rotate_object_local(Vector3.UP, PI / 8)
+		plate.position = Vector3(0, 2.52, stop_depths[layer])
+		plate.material_override = stop_finishes[layer]
 		post.add_child(plate)
+	for rail_y in [2.32, 2.71]:
+		_add_sign_mount(post, rail_y, .64, stop_aluminium)
 	_road_sign_text(post,"STOP",Vector3(0,2.52,.115),.005,Color.WHITE)
 
 	var cone := Node3D.new()
