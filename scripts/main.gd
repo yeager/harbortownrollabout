@@ -2404,8 +2404,8 @@ func _build_city_wall() -> void:
 			masonry.add_to_group("city_perimeter_masonry")
 			# One coping spans each corner. The perpendicular coping meets its inside edge.
 			var coping_length := length + 1.28 if along_x else length - .08
-			var coping_size := tangent * coping_length + normal * .68
-			_make_box("Coping bedding %s %s" % [along_x, side], coping_size + Vector3.UP * .04,
+			var bedding_size := tangent * masonry_length + normal * .60
+			_make_box("Coping bedding %s %s" % [along_x, side], bedding_size + Vector3.UP * .04,
 				center + Vector3.UP * 2.32, Color("#706d63"), false, wall)
 			var coping := MultiMesh.new()
 			coping.transform_format = MultiMesh.TRANSFORM_3D
