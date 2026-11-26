@@ -142,8 +142,6 @@ func _rail_batch(label: String, transforms: Array[Transform3D], finish: Material
 
 func _build_trackbed() -> void:
 	var length := track.get_baked_length()
-	var rails: Array[Transform3D] = []
-	var rail_lips: Array[Transform3D] = []
 	var grass: Array[Transform3D] = []
 	var wires: Array[Transform3D] = []
 	var count := ceili(length/1.1)
@@ -153,11 +151,6 @@ func _build_trackbed() -> void:
 		var heading := Basis.looking_at(from.direction_to(to))
 		var mid := (from+to)*.5
 		var span := from.distance_to(to)+.055
-		for side in [-1,1]:
-			var rail_center: Vector3 = mid + heading.x * .72 * side
-			rails.append(Transform3D(heading.scaled_local(Vector3(.092, .044, span)), rail_center - Vector3.UP * .0055))
-			rail_lips.append(Transform3D(heading.scaled_local(Vector3(.017, .009, span)),
-				rail_center - heading.x * .035 * side + Vector3.UP * .020))
 		if not _cross_street(mid):
 			grass.append(Transform3D(heading.scaled_local(Vector3(3.25,.06,span)),mid-Vector3.UP*.05))
 		wires.append(Transform3D(heading.scaled_local(Vector3(.027,.03,span)),mid+Vector3.UP*4.2))
@@ -176,14 +169,23 @@ func _build_trackbed() -> void:
 				beam(insulator + heading.x * (.046 * ring - .015),
 					insulator + heading.x * (.046 * ring + .015), .115, .10, Color("#c9c4ae"))
 	var world := get_parent()
-	_rail_batch("Grooved street rails", rails, world._material(Color("#56646a")))
-	_build_rail_heads(length, count, world._material(Color("#a9b3b8"), .34))
-	_rail_batch("Rail groove lips", rail_lips, world._material(Color("#77848a"), .56))
+	_build_rail_profiles(length, count)
 	_rail_batch("Grass reservation", grass, world.soil_finish)
 	_rail_batch("Contact wire", wires, world._material(Color("#464e4c")))
 
-func _build_rail_heads(length: float, count: int, finish: Material) -> void:
+func _build_rail_profiles(length: float, count: int) -> void:
 	const CHUNK_SIZE := 22
+	var world := get_parent()
+	var profiles := [
+		_rail_section(.674, .766, -.0275, .0165),
+		_rail_section(.718, .764, .0155, .0275),
+		_rail_section(.6765, .6935, .0155, .0245),
+	]
+	var finishes := [
+		world._material(Color("#56646a")),
+		world._material(Color("#a9b3b8"), .34),
+		world._material(Color("#77848a"), .56),
+	]
 	var sections: Array[Transform3D] = []
 	for i in count:
 		var offset := length * i / count
@@ -191,31 +193,37 @@ func _build_rail_heads(length: float, count: int, finish: Material) -> void:
 		var after := track.sample_baked(fposmod(offset + .20, length))
 		sections.append(Transform3D(Basis.looking_at(before.direction_to(after)), track.sample_baked(offset)))
 	for start in range(0, count, CHUNK_SIZE):
-		var surface := SurfaceTool.new()
-		surface.begin(Mesh.PRIMITIVE_TRIANGLES)
-		surface.set_material(finish)
-		surface.set_smooth_group(-1)
-		for i in range(start, mini(start + CHUNK_SIZE, count)):
-			var from := sections[i]
-			var to := sections[(i + 1) % count]
-			for side: float in [-1, 1]:
-				var x := .741 * side
-				var profile := [
-					Vector3(x - .023, .0155, 0), Vector3(x - .023, .0275, 0),
-					Vector3(x + .023, .0275, 0), Vector3(x + .023, .0155, 0),
-				]
-				for edge in 3:
-					var a: Vector3 = from * profile[edge]
-					var b: Vector3 = from * profile[edge + 1]
-					var c: Vector3 = to * profile[edge + 1]
-					var d: Vector3 = to * profile[edge]
-					for vertex in [a, c, b, a, d, c]:
-						surface.add_vertex(vertex)
-		surface.generate_normals()
+		var mesh := ArrayMesh.new()
+		for part in profiles.size():
+			var surface := SurfaceTool.new()
+			surface.begin(Mesh.PRIMITIVE_TRIANGLES)
+			surface.set_material(finishes[part])
+			surface.set_smooth_group(-1)
+			for i in range(start, mini(start + CHUNK_SIZE, count)):
+				var from := sections[i]
+				var to := sections[(i + 1) % count]
+				for profile: PackedVector3Array in profiles[part]:
+					for edge in 3:
+						var a := from * profile[edge]
+						var b := from * profile[edge + 1]
+						var c := to * profile[edge + 1]
+						var d := to * profile[edge]
+						for vertex in [a, c, b, a, d, c]:
+							surface.add_vertex(vertex)
+			surface.generate_normals()
+			surface.commit(mesh)
 		var model := MeshInstance3D.new()
-		model.name = "Continuous polished rail heads"
-		model.mesh = surface.commit()
+		model.name = "Grooved street rails"
+		model.mesh = mesh
 		add_child(model, true)
+
+func _rail_section(inner: float, outer: float, bottom: float, top: float) -> Array[PackedVector3Array]:
+	return [
+		PackedVector3Array([Vector3(inner, bottom, 0), Vector3(inner, top, 0),
+			Vector3(outer, top, 0), Vector3(outer, bottom, 0)]),
+		PackedVector3Array([Vector3(-outer, bottom, 0), Vector3(-outer, top, 0),
+			Vector3(-inner, top, 0), Vector3(-inner, bottom, 0)]),
+	]
 
 func _ready() -> void:
 	var world := get_parent()

@@ -484,6 +484,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Gräset mellan rälerna använder samma vädermaterial som marken runtom. Snön granskades vid Verkstadstorget och rälerna syns genom vintervyn. Spårvagns- och väderproven passerade.
   - Rälerna fick blanka löpytor och separata innerkanter som bildar spår för hjulflänsarna. Granskat från rälsnivå i vinterläge. Spårvagns- och signalproven passerade.
   - Rälernas löpytor delar tvärsnitt mellan segmenten, även i kurvorna. Granskat från rälsnivå i sydvästra kurvan. Spårvagnsprovet passerade.
+  - Även rälens bas och innerkant använder sammanhängande tvärsnitt. Granskat från rälsnivå i sydvästra kurvan. Spårvagnsprovet passerade.
   - Kontaktledningsstolparna fick fotplattor, stag och isolatorer. Granskat vid Västra torget i Godot efter godkänt spårvagnsprov.
   - Spårvagnens strömavtagare fick isolerade takfästen, ledaxlar och dubbla kolslitskenor. Granskat i närbild i Godot och spårvagnsprovet passerade.
   - Alla tre vagnsdelar fick omarbetade ventilationskåpor med sidointag, takgaller och synliga fästen. Granskat i Godot och spårvagnsprovet passerade.
