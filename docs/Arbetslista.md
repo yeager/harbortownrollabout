@@ -226,6 +226,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
 - [ ] [`sport_quattro.glb`](../vehicles/sport_quattro.glb)
   - Bakluckan fick emblemet Kvattro och galleriet visar Audo Sport Kvattro. Båda registreringsskyltarna fick distanser och spårskruvar. Emblemet och skyltarna granskades i Godot. Fordonsprovet och språkkontrollen passerade.
 - [ ] [`taxi.glb`](../vehicles/taxi.glb)
+  - Taxins takskylt fick fyra bultade fästen med gummimellanlägg och separata ändkåpor. Granskat i Godot. Taxiuppdraget och parkeringsprovet passerade.
 - [ ] [`tractor_snow_blade.glb`](../vehicles/tractor_snow_blade.glb)
 - [ ] [`traffic_bmw_blue.glb`](../vehicles/traffic_bmw_blue.glb)
 - [ ] [`traffic_bmw_silver.glb`](../vehicles/traffic_bmw_silver.glb)

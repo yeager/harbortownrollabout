@@ -695,7 +695,18 @@ def make_taxi():
                               ((0,0),(.003,.011),(.004,.025),(0,.024))])
             profile_loft("Green leaf livery",sweep,PAINT_GREEN,root)
     cube("Taxi roof plinth",(0,.05,1.605),(.54,.32,.044),BLACK,.015,root)
+    roof=next(obj for obj in root.children if obj.name.startswith("Roof and cabin"))
+    for x in (-.164,.164):
+        for y in (-.133,.233):
+            hit, point, _, _ = roof.ray_cast((x,y,2.5),(0,0,-1))
+            if not hit:
+                raise ValueError("Taxi roof sign mounting tab outside roof")
+            cube("Taxi sign rubber pad",(x,y,point.z+.006),(.092,.074,.018),RUBBER,.008,root)
+            cube("Taxi sign mounting tab",(x,y,point.z+.020),(.082,.070,.016),DARK,.005,root)
+            cylinder("Taxi sign fixing bolt",(x,y,point.z+.032),.010,.010,METAL,False,6,root)
     cube("Taxi roof sign",(0,.05,1.686),(.52,.25,.145),PAINT_WHITE,.032,root)
+    for x in (-.254,.254):
+        cube("Taxi sign end cap",(x,.05,1.686),(.030,.226,.120),DARK,.012,root)
     for side in (-1,1):
         sign=text_obj("Taxi roof lettering","TAXI",(0,.05+side*.128,1.653),.105,BLACK,root=root)
         sign.rotation_euler=(math.pi/2,0,math.pi if side>0 else 0)
