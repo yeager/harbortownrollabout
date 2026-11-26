@@ -278,6 +278,15 @@ func _ready() -> void:
 				Vector3(3.72, .962 + .098 * slat, 0), Color("#a87547").lightened(.06 * slat), false, station)
 		for z in [-.9,.9]:
 			world._make_box("Bench leg",Vector3(.25,.44,.08),Vector3(3.53,.55,z),Color("#49565c"),false,station)
+			world._make_box("Bench floor plate", Vector3(.30, .026, .15),
+				Vector3(3.53, .316, z), Color("#49565c"), false, station)
+			world._make_box("Bench backrest upright", Vector3(.044, .55, .065),
+				Vector3(3.758, .934, z), Color("#49565c"), false, station)
+			world._make_box("Bench seat bracket", Vector3(.36, .050, .10),
+				Vector3(3.61, .749, z), Color("#49565c"), false, station)
+			for slat in 3:
+				world._make_box("Bench slat fastener", Vector3(.008, .018, .018),
+					Vector3(3.686, .962 + .098 * slat, z), Color("#b4bcbf"), false, station)
 		world._make_box("Station name board",Vector3(.08,.43,3.8),Vector3(2.15,2.45,0),Color("#16496a"),false,station)
 		for side in [-1,1]:
 			var nameplate := sign_at(station,STATION_NAMES[i],Vector3(2.15+side*.045,2.45,0),side*PI/2,.0068)
