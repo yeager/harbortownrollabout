@@ -438,9 +438,15 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
 - [ ] Dax med uteservering, meny- och beställningsstation samt utlämningslucka
 - [ ] Villorna 12, 14, 16 och 18, var och en med tomt och trädgårdsdetaljer
 - [ ] Sjöstads- och Stockholmsfasadernas byggnadsvarianter
+- [ ] Sjukhusets vårdbyggnad, huvudentré och planteringar
 - [ ] Sjukhusets ambulansintag och takplatta
 - [ ] Lekhamnen och varorna i butikens fönster
 - [ ] Fontänen, midsommarstången och julgranen
+- [ ] Sjömackens stationsbyggnad, skärmtak och pumpanläggning
+- [ ] Depåns byggnader, garage och parkeringsytor
+- [ ] Sopkärlen längs sophämtningsrutten
+- [ ] Stadens granitmur med sockel, hörn och avtäckning
+- [ ] Uppdragsrekvisitan för cykelbud, födelsedag och upphittat paraply
 - [ ] Tvärbanans perrong, väderskydd och övriga hållplatsdetaljer
   - Kontaktledningsstolparna fick fotplattor, stag och isolatorer. Granskat vid Västra torget i Godot efter godkänt spårvagnsprov.
   - Spårvagnens strömavtagare fick isolerade takfästen, ledaxlar och dubbla kolslitskenor. Granskat i närbild i Godot och spårvagnsprovet passerade.
