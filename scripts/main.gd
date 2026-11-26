@@ -11693,6 +11693,25 @@ func _build_driving_school() -> void:
 	var footprint := Vector3(12,3.3,6)
 	_make_roadside_solid("School building",footprint,Vector3.UP*1.65,Color("#ddd8cd"),true,school)
 	_make_box("Roof flashing",Vector3(12.44,.25,6.43),Vector3.UP*3.37,Color("#293c42"),false,school)
+	var roof_metal := _material(Color("#435357"), .63)
+	roof_metal.metallic = .38
+	for edge in [-1, 1]:
+		_make_box("Roof coping longitudinal cap", Vector3(12.46, .046, .16),
+			Vector3(0, 3.512, edge * 3.14), Color.WHITE, false, school).material_override = roof_metal
+		_make_box("Roof coping end cap", Vector3(.16, .046, 6.12),
+			Vector3(edge * 6.15, 3.512, 0), Color.WHITE, false, school).material_override = roof_metal
+		var drain_x: float = edge * 5.58
+		_tube_between(school, Vector3(drain_x, 3.30, -3.23),
+			Vector3(drain_x, 3.06, -3.09), .052, roof_metal)
+		_tube_between(school, Vector3(drain_x, 3.06, -3.09),
+			Vector3(drain_x, .25, -3.09), .046, roof_metal)
+		for strap_y in [.61, 1.64, 2.68]:
+			_make_box("Downpipe wall clip", Vector3(.128, .037, .124),
+				Vector3(drain_x, strap_y, -3.065), Color.WHITE, false, school).material_override = roof_metal
+		_tube_between(school, Vector3(drain_x, .25, -3.09),
+			Vector3(drain_x, .132, -3.27), .047, roof_metal)
+	_make_box("Rear roof gutter", Vector3(12.24, .106, .135),
+		Vector3(0, 3.287, -3.23), Color.WHITE, false, school).material_override = roof_metal
 	_make_box("Entrance canopy",Vector3(5.0,.16,1.40),Vector3(0,2.72,3.59),Color("#225c63"),false,school)
 	var lamp := _add_entry_light(site + Vector3(0,2.61,3.66), Vector3(.72,.05,.19), 4.5)
 	lamp.name = "Driving school entrance light"
