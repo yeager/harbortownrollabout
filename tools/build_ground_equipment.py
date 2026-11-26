@@ -75,6 +75,13 @@ for side in (-1,1):
 for side in (-1,1):
     box("Wheel arch",(side*.37,.1,.57),(.30,.92,.17),paint,.08)
     box("Footboard",(side*.28,-.39,.36),(.30,.58,.07),frame)
+    box("Footboard tread plate",(side*.175,-.302,.458),(.228,.465,.020),rubber,.017)
+    for row in range(7):
+        box("Footboard grip rib",(side*.175,-.494+row*.062,.471),
+            (.183,.026,.012),frame,.005)
+    for y in (-.501,-.109):
+        disc("Footboard recessed fastener",(side*.269,y,.472),.012,.008,steel)
+        box("Footboard carrier",(side*.294,y,.329),(.25,.069,.042),frame,.009)
     for y in (-.43,.58):
         x=side*.43
         disc("All terrain tire",(x,y,.24),.24,.16,rubber,(1,0,0))
