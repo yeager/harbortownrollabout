@@ -139,7 +139,28 @@ for side, position, color in [
 aft_lens = material("Aft navigation glass", (.92, .95, 1.0), .06, .26, 1.7)
 cube("Aft navigation lamp housing", (0, 5.955, 3.035), (.134, .112, .082), graphite, .025, root)
 cube("Aft navigation lamp lens", (0, 6.012, 3.035), (.094, .032, .055), aft_lens, .012, root)
-engine=cube("Turbine housing",(0,.09,2.52),(1.25,2.26,.53),blue,.24,root)
+cube("Turbine housing", (0, .09, 2.52), (1.25, 2.26, .53), blue, .24, root)
+for side in (-1, 1):
+    cube("Turbine intake recess", (side * .624, -.38, 2.54),
+         (.045, .54, .20), graphite, .021, root)
+    for index in range(6):
+        louver = cube("Turbine intake louver", (side * .650, -.59 + index * .084, 2.54),
+                      (.034, .033, .163), metal, .008, root)
+        louver.rotation_euler.z = side * .32
+
+    outlet_center = (side * .357, 1.208, 2.54)
+    exhaust = cylinder("Turbine exhaust recess", outlet_center, .122, .089, graphite, False, 28, root)
+    exhaust.rotation_euler.x = math.pi / 2
+    bpy.ops.mesh.primitive_torus_add(
+        location=(outlet_center[0], 1.255, outlet_center[2]), rotation=(math.pi / 2, 0, 0),
+        major_radius=.117, minor_radius=.021, major_segments=32, minor_segments=10,
+    )
+    lip = bpy.context.object
+    lip.name = "Turbine exhaust lip"
+    lip.parent = root
+    lip.data.materials.append(metal)
+    for polygon in lip.data.polygons:
+        polygon.use_smooth = True
 cylinder("Mast",(0,-.27,2.99),.095,.47,metal,False,20,root)
 main=pivot("MainRotor",root,(0,-.27,3.21))
 tail=pivot("TailRotor",root,(0,5.35,2.05))
