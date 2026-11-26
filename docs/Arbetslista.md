@@ -348,6 +348,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Sockeln fortsätter nu runt gavlarna till entréns båda sidor. Granskat från entrégången i Godot. Övningsbaneprovet passerade.
   - Trafikskolans båda gavlar fick klassrumsfönster med fönsterbleck och genomgående socklar. Granskat från övningsbanan i Godot. Övningsbaneprovet passerade.
   - Trafikskolans entréyta fick stenplattor och en ribbad entrématta med metallram. Granskat i Godot. Övningsbaneprovet passerade.
+  - Entrégångens stenläggning fick en kant av mineralsten mot asfalten. Granskat i Godot. Övningsbaneprovet passerade.
   - Övningsbilens takskylt fick tvärskena och två fötter med gummiplattor och bultar. Granskat i Godot. Övningsbaneprovet passerade.
   - Övningsbilens takskylt fick ett hölje med fasade hörn och separata textpaneler. Granskat i Godot. Övningsbaneprovet passerade.
   - Övningsbilen fick en bakre övningsskylt med gummifästen och lokaliserad text, kopplad till övningsläget. Svensk spelvy granskades i Godot. Övningsbaneprovet och språkkontrollen passerade.

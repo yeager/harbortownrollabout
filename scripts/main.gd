@@ -12004,6 +12004,14 @@ func _build_driving_school() -> void:
 	_size_world_sign(sign,4.84)
 	_make_driving_surface("School entrance pavement", Vector3(12, .14, 2.5),
 		site + Vector3(0, -.068, 4.26), Color.WHITE).material_override = quay_finish
+	var edging_finish := _material(Color("#85837b"), .9, false, "mineral")
+	for piece in 20:
+		_make_box("School pavement front edging stone", Vector3(.594, .038, .145),
+			Vector3((piece - 9.5) * .60, -.011, 5.434), Color.WHITE, false, school).material_override = edging_finish
+	for side in [-1, 1]:
+		for piece in 4:
+			_make_box("School pavement side edging stone", Vector3(.145, .038, .58),
+				Vector3(side * 5.924, -.011, 3.308 + piece * .586), Color.WHITE, false, school).material_override = edging_finish
 	_make_box("Entrance mat surround", Vector3(1.53, .022, .69),
 		Vector3(0, .011, 3.58), Color.WHITE, false, school).material_override = door_metal
 	_make_box("Entrance rubber mat", Vector3(1.47, .017, .63),
