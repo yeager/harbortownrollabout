@@ -20,6 +20,11 @@ func verify() -> void:
 	if not is_equal_approx(apron_bounds.end.z, street_bounds.position.z) or not is_equal_approx(apron_bounds.end.y, street_bounds.end.y):
 		fail("The ambulance apron must meet the street flush without overlapping it")
 		return
+	var entrance_walk := game.find_child("Hospital entrance walk", true, false) as MeshInstance3D
+	var walk_bounds := entrance_walk.global_transform * entrance_walk.get_aabb()
+	if not is_equal_approx(walk_bounds.end.z, street_bounds.position.z):
+		fail("The hospital entrance paving must end at the carriageway edge")
+		return
 	game._on_vehicle_selected(0)
 	game.start_button.pressed.emit()
 	game.phone.open_button.pressed.emit()

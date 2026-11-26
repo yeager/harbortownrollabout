@@ -3,6 +3,7 @@ extends Node3D
 # The ward footprint ends at the intake's rear wall. Only the intake is open.
 const ORIGIN := Vector3(128, 0, -59)
 const APRON_WIDTH := 9.6
+const STREET_EDGE_Z := -52.8
 const WALL := Color("#d7cfba")
 const BRICK := Color("#b5a389")
 const METAL := Color("#303e44")
@@ -114,20 +115,24 @@ func _box_batch(label: String, size: Vector3, offset: Vector3, finish: Material,
 
 func _build_closed_entrance(world: Node3D, glass: Material) -> void:
 	var facade_x := -9.30
-	world._make_driving_surface("Hospital entrance walk", Vector3(6.60, .14, 6.3),
-		Vector3(facade_x, -.06, 3.20), Color("#a39c8d"), false, self)
+	var walk_start := .05
+	var walk_depth := STREET_EDGE_Z - ORIGIN.z - walk_start
+	var tile_depth := walk_depth / 10.0
+	world._make_driving_surface("Hospital entrance walk", Vector3(6.60, .14, walk_depth),
+		Vector3(facade_x, -.06, walk_start + walk_depth * .5), Color("#a39c8d"), false, self)
 	var paving: Array[Transform3D] = []
 	var covered_paving: Array[Transform3D] = []
 	for row in 10:
 		var target := covered_paving if row < 3 else paving
 		for column in 11:
 			target.append(Transform3D(Basis.IDENTITY,
-				Vector3(facade_x + (column - 5) * .60, .012, .365 + row * .63)))
+				Vector3(facade_x + (column - 5) * .60, .012, walk_start + (row + .5) * tile_depth)))
 	var paving_finish: ShaderMaterial = world._noise_material(Color("#afa694"), Color("#d4cbb9"), 10.0, .16)
 	world.ground_finishes.append(paving_finish)
-	_box_batch("Hospital entrance paving", Vector3(.584, .010, .614), Vector3.ZERO,
+	var tile_size := Vector3(.584, .010, tile_depth - .016)
+	_box_batch("Hospital entrance paving", tile_size, Vector3.ZERO,
 		paving_finish, paving)
-	_box_batch("Sheltered entrance paving", Vector3(.584, .010, .614), Vector3.ZERO,
+	_box_batch("Sheltered entrance paving", tile_size, Vector3.ZERO,
 		world._material(Color("#c7bead"), .84), covered_paving)
 	var shrub_mesh := SphereMesh.new()
 	shrub_mesh.radial_segments = 10
@@ -176,7 +181,7 @@ func _build_closed_entrance(world: Node3D, glass: Material) -> void:
 
 func _build_intake(world: Node3D) -> void:
 	# Meet the north edge of Östra allén at the same grade without overlapping it.
-	var apron_depth := -52.8 - ORIGIN.z
+	var apron_depth := STREET_EDGE_Z - ORIGIN.z
 	var stop_line_z := 1.20
 	var lane_line_x := 2.31
 	var lane_line_width := .105
