@@ -122,7 +122,15 @@ func check_response() -> void:
 
 	game.vehicle_index = game.A_TRACTOR
 	game._load_vehicle_model()
-	game.ambulance.position = Vector3(stop_x,0,2.35)
+	game.ambulance.position = Vector3(-game.street_signals.BOULEVARD_STOP_DISTANCE - game.front_reach - .10,0,2.35)
+	game.street_signals.phase = 3
+	game.speed = 0.0
+	for tick in 24:
+		game._update_traffic(.1)
+	if follower.horn_wait != 0.0 or follower.horn.playing:
+		printerr("Following car honked at an A-tractor waiting on red")
+		quit(1)
+		return
 	game.speed = 2.0
 	game.street_signals.phase = 0
 	game._update_traffic(.1)
