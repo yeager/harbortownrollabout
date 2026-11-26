@@ -452,7 +452,17 @@ def make_ambulance():
         box("Spegelglasens gummilist",(side*1.177,-1.604,1.669),(.157,.019,.268),RUBBER,.024)
         box("Huvudspegelns glas",(side*1.177,-1.591,1.709),(.133,.012,.165),mirror_glass,.017)
         box("Vidvinkelspegelns glas",(side*1.177,-1.591,1.583),(.133,.012,.065),mirror_glass,.013)
-        box("Dörrhandtag",(side*1.027,-.57,1.32),(.035,.18,.04),BLACK,.014)
+        _, handle_contact, _, _ = nose.ray_cast((side*2,-.57,1.32),(-side,0,0))
+        handle_x = handle_contact.x
+        box("Dörrhandtagets packning",(handle_x+side*.006,-.57,1.32),
+            (.025,.226,.073),RUBBER,.012)
+        for handle_y in (-.653,-.485):
+            box("Dörrhandtagets stöd",(handle_x+side*.022,handle_y,1.323),
+                (.031,.033,.048),BLACK,.008)
+        box("Dörrhandtagets grepp",(handle_x+side*.037,-.57,1.326),
+            (.024,.173,.026),BLACK,.008)
+        cylinder("Dörrens låscylinder",(handle_x+side*.020,-.466,1.296),
+                 .011,.020,METAL,vertices=16,root=root)
         box("Fotstegets bärprofil",(side*.992,-.99,.466),(.275,1.31,.066),METAL,.022)
         box("Fotstegets halkskydd",(side*1.024,-.99,.505),(.195,1.22,.019),RUBBER,.009)
         for rib in range(13):
