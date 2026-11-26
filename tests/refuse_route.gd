@@ -55,12 +55,18 @@ func check_route() -> void:
 				return
 			await create_timer(1.25).timeout
 			var bin: Node3D = game.refuse_bins[stop]
+			var comb := game.vehicle_model.find_child("LoadingCombPivot", true, false) as Node3D
+			var loading_tooth := comb.find_child("Loading comb tooth*", false, false) as Node3D
+			if not loading_tooth or comb.rotation.x < deg_to_rad(140.0) or not bin.global_basis.y.is_equal_approx(comb.global_basis.y):
+				printerr("The loaded bin did not tip with the comb and its teeth")
+				quit(1)
+				return
 			if bin.global_position.y <= curb.y + .8:
 				printerr("Bin did not lift above the loading edge")
 				quit(1)
 				return
 			await create_timer(1.45).timeout
-			if not bin.visible or bin.global_position.distance_to(curb) > .01 or absf(bin.rotation.x) > .01:
+			if not is_zero_approx(comb.rotation.x) or not bin.visible or bin.global_position.distance_to(curb) > .01 or absf(bin.rotation.x) > .01:
 				printerr("Bin did not return upright to the curb")
 				quit(1)
 				return

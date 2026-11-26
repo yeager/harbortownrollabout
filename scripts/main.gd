@@ -2024,21 +2024,25 @@ func _delivery_receipt() -> String:
 func _empty_refuse_bin(stop: int) -> void:
 	var bin := refuse_bins[stop]
 	var curb := bin.global_position
-	var loading_edge := vehicle_model.to_global(Vector3(0,.15,-3.92))
+	var comb := vehicle_model.find_child("LoadingCombPivot", true, false) as Node3D
 	var rest_rotation := bin.rotation
+	var loading_pose := Transform3D(Basis(Vector3.UP, vehicle_model.global_rotation.y), vehicle_model.to_global(Vector3(0,.315,-3.985)))
+	var bin_mount := comb.global_transform.affine_inverse() * loading_pose
+	var move_comb := func(angle: float) -> void:
+		comb.rotation.x = angle
+		bin.global_transform = comb.global_transform * bin_mount
 	bin.rotation.y = vehicle_model.global_rotation.y
 	refuse_lift = bin.create_tween().set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 	if refuse_beacon:
 		refuse_beacon.emission_enabled = true
 		refuse_lift.finished.connect(refuse_beacon.set.bind("emission_enabled", false), CONNECT_ONE_SHOT)
-	refuse_pump.global_position = loading_edge
-	refuse_lift.tween_property(bin,"global_position",loading_edge,.65)
+	refuse_pump.global_position = loading_pose.origin
+	refuse_lift.tween_property(bin,"global_position",loading_pose.origin,.65)
 	refuse_lift.tween_callback(refuse_pump.play)
-	refuse_lift.tween_property(bin,"global_position",loading_edge + Vector3.UP*1.9,.55)
-	refuse_lift.parallel().tween_property(bin,"rotation:x",deg_to_rad(145),.55)
+	var tip_angle := deg_to_rad(145.0)
+	refuse_lift.tween_method(move_comb,0.0,tip_angle,.55)
 	refuse_lift.tween_interval(.18)
-	refuse_lift.tween_property(bin,"rotation:x",0.0,.45)
-	refuse_lift.parallel().tween_property(bin,"global_position",loading_edge,.45)
+	refuse_lift.tween_method(move_comb,tip_angle,0.0,.45)
 	refuse_lift.tween_property(bin,"global_position",curb,.65)
 	refuse_lift.parallel().tween_property(bin,"rotation",rest_rotation,.65)
 

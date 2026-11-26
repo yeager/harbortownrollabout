@@ -235,6 +235,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Vindrutan fick en separat gummitätning och två torkare i viloläge med fästen, armar och blad. Granskat i närbild i Godot. Sophämtningsprovet passerade.
   - Kylgrillen fick en mörk fördjupning, separat ram, två stöd och sex vinklade lameller. Granskat i närbild i Godot. Sophämtningsprovet passerade.
   - Lastintagets lyftkam fick sexton vinklade tänder, en monteringsskena och sidofästen med tappar. Granskat i närbild i Godot. Sophämtningsprovet passerade.
+  - Lyftkammen fick ledade armar. Kammen och kärlet följer samma rörelse under lyft och tippning. Tippningen granskades i Godot. Körprovet verifierade att kärlet följer kammen och sedan står upprätt på trottoaren igen.
 - [ ] [`ride_on_mower.glb`](../vehicles/ride_on_mower.glb)
   - Åkgräsklipparen har en infälld kylgrill och röda baklyktor vid den bakmonterade motorn. Strålkastarna sitter på klippaggregatets främre kant. Båda ändarna granskades i Godot och samtliga fyra modellerade blinkerslinser verifierades. Fordons- och områdesproven passerade.
 - [ ] [`saab96.glb`](../vehicles/saab96.glb)

@@ -140,16 +140,32 @@ v.mesh_from_rings("Compactor body", [
     (-1.78,1.20,1.22,3.25,3.5),(-1.59,1.24,1.18,3.37,3.58),
     (2.37,1.24,1.18,3.37,3.58),(2.65,1.18,1.23,3.26,3.46)],green,root)
 box("Rear hopper floor",(0,2.97,1.12),(2.26,.96,.16),v.DARK)
-box("Loading comb carrier",(0,3.54,1.177),(1.84,.16,.125),v.DARK,.017)
-box("Loading comb mounting rail",(0,3.623,1.163),(1.74,.053,.091),v.METAL,.012)
+lift_pivot = bpy.data.objects.new("LoadingCombPivot", None)
+bpy.context.collection.objects.link(lift_pivot)
+lift_pivot.parent = root
+lift_pivot.location = (0,3.04,2.10)
+bpy.context.view_layer.update()
+for side in (-1,1):
+    box("Lift hinge housing",(side*.92,3.04,2.10),(.145,.20,.225),green,.023)
+    arm = box("Loading comb lift arm",(side*.92,3.30,1.63),(.085,.10,1.08),v.DARK,.022)
+    arm.rotation_euler.x = math.radians(29)
+    v.attach(arm,lift_pivot)
+
+carrier = box("Loading comb carrier",(0,3.54,1.177),(1.84,.16,.125),v.DARK,.017)
+rail = box("Loading comb mounting rail",(0,3.623,1.163),(1.74,.053,.091),v.METAL,.012)
+v.attach(carrier,lift_pivot)
+v.attach(rail,lift_pivot)
 for tooth in range(16):
     x = (tooth - 7.5) * .105
     tine = box("Loading comb tooth",(x,3.657,1.226),(.065,.115,.091),v.METAL,.012)
     tine.rotation_euler.x = math.radians(17)
+    v.attach(tine,lift_pivot)
 for side in (-1,1):
-    box("Loading comb end bracket",(side*.913,3.548,1.168),(.092,.206,.172),green,.017)
-    v.cylinder("Loading comb bracket pin",(side*.968,3.561,1.16),
+    bracket = box("Loading comb end bracket",(side*.913,3.548,1.168),(.092,.206,.172),green,.017)
+    pin = v.cylinder("Loading comb bracket pin",(side*.968,3.561,1.16),
                      .041,.025,v.METAL,True,20,root)
+    v.attach(bracket,lift_pivot)
+    v.attach(pin,lift_pivot)
 for side in (-1,1):
     box("Door window gasket",(side*1.173,-2.94,2.58),(.030,1.588,.880),v.RUBBER,.040)
     box("Door window",(side*1.155,-2.94,2.58),(.085,1.55,.84),v.GLASS,.075)
