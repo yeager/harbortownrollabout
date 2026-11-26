@@ -434,12 +434,24 @@ tube("Rear grab handle",(-.13,1.155,.595),(.13,1.155,.595),.016,v.BLACK)
 for side in (-1, 1):
     vent_y = .65
     slope = (.425 - .385) / (.78 - .42)
-    for name, offset, size, finish in (
-        ("Service vent surround", .004, (.018,.35,.145), v.METAL),
-        ("Recess behind cooling slots", .013, (.014,.326,.124), v.BLACK),
-    ):
-        panel = box(name, (side*(.40+offset), vent_y, .387), size, finish, .007)
-        panel.rotation_euler.z = side*math.atan(slope)
+    recess = box("Recess behind cooling slots",(side*.405,vent_y,.387),
+                 (.012,.335,.132),v.BLACK,.006)
+    recess.rotation_euler.z = side*math.atan(slope)
+    surround = []
+    for depth,width,height,radius in [
+        (.408,.177,.076,.012),(.422,.177,.076,.012),
+        (.427,.173,.072,.011),(.427,.162,.062,.008),
+        (.420,.159,.059,.007),(.412,.159,.059,.007),
+    ]:
+        outline = []
+        for y_sign,z_sign,start in ((1,1,0),(-1,1,90),(-1,-1,180),(1,-1,270)):
+            for step in range(7):
+                angle = math.radians(start+step*15)
+                u = y_sign*(width-radius)+radius*math.cos(angle)
+                h = z_sign*(height-radius)+radius*math.sin(angle)
+                outline.append((side*(depth-u*slope),vent_y+u,.387+h))
+        surround.append(outline)
+    v.profile_loft("Rolled side vent frame",surround+[surround[0]],v.METAL,root,close_ends=False)
     # All wires share one mesh per panel to keep the grille cheap to draw.
     wires = bpy.data.curves.new("Square wire grille", 'CURVE')
     wires.dimensions = '3D'
@@ -452,8 +464,8 @@ for side in (-1, 1):
             spline = wires.splines.new('POLY')
             spline.points.add(1)
             for point, end in zip(spline.points,(-1,1)):
-                u,h = (offset,end*.060) if vertical else (end*.158,offset)
-                point.co = (side*(.422-u*slope),vent_y+u,.387+h,1)
+                u,h = (offset,end*.062) if vertical else (end*.162,offset)
+                point.co = (side*(.417-u*slope),vent_y+u,.387+h,1)
     grille = bpy.data.objects.new("Engine intake wire mesh",wires)
     bpy.context.collection.objects.link(grille)
     grille.parent = root
