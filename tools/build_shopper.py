@@ -294,14 +294,21 @@ for side in (-1, 1):
         face.use_smooth = True
     shell = arch.modifiers.new("Pressed lip", 'SOLIDIFY')
     shell.thickness = .006
-def wheel_surface(name, center, profile, material, side=1):
-    segments = 48
+def wheel_surface(name, center, profile, material, side=1, *, tread=False):
+    segments = 192 if tread else 48
     vertices = []
     faces = []
     for ring, (radius, depth) in enumerate(profile):
         for index in range(segments):
             angle = math.tau*index/segments
-            vertices.append((side*depth,radius*math.cos(angle),radius*math.sin(angle)))
+            surface_radius = radius
+            if tread:
+                # Stagger the diagonal shoulder cuts on opposite sides of the tread.
+                phase = (index + round(depth*150) + (4 if depth < 0 else 0)) % 8
+                if phase == 0 and .027 <= abs(depth) <= .053:
+                    surface_radius -= .003 if abs(depth) < .053 else .001
+            vertices.append((side*depth,surface_radius*math.cos(angle),
+                             surface_radius*math.sin(angle)))
             if ring:
                 a = (ring-1)*segments+index
                 b = (ring-1)*segments+(index+1)%segments
@@ -328,7 +335,7 @@ rim_profile = [(.138,.064),(.138,.075),(.133,.079),(.128,.076),(.124,.070),
                (.115,.068),(.110,.071),(.104,.072),(.086,.070),(.062,.065),
                (.048,.066),(.038,.076),(.030,.079)]
 for x,y in ((-.429,-.72),(.429,-.72),(0,.89)):
-    wheel_surface("Performance tire",(x,y,.227),rubber_profile,v.RUBBER)
+    wheel_surface("Performance tire",(x,y,.227),rubber_profile,v.RUBBER,tread=True)
     for side in (-1,1):
         wheel_surface("Wheel hub",(x,y,.227),rim_profile,v.METAL,side)
         v.cylinder("Center cap",(x+side*.080,y,.227),.031,.017,v.DARK,True,32,root)
