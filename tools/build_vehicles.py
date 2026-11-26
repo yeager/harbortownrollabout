@@ -1711,6 +1711,14 @@ def profile_loft(name, rings, finish, parent, close_ends=True):
 def make_bwm(color, name="BWM Y5 N70i", *, patrol=False):
     detailed_cabin = patrol or color == PAINT_BLACK
     grille_edge_finish = material("Satin graphite grille edges", (0.12, 0.135, 0.14), 0.58, 0.33)
+    grille_rim_finish = DARK
+    grille_vane_finish = DARK
+    grille_rib_finish = DARK
+    if name.startswith("BWM Y5 N70i"):
+        grille_rim_finish = material("Smoked satin grille surround", (.076,.085,.091), .36, .45)
+        grille_vane_finish = material("Dark grille vane sides", (.022,.026,.029), .08, .52)
+        grille_edge_finish = material("Graphite grille vane faces", (.041,.049,.055), .24, .46)
+        grille_rib_finish = RUBBER
     indicator_finish = material("Smoked amber indicator lens", (0.22, 0.10, 0.03), 0.10, 0.31)
     root = bpy.data.objects.new(name, None)
     bpy.context.collection.objects.link(root)
@@ -2302,7 +2310,7 @@ def make_bwm(color, name="BWM Y5 N70i", *, patrol=False):
                 faces.append(face if side<0 else face[::-1])
         mesh=bpy.data.meshes.new("Rolled kidney grille rim")
         mesh.from_pydata(vertices,[],faces)
-        mesh.materials.append(DARK)
+        mesh.materials.append(grille_rim_finish)
         for poly in mesh.polygons:
             poly.use_smooth=True
         rim=bpy.data.objects.new("Satin grille surround",mesh)
@@ -2353,7 +2361,7 @@ def make_bwm(color, name="BWM Y5 N70i", *, patrol=False):
                     rib_faces.append(face if side>0 else face[::-1])
         mesh = bpy.data.meshes.new("Radiator cooling ribs")
         mesh.from_pydata(rib_vertices,[],rib_faces)
-        mesh.materials.append(DARK)
+        mesh.materials.append(grille_rib_finish)
         ribs = bpy.data.objects.new("Radiator cooling ribs",mesh)
         bpy.context.collection.objects.link(ribs)
         ribs.parent = root
@@ -2377,7 +2385,7 @@ def make_bwm(color, name="BWM Y5 N70i", *, patrol=False):
                     faces.append(face if side>0 else face[::-1])
         mesh=bpy.data.meshes.new("Cambered grille vanes")
         mesh.from_pydata(vertices,[],faces)
-        mesh.materials.append(DARK)
+        mesh.materials.append(grille_vane_finish)
         mesh.materials.append(grille_edge_finish)
         for poly in mesh.polygons:
             poly.use_smooth=True
