@@ -364,6 +364,36 @@ def build(key, length, width, axles, color, belt, cabin):
         else:
             box("Bumper",0,y,.36,width*1.96,.13,.13,RUBBER if key!="m3_e30" else paint)
     if key == "saab96":
+        box("Saav silencer",-.460,end-.238,.229,.245,.368,.112,DARK,.041)
+        box("Saav silencer clamp",-.460,end-.163,.233,.252,.033,.119,METAL,.014)
+        outlet_profile = [(-.144,.034),(.062,.034),(.125,.033),(.134,.028),
+                          (.125,.022),(-.144,.022)]
+        steps = 32
+        vertices = []
+        for y,radius in outlet_profile:
+            for step in range(steps):
+                angle = math.tau*step/steps
+                vertices.append((-.460+radius*math.cos(angle), end+y,
+                                 .220+radius*math.sin(angle)))
+        faces = []
+        for ring in range(len(outlet_profile)):
+            following = (ring+1) % len(outlet_profile)
+            for step in range(steps):
+                neighbor = (step+1) % steps
+                faces.append((ring*steps+step,following*steps+step,
+                              following*steps+neighbor,ring*steps+neighbor))
+        exhaust_mesh = bpy.data.meshes.new("Saav rolled exhaust pipe")
+        exhaust_mesh.from_pydata(vertices,[],faces)
+        exhaust_mesh.update()
+        exhaust_mesh.materials.append(METAL)
+        exhaust_mesh.materials.append(DARK)
+        for face in exhaust_mesh.polygons:
+            face.use_smooth = True
+            if face.index >= 4*steps:
+                face.material_index = 1
+        exhaust = bpy.data.objects.new("Saav exhaust outlet",exhaust_mesh)
+        bpy.context.collection.objects.link(exhaust)
+        exhaust.parent = root
         blue = material("Saav registration country blue",(.025,.106,.43),.06,.40)
         for outward, height, offset in [(-1,.360,.079),(1,.464,.039)]:
             y = outward*(end+offset)
