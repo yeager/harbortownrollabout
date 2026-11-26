@@ -227,6 +227,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Dörrhandtagen fick formpassade packningar, separata fästen, grepp och lås. Granskat i närbild i Godot. Landningsprovet passerade.
   - Hyttens sidodörrar fick karossfogar som följer skrovets välvning. Granskat i Godot. Landningsprovet passerade.
   - Navigationsljusen fick formpassade infattningar. Det röda glaset sitter på babord och det gröna på styrbord. Granskat i Godot. Landningsprovet passerade.
+  - Ambulanshelikoptern fick ett vitt bakre positionsljus i stjärtfenans topp. Granskat bakifrån i nattläge i Godot. Rotor- och landningsprovet passerade i Godot 4.7 dev5.
   - Landningslamporna under nosen fick fästplattor, lamphus, reflektorringar och separata linser. Granskat i Godot. Landningsprovet passerade. Två ljuskäglor tänds under finalen och tonas ut efter landning. Granskade i nattläge i Godot och verifierade i landningsprovet. Linser och ljuskäglor tonas nu tillsammans och tänds även inför start. Granskat i nattläge och verifierat i landningsprovet.
 - [ ] [`bargare.glb`](../vehicles/bargare.glb)
   - Vinschen fick bultade lagerbockar med axeländar och en vajerstyrning med två rullar. Granskat på flaket i Godot. Bärgningsprovet passerade.

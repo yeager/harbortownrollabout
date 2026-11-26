@@ -190,6 +190,10 @@ fin = cube("Swept yellow tail fin", (0, 5.48, 2.95), (.22, .72, 1.20), yellow, .
 fin.rotation_euler.x = -.30
 tip = cube("Teal tail cap", (0, 5.64, 3.53), (.235, .68, .095), teal, .03, root)
 tip.rotation_euler.x = -.04
+tail_white = material("Aft navigation white", (.92, .95, 1.0), .06, .26, 1.55)
+cube("Aft navigation lamp housing", (0, 5.962, 3.518), (.148, .104, .081), dark, .023, root)
+cube("Aft navigation lamp rim", (0, 6.014, 3.518), (.115, .023, .061), metal, .014, root)
+cube("Aft navigation lamp lens", (0, 6.029, 3.518), (.087, .014, .044), tail_white, .010, root)
 bpy.ops.mesh.primitive_torus_add(location=(0, 5.40, 2.11), rotation=(0, math.pi / 2, 0),
                                 major_radius=.63, minor_radius=.119, major_segments=48, minor_segments=14)
 duct = bpy.context.object
