@@ -134,6 +134,20 @@ for side in (-1, 1):
         for rib in range(-3, 4):
             cube("Skid step grip rib", (side * 1.087, step_y + rib * .052, .175),
                  (.164, .013, .009), dark, .003, root)
+    for outline in (
+        ((-1.78, 2.25), (-.73, 2.30), (-.70, 1.23), (-.78, 1.14), (-1.53, 1.14), (-1.78, 1.45), (-1.78, 2.25)),
+        ((-.64, 2.30), (.48, 2.28), (.54, 1.21), (.43, 1.12), (-.55, 1.12), (-.64, 1.23), (-.64, 2.30)),
+    ):
+        seam = []
+        for (y0, z0), (y1, z1) in zip(outline, outline[1:]):
+            for step in range(12):
+                t = step / 12
+                y, z = y0 + (y1 - y0) * t, z0 + (z1 - z0) * t
+                hit, contact, _, _ = cabin.ray_cast((side * 2, y, z), (-side, 0, 0))
+                if not hit:
+                    raise ValueError("Cabin door seam must meet the fuselage")
+                seam.append((contact.x + side * .003, y, z))
+        pipe("Cabin door seam", seam + [seam[0]], .006, dark, root)
     handle_y, handle_z = -.26, 1.65
     hit, contact, _, _ = cabin.ray_cast((side * 2, handle_y, handle_z), (-side, 0, 0))
     if not hit:
