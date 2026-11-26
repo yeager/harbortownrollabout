@@ -2606,6 +2606,23 @@ def make_bmw(color, name="BWM Y5 N70i", *, patrol=False):
         # The upper rub strip catches a continuous body-coloured highlight.
         face.material_index = int(face.center.z > .728)
     if root.name.startswith("BWM Y5 N70i"):
+        reflector_finish = material("Red rear reflector", (.42, .012, .018), .10, .30)
+        for side in (-1, 1):
+            for label, finish, inner, outer, half_height, outset in (
+                ("Rear reflector bezel", DARK, .742, .930, .024, .010),
+                ("Rear reflector lens", reflector_finish, .757, .916, .015, .016),
+            ):
+                rings = []
+                for step in range(7):
+                    x = side * (inner + (outer - inner) * step / 6)
+                    section = bumper_section(x)
+                    _, depth, centre = section[7]
+                    height = half_height * (.72 if step in (0, 6) else 1.0)
+                    rings.append([(x, depth + y, centre + z) for y, z in (
+                        (outset - .023, -height), (outset, -height),
+                        (outset, height), (outset - .023, height),
+                    )])
+                profile_loft(label, rings, finish, root)
         diffuser_finish = material("Textured rear diffuser", (.025, .030, .034), .14, .61)
         diffuser_profile = [(2.375, .483), (2.490, .487), (2.528, .514),
                             (2.531, .576), (2.508, .597), (2.470, .563)]

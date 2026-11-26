@@ -269,6 +269,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Den bakre registreringsskylten fick två armaturhus med separata ljusspridare. Granskat i närbild i Godot. Blinkersprovet passerade.
   - Skyltljusen och registreringsskylten ljusnar i nattläget. Granskat på spelbilen och verifierat vid växling mellan dag och natt för spel-, trafik- och uppdragsmodellerna.
   - Bakre stötfångaren fick en separat diffusor med fyra fenor mellan avgasutblåsen. Granskat från låg kameravinkel i Godot. Blinkersprovet passerade.
+  - Stötfångarens bakre hörn fick röda reflexer med separata infattningar som följer stötfångarens form. Granskat bakifrån i Godot. Blinkersprovet passerade.
 - [ ] [`brandbil.glb`](../vehicles/brandbil.glb)
   - Dragkrokens infästning fick fyra sexkantsbultar samt ett släpvagnsuttag med fäste och väderskydd. Granskat bakifrån i Godot. Förarplats- och luckproven passerade.
 - [ ] [`city_bus.glb`](../vehicles/city_bus.glb)
