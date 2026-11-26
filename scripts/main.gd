@@ -7326,7 +7326,7 @@ func _update_traffic(delta: float) -> void:
 		if ambulance.visible:
 			player_gap = _traffic_gap(item,ambulance.position,player_size)
 			clearance = minf(clearance, player_gap)
-			if player_driving and vehicle_index == A_TRACTOR and player_gap < 8.0 and speed < float(item.cruise) - .5:
+			if player_driving and police_stop_left <= 0.0 and vehicle_index == A_TRACTOR and player_gap < 8.0 and speed < float(item.cruise) - .5:
 				if not waiting_for_clear_crossing and street_signals.red_clearance(ambulance.position, -ambulance.basis.z, front_reach) > 1.5:
 					tractor_gap = minf(tractor_gap, player_gap)
 			if bus_merge_time > 0 and speed >= -.12 and driven_turn_signals.direction < 0 and actor.basis.z.dot(ambulance.basis.z) > .85 and ambulance.to_local(actor.position).z > player_half_size.y:
@@ -7341,7 +7341,7 @@ func _update_traffic(delta: float) -> void:
 			if person==walker:
 				clearance=minf(clearance,_traffic_gap(item,person.position+walking_velocity*.8,Vector2(.45,.45)))
 		var held_by_tractor := tractor_gap <= clearance and tractor_gap < 8.0
-		var held_at_green := waiting_after_green and not waiting_for_clear_crossing and player_gap <= clearance and player_gap < 8.0 and actor.basis.z.dot(ambulance.basis.z) > .8
+		var held_at_green := waiting_after_green and police_stop_left <= 0.0 and not waiting_for_clear_crossing and player_gap <= clearance and player_gap < 8.0 and actor.basis.z.dot(ambulance.basis.z) > .8
 		if (held_by_tractor or held_at_green) and not emergency and not item.tractor and not item.get("pedals"):
 			item.horn_wait += delta
 			if item.horn_wait >= 2.0:

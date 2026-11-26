@@ -103,6 +103,14 @@ func check_response() -> void:
 		quit(1)
 		return
 	game.waiting_for_clear_crossing = false
+	game.police_stop_left = 3.0
+	for tick in 24:
+		game._update_traffic(.1)
+	if follower.horn_wait > 0.0 or follower.horn.playing:
+		printerr("Following car honked during a police stop")
+		quit(1)
+		return
+	game.police_stop_left = 0.0
 	var honks := 0
 	for tick in 48:
 		var before: float = follower.horn_wait
