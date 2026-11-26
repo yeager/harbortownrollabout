@@ -149,8 +149,18 @@ for side in (-1, 1):
              .014, .018, metal, True, 16, root)
     cube("Door lock slot", (contact.x + side * .028, handle_y + .129, handle_z - .045),
          (.006, .012, .004), dark, .001, root)
-    cube("Navigation lamp", (side * 1.2, 1.0, 1.74), (.08, .09, .047),
-         red_lamp if side < 0 else green_lamp, .015, root)
+    lamp_y, lamp_z = 1.0, 1.74
+    hit, contact, _, _ = cabin.ray_cast((side * 2, lamp_y, lamp_z), (-side, 0, 0))
+    if not hit:
+        raise ValueError("Navigation lamp must meet the fuselage")
+    cube("Navigation lamp gasket", (contact.x + side * .006, lamp_y, lamp_z),
+         (.034, .139, .077), dark, .020, root)
+    cube("Navigation lamp bezel", (contact.x + side * .026, lamp_y, lamp_z),
+         (.035, .120, .063), metal, .017, root)
+    # The nose points toward -Y, so port is the positive X side.
+    cube("Port navigation lens" if side > 0 else "Starboard navigation lens",
+         (contact.x + side * .048, lamp_y, lamp_z), (.022, .092, .045),
+         red_lamp if side > 0 else green_lamp, .013, root)
     lamp = cylinder("Forward belly searchlight", (side * .44, -2.52, .65),
                     .111, .075, white_lamp, False, 20, root)
     lamp.rotation_euler.x = .63
