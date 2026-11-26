@@ -75,14 +75,21 @@ for side in (-1,1):
     box("Door pull escutcheon",(side*.876,.235,.855),(.034,.187,.052),RUBBER,.012)
     for axle_y in (-1.45,1.39):
         wheel_part("Center cap",side*.93,axle_y,.054,.024,METAL)
+rear_amber = material("Rear amber optic",(.92,.33,.032),.08,.28)
 for side in [-1,1]:
-
     box("Door handle",(side*.886,.25,.92),(.052,.15,.031),DARK)
     box("Bodyside moulding",(side*.889,-.10,.55),(.032,1.85,.055),RUBBER)
     box("Mirror",(side*.94,-.75,1.045),(.16,.14,.15),DARK)
     box("Cargo rail",(side*.79,1.55,.99),(.13,1.23,.14),PAINT_WHITE)
-    box("Rear lamp",(side*.78,2.182,.70),(.135,.047,.34),RED_LAMP)
-    box("Reversing lens",(side*.78,2.208,.70),(.131,.012,.087),PAINT_WHITE)
+    box("Tail light gasket",(side*.78,2.186,.70),(.156,.033,.348),RUBBER,.014)
+    box("Tail light housing",(side*.78,2.207,.70),(.144,.026,.336),DARK,.011)
+    for label,z,height,finish in (
+        ("Rear lamp brake lens",.802,.114,RED_LAMP),
+        ("Reversing lens",.706,.058,PAINT_WHITE),
+        ("Rear indicator lens",.638,.068,rear_amber),
+        ("Rear lamp lower lens",.566,.056,RED_LAMP),
+    ):
+        box(label,(side*.78,2.225,z),(.126,.020,height),finish,.008)
     box("Headlight",(side*.58,-2.323,.72),(.31,.054,.17),HEADLAMP)
 # Cut an actual recessed bed within the rear quarters.
 bpy.ops.mesh.primitive_cube_add(size=1, location=(0,1.515,1.127))
