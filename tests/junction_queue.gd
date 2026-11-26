@@ -70,6 +70,31 @@ func check() -> void:
 		fail("Ambient traffic stayed stopped when the exit opened")
 		return
 
+	game.traffic_data.clear()
+	game.traffic_data.append(queue)
+	queue.distance = start.distance_to(Vector3(18.5, 0.0, start.z))
+	game._place_traffic(queue)
+	game.vehicle_index = 0
+	game._load_vehicle_model()
+	game.ambulance.show()
+	game.ambulance.position = start
+	game.ambulance.rotation.y = -PI / 2
+	game.speed = 6.0
+	game.lights_on = true
+	game.street_signals.phase = 3
+	for tick in 100:
+		game._drive(.05)
+	if game.ambulance.position.x + game.front_reach > -line or absf(game.speed) > .05 or not game.waiting_for_clear_crossing:
+		fail("Responding player ambulance entered a blocked junction on red")
+		return
+	queue.distance = 66.0
+	game._place_traffic(queue)
+	for tick in 160:
+		game._drive(.05)
+	if game.ambulance.position.x <= line:
+		fail("Responding ambulance did not cross once the red-light junction cleared")
+		return
+
 	# This eastbound route turns onto the southbound leg, where the queue sits.
 	var corner := Curve3D.new()
 	corner.add_point(Vector3(-23, 0, 2.35))
@@ -84,5 +109,5 @@ func check() -> void:
 	if not is_inf(lights.junction_queue_gap(corner.get_point_position(0), right, 2.0, 4.0, .9, exit_obstacles)):
 		fail("A side street queue also blocked the unobstructed straight lane")
 		return
-	print("Player, ambient traffic and turning route kept the junction clear until their exits opened.")
+	print("Player, ambient traffic, responding ambulance and turning route kept the junction clear until their exits opened.")
 	quit()
