@@ -1842,6 +1842,15 @@ def make_bwm(color, name="BWM Y5 N70i", *, patrol=False):
                           ((-.009,0),(0,-width),(.006,0),(0,width))])
         profile_loft("Windscreen wiper blade",rings,RUBBER,root)
         arm=[]
+        pivot = windshield_point(start + (end - start) * .29, 1.573)
+        if root.name.startswith("BWM Y5 N70i"):
+            for label, radius, thickness, outset, finish in (
+                ("Windscreen wiper spindle seal", .028, .024, .009, RUBBER),
+                ("Windscreen wiper spindle cap", .020, .014, .027, DARK),
+            ):
+                fitting = cylinder(label, (pivot.x, pivot.y - outset, pivot.z),
+                                   radius, thickness, finish, axis_x=False, vertices=24, root=root)
+                fitting.rotation_euler.x = math.pi / 2
         for t in (0,.35,.70,1):
             point=windshield_point(start+(end-start)*(.29+.28*t),1.573+(.048+rise*.57)*t)
             arm.append([(point.x,point.y-.020+dy,point.z+dz) for dy,dz in
