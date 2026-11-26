@@ -28,7 +28,6 @@ def tube(name,a,b,radius,material):
     rod=v.cylinder(name,(Vector(a)+Vector(b))/2,radius,axis.length,material,False,16,root)
     rod.rotation_euler=axis.to_track_quat('Z','Y').to_euler()
     return rod
-    return rod
 
 def nose_lamp(name,y,z,radius,depth,material):
     lamp=v.cylinder(name,(0,y,z),radius,depth,material,False,48,root)
