@@ -75,7 +75,7 @@ for side in (-1,1):
     box("Door pull escutcheon",(side*.876,.235,.855),(.034,.187,.052),RUBBER,.012)
     for axle_y in (-1.45,1.39):
         wheel_part("Center cap",side*.93,axle_y,.054,.024,METAL)
-rear_amber = material("Rear amber optic",(.92,.33,.032),.08,.28)
+amber = material("A-tractor amber optic",(.92,.33,.032),.08,.28)
 for side in [-1,1]:
     box("Door handle",(side*.886,.25,.92),(.052,.15,.031),DARK)
     box("Bodyside moulding",(side*.889,-.10,.55),(.032,1.85,.055),RUBBER)
@@ -86,7 +86,7 @@ for side in [-1,1]:
     for label,z,height,finish in (
         ("Rear lamp brake lens",.802,.114,RED_LAMP),
         ("Reversing lens",.706,.058,PAINT_WHITE),
-        ("Rear indicator lens",.638,.068,rear_amber),
+        ("Rear indicator lens",.638,.068,amber),
         ("Rear lamp lower lens",.566,.056,RED_LAMP),
     ):
         box(label,(side*.78,2.225,z),(.126,.020,height),finish,.008)
@@ -106,7 +106,9 @@ box("Load bed liner",(0,1.515,.724),(1.43,1.12,.030),DARK)
 for side in (-1,1):
     box("Inner bed liner",(side*.712,1.515,.845),(.022,1.12,.214),DARK,.009)
     box("Wheel housing in bed",(side*.686,1.39,.770),(.14,.55,.093),RUBBER,.040)
-    box("Front amber sidelight",(side*.767,-2.32,.71),(.08,.047,.154),material("Amber indicator",(.92,.33,.032)),.014)
+    box("Front indicator gasket",(side*.767,-2.327,.71),(.111,.035,.167),RUBBER,.012)
+    box("Front indicator housing",(side*.767,-2.347,.71),(.098,.023,.151),DARK,.010)
+    box("Front amber indicator",(side*.767,-2.364,.71),(.085,.020,.137),amber,.010)
     box("Bumper bright strip",(side*.54,-2.374,.465),(.63,.017,.024),METAL,.004)
     box("Tailgate hinge",(side*.47,2.195,.631),(.112,.027,.040),METAL,.006)
 box("Tailgate recessed pull",(0,2.197,.874),(.178,.021,.046),DARK,.010)
