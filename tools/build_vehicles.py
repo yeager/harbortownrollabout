@@ -2605,6 +2605,22 @@ def make_bmw(color, name="BWM Y5 N70i", *, patrol=False):
     for face in bumper.data.polygons:
         # The upper rub strip catches a continuous body-coloured highlight.
         face.material_index = int(face.center.z > .728)
+    if root.name.startswith("BWM Y5 N70i"):
+        diffuser_finish = material("Textured rear diffuser", (.025, .030, .034), .14, .61)
+        diffuser_profile = [(2.375, .483), (2.490, .487), (2.528, .514),
+                            (2.531, .576), (2.508, .597), (2.470, .563)]
+        rings = []
+        for x in (-.51, -.47, -.32, 0, .32, .47, .51):
+            wrap = .039 * (abs(x) / 1.045) ** 2
+            rings.append([(x, y - wrap, z + .020 * (abs(x) / .51) ** 4)
+                          for y, z in diffuser_profile])
+        profile_loft("Rear diffuser insert", rings, diffuser_finish, root)
+        for x in (-.34, -.17, .17, .34):
+            blade = [(2.397, .475), (2.518, .450), (2.543, .476),
+                     (2.543, .548), (2.492, .560)]
+            profile_loft("Rear diffuser strake",
+                         [[(x + edge, y, z) for y, z in blade] for edge in (-.013, .013)],
+                         diffuser_finish, root)
     # A swept lower edge follows the bumper corners back to the wings.
     vertices, faces = [], []
     for i in range(33):
