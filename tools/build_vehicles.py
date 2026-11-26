@@ -751,26 +751,27 @@ def make_ambulance():
         x=(index-5.5)*.071
         box("LED-rampens reflektor",(x,-3.282,.895),(.058,.013,.048),METAL,.008)
         box("LED-rampens glas",(x,-3.291,.895),(.039,.009,.030),GLASS_HI,.005)
-    for side in (-1,1):
-        vertices, faces = [], []
-        for row in range(4):
-            for col in range(13):
-                x=side*(.30+col*.048)
-                y=-3.058+row*.051+max(0,abs(x)-.75)*.34
-                hit,point,normal,_=nose.ray_cast((x,y,2),(0,0,-1))
-                if not hit:
-                    raise ValueError("Hood marking outside ambulance body")
-                vertices.append(point+normal*.003)
-                if row and col:
-                    i=len(vertices)-1
-                    face=(i-14,i-13,i,i-1)
-                    faces.append(face if side>0 else face[::-1])
-        mesh=bpy.data.meshes.new("Orange huvreflex")
-        mesh.from_pydata(vertices,[],faces)
-        mesh.materials.append(orange)
-        decal=bpy.data.objects.new("Orange huvreflex",mesh)
-        bpy.context.collection.objects.link(decal)
-        decal.parent=root
+    vertices, faces = [], []
+    columns = 89
+    for row in range(11):
+        for col in range(columns):
+            x = (col-44)*.020
+            edge = max(0,abs(x)-.75)*.34
+            shoulder = min(1.0,max(0.0,(abs(x)-.36)/.11))
+            y = -3.086+edge+row/10*(.132+.184*shoulder)
+            hit,point,_,_ = nose.ray_cast((x,y,2),(0,0,-1))
+            if not hit:
+                raise ValueError("Hood marking outside ambulance body")
+            vertices.append(point+Vector((0,0,.003)))
+            if row and col:
+                i = len(vertices)-1
+                faces.append((i-columns-1,i-columns,i,i-1))
+    mesh = bpy.data.meshes.new("Sammanhängande huvreflex")
+    mesh.from_pydata(vertices,[],faces)
+    mesh.materials.append(orange)
+    decal = bpy.data.objects.new("Sammanhängande huvreflex",mesh)
+    bpy.context.collection.objects.link(decal)
+    decal.parent = root
     # The raised intake blends back into the hood, with a forward-facing grille.
     scoop_sections = []
     for y,width,bottom,top in ((-2.877,.66,1.389,1.486),
