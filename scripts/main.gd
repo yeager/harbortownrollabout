@@ -7774,9 +7774,19 @@ func _build_birthday_delivery() -> void:
 	_animate_steps(birthday_host,0,0)
 	var top := Vector3(33,.84,17.4)
 	_make_roadside_solid("Birthday table",Vector3(1.4,.08,.75),top,Color("#a1cdb7"),false)
+	var wood := Color("#885936")
+	for side in [-1, 1]:
+		_make_box("Birthday table long apron", Vector3(1.16, .105, .042),
+			top + Vector3(0, -.084, side * .26), wood, false)
+		_make_box("Birthday table end apron", Vector3(.042, .105, .47),
+			top + Vector3(side * .55, -.084, 0), wood, false)
 	for x in [-.55,.55]:
 		for z in [-.26,.26]:
-			_make_box("Table leg",Vector3(.06,.8,.06),top+Vector3(x,-.44,z),Color("#885936"),false)
+			_make_box("Table leg",Vector3(.06,.8,.06),top+Vector3(x,-.44,z),wood,false)
+	for seam in [-.1875, 0.0, .1875]:
+		var joint := _make_box("Painted tabletop plank joint", Vector3(1.39, .002, .004),
+			top + Vector3(0, .041, seam), Color("#779f8c"), false)
+		joint.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	add_child(cake_box)
 	var card := Color("#e8b7be")
 	_make_box("Cake board",Vector3(.47,.018,.47),Vector3.ZERO,card,false,cake_box)

@@ -456,6 +456,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Cykelbudets paket fick kartongskarv, packtejp och adressetikett. Efter leverans vilar det på en pakethållare ovanför hjulet. Hämtning, bärande och överlämning provades i Godot och pakethållaren granskades i närbild.
   - Tårtkartongens lock fick vikta kanter och en öppningsflik som följer locket. Hämtning, överlämning och öppning provades i Godot. Kartongen granskades öppen på födelsedagsbordet.
   - Födelsedagstårtan fick en spritsad kant. Granskad med öppet lock efter hämtning och överlämning i Godot.
+  - Födelsedagsbordet fick träsarg mellan benen och fogar i den målade bordsskivan. Granskat med tårtan levererad och locket öppet i Godot.
   - Paraplyet fick hela spröt, stag, glidhylsa och metallspetsar. Hämtning, återlämning och uppfällning vid regn provades i Godot. Det öppna paraplyet granskades underifrån.
   - Den uppfällda paraplyduken fick rundade paneler, välvd kant och mjukare skuggning. Hämtning, återlämning och uppfällning provades på nytt i Godot.
   - Paraplyet fick ett böjt grepp med rundad ände. Granskat i ägarens hand efter återlämning. Stadsgränsprovet passerade efter att bågprofilen gjordes gemensam med broräckena.
