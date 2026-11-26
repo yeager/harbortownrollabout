@@ -737,6 +737,18 @@ def make_ambulance():
         decal=bpy.data.objects.new("Orange huvreflex",mesh)
         bpy.context.collection.objects.link(decal)
         decal.parent=root
+    # The raised intake blends back into the hood, with a forward-facing grille.
+    scoop_sections = []
+    for y,width,bottom,top in ((-2.877,.66,1.389,1.486),
+                               (-2.81,.69,1.389,1.503),
+                               (-2.56,.68,1.405,1.482),
+                               (-2.34,.60,1.414,1.427)):
+        scoop_sections.append(rear_outline(0,y,(bottom+top)/2,width,top-bottom,.006))
+    profile_loft("Motorhuvens luftintag",scoop_sections,yellow,root)
+    box("Luftintagets infattning",(0,-2.881,1.450),(.615,.021,.048),METAL,.010)
+    box("Luftintagets mörka öppning",(0,-2.894,1.450),(.583,.009,.033),BLACK,.006)
+    for vane in range(-4,5):
+        box("Luftintagets lamell",(vane*.059,-2.900,1.450),(.007,.009,.030),DARK,.002)
     box("Nedre luftintag",(0,-3.277,.692),(.72,.021,.060),RUBBER,.018)
     box("Främre skylthållare",(0,-3.281,.769),(.47,.028,.102),seal,.010)
     box("Registreringsskylt fram",(0,-3.301,.769),(.453,.013,.090),PAINT_WHITE,.006)
