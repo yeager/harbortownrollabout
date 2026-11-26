@@ -138,7 +138,30 @@ def build():
         left.append((-width*.68,y,cabin_floor))
         return left+[(0,y,cabin_floor)]+[(-x,y,z) for x,y,z in reversed(left)]
 
-    mesh_from_rings("Sculpted body and open wheel arches", [sample(y) for y in sorted(cuts)], red, root, bevel=.012, section=lower_section)
+    body = mesh_from_rings("Sculpted body and open wheel arches", [sample(y) for y in sorted(cuts)], red, root, bevel=.012, section=lower_section)
+    body_surface = body.evaluated_get(bpy.context.evaluated_depsgraph_get())
+
+    def door_seam(name, side, top, bottom):
+        vertices = []
+        for step in range(41):
+            y, z = Vector(top).lerp(Vector(bottom), step / 40)
+            for offset in [-.0018, .0018]:
+                hit, point, normal, _ = body_surface.ray_cast(
+                    (side * 1.2, y + offset, z), (-side, 0, 0))
+                if not hit:
+                    raise ValueError(f"{name} lost the body surface at {y:.3f}, {z:.3f}")
+                vertices.append(point + normal * .0007)
+        faces = [(i, i + 1, i + 3, i + 2) for i in range(0, len(vertices) - 2, 2)]
+        if side == 1:
+            faces = [face[::-1] for face in faces]
+        mesh = bpy.data.meshes.new(name)
+        mesh.from_pydata(vertices, [], faces)
+        mesh.update()
+        mesh.materials.append(recess)
+        node = bpy.data.objects.new(name, mesh)
+        bpy.context.collection.objects.link(node)
+        attach(node, root)
+
     box("Recessed underbody", (0,0,.187), (1.22,3.75,.13), recess, .035)
     bottom_front = (.759,-.65,.886)
     top_front = (.632,-.155,1.311)
@@ -191,8 +214,8 @@ def build():
         bar("Roof drip rail",b,c,.019,.022,trim)
         bar("Beltline weatherstrip",a,quarter_tail,.015,.021,trim)
         bar("B pillar",divider_top,divider_bottom,.022,.023,trim)
-        bar("Door front shut line", on_side((.818,-.656,.801)),on_side((.838,-.525,.256)),.009,.009,recess)
-        bar("Door rear shut line", on_side((.833,.361,.810)),on_side((.835,.414,.252)),.009,.009,recess)
+        door_seam("Door front shut line", side, (-.656,.796), (-.525,.253))
+        door_seam("Door rear shut line", side, (.361,.810), (.414,.253))
         box("Door handle gasket", (side*.840,.246,.749), (.026,.146,.042), rubber,.009)
         box("Door handle inset", (side*.852,.238,.750), (.008,.121,.030), recess,.006)
         box("Door handle pull", (side*.858,.226,.754), (.015,.091,.019), trim,.005)
