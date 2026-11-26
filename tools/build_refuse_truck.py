@@ -46,8 +46,14 @@ for side in (-1,1):
                     (-3.58,1.072),(-3.71,1.215),(-3.71,2.77)]
     for start, end in zip(door_outline,door_outline[1:]):
         ram("Cab door shut line",(side*1.171,*start),(side*1.171,*end),.006,v.DARK)
-    box("Mirror arm",(side*1.27,-3.49,2.66),(.32,.075,.073),v.DARK)
-    box("Twin mirror",(side*1.43,-3.48,2.51),(.16,.19,.43),v.BLACK)
+    box("Mirror mounting foot",(side*1.17,-3.49,2.66),(.075,.145,.116),v.RUBBER,.016)
+    ram("Mirror arm",(side*1.18,-3.49,2.66),(side*1.43,-3.53,2.62),.034,v.DARK)
+    ram("Mirror carrier",(side*1.43,-3.53,2.66),(side*1.43,-3.53,2.31),.022,v.DARK)
+    for label, height, depth, size in (
+            ("Main",2.60,-3.50,.258),("Wide angle",2.382,-3.483,.136)):
+        box(label+" mirror shell",(side*1.43,depth,height),(.175,.114,size),v.BLACK,.025)
+        box(label+" mirror glass",(side*1.43,depth+.057,height),
+            (.144,.014,size-.032),v.METAL,.014)
     for height, step_x, width in ((.64,1.04,.38),(.91,1.10,.29)):
         box("Cab step",(side*step_x,-2.17,height),(width,.40,.087),v.METAL,.016)
         for stripe in (-.135,-.045,.045,.135):
