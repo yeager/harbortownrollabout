@@ -39,7 +39,7 @@ def panel_section(y, width, bottom, shoulder, crown):
         (-.93,0),(-1,.14),(-1,.77),(-.94,.92),(-.72,.99),(0,1),
         (.72,.99),(.94,.92),(1,.77),(1,.14),(.93,0)]]
 
-v.mesh_from_rings("Pressed chassis",[(-1.15,.37,.19,.46,.52),(-.94,.47,.17,.53,.59),
+chassis = v.mesh_from_rings("Pressed chassis",[(-1.15,.37,.19,.46,.52),(-.94,.47,.17,.53,.59),
     (-.66,.46,.20,.50,.57)],red,root,.018,panel_section)
 v.mesh_from_rings("Seat pedestal and rear deck",[(.005,.42,.21,.50,.55),(.42,.425,.22,.52,.56),(.78,.385,.23,.51,.54),
     (1.02,.345,.24,.50,.525),(1.16,.315,.25,.48,.51)],red,root,.018,panel_section)
@@ -244,14 +244,33 @@ for label,start,end in (
     bpy.context.view_layer.update()
     v.attach(rubber,carrier)
 # The bonnet, windscreen and roof lift as one shell about the nose.
+hinge_center = Vector((0,-1.13,.44))
+hinge_pocket = box("Hinge pocket cutter",(0,-1.10,.521),(.246,.163,.204),v.BLACK,.013)
+hinge_pocket.rotation_euler.z = math.atan2(.57,.82)
+bpy.context.view_layer.objects.active = chassis
+hinge_cut = chassis.modifiers.new("Recess for canopy hinge", "BOOLEAN")
+hinge_cut.operation = "DIFFERENCE"
+hinge_cut.object = hinge_pocket
+bpy.ops.object.modifier_apply(modifier=hinge_cut.name)
+bpy.data.objects.remove(hinge_pocket,do_unlink=True)
+hinge_axis = Vector((.82,.57,0)).normalized()
+tube("Canopy hinge sleeve",hinge_center-.065*hinge_axis,
+     hinge_center+.065*hinge_axis,.023,v.METAL)
+box("Canopy hinge upper leaf",(0,-1.13,.458),(.137,.064,.024),v.DARK,.006)
 moving_parts = set(root.children) - fixed_parts
 hinge = bpy.data.objects.new("EntryHinge",None)
 bpy.context.collection.objects.link(hinge)
 hinge.parent = root
-hinge.location = (0,-1.13,.44)
+hinge.location = hinge_center
 for part in moving_parts:
     part.parent = hinge
     part.location -= hinge.location
+tube("Canopy fixed hinge pin",hinge_center-.106*hinge_axis,
+     hinge_center+.106*hinge_axis,.011,v.METAL)
+for side in (-1,1):
+    bearing = hinge_center+side*.084*hinge_axis
+    tube("Canopy pivot bearing",bearing-.015*hinge_axis,bearing+.015*hinge_axis,.026,v.DARK)
+    box("Canopy hinge chassis foot",bearing-Vector((0,0,.027)),(.059,.053,.028),v.DARK,.006)
 box("Seat cushion",(0,.18,.595),(.61,.42,.093),vinyl,.044)
 # Upholstery sections run from the padded face to the shallow rear shell.
 outline = []
