@@ -5909,8 +5909,13 @@ func _build_depot() -> void:
 		var plastic := Color("#20548a") if i == 0 else Color("#245d48")
 		var lid_color := Color("#509be3") if i == 0 else Color("#74ab54")
 		_make_box("Bin base", Vector3(.67,.064,.58), Vector3.UP*.122, plastic, false, bin)
+		for rib_x in [-.21, -.07, .07, .21]:
+			_make_box("Bin floor reinforcing rib", Vector3(.028, .021, .49),
+				Vector3(rib_x, .159, 0), plastic.lightened(.06), false, bin)
 		for side in [-1,1]:
 			_make_box("Bin side wall", Vector3(.033,.784,.58), Vector3(side*.3185,.538,0), plastic, false, bin)
+			_make_box("Bin interior wheel housing", Vector3(.055, .069, .177),
+				Vector3(side * .278, .183, .190), plastic, false, bin)
 			_make_box("Bin end wall", Vector3(.604,.784,.032), Vector3(0,.538,side*.274), plastic, false, bin)
 			_make_box("Bin rim side", Vector3(.043,.043,.604), Vector3(side*.321,.919,0), plastic.lightened(.12), false, bin)
 			_make_box("Bin rim end", Vector3(.60,.043,.042), Vector3(0,.919,side*.281), plastic.lightened(.12), false, bin)
@@ -5932,6 +5937,9 @@ func _build_depot() -> void:
 		for rib_x in [-.23, -.115, 0.0, .115, .23]:
 			_make_box("Molded lid rib", Vector3(.022, .014, .37),
 				Vector3(rib_x, .047, -.298), lid_color.lightened(.07), false, lid)
+		for rib_z in [-.45, -.16]:
+			_make_box("Lid underside cross brace", Vector3(.60, .022, .026),
+				Vector3(0, -.019, rib_z), lid_color.darkened(.11), false, lid)
 		for side in [-1,1]:
 			_make_box("Lid hinge knuckle", Vector3(.082,.038,.058), Vector3(side*.224,0,0), lid_color, false, lid)
 		_add_recycling_labels(bin,i == 0)
