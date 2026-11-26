@@ -7876,26 +7876,35 @@ func _build_lost_umbrella() -> void:
 	var hardware := _material(Color("#858c91"), .34)
 	_tube_between(canopy, Vector3.DOWN * .26, Vector3.DOWN * .20, .027, hardware)
 	_tube_between(canopy, Vector3.DOWN * .014, Vector3.UP * .049, .020, hardware)
+	var cloth := SurfaceTool.new()
+	cloth.begin(Mesh.PRIMITIVE_TRIANGLES)
+	cloth.set_material(fabric)
 	for i in 8:
 		var a := Vector3.RIGHT.rotated(Vector3.UP,i*TAU/8)
 		var b := Vector3.RIGHT.rotated(Vector3.UP,(i+1)*TAU/8)
-		var mesh := SurfaceTool.new()
-		mesh.begin(Mesh.PRIMITIVE_TRIANGLES)
-		mesh.set_material(fabric)
-		for vertex: Vector3 in [Vector3.ZERO,a*.45+Vector3.DOWN*.10,b*.45+Vector3.DOWN*.10,
-				a*.45+Vector3.DOWN*.10,a*.64+Vector3.DOWN*.28,b*.64+Vector3.DOWN*.28,
-				a*.45+Vector3.DOWN*.10,b*.64+Vector3.DOWN*.28,b*.45+Vector3.DOWN*.10]:
-			mesh.add_vertex(vertex)
-		mesh.generate_normals()
-		var panel := MeshInstance3D.new()
-		panel.mesh = mesh.commit()
-		canopy.add_child(panel)
+		for strip in 6:
+			var start := strip / 6.0
+			var end := (strip + 1) / 6.0
+			var near_edge := a.lerp(b, start)
+			var far_edge := a.lerp(b, end)
+			var inner_start := near_edge * .45 + Vector3.UP * (-.10 + .023 * sin(PI * start))
+			var inner_end := far_edge * .45 + Vector3.UP * (-.10 + .023 * sin(PI * end))
+			var hem_start := near_edge * .64 + Vector3.UP * (-.28 + .026 * sin(PI * start))
+			var hem_end := far_edge * .64 + Vector3.UP * (-.28 + .026 * sin(PI * end))
+			for vertex in [Vector3.ZERO, inner_start, inner_end, inner_start, hem_start, hem_end, inner_start, hem_end, inner_end]:
+				cloth.add_vertex(vertex)
 		var elbow := a * .45 + Vector3.DOWN * .11
 		var tip := a * .64 + Vector3.DOWN * .28
 		_tube_between(canopy, Vector3.DOWN * .012, elbow, .007, rib_finish)
 		_tube_between(canopy, elbow, tip, .008, rib_finish)
 		_tube_between(canopy, Vector3.DOWN * .23, a * .31 + Vector3.DOWN * .079, .006, hardware)
 		_tube_between(canopy, tip - a * .023, tip + a * .016, .011, hardware)
+	cloth.index()
+	cloth.generate_normals()
+	var panels := MeshInstance3D.new()
+	panels.name = "Umbrella fabric panels"
+	panels.mesh = cloth.commit()
+	canopy.add_child(panels)
 
 func _place_umbrella() -> void:
 	if not umbrella.is_inside_tree(): return
