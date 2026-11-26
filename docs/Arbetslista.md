@@ -338,6 +338,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Takytan fick ett finkornigt tätskikt med synliga överlappsskarvar. Granskat ovanifrån i Godot. Övningsbaneprovet passerade.
   - Takets kantplåtar fick skarvbeslag på långsidor och gavlar. Granskat ovanifrån i Godot. Övningsbaneprovet passerade.
   - Bakre hängrännan fick öppen profil, ändplåtar och bärbeslag. Granskat vid takfoten i Godot. Övningsbaneprovet passerade.
+  - Stuprören anslöts under hängrännan med runda utloppskragar. Granskat underifrån i Godot. Övningsbaneprovet passerade.
   - Trafikskolans entrétak fick två väggkonsoler, ståndfalsar och en vikt framkant. Granskat i Godot. Övningsbaneprovet passerade.
   - Entréarmaturen fick metallhus, gavlar och en ram runt ljusspridaren. Granskat tänd i Godot. Övningsbaneprovet verifierade dag- och nattväxlingen.
   - Den lokaliserade fasadskylten flyttades till entrétakets framkant och fick kantprofiler och fästen. Hela texten granskades från marken i Godot. Övningsbaneprovet passerade.

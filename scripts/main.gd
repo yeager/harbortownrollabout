@@ -11785,6 +11785,7 @@ func _build_driving_school() -> void:
 	for seam in range(-3, 4):
 		_make_box("Roof membrane lap seam", Vector3(12.10, .006, .027),
 			Vector3(0, 3.509, seam * .84), Color("#34383a"), false, school)
+	var gutter_z := -3.274
 	for edge in [-1, 1]:
 		_make_box("Roof coping longitudinal cap", Vector3(12.46, .046, .16),
 			Vector3(0, 3.512, edge * 3.14), Color.WHITE, false, school).material_override = roof_metal
@@ -11799,8 +11800,11 @@ func _build_driving_school() -> void:
 			_make_box("End roof coping joint cover", Vector3(.166, .009, .041),
 				Vector3(edge * 6.15, 3.538, joint_z), Color.WHITE, false, school).material_override = roof_metal
 		var drain_x: float = edge * 5.58
-		_tube_between(school, Vector3(drain_x, 3.30, -3.23),
-			Vector3(drain_x, 3.06, -3.09), .052, roof_metal)
+		var outlet := Vector3(drain_x, 3.226, gutter_z)
+		_add_moored_round_fitting(school, "Gutter outlet collar",
+			outlet, outlet - Vector3.UP * .054, .063, roof_metal)
+		_tube_between(school, outlet - Vector3.UP * .041,
+			Vector3(drain_x, 3.06, -3.09), .047, roof_metal)
 		_tube_between(school, Vector3(drain_x, 3.06, -3.09),
 			Vector3(drain_x, .25, -3.09), .046, roof_metal)
 		for strap_y in [.61, 1.64, 2.68]:
@@ -11814,7 +11818,6 @@ func _build_driving_school() -> void:
 		for rim_side in [-1, 1]:
 			_make_box("Splash block channel edge", Vector3(.039, .025, .55),
 				Vector3(rim_side * .118, .030, 0), Color("#969488"), false, splash)
-	var gutter_z := -3.274
 	_make_box("Rear roof gutter bottom", Vector3(12.24, .018, .162),
 		Vector3(0, 3.235, gutter_z), Color.WHITE, false, school).material_override = roof_metal
 	for lip_side in [-1, 1]:
