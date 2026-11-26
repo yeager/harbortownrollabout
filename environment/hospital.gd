@@ -122,6 +122,7 @@ func _build_intake(world: Node3D) -> void:
 	var apron_depth := -52.8 - ORIGIN.z
 	world._make_driving_surface("Ambulance bay and apron", Vector3(APRON_WIDTH, .12, apron_depth),
 		Vector3(0, -.08, apron_depth * .5), Color("#777c79"), true, self)
+	var diffuser_finish: StandardMaterial3D = world._material(Color("#f4e5bd"), .38, true)
 	for side in [-1.0, 1.0]:
 		world._make_roadside_solid("Ambulance bay side wall", Vector3(.43, 4.15, 6.90),
 			Vector3(side * 4.24, 2.075, 3.45), BRICK, true, self)
@@ -134,8 +135,11 @@ func _build_intake(world: Node3D) -> void:
 		world._make_box("Ambulance bay lane line", Vector3(.105, .008, line_end - line_start),
 			Vector3(side * 2.31, -.013, (line_start + line_end) * .5), Color("#e8bc43"), false, self)
 		for z in [2.05, 5.55]:
-			world._make_box("Intake luminaire", Vector3(1.20, .08, .20),
-				Vector3(side * 2.1, 3.96, z), Color("#f4e5bd"), false, self)
+			world._make_box("Intake luminaire housing", Vector3(1.26, .08, .23),
+				Vector3(side * 2.1, 4.065, z), METAL, false, self)
+			var diffuser: MeshInstance3D = world._make_box("Intake luminaire diffuser", Vector3(1.16, .025, .15),
+				Vector3(side * 2.1, 4.017, z), Color("#f4e5bd"), false, self)
+			diffuser.material_override = diffuser_finish
 	var roof: MeshInstance3D = world._make_box("Ambulance intake roof", Vector3(9.12, .49, 7.06),
 		Vector3(0, 4.34, 3.51), METAL, true, self)
 	var roof_finish: ShaderMaterial = world._noise_material(METAL.darkened(.15), METAL.lightened(.08), 3.0, .18)
