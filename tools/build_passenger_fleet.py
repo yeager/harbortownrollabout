@@ -51,7 +51,7 @@ def build(key, length, width, axles, color, belt, cabin):
         bpy.ops.object.modifier_apply(modifier=mod.name)
         bpy.data.objects.remove(cutter,do_unlink=True)
         for side in [-1,1]:
-            for name,x,r,d,mat in [("Däck",width-.12,wheel,.21,RUBBER),("Alloy wheel",width-.012,wheel*.74,.04,METAL),("Wheel hub",width+.012,wheel*.43,.036,DARK)]:
+            for name,x,r,d,mat in [("Däck",width-.12,wheel,.21,RUBBER),("Alloy wheel",width-.012,wheel*.74,.04,DARK if key=="saab96" else METAL),("Wheel hub",width+.012,wheel*.43,.036,DARK)]:
                 cylinder(name,(side*x,y,wheel),r,d,mat,True,48,root)
             if key=="m3_e30":
                 cylinder("Anthracite wheel barrel",(side*(width+.019),y,wheel),.208,.029,DARK,True,48,root)
@@ -79,6 +79,34 @@ def build(key, length, width, axles, color, belt, cabin):
                 for i in range(5):
                     angle=math.tau*i/5
                     cylinder("Wheel bolt",(side*(width+.07),y+.046*math.sin(angle),wheel+.046*math.cos(angle)),.011,.012,DARK,True,6,root)
+                continue
+            if key == "saab96":
+                wheel_x = side*(width+.038)
+                dish = cylinder("Pressed steel wheel", (wheel_x,y,wheel), .211,
+                                .022,METAL,True,64,root)
+                for slot in range(8):
+                    angle = math.tau*slot/8
+                    bpy.ops.mesh.primitive_cylinder_add(vertices=20,radius=.020,depth=.055,
+                        location=(wheel_x,y+.166*math.cos(angle),wheel+.166*math.sin(angle)),
+                        rotation=(0,math.pi/2,0))
+                    punch = bpy.context.object
+                    opening = dish.modifiers.new("Ventilation opening","BOOLEAN")
+                    opening.object = punch
+                    opening.operation = "DIFFERENCE"
+                    bpy.context.view_layer.objects.active = dish
+                    bpy.ops.object.modifier_apply(modifier=opening.name)
+                    bpy.data.objects.remove(punch,do_unlink=True)
+                bpy.ops.mesh.primitive_torus_add(major_segments=48,minor_segments=12,
+                    location=(side*(width+.021),y,wheel),rotation=(0,math.pi/2,0),
+                    major_radius=.222,minor_radius=.011)
+                lip = bpy.context.object
+                lip.name = "Alloy wheel rolled edge"
+                lip.data.materials.append(METAL)
+                for face in lip.data.polygons:
+                    face.use_smooth = True
+                lip.parent = root
+                cylinder("Wheel hub cap",(side*(width+.063),y,wheel),.079,.044,
+                         METAL,True,48,root)
                 continue
             count=8
             for i in range(count):

@@ -267,6 +267,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Dörrarna fick smala skarvar som följer karossytan samt separata handtag med gummifästen och låscylindrar. Granskat i sidovy i Godot. Fordonsprovet passerade.
   - Vindrutan fick tätningar längs över- och nederkanten och två torkare i viloläge med separata axlar, armar och blad. Granskat i närbild i Godot. Fordonsprovet passerade.
   - Saav 97 fick en ljuddämpare med fästband och ett ihåligt avgasrör med rundad mynning. Granskat bakifrån i Godot. Fordonsprovet passerade.
+  - Saav 97 fick pressade stålfälgar med åtta ventilationshål per hjul, rundade fälgkanter och separata navkåpor. Granskat i närbild i Godot. Alla fyra fälgar sitter i hjulriggen och fordonsprovet passerade.
 - [ ] [`shopping_trike.glb`](../vehicles/shopping_trike.glb)
 - [ ] [`snowmobile.glb`](../vehicles/snowmobile.glb)
 - [ ] [`sport_quattro.glb`](../vehicles/sport_quattro.glb)
