@@ -224,6 +224,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Motorhuven fick ett sammanhängande orange reflexfält som följer plåten runt luftintaget. Granskat i Godot. Fordonsprovet passerade.
 - [ ] [`ambulance_helicopter.glb`](../vehicles/ambulance_helicopter.glb)
   - Landningsmedarna fick klämfästen, bultar och räfflade insteg. Granskat på sjukhustaket i Godot och verifierat med landningsprovet.
+  - Dörrhandtagen fick formpassade packningar, separata fästen, grepp och lås. Granskat i närbild i Godot. Landningsprovet passerade.
 - [ ] [`bargare.glb`](../vehicles/bargare.glb)
   - Vinschen fick bultade lagerbockar med axeländar och en vajerstyrning med två rullar. Granskat på flaket i Godot. Bärgningsprovet passerade.
   - Flakets 16 surrningsöglor fick genomgående öppning, stöd och bultade fotplattor. Infästningen granskades i Godot och bärgningsprovet passerade.

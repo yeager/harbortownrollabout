@@ -46,6 +46,7 @@ def shell(name, stations, finishes, paint, parent):
     node = bpy.data.objects.new(name, mesh)
     bpy.context.collection.objects.link(node)
     node.parent = parent
+    return node
 
 
 def pipe(name, points, radius, finish, parent):
@@ -102,7 +103,7 @@ def cabin_paint(row, index, height):
     return 0
 
 
-shell("Glazed ambulance fuselage", fuselage, [yellow, teal, glass, dark], cabin_paint, root)
+cabin = shell("Glazed ambulance fuselage", fuselage, [yellow, teal, glass, dark], cabin_paint, root)
 shell("Tail boom", [(1.92, .52, 1.78, .40), (2.62, .38, 1.88, .30),
                     (4.05, .24, 2.02, .20), (5.16, .17, 2.10, .15)],
       [yellow, teal], lambda row, index, height: int(height > .51), root)
@@ -133,7 +134,21 @@ for side in (-1, 1):
         for rib in range(-3, 4):
             cube("Skid step grip rib", (side * 1.087, step_y + rib * .052, .175),
                  (.164, .013, .009), dark, .003, root)
-    cube("Door handle", (side * 1.19, -.26, 1.66), (.055, .26, .045), metal, .012, root)
+    handle_y, handle_z = -.26, 1.65
+    hit, contact, _, _ = cabin.ray_cast((side * 2, handle_y, handle_z), (-side, 0, 0))
+    if not hit:
+        raise ValueError("Cabin door handle must meet the fuselage")
+    cube("Door pull gasket", (contact.x + side * .003, handle_y, handle_z),
+         (.026, .284, .066), dark, .015, root)
+    for support in (-.102, .102):
+        cube("Door pull support", (contact.x + side * .019, handle_y + support, handle_z),
+             (.034, .042, .041), metal, .008, root)
+    cube("Door pull grip", (contact.x + side * .037, handle_y, handle_z),
+         (.025, .214, .027), metal, .008, root)
+    cylinder("Door lock bezel", (contact.x + side * .018, handle_y + .129, handle_z - .045),
+             .014, .018, metal, True, 16, root)
+    cube("Door lock slot", (contact.x + side * .028, handle_y + .129, handle_z - .045),
+         (.006, .012, .004), dark, .001, root)
     cube("Navigation lamp", (side * 1.2, 1.0, 1.74), (.08, .09, .047),
          red_lamp if side < 0 else green_lamp, .015, root)
     lamp = cylinder("Forward belly searchlight", (side * .44, -2.52, .65),
