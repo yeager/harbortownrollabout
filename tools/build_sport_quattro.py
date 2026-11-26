@@ -465,7 +465,16 @@ def build():
     profile_loft("Pleated gear shift gaiter", gaiter_rings, leather, root)
     bar("Gear lever",(0,-.039,.535),(.006,-.006,.655),.012,.013,chrome)
     box("Gear knob",(.006,-.006,.655),(.055,.052,.052),trim,.021)
-    bar("Handbrake",(.081,.265,.495),(.081,.107,.576),.030,.030,trim)
+    brake_pivot = Vector((.081,.265,.503))
+    brake_tip = Vector((.081,.107,.576))
+    brake_axis = (brake_tip - brake_pivot).normalized()
+    box("Handbrake mounting surround", (.081,.265,.504), (.052,.096,.016),recess,.007)
+    bar("Handbrake lever", brake_pivot, brake_tip, .021,.024,trim)
+    bar("Handbrake molded grip", brake_tip - brake_axis*.077, brake_tip,
+        .034,.032,rubber)
+    release = cylinder("Handbrake release button", brake_tip + brake_axis*.004,
+                       .009,.013,alloy,axis_x=False,vertices=24,root=root)
+    release.rotation_euler = brake_axis.to_track_quat('Z', 'Y').to_euler()
     box("Rear bench", (0,.728,.533), (1.24,.492,.155),cloth,.045)
     box("Front black grille frame",(0,-2.006,.650),(1.675,.103,.246),trim,.036)
     box("Deep grille opening",(0,-2.063,.655),(1.112,.016,.191),recess,.004)
