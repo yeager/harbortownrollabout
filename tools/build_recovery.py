@@ -8,6 +8,28 @@ from mathutils import Vector
 sys.path.insert(0,str(Path(__file__).resolve().parent))
 from build_vehicles import (clear_scene, make_fire_engine, cube, cylinder, text_obj,
     DARK, METAL, PAINT_RED, PAINT_YELLOW, RED_LAMP, export_vehicle, SOURCE_DIR)
+
+
+def add_lashing_eye(root, x, y):
+    cube("Lashing eye base",(x,y,1.232),(.082,.162,.028),DARK,.008,root)
+    for end in (-.065,.065):
+        cylinder("Lashing base bolt",(x,y+end,1.249),.009,.010,METAL,False,6,root)
+    for end in (-.044,.044):
+        cube("Lashing eye support",(x,y+end,1.256),(.025,.019,.024),METAL,.004,root)
+    bpy.ops.mesh.primitive_torus_add(major_segments=24,minor_segments=8,
+                                     major_radius=.038,minor_radius=.007,
+                                     location=(x,y,1.269))
+    eye=bpy.context.object
+    eye.name="Lashing eye"
+    for vertex in eye.data.vertices:
+        vertex.co.x *= .70
+        vertex.co.y *= 1.20
+    for face in eye.data.polygons:
+        face.use_smooth=True
+    eye.data.materials.append(METAL)
+    eye.parent=root
+
+
 clear_scene()
 root=make_fire_engine()
 root.name="Sjöstad roadside recovery"
@@ -32,7 +54,7 @@ for side in [-1,1]:
     box("Cab stripe",(side*1.109,-1.76,1.52),(.032,1.91,.20),PAINT_YELLOW)
     box("Headboard upright",(side*1.11,-.62,1.71),(.13,.17,1.06),PAINT_RED)
     for j in range(8):
-        box("Lashing eye",(side*1.22,-.35+j*.54,1.245),(.048,.12,.035),METAL)
+        add_lashing_eye(root,side*1.20,-.35+j*.54)
     box("Tail lamp",(side*.98,3.89,1.09),(.34,.09,.10),RED_LAMP)
     box("Amber marker",(side*.69,-1.63,2.73),(.41,.22,.15),PAINT_YELLOW,.055)
 box("Headboard crossbeam",(0,-.62,2.18),(2.34,.16,.18),PAINT_RED)
