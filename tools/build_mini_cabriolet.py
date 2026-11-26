@@ -1,4 +1,4 @@
-"""Build a four-seat MINI Cabriolet in metres; Blender -Y is the nose."""
+"""Build the four-seat Mino Kuper S in metres; Blender -Y is the nose."""
 from math import cos, exp, pi, sin, sqrt, tau
 from pathlib import Path
 import sys
@@ -272,19 +272,19 @@ for side in [-1,1]:
     oval("Bumper corner air channel",(side*.55,-1.862,.36),(.066,.028,.085),trim)
     tube("Rear gate seam",[(side*.607,1.833,.849),(side*.602,1.848,.56),
                           (side*.52,1.855,.415),(side*.30,1.855,.405)],.005,shadow)
-sport_red=material("Cooper S red lettering",(.72,.018,.012),.17,.29)
-sport=text_obj("Cooper S lettering","S",(.34,1.855,.79),.062,sport_red)
+sport_red=material("Kuper S red lettering",(.72,.018,.012),.17,.29)
+sport=text_obj("Kuper S lettering","S",(.34,1.855,.79),.062,sport_red)
 sport.rotation_euler=(pi/2,0,pi)
 cube("Boot handle",(0,1.879,.73),(.259,.034,.03),chrome,.014)
 tube("Exhaust outlet",[(-.57,1.62,.233),(-.57,1.82,.218)],.047,trim)
-# Winged badges sit on the bonnet nose and boot lid.
+# The Mino badge has a copper monogram inset into a dark oval.
+badge_copper = material("Mino copper enamel", (.65, .25, .08), .42, .29)
 for y,z,sign in [(-1.897,.743,-1),(1.858,.815,1)]:
-    oval("Winged badge centre",(0,y,z),(.04,.011,.024),trim)
-    for side in (-1,1):
-        for i in range(3):
-            length=.117-i*.012
-            tube("Badge wing",[(side*.033,y+.002*sign,z+.011-i*.009),
-                               (side*length,y,z+.014-i*.009)],.0037,chrome)
+    oval("Mino badge rim", (0,y,z), (.052,.011,.028), chrome)
+    oval("Mino badge enamel", (0,y+sign*.009,z), (.046,.005,.022), trim)
+    tube("Mino monogram", [(x,y+sign*.014,z+dz) for x,dz in
+         [(-.026,-.012),(-.026,.012),(0,-.004),(.026,.012),(.026,-.012)]],
+         .0026,badge_copper)
 bpy.ops.object.select_all(action="SELECT")
 bpy.context.view_layer.objects.active=bpy.context.selected_objects[0]
 bpy.ops.object.convert(target="MESH")

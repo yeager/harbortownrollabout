@@ -973,8 +973,8 @@ msgstr "Politi-SUV"
 msgid "Porsje GT5RS"
 msgstr "Porsje GT5RS"
 
-msgid "Small convertible"
-msgstr "Liten kabriolet"
+msgid "Mino Kuper S"
+msgstr "Mino Kuper S"
 
 msgid "Classic moped"
 msgstr "Klassisk moped"

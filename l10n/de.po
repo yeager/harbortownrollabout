@@ -986,8 +986,8 @@ msgstr "Polizei-SUV"
 msgid "Porsje GT5RS"
 msgstr "Porsje GT5RS"
 
-msgid "Small convertible"
-msgstr "Kleines Cabrio"
+msgid "Mino Kuper S"
+msgstr "Mino Kuper S"
 
 msgid "Classic moped"
 msgstr "Klassisches Moped"

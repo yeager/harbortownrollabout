@@ -924,7 +924,7 @@ msgstr ""
 msgid "Porsje GT5RS"
 msgstr ""
 
-msgid "Small convertible"
+msgid "Mino Kuper S"
 msgstr ""
 
 msgid "Classic moped"

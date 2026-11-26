@@ -969,8 +969,8 @@ msgstr "Poliisin katumaasturi"
 msgid "Porsje GT5RS"
 msgstr "Porsje GT5RS"
 
-msgid "Small convertible"
-msgstr "Pieni avoauto"
+msgid "Mino Kuper S"
+msgstr "Mino Kuper S"
 
 msgid "Classic moped"
 msgstr "Klassinen mopo"

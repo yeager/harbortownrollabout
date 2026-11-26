@@ -201,6 +201,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
 - [ ] [`lotten.glb`](../vehicles/lotten.glb)
 - [ ] [`m3_e30.glb`](../vehicles/m3_e30.glb)
 - [ ] [`mini_cooper_cabriolet.glb`](../vehicles/mini_cooper_cabriolet.glb)
+  - Mino Kuper S fick ett eget kopparfärgat M-monogram på motorhuven och bakluckan samt nytt namn i fordonsgalleriet. Emblemen granskades i Godot. Fordonsprovet och språkkontrollen passerade.
 - [ ] [`model_s.glb`](../vehicles/model_s.glb)
 - [ ] [`monster_truck.glb`](../vehicles/monster_truck.glb)
 - [ ] [`motorboat.glb`](../vehicles/motorboat.glb)
