@@ -767,6 +767,8 @@ def make_police():
         return point.z
     antenna_z=roof_z(0,1.50)
     cylinder("Dispatch antenna foot",(0,1.50,antenna_z+.016),.040,.035,DARK,False,24,root)
+    cylinder("Dispatch antenna seal",(0,1.50,antenna_z+.007),.044,.015,RUBBER,False,24,root)
+    cylinder("Dispatch antenna collar",(0,1.50,antenna_z+.035),.018,.018,METAL,False,12,root)
     cylinder("Radio whip",(0,1.50,antenna_z+.221),.006,.38,DARK,False,12,root)
     for x in [-.19,.19]:
         cube("Front warning light bracket",(x,-2.484,.845),(.112,.038,.060),BLACK,.009,root)
@@ -776,6 +778,12 @@ def make_police():
     for x in [-.43,.43]:
         foot=roof_z(x,y)
         cube("Patrol lightbar foot",(x,y,(foot+base)*.5),(.11,.16,base-foot+.01),RUBBER,.009,root)
+        for offset in [-.092,.092]:
+            underlay=roof_z(x,y+offset)
+            cube("Lightbar mounting tab",(x,y+offset,underlay+.007),
+                 (.082,.046,.020),DARK,.006,root)
+            cylinder("Lightbar foot fastener",(x,y+offset,underlay+.021),
+                     .012,.012,METAL,False,6,root)
     shell=[]
     for elevation,w,d in [(0,.60,.099),(.012,.633,.126),(.069,.627,.124),(.085,.602,.104)]:
         ring=[]

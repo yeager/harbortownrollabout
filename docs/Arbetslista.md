@@ -210,6 +210,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
 - [ ] [`monster_truck.glb`](../vehicles/monster_truck.glb)
 - [ ] [`motorboat.glb`](../vehicles/motorboat.glb)
 - [ ] [`polisbil.glb`](../vehicles/polisbil.glb)
+  - Patrullbilens blåljusramp fick fyra bultade takfästen och radioantennen fick tätning och metallkrage. Modellen använder också BMV:s turkosvita emblem. Takdetaljerna granskades i Godot. Fordonsprovet och utryckningsprovet passerade.
 - [ ] [`polishelikopter.glb`](../vehicles/polishelikopter.glb)
 - [ ] [`porsche_gt3_rs.glb`](../vehicles/porsche_gt3_rs.glb)
   - Porsje GT5RS har egna bakre märkesbokstäver och en guldfärgad romb med svart vinkel på motorhuven. Båda granskades i Godot. Fordonsgalleriets körprov, banbilens körprov och språkkontrollen passerade.
