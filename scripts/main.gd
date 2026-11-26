@@ -7373,7 +7373,7 @@ func _player_extent() -> Vector2:
 		heading.z * player_half_size.y + heading.x * player_half_size.x)
 
 func _player_emergency_response() -> bool:
-	return mode == "playing" and not walker.visible and not boating and tram_mode == 0 \
+	return mode == "playing" and ambulance.visible and not walker.visible and not boating and tram_mode == 0 and not operating_excavator \
 		and (vehicle_index < 3 or vehicle_index == XC60_POLICE) and (lights_on or sound_on)
 
 func _responding_road_vehicles() -> Array[Node3D]:

@@ -10,6 +10,11 @@ func check_response() -> void:
 	game.set_process(false)
 	game.ambulance.hide()
 	game.traffic_data.clear()
+	game.lights_on = true
+	if game._responding_road_vehicles().has(game.ambulance):
+		printerr("A hidden player ambulance was treated as an emergency on the road")
+		quit(1)
+		return
 	for parked: Node3D in game.parked_cars:
 		parked.hide()
 	game._spawn_traffic(game.VEHICLE_SCENES_ALL[game.QUATTRO], -36, 2.35, 1, 5.0)
