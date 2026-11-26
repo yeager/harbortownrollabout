@@ -124,6 +124,9 @@ func _build_closed_entrance(world: Node3D, glass: Material) -> void:
 func _build_intake(world: Node3D) -> void:
 	# Meet the north edge of Östra allén at the same grade without overlapping it.
 	var apron_depth := -52.8 - ORIGIN.z
+	var stop_line_z := 1.20
+	var lane_line_x := 2.31
+	var lane_line_width := .105
 	world._make_driving_surface("Ambulance bay and apron", Vector3(APRON_WIDTH, .12, apron_depth),
 		Vector3(0, -.08, apron_depth * .5), Color("#777c79"), true, self)
 	var diffuser_finish: StandardMaterial3D = world._material(Color("#f4e5bd"), .38, true)
@@ -142,10 +145,9 @@ func _build_intake(world: Node3D) -> void:
 				guard + Vector3.UP * band, METAL, false, self)
 		world._make_box("Wall bumper rail", Vector3(.14, .18, 6.45),
 			Vector3(side * 3.99, .77, 3.36), METAL, false, self)
-		var line_start := .56
 		var line_end := apron_depth - .14
-		world._make_box("Ambulance bay lane line", Vector3(.105, .008, line_end - line_start),
-			Vector3(side * 2.31, -.013, (line_start + line_end) * .5), Color("#e8bc43"), false, self)
+		world._make_box("Ambulance bay lane line", Vector3(lane_line_width, .008, line_end - stop_line_z),
+			Vector3(side * lane_line_x, -.013, (stop_line_z + line_end) * .5), Color("#e8bc43"), false, self)
 		for z in [2.05, 5.55]:
 			world._make_box("Intake luminaire housing", Vector3(1.26, .08, .23),
 				Vector3(side * 2.1, 4.065, z), METAL, false, self)
@@ -195,8 +197,8 @@ func _build_intake(world: Node3D) -> void:
 			Vector3(side * 4.035, 1.89, 6.66), METAL, false, self)
 		world._make_box("Door overhead guide", Vector3(.083, .085, 1.85),
 			Vector3(side * 4.035, 3.98, 5.84), METAL, false, self)
-	world._make_box("Ambulance stop marking", Vector3(4.6, .008, .12),
-		Vector3(0, -.012, 1.20), Color("#e8bc43"), false, self)
+	world._make_box("Ambulance stop marking", Vector3(2.0 * lane_line_x - lane_line_width, .008, .27),
+		Vector3(0, -.013, stop_line_z), Color("#e8bc43"), false, self)
 	world._make_box("Closed inner transfer doors", Vector3(2.0, 2.47, .14),
 		Vector3(2.61, 1.235, .13), METAL, false, self)
 	world._make_box("Staff door meeting rail", Vector3(.026, 2.31, .035),
