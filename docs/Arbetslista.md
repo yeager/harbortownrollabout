@@ -241,6 +241,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Lastintaget fick nitade slitplåtar på golvet och bakväggen samt en separat servicelucka med synlig skarv. Granskat bakifrån i Godot. Sophämtningsprovet passerade.
   - Sopbilen fick registreringsskyltar med ECO 024 och blått landsfält fram och bak. Två lampor och skyltens bakgrund lyser i nattläge. Bakskylten granskades i Godot i mörker. Sophämtningsprovet passerade.
   - Bakpartiet fick två röda reflexer med prismor, monteringsramar och fästskruvar. Granskat i närbild i Godot. Sophämtningsprovet passerade.
+  - Takets två varningslyktor fick rundade räfflade glas, separata socklar och gummifästen. Båda glasen tändes under kärllyftet i Godot. Sophämtningsprovet passerade.
 - [ ] [`ride_on_mower.glb`](../vehicles/ride_on_mower.glb)
   - Åkgräsklipparen har en infälld kylgrill och röda baklyktor vid den bakmonterade motorn. Strålkastarna sitter på klippaggregatets främre kant. Båda ändarna granskades i Godot och samtliga fyra modellerade blinkerslinser verifierades. Fordons- och områdesproven passerade.
 - [ ] [`saab96.glb`](../vehicles/saab96.glb)

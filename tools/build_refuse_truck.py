@@ -94,6 +94,36 @@ def rear_mudguard(side, axle_y):
         rivet.rotation_euler.x = math.pi/2
 
 
+def roof_beacon(side):
+    x, y = side*.82, -2.74
+    box("Beacon mounting pad",(x,y,3.151),(.22,.235,.035),v.RUBBER,.015)
+    v.cylinder("Beacon socket",(x,y,3.179),.100,.052,v.DARK,False,32,root)
+    segments = 64
+    profile = [(3.199,.086),(3.214,.089),(3.306,.081),
+               (3.322,.071),(3.329,.053),(3.332,.020)]
+    vertices = []
+    for z, radius in profile:
+        for step in range(segments):
+            angle = step * math.tau / segments
+            rib_radius = radius - (.002 if step % 2 else 0)
+            vertices.append((x + rib_radius*math.cos(angle),
+                             y + rib_radius*math.sin(angle), z))
+    faces = [tuple(reversed(range(segments)))]
+    for ring in range(len(profile) - 1):
+        for step in range(segments):
+            neighbor = (step + 1) % segments
+            faces.append((ring*segments + step, ring*segments + neighbor,
+                          (ring+1)*segments + neighbor, (ring+1)*segments + step))
+    faces.append(tuple(range(len(vertices) - segments, len(vertices))))
+    mesh = bpy.data.meshes.new("Fluted beacon lens")
+    mesh.from_pydata(vertices, [], faces)
+    mesh.update()
+    mesh.materials.append(amber)
+    lens = bpy.data.objects.new("Roof beacon lens", mesh)
+    bpy.context.collection.objects.link(lens)
+    lens.parent = root
+
+
 tire_profile = [
     (-.195,.350),(-.195,.454),(-.182,.503),(-.162,.537),(-.132,.550),
     (-.087,.550),(-.084,.537),(-.069,.537),(-.066,.550),
@@ -211,7 +241,7 @@ for side in (-1,1):
     box("Front lamp bezel",(side*.89,-4.034,1.052),(.444,.038,.175),v.BLACK,.016)
     box("Headlight lens",(side*.815,-4.055,1.052),(.255,.024,.126),v.HEADLAMP,.012)
     box("Front amber indicator",(side*1.023,-4.055,1.052),(.110,.024,.126),amber,.009)
-    box("Roof beacon",(side*.82,-2.74,3.20),(.19,.23,.17),amber)
+    roof_beacon(side)
     box("Reflective tape",(side*1.244,.33,1.43),(.018,4.22,.075),v.PAINT_YELLOW)
     v.text_obj("Fleet marking","ECO  24",(side*1.25,.24,2.41),.42,v.PAINT_WHITE,side=-side,root=root,flat=True)
     cheek=box("Hopper cheek",(side*1.06,2.95,2.19),(.23,1.04,2.24),green,.10)
