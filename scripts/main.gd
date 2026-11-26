@@ -9520,8 +9520,8 @@ func _load_vehicle_model() -> void:
 		var beam := SpotLight3D.new()
 		beam.position = origin
 		beam.rotation.x = deg_to_rad(-7.0)
-		beam.spot_range = 28
-		beam.spot_angle = 26
+		beam.spot_range = 19 if vehicle_index == SHOPPER else 28
+		beam.spot_angle = 20 if vehicle_index == SHOPPER else 26
 		beam.light_color = Color("#fff0d9")
 		beam.light_energy = 4.5*maxf(last_night,0.0)
 		beam.visible = last_night>.05

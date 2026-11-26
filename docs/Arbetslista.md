@@ -297,6 +297,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Den nedre fronten fick rundade hörn som övergår i framskärmarna. Granskat snett framifrån i Godot. Körprovet passerade.
   - Det röda plastskalet fick en djupare ton och dämpad glans med metallvärdet satt till noll. Granskat i dagsljus i Godot. Fordonsprovet passerade.
   - Strålkastarglaset fick en mörkare innerkant och en varmare reflektor bakom de lodräta räfflorna. Granskat i Godot. Fordonsprovet passerade.
+  - Den ensamma strålkastaren fick en kortare och smalare ljuskägla. Granskat i nattläge i Godot. Fordonsprovet verifierar att både ljuskäglan och glasets ljus slås på i mörker och släcks i dagsljus.
 - [ ] [`snowmobile.glb`](../vehicles/snowmobile.glb)
 - [ ] [`sport_quattro.glb`](../vehicles/sport_quattro.glb)
   - Fordonsprovet kontrollerar att galleriet visar Audo Sport Kvattro, att bakluckan har Kvattro-emblemet och att fronten har fem ringar. Språkkontrollen passerade för alla sex översättningskataloger.

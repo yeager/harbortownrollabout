@@ -121,6 +121,14 @@ func check_gallery() -> void:
 				printerr("The shopping trike needs its fictional name in the gallery and on the body")
 				quit(1)
 				return
+			var beam: SpotLight3D = game.headlights[0]
+			for night in [true,false]:
+				game.time_mode = 1 if night else 0
+				game._update_daylight(0)
+				if beam.visible != night or (beam.light_energy > 0) != night or (game.projector_finish.emission_energy_multiplier > 0) != night:
+					printerr("The Shoppa beam and lens did not follow the day/night setting")
+					quit(1)
+					return
 			var mat := game.vehicle_model.find_child("Rubber foot mat*",true,false) as MeshInstance3D
 			if mat == null:
 				printerr("Shopping trike has no foot mat")
