@@ -11770,7 +11770,11 @@ func _build_driving_school() -> void:
 	school.position = site
 	add_child(school)
 	var footprint := Vector3(12,3.3,6)
-	_make_roadside_solid("School building",footprint,Vector3.UP*1.65,Color("#ddd8cd"),true,school)
+	var wall_finish := _material(Color("#ddd8cd"), .91, false, "mineral")
+	wall_finish.uv2_scale = Vector3.ONE * 2.8
+	_make_roadside_solid("School building", footprint, Vector3.UP * 1.65,
+		Color.WHITE, true, school).material_override = wall_finish
+	var plinth_finish := _material(Color("#93928a"), .89, false, "mineral")
 	_make_box("Roof flashing",Vector3(12.44,.25,6.43),Vector3.UP*3.37,Color("#293c42"),false,school)
 	var roof_metal := _material(Color("#435357"), .63)
 	roof_metal.metallic = .38
@@ -11813,7 +11817,7 @@ func _build_driving_school() -> void:
 		hood.material_override = roof_metal
 	var service_color := Color("#46595d")
 	_make_box("Rear plinth", Vector3(12.03, .29, .043),
-		Vector3(0, .145, -3.007), Color("#93928a"), false, school)
+		Vector3(0, .145, -3.007), Color.WHITE, false, school).material_override = plinth_finish
 	_make_box("Service door frame", Vector3(1.095, 2.18, .066),
 		Vector3(-2.66, 1.13, -3.036), service_color.darkened(.22), false, school)
 	_make_box("Service door leaf", Vector3(.974, 2.052, .031),
@@ -11905,7 +11909,7 @@ func _build_driving_school() -> void:
 		_add_school_window(school, Vector3(side * 6.0, 1.82, -.73),
 			side * PI * .5, classroom_glass, door_metal)
 		_make_box("School end wall plinth", Vector3(.043, .29, 6.01),
-			Vector3(side * 6.009, .145, 0), Color("#93928a"), false, school)
+			Vector3(side * 6.009, .145, 0), Color.WHITE, false, school).material_override = plinth_finish
 	for mount_x in [-2.18, 0.0, 2.18]:
 		_make_box("School sign canopy bracket", Vector3(.144, .33, .18),
 			Vector3(mount_x, 2.85, 4.18), Color.WHITE, false, school).material_override = roof_metal

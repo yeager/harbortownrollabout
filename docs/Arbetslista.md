@@ -336,6 +336,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Trafikskolans tak fick två ventilationshuvar med plåtbeslag och indragna galler. Granskat i Godot. Övningsbaneprovet passerade.
   - Trafikskolans entrétak fick två väggkonsoler, ståndfalsar och en vikt framkant. Granskat i Godot. Övningsbaneprovet passerade.
   - Den lokaliserade fasadskylten flyttades till entrétakets framkant och fick kantprofiler och fästen. Hela texten granskades från marken i Godot. Övningsbaneprovet passerade.
+  - Trafikskolans ytterväggar fick en finkornig putsyta och socklarna ett grövre mineralmaterial. Granskat vid servicedörren i Godot. Övningsbaneprovet passerade.
   - Trafikskolans båda gavlar fick klassrumsfönster med fönsterbleck och genomgående socklar. Granskat från övningsbanan i Godot. Övningsbaneprovet passerade.
   - Trafikskolans entréyta fick stenplattor och en ribbad entrématta med metallram. Granskat i Godot. Övningsbaneprovet passerade.
   - Övningsbilens takskylt fick tvärskena och två fötter med gummiplattor och bultar. Granskat i Godot. Övningsbaneprovet passerade.
