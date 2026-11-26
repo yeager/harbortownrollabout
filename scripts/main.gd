@@ -7792,10 +7792,24 @@ func _build_boule_court() -> void:
 		boule_velocity.append(Vector3.ZERO)
 
 	add_child(thermos)
-	var steel := _material(Color("#b8bfba"),.25)
-	_tube_between(thermos,Vector3.UP*.012,Vector3.UP*.245,.052,_material(Color("#257559"),.35))
-	_tube_between(thermos,Vector3.ZERO,Vector3.UP*.02,.053,steel)
-	_tube_between(thermos,Vector3.UP*.245,Vector3.UP*.30,.050,steel)
+	var steel := _material(Color("#b8bfba"), .32, false, "brushed")
+	steel.metallic = .64
+	var enamel := _material(Color("#257559"), .37)
+	var gasket := _material(Color("#25332f"), .89)
+	_tube_between(thermos, Vector3.UP * .012, Vector3.UP * .244, .052, enamel)
+	_tube_between(thermos, Vector3.ZERO, Vector3.UP * .022, .053, steel)
+	_tube_between(thermos, Vector3.UP * .231, Vector3.UP * .250, .051, steel)
+	_tube_between(thermos, Vector3.UP * .247, Vector3.UP * .258, .050, gasket)
+	_tube_between(thermos, Vector3.UP * .255, Vector3.UP * .294, .051, steel)
+	_tube_between(thermos, Vector3.UP * .294, Vector3.UP * .30, .047, steel)
+	for rib in 16:
+		var angle := TAU * rib / 16.0
+		var radial := Vector3(cos(angle), 0, sin(angle))
+		var groove := _make_box("Thermos cup grip rib", Vector3(.005, .028, .008),
+			radial * .050 + Vector3.UP * .274, Color.WHITE, false, thermos)
+		groove.rotation.y = -angle
+		groove.material_override = steel
+
 
 func _place_thermos() -> void:
 	if not thermos.is_inside_tree(): return
