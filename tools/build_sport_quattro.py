@@ -314,7 +314,26 @@ def build():
             box("Headrest crossbar",(x,.316,height),(.198,.085,.039),leather,.016)
         box("Interior door card",(side*.600,-.072,.667),(.071,.88,.244),leather,.029)
         box("Door armrest",(side*.548,.030,.668),(.082,.349,.060),trim,.022)
-        box("Interior door release",(side*.550,-.235,.733),(.029,.088,.023),chrome,.005)
+        box("Interior door cloth insert", (side*.560,-.010,.728),
+            (.022,.54,.077),cloth,.012)
+        box("Interior release surround", (side*.542,-.235,.735),
+            (.025,.105,.042),recess,.010)
+        box("Interior door release", (side*.526,-.243,.737),
+            (.015,.062,.017),chrome,.004)
+        cylinder("Window crank base", (side*.543,-.347,.659), .021,.031,
+                 trim, vertices=24, root=root)
+        crank_pivot = (side*.520,-.347,.659)
+        crank_end = (side*.514,-.301,.618)
+        bar("Window crank arm", crank_pivot, crank_end, .013,.015,trim)
+        cylinder("Window crank knob", crank_end, .012,.023,trim,
+                 vertices=20, root=root)
+        box("Door pocket bottom", (side*.544,.062,.558),
+            (.068,.436,.026),trim,.007)
+        box("Door pocket lip", (side*.510,.062,.580),
+            (.017,.436,.052),leather,.009)
+        for pocket_y in [-.15, .274]:
+            box("Door pocket end", (side*.543,pocket_y,.578),
+                (.074,.018,.048),leather,.005)
 
     for index, x in enumerate([-.563,.082]):
         spindle = (x,-.621,.925)
@@ -334,14 +353,24 @@ def build():
         bar("Pedal lever",(x,-.567,.575),(x,-.533,.434),.013,.016,chrome)
         box("Pedal rubber",(x,-.524,.432),(width,.023,.051),rubber,.009)
     box("Dashboard", (0,-.465,.785), (1.42,.363,.108),trim,.043)
-    bpy.ops.mesh.primitive_torus_add(major_segments=32,minor_segments=8,major_radius=.146,minor_radius=.015,location=(.346,-.150,.858),rotation=(1.08,0,0))
+    wheel_center = Vector((.346, -.150, .858))
+    # The top of the rim leans toward the dashboard (Blender -Y).
+    wheel_tilt = math.radians(107)
+    bpy.ops.mesh.primitive_torus_add(
+        major_segments=64, minor_segments=12, major_radius=.146, minor_radius=.015,
+        location=wheel_center, rotation=(wheel_tilt, 0, 0))
     steering = bpy.context.object
     steering.name = "Steering wheel rim"
     steering.data.materials.append(trim)
-    attach(steering,root)
-    box("Steering wheel hub",(.346,-.148,.857),(.115,.042,.064),trim,.013)
-    for x in [.446,.246]:
-        box("Steering wheel spoke",(x,-.152,.857),(.109,.027,.024),trim,.004)
+    for face in steering.data.polygons:
+        face.use_smooth = True
+    attach(steering, root)
+    hub = box("Steering wheel hub", wheel_center, (.115,.064,.042),trim,.013)
+    hub.rotation_euler.x = wheel_tilt
+    for offset in [-.100, .100]:
+        spoke = box("Steering wheel spoke", wheel_center + Vector((offset, 0, 0)),
+                    (.109,.024,.027),trim,.004)
+        spoke.rotation_euler.x = wheel_tilt
     box("Instrument binnacle",(.346,-.478,.856),(.312,.122,.079),trim,.022)
     def dial(name, x, y, z, radius, speedometer=False):
         bezel = cylinder(name+" rim",(x,y,z),radius,.011,trim,axis_x=False,vertices=32,root=root)
