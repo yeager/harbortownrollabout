@@ -349,9 +349,22 @@ def build():
     for side in [-1,1]:
         box("Lower kick trim",(side*.549,-.256,.448),(.041,.54,.175),carpet,.018)
     # Driver left, from the seated viewpoint looking along Blender -Y.
-    for x, width in [(.44,.046),(.35,.043),(.26,.032)]:
-        bar("Pedal lever",(x,-.567,.575),(x,-.533,.434),.013,.016,chrome)
-        box("Pedal rubber",(x,-.524,.432),(width,.023,.051),rubber,.009)
+    for name, x, width, height, ribs in [
+        ("Clutch", .44, .046, .052, 4),
+        ("Brake", .35, .050, .052, 4),
+        ("Accelerator", .26, .032, .077, 6),
+    ]:
+        pad_center = Vector((x, -.524, .432))
+        bar(name + " pedal lever", (x,-.567,.575), (x,-.533,.434),
+            .013,.016,trim)
+        box(name + " pedal backing plate", pad_center + Vector((0,-.009,0)),
+            (width,.012,height),alloy,.005)
+        box(name + " pedal rubber pad", pad_center,
+            (width-.004,.013,height-.004),rubber,.005)
+        for row in range(ribs):
+            row_height = (row - (ribs - 1) / 2) * (height - .018) / (ribs - 1)
+            box(name + " pedal grip rib", pad_center + Vector((0,.007,row_height)),
+                (width-.011,.004,.004),rubber,.001)
     box("Dashboard", (0,-.465,.785), (1.42,.363,.108),trim,.043)
     wheel_center = Vector((.346, -.150, .858))
     # The top of the rim leans toward the dashboard (Blender -Y).
