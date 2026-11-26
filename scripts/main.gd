@@ -11865,10 +11865,11 @@ func _add_school_car_sign(model: Node3D) -> void:
 			.0018, Color("#253031"), PI if side == -1 else 0.0, plate)
 		_size_world_sign(face, .692)
 	var learner_plate := _make_box("Rear learner plate backing", Vector3(.42, .116, .029),
-		Vector3(.48, -.387, -2.635), Color("#333b3b"), false, mount)
+		Vector3(0, -.390, -2.349), Color("#333b3b"), false, mount)
+	learner_plate.rotation.x = .86
 	for anchor_x in [-.148, .148]:
-		_make_box("Rear learner plate rubber mount", Vector3(.067, .044, .086),
-			Vector3(anchor_x, 0, .055), Color("#252c2c"), false, learner_plate)
+		_make_box("Rear learner plate rubber mount", Vector3(.067, .044, .046),
+			Vector3(anchor_x, 0, .032), Color("#252c2c"), false, learner_plate)
 	_make_box("Rear learner plate white border", Vector3(.403, .102, .014),
 		Vector3(0, 0, -.020), Color("#f2f1dd"), false, learner_plate)
 	_make_box("Rear learner plate red face", Vector3(.382, .083, .010),
