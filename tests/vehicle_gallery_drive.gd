@@ -4,7 +4,7 @@ extends SceneTree
 func _initialize() -> void:
 	call_deferred("check_gallery")
 
-func check_y5_wheels() -> bool:
+func check_y5_wheels(game) -> bool:
 	for scene in [
 		preload("res://vehicles/luxury_suv.glb"),
 		preload("res://vehicles/traffic_suv_blue.glb"),
@@ -27,18 +27,31 @@ func check_y5_wheels() -> bool:
 				front += 1
 			else:
 				rear += 1
-		model.free()
 		if front != 2 or rear != 2:
 			printerr("Expected two Y5 tires per axle in ", scene.resource_path)
+			model.free()
 			return false
+		var pivots: Array[Node3D] = game._rig_wheels(model)
+		if pivots.size() != 4:
+			printerr("Expected four rolling Y5 wheels in ", scene.resource_path)
+			model.free()
+			return false
+		for pivot in pivots:
+			var valves := pivot.find_children("Tire valve*", "MeshInstance3D", false, false)
+			var caliper := pivot.get_parent().find_child("Red brake caliper*", false, false)
+			if valves.size() != 3 or not caliper:
+				printerr("Y5 wheel valves must roll with the rim and calipers must stay on the knuckle in ", scene.resource_path)
+				model.free()
+				return false
+		model.free()
 	return true
 
 func check_gallery() -> void:
-	if not check_y5_wheels():
-		quit(1)
-		return
 	var game = load("res://main.tscn").instantiate()
 	root.add_child(game)
+	if not check_y5_wheels(game):
+		quit(1)
+		return
 	game.steady_player_lights = true
 	var expected_tiles: int = game.VEHICLE_NAMES_ALL.size() + game.EXTRA_GALLERY_NAMES.size()
 	if game.vehicle_selector.get_child_count() != expected_tiles:
