@@ -13660,6 +13660,7 @@ func _noise_material(dark_color: Color, light_color: Color, frequency: float, st
 	uniform vec4 work_bounds = vec4(0.,0.,1.,1.);
 	uniform bool is_grass = false;
 	uniform bool road_paint = false;
+	uniform bool roof_surface = false;
 	uniform float frequency = 2.0;
 	uniform float strength = 0.1;
 	varying vec3 world_position;
@@ -13676,7 +13677,7 @@ func _noise_material(dark_color: Color, light_color: Color, frequency: float, st
 		float grain = mix(noise(p * 12.), .5, smoothstep(.25, 1., footprint * 12.));
 		ALBEDO = mix(dark_color.rgb, light_color.rgb, clamp(0.5 + (broad - 0.5) * strength * 3.0 + (grain - 0.5) * strength * 0.4, 0.0, 1.0));
 		vec3 worked = vec3(0.0);
-		if (is_grass || snow_cover > 0.0) {
+		if (!roof_surface && (is_grass || snow_cover > 0.0)) {
 			worked = texture(work_map,(world_position.xz-work_bounds.xy)/work_bounds.zw).rgb;
 		}
 		if (is_grass) {
@@ -13686,6 +13687,9 @@ func _noise_material(dark_color: Color, light_color: Color, frequency: float, st
 		ALBEDO *= 1.0 - wet*(road_paint ? .16 : .42);
 		float coverage = smoothstep(.12, .92, snow_cover * snow_retention + (broad - .5) * .65);
 		coverage *= (1.0-worked.r) * (1.0-.27*worked.b) * smoothstep(0., .22, snow_cover);
+		if (roof_surface) {
+			coverage *= smoothstep(.65, .95, (INV_VIEW_MATRIX * vec4(NORMAL, 0.0)).y);
+		}
 		ALBEDO = mix(ALBEDO,vec3(.73,.81,.85) * (.90 + .10 * grain),coverage);
 		ALBEDO = road_grit_color(ALBEDO, world_position.xz, worked.b);
 		ROUGHNESS = mix(mix(mix(.92,road_paint ? .48 : .23,wet),.94,coverage),.94,worked.b);

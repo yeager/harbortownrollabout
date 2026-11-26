@@ -136,7 +136,12 @@ func _build_intake(world: Node3D) -> void:
 		for z in [2.05, 5.55]:
 			world._make_box("Intake luminaire", Vector3(1.20, .08, .20),
 				Vector3(side * 2.1, 3.96, z), Color("#f4e5bd"), false, self)
-	world._make_box("Ambulance intake roof", Vector3(9.12, .49, 7.06), Vector3(0, 4.34, 3.51), METAL, true, self)
+	var roof: MeshInstance3D = world._make_box("Ambulance intake roof", Vector3(9.12, .49, 7.06),
+		Vector3(0, 4.34, 3.51), METAL, true, self)
+	var roof_finish: ShaderMaterial = world._noise_material(METAL.darkened(.15), METAL.lightened(.08), 3.0, .18)
+	roof_finish.set_shader_parameter("roof_surface", true)
+	roof.material_override = roof_finish
+	world.ground_finishes.append(roof_finish)
 	world._make_box("Intake signage fascia", Vector3(9.13, .75, .14), Vector3(0, 4.27, 7.04), METAL, false, self)
 	var intake: Label3D = world._station_sign("Ambulance intake", Vector3(.27, 4.30, 7.12), .0115, Color("#fff6e5"), 0, self)
 	world._size_world_sign(intake, 6.65)

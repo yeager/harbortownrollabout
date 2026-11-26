@@ -181,7 +181,7 @@ Fordonsgranskningen börjar med exteriörerna. Bilarnas tillverkarnamn, modellna
 
 - [x] Brandbilen följer brons lutning i reklamfilmens omtagning. Spelmodellen justerar även höjden mellan axlarna när bron kröker. Kontrollerat i filmens brotagning och i hopp- och broprovet för båda färdriktningarna.
 
-- [x] Infarten till ambulansintaget möter Östra allén i samma nivå utan överlappande vägytor. Granskad i Godot och kontrollerad i ambulansprovet, inklusive patientöverlämning. Vägens kantlinje gör uppehåll vid infarten och de gula ledlinjerna slutar före körbanan. Granskat i Godot och ambulansprovet passerade.
+- [x] Infarten till ambulansintaget möter Östra allén i samma nivå utan överlappande vägytor. Granskad i Godot och kontrollerad i ambulansprovet, inklusive patientöverlämning. Vägens kantlinje gör uppehåll vid infarten och de gula ledlinjerna slutar före körbanan. Granskat i Godot och ambulansprovet passerade. Intagets plåttak mörknar i regn och samlar snö på ovansidan, medan golvet under taket behåller sitt material. Vintervyn granskades i Godot. Väderprovet och ambulansprovet passerade.
 
 ### Importerade modeller
 
