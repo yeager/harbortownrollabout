@@ -132,7 +132,7 @@ func check() -> void:
 		printerr("Grit did not improve braking on the same ploughed road: ",brake_speeds)
 		quit(1)
 		return
-	var traffic: Node3D = game._spawn_traffic("res://vehicles/traffic_bmw_blue.glb",trail.x,trail.z,1,9.0)
+	var traffic: Node3D = game._spawn_traffic("res://vehicles/traffic_suv_blue.glb",trail.x,trail.z,1,9.0)
 	var item: Dictionary = game.traffic_data.back()
 	item.cruise = 0.0
 	var route := Curve3D.new()

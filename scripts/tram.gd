@@ -534,7 +534,7 @@ func _ready() -> void:
 		var travel := 1 if i%2==0 else -1
 		var offset := (i+.35)*length/4
 		var pose := _carriageway_pose(offset,travel)
-		var scene := "res://vehicles/traffic_bmw_blue.glb" if travel>0 else "res://vehicles/traffic_bmw_silver.glb"
+		var scene := "res://vehicles/traffic_suv_blue.glb" if travel>0 else "res://vehicles/traffic_suv_silver.glb"
 		var actor: Node3D = world._spawn_traffic(scene,pose.origin.x,pose.origin.z,travel,4.8)
 		var road_car: Dictionary = world.traffic_data.pop_back()
 		road_car.offset = offset

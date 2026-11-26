@@ -173,6 +173,7 @@ Listan innehåller 100 jobb. En tom ruta är öppen. En punkt bockas av när bet
 ## Modellgranskning
 
 Prioritera fordonens exteriörer, därefter fordonens interiörer. Fortsätt sedan med byggnader och övriga objekt.
+Fordonsfiler, Blender-källor och tillhörande media använder neutrala filnamn. I spelet heter SUV:n BWM Y5 N70i.
 
 Fordonsgranskningen börjar med exteriörerna. Bilarnas tillverkarnamn, modellnamn och emblem ska få egna varianter som påminner om förebilderna.
 
@@ -259,13 +260,14 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Vinschen fick bultade lagerbockar med axeländar och en vajerstyrning med två rullar. Granskat på flaket i Godot. Bärgningsprovet passerade.
   - Flakets 16 surrningsöglor fick genomgående öppning, stöd och bultade fotplattor. Infästningen granskades i Godot och bärgningsprovet passerade.
   - Baklyktorna fick skruvade hus och separata röda och bärnstensfärgade linser. Godot använder de modellerade blinkerslinserna på båda sidor. Granskat tänt och släckt i spelvyn. Fordons- och bärgningsproven passerade.
-- [ ] [`bmw_x5_m60i.glb`](../vehicles/bmw_x5_m60i.glb)
-  - BMV X5i har egna diagonaldelade emaljemblem i turkost och vitt på motorhuven och bakluckan. Samma emblem används på de två trafikvarianterna. Granskat framifrån och bakifrån i Godot. Fordonsprovet, övningskörningen, trafikens blinkers och språkkontrollen passerade.
+- [ ] [`luxury_suv.glb`](../vehicles/luxury_suv.glb)
+  - BWM Y5 N70i har egna diagonaldelade emaljemblem i turkost och vitt på motorhuven och bakluckan. Samma emblem används på de två trafikvarianterna. Granskat framifrån och bakifrån i Godot. Fordonsprovet, övningskörningen, trafikens blinkers och språkkontrollen passerade.
   - Grillens välvda lameller fick satinbehandlade framkanter på spelbilen och båda trafikvarianterna. Granskat på spelbilen i Godot. Fordons- och körskoleproven passerade.
   - Frontblinkersen fick formpassade glas i strålkastarhusens ytterkanter på spelbilen och trafikvarianterna. Granskat tänt i Godot. Trafikprovet verifierar att X5i blinkar i de modellerade glasen.
   - Bakblinkersen fick egna glas mellan baklyktornas röda ljuslister. Granskat med höger blinkers tänd. Trafikprovet verifierar de modellerade glasen fram och bak.
   - Den främre registreringsskylten fick en separat formad hållare mot stötfångaren på spelbilen och trafikvarianterna. Granskat snett framifrån i Godot. Körskoleprovet passerade.
   - Den bakre registreringsskylten fick två armaturhus med separata ljusspridare. Granskat i närbild i Godot. Blinkersprovet passerade.
+  - Skyltljusen och registreringsskylten ljusnar i nattläget. Granskat på spelbilen och verifierat vid växling mellan dag och natt för spel-, trafik- och uppdragsmodellerna.
 - [ ] [`brandbil.glb`](../vehicles/brandbil.glb)
   - Dragkrokens infästning fick fyra sexkantsbultar samt ett släpvagnsuttag med fäste och väderskydd. Granskat bakifrån i Godot. Förarplats- och luckproven passerade.
 - [ ] [`city_bus.glb`](../vehicles/city_bus.glb)
@@ -279,12 +281,12 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
 - [ ] [`food_truck_road.glb`](../vehicles/food_truck_road.glb)
 - [ ] [`ice_cream_van.glb`](../vehicles/ice_cream_van.glb)
 - [ ] [`lotten.glb`](../vehicles/lotten.glb)
-- [ ] [`m3_e30.glb`](../vehicles/m3_e30.glb)
-  - BMV M3 E33 fick ett upphöjt modellemblem på bakluckan. Granskat i Godot och fordonsprovet passerade.
-- [ ] [`mini_cooper_cabriolet.glb`](../vehicles/mini_cooper_cabriolet.glb)
+- [ ] [`sport_sedan.glb`](../vehicles/sport_sedan.glb)
+  - BWM M3 E33 fick ett upphöjt modellemblem på bakluckan. Granskat i Godot och fordonsprovet passerade.
+- [ ] [`compact_convertible.glb`](../vehicles/compact_convertible.glb)
   - Mino Kuper S fick ett eget kopparfärgat M-monogram på motorhuven och bakluckan samt nytt namn i fordonsgalleriet. Emblemen granskades i Godot. Fordonsprovet och språkkontrollen passerade.
-- [ ] [`model_s.glb`](../vehicles/model_s.glb)
-  - Teslo Model Z fick silverfärgade Z-emblem fram och bak. Båda granskades i Godot. Fordonsgalleriet visar även BMV M3 E33, Volva 241 och Saav 97. Fordonsprovet och språkkontrollen passerade.
+- [ ] [`electric_sedan.glb`](../vehicles/electric_sedan.glb)
+  - Teslo Model Z fick silverfärgade Z-emblem fram och bak. Båda granskades i Godot. Fordonsgalleriet visar även BWM M3 E33, Volva 241 och Saav 97. Fordonsprovet och språkkontrollen passerade.
 - [ ] [`monster_truck.glb`](../vehicles/monster_truck.glb)
 - [ ] [`motorboat.glb`](../vehicles/motorboat.glb)
 - [ ] [`polisbil.glb`](../vehicles/polisbil.glb)
@@ -300,9 +302,9 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Framrutan fick större glasyta och en smal mörk mittkarm som följer nosens välvning. Granskat framifrån. Rotor- och landningsprovet passerade i Godot 4.7 dev5.
   - Nosen fick två modellerade landningsstrålkastare med lamphus, reflektorer och lysande linser. Granskade framifrån under patrullflygning. Rotor- och landningsprovet passerade i Godot 4.7 dev5.
   - Strålkastarnas linser och ljuskäglor tänds gradvis när det mörknar. Dags- och nattläget kontrollerades i Godot 4.7 dev5. Rotor- och landningsprovet passerade.
-- [ ] [`porsche_gt3_rs.glb`](../vehicles/porsche_gt3_rs.glb)
+- [ ] [`track_coupe.glb`](../vehicles/track_coupe.glb)
   - Porsje GT5RS har egna bakre märkesbokstäver och en guldfärgad romb med svart vinkel på motorhuven. Båda granskades i Godot. Fordonsgalleriets körprov, banbilens körprov och språkkontrollen passerade.
-- [ ] [`puch_dakota.glb`](../vehicles/puch_dakota.glb)
+- [ ] [`classic_moped.glb`](../vehicles/classic_moped.glb)
   - Pusch Dakotta fick blå P-medaljonger och DAKOTTA-text på båda tanksidorna samt sitt nya namn i fordonsgalleriet. Båda sidor granskades i Godot. Mopedprovet, fordonsprovet och språkkontrollen passerade.
 - [ ] [`raggarbil.glb`](../vehicles/raggarbil.glb)
 - [ ] [`refuse_truck.glb`](../vehicles/refuse_truck.glb)
@@ -339,7 +341,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Klippaggregatets pressade kåpa fick en rundad nederkant och en mjuk övergång till ovansidan. Granskat i närbild i Godot. Provet för gräsklippning och områdesgränser passerade.
   - Sitsen fick en separat sittskål, sidostöd och synliga monteringsskenor. Ryggstödet fick ett bakstycke och egna fästtappar. Granskat i Godot med föraren på plats. Provet för gräsklippning och områdesgränser passerade.
   - Ratten fick jämnare greppyta, tre formade ekrar och ett separat nav med centrumkåpa. Granskat i Godot med förarens händer på ratten. Navet följer rattens rotation och fordonsprovet passerade.
-- [ ] [`saab96.glb`](../vehicles/saab96.glb)
+- [ ] [`classic_fastback.glb`](../vehicles/classic_fastback.glb)
   - Saav 97 fick ett upphöjt modellemblem på bakluckan. Granskat i Godot och fordonsprovet passerade.
   - Fronten fick separata strålkastarhus med blanka ramar, en grill med fem lameller och ett SAAV-emblem. Granskat i närbild i Godot. Fordonsprovet passerade.
   - Blinkersen fick egna lamphus och blanka ramar fram samt separata bärnstensfärgade fält i baklyktorna. Fronten granskades i Godot. Fordonsprovet verifierade att spelet använder de fyra modellerade linserna.
@@ -381,7 +383,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Strålkastarglaset fick en mörkare innerkant och en varmare reflektor bakom de lodräta räfflorna. Granskat i Godot. Fordonsprovet passerade.
   - Den ensamma strålkastaren fick en kortare och smalare ljuskägla. Granskat i nattläge i Godot. Fordonsprovet verifierar att både ljuskäglan och glasets ljus slås på i mörker och släcks i dagsljus.
 - [ ] [`snowmobile.glb`](../vehicles/snowmobile.glb)
-- [ ] [`sport_quattro.glb`](../vehicles/sport_quattro.glb)
+- [ ] [`rally_coupe.glb`](../vehicles/rally_coupe.glb)
   - Fordonsprovet kontrollerar att galleriet visar Audo Sport Kvattro, att bakluckan har Kvattro-emblemet och att fronten har fem ringar. Språkkontrollen passerade för alla sex översättningskataloger.
   - Bakluckan fick emblemet Kvattro och galleriet visar Audo Sport Kvattro. Båda registreringsskyltarna fick distanser och spårskruvar. Emblemet och skyltarna granskades i Godot. Fordonsprovet och språkkontrollen passerade.
 - [ ] [`taxi.glb`](../vehicles/taxi.glb)
@@ -391,17 +393,17 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Båda arbetslamporna fick bultade fästen, linsramar och kabelgenomföringar. Granskat framifrån och bakifrån i Godot. Halkbekämpningsprovet passerade.
   - Plogens hydraulcylindrar fick separata cylinderhus, kolvstänger och gaffelfästen med synliga ledtappar. Granskat från sidan i Godot. Halkbekämpningsprovet passerade.
   - Plogens fyra utlösningsfjädrar fick centreringskoppar och styrtappar. Fästena följer bladets profil. Granskat bakifrån i Godot och halkbekämpningsprovet passerade.
-- [ ] [`traffic_bmw_blue.glb`](../vehicles/traffic_bmw_blue.glb)
-- [ ] [`traffic_bmw_silver.glb`](../vehicles/traffic_bmw_silver.glb)
+- [ ] [`traffic_suv_blue.glb`](../vehicles/traffic_suv_blue.glb)
+- [ ] [`traffic_suv_silver.glb`](../vehicles/traffic_suv_silver.glb)
 - [ ] [`tram_cab.glb`](../vehicles/tram_cab.glb)
 - [ ] [`tram_saloon.glb`](../vehicles/tram_saloon.glb)
-- [ ] [`volvo240.glb`](../vehicles/volvo240.glb)
+- [ ] [`classic_estate.glb`](../vehicles/classic_estate.glb)
   - Volva 241 fick ett upphöjt modellemblem på bakluckan och ett eget V-emblem i grillen. Båda granskades i Godot och fordonsprovet passerade.
-- [ ] [`volvo_ec950f.glb`](../vehicles/volvo_ec950f.glb)
+- [ ] [`crawler_excavator.glb`](../vehicles/crawler_excavator.glb)
   - Volva HT-16 fick Volvas V-emblem på motvikten och nytt namn i fordonsgalleriet. Emblemet granskades i Godot. Fordonsprovet, grävarens sparprov och språkkontrollen passerade.
-- [ ] [`volvo_wheel_loader.glb`](../vehicles/volvo_wheel_loader.glb)
+- [ ] [`wheel_loader.glb`](../vehicles/wheel_loader.glb)
   - Volva L91 fick V-emblem på kylargallret, upphöjda modellskyltar på sidorna och nytt namn i fordonsgalleriet. Bakemblemet och den högra modellskylten granskades i Godot. Fordonsprovet och språkkontrollen passerade.
-- [ ] [`volvo_xc60_polis.glb`](../vehicles/volvo_xc60_polis.glb)
+- [ ] [`police_suv.glb`](../vehicles/police_suv.glb)
   - Volva HT-6 har samma V-emblem som Volva 241, egen märkning på bakluckan och nytt namn i fordonsgalleriet. Exteriördetaljerna granskades i Godot. Fordonsprovet, utryckningsprovet och språkkontrollen passerade.
 
 #### Byggnader och miljöobjekt

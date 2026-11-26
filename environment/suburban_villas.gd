@@ -11,7 +11,7 @@ const TRIM := Color("#eee6d6")
 const TIMBER := Color("#957b60")
 const BULBS := [Color("#ffde9e"), Color("#ffbc58"), Color("#ed4836"), Color("#57b993")]
 const HOUSE_LIGHTS := [[0], [1, 0, 1], [3, 0], [0, 2, 1, 3]]
-const PARKED_CARS := [preload("res://vehicles/volvo240.glb"), preload("res://vehicles/saab96.glb")]
+const PARKED_CARS := [preload("res://vehicles/classic_estate.glb"), preload("res://vehicles/classic_fastback.glb")]
 
 var world: Node3D
 var winter_trim := Node3D.new()

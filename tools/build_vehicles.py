@@ -981,8 +981,8 @@ def make_police():
     rear.rotation_euler=(math.pi/2,0,math.pi)
     return root
 
-def make_volvo_xc60_police():
-    from xc60_body import build
+def make_police_suv():
+    from police_suv_body import build
     return build()
 
 
@@ -1708,7 +1708,7 @@ def profile_loft(name, rings, finish, parent, close_ends=True):
     obj.parent=parent
     return obj
 
-def make_bmw(color, name="BMV X5i", *, patrol=False):
+def make_bmw(color, name="BWM Y5 N70i", *, patrol=False):
     detailed_cabin = patrol or color == PAINT_BLACK
     grille_edge_finish = material("Satin graphite grille edges", (0.12, 0.135, 0.14), 0.58, 0.33)
     indicator_finish = material("Smoked amber indicator lens", (0.22, 0.10, 0.03), 0.10, 0.31)
@@ -2006,7 +2006,7 @@ def make_bmw(color, name="BMV X5i", *, patrol=False):
     hatch_skin = hatch.evaluated_get(bpy.context.evaluated_depsgraph_get())
     cube("Plate frame",(0,2.509,1.204),(.59,.012,.154),BLACK,.005,root)
     cube("Registration plate",(0,2.517,1.204),(.56,.007,.132),PAINT_WHITE,.003,root)
-    if root.name.startswith("BMV X5i"):
+    if root.name.startswith("BWM Y5 N70i"):
         for x in (-.18, .18):
             cube("Rear plate lamp housing", (x, 2.526, 1.303),
                  (.091, .040, .024), DARK, .006, root)
@@ -2351,7 +2351,7 @@ def make_bmw(color, name="BMV X5i", *, patrol=False):
                        (u+.23,.68),(u+.14,.68),(u+.12,.52)],.020,METAL)
             lamp_patch("Projector lens",[(u+.15,.34),(u+.225,.34),(u+.238,.53),
                        (u+.22,.62),(u+.15,.62),(u+.138,.52)],.026,GLASS,dome=.026)
-        if root.name.startswith("BMV X5i"):
+        if root.name.startswith("BWM Y5 N70i"):
             lamp_patch("Front amber indicator", [(.73,.75),(.90,.73),(.94,.78),
                        (.91,.86),(.73,.87)], .024, indicator_finish)
         duct = [(.015,1.005),(.49,1.014),(.68,1.09),(.80,1.145),(.85,1.115),
@@ -2487,7 +2487,7 @@ def make_bmw(color, name="BMV X5i", *, patrol=False):
                 ("Upper ruby light guide",TAIL_LAMP,.25,.27,.006),
                 ("Lower ruby light guide",TAIL_LAMP,-.24,.23,.006),
         ]
-        if root.name.startswith("BMV X5i"):
+        if root.name.startswith("BWM Y5 N70i"):
             rear_lamp_layers.append(("Rear indicator lens", indicator_finish, 0, .16, .008))
         for label, finish, band, thickness, outset in rear_lamp_layers:
             vertices, faces = [], []
@@ -2622,7 +2622,7 @@ def make_bmw(color, name="BMV X5i", *, patrol=False):
     spoiler=bpy.data.objects.new("Front lower splitter",mesh)
     bpy.context.collection.objects.link(spoiler)
     spoiler.parent=root
-    badge_teal = material("BMV turquoise enamel", (.015, .37, .32), .20, .26)
+    badge_teal = material("BWM turquoise enamel", (.015, .37, .32), .20, .26)
 
     def roundel(name, center, vertical, outward, radius):
         vertices, faces, finishes = [], [], []
@@ -2753,7 +2753,7 @@ def make_bmw(color, name="BMV X5i", *, patrol=False):
         top=[(x*w,y,roof_height(x*w,y)+.006) for x in (-1,-.75,-.5,-.25,0,.25,.5,.75,1)]
         glass_rings.append(top+[(x,y,z-.013) for x,y,z in reversed(top)])
     profile_loft("Panoramic sunroof",glass_rings,privacy,root)
-    if root.name.startswith("BMV X5i"):
+    if root.name.startswith("BWM Y5 N70i"):
         cube("Front plate holder", (0, -2.531, 1.035), (.754, .108, .208), DARK, .022, root)
     cube("Front plate", (0, -2.596, 1.035), (0.72, 0.035, 0.18), PAINT_WHITE, 0.025, root)
     registration = {PAINT_BLUE_CAR: "AXL 061", PAINT_SILVER: "AXL 062"}.get(color, "AXL 060")
@@ -2895,10 +2895,10 @@ def render_bmw_detail(root):
     bpy.context.scene.render.image_settings.file_format = "PNG"
     bpy.context.scene.view_settings.view_transform = "AgX"
     bpy.context.scene.world.color = (0.12, 0.13, 0.14)
-    bpy.context.scene.render.filepath = os.path.join(OUT_DIR, "bmw_x5_reference_study.png")
+    bpy.context.scene.render.filepath = os.path.join(OUT_DIR, "luxury_suv_reference_study.png")
     bpy.context.preferences.filepaths.save_version = 0
     bpy.ops.render.render(write_still=True)
-    bpy.ops.wm.save_as_mainfile(filepath=os.path.join(SOURCE_DIR, "BMW_X5_M60i_ReferenceStudy.blend"))
+    bpy.ops.wm.save_as_mainfile(filepath=os.path.join(SOURCE_DIR, "luxury_suv_reference_study.blend"))
 
 def export_vehicle(root, filename):
     bpy.ops.object.select_all(action="DESELECT")
@@ -2915,15 +2915,15 @@ def main():
     police = make_police()
     fire = make_fire_engine()
     bmw_black = make_bmw(PAINT_BLACK)
-    bmw_silver = make_bmw(PAINT_SILVER, "BMV X5i / Arctic silver")
-    bmw_blue = make_bmw(PAINT_BLUE_CAR, "BMV X5i / Deep blue")
+    bmw_silver = make_bmw(PAINT_SILVER, "BWM Y5 N70i / Arctic silver")
+    bmw_blue = make_bmw(PAINT_BLUE_CAR, "BWM Y5 N70i / Deep blue")
     export_vehicle(make_taxi(), "taxi.glb")
     export_vehicle(ambulance, "ambulance.glb")
     export_vehicle(police, "polisbil.glb")
     export_vehicle(fire, "brandbil.glb")
-    export_vehicle(bmw_black, "bmw_x5_m60i.glb")
-    export_vehicle(bmw_silver, "traffic_bmw_silver.glb")
-    export_vehicle(bmw_blue, "traffic_bmw_blue.glb")
+    export_vehicle(bmw_black, "luxury_suv.glb")
+    export_vehicle(bmw_silver, "traffic_suv_silver.glb")
+    export_vehicle(bmw_blue, "traffic_suv_blue.glb")
     polish_scene([ambulance, police, fire, bmw_black], [bmw_silver, bmw_blue])
     render_bmw_detail(bmw_black)
     print("Built Blender source, three emergency vehicles, and a BMW X5 M60i with traffic variants in", OUT_DIR)

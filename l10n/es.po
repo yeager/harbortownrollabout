@@ -958,11 +958,11 @@ msgstr "Siguiente canción · %s"
 msgid "Ready to run again! Hold {run} and walk forward."
 msgstr "¡Ya puedes correr! Mantén pulsada {run} y camina hacia delante."
 
-msgid "BMV X5i"
-msgstr "BMV X5i"
+msgid "BWM Y5 N70i"
+msgstr "BWM Y5 N70i"
 
-msgid "BMV M3 E33"
-msgstr "BMV M3 E33"
+msgid "BWM M3 E33"
+msgstr "BWM M3 E33"
 
 msgid "Volva 241"
 msgstr "Volva 241"

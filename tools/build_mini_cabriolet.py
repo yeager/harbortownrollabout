@@ -8,7 +8,7 @@ from mathutils import Vector
 
 TOOLS = Path(__file__).resolve().parent
 sys.path.insert(0, str(TOOLS))
-from build_porsche import grid, oval, profile, tube
+from build_track_coupe import grid, oval, profile, tube
 from build_vehicles import cube, cylinder, material, text_obj
 
 PROJECT = TOOLS.parent
@@ -289,7 +289,7 @@ bpy.ops.object.select_all(action="SELECT")
 bpy.context.view_layer.objects.active=bpy.context.selected_objects[0]
 bpy.ops.object.convert(target="MESH")
 bpy.context.preferences.filepaths.save_version=0
-bpy.ops.wm.save_as_mainfile(filepath=str(PROJECT/"source_blender/MiniCooperCabriolet.blend"),compress=True)
+bpy.ops.wm.save_as_mainfile(filepath=str(PROJECT/"source_blender/compact_convertible.blend"),compress=True)
 # Ship a small set of material batches while keeping the editable source parts.
 groups = {}
 for obj in list(bpy.context.scene.objects):
@@ -303,5 +303,5 @@ for finish, parts in groups.items():
     if len(parts) > 1:
         bpy.ops.object.join()
     parts[0].name = finish
-bpy.ops.export_scene.gltf(filepath=str(PROJECT/"vehicles/mini_cooper_cabriolet.glb"),
+bpy.ops.export_scene.gltf(filepath=str(PROJECT/"vehicles/compact_convertible.glb"),
                           export_format="GLB",export_yup=True,export_animations=False)

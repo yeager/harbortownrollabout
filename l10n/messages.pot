@@ -903,10 +903,10 @@ msgstr ""
 msgid "Ready to run again! Hold {run} and walk forward."
 msgstr ""
 
-msgid "BMV X5i"
+msgid "BWM Y5 N70i"
 msgstr ""
 
-msgid "BMV M3 E33"
+msgid "BWM M3 E33"
 msgstr ""
 
 msgid "Volva 241"

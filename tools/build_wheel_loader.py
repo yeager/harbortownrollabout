@@ -36,7 +36,7 @@ def pivot(name, point, parent=None):
     return obj
 
 
-root = pivot("VolvoWheelLoader", (0, 0, 0))
+root = pivot("wheel_loader", (0, 0, 0))
 rear = pivot("RearFrame", (0, 0, 0), root)
 front = pivot("Articulation", (0, -.18, 1.04), root)
 lift = pivot("LiftArms", (0, -.85, 1.84), front)
@@ -260,7 +260,7 @@ for i in range(7):
     profile("Replaceable digging tooth",[(-4.42,.085),(-4.69,.065),(-4.75,.086),(-4.53,.18),(-4.40,.19)],
             x-.075,x+.075,edge,bucket,.012)
 
-v.export_vehicle(root,"volvo_wheel_loader.glb")
+v.export_vehicle(root,"wheel_loader.glb")
 # Camera and lighting stay in the editable studio file and out of the game mesh.
 scene=bpy.context.scene
 target=Vector((0,-.72,1.45))
@@ -282,7 +282,7 @@ scene.world.color=(.25,.25,.25)
 scene.render.engine='CYCLES';scene.cycles.samples=12;scene.cycles.use_denoising=True
 scene.render.resolution_percentage=100
 scene.render.resolution_x,scene.render.resolution_y=1000,670
-scene.render.filepath="//../docs/volvo-wheel-loader.png"
+scene.render.filepath="//../docs/wheel-loader.png"
 for area in bpy.context.screen.areas:
     if area.type=='VIEW_3D':
         view=area.spaces.active
@@ -291,5 +291,5 @@ for area in bpy.context.screen.areas:
         view.overlay.show_overlays=False;view.shading.color_type='MATERIAL'
 bpy.ops.object.select_all(action='DESELECT')
 root.select_set(True);bpy.context.view_layer.objects.active=root
-bpy.ops.wm.save_as_mainfile(filepath=str(Path(v.SOURCE_DIR)/"VolvoWheelLoader.blend"))
+bpy.ops.wm.save_as_mainfile(filepath=str(Path(v.SOURCE_DIR)/"wheel_loader.blend"))
 bpy.ops.render.render(write_still=True)

@@ -9,9 +9,9 @@ from build_vehicles import (clear_scene, cube, cylinder, material, mesh_from_rin
     export_vehicle, profile_loft, text_obj, SOURCE_DIR, DARK, RUBBER, METAL, HEADLAMP, RED_LAMP)
 
 CLASSIC_BADGES = {
-    "m3_e30": ("BMV M3 E33", .802),
-    "volvo240": ("VOLVA 241", .844),
-    "saab96": ("SAAV 97", .567),
+    "sport_sedan": ("BWM M3 E33", .802),
+    "classic_estate": ("VOLVA 241", .844),
+    "classic_fastback": ("SAAV 97", .567),
 }
 
 def saav_tire(side, x, y, radius, root):
@@ -54,7 +54,7 @@ def build(key, length, width, axles, color, belt, cabin):
     paint=material(key+" enamel",color,.42,.26)
     glass=material("Smoked blue glazing",(.035,.062,.077),.47,.15)
     cabin_materials=[paint,glass]
-    if key=="m3_e30":
+    if key=="sport_sedan":
         windscreens=material("Laminated blue-green safety glass",(.065,.125,.135),.08,.13)
         shade=material("Blue-green upper sun strip",(.025,.063,.078),.07,.16)
         for finish,alpha in [(windscreens,.58),(shade,.72)]:
@@ -63,7 +63,7 @@ def build(key, length, width, axles, color, belt, cabin):
         cabin_materials.extend([windscreens,shade])
     white=material("Ivory",(.88,.86,.75),.13,.3)
     amber=material("Indicator",(.95,.29,.012),.15,.27)
-    if key == "saab96":
+    if key == "classic_fastback":
         reverse_glass = material("Reverse lamp Saav glass",(.73,.77,.74),.14,.24)
     def box(name,x,y,z,w,d,h,mat,bev=.018):
         return cube(name,(x,y,z),(w,d,h),mat,bev,root)
@@ -75,7 +75,7 @@ def build(key, length, width, axles, color, belt, cabin):
     end=length/2
     wheel=.46 if bus else .32
     shape=[(-1,.88,.8),(-.93,.97,.92),(-.63,1,1),(-.28,.98,1.03),(.22,.99,1.02),(.65,1,1),(.94,.97,.98),(1,.91,.92)]
-    if key=="saab96": shape=[(-1,.70,.77),(-.91,.90,.85),(-.67,1,.96),(-.29,.98,1.05),(.25,.98,1.06),(.68,1,.99),(.92,.88,.86),(1,.72,.73)]
+    if key=="classic_fastback": shape=[(-1,.70,.77),(-.91,.90,.85),(-.67,1,.96),(-.29,.98,1.05),(.25,.98,1.06),(.68,1,.99),(.92,.88,.86),(1,.72,.73)]
     if bus: shape=[(-1,.94,.99),(-.97,1,1),(.97,1,1),(1,.96,.99)]
     body=mesh_from_rings("Painted bodyshell",[(u*end,w*width,.20,belt*h-.04,belt*h) for u,w,h in shape],paint,root,.035)
     for y in axles:
@@ -86,13 +86,13 @@ def build(key, length, width, axles, color, belt, cabin):
         bpy.ops.object.modifier_apply(modifier=mod.name)
         bpy.data.objects.remove(cutter,do_unlink=True)
         for side in [-1,1]:
-            if key == "saab96":
+            if key == "classic_fastback":
                 saav_tire(side,width-.12,y,wheel,root)
             else:
                 cylinder("Däck",(side*(width-.12),y,wheel),wheel,.21,RUBBER,True,48,root)
-            for name,x,r,d,mat in [("Alloy wheel",width-.012,wheel*.74,.04,DARK if key=="saab96" else METAL),("Wheel hub",width+.012,wheel*.43,.036,DARK)]:
+            for name,x,r,d,mat in [("Alloy wheel",width-.012,wheel*.74,.04,DARK if key=="classic_fastback" else METAL),("Wheel hub",width+.012,wheel*.43,.036,DARK)]:
                 cylinder(name,(side*x,y,wheel),r,d,mat,True,48,root)
-            if key=="m3_e30":
+            if key=="sport_sedan":
                 cylinder("Anthracite wheel barrel",(side*(width+.019),y,wheel),.208,.029,DARK,True,48,root)
                 vertices,faces=[],[]
                 for i in range(16):
@@ -119,7 +119,7 @@ def build(key, length, width, axles, color, belt, cabin):
                     angle=math.tau*i/5
                     cylinder("Wheel bolt",(side*(width+.07),y+.046*math.sin(angle),wheel+.046*math.cos(angle)),.011,.012,DARK,True,6,root)
                 continue
-            if key == "saab96":
+            if key == "classic_fastback":
                 wheel_x = side*(width+.038)
                 dish = cylinder("Pressed steel wheel", (wheel_x,y,wheel), .211,
                                 .022,METAL,True,64,root)
@@ -172,7 +172,7 @@ def build(key, length, width, axles, color, belt, cabin):
         return points
     for i,(a,b) in enumerate(zip(sections,sections[1:])):
         for j in range(3):
-            if key=="m3_e30" and j==1:
+            if key=="sport_sedan" and j==1:
                 near,far=crowned_edge(a),crowned_edge(b)
                 for k in range(len(near)-1):
                     if i==0:
@@ -184,15 +184,15 @@ def build(key, length, width, axles, color, belt, cabin):
                         finish=windscreens if i==len(sections)-2 else paint
                         quad([near[k],far[k],far[k+1],near[k+1]],finish)
                 continue
-            quad([a[j],b[j],b[j+1],a[j+1]],glass if j!=1 or i in [0,len(sections)-2] or key=="model_s" else paint)
+            quad([a[j],b[j],b[j+1],a[j+1]],glass if j!=1 or i in [0,len(sections)-2] or key=="electric_sedan" else paint)
         for side,j in [(-1,0),(1,3)]:
             k=1 if j==0 else 2
-            bar("Roof rail",a[k],b[k],.036 if key=="m3_e30" else .058,paint)
+            bar("Roof rail",a[k],b[k],.036 if key=="sport_sedan" else .058,paint)
             if i>0:
-                bar("Window pillar",a[j],a[k],.043 if key=="m3_e30" else .065,paint if i==1 else DARK)
-            if key=="m3_e30":
+                bar("Window pillar",a[j],a[k],.043 if key=="sport_sedan" else .065,paint if i==1 else DARK)
+            if key=="sport_sedan":
                 bar("Beltline window seal",a[j],b[j],.025,RUBBER)
-    if key=="m3_e30":
+    if key=="sport_sedan":
         lower,upper=[crowned_edge(section) for section in sections[:2]]
         def windshield(u,t):
             column=min(9,int(u*10))
@@ -206,7 +206,7 @@ def build(key, length, width, axles, color, belt, cabin):
         for u in [.36,.78]:
             bar("Wiper arm",windshield(u,.022),windshield(u-.117,.135),.012,DARK)
             bar("Wiper blade",windshield(u-.236,.149),windshield(u+.026,.117),.015,RUBBER)
-    elif key == "saab96":
+    elif key == "classic_fastback":
         lower, upper = sections[:2]
         def glass_point(u, t):
             foot = Vector(lower[1]).lerp(Vector(lower[2]),u)
@@ -244,7 +244,7 @@ def build(key, length, width, axles, color, belt, cabin):
     cabin_obj=bpy.data.objects.new("Cabin",mesh);bpy.context.collection.objects.link(cabin_obj);cabin_obj.parent=root
     for mat in cabin_materials: mesh.materials.append(mat)
     for p,m in zip(mesh.polygons,mats): p.material_index=cabin_materials.index(m)
-    if key in ["m3_e30","volvo240"]:
+    if key in ["sport_sedan","classic_estate"]:
         glass.diffuse_color=(.12,.17,.19,.40)
         shader=next(node for node in glass.node_tree.nodes if node.type=="BSDF_PRINCIPLED")
         shader.inputs["Alpha"].default_value=.40
@@ -266,7 +266,7 @@ def build(key, length, width, axles, color, belt, cabin):
         rim.parent=root
         rim.data.materials.append(RUBBER)
         box("Steering wheel hub",-.39,-.405,belt+.11,.244,.034,.037,DARK)
-    if key=="volvo240":
+    if key=="classic_estate":
         reverse=material("Reverse lamp classic saloon",(.76,.79,.74),.09,.21)
         top,bottom=sections[-2:]
         for t in [.045,.2,.32,.44,.56,.68,.8,.95]:
@@ -277,7 +277,7 @@ def build(key, length, width, axles, color, belt, cabin):
             bar("Rear screen seal" if t in [.045,.95] else "Heated screen filament",
                 left,right,.022 if t in [.045,.95] else .003,RUBBER)
     for side in [-1,1]:
-        if key in ["m3_e30","volvo240"]:
+        if key in ["sport_sedan","classic_estate"]:
             # Solid sail panel joins the roof to the rear deck behind the quarter glass.
             y1,z1,w1=cabin[-2]
             y2,z2,w2=cabin[-1]
@@ -288,10 +288,10 @@ def build(key, length, width, axles, color, belt, cabin):
                                      (side*(width*.91+depth),y2+.008,belt-.019),
                                      (side*(width*.91+depth),y2-.23,belt-.019)])
             profile_loft("Painted rear quarter pillar",pillar_rings,paint,root)
-            for y in ([.35] if key=="m3_e30" else [.12,.94]):
+            for y in ([.35] if key=="sport_sedan" else [.12,.94]):
                 bar("Door shut line",(side*width*.992,y,belt-.045),
                     (side*width*.994,y-.018,.55),.012,DARK)
-        if key=="m3_e30":
+        if key=="sport_sedan":
             mount_y=cabin[1][0]-.07
             bar("Mirror stalk",(side*(width-.06),mount_y,belt+.08),
                 (side*(width+.055),mount_y+.009,belt+.14),.047,DARK)
@@ -301,7 +301,7 @@ def build(key, length, width, axles, color, belt, cabin):
                               for t in [math.tau*i/20 for i in range(20)]])
             profile_loft("Aero mirror housing",shell,paint,root)
             box("Mirror glass",side*(width+.108),mount_y+.062,belt+.15,.159,.009,.077,METAL,.004)
-        elif key == "saab96":
+        elif key == "classic_fastback":
             mount_y = cabin[1][0] - .07
             box("Mirror door gasket",side*.761,mount_y,.929,.048,.108,.089,RUBBER,.012)
             bar("Mirror angled stalk",(side*.780,mount_y,.937),
@@ -311,7 +311,7 @@ def build(key, length, width, axles, color, belt, cabin):
             box("Mirror glass",side*.884,mount_y+.044,1.014,.140,.011,.075,METAL,.012)
         else:
             box("Mirror",side*(width+.065),cabin[1][0]-.07,belt+.12,.17,.22,.13,paint)
-        if key == "saab96":
+        if key == "classic_fastback":
             # Project the shut line onto the curved outer panel.
             outline = [(-.657,.897),(.536,.897),(.625,.815),(.611,.360),
                        (.532,.281),(-.582,.281),(-.655,.347)]
@@ -340,14 +340,14 @@ def build(key, length, width, axles, color, belt, cabin):
             box("Saav door pull",side*.793,.375,.777,.025,.131,.030,METAL,.008)
             cylinder("Saav door lock",(side*.794,.450,.769),.012,.010,METAL,True,20,root)
         else:
-            for y in ([.10,.94] if key in ["model_s","volvo240"] else [.22]):
+            for y in ([.10,.94] if key in ["electric_sedan","classic_estate"] else [.22]):
                 box("Door handle",side*width*.99,y,belt-.14,.032,.15,.04,DARK)
-        if key=="volvo240":
+        if key=="classic_estate":
             box("Rectangular headlamp seal",side*.59,-end-.025,belt*.73,.39,.065,.245,DARK)
             box("Fluted rectangular headlamp",side*.59,-end-.064,belt*.73,.35,.034,.205,HEADLAMP)
             box("Corner indicator",side*.802,-end+.015,belt*.73,.065,.16,.20,amber)
             box("Rubber door protector",side*width,0,.54,.038,1.91,.075,RUBBER)
-        elif key=="m3_e30":
+        elif key=="sport_sedan":
             box("Sculpted sill",side*(width-.012),0,.29,.115,1.87,.115,paint,.032)
             box("Front brake cooling duct",side*.51,-end-.077,.35,.27,.023,.064,DARK)
             for axle in axles:
@@ -374,7 +374,7 @@ def build(key, length, width, axles, color, belt, cabin):
                 bezel.rotation_euler.x=math.pi/2
                 lens=cylinder("Headlight",(side*x,-end-.082,belt*.73),.096,.018,HEADLAMP,False,40,root)
                 lens.rotation_euler.x=math.pi/2
-        elif key == "saab96":
+        elif key == "classic_fastback":
             x = side*.501
             box("Headlamp pocket",x,-end-.029,.657,.359,.103,.237,RUBBER,.027)
             box("Headlamp bright surround",x,-end-.084,.657,.318,.032,.204,METAL,.020)
@@ -383,21 +383,21 @@ def build(key, length, width, axles, color, belt, cabin):
             box("Front indicator bezel",x,-end-.108,.492,.205,.024,.059,METAL,.007)
             box("Front amber indicator",x,-end-.125,.492,.184,.020,.045,amber,.006)
         else:
-            box("Headlamp",side*width*.68,-end-.02,belt*.72,width*.40,.065,.10 if key=="model_s" else .18,HEADLAMP)
-        if key=="volvo240":
+            box("Headlamp",side*width*.68,-end-.02,belt*.72,width*.40,.065,.10 if key=="electric_sedan" else .18,HEADLAMP)
+        if key=="classic_estate":
             box("Six-cell lamp gasket",side*.605,end+.018,.725,.405,.075,.226,RUBBER,.017)
             for row,finishes in enumerate([(RED_LAMP,RED_LAMP,RED_LAMP),(RED_LAMP,reverse,amber)]):
                 for column,finish in enumerate(finishes):
                     x=side*(.478+column*.127)
                     box("Rear lamp cell",x,end+.062,.674+row*.102,.122,.029,.094,finish,.008)
             box("Bumper quarter return",side*.819,end-.16,.435,.103,.42,.154,RUBBER,.024)
-        elif key=="m3_e30":
+        elif key=="sport_sedan":
             box("Rear light cluster seal",side*.57,end+.018,.708,.468,.078,.203,RUBBER,.018)
             clear_lens=material("Reverse lamp coupe",(.77,.80,.74),.15,.18)
             for x,w,finish in [(.399,.105,clear_lens),(.544,.175,RED_LAMP),(.715,.151,amber)]:
                 box("Rear lamp upper lens",side*x,end+.062,.755,w,.032,.075,finish,.007)
             box("Rear lamp stop lens",side*.57,end+.062,.661,.443,.032,.088,RED_LAMP,.009)
-        elif key == "saab96":
+        elif key == "classic_fastback":
             x = side*.538
             box("Rear combination lamp housing",x,end+.027,.631,.284,.104,.215,RUBBER,.018)
             box("Rear lamp bezel",x,end+.083,.631,.260,.032,.191,METAL,.012)
@@ -408,7 +408,7 @@ def build(key, length, width, axles, color, belt, cabin):
             box("Ruby tail lens",side*width*.66,end+.025,belt*.73,width*.44,.07,.12,RED_LAMP)
             box("Amber lens",side*width*.84,end+.03,belt*.75,.07,.07,.09,amber)
     for y in [-end,end]:
-        if key=="volvo240" and y>0:
+        if key=="classic_estate" and y>0:
             box("Rear impact bumper",0,y+.052,.435,1.72,.21,.158,RUBBER,.030)
             box("Bumper bright edge",0,y+.115,.512,1.62,.045,.019,METAL,.007)
             box("Boot trailing edge",0,y-.027,.907,1.46,.12,.034,paint,.012)
@@ -417,7 +417,7 @@ def build(key, length, width, axles, color, belt, cabin):
             plate=text_obj("Registration lettering","SJO 240",(.165,y+.042,.657),.09,DARK,root=root,flat=True)
             plate.rotation_euler=(math.pi/2,0,math.pi)
             box("Boot release",0,y+.03,.804,.098,.040,.028,METAL,.009)
-        elif key=="m3_e30" and y>0:
+        elif key=="sport_sedan" and y>0:
             bumper=[]
             for x in [-.85,-.83,-.78,-.67,0,.67,.78,.83,.85]:
                 setback=.14*(abs(x)/.85)**12
@@ -435,7 +435,7 @@ def build(key, length, width, axles, color, belt, cabin):
                 pipe.rotation_euler.x=math.pi/2
                 bore=cylinder("Exhaust opening",(x,y+.112,.238),.034,.006,DARK,False,24,root)
                 bore.rotation_euler.x=math.pi/2
-        elif key == "saab96":
+        elif key == "classic_fastback":
             outward = math.copysign(1,y)
             profile = [(-.078,.314),(.035,.304),(.063,.320),(.067,.341),
                        (.067,.392),(.051,.416),(.022,.424),(-.078,.412)]
@@ -447,8 +447,8 @@ def build(key, length, width, axles, color, belt, cabin):
                                   .36+(z-.36)*section_height) for depth,z in profile])
             profile_loft("Saav wraparound bumper",sections,RUBBER,root)
         else:
-            box("Bumper",0,y,.36,width*1.96,.13,.13,RUBBER if key!="m3_e30" else paint)
-    if key == "saab96":
+            box("Bumper",0,y,.36,width*1.96,.13,.13,RUBBER if key!="sport_sedan" else paint)
+    if key == "classic_fastback":
         outline = [(-.340,.748),(.340,.748),(.368,.699),(.357,.445),
                    (.310,.406),(-.310,.406),(-.357,.445),(-.368,.699)]
         seam = bpy.data.curves.new("Saav boot shut line","CURVE")
@@ -522,18 +522,18 @@ def build(key, length, width, axles, color, belt, cabin):
                 screw = cylinder("Saav plate screw",(x,y+outward*.032,height+.038),
                                  .006,.007,METAL,False,12,root)
                 screw.rotation_euler.x = math.pi/2
-    if key!="model_s":
+    if key!="electric_sedan":
         box("Grille",0,-end-.033,belt*.74,width*.91,.05,.22,DARK)
-        if key=="volvo240":
+        if key=="classic_estate":
             grille_y = -end - .083
             box("Volva grille badge",0,grille_y,.735,.19,.025,.14,DARK,.009)
             for side in [-1,1]:
                 bar("Volva grille chevron",(side*.062,grille_y-.018,.775),
                     (0,grille_y-.018,.698),.017,METAL)
-        elif key=="m3_e30":
+        elif key=="sport_sedan":
             for x in [-.09,.09]: box("Kidney surround",x,-end-.074,belt*.74,.15,.035,.20,METAL)
             for x in [-.09,.09]: box("Kidney opening",x,-end-.097,belt*.74,.115,.025,.17,DARK)
-        if key == "saab96":
+        if key == "classic_fastback":
             box("Saav grille backing",0,-end-.063,.657,.669,.075,.225,DARK,.020)
             for z in (.554,.761):
                 box("Grille bright trim",0,-end-.108,z,.656,.022,.016,METAL,.005)
@@ -564,7 +564,7 @@ def build(key, length, width, axles, color, belt, cabin):
         emblem.rotation_euler = (math.pi/2,0,math.pi)
         bounds = [vertex.co.x for vertex in emblem.data.vertices]
         emblem.location.x = (min(bounds)+max(bounds))*.5
-    if key=="m3_e30":
+    if key=="sport_sedan":
         for side in [-1,1]:
             feet=[]
             for z,y,d,w in [(belt-.063,end-.16,.168,.069),(belt-.042,end-.16,.139,.047),
@@ -589,8 +589,8 @@ def build(key, length, width, axles, color, belt, cabin):
     bpy.context.preferences.filepaths.save_version=0
     bpy.ops.wm.save_as_mainfile(filepath=str(Path(SOURCE_DIR)/(key+".blend")))
 
-build("m3_e30",4.35,.86,[-1.28,1.28],(.57,.018,.023),.93,[(-1.02,.97,.89),(-.49,1.40,.77),(.20,1.42,.76),(.69,1.40,.76),(1.30,.97,.89)])
-build("volvo240",4.77,.86,[-1.32,1.32],(.89,.23,.035),.99,[(-.96,1.03,.89),(-.53,1.46,.81),(.20,1.48,.80),(.86,1.47,.81),(1.32,1.03,.89)])
-build("saab96",4.15,.79,[-1.23,1.23],(.12,.38,.30),.90,[(-.88,.95,.88),(-.49,1.38,.76),(-.23,1.47,.73),(.28,1.48,.73),(.69,1.41,.74),(1.09,1.22,.79),(1.57,.91,.82)])
-build("model_s",4.97,.97,[-1.48,1.48],(.82,.84,.86),.90,[(-1.31,.94,.89),(-.63,1.31,.75),(-.2,1.43,.71),(.39,1.44,.71),(.88,1.35,.74),(1.47,1.13,.78),(1.93,.93,.81)])
+build("sport_sedan",4.35,.86,[-1.28,1.28],(.57,.018,.023),.93,[(-1.02,.97,.89),(-.49,1.40,.77),(.20,1.42,.76),(.69,1.40,.76),(1.30,.97,.89)])
+build("classic_estate",4.77,.86,[-1.32,1.32],(.89,.23,.035),.99,[(-.96,1.03,.89),(-.53,1.46,.81),(.20,1.48,.80),(.86,1.47,.81),(1.32,1.03,.89)])
+build("classic_fastback",4.15,.79,[-1.23,1.23],(.12,.38,.30),.90,[(-.88,.95,.88),(-.49,1.38,.76),(-.23,1.47,.73),(.28,1.48,.73),(.69,1.41,.74),(1.09,1.22,.79),(1.57,.91,.82)])
+build("electric_sedan",4.97,.97,[-1.48,1.48],(.82,.84,.86),.90,[(-1.31,.94,.89),(-.63,1.31,.75),(-.2,1.43,.71),(.39,1.44,.71),(.88,1.35,.74),(1.47,1.13,.78),(1.93,.93,.81)])
 build("city_bus",10.4,1.24,[-3.12,2.94],(.65,.025,.038),1.45,[(-5.2,1.50,.90),(-4.99,2.96,.94),(-3.45,2.98,.94),(-1.9,2.98,.94),(-.4,2.98,.94),(1.1,2.98,.94),(2.6,2.98,.94),(4.97,2.98,.94),(5.2,1.50,.90)])

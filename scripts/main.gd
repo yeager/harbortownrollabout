@@ -35,9 +35,9 @@ const PRACTICE_START := Vector3(-119, 0, 109)
 const CITY_INTERIOR := Rect2(-520, -92, 690, 172)
 const VEHICLE_NAMES := ["Ambulance", "Police car", "Fire engine"]
 const VEHICLE_SCENES := ["res://vehicles/ambulance.glb", "res://vehicles/polisbil.glb", "res://vehicles/brandbil.glb"]
-const VEHICLE_NAMES_ALL := ["Ambulance", "Police car", "Fire engine", "BMV X5i", "Taxi", "Recovery truck", "BMV M3 E33", "Volva 241", "Saav 97", "Teslo Model Z", "City bus", "Snowmobile", "Volva HT-6 police SUV", "Porsje GT5RS", "Ice cream van", "Mino Kuper S", "Pusch Dakotta", "Monster truck", "A-tractor", "Classic cruiser", "Volva L91 wheel loader", "Farm tractor", "Food truck", "Ride-on mower", "Garbage truck", "Norrsjö Shoppa", "DAM pickup", "Audo Sport Kvattro"]
-const VEHICLE_SCENES_ALL := ["res://vehicles/ambulance.glb", "res://vehicles/polisbil.glb", "res://vehicles/brandbil.glb", "res://vehicles/bmw_x5_m60i.glb", "res://vehicles/taxi.glb", "res://vehicles/bargare.glb", "res://vehicles/m3_e30.glb", "res://vehicles/volvo240.glb", "res://vehicles/saab96.glb", "res://vehicles/model_s.glb", "res://vehicles/city_bus.glb", "res://vehicles/snowmobile.glb", "res://vehicles/volvo_xc60_polis.glb", "res://vehicles/porsche_gt3_rs.glb", "res://vehicles/ice_cream_van.tscn", "res://vehicles/mini_cooper_cabriolet.glb", "res://vehicles/puch_dakota.glb", "res://vehicles/monster_truck.glb", "res://vehicles/a_traktor.glb", "res://vehicles/raggarbil.glb", "res://vehicles/volvo_wheel_loader.glb", "res://vehicles/farm_tractor.glb", "res://vehicles/food_truck_road.glb", "res://vehicles/ride_on_mower.glb", "res://vehicles/refuse_truck.glb", "res://vehicles/shopping_trike.glb", "res://vehicles/dam_pickup.glb", "res://vehicles/sport_quattro.glb"]
-const SIREN_SOUNDS := ["res://audio/siren_ambulance.wav", "res://audio/siren_police.wav", "res://audio/siren_fire.wav", "res://audio/bmw_engine.wav", "res://audio/bmw_engine.wav", "res://audio/bmw_engine.wav", "res://audio/bmw_engine.wav", "res://audio/bmw_engine.wav", "res://audio/bmw_engine.wav", "res://audio/electric_drive.wav", "res://audio/bmw_engine.wav", "res://audio/sled_engine.wav", "res://audio/siren_police.wav", "res://audio/porsche_engine.wav", "res://audio/bmw_engine.wav", "res://audio/bmw_engine.wav", "res://audio/moped_engine.wav", "res://audio/monster_engine.wav", "res://audio/bmw_engine.wav", "res://audio/bmw_engine.wav", "res://audio/loader_diesel.wav", "res://audio/tractor_diesel.wav", "res://audio/bmw_engine.wav", "res://audio/mower_engine.wav", "res://audio/loader_diesel.wav", "res://audio/moped_engine.wav", "res://audio/bmw_engine.wav", "res://audio/quattro_engine.wav"]
+const VEHICLE_NAMES_ALL := ["Ambulance", "Police car", "Fire engine", "BWM Y5 N70i", "Taxi", "Recovery truck", "BWM M3 E33", "Volva 241", "Saav 97", "Teslo Model Z", "City bus", "Snowmobile", "Volva HT-6 police SUV", "Porsje GT5RS", "Ice cream van", "Mino Kuper S", "Pusch Dakotta", "Monster truck", "A-tractor", "Classic cruiser", "Volva L91 wheel loader", "Farm tractor", "Food truck", "Ride-on mower", "Garbage truck", "Norrsjö Shoppa", "DAM pickup", "Audo Sport Kvattro"]
+const VEHICLE_SCENES_ALL := ["res://vehicles/ambulance.glb", "res://vehicles/polisbil.glb", "res://vehicles/brandbil.glb", "res://vehicles/luxury_suv.glb", "res://vehicles/taxi.glb", "res://vehicles/bargare.glb", "res://vehicles/sport_sedan.glb", "res://vehicles/classic_estate.glb", "res://vehicles/classic_fastback.glb", "res://vehicles/electric_sedan.glb", "res://vehicles/city_bus.glb", "res://vehicles/snowmobile.glb", "res://vehicles/police_suv.glb", "res://vehicles/track_coupe.glb", "res://vehicles/ice_cream_van.tscn", "res://vehicles/compact_convertible.glb", "res://vehicles/classic_moped.glb", "res://vehicles/monster_truck.glb", "res://vehicles/a_traktor.glb", "res://vehicles/raggarbil.glb", "res://vehicles/wheel_loader.glb", "res://vehicles/farm_tractor.glb", "res://vehicles/food_truck_road.glb", "res://vehicles/ride_on_mower.glb", "res://vehicles/refuse_truck.glb", "res://vehicles/shopping_trike.glb", "res://vehicles/dam_pickup.glb", "res://vehicles/rally_coupe.glb"]
+const SIREN_SOUNDS := ["res://audio/siren_ambulance.wav", "res://audio/siren_police.wav", "res://audio/siren_fire.wav", "res://audio/suv_engine.wav", "res://audio/suv_engine.wav", "res://audio/suv_engine.wav", "res://audio/suv_engine.wav", "res://audio/suv_engine.wav", "res://audio/suv_engine.wav", "res://audio/electric_drive.wav", "res://audio/suv_engine.wav", "res://audio/sled_engine.wav", "res://audio/siren_police.wav", "res://audio/track_coupe_engine.wav", "res://audio/suv_engine.wav", "res://audio/suv_engine.wav", "res://audio/moped_engine.wav", "res://audio/monster_engine.wav", "res://audio/suv_engine.wav", "res://audio/suv_engine.wav", "res://audio/loader_diesel.wav", "res://audio/tractor_diesel.wav", "res://audio/suv_engine.wav", "res://audio/mower_engine.wav", "res://audio/loader_diesel.wav", "res://audio/moped_engine.wav", "res://audio/suv_engine.wav", "res://audio/rally_coupe_engine.wav"]
 const BUILDING_SCENES := {"Polisstationen":"res://environment/polisstation.glb", "Bageriet":"res://environment/bageri.glb", "Vårdcentralen":"res://environment/vardcentral.glb", "Brandstationen":"res://environment/brandstation.glb", "Biblioteket":"res://environment/bibliotek.glb"}
 const TREE_SCENES := ["res://environment/lovtrad.glb", "res://environment/gran.glb", "res://environment/bredkronigt_lovtrad.glb"]
 
@@ -73,6 +73,8 @@ var bus_plate_finish: StandardMaterial3D
 var bus_plate_lamp_finish: StandardMaterial3D
 var refuse_plate_lamp_finish: StandardMaterial3D
 var refuse_plate_finish: StandardMaterial3D
+var x5_plate_lamp_finish: StandardMaterial3D
+var x5_plate_finish: StandardMaterial3D
 var bus_side_marker_finish: StandardMaterial3D
 var bus_rear_marker_finish: StandardMaterial3D
 var traffic_headlights: Array[SpotLight3D] = []
@@ -85,7 +87,7 @@ var road_finish: ShaderMaterial
 var apartment_lights: Array[StandardMaterial3D] = []
 var quay_stair_light: StandardMaterial3D
 var city_env: Environment
-var quattro_glazing: ShaderMaterial
+var rally_coupe_glazing: ShaderMaterial
 var bus_glazing: ShaderMaterial
 var quattro_gauge_marks: StandardMaterial3D
 var quattro_gauge_needle: StandardMaterial3D
@@ -319,7 +321,7 @@ var bus_dashboard_backlight: StandardMaterial3D
 const BUS_STOP_NAMES := ["THE SQUARE","HEALTH CENTRE","MARINA","HARBOR TOWN SCHOOL","VÄSTRA TORGET","SICKLA UDDE"]
 var bus_leg := 0
 const TAXI := 4
-const HORNS := ["ambulance","police","fire","bmw","taxi","recovery", "m3_e30", "volvo240", "saab96", "model_s", "city_bus","snowmobile", "police", "porsche", "icecream", "bmw", "saab96", "bmw", "volvo240", "bmw", "recovery", "recovery", "bmw", "saab96", "recovery", "saab96", "bmw", "m3_e30"]
+const HORNS := ["ambulance","police","fire","suv","taxi","recovery", "sport_sedan", "classic_estate", "classic_fastback", "electric_sedan", "city_bus","snowmobile", "police", "track_coupe", "icecream", "suv", "classic_fastback", "suv", "classic_estate", "suv", "recovery", "recovery", "suv", "classic_fastback", "recovery", "classic_fastback", "suv", "sport_sedan"]
 var horn := AudioStreamPlayer.new()
 var next_song_button: Button
 var radio_button: Button
@@ -397,7 +399,7 @@ const GALLERY_GROUPS := {
 	"All vehicles": [],
 	"Emergency vehicles": ["Ambulance", "Police car", "Volva HT-6 police SUV", "Fire engine"],
 	"Work vehicles": ["Farm tractor", "Garbage truck", "Recovery truck", "Volva L91 wheel loader", "Volva HT-16 tracked excavator", "Ride-on mower", "Ice cream van", "Food truck", "DAM pickup"],
-	"Cars": ["BMV X5i", "BMV M3 E33", "Volva 241", "Saav 97", "Teslo Model Z", "Porsje GT5RS", "Mino Kuper S", "Classic cruiser", "A-tractor", "Audo Sport Kvattro"],
+	"Cars": ["BWM Y5 N70i", "BWM M3 E33", "Volva 241", "Saav 97", "Teslo Model Z", "Porsje GT5RS", "Mino Kuper S", "Classic cruiser", "A-tractor", "Audo Sport Kvattro"],
 	"Passenger transport": ["City bus", "Tram", "Taxi"],
 	"Leisure vehicles": ["Monster truck", "Pusch Dakotta", "Snowmobile", "Norrsjö Shoppa", "Motorboat"]
 }
@@ -887,7 +889,7 @@ func _process(delta: float) -> void:
 		snow_cursor = 0
 	water_finish.set_shader_parameter("rain",weather.intensity.x)
 	city_env.sky.sky_material.set_shader_parameter("overcast",weather.cloud_cover)
-	quattro_glazing.set_shader_parameter("overcast",weather.cloud_cover)
+	rally_coupe_glazing.set_shader_parameter("overcast",weather.cloud_cover)
 	if bus_glazing: bus_glazing.set_shader_parameter("overcast",weather.cloud_cover)
 	_update_daylight(delta)
 	if radio.playing:
@@ -2511,7 +2513,7 @@ func _build_west_district() -> void:
 	for side in [-1, 1]:
 		_make_box("Yard edge marking", Vector3(extent.x,.012,line_width), yard + Vector3(0,.068,side*(extent.y-line_width)/2), paint)
 		_make_box("Yard edge marking", Vector3(line_width,.012,extent.y-2*line_width), yard + Vector3(side*(extent.x-line_width)/2,.068,0), paint)
-	excavator = preload("res://vehicles/volvo_ec950f.glb").instantiate()
+	excavator = preload("res://vehicles/crawler_excavator.glb").instantiate()
 	excavator.position = yard + Vector3(-7,.06,-4)
 	excavator.rotation.y = PI*.5
 	add_child(excavator)
@@ -5237,6 +5239,9 @@ func _update_daylight(delta: float) -> void:
 	if refuse_plate_lamp_finish:
 		refuse_plate_lamp_finish.emission_energy_multiplier = 1.1 * night
 		refuse_plate_finish.emission_energy_multiplier = .32 * night
+	if x5_plate_lamp_finish:
+		x5_plate_lamp_finish.emission_energy_multiplier = 1.1 * night
+		x5_plate_finish.emission_energy_multiplier = .38 * night
 	_update_bus_ceiling_lights(night)
 	var patrol_light := smoothstep(.30, .75, night)
 	for light in patrol_landing_lights:
@@ -5258,7 +5263,7 @@ func _update_daylight(delta: float) -> void:
 		var dusk := smoothstep(.22+.18*i,.85+.12*i,night)
 		apartment_lights[i].emission_energy_multiplier = dusk*(.83-.22*i)
 	city_env.sky.sky_material.set_shader_parameter("night",night)
-	quattro_glazing.set_shader_parameter("night",night)
+	rally_coupe_glazing.set_shader_parameter("night",night)
 	if bus_glazing: bus_glazing.set_shader_parameter("night",night)
 	_update_quattro_gauge_light(night)
 	city_env.ambient_light_energy = lerpf(.38,.28,night)
@@ -6090,9 +6095,10 @@ func _build_depot() -> void:
 		if i == REFUSE:
 			_fit_refuse_plate_lamps(model)
 		if i == QUATTRO:
-			_fit_quattro_glazing(model)
+			_fit_rally_coupe_glazing(model)
 		if i == SCHOOL_CAR:
 			_add_school_car_sign(model)
+			_fit_x5_plate_lamps(model)
 		_park_at_home(body, i)
 		if i == 2:
 			parked_fire_locker = FireLocker.new()
@@ -6147,7 +6153,7 @@ func _build_depot() -> void:
 	_place_thermos()
 	walker.add_child(scooter)
 	shops.show_carried_toy()
-	_make_walker("BMW driver",0,0,1,Color("#648faa"),Color("#30414d"))
+	_make_walker("SUV driver",0,0,1,Color("#648faa"),Color("#30414d"))
 	road_driver = walker_data.pop_back().actor
 	road_driver.reparent(ambulance,false)
 	road_driver.rotation = Vector3.ZERO
@@ -7039,7 +7045,7 @@ func _build_ambulance() -> void:
 func _build_traffic() -> void:
 	_spawn_traffic("res://vehicles/a_traktor.glb", 51, 2.35, 1, 3.2, 1)
 	# Two-way, steady traffic on both sides of the main street.
-	_spawn_traffic("res://vehicles/traffic_bmw_blue.glb", -40.0, 2.35, 1.0, 6.4)
+	_spawn_traffic("res://vehicles/traffic_suv_blue.glb", -40.0, 2.35, 1.0, 6.4)
 	_spawn_traffic("res://environment/cyklist.glb", -24.0, 4.18, 1.0, 2.7, 0.72)
 	_spawn_traffic("res://environment/cyklist.glb", 26.0, -4.18, -1.0, 2.45, 0.72)
 	_spawn_traffic("res://vehicles/raggarbil.glb",68,2.35,1,4.75,.89)
@@ -7207,6 +7213,8 @@ func _spawn_traffic(scene_path: String, x: float, lane_z: float, direction: floa
 	model.scale = Vector3.ONE * model_scale
 	model.rotation.y = PI
 	actor.add_child(model)
+	if scene_path in ["res://vehicles/traffic_suv_blue.glb", "res://vehicles/traffic_suv_silver.glb"]:
+		_fit_x5_plate_lamps(model)
 	var is_bus := scene_path == VEHICLE_SCENES_ALL[BUS]
 	if is_bus:
 		_fit_bus_exterior(model)
@@ -7253,7 +7261,7 @@ func _spawn_traffic(scene_path: String, x: float, lane_z: float, direction: floa
 			traffic_running_lenses.append(finish)
 	var traffic_horn := AudioStreamPlayer3D.new()
 	traffic_horn.bus = &"Traffic and radio"
-	var voice: String = {"cyklist": "bicycle", "a_traktor": "a_traktor", "raggarbil": "raggarbil", "puch_dakota": "saab96"}.get(scene_path.get_file().get_basename(), "bmw")
+	var voice: String = {"cyklist": "bicycle", "a_traktor": "a_traktor", "raggarbil": "raggarbil", "classic_moped": "classic_fastback"}.get(scene_path.get_file().get_basename(), "suv")
 	var emergency_index := VEHICLE_SCENES.find(scene_path)
 	if emergency_index >= 0:
 		voice = HORNS[emergency_index]
@@ -8564,7 +8572,7 @@ func _make_walker(label: String, start_x: float, lane_z: float, direction: float
 	torso.add_child(preload("res://characters/JacketTrim.glb").instantiate())
 	# Portrait meshes share a local origin at the centre of the face.
 	var head_origin := Vector3(0, 1.635, -.003)
-	var is_avatar := label in ["Player on foot", "Helmsperson", "BMW driver"]
+	var is_avatar := label in ["Player on foot", "Helmsperson", "SUV driver"]
 	if is_avatar:
 		AvatarDetails.add_jacket_details(torso)
 	var complexion: Array[Color] = [Color("#c58e6d"), Color("#a87355"), Color("#d8a888"), Color("#885f4b")]
@@ -8657,17 +8665,17 @@ func _make_walker(label: String, start_x: float, lane_z: float, direction: float
 		if is_avatar:
 			AvatarDetails.add_trainer_details(shoe, Color("#879aa1"))
 		var arm_pivot := Node3D.new()
-		arm_pivot.position = Vector3(side * (.22 if label == "BMW driver" else .188), 1.38, 0)
+		arm_pivot.position = Vector3(side * (.22 if label == "SUV driver" else .188), 1.38, 0)
 		person.add_child(arm_pivot)
 		var arm := MeshInstance3D.new()
 		var arm_mesh := CapsuleMesh.new()
 		arm_mesh.radius = 0.075
 		arm_mesh.height = 0.65
-		arm.mesh = arm_mesh if label == "BMW driver" else preload("res://characters/Sleeve.obj")
-		arm.position.y = -.29 if label == "BMW driver" else -.296
+		arm.mesh = arm_mesh if label == "SUV driver" else preload("res://characters/Sleeve.obj")
+		arm.position.y = -.29 if label == "SUV driver" else -.296
 		arm.material_override = _material(shirt, 0.9, false, "cotton_jersey")
 		arm_pivot.add_child(arm)
-		if label != "BMW driver":
+		if label != "SUV driver":
 			var palm := MeshInstance3D.new()
 			palm.mesh = preload("res://characters/RelaxedHand.obj")
 			palm.scale.x = side
@@ -9219,16 +9227,16 @@ func _fit_bus_rear_bench(model: Node3D) -> void:
 	var podium := _make_box("Rear bench plinth", Vector3(1.98,.23,.56), Vector3(0,1.48,-4.65), Color("#303638"), false, model)
 	podium.material_override = _material(Color("#303638"), .81)
 
-func _fit_quattro_glazing(model: Node3D) -> void:
-	if quattro_glazing == null:
-		quattro_glazing = ShaderMaterial.new()
-		quattro_glazing.shader = preload("res://environment/quattro_glazing.gdshader")
-		quattro_glazing.set_shader_parameter("skyline",preload("res://environment/portland_landing_pad.exr"))
+func _fit_rally_coupe_glazing(model: Node3D) -> void:
+	if rally_coupe_glazing == null:
+		rally_coupe_glazing = ShaderMaterial.new()
+		rally_coupe_glazing.shader = preload("res://environment/rally_coupe_glazing.gdshader")
+		rally_coupe_glazing.set_shader_parameter("skyline",preload("res://environment/portland_landing_pad.exr"))
 	for pane: MeshInstance3D in model.find_children("*glass*","MeshInstance3D",true,false):
 		for surface in pane.mesh.get_surface_count():
 			var finish := pane.get_active_material(surface)
 			if finish != null and finish.resource_name == "Blue-green laminated glazing":
-				pane.set_surface_override_material(surface,quattro_glazing)
+				pane.set_surface_override_material(surface,rally_coupe_glazing)
 
 func _fit_quattro_gauges(model: Node3D) -> void:
 	if quattro_gauge_marks == null:
@@ -9261,6 +9269,20 @@ func _fit_refuse_plate_lamps(model: Node3D) -> void:
 		refuse_plate_finish.emission = Color("#eee8d1")
 		refuse_plate_finish.emission_energy_multiplier = .32 * maxf(last_night,0.0)
 	plate.material_override = refuse_plate_finish
+
+func _fit_x5_plate_lamps(model: Node3D) -> void:
+	var plate := model.find_child("Registration plate", true, false) as MeshInstance3D
+	if not x5_plate_lamp_finish:
+		x5_plate_lamp_finish = _material(Color("#c2c7c3"), .42, true)
+		x5_plate_lamp_finish.emission = Color("#fff1d1")
+		x5_plate_lamp_finish.emission_energy_multiplier = 1.1 * maxf(last_night, 0.0)
+		x5_plate_finish = plate.get_active_material(0).duplicate() as StandardMaterial3D
+		x5_plate_finish.emission_enabled = true
+		x5_plate_finish.emission = Color("#eee8d1")
+		x5_plate_finish.emission_energy_multiplier = .38 * maxf(last_night, 0.0)
+	for diffuser: MeshInstance3D in model.find_children("Rear plate lamp diffuser*", "MeshInstance3D", true, false):
+		diffuser.material_override = x5_plate_lamp_finish
+	plate.material_override = x5_plate_finish
 
 func _fit_bus_exterior(model: Node3D) -> void:
 	_fit_bus_rear_bench(model)
@@ -9471,7 +9493,7 @@ func _fit_bus_exterior(model: Node3D) -> void:
 
 	if bus_glazing == null:
 		bus_glazing = ShaderMaterial.new()
-		bus_glazing.shader = preload("res://environment/quattro_glazing.gdshader")
+		bus_glazing.shader = preload("res://environment/rally_coupe_glazing.gdshader")
 		bus_glazing.set_shader_parameter("skyline",preload("res://environment/portland_landing_pad.exr"))
 		bus_glazing.set_shader_parameter("glass_tint", Color(.12, .20, .21))
 		bus_glazing.set_shader_parameter("glass_opacity", Vector2(.27, .37))
@@ -9602,7 +9624,7 @@ func _load_vehicle_model() -> void:
 	var packed: PackedScene = load(VEHICLE_SCENES_ALL[vehicle_index])
 	vehicle_model = packed.instantiate() as Node3D
 	if vehicle_index == QUATTRO:
-		_fit_quattro_glazing(vehicle_model)
+		_fit_rally_coupe_glazing(vehicle_model)
 		_fit_quattro_gauges(vehicle_model)
 	driven_fire_locker = null
 	if vehicle_index == 2:
@@ -9629,6 +9651,7 @@ func _load_vehicle_model() -> void:
 	ambulance.add_child(vehicle_model)
 	if vehicle_index == SCHOOL_CAR:
 		_add_school_car_sign(vehicle_model)
+		_fit_x5_plate_lamps(vehicle_model)
 	muddy_parts.clear()
 	mud_finish = ShaderMaterial.new()
 	mud_finish.shader = preload("res://environment/road_mud.gdshader")
@@ -10186,15 +10209,17 @@ func _repair_at_workshop(replace_wheel: bool) -> void:
 		repair_tween.tween_callback(workshop_tool.hide)
 
 func _build_target_marker() -> void:
-	var roadside_model := preload("res://vehicles/traffic_bmw_silver.glb")
+	var roadside_model := preload("res://vehicles/traffic_suv_silver.glb")
 	workshop_car=roadside_model.instantiate()
 	add_child(workshop_car)
+	_fit_x5_plate_lamps(workshop_car)
 	workshop_car.position=STATION_PARKING
 	workshop_car.scale=Vector3.ONE*.79
 	workshop_car.rotation.y=PI/2
 	workshop_car.hide()
 	casualty=roadside_model.instantiate()
 	add_child(casualty)
+	_fit_x5_plate_lamps(casualty)
 	casualty.scale=Vector3.ONE*.79
 	hazard_amber = _material(Color("#ffad26"),.24,true)
 	for pattern in ["Daytime LED chevron*", "Upper ruby light guide*"]:

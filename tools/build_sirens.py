@@ -40,11 +40,11 @@ def fire_phase(t: float) -> float:
         return completed_pairs * 744 + local * 390
     return completed_pairs * 744 + 312 + local * 540
 
-def bmw_engine_phase(t: float) -> float:
+def suv_engine_phase(t: float) -> float:
     # A low, smooth V8 idle loop with enough harmonics to read as an engine.
     return 105 * t + 12 * 1.4 / math.tau * (1 - math.cos(math.tau * t / 1.4))
 
-def bmw_engine_gain(t: float) -> float:
+def suv_engine_gain(t: float) -> float:
     return 0.19 + 0.05 * (0.5 + 0.5 * math.sin(math.tau * t / 1.4))
 
 def steady_gain(_t: float) -> float:
@@ -56,5 +56,5 @@ def police_gain(t: float) -> float:
 render(Path("audio/siren_ambulance.wav"), 4.0, ambulance_phase, steady_gain)
 render(Path("audio/siren_police.wav"), 4.0, police_phase, police_gain)
 render(Path("audio/siren_fire.wav"), 4.8, fire_phase, steady_gain)
-render(Path("audio/bmw_engine.wav"), 4.2, bmw_engine_phase, bmw_engine_gain)
+render(Path("audio/suv_engine.wav"), 4.2, suv_engine_phase, suv_engine_gain)
 print("Generated ambulance, police, and fire sirens plus a BMW V8 idle loop.")

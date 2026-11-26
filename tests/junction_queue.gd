@@ -16,7 +16,7 @@ func check() -> void:
 	var line: float = game.street_signals.BOULEVARD_STOP_DISTANCE
 	game.street_signals.phase = 0
 	game.traffic_data.clear()
-	var blocker: Node3D = game._spawn_traffic("res://vehicles/traffic_bmw_blue.glb", 18.5, 2.35, 1.0, 0.0)
+	var blocker: Node3D = game._spawn_traffic("res://vehicles/traffic_suv_blue.glb", 18.5, 2.35, 1.0, 0.0)
 	var queue: Dictionary = game.traffic_data[0]
 	var start := Vector3(-27, -.02, 2.35)
 	game.ambulance.position = start
@@ -45,7 +45,7 @@ func check() -> void:
 
 	game.ambulance.hide()
 	blocker.position.x = 18.5
-	var follower: Node3D = game._spawn_traffic("res://vehicles/traffic_bmw_blue.glb", start.x, start.z, 1.0, 6.0)
+	var follower: Node3D = game._spawn_traffic("res://vehicles/traffic_suv_blue.glb", start.x, start.z, 1.0, 6.0)
 	var follower_data: Dictionary = game.traffic_data[1]
 	var path := Curve3D.new()
 	path.add_point(start)

@@ -19,7 +19,7 @@ func verify() -> void:
 	game.ambulance.hide()
 	game.calm_mode = false
 	game.steady_player_lights = false
-	var actor: Node3D = game._spawn_traffic("res://vehicles/traffic_bmw_blue.glb", -103, 2.35, 1, 0.0)
+	var actor: Node3D = game._spawn_traffic("res://vehicles/traffic_suv_blue.glb", -103, 2.35, 1, 0.0)
 	var item: Dictionary = game.traffic_data.back()
 	for lamps in [item.turn_signals.left, item.turn_signals.right]:
 		for lens_name in ["Front amber indicator", "Rear indicator lens"]:

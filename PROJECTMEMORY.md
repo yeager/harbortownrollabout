@@ -410,7 +410,7 @@ Six track transitions have signals for trams, cars and foot traffic. Red stops b
 - Sjöstadens Pizzeria has brickwork, awnings and a menu in the window. Godisboden has 40 illuminated pick-and-mix bins. Tests covered walking in and out, buying pizza for eight coins and candy for four, and checking the wallet and inventory.
 - Of 155 road and park lamps, 18 stand at the bench, promenade and bridge. The lanterns are lit and extinguished in the day cycle. The ground lighting at the bench is controlled by comparing rendered night images with the park lamps on and off.
 - The canal reflects 15 lights along the quay and pier. Night views were rendered in Compatibility, Mobile and Forward+ using the local Godot 4.7-dev build on AMD Radeon. Testing DLSS on compatible NVIDIA hardware remains outstanding.
-- Puch Dakota is available in the vehicle menu and in the depot. Axel and Alma can drive it, and a neighbor rides moped in traffic. Testing `tests/puch_dakota.gd` covers, among other things, grip on the control, braking and vehicle change in the depot.
+- Puch Dakota is available in the vehicle menu and in the depot. Axel and Alma can drive it, and a neighbor rides moped in traffic. Testing `tests/classic_moped.gd` covers, among other things, grip on the control, braking and vehicle change in the depot.
 
 The tram’s Blender models have rounded cab fronts with recessed lights, arched roofs, gently curved sides and blue roof panels above the sliding doors. The destination display updates at each stop. The articulated gangways have rounded corners. The exterior was inspected in the local Godot 4.7-dev build. See docs/tram-exterior.png.
 
