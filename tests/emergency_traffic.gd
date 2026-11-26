@@ -166,5 +166,27 @@ func check_response() -> void:
 		printerr("Player remained stopped when the light turned green")
 		quit(1)
 		return
+	# A distant patrol cannot enforce a stop at this junction.
+	police.actor.position = Vector3(-90,0,-2.35)
+	game.street_signals.phase = 3
+	game.ambulance.position = Vector3(stop_x,0,2.35)
+	game.speed = 5.0
+	game.message = ""
+	game._drive(.1)
+	if game.police_stop_left > 0.0 or game.ambulance.position.x <= stopped_at.x or game.message != "Red light! Stop at the line and wait for green.":
+		printerr("A distant patrol intervened, or the red-light warning was missing")
+		quit(1)
+		return
+
+	police.actor.position = Vector3(-18,0,-2.35)
+	game.street_signals.phase = 1
+	game.ambulance.position = Vector3(stop_x,0,2.35)
+	game.speed = 5.0
+	game.message = ""
+	game._drive(.1)
+	if game.police_stop_left > 0.0 or game.ambulance.position.x <= stopped_at.x or not game.message.is_empty():
+		printerr("An amber signal triggered red-light enforcement")
+		quit(1)
+		return
 	print("A-tractor speed, repeated horn at green and nearby police stop verified.")
 	quit()
