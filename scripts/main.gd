@@ -2345,6 +2345,7 @@ func _granite_wall_finish() -> ShaderMaterial:
 	shader_type spatial;
 	uniform vec2 block_size = vec2(.91, .36);
 	uniform float damp_base = -.82;
+	uniform vec2 canal_end_span = vec2(0.0);
 	varying vec3 world_point;
 	void vertex() {
 		world_point = (MODEL_MATRIX * vec4(VERTEX, 1.0)).xyz;
@@ -2364,6 +2365,9 @@ func _granite_wall_finish() -> ShaderMaterial:
 		granite *= 1.0 + (grain - .5) * .12 * (1.0 - smoothstep(.003, .012, fwidth(along)));
 		float dry = smoothstep(damp_base - .17, damp_base + .16, world_point.y);
 		ALBEDO = mix(vec3(.23, .22, .20), granite, stone) * mix(.61, 1.0, dry);
+		float canal_end = step(canal_end_span.x, world_point.x) * step(world_point.x, canal_end_span.y) * abs(world_normal.z);
+		float waterline = 1.0 - smoothstep(.05, .29, abs(world_point.y + .99 - (block - .5) * .10));
+		ALBEDO = mix(ALBEDO, vec3(.15, .18, .12), .43 * canal_end * waterline);
 		ROUGHNESS = mix(.66, .93, dry);
 	}
 	"""
@@ -2378,6 +2382,7 @@ func _build_city_wall() -> void:
 	var stone := _granite_wall_finish()
 	stone.set_shader_parameter("block_size", Vector2(1.32, .43))
 	stone.set_shader_parameter("damp_base", -.12)
+	stone.set_shader_parameter("canal_end_span", Vector2(CANAL_BOUNDS.position.x, CANAL_BOUNDS.end.x))
 	var coping_finish := _noise_material(Color("#c8c3b5"), Color("#e0d9c6"), 6.0, .18)
 	coping_finish.set_shader_parameter("roof_surface", true)
 	coping_finish.set_shader_parameter("use_instance_tint", true)
