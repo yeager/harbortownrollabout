@@ -66,6 +66,10 @@ func check_gallery() -> void:
 					quit(1)
 					return
 		if index == game.QUATTRO:
+			if tile.text != "Audo Sport Kvattro" or not game.vehicle_model.find_child("Kvattro badge", true, false):
+				printerr("The Sport Kvattro needs its fictional name in the gallery and on the car")
+				quit(1)
+				return
 			var rings: Array = game.vehicle_model.find_children("Polished grille ring*","MeshInstance3D",true,false)
 			if rings.size() != 5 or game.cabin_wheel == null or not game.road_driver.visible:
 				printerr("Quattro grille or driver layout is incomplete")
