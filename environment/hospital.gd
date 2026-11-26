@@ -22,6 +22,18 @@ func build(world: Node3D) -> void:
 	ward_roof_finish.set_shader_parameter("roof_surface", true)
 	ward_roof.material_override = ward_roof_finish
 	world.ground_finishes.append(ward_roof_finish)
+	var drain_finish: StandardMaterial3D = world._material(METAL.lightened(.14), .42)
+	for side in [-1.0, 1.0]:
+		var drain_x: float = side * 13.15
+		var run := PackedVector3Array([
+			Vector3(drain_x, 9.99, .085), Vector3(drain_x, 9.74, .25),
+			Vector3(drain_x, .43, .25), Vector3(drain_x, .27, .42),
+		])
+		for index in range(run.size() - 1):
+			world._tube_between(self, run[index], run[index + 1], .062, drain_finish)
+		for height in [1.05, 3.54, 6.14, 8.74]:
+			world._make_box("Roof drain bracket", Vector3(.16, .055, .31),
+				Vector3(drain_x, height, .155), METAL, false, self)
 	for band in [3.82, 6.42, 9.02]:
 		world._make_box("Precast concrete course", Vector3(27.04, .15, .19),
 			Vector3(0, band, .035), TRIM, false, self)
