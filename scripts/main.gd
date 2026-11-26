@@ -11814,8 +11814,23 @@ func _build_driving_school() -> void:
 		for rim_side in [-1, 1]:
 			_make_box("Splash block channel edge", Vector3(.039, .025, .55),
 				Vector3(rim_side * .118, .030, 0), Color("#969488"), false, splash)
-	_make_box("Rear roof gutter", Vector3(12.24, .106, .135),
-		Vector3(0, 3.287, -3.23), Color.WHITE, false, school).material_override = roof_metal
+	var gutter_z := -3.274
+	_make_box("Rear roof gutter bottom", Vector3(12.24, .018, .162),
+		Vector3(0, 3.235, gutter_z), Color.WHITE, false, school).material_override = roof_metal
+	for lip_side in [-1, 1]:
+		_make_box("Rear roof gutter side", Vector3(12.24, .097, .018),
+			Vector3(0, 3.282, gutter_z + lip_side * .074),
+			Color.WHITE, false, school).material_override = roof_metal
+		_make_box("Rear roof gutter end plate", Vector3(.025, .106, .166),
+			Vector3(lip_side * 6.11, 3.28, gutter_z),
+			Color.WHITE, false, school).material_override = roof_metal
+	for support in range(-5, 6):
+		_make_box("Rear roof gutter support strap", Vector3(.041, .020, .265),
+			Vector3(support * 1.09, 3.222, -3.224),
+			Color.WHITE, false, school).material_override = roof_metal
+		_make_box("Rear roof gutter strap return", Vector3(.041, .078, .014),
+			Vector3(support * 1.09, 3.26, gutter_z - .086),
+			Color.WHITE, false, school).material_override = roof_metal
 	for vent_at in [Vector3(-2.70, 3.495, -.87), Vector3(2.41, 3.495, -1.31)]:
 		_make_box("Roof vent flashing", Vector3(.66, .038, .55),
 			vent_at, Color.WHITE, false, school).material_override = roof_metal
