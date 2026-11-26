@@ -7707,9 +7707,24 @@ func _build_boule_court() -> void:
 			BOULE_BENCH + Vector3(.23, .57, end), Color("#394944"))
 	var gravel := _make_driving_surface("Boule gravel", Vector3(3.8,.12,14), BOULE_CENTRE-Vector3.UP*.06, Color("#baa781"))
 	gravel.material_override = _noise_material(Color("#998465"), Color("#d7c7a1"), 38, .5)
-	for side in [-1,1]:
-		_make_box("Court edging",Vector3(.10,.10,14),BOULE_CENTRE+Vector3(side*1.88,0,0),Color("#77644b"))
-		_make_box("Court edging",Vector3(3.8,.10,.10),BOULE_CENTRE+Vector3(0,0,side*6.95),Color("#77644b"))
+	var edging_finish := _material(Color("#77644b"), .86, false, "wood")
+	var clip_finish := _material(Color("#646963"), .74)
+	for side in [-1, 1]:
+		_make_box("Court end timber", Vector3(3.86, .10, .10),
+			BOULE_CENTRE + Vector3(0, 0, side * 6.95), Color.WHITE).material_override = edging_finish
+		for segment in 4:
+			_make_box("Court side timber", Vector3(.10, .10, 3.442),
+				BOULE_CENTRE + Vector3(side * 1.88, 0, (segment - 1.5) * 3.45),
+				Color.WHITE).material_override = edging_finish
+		for end in [-1, 1]:
+			var corner := BOULE_CENTRE + Vector3(side * 1.88, .051, end * 6.95)
+			_make_box("Court corner strap", Vector3(.08, .009, .24),
+				corner - Vector3.BACK * end * .08, Color.WHITE).material_override = clip_finish
+			_make_box("Court corner strap return", Vector3(.174, .009, .08),
+				corner - Vector3.RIGHT * side * .126, Color.WHITE).material_override = clip_finish
+			for offset: Vector3 in [Vector3(0, .006, -.153 * end), Vector3(-.161 * side, .006, 0)]:
+				_make_box("Court corner fixing", Vector3(.019, .009, .019),
+					corner + offset, Color("#94948a"))
 	var ring := MeshInstance3D.new()
 	var torus := TorusMesh.new()
 	torus.inner_radius = .28
