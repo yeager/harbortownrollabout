@@ -181,6 +181,7 @@ func _ready() -> void:
 	_build_trackbed()
 	var length := track.get_baked_length()
 	var shelter_glass := StandardMaterial3D.new()
+	var drain_finish: StandardMaterial3D = world._material(Color("#40535c"), .58)
 	shelter_glass.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
 	shelter_glass.albedo_color = Color(.64,.82,.84,.22)
 	shelter_glass.roughness = .20
@@ -244,6 +245,19 @@ func _ready() -> void:
 			world._make_box("Canopy end cap", Vector3(2.14, .18, .054), Vector3(3, 2.71, z), Color("#35464d"), false, station)
 		for seam in range(-4, 5):
 			world._make_box("Canopy standing seam", Vector3(2.03, .022, .031), Vector3(3, 2.763, .52 * seam), Color("#687981"), false, station)
+		world._make_box("Shelter gutter bottom", Vector3(.127, .023, 5.20),
+			Vector3(4.125, 2.666, 0), drain_finish.albedo_color, false, station)
+		world._make_box("Shelter gutter outer lip", Vector3(.021, .094, 5.20),
+			Vector3(4.183, 2.708, 0), drain_finish.albedo_color, false, station)
+		for end_z in [-2.59, 2.59]:
+			world._make_box("Shelter gutter end plate", Vector3(.13, .09, .023),
+				Vector3(4.124, 2.708, end_z), drain_finish.albedo_color, false, station)
+		world._tube_between(station, Vector3(4.11, 2.672, 2), Vector3(3.91, 2.45, 2), .034, drain_finish)
+		world._tube_between(station, Vector3(3.91, 2.46, 2), Vector3(3.91, .43, 2), .034, drain_finish)
+		world._tube_between(station, Vector3(3.91, .45, 2), Vector3(4.01, .35, 2), .034, drain_finish)
+		for height in [.67, 1.91]:
+			world._make_box("Shelter downpipe bracket", Vector3(.087, .033, .052),
+				Vector3(3.88, height, 2), drain_finish.albedo_color, false, station)
 		for y in [.46, 2.56]:
 			world._make_box("Glazing channel", Vector3(.077, .055, 4.02), Vector3(3.8, y, 0), Color("#46565a"), false, station)
 		for z in [-1.55,1.55]:
