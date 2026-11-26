@@ -11808,8 +11808,17 @@ func _build_driving_school() -> void:
 		_tube_between(school, Vector3(drain_x, 3.06, -3.09),
 			Vector3(drain_x, .25, -3.09), .046, roof_metal)
 		for strap_y in [.61, 1.64, 2.68]:
-			_make_box("Downpipe wall clip", Vector3(.128, .037, .124),
-				Vector3(drain_x, strap_y, -3.065), Color.WHITE, false, school).material_override = roof_metal
+			_make_box("Downpipe bracket wall plate", Vector3(.145, .059, .021),
+				Vector3(drain_x, strap_y, -3.011), Color.WHITE, false, school).material_override = roof_metal
+			_make_box("Downpipe bracket stand-off", Vector3(.042, .024, .064),
+				Vector3(drain_x, strap_y, -3.046), Color.WHITE, false, school).material_override = roof_metal
+			_add_moored_round_fitting(school, "Downpipe collar",
+				Vector3(drain_x, strap_y - .011, -3.09),
+				Vector3(drain_x, strap_y + .011, -3.09), .052, roof_metal)
+			for tab_side in [-1, 1]:
+				_add_moored_round_fitting(school, "Downpipe bracket screw",
+					Vector3(drain_x + tab_side * .054, strap_y, -3.019),
+					Vector3(drain_x + tab_side * .054, strap_y, -3.026), .008, roof_metal)
 		_tube_between(school, Vector3(drain_x, .25, -3.09),
 			Vector3(drain_x, .132, -3.27), .047, roof_metal)
 		var splash := _make_box("Downpipe splash block", Vector3(.29, .039, .57),
