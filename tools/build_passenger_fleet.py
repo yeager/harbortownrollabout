@@ -139,6 +139,23 @@ def build(key, length, width, axles, color, belt, cabin):
         for u in [.36,.78]:
             bar("Wiper arm",windshield(u,.022),windshield(u-.117,.135),.012,DARK)
             bar("Wiper blade",windshield(u-.236,.149),windshield(u+.026,.117),.015,RUBBER)
+    elif key == "saab96":
+        lower, upper = sections[:2]
+        def glass_point(u, t):
+            foot = Vector(lower[1]).lerp(Vector(lower[2]),u)
+            head = Vector(upper[1]).lerp(Vector(upper[2]),u)
+            return foot.lerp(head,t)+Vector((0,-.006,.006))
+
+        for t in (.012,.982):
+            bar("Saav windscreen seal",glass_point(.008,t),glass_point(.992,t),.014,RUBBER)
+        for u in (.29,.73):
+            hinge = glass_point(u,.029)
+            arm_end = glass_point(u+.11,.174)
+            spindle = cylinder("Saav wiper spindle",hinge,.014,.024,DARK,False,20,root)
+            spindle.rotation_euler.x = -.74
+            bar("Saav wiper arm",hinge,arm_end,.012,DARK)
+            bar("Saav wiper blade",glass_point(u-.063,.194),
+                glass_point(u+.253,.156),.015,RUBBER)
     mesh=bpy.data.meshes.new("Cabin panels");mesh.from_pydata(verts,[],faces);mesh.update()
     cabin_obj=bpy.data.objects.new("Cabin",mesh);bpy.context.collection.objects.link(cabin_obj);cabin_obj.parent=root
     for mat in cabin_materials: mesh.materials.append(mat)
