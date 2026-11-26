@@ -122,6 +122,17 @@ for side in (-1, 1):
     for y in (-1.63, 1.07):
         pipe("Skid cross braces", [(side * .53, y, .63), (side * .79, y, .47),
                                   (side * 1.08, y, .115)], .048, dark, root)
+        cube("Skid saddle clamp", (side * 1.08, y, .112), (.156, .153, .084), metal, .016, root)
+        for bolt_y in (y - .048, y + .048):
+            cylinder("Skid clamp bolt", (side * 1.125, bolt_y, .161),
+                     .013, .017, dark, False, 6, root)
+    for step_y in (-1.04, .52):
+        cube("Skid step plate", (side * 1.087, step_y, .139), (.235, .495, .045), metal, .014, root)
+        cube("Skid step rubber insert", (side * 1.087, step_y, .166),
+             (.193, .425, .012), dark, .007, root)
+        for rib in range(-3, 4):
+            cube("Skid step grip rib", (side * 1.087, step_y + rib * .052, .175),
+                 (.164, .013, .009), dark, .003, root)
     cube("Door handle", (side * 1.19, -.26, 1.66), (.055, .26, .045), metal, .012, root)
     cube("Navigation lamp", (side * 1.2, 1.0, 1.74), (.08, .09, .047),
          red_lamp if side < 0 else green_lamp, .015, root)
