@@ -24,7 +24,7 @@ func configure(landing_center: Vector3) -> void:
 	add_child(aircraft)
 	main_rotor = aircraft.find_child("MainRotor", true, false) as Node3D
 	tail_rotor = aircraft.find_child("TailRotor", true, false) as Node3D
-	rotor_blur = [RotorMotion.fit(main_rotor, 4.955, 5), RotorMotion.fit(tail_rotor, .515, 9, true)]
+	rotor_blur = [RotorMotion.fit(main_rotor, 4.955, 5, false, true), RotorMotion.fit(tail_rotor, .515, 9, true)]
 	var rotor_loop := preload("res://audio/medical_helicopter_rotor.wav").duplicate() as AudioStreamWAV
 	rotor_loop.loop_mode = AudioStreamWAV.LOOP_FORWARD
 	rotor_loop.loop_end = roundi(rotor_loop.get_length() * rotor_loop.mix_rate)

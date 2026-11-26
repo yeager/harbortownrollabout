@@ -57,6 +57,11 @@ func check_landing() -> void:
 		printerr("Rotor sound did not slow and soften on the roof")
 		quit(1)
 		return
+	for motion: MeshInstance3D in aircraft.rotor_blur:
+		if float(motion.material_override.get_shader_parameter("power")) >= .17:
+			printerr("Rotor blur stayed visible at idle on the helipad")
+			quit(1)
+			return
 	for skid: MeshInstance3D in skids:
 		var bounds := skid.global_transform * skid.get_aabb()
 		if absf(bounds.position.y - pad.y) > .02:
@@ -77,6 +82,11 @@ func check_landing() -> void:
 		printerr("Rotor sound did not recover on takeoff")
 		quit(1)
 		return
+	for motion: MeshInstance3D in aircraft.rotor_blur:
+		if not is_equal_approx(float(motion.material_override.get_shader_parameter("power")), 1.0):
+			printerr("Rotor blur did not return at flight speed")
+			quit(1)
+			return
 	game._update_patrol(aircraft.CYCLE_SECONDS - aircraft.flight_seconds + aircraft.TOUCHDOWN_AT)
 	if not aircraft.position.is_equal_approx(pad):
 		printerr("A subsequent circuit did not return to the helipad")
