@@ -54,7 +54,16 @@ def export(name):
 
 box("Ladder frame",(0,.02,.36),(.61,1.52,.18),frame)
 box("Engine bonnet",(0,.64,.64),(.83,.64,.44),paint,.14)
-box("Bonnet lid",(0,.67,.855),(.61,.42,.035),frame)
+box("Bonnet lid seam",(0,.685,.861),(.622,.433,.031),rubber,.026)
+box("Bonnet lid",(0,.685,.881),(.598,.409,.035),paint,.023)
+for x in (-.204,.204):
+    box("Bonnet hinge leaf",(x,.489,.891),(.090,.067,.018),frame,.007)
+    disc("Bonnet hinge knuckle",(x,.474,.897),.014,.086,steel,(1,0,0))
+    box("Bonnet vent recess",(x,.695,.899),(.098,.242,.012),frame,.011)
+    for y in (.608,.65,.692,.734,.776):
+        box("Bonnet vent louvre",(x,y,.906),(.080,.021,.010),paint,.003)
+box("Bonnet latch recess",(0,.858,.899),(.113,.055,.016),rubber,.010)
+box("Bonnet latch grip",(0,.857,.911),(.084,.025,.021),frame,.006)
 box("Cooling grille surround",(0,.949,.626),(.591,.036,.253),frame,.020)
 box("Recessed cooling grille",(0,.969,.626),(.541,.014,.219),rubber,.012)
 for n in range(7):
