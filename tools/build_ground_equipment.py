@@ -79,7 +79,19 @@ for side in (-1,1):
         x=side*.43
         disc("All terrain tire",(x,y,.24),.24,.16,rubber,(1,0,0))
         disc("Alloy wheel",(x+side*.08,y,.24),.142,.036,steel,(1,0,0))
-        disc("Wheel hub",(x+side*.106,y,.24),.065,.026,frame,(1,0,0))
+        bpy.ops.mesh.primitive_torus_add(major_segments=48, minor_segments=12,
+            location=(x+side*.100,y,.24), rotation=(0,math.pi/2,0),
+            major_radius=.128, minor_radius=.010)
+        part("Alloy wheel rolled lip",steel)
+        disc("Wheel hub",(x+side*.107,y,.24),.061,.028,frame,(1,0,0))
+        disc("Wheel hub cap",(x+side*.124,y,.24),.042,.016,steel,(1,0,0))
+        for stud in range(4):
+            angle = math.tau*stud/4 + math.pi/4
+            center_y, center_z = y+.089*math.cos(angle), .24+.089*math.sin(angle)
+            disc("Wheel bolt washer",(x+side*.101,center_y,center_z),.018,.009,frame,(1,0,0))
+            bpy.ops.mesh.primitive_cylinder_add(vertices=6, radius=.012, depth=.014,
+                location=(x+side*.111,center_y,center_z), rotation=(0,math.pi/2,0))
+            part("Wheel bolt",steel,bevel=.002)
         for n in range(20):
             a=n*math.tau/20
             tread=box("Mower tread",(x,y+.239*math.sin(a),.24+.239*math.cos(a)),(.14,.034,.019),rubber,.006)
