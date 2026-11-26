@@ -108,8 +108,22 @@ rim_profile = [
 
 box("Ladder chassis", (0,0,.82), (1.60,7.4,.32), v.DARK)
 box("Cab shell", (0,-2.90,2.04), (2.34,1.98,2.20), green,.17)
+gasket = box("Windshield gasket",(0,-3.862,2.57),(2.116,.123,.946),v.RUBBER,.088)
+gasket.rotation_euler.x = -.09
 glass = box("Panoramic windshield",(0,-3.87,2.57),(2.05,.12,.88),v.GLASS,.08)
 glass.rotation_euler.x = -.09
+for pivot_x in (-.82,.14):
+    pivot = v.cylinder("Windshield wiper spindle",(pivot_x,-3.961,2.141),
+                       .036,.055,v.DARK,False,20,root)
+    pivot.rotation_euler.x = math.pi/2
+    elbow = (pivot_x+.30,-4.005,2.205)
+    blade_center = (pivot_x+.415,-4.004,2.257)
+    ram("Windshield wiper arm",(pivot_x,-3.995,2.141),elbow,.015,v.DARK)
+    ram("Windshield wiper arm tip",elbow,blade_center,.009,v.DARK)
+    ram("Windshield wiper blade",(pivot_x+.072,-3.986,2.225),
+        (pivot_x+.758,-3.981,2.289),.014,v.RUBBER)
+    ram("Windshield blade spine",(pivot_x+.108,-4.002,2.228),
+        (pivot_x+.722,-3.997,2.286),.007,v.DARK)
 box("Sun visor",(0,-3.92,3.06),(2.29,.24,.12),v.DARK)
 box("Front bumper",(0,-3.90,.82),(2.34,.28,.37),v.DARK,.08)
 for i in range(4):
