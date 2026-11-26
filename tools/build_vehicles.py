@@ -1608,6 +1608,9 @@ def make_fire_engine():
     cube("Reflective registration plate",(0,-3.170,.49),(.46,.010,.104),PAINT_WHITE,.007,root)
     cube("Rear registration plinth",(-.63,3.15,.89),(.51,.026,.137),BLACK,.009,root)
     cube("Rear registration plate",(-.63,3.168,.89),(.484,.012,.114),PAINT_WHITE,.005,root)
+    for x in (-.78, -.48):
+        cube("Pumper rear plate lamp housing",(x,3.143,.984),(.091,.118,.035),DARK,.008,root)
+        cube("Pumper rear plate lamp lens",(x,3.178,.965),(.069,.043,.008),GLASS_HI,.003,root)
     plate_blue = material("Registration blue", (.015,.07,.43), .12, .35)
     for center_x, face_y, center_z, facing in ((0,-3.175,.49,1),(-.63,3.174,.89,-1)):
         heading = 0 if facing == 1 else math.pi

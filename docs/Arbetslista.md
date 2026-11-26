@@ -300,6 +300,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Däckventilens stam, hatt och tätning roterar med fälgen. Fordonsprovet kontrollerar infästningen på alla fyra hjul i de tre varianterna och att bromsoket sitter kvar på hjulspindeln. Framhjulet granskades före och efter en rotation i Godot 4.7 dev5.
 - [ ] [`brandbil.glb`](../vehicles/brandbil.glb)
   - Dragkrokens infästning fick fyra sexkantsbultar samt ett släpvagnsuttag med fäste och väderskydd. Granskat bakifrån i Godot. Förarplats- och luckproven passerade.
+  - Registreringsskylten fick två armaturhus med nedåtvända linser. Placeringen granskades i Godot och luckprovet passerade. Belysning i nattläge återstår.
 - [ ] [`city_bus.glb`](../vehicles/city_bus.glb)
 - [ ] [`dam_pickup.glb`](../vehicles/dam_pickup.glb)
 - [ ] [`electric_kick_scooter.glb`](../vehicles/electric_kick_scooter.glb)
