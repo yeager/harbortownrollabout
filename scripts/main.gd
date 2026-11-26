@@ -11882,7 +11882,15 @@ func _build_driving_school() -> void:
 	for seam in range(-2, 3):
 		_make_box("Canopy standing seam", Vector3(.019, .023, 1.37),
 			Vector3(seam * .90, 2.802, 3.586), Color.WHITE, false, school).material_override = roof_metal
-	var lamp := _add_entry_light(site + Vector3(0,2.61,3.66), Vector3(.72,.05,.19), 4.5)
+	var lamp_at := Vector3(0, 2.61, 3.66)
+	_make_box("School entrance light housing", Vector3(.80, .052, .27),
+		lamp_at + Vector3.UP * .019, Color.WHITE, false, school).material_override = roof_metal
+	for end in [-1, 1]:
+		_make_box("School entrance light end cap", Vector3(.038, .054, .246),
+			lamp_at + Vector3(end * .382, .004, 0), Color.WHITE, false, school).material_override = roof_metal
+		_make_box("School entrance light lens rim", Vector3(.746, .024, .025),
+			lamp_at + Vector3(0, -.014, end * .106), Color.WHITE, false, school).material_override = roof_metal
+	var lamp := _add_entry_light(site + lamp_at, Vector3(.72,.05,.19), 4.5)
 	lamp.name = "Driving school entrance light"
 	lamp.look_at(site + Vector3(0,0,3.35), Vector3.BACK)
 	_make_box("Entrance frame",Vector3(1.56,2.34,.14),Vector3(0,1.19,3.035),Color("#263e43"),false,school)
