@@ -270,6 +270,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Saav 97 fick pressade stålfälgar med åtta ventilationshål per hjul, rundade fälgkanter och separata navkåpor. Granskat i närbild i Godot. Alla fyra fälgar sitter i hjulriggen och fordonsprovet passerade.
   - Däcken fick rundade skuldror och tre längsgående spår i slitbanan. Granskat i närbild i Godot. Fordonsprovet passerade.
   - Bakluckan fick en skarv som följer karossen samt separat öppningshandtag och lås. Granskat bakifrån i Godot. Fordonsprovet passerade.
+  - Båda baklyktorna fick vita backljus under de röda och bärnstensfärgade fälten. Granskat under backning i Godot. Fordonsprovet verifierade att båda är släckta vid bromsning och tänds vid backning.
 - [ ] [`shopping_trike.glb`](../vehicles/shopping_trike.glb)
 - [ ] [`snowmobile.glb`](../vehicles/snowmobile.glb)
 - [ ] [`sport_quattro.glb`](../vehicles/sport_quattro.glb)

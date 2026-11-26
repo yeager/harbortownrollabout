@@ -178,7 +178,8 @@ func check_gallery() -> void:
 				printerr("Both mower rear lenses must light when braking")
 				quit(1)
 				return
-		if index in [game.REFUSE, game.MOWER]:
+		var has_paired_reverse_lenses: bool = index in [game.REFUSE, game.MOWER] or tile.text == "Saav 97"
+		if has_paired_reverse_lenses:
 			var lenses: Array = game.vehicle_model.find_children("Reversing lens*", "MeshInstance3D", true, false)
 			if lenses.size() != 2 or not game.reverse_lens or game.reverse_lens.emission_energy_multiplier > 0.0 or not lenses.all(func(lens: MeshInstance3D): return lens.get_active_material(0) == game.reverse_lens):
 				printerr("Expected two inactive reverse lenses when braking ", tile.text)
@@ -195,7 +196,7 @@ func check_gallery() -> void:
 			printerr("Reverse failed for ", tile.text, " distance=", reverse_travel)
 			quit(1)
 			return
-		if index in [game.REFUSE, game.MOWER] and game.reverse_lens.emission_energy_multiplier < 1.99:
+		if has_paired_reverse_lenses and game.reverse_lens.emission_energy_multiplier < 1.99:
 			printerr("Reverse lenses did not light on ", tile.text)
 			quit(1)
 			return

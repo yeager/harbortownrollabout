@@ -63,6 +63,8 @@ def build(key, length, width, axles, color, belt, cabin):
         cabin_materials.extend([windscreens,shade])
     white=material("Ivory",(.88,.86,.75),.13,.3)
     amber=material("Indicator",(.95,.29,.012),.15,.27)
+    if key == "saab96":
+        reverse_glass = material("Reverse lamp Saav glass",(.73,.77,.74),.14,.24)
     def box(name,x,y,z,w,d,h,mat,bev=.018):
         return cube(name,(x,y,z),(w,d,h),mat,bev,root)
     def bar(name,a,b,thick,mat):
@@ -380,10 +382,11 @@ def build(key, length, width, axles, color, belt, cabin):
             box("Rear lamp stop lens",side*.57,end+.062,.661,.443,.032,.088,RED_LAMP,.009)
         elif key == "saab96":
             x = side*.538
-            box("Rear combination lamp housing",x,end+.027,.657,.284,.104,.163,RUBBER,.018)
-            box("Rear lamp bezel",x,end+.083,.657,.260,.032,.139,METAL,.012)
+            box("Rear combination lamp housing",x,end+.027,.631,.284,.104,.215,RUBBER,.018)
+            box("Rear lamp bezel",x,end+.083,.631,.260,.032,.191,METAL,.012)
             box("Ruby tail lens",x-side*.039,end+.105,.657,.146,.022,.112,RED_LAMP,.009)
             box("Rear indicator lens",x+side*.081,end+.105,.657,.079,.022,.112,amber,.008)
+            box("Reversing lens",x,end+.105,.574,.225,.022,.041,reverse_glass,.006)
         else:
             box("Ruby tail lens",side*width*.66,end+.025,belt*.73,width*.44,.07,.12,RED_LAMP)
             box("Amber lens",side*width*.84,end+.03,belt*.75,.07,.07,.09,amber)
