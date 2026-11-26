@@ -1506,7 +1506,7 @@ def profile_loft(name, rings, finish, parent, close_ends=True):
     obj.parent=parent
     return obj
 
-def make_bmw(color, name="BMW X5 M60i", *, patrol=False):
+def make_bmw(color, name="BMV X5i", *, patrol=False):
     detailed_cabin = patrol or color == PAINT_BLACK
     root = bpy.data.objects.new(name, None)
     bpy.context.collection.objects.link(root)
@@ -2400,6 +2400,8 @@ def make_bmw(color, name="BMW X5 M60i", *, patrol=False):
     spoiler=bpy.data.objects.new("Front lower splitter",mesh)
     bpy.context.collection.objects.link(spoiler)
     spoiler.parent=root
+    badge_teal = material("BMV turquoise enamel", (.015, .37, .32), .20, .26)
+
     def roundel(name, center, vertical, outward, radius):
         vertices, faces, finishes = [], [], []
         segments = 48
@@ -2416,10 +2418,11 @@ def make_bmw(color, name="BMW X5 M60i", *, patrol=False):
                 lo = band*segments
                 face = (lo+i,lo+j,lo+j+segments,lo+i+segments)
                 faces.append(face[:3] if band==6 else face)
-                finishes.append(3 if finish==2 and (i//12)%2 else finish)
+                # A diagonal split makes the two-tone enamel a single motif.
+                finishes.append(3 if finish == 2 and (i - 6) % segments < segments // 2 else finish)
         mesh = bpy.data.meshes.new(name)
         mesh.from_pydata(vertices,[],faces)
-        for mat in (METAL, BLACK, POLICE_BLUE, PAINT_WHITE):
+        for mat in (METAL, BLACK, badge_teal, PAINT_WHITE):
             mesh.materials.append(mat)
         for polygon, finish in zip(mesh.polygons,finishes):
             polygon.material_index = finish
@@ -2688,8 +2691,8 @@ def main():
     police = make_police()
     fire = make_fire_engine()
     bmw_black = make_bmw(PAINT_BLACK)
-    bmw_silver = make_bmw(PAINT_SILVER, "BMW traffic | Arctic silver")
-    bmw_blue = make_bmw(PAINT_BLUE_CAR, "BMW traffic | Deep blue")
+    bmw_silver = make_bmw(PAINT_SILVER, "BMV X5i / Arctic silver")
+    bmw_blue = make_bmw(PAINT_BLUE_CAR, "BMV X5i / Deep blue")
     export_vehicle(make_taxi(), "taxi.glb")
     export_vehicle(ambulance, "ambulance.glb")
     export_vehicle(police, "polisbil.glb")

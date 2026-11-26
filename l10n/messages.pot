@@ -903,7 +903,7 @@ msgstr ""
 msgid "Ready to run again! Hold {run} and walk forward."
 msgstr ""
 
-msgid "SUV"
+msgid "BMV X5i"
 msgstr ""
 
 msgid "Classic sports coupe"

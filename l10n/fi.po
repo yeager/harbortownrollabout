@@ -948,8 +948,8 @@ msgstr "Seuraava kappale · %s"
 msgid "Ready to run again! Hold {run} and walk forward."
 msgstr "Voit taas juosta! Pidä {run} pohjassa ja kävele eteenpäin."
 
-msgid "SUV"
-msgstr "Katumaasturi"
+msgid "BMV X5i"
+msgstr "BMV X5i"
 
 msgid "Classic sports coupe"
 msgstr "Klassinen urheilucoupé"

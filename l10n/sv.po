@@ -904,8 +904,8 @@ msgstr "Nästa låt · %s"
 msgid "Ready to run again! Hold {run} and walk forward."
 msgstr "Nu kan du springa igen! Håll ner {run} och gå framåt."
 
-msgid "SUV"
-msgstr "SUV"
+msgid "BMV X5i"
+msgstr "BMV X5i"
 
 msgid "Classic sports coupe"
 msgstr "Klassisk sportkupé"

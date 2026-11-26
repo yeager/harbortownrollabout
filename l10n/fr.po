@@ -964,8 +964,8 @@ msgstr "Chanson suivante · %s"
 msgid "Ready to run again! Hold {run} and walk forward."
 msgstr "Tu peux à nouveau courir ! Maintiens {run} et avance."
 
-msgid "SUV"
-msgstr "SUV"
+msgid "BMV X5i"
+msgstr "BMV X5i"
 
 msgid "Classic sports coupe"
 msgstr "Coupé sport classique"
