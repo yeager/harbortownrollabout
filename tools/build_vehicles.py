@@ -2826,7 +2826,23 @@ def make_bwm(color, name="BWM Y5 N70i", *, patrol=False):
                 rotor_finish = material("Satin brake rotor steel", (.28,.29,.30), .58, .48)
             wheel_shell("Brake disc friction ring", rotor_profile, rotor_finish)
             cylinder("Brake disc hat",(side*1.003,y,.48),.181,.041,DARK,vertices=48,root=root)
-            cube("Red brake caliper",(side*1.034,y+.225,.51),(.062,.094,.212),PAINT_RED,.029,root)
+            if root.name.startswith("BWM Y5 N70i"):
+                # The casting wraps over the rotor edge, leaving clearance on both faces.
+                profile = ((.931,.239),(.943,.222),(.969,.222),(.969,.288),
+                           (1.015,.288),(1.015,.222),(1.051,.222),
+                           (1.068,.244),(1.065,.285),(1.049,.311),
+                           (.948,.311),(.931,.291))
+                caliper_rings = []
+                for angle, taper in ((-.36,.020),(-.30,.008),(-.20,0),
+                                     (.27,0),(.39,.008),(.45,.020)):
+                    ring = []
+                    for depth, radius in profile:
+                        r = radius + taper * (.5 - (radius - .222) / .089)
+                        ring.append((side * depth, y + r * math.cos(angle), .48 + r * math.sin(angle)))
+                    caliper_rings.append(ring[::side])
+                profile_loft("Red brake caliper casting", caliper_rings, PAINT_RED, root)
+            else:
+                cube("Red brake caliper",(side*1.034,y+.225,.51),(.062,.094,.212),PAINT_RED,.029,root)
             for lug in range(5):
                 angle = math.tau*lug/5
                 cylinder("Wheel bolt",(side*1.133,y+.085*math.sin(angle),
