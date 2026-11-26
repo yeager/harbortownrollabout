@@ -265,6 +265,20 @@ for x in (-.154,.154):
     box("Rear plate lamp housing",(x,3.824,.895),(.084,.075,.038),v.DARK,.008)
     box("Rear plate lamp lens",(x,3.856,.882),(.064,.024,.012),plate_lens,.004)
 
+reflector_red = v.material("Passive red reflector", (.63,.022,.014), .34, .17)
+reflector_prism = v.material("Reflector prism highlights", (.79,.053,.034), .45, .19)
+for side in (-1,1):
+    x = side*.651
+    box("Rear reflector mounting base",(x,3.819,.849),(.196,.047,.072),v.DARK,.010)
+    box("Rear reflector red lens",(x,3.845,.849),(.172,.022,.051),reflector_red,.007)
+    for flute in range(11):
+        box("Rear reflector lens prism",(x+(flute-5)*.014,3.857,.849),
+            (.006,.004,.035),reflector_prism,.0015)
+    for offset in (-.087,.087):
+        screw = v.cylinder("Reflector retaining screw",(x+offset,3.844,.849),
+                           .005,.006,v.METAL,False,12,root)
+        screw.rotation_euler.x = math.pi/2
+
 v.export_vehicle(root,"refuse_truck.glb")
 if os.getenv("TRUCK_PORTRAIT"):
     scene=bpy.context.scene
