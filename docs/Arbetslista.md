@@ -259,6 +259,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Ratten fick jämnare greppyta, tre formade ekrar och ett separat nav med centrumkåpa. Granskat i Godot med förarens händer på ratten. Navet följer rattens rotation och fordonsprovet passerade.
 - [ ] [`saab96.glb`](../vehicles/saab96.glb)
   - Saav 97 fick ett upphöjt modellemblem på bakluckan. Granskat i Godot och fordonsprovet passerade.
+  - Fronten fick separata strålkastarhus med blanka ramar, en grill med fem lameller och ett SAAV-emblem. Granskat i närbild i Godot. Fordonsprovet passerade.
 - [ ] [`shopping_trike.glb`](../vehicles/shopping_trike.glb)
 - [ ] [`snowmobile.glb`](../vehicles/snowmobile.glb)
 - [ ] [`sport_quattro.glb`](../vehicles/sport_quattro.glb)

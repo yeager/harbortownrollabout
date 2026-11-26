@@ -238,6 +238,11 @@ def build(key, length, width, axles, color, belt, cabin):
                 bezel.rotation_euler.x=math.pi/2
                 lens=cylinder("Headlight",(side*x,-end-.082,belt*.73),.096,.018,HEADLAMP,False,40,root)
                 lens.rotation_euler.x=math.pi/2
+        elif key == "saab96":
+            x = side*.501
+            box("Headlamp pocket",x,-end-.029,.657,.359,.103,.237,RUBBER,.027)
+            box("Headlamp bright surround",x,-end-.084,.657,.318,.032,.204,METAL,.020)
+            box("Headlamp lens",x,-end-.105,.657,.281,.024,.169,HEADLAMP,.016)
         else:
             box("Headlamp",side*width*.68,-end-.02,belt*.72,width*.40,.065,.10 if key=="model_s" else .18,HEADLAMP)
         if key=="volvo240":
@@ -297,7 +302,19 @@ def build(key, length, width, axles, color, belt, cabin):
         elif key=="m3_e30":
             for x in [-.09,.09]: box("Kidney surround",x,-end-.074,belt*.74,.15,.035,.20,METAL)
             for x in [-.09,.09]: box("Kidney opening",x,-end-.097,belt*.74,.115,.025,.17,DARK)
-        for i in range(4): box("Grille slat",0,-end-.065,belt*.65+i*.043,width*.83,.018,.011,METAL,.002)
+        if key == "saab96":
+            box("Saav grille backing",0,-end-.063,.657,.669,.075,.225,DARK,.020)
+            for z in (.554,.761):
+                box("Grille bright trim",0,-end-.108,z,.656,.022,.016,METAL,.005)
+            for i in range(5):
+                box("Grille slat",0,-end-.107,.574+i*.037,.621,.019,.012,METAL,.003)
+            box("Saav grille emblem backing",0,-end-.123,.677,.14,.025,.063,DARK,.006)
+            emblem = text_obj("Saav grille emblem","SAAV",(-.049,-end-.138,.662),
+                              .040,METAL,root=root,flat=True)
+            emblem.rotation_euler = (math.pi/2,0,0)
+        else:
+            for i in range(4):
+                box("Grille slat",0,-end-.065,belt*.65+i*.043,width*.83,.018,.011,METAL,.002)
     else:
         # A silver lightning stroke on a graphite mounting plate.
         for y in [-end-.003, end+.003]:
