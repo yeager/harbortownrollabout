@@ -11714,10 +11714,21 @@ func _build_driving_school() -> void:
 			Vector3(handle_x, 1.017, 3.218), Vector3(handle_x, 1.264, 3.218), .014, door_metal)
 	_make_box("Entrance aluminium threshold", Vector3(1.49, .044, .23),
 		Vector3(0, .036, 3.14), Color.WHITE, false, school).material_override = door_metal
-	for side in [-1,1]:
-		_make_box("Window frame",Vector3(3.25,1.55,.13),Vector3(side*3.55,1.71,3.03),Color("#263e43"),false,school)
-		_make_box("Classroom glazing",Vector3(3.02,1.33,.035),Vector3(side*3.55,1.71,3.11),Color("#566e73"),false,school)
-		_make_box("Window mullion",Vector3(.07,1.33,.05),Vector3(side*3.55,1.71,3.14),Color("#263e43"),false,school)
+	var classroom_glass := _material(Color("#566e73"), .27)
+	for window_x in [-3.55, 3.55]:
+		_make_box("Window frame", Vector3(3.25, 1.55, .13),
+			Vector3(window_x, 1.71, 3.03), Color("#263e43"), false, school)
+		for offset in [-.765, .765]:
+			_make_box("Classroom window sash", Vector3(1.50, 1.37, .055),
+				Vector3(window_x + offset, 1.71, 3.105), Color("#3c5257"), false, school)
+			_make_box("Classroom glazing", Vector3(1.408, 1.272, .018),
+				Vector3(window_x + offset, 1.71, 3.135), Color.WHITE, false, school).material_override = classroom_glass
+		var sill := _make_box("Classroom window sill flashing", Vector3(3.32, .045, .242),
+			Vector3(window_x, .934, 3.086), Color.WHITE, false, school)
+		sill.rotation.x = .084
+		sill.material_override = door_metal
+		_make_box("Window sill drip edge", Vector3(3.32, .025, .020),
+			Vector3(window_x, .907, 3.2), Color("#647477"), false, school)
 	var fascia := _make_box("School sign board",Vector3(5.10,.62,.12),Vector3(0,3.13,3.10),Color("#225c63"),false,school)
 	var sign := _station_sign("Driving school",Vector3(0,0,.07),.009,Color("#fff1c8"),0,fascia)
 	_size_world_sign(sign,4.84)
