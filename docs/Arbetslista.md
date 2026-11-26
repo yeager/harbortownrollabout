@@ -200,6 +200,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
 - [ ] [`ice_cream_van.glb`](../vehicles/ice_cream_van.glb)
 - [ ] [`lotten.glb`](../vehicles/lotten.glb)
 - [ ] [`m3_e30.glb`](../vehicles/m3_e30.glb)
+  - BMV M3 E33 fick ett upphöjt modellemblem på bakluckan. Granskat i Godot och fordonsprovet passerade.
 - [ ] [`mini_cooper_cabriolet.glb`](../vehicles/mini_cooper_cabriolet.glb)
   - Mino Kuper S fick ett eget kopparfärgat M-monogram på motorhuven och bakluckan samt nytt namn i fordonsgalleriet. Emblemen granskades i Godot. Fordonsprovet och språkkontrollen passerade.
 - [ ] [`model_s.glb`](../vehicles/model_s.glb)
@@ -215,6 +216,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
 - [ ] [`refuse_truck.glb`](../vehicles/refuse_truck.glb)
 - [ ] [`ride_on_mower.glb`](../vehicles/ride_on_mower.glb)
 - [ ] [`saab96.glb`](../vehicles/saab96.glb)
+  - Saav 97 fick ett upphöjt modellemblem på bakluckan. Granskat i Godot och fordonsprovet passerade.
 - [ ] [`shopping_trike.glb`](../vehicles/shopping_trike.glb)
 - [ ] [`snowmobile.glb`](../vehicles/snowmobile.glb)
 - [ ] [`sport_quattro.glb`](../vehicles/sport_quattro.glb)
@@ -226,6 +228,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
 - [ ] [`tram_cab.glb`](../vehicles/tram_cab.glb)
 - [ ] [`tram_saloon.glb`](../vehicles/tram_saloon.glb)
 - [ ] [`volvo240.glb`](../vehicles/volvo240.glb)
+  - Volva 241 fick ett upphöjt modellemblem på bakluckan och ett eget V-emblem i grillen. Båda granskades i Godot och fordonsprovet passerade.
 - [ ] [`volvo_ec950f.glb`](../vehicles/volvo_ec950f.glb)
 - [ ] [`volvo_wheel_loader.glb`](../vehicles/volvo_wheel_loader.glb)
 - [ ] [`volvo_xc60_polis.glb`](../vehicles/volvo_xc60_polis.glb)

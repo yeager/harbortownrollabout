@@ -6,7 +6,13 @@ import bpy
 from mathutils import Vector
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from build_vehicles import (clear_scene, cube, cylinder, material, mesh_from_rings,
-    export_vehicle, SOURCE_DIR, DARK, RUBBER, METAL, HEADLAMP, RED_LAMP)
+    export_vehicle, text_obj, SOURCE_DIR, DARK, RUBBER, METAL, HEADLAMP, RED_LAMP)
+
+CLASSIC_BADGES = {
+    "m3_e30": ("BMV M3 E33", .802),
+    "volvo240": ("VOLVA 241", .844),
+    "saab96": ("SAAV 97", .567),
+}
 
 def build(key, length, width, axles, color, belt, cabin):
     clear_scene()
@@ -257,7 +263,6 @@ def build(key, length, width, axles, color, belt, cabin):
             box("Boot trailing edge",0,y-.027,.907,1.46,.12,.034,paint,.012)
             box("Number plate gasket",0,y+.012,.692,.54,.028,.15,RUBBER,.009)
             box("Registration plate",0,y+.031,.692,.504,.013,.116,white,.006)
-            from build_vehicles import text_obj
             plate=text_obj("Registration lettering","SJO 240",(.165,y+.042,.657),.09,DARK,root=root,flat=True)
             plate.rotation_euler=(math.pi/2,0,math.pi)
             box("Boot release",0,y+.03,.804,.098,.040,.028,METAL,.009)
@@ -272,7 +277,6 @@ def build(key, length, width, axles, color, belt, cabin):
             box("Rear rub strip",0,y+.124,.471,1.38,.024,.047,RUBBER,.009)
             box("Rear plate surround",0,y+.019,.694,.591,.041,.164,DARK,.014)
             box("Rear number plate",0,y+.047,.694,.504,.013,.113,white,.006)
-            from build_vehicles import text_obj
             plate=text_obj("Coupe registration","SJO 030",(.151,y+.056,.665),.082,DARK,root=root,flat=True)
             plate.rotation_euler=(math.pi/2,0,math.pi)
             for x in [.515,.604]:
@@ -285,7 +289,11 @@ def build(key, length, width, axles, color, belt, cabin):
     if key!="model_s":
         box("Grille",0,-end-.033,belt*.74,width*.91,.05,.22,DARK)
         if key=="volvo240":
-            bar("Diagonal grille slash",(-.38,-end-.072,belt*.64),(.38,-end-.072,belt*.84),.027,METAL)
+            grille_y = -end - .083
+            box("Volva grille badge",0,grille_y,.735,.19,.025,.14,DARK,.009)
+            for side in [-1,1]:
+                bar("Volva grille chevron",(side*.062,grille_y-.018,.775),
+                    (0,grille_y-.018,.698),.017,METAL)
         elif key=="m3_e30":
             for x in [-.09,.09]: box("Kidney surround",x,-end-.074,belt*.74,.15,.035,.20,METAL)
             for x in [-.09,.09]: box("Kidney opening",x,-end-.097,belt*.74,.115,.025,.17,DARK)
@@ -302,6 +310,12 @@ def build(key, length, width, axles, color, belt, cabin):
                 points = [(-x,y,z) for x,y,z in points]
             for start, finish in zip(points, points[1:]):
                 bar("Teslo Z emblem",start,finish,.007,METAL)
+    if key in CLASSIC_BADGES:
+        name, height = CLASSIC_BADGES[key]
+        emblem = text_obj(name+" rear badge",name,(0,end+.012,height),.047,METAL,root=root)
+        emblem.rotation_euler = (math.pi/2,0,math.pi)
+        bounds = [vertex.co.x for vertex in emblem.data.vertices]
+        emblem.location.x = (min(bounds)+max(bounds))*.5
     if key=="m3_e30":
         for side in [-1,1]:
             feet=[]
