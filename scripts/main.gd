@@ -7797,6 +7797,24 @@ func _build_birthday_delivery() -> void:
 	var cake := shops._turned("Birthday cake",Vector3.ZERO,.208,.208,.13,Color("#fff2ce"))
 	cake.reparent(cake_box,false)
 	cake.position.y = .08
+	var icing := SphereMesh.new()
+	icing.radius = .010
+	icing.height = .018
+	icing.radial_segments = 10
+	icing.rings = 5
+	icing.material = _material(Color("#fff9e8"), .66)
+	var border := MultiMesh.new()
+	border.transform_format = MultiMesh.TRANSFORM_3D
+	border.mesh = icing
+	border.instance_count = 42
+	for dollop in border.instance_count:
+		var angle := TAU * dollop / border.instance_count
+		border.set_instance_transform(dollop, Transform3D(Basis.IDENTITY,
+			Vector3(.194 * cos(angle), .148, .194 * sin(angle))))
+	var piping := MultiMeshInstance3D.new()
+	piping.name = "Piped icing border"
+	piping.multimesh = border
+	cake_box.add_child(piping)
 	for i in 7:
 		var angle := TAU*i/7
 		var berry := shops._turned("Raspberry",Vector3.ZERO,.017,.012,.022,Color("#ac2348"))
