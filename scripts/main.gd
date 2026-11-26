@@ -2390,7 +2390,10 @@ func _build_city_wall() -> void:
 			var size := tangent * (length + 1.2) + normal * .6
 			var masonry := _make_box("Granitmur", size + Vector3.UP * 3.8, center + Vector3.UP * .4, Color.WHITE, true, wall)
 			masonry.material_override = stone
-			_make_box("Avtäckning", size + normal * .08 + Vector3.UP * .13, center + Vector3.UP * 2.365, Color("#a6a293"), false, wall)
+			# One coping spans each corner. The perpendicular coping meets its inside edge.
+			var coping_length := length + 1.28 if along_x else length - .08
+			var coping_size := tangent * coping_length + normal * .68 + Vector3.UP * .13
+			_make_box("Avtäckning", coping_size, center + Vector3.UP * 2.365, Color("#a6a293"), false, wall)
 
 func _build_road_network() -> void:
 	marking_finish = _noise_material(Color("#ededed"), Color.WHITE, 2.3, .12)
