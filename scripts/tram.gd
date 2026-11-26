@@ -119,10 +119,10 @@ func _cross_street(p: Vector3) -> bool:
 		if absf(offset.dot(direction))<8 and absf(offset.dot(direction.cross(Vector3.UP)))<1: return true
 	return false
 
-func _rail_batch(label: String, transforms: Array[Transform3D], color: Color) -> void:
+func _rail_batch(label: String, transforms: Array[Transform3D], finish: Material) -> void:
 	var box := BoxMesh.new()
 	box.size = Vector3.ONE
-	box.material = get_parent()._material(color)
+	box.material = finish
 	# Local batches let the compatibility renderer select lights near each stretch.
 	var cells := {}
 	for pose in transforms:
@@ -171,9 +171,10 @@ func _build_trackbed() -> void:
 			for ring in [-1, 0, 1]:
 				beam(insulator + heading.x * (.046 * ring - .015),
 					insulator + heading.x * (.046 * ring + .015), .115, .10, Color("#c9c4ae"))
-	_rail_batch("Grooved street rails",rails,Color("#97a3a9"))
-	_rail_batch("Grass reservation",grass,Color("#778c5e"))
-	_rail_batch("Contact wire",wires,Color("#464e4c"))
+	var world := get_parent()
+	_rail_batch("Grooved street rails", rails, world._material(Color("#97a3a9")))
+	_rail_batch("Grass reservation", grass, world.soil_finish)
+	_rail_batch("Contact wire", wires, world._material(Color("#464e4c")))
 
 func _ready() -> void:
 	var world := get_parent()
