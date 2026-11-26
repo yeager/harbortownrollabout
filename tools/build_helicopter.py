@@ -77,13 +77,24 @@ engine=cube("Turbine housing",(0,.09,2.52),(1.25,2.26,.53),blue,.24,root)
 cylinder("Mast",(0,-.27,2.99),.095,.47,metal,False,20,root)
 main=pivot("MainRotor",root,(0,-.27,3.21))
 tail=pivot("TailRotor",root,(.25,5.35,2.05))
-for hub,count,length in [(main,4,4.44),(tail,7,.56)]:
+for name, height, radius, depth, finish in [
+    ("Main rotor hub", 0, .29, .13, metal),
+    ("Main rotor cap", .093, .19, .074, blue),
+]:
+    component = cylinder(name, (0, 0, height), radius, depth, finish, False, 32, main)
+    component.matrix_parent_inverse.identity()
+for hub,count,length in [(main,4,4.09),(tail,7,.56)]:
     for i in range(count):
         angle=math.tau*i/count
         if hub==main:
             blade=cube("Main blade",(0,0,0),(.19,length,.047),graphite,.02,hub)
-            blade.location=(-math.sin(angle)*length/2,math.cos(angle)*length/2,0)
+            radial = Vector((-math.sin(angle), math.cos(angle), 0))
+            blade.location = radial * (.35 + length / 2)
             blade.rotation_euler.z=angle
+            cuff = cube("Main blade root cuff", (0, 0, 0), (.235, .39, .085), metal, .025, hub)
+            cuff.location = radial * .365
+            cuff.rotation_euler.z = angle
+            cuff.matrix_parent_inverse.identity()
         else:
             blade=cube("Tail blade",(0,0,0),(.038,.08,length),graphite,.012,hub)
             blade.location=(0,-math.sin(angle)*length/2,math.cos(angle)*length/2)
