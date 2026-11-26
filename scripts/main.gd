@@ -5940,8 +5940,14 @@ func _build_depot() -> void:
 		for rib_z in [-.45, -.16]:
 			_make_box("Lid underside cross brace", Vector3(.60, .022, .026),
 				Vector3(0, -.019, rib_z), lid_color.darkened(.11), false, lid)
-		for side in [-1,1]:
-			_make_box("Lid hinge knuckle", Vector3(.082,.038,.058), Vector3(side*.224,0,0), lid_color, false, lid)
+		var hinge_plastic := _material(lid_color.darkened(.12), .72)
+		var hinge_steel := _material(Color("#929b9c"), .42)
+		for side in [-1, 1]:
+			var hinge_x: float = side * .224
+			_tube_between(lid, Vector3(hinge_x - .041, 0, 0),
+				Vector3(hinge_x + .041, 0, 0), .025, hinge_plastic)
+			_tube_between(bin, Vector3(hinge_x - .060, .953, .302),
+				Vector3(hinge_x + .060, .953, .302), .012, hinge_steel)
 		_add_recycling_labels(bin,i == 0)
 		var wheel_rubber := _material(Color("#242a29"), .92)
 		var hub_plastic := _material(Color("#4e5859"), .64)
