@@ -77,7 +77,14 @@ for side in (-1,1):
     cheek.rotation_euler.x=.20
     ram("Lift cylinder",(side*1.20,2.47,3.13),(side*1.20,3.01,2.03),.074,v.DARK)
     ram("Chrome piston",(side*1.20,3.01,2.03),(side*1.20,3.36,1.31),.042,v.METAL)
-    box("Crew footboard",(side*.87,3.59,.67),(.53,.44,.12),v.METAL)
+    box("Crew footboard",(side*.87,3.59,.67),(.53,.44,.105),v.METAL,.018)
+    for offset in (-.145,-.052,.052,.145):
+        box("Footboard grip rib",(side*.87,3.59+offset,.726),(.44,.028,.019),v.DARK,.005)
+    for x in (.69,1.05):
+        ram("Footboard brace",(side*x,3.25,.78),(side*x,3.71,.625),.027,v.DARK)
+    for z in (1.79,2.29):
+        ram("Rear grab handle mount",(side*1.163,3.32,z),(side*1.30,3.38,z),.026,v.DARK)
+    ram("Rear grab handle",(side*1.30,3.38,1.79),(side*1.30,3.38,2.29),.024,v.METAL)
     light_x = side*1.12
     box("Rear lamp mounting plate",(light_x,3.531,1.46),(.183,.213,.367),green,.018)
     box("Rear lamp gasket",(light_x,3.650,1.46),(.168,.052,.337),v.RUBBER,.015)
