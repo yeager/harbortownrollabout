@@ -918,7 +918,7 @@ msgstr ""
 msgid "Teslo Model Z"
 msgstr ""
 
-msgid "Police SUV"
+msgid "Volva HT-6 police SUV"
 msgstr ""
 
 msgid "Porsje GT5RS"

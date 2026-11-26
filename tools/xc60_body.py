@@ -1,4 +1,4 @@
-"""Volvo XC60 patrol SUV, measured longitudinal sections in metres (-Y nose)."""
+"""Volva HT-6 patrol SUV, measured longitudinal sections in metres (-Y nose)."""
 from math import cos, exp, pi, sin, sqrt, tau
 
 import bpy
@@ -104,7 +104,7 @@ def panel_word(name,word,center,size,angle,finish):
 
 
 def build():
-    root=bpy.data.objects.new("Volvo XC60 patrol",None)
+    root=bpy.data.objects.new("Volva HT-6 patrol",None)
     bpy.context.collection.objects.link(root)
     white=material("XC60 ceramic white",(.89,.91,.89),.26,.25)
     glass=material("XC60 solar glass",(.028,.057,.074),.31,.15)
@@ -278,10 +278,9 @@ def build():
     for k in range(-7,8):
         x=k*.053
         face_line("Concave vertical grille blade",front,[(x*.96,.823),(x,1.005),(x*1.04,1.125)],.032,.0068,chrome)
-    face_line("Volvo iron diagonal",front,[(-.382,.813),(.393,1.133)],.041,.014,chrome)
-    oval("Volvo roundel surround",(0,front-.19-.048,.978),(.076,.015,.074),chrome)
-    oval("Volvo roundel",(0,front-.19-.063,.978),(.061,.009,.059),black)
-    panel_word("Patrol badge lettering","HT",(0,front-.19-.073,.979),.021,0,chrome)
+    cube("Volva grille badge",(0,front-.19-.052,.978),(.19,.036,.14),black,.012,root)
+    face_line("Volva grille chevron",front,[(-.060,1.014),(0,.940),(.060,1.014)],
+              .080,.010,chrome)
     face_patch("Lower bumper intake",front,[(-.706,.532),(-.641,.694),(-.549,.723),
               (.549,.723),(.641,.694),(.706,.532),(.657,.498),(-.657,.498)],.023,trim)
     for z in [.553,.604,.654]:
@@ -348,7 +347,7 @@ def build():
         face_line("Rear bumper reflector",rear,[(side*.698,.674),(side*.802,.682)],.025,.010,reflector)
     tube("Rear window wiper",[(-.40,2.108,1.477),(-.10,2.155,1.485),(.27,2.129,1.50)],.011,trim)
     cube("Centre brake lamp",(0,1.944,1.906),(.54,.025,.025),ruby,.008)
-    panel_word("Patrol tailgate lettering","H T – 6",(0,rear+.171,1.325),.082,pi,chrome)
+    panel_word("Volva tailgate lettering","VOLVA HT–6",(0,rear+.171,1.325),.075,pi,chrome)
     panel_word("Police rear legend","POLIS",(0,rear+.176,1.186),.119,pi,blue)
     face_patch("Plate recess",rear,[(-.315,1.059),(.315,1.059),(.29,.889),(-.29,.889)],.013,trim)
     cube("Rear registration plate",(0,rear+.189,.977),(.510,.020,.107),white,.009)

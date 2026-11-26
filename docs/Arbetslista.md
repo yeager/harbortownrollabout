@@ -232,6 +232,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
 - [ ] [`volvo_ec950f.glb`](../vehicles/volvo_ec950f.glb)
 - [ ] [`volvo_wheel_loader.glb`](../vehicles/volvo_wheel_loader.glb)
 - [ ] [`volvo_xc60_polis.glb`](../vehicles/volvo_xc60_polis.glb)
+  - Volva HT-6 har samma V-emblem som Volva 241, egen märkning på bakluckan och nytt namn i fordonsgalleriet. Exteriördetaljerna granskades i Godot. Fordonsprovet, utryckningsprovet och språkkontrollen passerade.
 
 #### Byggnader och miljöobjekt
 
