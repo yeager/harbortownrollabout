@@ -181,6 +181,8 @@ Fordonsgranskningen börjar med exteriörerna. Bilarnas tillverkarnamn, modellna
 
 - [x] Brandbilen följer brons lutning i reklamfilmens omtagning. Spelmodellen justerar även höjden mellan axlarna när bron kröker. Kontrollerat i filmens brotagning och i hopp- och broprovet för båda färdriktningarna.
 
+- [x] Infarten till ambulansintaget möter Östra allén i samma nivå utan överlappande vägytor. Granskad i Godot och kontrollerad i ambulansprovet, inklusive patientöverlämning.
+
 ### Importerade modeller
 
 Resursnamnen identifierar även delar som ska bedömas i den sammansatta modellen. En öppen ruta betyder att 99/100 återstår att verifiera.

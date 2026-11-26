@@ -117,8 +117,10 @@ func _build_closed_entrance(world: Node3D, glass: Material) -> void:
 	world._size_world_sign(entrance, 6.15)
 
 func _build_intake(world: Node3D) -> void:
-	world._make_driving_surface("Ambulance bay and apron", Vector3(9.6, .12, 10.65),
-		Vector3(0, -.08, 5.33), Color("#777c79"), true, self)
+	# Meet the north edge of Östra allén at the same grade without overlapping it.
+	var apron_depth := -52.8 - ORIGIN.z
+	world._make_driving_surface("Ambulance bay and apron", Vector3(9.6, .12, apron_depth),
+		Vector3(0, -.08, apron_depth * .5), Color("#777c79"), true, self)
 	for side in [-1.0, 1.0]:
 		world._make_roadside_solid("Ambulance bay side wall", Vector3(.43, 4.15, 6.90),
 			Vector3(side * 4.24, 2.075, 3.45), BRICK, true, self)

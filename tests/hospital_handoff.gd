@@ -10,6 +10,16 @@ func fail(reason: String) -> void:
 func verify() -> void:
 	var game = preload("res://main.tscn").instantiate()
 	root.add_child(game)
+	var apron := game.find_child("Ambulance bay and apron", true, false) as MeshInstance3D
+	var apron_bounds := apron.global_transform * apron.get_aabb()
+	var street_bounds := AABB()
+	for bounds: AABB in game.driving_surfaces:
+		if bounds.get_center().is_equal_approx(Vector3(126, -.08, -48)):
+			street_bounds = bounds
+			break
+	if not is_equal_approx(apron_bounds.end.z, street_bounds.position.z) or not is_equal_approx(apron_bounds.end.y, street_bounds.end.y):
+		fail("The ambulance apron must meet the street flush without overlapping it")
+		return
 	game._on_vehicle_selected(0)
 	game.start_button.pressed.emit()
 	game.phone.open_button.pressed.emit()
