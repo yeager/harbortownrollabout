@@ -1217,6 +1217,7 @@ def make_fire_engine():
         fitting("Shutter lock bezel",0,.012,.153,.074,.025,.064,DARK,.010)
         fitting("Shutter lock barrel",0,.027,.153,.043,.009,.036,METAL,.004)
         fitting("Shutter keyway",0,.032,.153,.007,.003,.020,BLACK,.001)
+    side_reflector = material("Amber side reflector acrylic", (.68,.23,.014), .14, .28)
     for side in (-1,1):
         for y in (-.10,1.08,2.26):
             low = 1.19 if y > 0 else .91
@@ -1231,6 +1232,9 @@ def make_fire_engine():
             for rib in range(1,int((high-low)/.081)):
                 cube("Shutter seam",(side*1.176,y,low+rib*.081),(.006,1.10,.006),DARK,0,root)
             shutter_hardware((side*1.168,y,low+.023),(side,0),1.11,high-low-.046)
+        for y,z in ((-.63,.84),(.49,.86),(2.83,.86)):
+            cube("Side reflector gasket",(side*1.151,y,z),(.045,.150,.068),RUBBER,.010,root)
+            cube("Amber side reflector lens",(side*1.178,y,z),(.018,.126,.049),side_reflector,.008,root)
         for row in range(2):
             for col in range(8):
                 y = -2.63+col*.246
