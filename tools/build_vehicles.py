@@ -453,7 +453,15 @@ def make_ambulance():
         box("Huvudspegelns glas",(side*1.177,-1.591,1.709),(.133,.012,.165),mirror_glass,.017)
         box("Vidvinkelspegelns glas",(side*1.177,-1.591,1.583),(.133,.012,.065),mirror_glass,.013)
         box("Dörrhandtag",(side*1.027,-.57,1.32),(.035,.18,.04),BLACK,.014)
-        box("Fotsteg",(side*.99,-.99,.47),(.27,1.33,.09),METAL)
+        box("Fotstegets bärprofil",(side*.992,-.99,.466),(.275,1.31,.066),METAL,.022)
+        box("Fotstegets halkskydd",(side*1.024,-.99,.505),(.195,1.22,.019),RUBBER,.009)
+        for rib in range(13):
+            box("Fotstegets greppkant",(side*1.023,-1.53+rib*.09,.518),
+                (.149,.015,.009),DARK,.004)
+        for support_y in (-1.425,-.565):
+            box("Fotstegets konsol",(side*.864,support_y,.428),(.29,.079,.069),DARK,.012)
+        for end_y in (-1.62,-.36):
+            box("Fotstegets ändstycke",(side*.994,end_y,.464),(.274,.071,.072),BLACK,.018)
         # The module arch has a moulded lip that returns inside the wheel
         # opening. The deeper rear splash flap sits inboard of the trim.
         arch=[]
