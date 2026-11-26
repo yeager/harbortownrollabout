@@ -176,6 +176,12 @@ func check_gallery() -> void:
 				printerr("Quattro brake lights did not work independently of the reverse lights")
 				quit(1)
 				return
+		if index == game.SHOPPER:
+			var lens := game.vehicle_model.find_child("Tail lamp fluted lens", true, false) as MeshInstance3D
+			if not lens or not game.player_brake_lens or lens.get_active_material(0) != game.player_brake_lens or game.player_brake_lens.emission_energy_multiplier < 2.39:
+				printerr("The Shoppa's molded rear lens must light when braking")
+				quit(1)
+				return
 		if index == game.MOWER:
 			var tail_lenses: Array = game.vehicle_model.find_children("Mower rear lamp lens*", "MeshInstance3D", true, false)
 			if tail_lenses.size() != 2 or not game.player_brake_lens or game.player_brake_lens.emission_energy_multiplier < 2.39 or not tail_lenses.all(func(lens: MeshInstance3D): return lens.get_active_material(0) == game.player_brake_lens):

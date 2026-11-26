@@ -385,7 +385,19 @@ tube("Dark outlet bore",(.426,1.12,.194),(.426,1.121,.194),.016,v.BLACK)
 flap = box("Rear mud flap", (0,1.147,.203), (.216,.018,.211), v.RUBBER, .008)
 flap.rotation_euler.x = math.radians(13)
 box("Mud flap retaining strip", (0,1.132,.293), (.215,.025,.028), v.METAL, .004)
-box("Tail lamp",(0,1.16,.43),(.14,.035,.06),v.TAIL_LAMP)
+box("Tail lamp gasket",(0,1.158,.43),(.161,.020,.077),v.RUBBER,.013)
+box("Tail lamp housing",(0,1.173,.43),(.153,.024,.069),v.DARK,.012)
+# Mold the vertical prisms into the red lens so they light with the whole optic.
+tail_lens_sections = []
+for i in range(49):
+    u = i/24-1
+    half_height = .028 - .009*max(0,(abs(u)-.78)/.22)**2
+    ridge = .0015*(1-math.cos(math.tau*i/4))*(1-u*u)
+    tail_lens_sections.append([(u*.070,y,.43+h*half_height) for y,h in (
+        (1.182,-.87),(1.186,-1),(1.195,-.84),(1.198+ridge,-.66),
+        (1.201+ridge,0),(1.198+ridge,.66),(1.195,.84),(1.186,1),(1.182,.87),
+    )])
+v.profile_loft("Tail lamp fluted lens",tail_lens_sections,v.TAIL_LAMP,root)
 for side in (-1,1):
     box("Rear indicator housing",(side*.237,1.157,.423),(.099,.037,.057),v.DARK,.009)
     box("Rear indicator lens",(side*.237,1.18,.423),(.088,.018,.047),amber,.008)

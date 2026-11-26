@@ -276,6 +276,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Shoppingtrehjulingen heter Norrsjö Shoppa i fordonsgalleriet på alla sju språk. De upphöjda märkesbokstäverna ovanför baklyktan granskades i Godot. Språkkontrollen och fordonsprovet passerade.
   - Strålkastaren fick en profilerad kromring runt glaset och en separat gummipackning mot huven. Granskat framifrån i Godot. Fordonsprovet passerade.
   - Blinkersen fick rundade glas och separata hus fram och bak. Fram sitter husen på korta fästen mot huven. Båda ändarna granskades i Godot och fordonsprovet verifierar att de modellerade glasen blinkar på rätt sida.
+  - Baklyktan fick räfflat rött glas, separat lamphus och gummipackning. Granskat i Godot. Fordonsprovet verifierar att det nya glaset lyser vid inbromsning.
 - [ ] [`snowmobile.glb`](../vehicles/snowmobile.glb)
 - [ ] [`sport_quattro.glb`](../vehicles/sport_quattro.glb)
   - Fordonsprovet kontrollerar att galleriet visar Audo Sport Kvattro, att bakluckan har Kvattro-emblemet och att fronten har fem ringar. Språkkontrollen passerade för alla sex översättningskataloger.
