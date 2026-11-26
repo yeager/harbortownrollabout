@@ -230,6 +230,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Båda hyttdörrarna fick synliga dörrskarvar och separata fönstertätningar. Granskat från sidan i Godot. Sophämtningsprovet passerade.
   - Backspeglarna fick separata huvud- och vidvinkelspeglar med egna spegelytor, bärarmar och fötter. Granskat i Godot. Sophämtningsprovet passerade.
   - De bakre fotstegen fick halkskyddsribbor, stag och separata handtag på båda sidor. Granskat bakifrån i Godot. Sophämtning, tömning och betalning passerade i körprovet.
+  - Alla sex hjul fick rundade däckskuldror, tre längsgående spår, försänkta fälgar och separata navkåpor, brickor och hjulbultar. Granskat i närbild i Godot. Alla sex fälgar följer respektive däck i hjulriggen. Sophämtningsprovet passerade.
 - [ ] [`ride_on_mower.glb`](../vehicles/ride_on_mower.glb)
   - Åkgräsklipparen har en infälld kylgrill och röda baklyktor vid den bakmonterade motorn. Strålkastarna sitter på klippaggregatets främre kant. Båda ändarna granskades i Godot och samtliga fyra modellerade blinkerslinser verifierades. Fordons- och områdesproven passerade.
 - [ ] [`saab96.glb`](../vehicles/saab96.glb)

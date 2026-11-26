@@ -25,6 +25,45 @@ def ram(name, start, end, radius, finish):
     rod = v.cylinder(name, (Vector(end) + Vector(start))/2, radius, axis.length, finish, False, 16, root)
     rod.rotation_euler = axis.to_track_quat('Z', 'Y').to_euler()
 
+def wheel_surface(name, side, y, profile, finish):
+    segments = 64
+    vertices = []
+    for offset, radius in profile:
+        for step in range(segments):
+            angle = math.tau * step / segments
+            vertices.append((side * offset, radius * math.cos(angle), radius * math.sin(angle)))
+    faces = []
+    for ring in range(len(profile)):
+        following = (ring + 1) % len(profile)
+        for step in range(segments):
+            neighbor = (step + 1) % segments
+            face = (ring * segments + step, ring * segments + neighbor,
+                    following * segments + neighbor, following * segments + step)
+            faces.append(face if side > 0 else face[::-1])
+    mesh = bpy.data.meshes.new(name)
+    mesh.from_pydata(vertices, [], faces)
+    mesh.update()
+    mesh.materials.append(finish)
+    for polygon in mesh.polygons:
+        polygon.use_smooth = True
+    wheel = bpy.data.objects.new(name, mesh)
+    bpy.context.collection.objects.link(wheel)
+    wheel.parent = root
+    wheel.location = (side, y, .55)
+
+
+tire_profile = [
+    (-.195,.350),(-.195,.454),(-.182,.503),(-.162,.537),(-.132,.550),
+    (-.087,.550),(-.084,.537),(-.069,.537),(-.066,.550),
+    (-.012,.550),(-.009,.537),(.009,.537),(.012,.550),
+    (.066,.550),(.069,.537),(.084,.537),(.087,.550),
+    (.132,.550),(.162,.537),(.182,.503),(.195,.454),(.195,.350),
+]
+rim_profile = [
+    (.161,.348),(.175,.361),(.200,.361),(.212,.349),(.210,.331),
+    (.175,.300),(.170,.249),(.204,.196),(.212,.138),(.161,.138),
+]
+
 box("Ladder chassis", (0,0,.82), (1.60,7.4,.32), v.DARK)
 box("Cab shell", (0,-2.90,2.04), (2.34,1.98,2.20), green,.17)
 glass = box("Panoramic windshield",(0,-3.87,2.57),(2.05,.12,.88),v.GLASS,.08)
@@ -95,11 +134,15 @@ for side in (-1,1):
                            .008,.012,v.METAL,False,12,root)
         screw.rotation_euler.x = math.pi/2
     for y in (-2.94,.90,2.28):
-        for name,x,r,d,mat in [('Performance tire',1.00,.55,.39,v.RUBBER),('Wheel rim',1.18,.353,.10,v.METAL),('Wheel hub',1.237,.158,.08,v.DARK)]:
-            v.cylinder(name,(side*x,y,.55),r,d,mat,True,32,root)
+        wheel_surface("Performance tire",side,y,tire_profile,v.RUBBER)
+        wheel_surface("Alloy wheel dish",side,y,rim_profile,v.METAL)
+        v.cylinder("Wheel hub",(side*1.206,y,.55),.151,.081,v.DARK,True,32,root)
+        v.cylinder("Wheel hub cover",(side*1.249,y,.55),.103,.020,v.METAL,True,32,root)
         for j in range(8):
-            a=j*math.tau/8
-            v.cylinder("Wheel bolt",(side*1.24,y+.25*math.cos(a),.55+.25*math.sin(a)),.031,.04,v.DARK,True,6,root)
+            a = j * math.tau / 8
+            bolt_y, bolt_z = y + .222*math.cos(a), .55 + .222*math.sin(a)
+            v.cylinder("Wheel bolt washer",(side*1.193,bolt_y,bolt_z),.040,.026,v.DARK,True,16,root)
+            v.cylinder("Wheel bolt",(side*1.214,bolt_y,bolt_z),.027,.033,v.METAL,True,6,root)
 v.export_vehicle(root,"refuse_truck.glb")
 if os.getenv("TRUCK_PORTRAIT"):
     scene=bpy.context.scene
