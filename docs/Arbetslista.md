@@ -280,6 +280,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Backspeglarna fick rundade hus, infällda spegelytor, justerleder och gummifästen. Båda speglarna granskades i Godot och fordonsprovet passerade.
   - Vindrutan fick tätare geometri och en sammanhängande gummilist runt alla fyra kanter. Fronten granskades i Godot och fordonsprovet passerade. På- och avstigningsprovet passerade sina kontroller men loggade ett fel från Godots Dictionary-kod.
   - Takskalet fick rundade fram- och bakkanter samt en infälld mörk avslutningslist vid vindrutan. Granskat framifrån i Godot och fordonsprovet passerade.
+  - Fälgarna fick åtta mörka ventilationsfördjupningar, fyra hjulbultar och separata däckventiler med hattar. Granskat i närbild i Godot och fordonsprovet passerade.
 - [ ] [`snowmobile.glb`](../vehicles/snowmobile.glb)
 - [ ] [`sport_quattro.glb`](../vehicles/sport_quattro.glb)
   - Fordonsprovet kontrollerar att galleriet visar Audo Sport Kvattro, att bakluckan har Kvattro-emblemet och att fronten har fem ringar. Språkkontrollen passerade för alla sex översättningskataloger.

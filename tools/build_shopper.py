@@ -332,6 +332,21 @@ for x,y in ((-.429,-.72),(.429,-.72),(0,.89)):
     for side in (-1,1):
         wheel_surface("Wheel hub",(x,y,.227),rim_profile,v.METAL,side)
         v.cylinder("Center cap",(x+side*.080,y,.227),.031,.017,v.DARK,True,32,root)
+        for i in range(8):
+            angle = math.tau*(i+.5)/8
+            hub_y, hub_z = y+.094*math.cos(angle), .227+.094*math.sin(angle)
+            v.cylinder("Wheel hub vent collar",(x+side*.071,hub_y,hub_z),
+                       .013,.005,v.METAL,True,16,root)
+            v.cylinder("Wheel hub vent inset",(x+side*.074,hub_y,hub_z),
+                       .010,.002,v.DARK,True,16,root)
+        for i in range(4):
+            angle = math.tau*i/4
+            v.cylinder("Wheel bolt",(x+side*.069,y+.049*math.cos(angle),
+                       .227+.049*math.sin(angle)),.007,.012,v.METAL,True,6,root)
+        tube("Wheel hub valve stem",(x+side*.075,y,.350),
+             (x+side*.087,y,.344),.004,v.RUBBER)
+        tube("Wheel hub valve cap",(x+side*.085,y,.345),
+             (x+side*.092,y,.342),.0045,v.DARK)
 # Tapered wire basket on the rear deck.
 for z,w,front,rear in ((.55,.30,.53,1.05),(.72,.345,.49,1.12)):
     rear_width = w-.055
