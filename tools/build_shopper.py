@@ -59,7 +59,18 @@ bpy.data.objects.remove(cutter,do_unlink=True)
 box("Pressed footwell floor",(0,-.315,.211),(.82,.73,.044),red,.018)
 box("Rubber foot mat",(0,-.315,.238),(.765,.64,.010),v.RUBBER,.005)
 fixed_parts = set(root.children) - {bonnet}
-nose_lamp("Chrome headlight bezel",-1.185,.58,.101,.045,v.METAL)
+# The rubber seat follows the bonnet; the spun bezel wraps around the glass edge.
+for name, finish, section in [
+    ("Headlight rubber gasket", v.RUBBER,
+     [(.095,-1.179),(.108,-1.179),(.107,-1.189),(.103,-1.194),(.095,-1.194)]),
+    ("Chrome headlight bezel", v.METAL,
+     [(.094,-1.188),(.102,-1.188),(.102,-1.199),(.099,-1.207),
+      (.093,-1.211),(.085,-1.211),(.084,-1.207),(.087,-1.202),(.090,-1.194)]),
+]:
+    angles = [math.tau*i/64 for i in range(64)]
+    rings = [[(radius*math.cos(angle), y, .58+radius*math.sin(angle))
+              for angle in angles] for radius,y in section+[section[0]]]
+    v.profile_loft(name,rings,finish,root,close_ends=False)
 # Flutes are part of one lens mesh so the driving light still has one emitter.
 lens_radius = .085
 vertices = [(-lens_radius,-1.208,.58)]

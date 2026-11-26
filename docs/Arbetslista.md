@@ -274,6 +274,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Bakrutan fick åtta synliga värmetrådar, anslutningsskenor och tätningar längs över- och nederkanten. Granskat bakifrån i Godot. Fordonsprovet passerade.
 - [ ] [`shopping_trike.glb`](../vehicles/shopping_trike.glb)
   - Shoppingtrehjulingen heter Norrsjö Shoppa i fordonsgalleriet på alla sju språk. De upphöjda märkesbokstäverna ovanför baklyktan granskades i Godot. Språkkontrollen och fordonsprovet passerade.
+  - Strålkastaren fick en profilerad kromring runt glaset och en separat gummipackning mot huven. Granskat framifrån i Godot. Fordonsprovet passerade.
 - [ ] [`snowmobile.glb`](../vehicles/snowmobile.glb)
 - [ ] [`sport_quattro.glb`](../vehicles/sport_quattro.glb)
   - Fordonsprovet kontrollerar att galleriet visar Audo Sport Kvattro, att bakluckan har Kvattro-emblemet och att fronten har fem ringar. Språkkontrollen passerade för alla sex översättningskataloger.
