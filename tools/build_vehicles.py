@@ -277,6 +277,7 @@ def make_ambulance():
     bpy.context.collection.objects.link(root)
     yellow = material("Ambulans citrongul", (0.47, 0.55, 0.068), 0.06, 0.34)
     glass = material("Röktonat glas", (0.018, 0.042, 0.056), 0.36, 0.13)
+    mirror_glass = material("Ambulance mirror glass",(.42,.51,.56),.88,.14)
 
     def box(name, loc, dims, mat, radius=0.025):
         return cube(name, loc, dims, mat, radius, root)
@@ -444,8 +445,13 @@ def make_ambulance():
         number.location.y-=side*(min(extents)+max(extents))*.5
         label = text_obj("Ambulansdekal","AMBULANS",(side*1.123,1.54,1.58),.185,POLICE_BLUE,-side,root)
         label.data.transform(__import__("mathutils").Matrix.Translation((-sum(v.co.x for v in label.data.vertices)/len(label.data.vertices),0,0)))
-        box("Spegelarm",(side*1.04,-1.68,1.54),(.22,.06,.05),BLACK,.012)
-        box("Backspegel",(side*1.15,-1.68,1.65),(.09,.17,.24),BLACK,.038)
+        box("Spegelfästets packning",(side*.948,-1.68,1.477),(.035,.128,.105),RUBBER,.014)
+        box("Spegelarm",(side*1.059,-1.68,1.494),(.245,.068,.061),BLACK,.020)
+        box("Spegelarmens led",(side*1.171,-1.68,1.526),(.088,.081,.096),BLACK,.022)
+        box("Backspegelns hus",(side*1.177,-1.679,1.669),(.180,.150,.301),BLACK,.041)
+        box("Spegelglasens gummilist",(side*1.177,-1.604,1.669),(.157,.019,.268),RUBBER,.024)
+        box("Huvudspegelns glas",(side*1.177,-1.591,1.709),(.133,.012,.165),mirror_glass,.017)
+        box("Vidvinkelspegelns glas",(side*1.177,-1.591,1.583),(.133,.012,.065),mirror_glass,.013)
         box("Dörrhandtag",(side*1.027,-.57,1.32),(.035,.18,.04),BLACK,.014)
         box("Fotsteg",(side*.99,-.99,.47),(.27,1.33,.09),METAL)
         # The module arch has a moulded lip that returns inside the wheel
