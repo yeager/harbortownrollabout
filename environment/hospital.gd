@@ -116,6 +116,13 @@ func _build_closed_entrance(world: Node3D, glass: Material) -> void:
 	var facade_x := -9.30
 	world._make_driving_surface("Hospital entrance walk", Vector3(6.60, .14, 6.3),
 		Vector3(facade_x, -.06, 3.20), Color("#a39c8d"), false, self)
+	var paving: Array[Transform3D] = []
+	for row in 10:
+		for column in 11:
+			paving.append(Transform3D(Basis.IDENTITY,
+				Vector3(facade_x + (column - 5) * .60, .012, .365 + row * .63)))
+	_box_batch("Hospital entrance paving", Vector3(.584, .010, .614), Vector3.ZERO,
+		world._material(Color("#c7bead"), .84), paving)
 	world._make_box("Entrance surround", Vector3(6.1, 3.05, .20), Vector3(facade_x, 1.525, .15), METAL, false, self)
 	for column in 4:
 		var pane: MeshInstance3D = world._make_box("Locked entrance glazing", Vector3(1.31, 2.42, .06),
