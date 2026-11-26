@@ -10,6 +10,9 @@ const SWEDISH := {
 	"Library": "Biblioteket",
 	"HARBOR TOWN SCHOOL": "SJÖSTADSSKOLAN",
 	"HARBOR TOWN GARAGE": "SJÖSTADENS BILVERKSTAD",
+	"Vehicle depot": "Fordonsdepå",
+	"Tyre service": "Däckservice",
+	"HARBOR FUEL": "SJÖMACKEN",
 }
 
 func _initialize() -> void:

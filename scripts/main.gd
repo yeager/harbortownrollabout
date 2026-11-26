@@ -6083,6 +6083,7 @@ func _build_depot() -> void:
 	sign.billboard = BaseMaterial3D.BILLBOARD_ENABLED
 	sign.pixel_size = .008
 	add_child(sign)
+	_size_world_sign(sign, 2.3)
 	for i in VEHICLE_SCENES_ALL.size():
 		var body := Node3D.new()
 		add_child(body)
