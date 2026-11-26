@@ -1453,6 +1453,17 @@ def make_fire_engine():
         bpy.ops.object.join()
         bars[0].name="Galvanized rear footboard"
     cube("Tow hitch flange",(0,3.143,.79),(.23,.065,.194),cab_red,.014,root)
+    for x in [-.076,.076]:
+        for z in [.729,.851]:
+            bolt = cylinder("Tow flange bolt",(x,3.183,z),.018,.020,METAL,False,6,root)
+            bolt.rotation_euler.x = math.pi/2
+    cube("Trailer socket bracket",(.191,3.152,.79),(.116,.052,.121),DARK,.009,root)
+    for y, radius, finish, name in [
+            (3.189,.047,METAL,"Trailer socket rim"),
+            (3.207,.040,BLACK,"Trailer socket weather cap")]:
+        socket = cylinder(name,(.191,y,.79),radius,.018,finish,False,32,root)
+        socket.rotation_euler.x = math.pi/2
+    cube("Trailer socket cap hinge",(.191,3.206,.833),(.043,.023,.017),DARK,.004,root)
     cube("Tow hitch drawbar",(0,3.255,.743),(.12,.246,.065),cab_red,.015,root)
     cylinder("Tow ball neck",(0,3.344,.800),.024,.099,METAL,False,24,root)
     bpy.ops.mesh.primitive_uv_sphere_add(segments=24,ring_count=12,radius=.043,
