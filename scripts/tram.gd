@@ -183,6 +183,10 @@ func _ready() -> void:
 	var roof_finish: ShaderMaterial = world._noise_material(Color("#475963"), Color("#536772"), 3.2, .13)
 	roof_finish.set_shader_parameter("roof_surface", true)
 	world.ground_finishes.append(roof_finish)
+	var platform_finish: ShaderMaterial = world._noise_material(Color("#a8a295"), Color("#d0c8b7"), 5.5, .20)
+	platform_finish.set_shader_parameter("roof_surface", true)
+	platform_finish.set_shader_parameter("snow_retention", .72)
+	world.ground_finishes.append(platform_finish)
 	var shelter_glass := StandardMaterial3D.new()
 	var drain_finish: StandardMaterial3D = world._material(Color("#40535c"), .58)
 	shelter_glass.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
@@ -214,7 +218,9 @@ func _ready() -> void:
 		station.position = track.sample_baked(offset)
 		station.look_at(track.sample_baked(offset+.2))
 		# Stops lie on the straight portions with space for all three cars.
-		world._make_box("Island platform",Vector3(2.55,.34,17),Vector3(2.81,.12,4.5),Color("#c4bbaa"),false,station)
+		var platform := world._make_box("Island platform", Vector3(2.55, .34, 17),
+			Vector3(2.81, .12, 4.5), Color.WHITE, false, station) as MeshInstance3D
+		platform.material_override = platform_finish
 		world._make_box("Tactile strip",Vector3(.18,.019,16.8),Vector3(1.69,.299,4.5),Color("#edce73"),false,station)
 		var tactile_studs := MultiMeshInstance3D.new()
 		tactile_studs.name = "Raised tactile warning studs"
@@ -234,6 +240,7 @@ func _ready() -> void:
 		var ramp := world._make_box("Platform access ramp",Vector3(2.55,.09,Vector2(3,rise).length()),Vector3(2.81,(bottom+.29)*.5,-5.5),Color("#c4bbaa"),false,station) as MeshInstance3D
 		ramp.rotation.x = angle
 		ramp.position -= ramp.basis.y*.045
+		ramp.material_override = platform_finish
 		# Cross the near carriageway at the level landing before the ramp begins.
 		for stripe in 7:
 			var paint_at := Vector3(3.53+stripe*.74,0,-8.06)

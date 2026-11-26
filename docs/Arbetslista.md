@@ -480,6 +480,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - De dubbelsidiga hållplatsskyltarna sänktes något och fick två takfästen. Granskat från perrongen vid Verkstadstorget. Spårvagnsprovet passerade.
   - Takarmaturerna fick mörka höljen runt separata ljusspridare. Granskat underifrån vid Verkstadstorget i Godot. Spårvagnsprovet passerade.
   - Väderskyddens plåttak fick vädermaterial. Snö lägger sig på takets ovansida och ståndfalsarna är synliga. Granskat vid Verkstadstorget i Godot. Spårvagns- och väderproven passerade.
+  - Perrongerna och ramperna fick betongmaterial med väderrespons. Den gula taktila kanten och påstigningsmarkeringarna syns i snön. Granskat vid Verkstadstorget i Godot. Spårvagns- och väderproven passerade.
   - Kontaktledningsstolparna fick fotplattor, stag och isolatorer. Granskat vid Västra torget i Godot efter godkänt spårvagnsprov.
   - Spårvagnens strömavtagare fick isolerade takfästen, ledaxlar och dubbla kolslitskenor. Granskat i närbild i Godot och spårvagnsprovet passerade.
   - Alla tre vagnsdelar fick omarbetade ventilationskåpor med sidointag, takgaller och synliga fästen. Granskat i Godot och spårvagnsprovet passerade.
