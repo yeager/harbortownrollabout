@@ -161,9 +161,15 @@ for side in (-1, 1):
     cube("Port navigation lens" if side > 0 else "Starboard navigation lens",
          (contact.x + side * .048, lamp_y, lamp_z), (.022, .092, .045),
          red_lamp if side > 0 else green_lamp, .013, root)
-    lamp = cylinder("Forward belly searchlight", (side * .44, -2.52, .65),
-                    .111, .075, white_lamp, False, 20, root)
-    lamp.rotation_euler.x = .63
+    cube("Landing lamp mounting plate", (side * .44, -2.49, .725),
+         (.244, .236, .073), dark, .027, root)
+    for name, y, z, radius, depth, finish in (
+        ("Landing lamp housing", -2.52, .666, .119, .116, dark),
+        ("Landing lamp reflector rim", -2.553, .620, .110, .029, metal),
+        ("Landing lamp lens", -2.568, .600, .090, .021, white_lamp),
+    ):
+        lamp = cylinder(name, (side * .44, y, z), radius, depth, finish, False, 24, root)
+        lamp.rotation_euler.x = -.63
 
 cube("Horizontal stabilizer", (0, 4.31, 2.03), (2.54, .50, .083), teal, .038, root)
 fin = cube("Swept yellow tail fin", (0, 5.48, 2.95), (.22, .72, 1.20), yellow, .09, root)
