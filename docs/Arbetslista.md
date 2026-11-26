@@ -285,6 +285,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Framdörrarnas handtag fick modellerade sensorytor för nyckelfri upplåsning. Granskat i närbild i Godot och kontrollerat i alla tre GLB-varianter. Körskoleprovet passerade.
   - Taket fick en lackerad hajfensantenn med separat gummitätning. Verifierat i tre GLB-varianter och granskat snett bakifrån i Godot. Körskoleprovet passerade.
   - Panoramataket fick en profilerad gummilist längs glaset och en tvärlist vid rutornas skarv. Kontrollerat i tre GLB-varianter och granskat i Godot. Körskoleprovet passerade.
+  - Exteriörgranskning i Godot 4.7 dev5 från cirka 5–8 meters avstånd, snett framifrån, från sidan och snett bakifrån. Silhuetten visar en sammanhängande taklinje, tydliga hjulhus och avläsbara stötfångare. Proportionerna bedömdes visuellt från sidan. Frontens ljusa grillram och lameller flyter ihop på köravstånd. I sidovyn skymmer lackens starka omgivningsreflexer delar av dörrfogarna. Bakifrån går ljuslisten, bakluckan och diffusorn att skilja åt. Nästa exteriörgranskning ska jämföra grillens materialkontrast och lackens reflexer i dagsljus och nattläge. De tre vyerna räcker för att prioritera ändringarna. Referensjämförelse, funktion och helhetsbetyg återstår.
 - [ ] [`brandbil.glb`](../vehicles/brandbil.glb)
   - Dragkrokens infästning fick fyra sexkantsbultar samt ett släpvagnsuttag med fäste och väderskydd. Granskat bakifrån i Godot. Förarplats- och luckproven passerade.
 - [ ] [`city_bus.glb`](../vehicles/city_bus.glb)
