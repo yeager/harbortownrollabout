@@ -154,6 +154,8 @@ bpy.context.view_layer.objects.active=shell
 bpy.ops.object.modifier_apply(modifier=cut.name)
 bpy.data.objects.remove(cutter,do_unlink=True)
 box("Load bed liner",(0,1.515,.724),(1.43,1.12,.030),DARK)
+box("Bed front bulkhead liner",(0,.962,.842),(1.42,.022,.217),DARK,.009)
+box("Tailgate inner liner",(0,2.076,.837),(1.42,.022,.208),DARK,.009)
 for side in (-1,1):
     box("Inner bed liner",(side*.712,1.515,.845),(.022,1.12,.214),DARK,.009)
     box("Wheel housing in bed",(side*.686,1.39,.770),(.14,.55,.093),RUBBER,.040)
@@ -162,7 +164,16 @@ for side in (-1,1):
     box("Front amber indicator",(side*.767,-2.364,.71),(.085,.020,.137),amber,.010)
     box("Bumper bright strip",(side*.54,-2.374,.465),(.63,.017,.024),METAL,.004)
     box("Tailgate hinge",(side*.47,2.195,.631),(.112,.027,.040),METAL,.006)
-box("Tailgate recessed pull",(0,2.197,.874),(.178,.021,.046),DARK,.010)
+    rod("Tailgate side seam",(side*.684,2.182,.898),(side*.684,2.182,.594),.004,panel_gap)
+    for bed_y in (1.081,1.960):
+        box("Cargo anchor mounting plate",(side*.694,bed_y,.839),(.018,.082,.061),DARK,.005)
+        anchor = ((side*.684,bed_y-.024,.853),(side*.651,bed_y-.019,.825),
+                  (side*.651,bed_y+.019,.825),(side*.684,bed_y+.024,.853))
+        for start,end in zip(anchor,anchor[1:]):
+            rod("Cargo anchor loop",start,end,.007,METAL)
+rod("Tailgate lower seam",(-.684,2.182,.594),(.684,2.182,.594),.004,panel_gap)
+box("Tailgate handle surround",(0,2.188,.874),(.192,.023,.054),RUBBER,.009)
+box("Tailgate handle grip",(0,2.203,.876),(.148,.018,.025),DARK,.005)
 box("Rear registration holder",(0,2.197,.73),(.456,.025,.124),DARK,.008)
 box("Rear registration",(0,2.215,.73),(.43,.017,.10),PAINT_WHITE,.006)
 plate_blue = material("Rear registration blue enamel",(.018,.105,.48),0,.42)

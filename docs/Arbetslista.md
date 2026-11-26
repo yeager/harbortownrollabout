@@ -197,6 +197,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Dörrarna fick karossfogar, delade sidolister samt handtag med packning och separat låscylinder. Granskade i sidovy i Godot. Fordonsprovet passerade.
   - Alla fyra fälgar fick navflänsar, separata centrumkåpor och fem sexkantiga hjulmuttrar i mörka försänkningar. Granskat i närbild i Godot. Fordonsprovet passerade.
   - Däcken fick välvda skuldror och tre längsgående spår i slitbanans geometri. Granskat i närbild i Godot. Fordonsprovet passerade.
+  - Flaket fick fyra surrningsöglor och skydd vid framstammen och bakluckan. Bakluckan fick karossfogar och ett separat grepp. Granskat i Godot. Fordonsprovet passerade.
 - [ ] [`ambulance.glb`](../vehicles/ambulance.glb)
   - Bakdörrens handtag fick separata fästen och en låscylinder med nyckelspår. Registreringsskylten fick två armaturhus med diffusorer. Detaljerna granskades i Godot. Ambulansintaget och utryckningsprovet passerade.
 - [ ] [`ambulance_helicopter.glb`](../vehicles/ambulance_helicopter.glb)
