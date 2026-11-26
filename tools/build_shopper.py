@@ -117,9 +117,13 @@ for vertex, sample in zip(mesh.vertices, reflection.data):
     u = vertex.co.x / lens_radius
     height = (vertex.co.z-.58) / lens_radius
     ridge = .5 + .5*math.cos(math.pi*8*u)
-    centre = max(0.0,1-u*u-height*height)
-    tone = .25 + .30*ridge + .15*centre
-    sample.color = (tone,tone,tone,1)
+    radius_squared = u*u+height*height
+    centre = max(0.0,1-radius_squared)
+    # Keep the optical centre bright while the inner lip reads as a darker ring.
+    edge = max(0.0,min(1.0,(1-radius_squared)*6))
+    reflector = .19+.24*centre+.32*ridge
+    tone = .14+edge*reflector
+    sample.color = (tone,tone*.97,tone*.90,1)
 shader = mesh.materials[0].node_tree
 color = shader.nodes.new("ShaderNodeVertexColor")
 color.layer_name = reflection.name
