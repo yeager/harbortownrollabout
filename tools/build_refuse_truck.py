@@ -52,7 +52,15 @@ for side in (-1,1):
     ram("Lift cylinder",(side*1.20,2.47,3.13),(side*1.20,3.01,2.03),.074,v.DARK)
     ram("Chrome piston",(side*1.20,3.01,2.03),(side*1.20,3.36,1.31),.042,v.METAL)
     box("Crew footboard",(side*.87,3.59,.67),(.53,.44,.12),v.METAL)
-    box("Rear light",(side*1.12,3.46,1.46),(.14,.09,.31),v.TAIL_LAMP)
+    light_x = side*1.12
+    box("Rear lamp mounting plate",(light_x,3.531,1.46),(.183,.213,.367),green,.018)
+    box("Rear lamp gasket",(light_x,3.650,1.46),(.168,.052,.337),v.RUBBER,.015)
+    box("Rear indicator lens",(light_x,3.680,1.545),(.120,.026,.104),amber,.009)
+    box("Tail lamp",(light_x,3.680,1.418),(.120,.026,.135),v.TAIL_LAMP,.009)
+    for z in (1.310,1.612):
+        screw = v.cylinder("Rear lamp retaining screw",(light_x,3.679,z),
+                           .008,.012,v.METAL,False,12,root)
+        screw.rotation_euler.x = math.pi/2
     for y in (-2.94,.90,2.28):
         for name,x,r,d,mat in [('Performance tire',1.00,.55,.39,v.RUBBER),('Wheel rim',1.18,.353,.10,v.METAL),('Wheel hub',1.237,.158,.08,v.DARK)]:
             v.cylinder(name,(side*x,y,.55),r,d,mat,True,32,root)
