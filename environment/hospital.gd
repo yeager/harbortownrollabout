@@ -151,8 +151,12 @@ func _build_closed_entrance(world: Node3D, glass: Material) -> void:
 			Vector3(facade_x + side * .27, 1.21, .36), TRIM, false, self)
 		world._make_roadside_solid("Entrance canopy pier", Vector3(.18, 2.99, .18),
 			Vector3(facade_x + side * 2.86, 1.48, 1.75), METAL, true, self)
-	world._make_box("Public entrance canopy", Vector3(6.5, .50, 2.19),
+	var canopy: MeshInstance3D = world._make_box("Public entrance canopy", Vector3(6.5, .50, 2.19),
 		Vector3(facade_x, 3.21, 1.01), TRIM, false, self)
+	var canopy_finish: ShaderMaterial = world._noise_material(TRIM.darkened(.12), TRIM, 4.0, .14)
+	canopy_finish.set_shader_parameter("roof_surface", true)
+	canopy.material_override = canopy_finish
+	world.ground_finishes.append(canopy_finish)
 	var entrance: Label3D = world._station_sign("Harbor Town Hospital", Vector3(facade_x, 3.22, 2.12), .007, METAL, 0, self)
 	world._size_world_sign(entrance, 6.15)
 	for side in [-1.0, 1.0]:
