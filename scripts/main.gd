@@ -11906,7 +11906,15 @@ func _build_driving_school() -> void:
 			side * PI * .5, classroom_glass, door_metal)
 		_make_box("School end wall plinth", Vector3(.043, .29, 6.01),
 			Vector3(side * 6.009, .145, 0), Color("#93928a"), false, school)
-	var fascia := _make_box("School sign board",Vector3(5.10,.62,.12),Vector3(0,3.13,3.10),Color("#225c63"),false,school)
+	for mount_x in [-2.18, 0.0, 2.18]:
+		_make_box("School sign canopy bracket", Vector3(.144, .33, .18),
+			Vector3(mount_x, 2.85, 4.18), Color.WHITE, false, school).material_override = roof_metal
+	var fascia := _make_box("School sign board",Vector3(5.10,.62,.12),Vector3(0,3.04,4.32),Color("#225c63"),false,school)
+	for edge in [-1, 1]:
+		_make_box("School sign horizontal trim", Vector3(5.12, .028, .129),
+			Vector3(0, edge * .307, 0), Color.WHITE, false, fascia).material_override = roof_metal
+		_make_box("School sign end cap", Vector3(.028, .59, .129),
+			Vector3(edge * 2.544, 0, 0), Color.WHITE, false, fascia).material_override = roof_metal
 	var sign := _station_sign("Driving school",Vector3(0,0,.07),.009,Color("#fff1c8"),0,fascia)
 	_size_world_sign(sign,4.84)
 	_make_driving_surface("School entrance pavement", Vector3(12, .14, 2.5),
