@@ -1,4 +1,5 @@
 """Build the red and yellow flatbed recovery truck from a commercial truck cab."""
+from math import pi
 from pathlib import Path
 import sys
 
@@ -30,6 +31,19 @@ def add_lashing_eye(root, x, y):
     eye.parent=root
 
 
+def add_tail_lamp_housing(root, side):
+    x = side*.98
+    cube("Rear lamp housing",(x,3.88,1.09),(.415,.107,.156),DARK,.017,root)
+    cube("Rear lamp carrier",(x,3.825,1.09),(.375,.060,.177),PAINT_RED,.011,root)
+    cube("Tail lamp",(x-side*.059,3.931,1.09),(.200,.030,.100),RED_LAMP,.010,root)
+    cube("Rear indicator lens",(x+side*.110,3.931,1.09),(.112,.030,.100),
+         PAINT_YELLOW,.010,root)
+    for offset in (-.187,.187):
+        screw = cylinder("Rear lamp housing screw",(x+offset,3.938,1.09),
+                         .009,.010,METAL,False,12,root)
+        screw.rotation_euler.x = pi/2
+
+
 clear_scene()
 root=make_fire_engine()
 root.name="Sjöstad roadside recovery"
@@ -55,7 +69,7 @@ for side in [-1,1]:
     box("Headboard upright",(side*1.11,-.62,1.71),(.13,.17,1.06),PAINT_RED)
     for j in range(8):
         add_lashing_eye(root,side*1.20,-.35+j*.54)
-    box("Tail lamp",(side*.98,3.89,1.09),(.34,.09,.10),RED_LAMP)
+    add_tail_lamp_housing(root,side)
     box("Amber marker",(side*.69,-1.63,2.73),(.41,.22,.15),PAINT_YELLOW,.055)
 box("Headboard crossbeam",(0,-.62,2.18),(2.34,.16,.18),PAINT_RED)
 cylinder("Winch drum",(0,-.46,1.49),.19,.70,METAL,True,32,root)
