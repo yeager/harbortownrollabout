@@ -7787,7 +7787,14 @@ func _build_birthday_delivery() -> void:
 	cake_box.add_child(cake_lid)
 	cake_lid.position = Vector3(0,.16,.235)
 	_make_box("Bakery lid",Vector3(.48,.018,.48),Vector3(0,.009,-.235),card.lightened(.18),false,cake_lid)
+	for side in [-1, 1]:
+		_make_box("Cake lid folded side", Vector3(.008, .029, .48),
+			Vector3(side * .240, -.010, -.235), card.lightened(.08), false, cake_lid)
+		_make_box("Cake lid folded end", Vector3(.472, .029, .008),
+			Vector3(0, -.010, -.235 + side * .240), card.lightened(.08), false, cake_lid)
 	_make_box("Ribbon",Vector3(.046,.004,.48),Vector3(0,.020,-.235),Color("#a34264"),false,cake_lid)
+	_make_box("Lid opening tab", Vector3(.11, .018, .027),
+		Vector3(0, -.008, -.481), card.lightened(.18), false, cake_lid)
 	var cake := shops._turned("Birthday cake",Vector3.ZERO,.208,.208,.13,Color("#fff2ce"))
 	cake.reparent(cake_box,false)
 	cake.position.y = .08
