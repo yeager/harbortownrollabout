@@ -2161,7 +2161,25 @@ def make_bwm(color, name="BWM Y5 N70i", *, patrol=False):
                 skin_x,_,_=skin_point(side,y,z)
                 rings.append([(skin_x+side*(relief+.012*math.cos(i*math.tau/12)),y,
                     z+.013+width*math.sin(i*math.tau/12)) for i in range(12)])
-            profile_loft("Painted bridge door pull",rings,color,root)
+            pull = profile_loft("Painted bridge door pull",rings,color,root)
+            if center_y < 0 and root.name.startswith("BWM Y5 N70i"):
+                sensor_outline = ((.046,-.005),(.078,-.005),(.082,-.002),(.082,.002),
+                                  (.078,.005),(.046,.005),(.042,.002),(.042,-.002))
+                sensor_vertices = []
+                for along, height in (*sensor_outline, (.062,0)):
+                    hit, point, normal, _ = pull.ray_cast(
+                        (side * 1.6, center_y + along, z + .013 + height), (-side, 0, 0))
+                    if not hit:
+                        raise ValueError("Keyless sensor outside door pull")
+                    sensor_vertices.append(point + normal * .0025)
+                sensor_mesh = bpy.data.meshes.new("Keyless door sensor")
+                center = len(sensor_outline)
+                sensor_faces = [(center, i, (i + 1) % center)[::side] for i in range(center)]
+                sensor_mesh.from_pydata(sensor_vertices, [], sensor_faces)
+                sensor_mesh.materials.append(DARK)
+                sensor = bpy.data.objects.new("Keyless door sensor", sensor_mesh)
+                bpy.context.collection.objects.link(sensor)
+                sensor.parent = root
         sill_rings=[]
         for y,width,height in ((-1.04,.045,.04),(-.84,.085,.09),
                 (-.38,.091,.082),(.50,.094,.075),(.94,.085,.09),(1.10,.047,.044)):
