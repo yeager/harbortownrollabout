@@ -525,11 +525,17 @@ def build():
         x = side*.674
         box("Wraparound rear lamp housing",(x,2.030,.662),(.303,.074,.207),trim,.026)
         for z, finish in [(.713,ruby),(.662,smoked_amber),(.611,clear)]:
-            box("Inset tail lens",(x,2.066,z),(.245,.012,.038),finish,.006)
+            box("Rear indicator lens" if finish == smoked_amber else "Inset tail lens",(x,2.066,z),(.245,.012,.038),finish,.006)
             for i in range(3):
                 box("Pressed tail lens rib",(x,2.072,z-.010+i*.010),(.227,.004,.0025),finish,.001)
         box("Return lens around quarter",(side*.808,1.991,.671),(.027,.109,.131),smoked_ruby,.010)
-        box("Rear bumper reflector",(side*.671,2.089,.423),(.106,.009,.025),smoked_ruby,.004)
+        box("Rear bumper reflector bezel", (side*.671,2.089,.423),
+            (.119,.015,.034),trim,.006)
+        box("Rear bumper reflector", (side*.671,2.097,.423),
+            (.103,.004,.023),smoked_ruby,.004)
+        for flute in range(9):
+            box("Rear reflector prism", (side*.671 + (flute-4)*.010,2.099,.423),
+                (.002,.002,.017),ruby,.0008)
         bar("Spoiler pedestal",(side*.588,1.532,.877),(side*.588,1.876,.973),.108,.078,trim)
         box("Rear bumper corner",(side*.786,2.010,.389),(.097,.150,.167),red,.026)
 

@@ -75,6 +75,11 @@ func check_gallery() -> void:
 				printerr("Quattro driver or wheel moved off the left seat")
 				quit(1)
 				return
+			for lamps in [signals.left, signals.right]:
+				if not lamps.any(func(lamp: MeshInstance3D): return String(lamp.get_parent().name).begins_with("Rear indicator lens")):
+					printerr("Quattro rear turn signal is detached from the taillight")
+					quit(1)
+					return
 			var wheel_axis: Vector3 = game.cabin_wheel_axis
 			var expected_axis := Vector3(0.0, sin(deg_to_rad(17.0)), cos(deg_to_rad(17.0)))
 			var rest_basis: Basis = game.cabin_wheel_rest_basis
