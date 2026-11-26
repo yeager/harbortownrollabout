@@ -175,10 +175,23 @@ for x in (-.204,.204):
     disc("Backrest mounting pin",(x*1.14,.399,.739),.018,.019,steel,(1,0,0))
 box("Column cover",(0,-.54,.54),(.24,.24,.38),paint,.065).rotation_euler.x=-.16
 rod("Column",(0,-.56,.55),(0,-.39,.94),.029,frame)
-bpy.ops.mesh.primitive_torus_add(location=(0,-.39,.94),major_radius=.156,minor_radius=.015)
-part("Steering wheel",rubber).rotation_euler.x=-.36
-for x in (-.14,.14):
-    rod("Wheel spoke",(0,-.39,.94),(x,-.39,.94),.009,steel)
+wheel_center = Vector((0,-.39,.94))
+wheel_tilt = -.36
+wheel_normal = Vector((0,-math.sin(wheel_tilt),math.cos(wheel_tilt)))
+wheel_y = Vector((0,math.cos(wheel_tilt),math.sin(wheel_tilt)))
+bpy.ops.mesh.primitive_torus_add(major_segments=64, minor_segments=16,
+    location=wheel_center, major_radius=.156, minor_radius=.015)
+part("Steering wheel",rubber).rotation_euler.x = wheel_tilt
+for polygon in bpy.context.object.data.polygons:
+    polygon.use_smooth = True
+for x in (-.092,.092):
+    spoke = box("Wheel spoke",wheel_center+Vector((x,0,0)),(.116,.039,.018),frame,.008)
+    spoke.rotation_euler.x = wheel_tilt
+spoke = box("Wheel spoke lower",wheel_center+wheel_y*.089,(.033,.119,.018),frame,.007)
+spoke.rotation_euler.x = wheel_tilt
+disc("Steering wheel hub",wheel_center,.053,.042,frame,wheel_normal)
+disc("Steering wheel center cap",wheel_center+wheel_normal*.025,.040,.013,rubber,wheel_normal)
+disc("Steering wheel center insert",wheel_center+wheel_normal*.033,.020,.005,paint,wheel_normal)
 # Stamp both blade chambers into one shell with a continuous rolled skirt.
 outline = []
 for centre, start in ((.29, -math.pi/2), (-.29, math.pi/2)):
