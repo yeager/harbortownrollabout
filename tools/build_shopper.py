@@ -477,10 +477,26 @@ tube("Exhaust downpipe",(.34,.24,.32),(.426,.34,.213),.020,v.METAL)
 tube("Exhaust inlet",(.426,.34,.213),(.426,.52,.198),.020,v.METAL)
 tube("Silencer",(.426,.51,.198),(.426,1.01,.202),.042,v.METAL)
 for y in (.59,.93):
-    tube("Silencer strap",(.426,y-.007,.20),(.426,y+.007,.20),.044,v.DARK)
-    box("Exhaust hanger",(.414,y,.256),(.023,.027,.086),v.DARK,.004)
-tube("Exhaust outlet",(.426,1.01,.202),(.426,1.12,.194),.022,v.METAL)
-tube("Dark outlet bore",(.426,1.12,.194),(.426,1.121,.194),.016,v.BLACK)
+    tube("Silencer strap",(.426,y-.009,.20),(.426,y+.009,.20),.044,v.DARK)
+    box("Exhaust mounting tab",(.398,y,.267),(.050,.030,.017),v.METAL,.004)
+    box("Exhaust rubber isolator",(.414,y,.252),(.024,.027,.038),v.RUBBER,.005)
+    v.cylinder("Exhaust hanger bolt",(.428,y,.259),.006,.011,v.METAL,True,6,root)
+
+outlet_base = Vector((.426,1.006,.202))
+outlet_axis = Vector((0,.114,-.008)).normalized()
+outlet_up = Vector((1,0,0)).cross(outlet_axis)
+outlet_profile = [(0,.022),(.109,.022),(.114,.021),(.116,.019),
+                  (.115,.0175),(.111,.017),(.008,.017),(0,.017)]
+outlet_rings = []
+for distance,radius in outlet_profile:
+    center = outlet_base + distance*outlet_axis
+    outlet_rings.append([
+        center + radius*Vector((1,0,0))*math.cos(math.tau*i/48) +
+        radius*outlet_up*math.sin(math.tau*i/48) for i in range(48)
+    ])
+v.profile_loft("Rolled exhaust outlet",outlet_rings+[outlet_rings[0]],v.METAL,root,close_ends=False)
+tube("Recessed exhaust bore",outlet_base+.007*outlet_axis,
+     outlet_base+.009*outlet_axis,.017,v.BLACK)
 # A trailing rubber flap hangs from the deck behind the single rear tyre.
 flap = box("Rear mud flap", (0,1.147,.203), (.216,.018,.211), v.RUBBER, .008)
 flap.rotation_euler.x = math.radians(13)
