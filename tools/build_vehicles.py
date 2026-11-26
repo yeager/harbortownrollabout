@@ -1710,11 +1710,17 @@ def profile_loft(name, rings, finish, parent, close_ends=True):
 
 def make_bwm(color, name="BWM Y5 N70i", *, patrol=False):
     detailed_cabin = patrol or color == PAINT_BLACK
+    registration = {PAINT_BLUE_CAR: "AXL 061", PAINT_SILVER: "AXL 062"}.get(color, "AXL 060")
     grille_edge_finish = material("Satin graphite grille edges", (0.12, 0.135, 0.14), 0.58, 0.33)
     grille_rim_finish = DARK
     grille_vane_finish = DARK
     grille_rib_finish = DARK
     if name.startswith("BWM Y5 N70i"):
+        color = color.copy()
+        color.name = f"{name} body finish"
+        paint = next(node for node in color.node_tree.nodes if node.type == "BSDF_PRINCIPLED")
+        paint.inputs["Metallic"].default_value *= .65
+        paint.inputs["Roughness"].default_value = .32
         grille_rim_finish = material("Smoked satin grille surround", (.076,.085,.091), .36, .45)
         grille_vane_finish = material("Dark grille vane sides", (.022,.026,.029), .08, .52)
         grille_edge_finish = material("Graphite grille vane faces", (.041,.049,.055), .24, .46)
@@ -2981,7 +2987,6 @@ def make_bwm(color, name="BWM Y5 N70i", *, patrol=False):
     if root.name.startswith("BWM Y5 N70i"):
         cube("Front plate holder", (0, -2.531, 1.035), (.754, .108, .208), DARK, .022, root)
     cube("Front plate", (0, -2.596, 1.035), (0.72, 0.035, 0.18), PAINT_WHITE, 0.025, root)
-    registration = {PAINT_BLUE_CAR: "AXL 061", PAINT_SILVER: "AXL 062"}.get(color, "AXL 060")
     for rear, depth, height, width in [(True,2.523,1.204,.56),(False,-2.615,1.035,.72)]:
         facing = -1 if rear else 1
         cube("Blue registration band",(-facing*width*.445,depth,height),
