@@ -707,6 +707,36 @@ def make_ambulance():
                       (-.007,low+.047),(-.013,top-.045),(.002,top-.011),
                       (.036,top),(.165,top-.006))])
     profile_loft("Pressad kromstötfångare",rings,METAL,root)
+    orange = material("Orange frontreflex",(.98,.16,.012),.08,.31)
+    for side in (-1,1):
+        patch = box("Orange stötfångarreflex",(side*.745,-3.254,.728),
+                    (.265,.018,.111),orange,.009)
+        patch.rotation_euler.z=side*.22
+    box("LED-rampens hus",(0,-3.243,.895),(.91,.074,.075),BLACK,.016)
+    for index in range(12):
+        x=(index-5.5)*.071
+        box("LED-rampens reflektor",(x,-3.282,.895),(.058,.013,.048),METAL,.008)
+        box("LED-rampens glas",(x,-3.291,.895),(.039,.009,.030),GLASS_HI,.005)
+    for side in (-1,1):
+        vertices, faces = [], []
+        for row in range(4):
+            for col in range(13):
+                x=side*(.30+col*.048)
+                y=-3.058+row*.051+max(0,abs(x)-.75)*.34
+                hit,point,normal,_=nose.ray_cast((x,y,2),(0,0,-1))
+                if not hit:
+                    raise ValueError("Hood marking outside ambulance body")
+                vertices.append(point+normal*.003)
+                if row and col:
+                    i=len(vertices)-1
+                    face=(i-14,i-13,i,i-1)
+                    faces.append(face if side>0 else face[::-1])
+        mesh=bpy.data.meshes.new("Orange huvreflex")
+        mesh.from_pydata(vertices,[],faces)
+        mesh.materials.append(orange)
+        decal=bpy.data.objects.new("Orange huvreflex",mesh)
+        bpy.context.collection.objects.link(decal)
+        decal.parent=root
     box("Nedre luftintag",(0,-3.277,.692),(.72,.021,.060),RUBBER,.018)
     box("Främre skylthållare",(0,-3.281,.769),(.47,.028,.102),seal,.010)
     box("Registreringsskylt fram",(0,-3.301,.769),(.453,.013,.090),PAINT_WHITE,.006)

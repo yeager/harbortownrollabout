@@ -207,6 +207,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Hyttens insteg fick en bärprofil, fästen, ändstycken och räfflat halkskydd. Granskat i Godot. Ambulansintaget och fordonsprovet passerade.
   - Hyttdörrarnas handtag följer plåtens position och har separata packningar, stöd, draggrepp och låscylindrar. Granskat i närbild i Godot. Fordonsprovet passerade.
   - Hyttdörrarnas konturer följer den pressade plåten ned till instegen. Granskat i sidovy i Godot. Fordonsprovet passerade.
+  - Fronten fick orange reflexfält på huv och stötfångare samt en modellerad LED-ramp med tolv optiska moduler. Granskat i Godot. Fordonsprovet passerade.
 - [ ] [`ambulance_helicopter.glb`](../vehicles/ambulance_helicopter.glb)
 - [ ] [`bargare.glb`](../vehicles/bargare.glb)
   - Vinschen fick bultade lagerbockar med axeländar och en vajerstyrning med två rullar. Granskat på flaket i Godot. Bärgningsprovet passerade.
