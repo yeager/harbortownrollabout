@@ -228,6 +228,18 @@ def pumper_running_gear(root,chassis):
                 lip.extend([(1.275,.293),(1.229,.291),(1.189,.287)])
             lip.append((1.278-recess,.277))
             profile_loft("Alloy wheel rim",rings(lip),wheel_finish,root,close_ends=False)
+            valve_angle = math.tau * .19
+            radial = Vector((0, math.cos(valve_angle), math.sin(valve_angle)))
+            valve_base = Vector((side*(1.287-.62*recess), y, .51)) + radial*.294
+            valve_axis = (Vector((side,0,0)) - radial*.7).normalized()
+            for label, radius, depth, offset, finish in (
+                ("Tire valve grommet",.010,.009,.002,RUBBER),
+                ("Tire valve stem",.0045,.024,.015,stud_finish),
+                ("Tire valve cap",.006,.012,.027,DARK),
+            ):
+                valve = cylinder(label,valve_base+valve_axis*offset,radius,depth,
+                                 finish,False,12,root)
+                valve.rotation_euler = valve_axis.to_track_quat("Z","Y").to_euler()
             # Stamp each vent into a sector of the dished steel centre.
             vertices,faces=[],[]
             for i in range(8):

@@ -306,6 +306,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Dragkrokens infästning fick fyra sexkantsbultar samt ett släpvagnsuttag med fäste och väderskydd. Granskat bakifrån i Godot. Förarplats- och luckproven passerade.
   - Registreringsskylten fick två armaturhus med nedåtvända linser. Placeringen granskades i Godot och luckprovet passerade. Linserna tänds och skylten ljusnar i nattläge. Granskat i Godot och verifierat på både spelbilen och den parkerade brandbilen.
   - Stänkskydden fick chassifästen, klämlister och tre sexkantsbultar per hjulhus. Alla fyra fästen kontrollerades i GLB-filen. Bakre fästet granskades i Godot och förarprovet passerade.
+  - Fälgarna fick däckventiler med gummitätning, metallstam och hatt. I Godot verifierades att alla fyra ventilerna roterar med hjulen. Bakfälgen granskades i närbild och förarprovet passerade.
 - [ ] [`city_bus.glb`](../vehicles/city_bus.glb)
 - [ ] [`dam_pickup.glb`](../vehicles/dam_pickup.glb)
 - [ ] [`electric_kick_scooter.glb`](../vehicles/electric_kick_scooter.glb)
