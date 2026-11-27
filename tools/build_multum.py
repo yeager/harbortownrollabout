@@ -106,11 +106,12 @@ body = v.mesh_from_rings("Rounded body and short bonnet", [
 ], paint, root, bevel=0, section=body_section)
 for side in (-1,1):
     for y in (-1.28,1.30):
-        cutter = v.cylinder("Wheel opening tool", (side*.94,y,.33), .383, .68, None, vertices=96)
+        cutter = v.cylinder("Wheel opening tool", (side*.94,y,.33), .383, .68, v.RUBBER, vertices=96)
         bpy.context.view_layer.objects.active = body
         cut = body.modifiers.new("Wheel arch", "BOOLEAN")
         cut.object = cutter
         cut.operation = "DIFFERENCE"
+        cut.material_mode = "TRANSFER"
         bpy.ops.object.modifier_apply(modifier=cut.name)
         bpy.data.objects.remove(cutter, do_unlink=True)
 intake_center = (0, -2.045, .627)

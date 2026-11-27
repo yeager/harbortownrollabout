@@ -459,6 +459,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Multums bakre stötfångare fick rundade hörn som följer bakskärmarna. Reflexerna och skyddslisterna granskades tillsammans med den nya formen i Godot. Körprovet för 29 vägfordon passerade.
   - Multums främre stötfångare följer nu framskärmarna. Formen, gallret och de infällda dimljusen granskades i Godot. Körprovet för 29 vägfordon passerade.
   - Multums bakluckefog löper nu över karossvecket under bakrutan och runt de nedre hörnen. Granskat bakifrån i Godot. Körprovet för 29 vägfordon passerade.
+  - Multums hjulhus fick mörka innerytor. Granskat i närbild i Godot och körprovet passerade.
 - [ ] [`compact_convertible.glb`](../vehicles/compact_convertible.glb)
   - Mino Kuper S fick ett eget kopparfärgat M-monogram på motorhuven och bakluckan samt nytt namn i fordonsgalleriet. Emblemen granskades i Godot. Fordonsprovet och språkkontrollen passerade.
 - [ ] [`electric_sedan.glb`](../vehicles/electric_sedan.glb)
