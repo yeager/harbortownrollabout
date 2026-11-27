@@ -35,7 +35,8 @@ def save(stem, filename, body_name, separate_glass):
     bpy.ops.object.select_all(action="DESELECT")
     # Keep alpha-blended windows independently sortable in Godot.
     body_parts = [part for part in root.children if part.type == "MESH"
-                  and not part.name.startswith((separate_glass, "Cab glass", "All terrain tire", "Projector lens", "Upper running light"))]
+                  and not part.name.startswith((separate_glass, "Cab glass", "All terrain tire", "Projector lens", "Upper running light",
+                                                "Front amber indicator", "Rear indicator lens"))]
     for part in body_parts:
         part.select_set(True)
     bpy.context.view_layer.objects.active = body_parts[0]
@@ -574,6 +575,7 @@ for y, width, crest in insert_sections:
     insert_rings.append([(-width,y,crest-.026),(0,y,crest+.008),(width,y,crest-.026),
                          (width,y+.014,crest-.046),(0,y+.014,crest-.013),(-width,y+.014,crest-.046)])
 v.profile_loft("Graphite bonnet spine",insert_rings,v.BLACK,root)
+amber = v.material("Turn indicator amber",(.96,.26,.015),.08,.23)
 for side in [-1,1]:
     # Follow the bonnet flare, sweeping the lower edge up toward the cab.
     vent_sections = [(-2.10,.588,1.25,1.28),(-2.04,.61,1.24,1.42),
@@ -615,6 +617,10 @@ for side in [-1,1]:
     rod("Recessed projector barrel",(side*.32,-2.316,1.374),(side*.32,-2.331,1.374),.058,v.DARK)
     rod("Projector bezel",(side*.32,-2.331,1.374),(side*.32,-2.339,1.374),.048,v.METAL)
     rod("Projector lens",(side*.32,-2.339,1.374),(side*.32,-2.345,1.374),.036,v.HEADLAMP)
+    box("Front indicator housing",(side*.441,-2.307,1.362),
+        (.080,.033,.035),v.BLACK,.008)
+    box("Front amber indicator",(side*.441,-2.326,1.362),
+        (.064,.015,.022),amber,.004)
 for z in [1.08,1.12,1.16]:
     box("Lower intake slat",(0,-2.267,z),(.59,.03,.021),v.DARK,.008)
 box("Front linkage carrier",(0,-1.96,.89),(.56,.63,.29),v.DARK,.06)
@@ -988,7 +994,6 @@ rod("Top link barrel",(0,2.03,1.40),(0,2.15,1.20),.058,v.DARK)
 rod("Top link adjuster",(0,2.15,1.20),(0,2.22,1.04),.033,v.METAL)
 rod("PTO guard",(0,1.89,.88),(0,2.07,.88),.138,v.BLACK)
 rod("PTO shaft",(0,2.07,.88),(0,2.17,.88),.066,v.METAL)
-amber = v.material("Turn indicator amber",(.96,.26,.015),.08,.23)
 for side in [-1,1]:
     rod("Lift rocker",(side*.30,1.64,1.40),(side*.44,1.98,1.38),.072,v.DARK)
     rod("Lift rod sleeve",(side*.44,1.98,1.38),(side*.48,2.00,.97),.064,v.BLACK)
@@ -1038,7 +1043,8 @@ for side in [-1,1]:
         radius = .93 + rise
         center = Vector((side*(1.02+offset),1.03+radius*sin(angle),.93+radius*cos(angle)))
         rod("Inset rear lamp seal",center-normal*.016,center+normal*.012,.047,v.BLACK,24)
-        rod("Fender signal optic",center+normal*.011,center+normal*.022,.034,lens,24)
+        label = "Rear indicator lens" if lens == amber else "Fender signal optic"
+        rod(label,center+normal*.011,center+normal*.022,.034,lens,24)
 # A narrow pipe passes through the heat shield and bends away from the cab.
 exhaust_profile = [(1.34,-.51,.061),(1.55,-.51,.061),(1.58,-.51,.095),
                    (2.62,-.51,.095),(2.67,-.51,.064),(2.79,-.51,.064),
