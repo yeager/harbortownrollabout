@@ -122,10 +122,27 @@ for side in (-1, 1):
     for flute in range(-3, 4):
         box("Amber lens rib", (side * (.709 + flute * .0085), -2.067, .702),
             (.0017, .0035, .123), amber_flute, .0007)
-    box("Rear lamp carrier", (side*.548, 2.000, .627), (.429, .075, .150), v.RUBBER)
-    box("Tail lamp", (side*.557, 2.048, .628), (.238, .035, .130), v.TAIL_LAMP)
-    box("Rear indicator lens", (side*.715, 2.040, .629), (.069, .039, .131), amber)
-    box("Reversing lens", (side*.400, 2.048, .627), (.068, .035, .127), reverse)
+    box("Rear lamp carrier", (side * .548, 2.005, .627), (.436, .087, .158), v.RUBBER)
+    for name, x, width, ribs, finish in [
+        ("Tail lamp", .555, .231, 16, v.TAIL_LAMP),
+        ("Rear indicator lens", .715, .069, 6, amber),
+        ("Reversing lens", .400, .068, 6, reverse),
+    ]:
+        # Mold the flutes into the lens itself so they light with the lens.
+        sections = [(-.5, 0, .83)]
+        for rib in range(ribs):
+            for offset, relief in [(.15, 0), (.5, .0027), (.85, 0)]:
+                sections.append(((rib + offset) / ribs - .5, relief, 1))
+        sections.append((.5, 0, .83))
+        v.profile_loft(name, [
+            [(side * (x + width * offset), y, .627 + z * height)
+             for y, z in [
+                 (2.043, -.060), (2.060 + relief, -.065),
+                 (2.069 + relief, -.052), (2.069 + relief, .052),
+                 (2.060 + relief, .065), (2.043, .060),
+             ]]
+            for offset, relief, height in sections
+        ], finish, root)
     for y in (-1.215, 1.215):
         v.cylinder("Däck", (side*.699, y, .287), .287, .181, v.RUBBER, vertices=64, root=root)
         v.cylinder("Pressed steel wheel rim", (side*.786, y, .287), .183, .037, v.METAL, vertices=56, root=root)
