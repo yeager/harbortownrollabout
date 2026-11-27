@@ -418,6 +418,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - BWM M3 E33 fick modellerade främre blinkers och använder de orange glasen i baklyktorna. Fordonsprovet verifierade att båda ändarna använder de modellerade glasen vid sväng.
 - [ ] [`multum.glb`](../vehicles/multum.glb)
   - Fait Multum fick en turkos kaross med bred hög kupé, upphöjd frontkant och runda strålkastare i två nivåer. Modellen granskades framifrån och bakifrån i Godot. Den körbara bilen finns i fordonsgalleriet och har fungerande blinkers och backljus. Fordonsprovet och språkkontrollen passerade.
+  - De fyra strålkastarna fick välvda linser med metallringar och separata gummitätningar. Granskade i Godot. Körprovet för 29 vägfordon passerade.
 - [ ] [`compact_convertible.glb`](../vehicles/compact_convertible.glb)
   - Mino Kuper S fick ett eget kopparfärgat M-monogram på motorhuven och bakluckan samt nytt namn i fordonsgalleriet. Emblemen granskades i Godot. Fordonsprovet och språkkontrollen passerade.
 - [ ] [`electric_sedan.glb`](../vehicles/electric_sedan.glb)

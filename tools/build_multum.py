@@ -30,6 +30,17 @@ def lamp(name, x, y, z, radius, finish):
     obj = v.cylinder(name, (x,y,z), radius, .034, finish, False, 32, root)
     obj.rotation_euler.x = math.pi/2
 
+def headlight(label, x, y, z, radius):
+    lamp(label+" gasket",x,y+.014,z,radius*1.20,v.RUBBER)
+    lamp(label+" reflector rim",x,y-.002,z,radius*1.08,v.METAL)
+    angles = [step*math.tau/40 for step in range(40)]
+    section = [(.010,1),(.018,1),(.023,.91),(.027,.66),(.029,.24)]
+    v.profile_loft(label+" lens",[
+        [(x+radius*scale*math.cos(angle),y-depth,z+radius*scale*math.sin(angle))
+         for angle in angles]
+        for depth,scale in section
+    ],v.HEADLAMP,root)
+
 body = v.mesh_from_rings("Rounded body and short bonnet", [
     (-2.04,.75,.25,.54,.72),(-1.92,.88,.23,.62,.81),
     (-1.61,.92,.22,.69,.89),(-1.15,.925,.22,.77,.99),
@@ -85,10 +96,8 @@ for side in (-1,1):
     box("Mirror mount",(side*.869,-.78,1.141),(.139,.114,.085),v.DARK)
     box("Rounded mirror housing",(side*.970,-.755,1.193),(.167,.146,.155),v.DARK,.042)
     box("Mirror glass",(side*.970,-.674,1.193),(.114,.014,.104),v.METAL,.007)
-    lamp("Upper headlight surround",side*.694,-1.385,1.087,.078,v.DARK)
-    lamp("Upper headlight",side*.694,-1.406,1.087,.062,v.HEADLAMP)
-    lamp("Lower headlight surround",side*.655,-2.043,.672,.092,v.DARK)
-    lamp("Lower headlight",side*.655,-2.065,.672,.079,v.HEADLAMP)
+    headlight("Upper headlight",side*.694,-1.385,1.087,.062)
+    headlight("Lower headlight",side*.655,-2.043,.672,.079)
     lamp("Front amber indicator",side*.816,-1.987,.671,.052,amber)
     lamp("Bumper fog lamp",side*.658,-2.102,.374,.043,v.HEADLAMP)
     box("Rear lamp housing",(side*.754,1.938,.865),(.179,.115,.297),v.DARK,.036)
