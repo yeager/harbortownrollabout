@@ -80,6 +80,12 @@ def pilot_section(y,w,b,s,c):
 mesh_from_rings("Pilot glass", [(-1.22,1.09,2.76,0,3.44),(1.22,1.09,2.76,0,3.44)],
                 glass,root,.02,pilot_section)
 for end in [-1,1]:
+    lower_y = end*(1.22*.89+.016)-.46
+    upper_y = end*(1.22+.016)-.46
+    seal = [(-.914,lower_y,2.790),(.914,lower_y,2.790),
+            (1.045,upper_y,3.415),(-1.045,upper_y,3.415)]
+    for start,end_point in zip(seal,seal[1:]+seal[:1]):
+        tube("Wheelhouse window seal",start,end_point,.014,rubber)
     for x in [-1.09,-.36,.36,1.09]:
         tube("Raked pilot frame",(x*.88,end*1.22*.89-.46,2.76),
              (x,end*1.22-.46,3.44),.03,white)
