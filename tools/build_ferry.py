@@ -168,7 +168,13 @@ for a,b in zip(corners,corners[1:]+corners[:1]):
         tube("Promenade rail",(*a,z),(*b,z),.022,white)
 
 for side in [-1,1]:
-    x = side*1.89
+    x = side*1.976
+    box("Rescue ring mounting spine",(side*1.904,3.28,1.75),
+        (.045,.082,.50),steel,.010)
+    for z in (1.504,1.968):
+        tube("Rescue ring cradle arm",(side*1.91,3.28,z),
+             (side*2.026,3.28,z),.014,steel)
+    pole("Rescue ring cradle lip",(side*2.026,3.28,1.523),.014,.068,steel)
     bpy.ops.mesh.primitive_torus_add(major_radius=.227, minor_radius=.062,
             major_segments=48, minor_segments=10, location=(x,3.22,1.75),
             rotation=(0,math.pi/2,0))
