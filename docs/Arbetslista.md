@@ -446,6 +446,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Bilden i fordonsgalleriet renderades om i Godot med Multums uppdaterade exteriör. Kontroll av bildfilen visade ändringar enbart i Multums ruta. Körprovet från fordonsgalleriet passerade.
   - Multums fälgkanter och ekrar följer nu hjulens rotation och framhjulens styrning. Granskat i stadsmiljö i Godot. Körprovet verifierar att alla fyra hjul rullar med sina fälgdelar.
   - Multum fick ett högt mittbromsljus vid bakrutan. Placeringen granskades i Godot och körprovet verifierade att det tänds vid bromsning och slocknar vid backning.
+  - Multums turkosa lack fick lägre metallandel och högre ytråhet. En jämförelse i samma stadsvy i Godot visade mjukare reflexer på motorhuven och framskärmarna. Körprovet för 29 vägfordon passerade.
 - [ ] [`compact_convertible.glb`](../vehicles/compact_convertible.glb)
   - Mino Kuper S fick ett eget kopparfärgat M-monogram på motorhuven och bakluckan samt nytt namn i fordonsgalleriet. Emblemen granskades i Godot. Fordonsprovet och språkkontrollen passerade.
 - [ ] [`electric_sedan.glb`](../vehicles/electric_sedan.glb)

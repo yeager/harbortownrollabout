@@ -12,7 +12,7 @@ import build_vehicles as v
 v.clear_scene()
 root = bpy.data.objects.new("Fait Multum", None)
 bpy.context.collection.objects.link(root)
-paint = v.material("Lagoon teal enamel", (.035, .37, .41), .48, .27)
+paint = v.material("Lagoon teal enamel", (.035, .37, .41), .20, .39)
 glazing = v.material("Smoked blue glass", (.045, .102, .126), .28, .18)
 amber = v.material("Amber signal glass", (.91, .29, .015))
 reverse = v.material("Reverse lamp clear glass", (.72, .84, .89))
