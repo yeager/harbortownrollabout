@@ -82,10 +82,27 @@ for side in (-1,1):
         box("Flush latch",(s*1.111,y+.40,1.56),(.035,.055,.14),v.METAL)
         for off in (-.34,.34):
             box("Insulated hinge",(s*1.11,y+off,2.12),(.03,.13,.046),v.METAL)
-    speaker = disc("Roof loudspeaker", (s*.61,-.93,2.65),.145,.22,v.DARK)
-    speaker.rotation_euler = (math.pi/2,0,0)
-    cap = disc("Speaker grille", (s*.61,-1.047,2.65),.112,.018,v.BLACK)
-    cap.rotation_euler = speaker.rotation_euler
+    speaker_x = s*.665
+    box("Speaker roof mounting plate",(speaker_x,-.91,2.465),(.204,.226,.029),v.DARK,.009)
+    for offset in (-.08,.08):
+        box("Speaker bracket upright",(speaker_x+offset,-.91,2.547),
+            (.025,.080,.158),v.METAL,.006)
+        v.cylinder("Speaker bracket bolt",(speaker_x+offset*1.17,-.91,2.608),
+                   .018,.021,v.METAL,True,8,root)
+    # Follow the outside of the horn and return along the inside of the flare.
+    horn_rings = [
+        (-.802,.065),(-.824,.083),(-.905,.088),(-.988,.117),
+        (-1.071,.149),(-1.086,.149),(-1.092,.135),
+        (-1.076,.129),(-.996,.097),(-.929,.062),(-.910,.036),
+    ]
+    v.profile_loft("Flared roof loudspeaker",[
+        [(speaker_x+radius*math.cos(angle),y,2.65+radius*math.sin(angle))
+         for angle in (step*math.tau/32 for step in range(32))]
+        for y,radius in horn_rings
+    ],v.DARK,root)
+    driver = v.cylinder("Speaker throat driver",(speaker_x,-.951,2.65),.037,.080,
+                        v.BLACK,False,20,root)
+    driver.rotation_euler.x = math.pi/2
     box("Rear combination lamp housing",(s*.75,2.973,.96),(.50,.074,.167),v.DARK,.018)
     box("Rear indicator bezel",(s*.865,2.973,1.090),(.24,.074,.098),v.DARK,.014)
     box("Rear indicator lens",(s*.865,3.012,1.090),(.203,.032,.071),signal_glass,.009)
