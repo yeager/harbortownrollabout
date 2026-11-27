@@ -1083,14 +1083,42 @@ for side in [-1,1]:
         label = "Rear indicator lens" if lens == amber else "Fender signal optic"
         rod(label,center+normal*.011,center+normal*.022,.034,lens,24)
 # A narrow pipe passes through the heat shield and bends away from the cab.
-exhaust_profile = [(1.34,-.51,.061),(1.55,-.51,.061),(1.58,-.51,.095),
-                   (2.62,-.51,.095),(2.67,-.51,.064),(2.79,-.51,.064),
+exhaust_profile = [(1.34,-.51,.061),(2.67,-.51,.064),(2.79,-.51,.064),
                    (2.88,-.55,.064),(2.95,-.60,.061)]
 exhaust_rings = []
 for height,center_y,radius in exhaust_profile:
     exhaust_rings.append([(.69+radius*cos(tau*i/24),center_y+radius*sin(tau*i/24),height)
                           for i in range(24)])
-v.profile_loft("Exhaust pipe and heat shield",exhaust_rings,v.DARK,root,close_ends=False)
+v.profile_loft("Exhaust pipe",exhaust_rings,v.BLACK,root,close_ends=False)
+shield_heights = [1.58]
+for row in range(8):
+    shield_heights.extend((1.637+row*.121, 1.715+row*.121))
+shield_heights.append(2.62)
+around = 48
+shield_vertices = [
+    (.69+.094*cos(tau*column/around), -.51+.094*sin(tau*column/around), height)
+    for height in shield_heights for column in range(around)
+]
+shield_faces = []
+for row in range(len(shield_heights)-1):
+    for column in range(around):
+        if row % 2 and column % 6 in (2, 3):
+            continue
+        next_column = (column+1) % around
+        shield_faces.append((row*around+column, row*around+next_column,
+                             (row+1)*around+next_column, (row+1)*around+column))
+shield_mesh = bpy.data.meshes.new("Slotted exhaust heat shield")
+shield_mesh.from_pydata(shield_vertices, [], shield_faces)
+shield_mesh.materials.append(v.DARK)
+for face in shield_mesh.polygons:
+    face.use_smooth = True
+shield = bpy.data.objects.new("Slotted exhaust heat shield", shield_mesh)
+bpy.context.collection.objects.link(shield)
+shield.parent = root
+thickness = shield.modifiers.new("Rolled steel thickness", "SOLIDIFY")
+thickness.thickness = .003
+for height in (1.587, 2.612):
+    v.cylinder("Heat shield end collar",(.69,-.51,height),.099,.016,v.DARK,False,32,root)
 mouth = [[(.69+radius*cos(tau*i/24),center_y+radius*sin(tau*i/24),height)
           for i in range(24)] for height,center_y,radius in
          [(2.95,-.60,.061),(2.95,-.60,.051),(2.88,-.55,.051)]]

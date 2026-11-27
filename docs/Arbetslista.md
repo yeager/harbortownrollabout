@@ -365,6 +365,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Båda främre hydraulcylindrarna fick böjda slangar till ventilblock med metallkopplingar. Slangdragningen granskades från båda sidor i Godot och halkbekämpningsprovet passerade.
   - Traktorns sex insteg fick öppna metallgaller med åtta lameller och ett underliggande stag per steg. Båda sidor granskades i Godot och halkbekämpningsprovet passerade.
   - Hyttdörrarnas handtag fick välvda grepp, separata fästplattor och låscylindrar med nyckelspår. Båda handtagen granskades i Godot och halkbekämpningsprovet passerade.
+  - Avgasröret fick en separat värmesköld med 64 öppna ventilationsspår och två ändkragar. Skölden och röret bakom den granskades i Godot. Halkbekämpningsprovet passerade.
 - [ ] [`food_truck.glb`](../vehicles/food_truck.glb)
 - [ ] [`food_truck_road.glb`](../vehicles/food_truck_road.glb)
 - [ ] [`ice_cream_van.glb`](../vehicles/ice_cream_van.glb)
