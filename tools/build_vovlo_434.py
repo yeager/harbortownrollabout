@@ -13,6 +13,10 @@ bpy.context.collection.objects.link(root)
 paint = v.material("Juniper green enamel", (.035, .255, .163), .22, .36)
 glass = v.material("Blue gray window glass", (.055, .119, .143), 0, .27)
 amber = v.material("Amber lens", (.91, .29, .015))
+headlamp_glass = v.material("Pale fluted headlamp glass", (.66, .72, .69), .12, .29)
+headlamp_flute = v.material("Headlamp glass flute", (.44, .53, .51), .20, .29)
+headlamp_optic = v.material("Bright headlamp reflector", (.79, .81, .74), .46, .24)
+amber_flute = v.material("Amber glass flute", (.68, .17, .012), .10, .31)
 reverse = v.material("Reverse lamp clear", (.75, .81, .78))
 ivory = v.material("Ivory plate", (.9, .87, .78))
 
@@ -102,8 +106,22 @@ for side in (-1, 1):
                                    1.054 + slot * .031), (.016, .058, .014), v.RUBBER, .004)
     box("Front lamp gasket", (side*.584, -2.004, .702), (.345, .060, .187), v.RUBBER)
     box("Front lamp bright frame", (side*.581, -2.035, .707), (.329, .028, .173), v.METAL)
-    box("Headlight lens", (side*.545, -2.055, .708), (.239, .035, .151), v.HEADLAMP)
-    box("Front amber indicator", (side*.709, -2.051, .702), (.074, .031, .144), amber)
+    box("Headlight lens", (side * .545, -2.055, .708), (.239, .035, .151),
+        headlamp_glass, .011)
+    optic_angles = [step * math.tau / 48 for step in range(48)]
+    v.profile_loft("Circular headlamp optic rim", [
+        [(side * .542 + radius * math.cos(angle), depth,
+          .710 + radius * math.sin(angle)) for angle in optic_angles]
+        for depth, radius in [(-2.073, .052), (-2.077, .049),
+                              (-2.077, .044), (-2.073, .042)]
+    ], headlamp_optic, root, close_ends=False)
+    for flute in range(-9, 10):
+        box("Vertical headlamp flute", (side * (.545 + flute * .0114), -2.075, .708),
+            (.0018, .004, .135), headlamp_flute, .0008)
+    box("Front amber indicator", (side * .709, -2.051, .702), (.074, .031, .144), amber)
+    for flute in range(-3, 4):
+        box("Amber lens rib", (side * (.709 + flute * .0085), -2.067, .702),
+            (.0017, .0035, .123), amber_flute, .0007)
     box("Rear lamp carrier", (side*.548, 2.000, .627), (.429, .075, .150), v.RUBBER)
     box("Tail lamp", (side*.557, 2.048, .628), (.238, .035, .130), v.TAIL_LAMP)
     box("Rear indicator lens", (side*.715, 2.040, .629), (.069, .039, .131), amber)

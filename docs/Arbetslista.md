@@ -462,6 +462,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Multums hjulhus fick mörka innerytor. Granskat i närbild i Godot och körprovet passerade.
 - [ ] [`vovlo_434.glb`](../vehicles/vovlo_434.glb)
   - Vovlo 434 finns som körbar tredörrars halvkombi i fordonsgalleriet. Exteriören granskades framifrån och bakifrån i Godot. Körprovet för 30 vägfordon och kontrollen av språkkatalogerna passerade.
+  - Vovlo 434 fick räfflade strålkastar- och blinkersglas fram samt separata reflektorringar. Granskat i närbild i Godot. Körprovet för 30 vägfordon passerade.
 - [ ] [`compact_convertible.glb`](../vehicles/compact_convertible.glb)
   - Mino Kuper S fick ett eget kopparfärgat M-monogram på motorhuven och bakluckan samt nytt namn i fordonsgalleriet. Emblemen granskades i Godot. Fordonsprovet och språkkontrollen passerade.
 - [ ] [`electric_sedan.glb`](../vehicles/electric_sedan.glb)
