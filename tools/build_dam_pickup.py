@@ -216,9 +216,28 @@ def build_pickup():
                     section.append((surface.x+side*relief, yy, zz))
                 sections.append(section)
             profile_loft(f"{label} shut line", sections, trim, root)
-        panel("Mirror stem", (side*1.02, -.99, 1.52), (.31, .107, .08), trim)
-        panel("Mirror housing", (side*1.17, -.99, 1.57), (.234, .236, .131), trim)
-        panel("Mirror glass", (side*1.17, -.862, 1.57), (.184, .022, .084), chrome)
+        panel("Mirror door mount", (side*.925, -.991, 1.516), (.102, .174, .115), trim, .024)
+        stem = panel("Mirror stem", (side*1.033, -1.004, 1.519), (.239, .086, .063), trim, .021)
+        stem.rotation_euler.z = -side*.12
+        cylinder("Mirror folding pivot", (side*1.124, -1.016, 1.544),
+                 .042, .067, trim, False, 20, root)
+        outline = [(-.96, -.55), (-.74, -.91), (.55, -.98), (.92, -.69),
+                   (1, .48), (.76, .89), (-.58, 1), (-.90, .74)]
+        for label, finish, sections in [
+            ("Mirror housing", trim, [(-1.112, .064, .043), (-1.09, .092, .064),
+                                      (-1.035, .123, .085), (-.903, .123, .085),
+                                      (-.875, .112, .076)]),
+            ("Mirror glass gasket", rubber, [(-.878, .105, .070), (-.867, .105, .070)]),
+            ("Mirror glass", chrome, [(-.870, .094, .061), (-.863, .094, .061)]),
+        ]:
+            rings = [
+                [(side*(1.169+x*width), y, 1.577+z*height) for x, z in outline]
+                for y, width, height in sections
+            ]
+            part = profile_loft(label, rings, finish, root)
+            if label == "Mirror glass":
+                for face in part.data.polygons:
+                    face.use_smooth = False
         for y in [-1.78, 1.96]:
             # Sweep a rounded lip around the tyre, tapering the ends into the body.
             arch_sections = []
