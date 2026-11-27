@@ -9320,6 +9320,30 @@ func _fit_bus_exterior(model: Node3D) -> void:
 	badge.auto_translate_mode = Node.AUTO_TRANSLATE_MODE_DISABLED
 	badge.rotation.x = -atan(.057 / .25)
 	_size_world_sign(badge, .42)
+	var valve_stem := CylinderMesh.new()
+	valve_stem.top_radius = .004
+	valve_stem.bottom_radius = .006
+	valve_stem.height = .027
+	valve_stem.radial_segments = 12
+	valve_stem.material = _material(Color("#768083"), .36)
+	var valve_cap := CylinderMesh.new()
+	valve_cap.top_radius = .0055
+	valve_cap.bottom_radius = .0055
+	valve_cap.height = .010
+	valve_cap.radial_segments = 10
+	valve_cap.material = _material(Color("#15191a"), .67)
+	for rim: MeshInstance3D in model.find_children("Pressed steel wheel*", "MeshInstance3D", true, false):
+		var outward := signf(rim.position.x * rim.basis.y.x)
+		var stem := MeshInstance3D.new()
+		stem.name = "Bus valve stem"
+		stem.mesh = valve_stem
+		stem.position = Vector3(.134, outward * .061, .194)
+		rim.add_child(stem)
+		var cap := MeshInstance3D.new()
+		cap.name = "Bus valve cap"
+		cap.mesh = valve_cap
+		cap.position = Vector3(0, outward * .0185, 0)
+		stem.add_child(cap)
 	var window_seal := _material(Color("#151c1e"), .53)
 	var lower_door_finish := _material(Color("#283337"), .37)
 	lower_door_finish.metallic = .15
