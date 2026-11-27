@@ -244,9 +244,18 @@ for side in (-1,1):
         [(side*(.752+(x-.752)*scale),y,.86+(z-.86)*scale) for x,z in cluster]
         for y,scale in [(1.912,.91),(1.975,1.06),(1.998,1.0)]
     ],v.RUBBER,root)
-    lamp("Tail lamp",side*.735,2.001,.937,.052,v.TAIL_LAMP)
-    lamp("Rear indicator lens",side*.777,2.011,.835,.054,amber)
-    lamp("Reversing lens",side*.733,2.009,.761,.032,reverse)
+    for name, x, z, width, height, finish in [
+        ("Tail lamp", .742, .928, .052, .063, v.TAIL_LAMP),
+        ("Rear indicator lens", .768, .825, .054, .036, amber),
+        ("Reversing lens", .744, .754, .044, .025, reverse),
+    ]:
+        angles = [step * math.tau / 40 for step in range(40)]
+        v.profile_loft(name, [
+            [(side * (x + width * scale * math.cos(angle)), depth,
+              z + height * scale * math.sin(angle))
+             for angle in angles]
+            for depth, scale in [(1.990, 1), (2.003, 1), (2.012, .88), (2.015, .66)]
+        ], finish, root)
     for y in (-1.28,1.30):
         tire(side,y)
         v.cylinder("Wheel hub barrel",(side*.884,y,.318),.209,.045,v.DARK,True,40,root)

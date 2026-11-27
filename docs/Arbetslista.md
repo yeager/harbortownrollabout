@@ -438,6 +438,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Multums tak fick en sammanhängande rundad kant vid vindrutan, sidorutorna och bakrutan. Granskat framifrån och snett ovanifrån i Godot. Körprovet för 29 vägfordon passerade.
   - Multums bakruta fick en lackerad ram som följer glasets rundade hörn. Granskat bakifrån i Godot. Körprovet för 29 vägfordon passerade.
   - Multums bakruta fick nio kopparfärgade värmetrådar med anslutningar längs sidorna. Granskat bakifrån i Godot. Körprovet för 29 vägfordon passerade.
+  - Multums baklyktor fick lägre, välvda glas som följer lykthusen. Granskade i Godot och körprovet för 29 vägfordon verifierade de modellerade blinkersen och backljusen.
 - [ ] [`compact_convertible.glb`](../vehicles/compact_convertible.glb)
   - Mino Kuper S fick ett eget kopparfärgat M-monogram på motorhuven och bakluckan samt nytt namn i fordonsgalleriet. Emblemen granskades i Godot. Fordonsprovet och språkkontrollen passerade.
 - [ ] [`electric_sedan.glb`](../vehicles/electric_sedan.glb)
