@@ -14,6 +14,7 @@ var turn_signals := preload("res://scripts/turn_indicators.gd").new()
 
 var headlamp := SpotLight3D.new()
 var lamp_finishes: Array[StandardMaterial3D] = []
+var speed_display: Label3D
 
 func _ready() -> void:
 	add_child(preload("res://vehicles/electric_kick_scooter.glb").instantiate())
@@ -33,6 +34,28 @@ func _ready() -> void:
 	headlamp.spot_angle = 25.0
 	add_child(headlamp)
 	update_lights(0.0)
+	var screen := MeshInstance3D.new()
+	screen.name = "Scooter display glass"
+	var glass := BoxMesh.new()
+	glass.size = Vector3(.048, .002, .061)
+	var screen_finish := StandardMaterial3D.new()
+	screen_finish.albedo_color = Color("#111f24")
+	screen_finish.roughness = .25
+	glass.material = screen_finish
+	screen.mesh = glass
+	screen.position = Vector3(0, 1.303, -.385)
+	add_child(screen)
+	speed_display = Label3D.new()
+	speed_display.name = "Scooter speed display"
+	speed_display.position = screen.position + Vector3.UP * .0015
+	speed_display.rotation.x = -PI * .5
+	speed_display.font_size = 48
+	speed_display.pixel_size = .00063
+	speed_display.outline_size = 0
+	speed_display.modulate = Color("#a9fbef")
+	speed_display.auto_translate_mode = Node.AUTO_TRANSLATE_MODE_DISABLED
+	speed_display.text = "0"
+	add_child(speed_display)
 	for pattern in ["Scooter front indicator lens*", "Scooter rear indicator lens*"]:
 		for lens: MeshInstance3D in find_children(pattern, "MeshInstance3D", true, false):
 			turn_signals.use_existing_lens(lens, -1 if to_local(lens.global_position).x < 0.0 else 1)
@@ -68,6 +91,7 @@ func mount(rider: Node3D) -> void:
 	rider.position.y += DECK_HEIGHT*rider.scale.y
 	speed = 0
 	yaw_input = 0
+	speed_display.text = "0"
 	show()
 
 func dismount(rider: Node3D) -> void:
@@ -120,8 +144,11 @@ func ride(game: Node3D, throttle: float, steer: float, delta: float) -> void:
 	game.walk_basis = Basis(Vector3.UP,rider.rotation.y)
 	game.listener.global_basis = game.walk_basis
 	game.walking_velocity = (rider.position-previous)/maxf(delta,.00001)
-	roll(previous.distance_to(rider.position), rider.scale.y)
+	roll(previous.distance_to(rider.position), rider.scale.y, delta)
 
-func roll(distance: float, actor_scale: float) -> void:
+func roll(distance: float, actor_scale: float, delta: float) -> void:
+	var reading := str(roundi(3.6 * distance / maxf(delta, .00001)))
+	if speed_display.text != reading:
+		speed_display.text = reading
 	for wheel in wheels:
 		wheel.rotate_x(-distance / (.118*actor_scale))

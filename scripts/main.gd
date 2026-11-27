@@ -9052,7 +9052,7 @@ func _update_pedestrians(delta: float) -> void:
 		if item.has("scooter"):
 			var turn := -angle_difference(previous_heading, person.rotation.y) / maxf(delta, .00001)
 			item.scooter.turn_signals.advance(turn, delta, calm_mode or steady_player_lights)
-			item.scooter.roll(distance,person.scale.y)
+			item.scooter.roll(distance,person.scale.y,delta)
 			person.position.y = _foot_height(person.position.x,person.position.z) + Scooter.DECK_HEIGHT*person.scale.y
 			continue
 		if distance > 0 and item.has("wheels"):
