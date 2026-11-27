@@ -78,10 +78,24 @@ mirror_glass = v.material("Door mirror glass", (.45,.55,.62), .88,.13)
 for side in (-1,1):
     s = side
     # Keep the glass inside the flat portion of the cab side below its shoulder.
-    window("Cab door window", [
+    door_window = [
         (s*1.012,-1.738,1.535),(s*1.012,-.56,1.535),
         (s*1.012,-.56,2.095),(s*1.012,-1.257,2.095),
-    ])
+    ]
+    window("Cab door window", door_window)
+    gasket = bpy.data.curves.new("Cab window gasket", "CURVE")
+    gasket.dimensions = "3D"
+    gasket.bevel_depth = .012
+    gasket.bevel_resolution = 3
+    outline = gasket.splines.new("POLY")
+    outline.points.add(len(door_window)-1)
+    for point, vertex in zip(outline.points, door_window):
+        point.co = (*vertex,1)
+    outline.use_cyclic_u = True
+    rubber_trim = bpy.data.objects.new(gasket.name,gasket)
+    bpy.context.collection.objects.link(rubber_trim)
+    gasket.materials.append(v.RUBBER)
+    rubber_trim.parent = root
     box("Mirror mounting plate",(s*1.008,-1.77,1.566),(.047,.157,.145),v.DARK,.017)
     box("Mirror arm",(s*1.113,-1.77,1.581),(.224,.071,.070),v.DARK,.016)
     v.cylinder("Mirror folding pivot",(s*1.205,-1.77,1.619),.051,.102,
