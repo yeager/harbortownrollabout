@@ -338,6 +338,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Sidostegen fick två räfflade halkskydd per sida, fästbyglar och en separat ytterlist. Stegytorna granskades på båda sidor i Godot och fordonsprovet passerade.
   - Dörrfogarna följer den fasade karossytan längs tröskeln och upp till sidorutorna. Båda sidor granskades i Godot och fordonsprovet passerade.
   - Alla fyra dörrhandtag fick formpassade ramar, fingerurtag och separata grepp. Framdörrarna fick låscylindrar med nyckelspår. Båda sidor granskades i Godot och fordonsprovet passerade.
+  - De fyra däcken fick tre rader förskjutna slitbaneblock med öppna spår mellan raderna. Exporten kontrollerades för ett slitbanenät per hjul. Ett framdäck granskades i Godot och fordonsprovet passerade.
 - [ ] [`electric_kick_scooter.glb`](../vehicles/electric_kick_scooter.glb)
 - [ ] [`farm_tractor.glb`](../vehicles/farm_tractor.glb)
   - Vinterspridaren fick en modellerad trepunktsinfästning med två nedre stag, toppstag och ledtappar. Infästningen granskades i Godot och halkbekämpningsprovet passerade.

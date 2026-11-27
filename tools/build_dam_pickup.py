@@ -27,6 +27,29 @@ def build_pickup():
     red = material("Tail lamp ruby", (.57, .018, .022), .06, .25, .22)
     amber = material("Amber markers", (.95, .31, .018), .02, .3, .45)
 
+    tread_vertices, tread_faces = [], []
+    for lateral, width, phase, sweep in [
+        (-.112, .076, .0, -.011), (0, .098, .5, .014), (.112, .076, .0, -.011),
+    ]:
+        for index in range(28):
+            angle = (index+phase)*math.tau/28
+            cosine, sine = math.cos(angle), math.sin(angle)
+            base = len(tread_vertices)
+            for radius in [.417, .4415]:
+                for across, along in [(-1, -1), (1, -1), (1, 1), (-1, 1)]:
+                    tangent = along*.022 + across*sweep
+                    tread_vertices.append((
+                        lateral + across*width*.5,
+                        radius*cosine - tangent*sine,
+                        radius*sine + tangent*cosine,
+                    ))
+            for face in [(0, 1, 2, 3), (7, 6, 5, 4), (0, 4, 5, 1),
+                         (1, 5, 6, 2), (2, 6, 7, 3), (3, 7, 4, 0)]:
+                tread_faces.append(tuple(base+vertex for vertex in face))
+    tread_mesh = bpy.data.meshes.new("Staggered pickup tread blocks")
+    tread_mesh.from_pydata(tread_vertices, [], tread_faces)
+    tread_mesh.materials.append(rubber)
+
     def panel(name, position, dimensions, finish, bevel=.035, parent=root):
         return cube(name, position, dimensions, finish, bevel, parent)
 
@@ -219,10 +242,13 @@ def build_pickup():
                 angle = index * math.tau/8
                 spoke = panel("Wheel spoke", (side*1.222, y+.15*math.cos(angle), .433+.15*math.sin(angle)), (.034, .18, .038), alloy, .014, wheel)
                 spoke.rotation_euler.x = angle
-            for index in range(28):
-                angle = index*math.tau/28
-                tread = panel("Raised tread block", (side*1.012, y+.429*math.cos(angle), .433+.429*math.sin(angle)), (.30, .053, .025), rubber, .007, wheel)
-                tread.rotation_euler.x = angle-math.pi/2
+            tread = bpy.data.objects.new("Staggered tire tread", tread_mesh)
+            bpy.context.collection.objects.link(tread)
+            tread.location = (side*1.012, y, .433)
+            attach(tread, wheel)
+            bevel = tread.modifiers.new("Rounded tread edges", "BEVEL")
+            bevel.width = .003
+            bevel.segments = 1
 
     panel("Front bumper", (0, -2.85, .76), (2.10, .39, .32), trim, .11)
     panel("Lower intake", (0, -3.044, .80), (1.26, .052, .127), liner)
