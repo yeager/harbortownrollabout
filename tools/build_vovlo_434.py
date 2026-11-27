@@ -460,6 +460,22 @@ for x in (-.49, .17):
     v.pipe("Parked wiper arm", [mount, mount + Vector((.037, .022, .035)),
                               frame_points[1].lerp(frame_points[2], .5)],
            .007, v.DARK, root)
+rear_wiper_base = Vector((.126, 1.514, 1.060))
+rear_wiper_axis = Vector((0, .336, .551)).normalized()
+rear_spindle = v.cylinder("Rear wiper spindle", rear_wiper_base, .018, .018, v.RUBBER,
+                          axis_x=False, vertices=24, root=root)
+rear_spindle.rotation_euler = rear_wiper_axis.to_track_quat('Z', 'Y').to_euler()
+rear_blade = [
+    Vector((x, 1.512 - .551 * (z - 1.054) / .336 + .009, z))
+    for x, z in [(-.379, 1.101), (-.265, 1.102), (-.105, 1.107), (.005, 1.112)]
+]
+v.pipe("Rear wiper rubber edge", rear_blade, .004, v.RUBBER, root)
+rear_frame = [rear_blade[0], rear_blade[1] + rear_wiper_axis * .008,
+              rear_blade[2] + rear_wiper_axis * .008, rear_blade[3]]
+v.pipe("Rear wiper blade frame", rear_frame, .004, v.DARK, root)
+v.pipe("Rear wiper arm", [rear_wiper_base + rear_wiper_axis * .009,
+                         (.057, 1.495, 1.085), rear_frame[1].lerp(rear_frame[2], .5)],
+       .006, v.DARK, root)
 v.pipe("Roof aerial", [(0, -.13, 1.449), (0, .125, 1.755)], .006, v.DARK, root)
 
 v.export_vehicle(root, "vovlo_434.glb")

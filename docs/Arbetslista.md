@@ -491,6 +491,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Stålfälgarna fick vinklade däckventiler med separata ventilhattar. Körprovet verifierar att fyra hjul rullar med fälgar, navkapslar och ventiler och att bilen har två styrleder fram. Ventilerna granskades i närbild i Godot.
   - Strålkastarna fick varmare ljus. Körprovet verifierar att båda ljuskäglorna, strålkastarglasen och de två bakre skyltlyktorna slår om vid dag- och nattväxling. Fronten granskades i nattläge i Godot.
   - Baklyktorna har separata röda glas för positionsljus och bromsljus. Körprovet verifierade att båda bromsfälten lyser starkare vid inbromsning och att backljusen tänds separat. Granskat i nattläge i Godot.
+  - Bakrutan fick torkare med separat fäste, arm, ram och gummiblad. Svepet granskades i Godot och körprovet verifierade att alla tre torkare rör sig vid nederbörd och återgår till viloläget.
 - [ ] [`compact_convertible.glb`](../vehicles/compact_convertible.glb)
   - Mino Kuper S fick ett eget kopparfärgat M-monogram på motorhuven och bakluckan samt nytt namn i fordonsgalleriet. Emblemen granskades i Godot. Fordonsprovet och språkkontrollen passerade.
 - [ ] [`electric_sedan.glb`](../vehicles/electric_sedan.glb)
