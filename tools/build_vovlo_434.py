@@ -185,15 +185,15 @@ for side in (-1, 1):
     ]
     door_seam = []
     for segment, (start, end) in enumerate(zip(door_outline, door_outline[1:])):
-        steps = math.ceil(math.dist(start, end) / .022)
+        steps = math.ceil(math.dist(start, end) / .005)
         for index in range(1 if segment else 0, steps + 1):
             y, z = Vector(start).lerp(Vector(end), index / steps)
-            hit, point, normal, _ = body_surface.ray_cast(
+            hit, point, _, _ = body_surface.ray_cast(
                 Vector((side * 1.1, y, z)), Vector((-side, 0, 0))
             )
             if not hit:
                 raise RuntimeError(f"Door edge misses the body at {y:.3f}, {z:.3f}")
-            door_seam.append(point + normal * .0008)
+            door_seam.append(point + Vector((side * .0017, 0, 0)))
     v.pipe("Door shut line", door_seam, .003, v.RUBBER, root)
     for center, length in [(-1.67, .42), (-.12, 1.04), (.65, .40), (1.72, .26)]:
         molding_rings = []
