@@ -77,8 +77,11 @@ signal_glass = v.material("Amber indicator glass", (.96,.34,.018), .12,.26)
 mirror_glass = v.material("Door mirror glass", (.45,.55,.62), .88,.13)
 for side in (-1,1):
     s = side
-    window("Cab door window", [(s*1.012,-1.93,1.47),(s*1.012,-.55,1.47),
-                               (s*.958,-.55,2.23),(s*.958,-1.25,2.23)])
+    # Keep the glass inside the flat portion of the cab side below its shoulder.
+    window("Cab door window", [
+        (s*1.012,-1.738,1.535),(s*1.012,-.56,1.535),
+        (s*1.012,-.56,2.095),(s*1.012,-1.257,2.095),
+    ])
     box("Mirror mounting plate",(s*1.008,-1.77,1.566),(.047,.157,.145),v.DARK,.017)
     box("Mirror arm",(s*1.113,-1.77,1.581),(.224,.071,.070),v.DARK,.016)
     v.cylinder("Mirror folding pivot",(s*1.205,-1.77,1.619),.051,.102,
