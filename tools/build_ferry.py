@@ -9,7 +9,7 @@ from mathutils import Vector
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from build_vehicles import (clear_scene, cube, cylinder, mesh_from_rings, material,
-                            text_obj, export_vehicle, SOURCE_DIR)
+                            text_obj, export_vehicle, profile_loft, SOURCE_DIR)
 
 clear_scene()
 root = bpy.data.objects.new("Lotten", None)
@@ -200,8 +200,19 @@ for end in [-1,1]:
     for x in [-.54,-.27,0,.27,.54]:
         pole("Gate spindle",(x,end*6.06,1.08),.014,.36,gold)
 
-pole("Funnel",(1.36,.51,3.12),.091,1.51,brass)
-pole("Exhaust cap",(1.36,.51,3.89),.099,.12,rubber)
+pole("Funnel deck flange",(1.36,.51,2.40),.151,.033,steel)
+for index in range(4):
+    angle = (index+.5)*math.tau/4
+    pole("Funnel flange bolt",(1.36+.119*math.cos(angle),.51+.119*math.sin(angle),2.421),
+         .016,.015,steel)
+pole("Funnel",(1.36,.51,3.101),.091,1.463,brass)
+rim_profile = [(3.805,.089),(3.819,.109),(3.917,.109),(3.950,.105),
+               (3.953,.078),(3.938,.070),(3.844,.070),(3.826,.065)]
+angles = [index*math.tau/32 for index in range(32)]
+profile_loft("Recessed exhaust outlet",[
+    [(1.36+radius*math.cos(angle),.51+radius*math.sin(angle),z) for angle in angles]
+    for z,radius in rim_profile
+],rubber,root)
 blue = material("Ensign blue", (.012,.15,.43))
 def flag(name,y,swedish):
     pole(name+" staff",(0,y,3.91),.032,3.08,steel)

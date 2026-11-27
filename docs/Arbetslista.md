@@ -398,6 +398,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - De fyra passagerardörrarna fick runda bygelhandtag med plats för handen bakom greppet och separata fästplattor. Granskade i Godot. Färjeprovet passerade.
   - Passagerardörrarnas rutor fick svarta gummitätningar. Handtagen sänktes för att ge tätningarna fri plats. Granskat i Godot. Färjeprovet passerade.
   - Gummiavbärarna vid landgångarna fick synliga stålplattor och bultade fästbleck. Granskade i Godot. Färjeprovet passerade båda överfarterna.
+  - Skorstenen fick ett försänkt avgasutlopp med rundad kant och en bultad takfläns. Granskad i Godot. Färjeprovet passerade båda överfarterna.
 - [ ] [`sport_sedan.glb`](../vehicles/sport_sedan.glb)
   - BWM M3 E33 fick ett upphöjt modellemblem på bakluckan. Granskat i Godot och fordonsprovet passerade.
 - [ ] [`compact_convertible.glb`](../vehicles/compact_convertible.glb)
