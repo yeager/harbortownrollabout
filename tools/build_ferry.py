@@ -191,6 +191,12 @@ for a,b in zip(corners,corners[1:]+corners[:1]):
     for i in range(count):
         x,y = [a[k]+(b[k]-a[k])*i/count for k in (0,1)]
         pole("Promenade baluster",(x,y,2.66),.018,.58,white)
+        box("Promenade stanchion deck plate",(x,y,2.390),
+            (.082,.062,.015),steel,.005)
+        pole("Promenade stanchion collar",(x,y,2.414),.027,.046,steel)
+        for offset in (-.028,.028):
+            cylinder("Promenade deck bolt",(x+offset,y,2.401),
+                     .007,.010,steel,False,6,root)
     for z in (2.64,2.95):
         tube("Promenade rail",(*a,z),(*b,z),.022,white)
 

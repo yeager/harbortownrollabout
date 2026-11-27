@@ -405,6 +405,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Radarantennen roterar nu runt mastfästet ett varv på 2,5 sekunder. Färjeprovet verifierade rotationen och kontrollerade antennens frigång under norra bron.
   - Mastfoten fick en bultad takplatta, förstärkningskrage och två snedstag. Granskad i Godot. Färjeprovet passerade i båda riktningarna.
   - Båda sprötantennerna fick takpackningar, låsmuttrar, isolatorer och metallhylsor. Granskade i Godot. Färjeprovet passerade med minst 0,75 meters frigång under norra bron.
+  - Takdäckets räckesstolpar fick bultade fotplattor och metallkragar. Granskade i Godot. Färjeprovet passerade i båda riktningarna.
 - [ ] [`sport_sedan.glb`](../vehicles/sport_sedan.glb)
   - BWM M3 E33 fick ett upphöjt modellemblem på bakluckan. Granskat i Godot och fordonsprovet passerade.
 - [ ] [`compact_convertible.glb`](../vehicles/compact_convertible.glb)
