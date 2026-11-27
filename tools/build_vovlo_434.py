@@ -95,6 +95,17 @@ for side in (-1, 1):
             lip.append(point + Vector((side * .001, 0, 0)))
         v.pipe("Rolled wheel arch lip", lip, .004, paint, root)
 
+# Rolled inner liners follow the arch behind the rotating tires.
+liner_finish = v.material("Textured wheelhouse liner", (.027, .030, .031), 0, .86)
+for side in (-1, 1):
+    for axle in (-1.215, 1.215):
+        v.profile_loft("Fixed wheelhouse liner", [
+            [(side * x, axle + radius * math.cos(angle), .286 + radius * math.sin(angle))
+             for x, radius in [(.559, .342), (.563, .331), (.606, .327),
+                               (.765, .329), (.794, .335), (.794, .341)]]
+            for angle in (math.pi * step / 48 for step in range(49))
+        ], liner_finish, root)
+
 # Sample the finished body so the shut line follows the crown without gaps.
 hood_outline = [
     (-.53, -1.985), (.53, -1.985), (.58, -1.95),
