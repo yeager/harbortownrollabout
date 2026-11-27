@@ -129,7 +129,7 @@ body.modifiers.new("Body normals","WEIGHTED_NORMAL")
 
 # Trace the shut lines on the evaluated shell, including its rounded shoulder.
 bpy.context.view_layer.update()
-door_surface = body.evaluated_get(bpy.context.evaluated_depsgraph_get())
+body_surface = body.evaluated_get(bpy.context.evaluated_depsgraph_get())
 door_seams = [
     [(-.71, 1.023), (-.752, .939), (-.773, .822), (-.773, .431),
      (-.747, .382), (-.696, .366), (.205, .366), (.230, .366),
@@ -146,11 +146,30 @@ for side in (-1, 1):
         samples.append(seam[-1])
         surface_points = []
         for y, z in samples:
-            hit, point, _, _ = door_surface.ray_cast(Vector((side * 1.5, y, z)), Vector((-side, 0, 0)))
+            hit, point, _, _ = body_surface.ray_cast(Vector((side * 1.5, y, z)), Vector((-side, 0, 0)))
             if not hit:
                 raise ValueError(f"Door seam misses body at {y:.3f}, {z:.3f}")
             surface_points.append((point.x + side * .001, y, z))
         v.pipe("Door shut line", surface_points, .003, v.RUBBER, root)
+
+# Project the narrow bonnet gap onto the top of the same shell.
+bonnet_right = [
+    (0, -2.026), (.30, -2.023), (.51, -2.010), (.607, -1.982),
+    (.650, -1.925), (.688, -1.812), (.715, -1.662), (.715, -1.403), (.711, -1.276),
+]
+bonnet_outline = [(-x, y) for x, y in reversed(bonnet_right[1:])] + bonnet_right
+bonnet_samples = []
+for start, end in zip(bonnet_outline, bonnet_outline[1:]):
+    steps = max(1, math.ceil(math.dist(start, end) / .018))
+    bonnet_samples.extend(Vector(start).lerp(Vector(end), step / steps) for step in range(steps))
+bonnet_samples.append(bonnet_outline[-1])
+bonnet_points = []
+for x, y in bonnet_samples:
+    hit, point, _, _ = body_surface.ray_cast(Vector((x, y, 1.5)), Vector((0, 0, -1)))
+    if not hit:
+        raise ValueError(f"Bonnet seam misses body at {x:.3f}, {y:.3f}")
+    bonnet_points.append((x, y, point.z + .0008))
+v.pipe("Bonnet shut line", bonnet_points, .0024, v.RUBBER, root)
 
 def cabin_section(y,w,base,shoulder,crown):
     return [(-w,y,base),(-w*.975,y,shoulder),(-w*.91,y,crown-.027),
