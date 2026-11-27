@@ -370,6 +370,24 @@ for y, sign, z in [(-2.058, -1, .430), (2.053, 1, .405)]:
     box("Plate mount", (0, y + sign*.126, z+.011), (.448, .025, .109), v.RUBBER)
     box("Registration plate", (0, y + sign*.142, z+.011), (.420, .015, .086), ivory, .007)
     text("Registration", "HVK 434", (sign*.150, y + sign*.153, z-.016), .067, sign > 0, v.RUBBER)
+# Turn the rolled end back into the tube so the outlet remains open.
+exhaust_stations = [
+    (1.79, -.46, .282, .025), (1.98, -.46, .253, .025),
+    (2.202, -.48, .248, .027), (2.213, -.48, .248, .025),
+    (2.213, -.48, .248, .021),
+]
+v.profile_loft("Rolled exhaust outlet", [
+    [(x + radius * math.cos(angle), y, z + radius * math.sin(angle))
+     for angle in (math.tau * step / 32 for step in range(32))]
+    for y, x, z, radius in exhaust_stations
+], v.METAL, root, close_ends=False)
+v.profile_loft("Dark exhaust bore", [
+    [(-.48 + radius * math.cos(angle), y, .248 + radius * math.sin(angle))
+     for angle in (math.tau * step / 32 for step in range(32))]
+    for y, radius in [(2.213, .021), (2.201, .020), (2.102, .020)]
+], v.RUBBER, root, close_ends=False)
+v.cylinder("Exhaust bore shadow", (-.48, 2.103, .248), .020, .005,
+           v.RUBBER, axis_x=False, vertices=32, root=root).rotation_euler.x = math.pi / 2
 text("Vovlo hatch badge", "VOVLO", (.654, 2.027, .808), .057, True)
 text("434 hatch badge", "434", (-.463, 2.027, .808), .057, True)
 box("Hatch latch", (0, 2.024, .778), (.070, .027, .066), v.DARK)
