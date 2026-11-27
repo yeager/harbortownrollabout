@@ -29,7 +29,7 @@ Open **Settings → Gamepad** to adjust the stick dead zone, camera speed and ve
 
 In the excavator, hold the **left shoulder button** to control the arm. Move the **right stick** sideways to turn the cab and vertically to raise or lower the boom. Move the **left stick** vertically to move the outer arm and sideways to tilt the bucket. Release the shoulder button to return to track and camera controls. Release and press the trigger again if you held it while operating the arm.
 
-On the motorboat, squeeze the triggers lightly to manoeuvre at low speed. On the tram, the right trigger accelerates and the left trigger brakes.
+On the motorboat, squeeze the triggers lightly to manoeuvre at low speed. On the tram, use the right trigger for gradual acceleration and the left trigger for gradual braking.
 
 ## Your first drive
 

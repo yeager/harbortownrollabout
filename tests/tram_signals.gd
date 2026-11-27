@@ -244,14 +244,14 @@ func check() -> void:
 		train.velocity=7
 		train.dwell=0
 		train.place_sections()
-		for i in 120: train.advance(.1,manual,true,false)
+		for i in 120: train.advance(.1, manual, 1.0, 0.0)
 		var gap: float = crossing.offset-train.distance-lights.BOULEVARD_LINE-train.CAB_REACH
 		if absf(gap)>.08 or train.velocity>.01:
 			fail("Tram failed to stop at red, gap %f" % gap)
 			return
 		crossing.stage=lights.Stage.BOULEVARD
 		crossing.timer=0
-		for i in 30: train.advance(.1,manual,true,false)
+		for i in 30: train.advance(.1, manual, 1.0, 0.0)
 		if train.velocity<1:
 			fail("Tram failed to restart at green")
 			return

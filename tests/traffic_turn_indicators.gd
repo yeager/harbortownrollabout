@@ -65,14 +65,14 @@ func verify() -> void:
 	var corner: float = tram.track.get_closest_offset(west_south_start)
 	tram.distance = corner - 3.0
 	tram.place_sections()
-	tram.advance(.04, true, false, true)
+	tram.advance(.04, true, 0.0, 1.0)
 	for signals in tram.cab_indicators:
 		if not selected_side_is_lit(signals, 1, 1):
 			fail("The tram's front and rear must indicate on the same side")
 			return
 	tram.distance = corner + 35.0
 	tram.place_sections()
-	tram.advance(.04, true, false, true)
+	tram.advance(.04, true, 0.0, 1.0)
 	for signals in tram.cab_indicators:
 		if signals.direction != 0 or not both_sides_are_dark(signals):
 			fail("The tram did not cancel both cab indicators after the bend")

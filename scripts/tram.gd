@@ -772,7 +772,7 @@ func car_bounds(exclude: Node3D = null) -> Array[AABB]:
 func distance_to_next_stop() -> float:
 	return fposmod(stops[next_stop]-distance,track.get_baked_length())
 
-func advance(delta: float, manual: bool, gas: bool, brake: bool) -> void:
+func advance(delta: float, manual: bool, gas: float, brake: float) -> void:
 	var world := get_parent()
 	var turn: float = world._traffic_turn_intent(track, distance, 1.0, sections[0].basis.x, 14.0)
 	for indicators in cab_indicators:
@@ -799,12 +799,20 @@ func advance(delta: float, manual: bool, gas: bool, brake: bool) -> void:
 	var stopping_gap := minf(remaining,signal_gap)
 	var target := 7.0
 	if manual:
-		target = 0 if brake else (7 if gas else velocity)
+		target = 0.0 if brake > 0.0 else (7.0 if gas > 0.0 else velocity)
 	# Reserve the distance travelled this frame as well as the braking distance afterwards.
 	var initial := velocity
 	var half_change := SERVICE_BRAKE * delta * .5
 	var approach_speed := sqrt(maxf(0,half_change*half_change + SERVICE_BRAKE*(2*stopping_gap-initial*delta))) - half_change
-	velocity = move_toward(initial,clampf(approach_speed,0,target),delta*(126000.0 / Mass.TRAM_KG if brake else SERVICE_BRAKE))
+	var rate := SERVICE_BRAKE
+	if brake > 0.0:
+		rate = 126000.0 / Mass.TRAM_KG * brake
+	elif manual and gas > 0.0 and approach_speed >= initial:
+		rate *= gas
+	# A light brake input must still respect the automatic approach curve.
+	if approach_speed < initial:
+		rate = maxf(rate, SERVICE_BRAKE)
+	velocity = move_toward(initial, clampf(approach_speed, 0, target), delta * rate)
 	var step := minf((initial + velocity) * .5 * delta, signal_gap)
 	if step >= signal_gap: velocity = 0.0
 	var safe_step := _safe_tram_step(step,users)

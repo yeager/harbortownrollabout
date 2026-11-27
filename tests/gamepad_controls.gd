@@ -93,16 +93,27 @@ func check_watercraft_and_tram(game) -> bool:
 	if game.tram_mode != 2:
 		return false
 	game.tram.dwell = 0.0
+	axis(JOY_AXIS_TRIGGER_RIGHT, .6)
+	game._process(.15)
+	var partial_acceleration: float = game.tram.velocity
+	game.tram.velocity = 0.0
 	axis(JOY_AXIS_TRIGGER_RIGHT, 1)
-	for frame in 30:
-		game._process(1.0 / 60)
-	var tram_speed: float = game.tram.velocity
+	game._process(.15)
+	var full_acceleration: float = game.tram.velocity
 	axis(JOY_AXIS_TRIGGER_RIGHT, 0)
+	if partial_acceleration <= 0.0 or not is_equal_approx(partial_acceleration, full_acceleration * .5):
+		return false
+
+	game.tram.velocity = 2.0
+	axis(JOY_AXIS_TRIGGER_LEFT, .6)
+	game._process(.15)
+	var partial_braking: float = 2.0 - game.tram.velocity
+	game.tram.velocity = 2.0
 	axis(JOY_AXIS_TRIGGER_LEFT, 1)
-	for frame in 30:
-		game._process(1.0 / 60)
+	game._process(.15)
+	var full_braking: float = 2.0 - game.tram.velocity
 	axis(JOY_AXIS_TRIGGER_LEFT, 0)
-	return tram_speed > .3 and game.tram.velocity < tram_speed * .5
+	return partial_braking > 0.0 and is_equal_approx(partial_braking, full_braking * .5)
 
 func check_settings(game) -> bool:
 	var dialog := game.find_child("GameSettings", true, false) as AcceptDialog

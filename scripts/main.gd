@@ -951,8 +951,16 @@ func _process(delta: float) -> void:
 				_look_around(pad_look * 130.0 * gamepad_camera_speed * delta)
 		var tram_controls := tram_mode == 2 and _world_controls_available()
 		var tram_keys := tram_controls and _keyboard_pedals_available()
-		var tram_gas := tram_controls and (mouse_gas or (tram_keys and (Input.is_action_pressed("pad_accelerate") or Input.is_action_pressed("ui_up") or _movement_pressed(KEY_W))))
-		var tram_brake := tram_controls and (mouse_brake or brake_pedal_held or (tram_keys and (Input.is_action_pressed("pad_brake") or Input.is_action_pressed("ui_down") or _movement_pressed(KEY_S))))
+		var tram_gas := 0.0
+		var tram_brake := 0.0
+		if tram_keys:
+			tram_gas = maxf(Input.get_action_strength("pad_accelerate"), Input.get_action_strength("ui_up"))
+			tram_brake = maxf(Input.get_action_strength("pad_brake"), Input.get_action_strength("ui_down"))
+			if _movement_pressed(KEY_W): tram_gas = 1.0
+			if _movement_pressed(KEY_S): tram_brake = 1.0
+		if tram_controls:
+			if mouse_gas: tram_gas = 1.0
+			if mouse_brake or brake_pedal_held: tram_brake = 1.0
 		tram.advance(delta, tram_mode == 2, tram_gas, tram_brake)
 		if tram_mode == 2 and tram_driver_exit_requested and tram.open_station() >= 0:
 			_change_seat()
@@ -13165,7 +13173,7 @@ func _resume_road_checkpoint() -> void:
 		tram.dwell = trip.dwell
 		tram.velocity = trip.get("velocity",0.0) if tram.dwell <= 0 else 0.0
 		tram.place_sections()
-		tram.advance(0, tram_mode == 2, false, false)
+		tram.advance(0, tram_mode == 2, 0.0, 0.0)
 		if trip.parked:
 			parked_cars[vehicle_index].transform = ambulance.transform
 			parked_cars[vehicle_index].show()

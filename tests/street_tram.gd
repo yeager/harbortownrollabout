@@ -45,7 +45,7 @@ func verify() -> void:
 	world._change_seat()
 	for stop in train.stations.size():
 		train.stop_at_station(stop)
-		train.advance(1,false,false,false)
+		train.advance(1, false, 0.0, 0.0)
 		for car: Node3D in train.sections:
 			for side in [-1,1]:
 				var doorway := car.to_global(Vector3(1.5,.29,.13))
@@ -64,7 +64,7 @@ func verify() -> void:
 					fail("Alighting failed at stop "+str(stop))
 					return
 	train.stop_at_station(0)
-	train.advance(1,false,false,false)
+	train.advance(1, false, 0.0, 0.0)
 	var platform: Node3D = train.stations[0]
 	world.walker.position = platform.to_global(Vector3(2.8,.29,0))
 	world.walker.rotation.y = platform.global_rotation.y + PI / 2
@@ -80,7 +80,7 @@ func verify() -> void:
 	var previous: int = train.next_stop
 	# A full circuit includes six independently timed junctions.
 	for tick in 4200:
-		train.advance(.1,false,false,false)
+		train.advance(.1, false, 0.0, 0.0)
 		if world.tram.open_station()<0:
 			world._change_seat()
 			if world.tram_mode!=1:
@@ -101,7 +101,7 @@ func verify() -> void:
 	if reached!=4 or train.distance!=0:
 		fail("Failed to complete four-stop service")
 		return
-	train.advance(1,false,false,false)
+	train.advance(1, false, 0.0, 0.0)
 	world.free_drive = true
 	world._refresh_ui()
 	world.map_button.pressed.emit()
@@ -134,12 +134,12 @@ func verify() -> void:
 	# Stand on the track and verify service stops before the train reaches the player.
 	var ahead: Vector3 = train.track.sample_baked(16)
 	world.walker.position = ahead
-	for tick in 100: train.advance(.2,false,false,false)
+	for tick in 100: train.advance(.2, false, 0.0, 0.0)
 	if train.distance>=14 or train.distance<8 or train.velocity>.01:
 		fail("Unsafe approach to player on tracks at offset "+str(train.distance))
 		return
 	world.walker.position=platform.to_global(Vector3(2.8,.29,0))
-	for tick in 30: train.advance(.2,true,true,false)
+	for tick in 30: train.advance(.2, true, 1.0, 0.0)
 	if train.distance <= 16:
 		fail("Driver could not restart with clear track")
 		return
@@ -162,7 +162,7 @@ func verify() -> void:
 			fail("Tram mouse help does not match the player's role")
 			return
 		for frame in 60:
-			train.advance(.05, role == 2, role == 2, false)
+			train.advance(.05, role == 2, 1.0 if role == 2 else 0.0, 0.0)
 		if train.distance <= saved_distance:
 			fail("Resumed tram did not move")
 			return
