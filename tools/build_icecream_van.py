@@ -49,6 +49,7 @@ box("Radiator", (0,-2.95,.99), (1.16,.10,.28), v.BLACK)
 for h in (.91,1,1.09):
     box("Grille louvre", (0,-3.007,h), (1.08,.025,.018), v.METAL)
 reverse_glass = v.material("Reverse lamp ice van lens", (.79,.87,.93), .12,.23)
+signal_glass = v.material("Amber indicator glass", (.96,.34,.018), .12,.26)
 for side in (-1,1):
     s = side
     window("Cab door window", [(s*1.012,-1.93,1.47),(s*1.012,-.55,1.47),
@@ -57,6 +58,8 @@ for side in (-1,1):
     box("Door mirror",(s*1.20,-1.75,1.71),(.16,.20,.33),v.DARK)
     box("Door handle",(s*1.012,-.65,1.34),(.05,.19,.055),v.DARK)
     box("Headlight lens",(s*.77,-2.926,1.09),(.32,.09,.14),v.HEADLAMP)
+    box("Front indicator bezel",(s*.80,-3.038,.928),(.29,.075,.103),v.DARK,.017)
+    box("Front amber indicator",(s*.80,-3.079,.928),(.248,.022,.073),signal_glass,.011)
     for y in (-1.96,1.85):
         disc("Däck", (s*.91,y,.405), .405,.26,v.RUBBER)
         disc("Wheel hub steel", (s*1.05,y,.405), .255,.065,v.METAL)
@@ -76,6 +79,8 @@ for side in (-1,1):
     cap = disc("Speaker grille", (s*.61,-1.047,2.65),.112,.018,v.BLACK)
     cap.rotation_euler = speaker.rotation_euler
     box("Rear combination lamp housing",(s*.75,2.973,.96),(.50,.074,.167),v.DARK,.018)
+    box("Rear indicator bezel",(s*.865,2.973,1.090),(.24,.074,.098),v.DARK,.014)
+    box("Rear indicator lens",(s*.865,3.012,1.090),(.203,.032,.071),signal_glass,.009)
     box("Tail lamp",(s*.806,3.012,.96),(.343,.032,.124),v.TAIL_LAMP,.012)
     box("Reversing lens",(s*.562,3.012,.96),(.118,.032,.124),reverse_glass,.010)
     for offset in (-.034,0,.034):

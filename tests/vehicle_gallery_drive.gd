@@ -120,7 +120,7 @@ func check_gallery() -> void:
 			printerr("Turning right did not light only the right side of ", tile.text)
 			quit(1)
 			return
-		if tile.text == "Saav 97" or index in [0, game.SHOPPER, game.A_TRACTOR]:
+		if tile.text == "Saav 97" or index in [0, game.SHOPPER, game.A_TRACTOR, game.ICE_CREAM]:
 			for lamps in [signals.left, signals.right]:
 				var names: Array = lamps.map(func(lamp: MeshInstance3D): return String(lamp.get_parent().name))
 				for prefix in ["Front amber indicator", "Rear indicator lens"]:
