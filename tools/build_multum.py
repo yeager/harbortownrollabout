@@ -350,6 +350,15 @@ rod("Hatch sill seam", (-.564, 1.993, .620), (.564, 1.993, .620), .004, v.DARK)
 box("Hatch release recess", (0, 2.003, .722), (.237, .029, .054), v.RUBBER, .013)
 box("Hatch release grip", (0, 2.020, .731), (.190, .015, .025), paint, .007)
 
+heater_trace = v.material("Muted copper rear window traces", (.147, .093, .070), .25, .53)
+for row in range(9):
+    z = 1.137 + row * .045
+    box("Rear window heater trace", (0, 1.872, z),
+        (1.276, .003, .0025), heater_trace, .0005)
+for side in (-1, 1):
+    box("Rear window heater bus bar", (side * .638, 1.872, 1.317),
+        (.006, .003, .365), heater_trace, .0005)
+
 pivot = v.cylinder("Rear wiper spindle", (.253, 1.881, 1.140),
                    .031, .029, v.RUBBER, False, 24, root)
 pivot.rotation_euler.x = math.pi / 2
