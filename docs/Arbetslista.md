@@ -430,6 +430,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Multums bakre stötfångare fick två runda reflexer och tre skyddslister. Granskat i Godot. Körprovet för 29 vägfordon passerade.
   - Multums främre stötfångare fick skyddslister, dimljus med välvda linser och ett nedre luftintag med korsande ribbor. Granskat i Godot. Körprovet för 29 vägfordon passerade.
   - Multums vindrutetorkare ligger längs rutans nederkant och har separata fästen, armar och blad. Granskat i Godot. Körprovet för 29 vägfordon passerade.
+  - Multums registreringsskyltar fick blå landsfält med S, separata hållare och fästskruvar. Båda granskades i Godot. Körprovet för 29 vägfordon passerade.
 - [ ] [`compact_convertible.glb`](../vehicles/compact_convertible.glb)
   - Mino Kuper S fick ett eget kopparfärgat M-monogram på motorhuven och bakluckan samt nytt namn i fordonsgalleriet. Emblemen granskades i Godot. Fordonsprovet och språkkontrollen passerade.
 - [ ] [`electric_sedan.glb`](../vehicles/electric_sedan.glb)

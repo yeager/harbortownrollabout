@@ -219,11 +219,25 @@ for x in (-.33, -.22, -.11, 0, .11, .22, .33):
 for z in (.329, .373, .417, .449):
     box("Lower grille rail", (0, -2.124, z), (.833, .023, .015), v.DARK, .005)
 box("Bonnet intake",(0,-2.039,.615),(.78,.028,.065),v.DARK,.012)
-for y, sign in [(-2.116,-1),(2.049,1)]:
-    box("Registration plate",(0,y,.525),(.465,.024,.106),cream,.010)
-    text = v.text_obj("Registration","FA 608",(-.167 if sign<0 else .167,y+sign*.016,.497),
-                      .077,v.DARK,root=root,flat=True)
-    text.rotation_euler = (math.pi/2,0,0 if sign<0 else math.pi)
+for y, sign in [(-2.116, -1), (2.049, 1)]:
+    rotation = (math.pi / 2, 0, 0 if sign < 0 else math.pi)
+    box("Registration plate holder", (0, y - sign * .007, .525),
+        (.508, .023, .122), v.RUBBER, .009)
+    box("Registration plate", (0, y, .525), (.488, .024, .108), cream, .007)
+    box("Registration country band", (sign * .219, y + sign * .012, .525),
+        (.043, .005, .101), v.POLICE_BLUE, .003)
+    for label, lettering, x, z, size, finish in [
+        ("Registration", "FA 608", .147, .497, .077, v.DARK),
+        ("Country code", "S", .229, .492, .028, cream),
+    ]:
+        text = v.text_obj(label, lettering, (sign * x, y + sign * .016, z),
+                          size, finish, root=root, flat=True)
+        text.rotation_euler = rotation
+    for x in (-.178, .198):
+        fastener = v.cylinder("Registration plate fastener",
+                              (-sign * x, y + sign * .013, .563),
+                              .004, .003, v.METAL, False, 12, root)
+        fastener.rotation_euler.x = math.pi / 2
 badge = v.text_obj("Multum hatch badge","MULTUM",(.208,2.008,.842),.086,
                    v.METAL,root=root,flat=True)
 badge.rotation_euler = (math.pi/2,0,math.pi)
