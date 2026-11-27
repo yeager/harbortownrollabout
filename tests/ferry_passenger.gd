@@ -22,6 +22,24 @@ func check_crossings() -> void:
 		bridge_parts.append(pier)
 		bridge_parts.append(pier.get_child(0))
 	var ferry: Node3D = game.ferry
+	var mast_lens := ferry.find_child("Mast lantern lens", true, false) as MeshInstance3D
+	if not mast_lens:
+		printerr("Lotten is missing its modeled mast lantern")
+		quit(1)
+		return
+	var original_time_mode: int = game.time_mode
+	var lantern := mast_lens.get_active_material(0) as StandardMaterial3D
+	game.time_mode = 1
+	game._update_daylight(0)
+	var lit_at_night := lantern.emission_enabled and lantern.emission_energy_multiplier > 0
+	game.time_mode = 0
+	game._update_daylight(0)
+	if not lit_at_night or not is_zero_approx(lantern.emission_energy_multiplier):
+		printerr("Lotten mast lantern must light only at night")
+		quit(1)
+		return
+	game.time_mode = original_time_mode
+	game._update_daylight(0)
 	var ferry_bounds: AABB = game._model_bounds(ferry, ferry)
 	var radar: Node3D = game.ferry_radar
 	if not radar or radar.get_child_count() != 4:

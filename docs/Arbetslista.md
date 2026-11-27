@@ -408,6 +408,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Takdäckets räckesstolpar fick bultade fotplattor och metallkragar. Granskade i Godot. Färjeprovet passerade i båda riktningarna.
   - Styrhyttens rutor i båda färdriktningarna fick mörka gummilister som följer rutornas lutning. Granskade i Godot. Färjeprovet passerade.
   - Styrhytten fick tre modellerade vindrutetorkare i viloläge per färdriktning. Granskade i Godot. Färjeprovet passerade.
+  - Lotten fick en modellerad mastlykta med fäste och regnhuv. Granskad i Godot. Färjeprovet bekräftade att lyktan tänds på natten och släcks på dagen.
 - [ ] [`sport_sedan.glb`](../vehicles/sport_sedan.glb)
   - BWM M3 E33 fick ett upphöjt modellemblem på bakluckan. Granskat i Godot och fordonsprovet passerade.
 - [ ] [`compact_convertible.glb`](../vehicles/compact_convertible.glb)

@@ -3850,6 +3850,13 @@ func _build_marina(rail_metal: Material) -> void:
 	ferry = (load("res://vehicles/lotten.glb") as PackedScene).instantiate()
 	add_child(ferry)
 	ferry_radar = ferry.find_child("Radar swivel", true, false)
+	var mast_lens := ferry.find_child("Mast lantern lens", true, false) as MeshInstance3D
+	if mast_lens:
+		var finish := mast_lens.get_active_material(0).duplicate() as StandardMaterial3D
+		finish.emission_enabled = true
+		finish.emission = Color("#fff0d2")
+		mast_lens.material_override = finish
+		navigation_lenses.append(finish)
 	ferry_hull_bounds = _model_bounds(ferry, ferry)
 	var engine_loop := preload("res://audio/loader_diesel.wav").duplicate() as AudioStreamWAV
 	engine_loop.loop_end = roundi(engine_loop.get_length() * engine_loop.mix_rate)

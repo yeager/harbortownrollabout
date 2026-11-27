@@ -155,6 +155,10 @@ for x in (-.12,.12):
 pole("Signal mast",(0,-.8,3.94),.046,1.0,steel)
 for height, width in [(4.02,.74),(4.25,.45)]:
     tube("Signal yardarm",(-width,-.8,height),(width,-.8,height),.018,steel)
+pole("Mast lantern mounting foot",(.56,-.8,4.038),.051,.030,steel)
+pole("Mast lantern lower housing",(.56,-.8,4.064),.055,.030,rubber)
+pole("Mast lantern lens",(.56,-.8,4.113),.047,.073,white)
+pole("Mast lantern rain cap",(.56,-.8,4.160),.057,.025,rubber)
 for x,y in [(-.8,-1.25),(.72,.16)]:
     pole("Whip antenna roof gasket",(x,y,3.558),.056,.018,rubber)
     cylinder("Whip antenna locknut",(x,y,3.579),.041,.032,steel,False,6,root)
