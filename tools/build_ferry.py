@@ -142,7 +142,11 @@ pole("Signal mast",(0,-.8,3.94),.046,1.0,steel)
 for height, width in [(4.02,.74),(4.25,.45)]:
     tube("Signal yardarm",(-width,-.8,height),(width,-.8,height),.018,steel)
 for x,y in [(-.8,-1.25),(.72,.16)]:
-    tube("Whip antenna",(x,y,3.55),(x,y,4.62),.012,steel)
+    pole("Whip antenna roof gasket",(x,y,3.558),.056,.018,rubber)
+    cylinder("Whip antenna locknut",(x,y,3.579),.041,.032,steel,False,6,root)
+    pole("Whip antenna insulator",(x,y,3.622),.031,.064,rubber)
+    pole("Whip antenna ferrule",(x,y,3.657),.022,.028,steel)
+    tube("Whip antenna",(x,y,3.658),(x,y,4.62),.012,steel)
 pole("Radar mounting collar",(0,-.8,4.345),.069,.076,steel)
 box("Radar drive housing",(0,-.8,4.391),(.218,.160,.087),white,.020)
 radar_pivot = bpy.data.objects.new("Radar swivel", None)
