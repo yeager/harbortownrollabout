@@ -9457,6 +9457,26 @@ func _fit_bus_exterior(model: Node3D) -> void:
 		hinge.material_override = hinge_finish
 		var pin := _make_box("Engine hatch hinge pin", Vector3(.15,.016,.018), Vector3(0,.012,-.017), Color.WHITE, false, hinge)
 		pin.material_override = hinge_finish
+	var latch := _make_box("Engine hatch latch housing", Vector3(.23,.086,.024),
+		Vector3(0,.95,-5.269), window_seal.albedo_color, false, model)
+	latch.material_override = window_seal
+	var pull := _make_box("Engine hatch pull", Vector3(.146,.026,.018),
+		Vector3(-.019,.011,-.018), Color.WHITE, false, latch)
+	pull.material_override = hinge_finish
+	var lock_mesh := CylinderMesh.new()
+	lock_mesh.top_radius = .012
+	lock_mesh.bottom_radius = .012
+	lock_mesh.height = .009
+	lock_mesh.radial_segments = 16
+	lock_mesh.material = hinge_finish
+	var lock := MeshInstance3D.new()
+	lock.name = "Engine hatch lock cylinder"
+	lock.mesh = lock_mesh
+	lock.rotation.x = PI * .5
+	lock.position = Vector3(.082,-.014,-.016)
+	latch.add_child(lock)
+	_make_box("Engine hatch key slot", Vector3(.012,.003,.002),
+		Vector3(.082,-.014,-.021), window_seal.albedo_color, false, latch)
 	var plate := _make_box("Bus rear number plate",Vector3(.46,.105,.018),Vector3(0,.57,-5.282),Color("#eeeee4"),false,model)
 	if not bus_plate_finish:
 		bus_plate_finish = _material(Color("#eeeee4"),.55,true)
