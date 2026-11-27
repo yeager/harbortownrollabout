@@ -28,6 +28,23 @@ def disc(name, pos, radius, depth, mat):
     return v.cylinder(name, pos, radius, depth, mat, root=root)
 
 
+def van_tire(side, y):
+    # Axial profile from the inner bead to the outer bead.
+    profile = [
+        (-.130,.251),(-.130,.345),(-.123,.374),(-.105,.393),
+        (-.083,.405),(-.069,.405),(-.064,.392),(-.053,.392),(-.048,.405),
+        (-.013,.405),(-.006,.392),(.006,.392),(.013,.405),
+        (.048,.405),(.053,.392),(.064,.392),(.069,.405),(.083,.405),
+        (.105,.393),(.123,.374),(.130,.345),(.130,.251),
+    ]
+    angles = [index*math.tau/64 for index in range(64)]
+    v.profile_loft("Däck", [
+        [(side*.91+offset,y+radius*math.sin(angle),.405+radius*math.cos(angle))
+         for angle in angles]
+        for offset,radius in profile
+    ],v.RUBBER,root)
+
+
 def window(name, vertices):
     mesh = bpy.data.meshes.new(name)
     mesh.from_pydata(vertices, [], [(0, 1, 2, 3), (3, 2, 1, 0)])
@@ -122,7 +139,7 @@ for side in (-1,1):
     box("Front indicator bezel",(s*.80,-3.038,.928),(.29,.075,.103),v.DARK,.017)
     box("Front amber indicator",(s*.80,-3.079,.928),(.248,.022,.073),signal_glass,.011)
     for y in (-1.96,1.85):
-        disc("Däck", (s*.91,y,.405), .405,.26,v.RUBBER)
+        van_tire(s,y)
         disc("Wheel hub steel", (s*1.05,y,.405), .255,.065,v.METAL)
         disc("Wheel centre dish",(s*1.085,y,.405),.128,.026,v.METAL)
         disc("Center cap",(s*1.104,y,.405),.049,.028,v.DARK)

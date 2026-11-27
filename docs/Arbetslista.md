@@ -390,6 +390,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Hyttdörrarna fick separata metallgrepp, gummitätningar och låscylindrar med nyckelspår. Granskade i Godot. Glassrutten passerade.
   - Sidostegen breddades och fick räfflade gummiplattor under frysluckorna samt synliga fästen mot karossen. Granskade i Godot. Glassrutten passerade.
   - Stålfälgarna fick separata navskålar, centrumkåpor och fem sexkantiga hjulmuttrar per hjul. Granskade i Godot. Fordonsprovet passerade.
+  - Glassbilens däck fick rundade skuldror och tre längsgående spår i slitbanan. Granskade i Godot. Fordonsprovet passerade.
 - [ ] [`lotten.glb`](../vehicles/lotten.glb)
 - [ ] [`sport_sedan.glb`](../vehicles/sport_sedan.glb)
   - BWM M3 E33 fick ett upphöjt modellemblem på bakluckan. Granskat i Godot och fordonsprovet passerade.
