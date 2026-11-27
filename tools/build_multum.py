@@ -236,7 +236,18 @@ for side in (-1,1):
     box("Mirror glass",(side*.970,-.665,1.193),(.117,.012,.104),v.METAL,.007)
     headlight("Upper headlight",side*.694,-1.385,1.087,.062)
     headlight("Lower headlight",side*.655,-2.043,.672,.079)
-    lamp("Front amber indicator",side*.816,-1.987,.671,.052,amber)
+    indicator_angles = [step * math.tau / 40 for step in range(40)]
+    for name, finish, width, height, profile in [
+        ("Front signal gasket", v.RUBBER, .061, .040, [(-.020, .91), (.004, 1), (.010, .96)]),
+        ("Front amber indicator", amber, .054, .034, [(.006, 1), (.012, 1), (.019, .81), (.022, .46)]),
+    ]:
+        v.profile_loft(name, [
+            [(side * (.774 + .76 * width * scale * math.cos(angle) + .65 * depth),
+              -1.968 + .65 * width * scale * math.cos(angle) - .76 * depth,
+              .656 + height * scale * math.sin(angle))
+             for angle in indicator_angles]
+            for depth, scale in profile
+        ], finish, root)
     cluster = [(.706,.716),(.786,.727),(.840,.768),(.842,.828),
                (.802,.894),(.784,.983),(.743,1.006),(.699,.975),
                (.680,.910),(.675,.782)]
