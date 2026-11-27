@@ -29,6 +29,27 @@ def disc(name, pos, r, depth, mat):
     return v.cylinder(name,pos,r,depth,mat,root=root)
 
 
+def hydraulic_hose(name, hose_points, radius=.018):
+    hose_curve = bpy.data.curves.new(name, "CURVE")
+    hose_curve.dimensions = "3D"
+    hose_curve.resolution_u = 5
+    hose_curve.bevel_depth = radius
+    hose_curve.bevel_resolution = 2
+    spline = hose_curve.splines.new("BEZIER")
+    spline.bezier_points.add(len(hose_points)-1)
+    for point, position in zip(spline.bezier_points,hose_points):
+        point.co = position
+        point.handle_left_type = point.handle_right_type = "AUTO"
+    hose = bpy.data.objects.new(name,hose_curve)
+    bpy.context.collection.objects.link(hose)
+    hose.parent = root
+    hose_curve.materials.append(v.RUBBER)
+    bpy.ops.object.select_all(action="DESELECT")
+    hose.select_set(True)
+    bpy.context.view_layer.objects.active = hose
+    bpy.ops.object.convert(target="MESH")
+
+
 def save(stem, filename, body_name, separate_glass):
     bpy.context.preferences.filepaths.save_version = 0
     bpy.ops.wm.save_as_mainfile(filepath=str(Path(v.SOURCE_DIR) / (stem + '.blend')))
@@ -643,8 +664,15 @@ for side in [-1,1]:
     disc("Front lift cylinder upper pin", cylinder_top, .026, .105, v.METAL)
     disc("Front lift piston foot pin", cylinder_foot, .025, .092, v.METAL)
     hose_port = cylinder_top.lerp(gland, .24)
-    rod("Front lift hydraulic port", hose_port, hose_port + Vector((side*.066, 0, 0)),
-        .018, v.METAL, 12)
+    port_end = hose_port + Vector((side*.066, 0, 0))
+    rod("Front lift hydraulic port", hose_port, port_end, .018, v.METAL, 12)
+    valve_end = Vector((side*.371, -1.942, .990))
+    box("Front lift valve block", (side*.301,-1.942,.990), (.112,.093,.068),v.DARK,.014)
+    rod("Front lift valve coupling", (side*.340,-1.942,.990), valve_end, .019, v.METAL, 12)
+    hydraulic_hose("Front lift hydraulic feed", [
+        port_end, port_end + Vector((side*.064, .018, -.016)),
+        (side*.463,-2.056,.948), (side*.437,-1.975,.986), valve_end,
+    ], .012)
 rod("Front linkage crossbar",(-.27,-2.34,.60),(.27,-2.34,.60),.038,v.BLACK)
 glazing = v.material("Blue-green laminated cab glass", (.070,.19,.18), .08,.17)
 next(node for node in glazing.node_tree.nodes if node.type == "BSDF_PRINCIPLED").inputs["Alpha"].default_value = .43
@@ -1027,27 +1055,10 @@ for side in [-1,1]:
     hose_points = [(side*.27,1.94,1.35),(side*.32,2.05,1.35),
                    (side*.36,2.10,1.20),(side*.37,2.11,1.03),
                    (side*.41,2.10,.98),(side*.46,2.04,1.01)]
-    hose_curve = bpy.data.curves.new("Rear hydraulic feed", "CURVE")
-    hose_curve.dimensions = "3D"
-    hose_curve.resolution_u = 5
-    hose_curve.bevel_depth = .018
-    hose_curve.bevel_resolution = 2
-    spline = hose_curve.splines.new("BEZIER")
-    spline.bezier_points.add(len(hose_points)-1)
-    for point, position in zip(spline.bezier_points,hose_points):
-        point.co = position
-        point.handle_left_type = point.handle_right_type = "AUTO"
-    hose = bpy.data.objects.new("Lift cylinder hose",hose_curve)
-    bpy.context.collection.objects.link(hose)
-    hose.parent = root
-    hose_curve.materials.append(v.RUBBER)
+    hydraulic_hose("Rear hydraulic feed", hose_points)
     for tip, neighbour in [(0,1),(-1,-2)]:
         end = Vector(hose_points[tip])
         rod("Crimped hose ferrule",end,end+(Vector(hose_points[neighbour])-end).normalized()*.042,.026,v.METAL)
-    bpy.ops.object.select_all(action="DESELECT")
-    hose.select_set(True)
-    bpy.context.view_layer.objects.active = hose
-    bpy.ops.object.convert(target="MESH")
     # Four flush lenses follow the transverse crown of the wing.
     angle = radians(49)
     normal = Vector((0,sin(angle),cos(angle)))
