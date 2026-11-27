@@ -393,9 +393,22 @@ for side in (-1, 1):
 
 bpy.data.objects.remove(tire_template, do_unlink=True)
 
-box("Grille backing", (0, -2.041, .713), (.842, .065, .179), v.RUBBER)
-for z in (.646, .670, .694, .718, .742, .766):
-    box("Grille horizontal blade", (0, -2.081, z), (.790, .025, .010), v.DARK, .004)
+# Layer the molded frame, floating slats and a recessed radiator face.
+grille_outline = [(-.96, -1), (.96, -1), (1, -.72), (1, .72),
+                  (.96, 1), (-.96, 1), (-1, .72), (-1, -.72)]
+v.profile_loft("Grille surround", [
+    [(x * width, y, .710 + z * height) for x, z in grille_outline]
+    for y, width, height in [
+        (-2.025, .419, .095), (-2.082, .419, .095), (-2.093, .411, .087),
+        (-2.093, .396, .072), (-2.054, .391, .069),
+    ]
+], v.DARK, root, close_ends=False)
+box("Grille recessed radiator", (0, -2.041, .710), (.792, .026, .143), v.RUBBER, .005)
+for x in (-.30, -.20, -.10, 0, .10, .20, .30):
+    box("Grille vertical support", (x, -2.061, .710), (.006, .018, .143), v.DARK, .001)
+for z in (.650, .674, .698, .722, .746, .770):
+    slat = box("Grille horizontal blade", (0, -2.075, z), (.795, .031, .008), v.DARK, .002)
+    slat.rotation_euler.x = .13
 box("Vovlo grille medallion", (0, -2.096, .709), (.101, .017, .081), v.METAL)
 box("Vovlo grille enamel", (0, -2.107, .709), (.081, .010, .064), v.POLICE_BLUE)
 text("Vovlo emblem", "V", (-.021, -2.115, .687), .052, material=ivory)
