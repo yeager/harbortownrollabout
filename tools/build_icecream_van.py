@@ -41,8 +41,12 @@ v.mesh_from_rings("Pressed steel bonnet and cab", [
     (-2.98,.85,.53,1.03,1.10), (-2.79,.98,.52,1.21,1.33),
     (-2.04,1.0,.57,1.37,1.49), (-1.25,1.0,.63,2.30,2.46),
     (-.46,1.0,.64,2.32,2.48)], blue, root)
-window("Swept windscreen", [(-.84,-2.04,1.47),(.84,-2.04,1.47),
-                            (.79,-1.28,2.43),(-.79,-1.28,2.43)])
+# The windscreen follows both halves of the crowned steel cab surface.
+for side in (-1,1):
+    window("Swept windscreen", [
+        (0,-2.017,1.568),(side*.708,-2.017,1.534),
+        (side*.688,-1.286,2.431),(0,-1.286,2.464),
+    ])
 box("Freezer body", (0,1.25,1.72), (2.14,3.43,1.76), blue,.075)
 box("Front bumper", (0,-2.97,.69), (1.91,.17,.30), v.DARK,.08)
 box("Recessed radiator core",(0,-2.983,.997),(1.11,.035,.281),v.BLACK,.018)
