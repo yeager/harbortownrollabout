@@ -34,8 +34,10 @@ func fit(actor: Node3D, model: Node3D, bounds: AABB) -> void:
 	if model.scene_file_path.ends_with("/city_bus.glb"):
 		for side in [-1, 1]:
 			# The imported bus faces +Z, opposite the driving actor.
+			var front := Vector3(side * 1.015, .892, 5.363)
+			_add_lamp(frame, actor.to_local(model.to_global(front)),
+				Vector3(.155, .041, .016), -side, side * .13)
 			for contact in [
-				[Vector3(side * 1.033, .907, 5.374), Vector3(.19, .085, .027)],
 				[Vector3(side * 1.01, 1.11, -5.302), Vector3(.19, .085, .027)],
 				[Vector3(side * 1.298, 1.16, 3.91), Vector3(.009, .043, .115)],
 			]:
@@ -110,7 +112,7 @@ func _attachment(panels: Array[AABB], bounds: AABB, side: int, end: int) -> Vect
 	at.z += end * .006
 	return at
 
-func _add_lamp(frame: Node3D, at: Vector3, size: Vector3, side: int) -> void:
+func _add_lamp(frame: Node3D, at: Vector3, size: Vector3, side: int, yaw := 0.0) -> void:
 	var lens := MeshInstance3D.new()
 	var mesh := BoxMesh.new()
 	mesh.size = size
@@ -118,6 +120,7 @@ func _add_lamp(frame: Node3D, at: Vector3, size: Vector3, side: int) -> void:
 	lens.mesh = mesh
 	lens.name = "Left indicator lens" if side < 0 else "Right indicator lens"
 	lens.position = at
+	lens.rotation.y = yaw
 	frame.add_child(lens, true)
 	var lit := MeshInstance3D.new()
 	var glow := BoxMesh.new()

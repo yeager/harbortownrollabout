@@ -323,6 +323,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Öppningsknapparna vid mitt- och bakdörren fick ljusa ringar och en modellerad symbol med två utåtriktade pilar. Mittdörrens knapp granskades i närbild i Godot. Bussprovet passerade.
   - Backspeglarna fick separata gummilister runt de fyra spegelglasen och sexkantsbultar på monteringsfötterna. Båda spegelhusen granskades i Godot och bussprovet passerade alla sex hållplatser.
   - De fyra runda strålkastaroptikerna fick mörka gummitätningar runt metallringarna. Båda strålkastarhusen granskades i Godot. Bussprovet verifierade även att halvljusets ljuskäglor sitter vid linserna.
+  - Främre blinkers gjordes smalare och vinklades efter strålkastarhusen. Båda sidor granskades tända och släckta i Godot. Bussprovet verifierade avgångsblinkningen.
 - [ ] [`dam_pickup.glb`](../vehicles/dam_pickup.glb)
 - [ ] [`electric_kick_scooter.glb`](../vehicles/electric_kick_scooter.glb)
 - [ ] [`farm_tractor.glb`](../vehicles/farm_tractor.glb)
