@@ -112,6 +112,18 @@ for side in (-1,1):
             angle = i*math.tau/8
             rod("Wheel hub spoke",(side*.915,y+.062*math.cos(angle),.318+.062*math.sin(angle)),
                 (side*.908,y+.195*math.cos(angle+.10),.318+.195*math.sin(angle+.10)),.022,v.METAL)
+        for i in range(4):
+            angle = (i+.5)*math.tau/4
+            bolt_y = y+.049*math.cos(angle)
+            bolt_z = .318+.049*math.sin(angle)
+            v.cylinder("Wheel bolt recess",(side*.927,bolt_y,bolt_z),
+                       .016,.008,v.DARK,True,16,root)
+            v.cylinder("Wheel lug nut",(side*.933,bolt_y,bolt_z),
+                       .010,.010,v.METAL,True,6,root)
+        valve_base = (side*.903,y+.190,.378)
+        valve_end = (side*.930,y+.211,.383)
+        rod("Tire valve stem",valve_base,valve_end,.008,v.DARK)
+        rod("Tire valve cap",valve_end,(side*.938,y+.217,.385),.009,v.METAL)
 
 box("Front bumper", (0,-1.983,.418),(1.68,.225,.315),v.DARK,.071)
 box("Rear bumper", (0,1.929,.433),(1.69,.211,.271),v.DARK,.074)
