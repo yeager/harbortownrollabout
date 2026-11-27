@@ -88,7 +88,7 @@ for end in [-1,1]:
              (side*1.09,end*.40-.46,3.44),.025,white)
     box("Lower landing ramp",(0,end*6.23,.70),(1.95,.46,.11),deck)
     box("Ramp nosing",(0,end*6.40,.74),(1.95,.10,.07),rubber)
-    for row_y in (6.07,6.16,6.25):
+    for row_y in (6.13,6.21,6.29):
         box("Ramp anti-slip strip",(0,end*row_y,.760),(1.77,.031,.016),rubber,.004)
     for side in (-1,1):
         box("Ramp edge strip",(side*.927,end*6.20,.761),(.048,.32,.017),steel,.004)
@@ -171,7 +171,15 @@ for side in [-1,1]:
         tube("Docking buffer",(side*1.30,end*6.18,.40),(side*1.51,end*5.97,.66),.105,rubber)
 for end in [-1,1]:
     for x in [-.84,.84]:
-        pole("Gate hinge",(x,end*6.06,.99),.028,.59,gold)
+        pole("Gate upright",(x,end*6.06,.997),.028,.574,gold)
+        box("Gate deck plate",(x,end*6.048,.752),(.105,.115,.021),steel,.006)
+        for offset in (-.032,.032):
+            pole("Gate base bolt",(x+offset,end*6.019,.768),.009,.014,steel)
+    for z in (.877,1.135):
+        pole("Gate hinge collar",(-.84,end*6.06,z),.039,.061,steel)
+        pole("Gate hinge pin head",(-.84,end*6.06,z+.035),.022,.013,steel)
+    box("Gate latch housing",(.84,end*6.06,1.195),(.085,.082,.067),steel,.010)
+    tube("Gate latch pull",(.802,end*6.031,1.198),(.735,end*6.031,1.198),.014,steel)
     for height in (.91,1.27):
         tube("Landing gate",(-.84,end*6.06,height),(.84,end*6.06,height),.026,gold)
     for x in [-.54,-.27,0,.27,.54]:

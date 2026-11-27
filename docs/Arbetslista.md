@@ -394,6 +394,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
 - [ ] [`lotten.glb`](../vehicles/lotten.glb)
   - Lotten fick fyra dubbla förtöjningspollare med bultade fotplattor på landgångsdäcken. Granskat i Godot. Färjeprovet passerade båda överfarterna och kontrollerade småbåtarnas linor mot den modellerade fästpunkten i fören.
   - Båda landgångarna fick tre halkskyddslister och två metallkanter. Granskat i Godot. Färjeprovet passerade båda överfarterna och kontrollerade fotfästet vid kajen.
+  - Landgångsgrindarna fick bultade fotplattor, gångjärnshylsor och separata låsbeslag. Halkskyddet lämnade plats åt fotplattorna. Granskat i Godot. Färjeprovet passerade.
 - [ ] [`sport_sedan.glb`](../vehicles/sport_sedan.glb)
   - BWM M3 E33 fick ett upphöjt modellemblem på bakluckan. Granskat i Godot och fordonsprovet passerade.
 - [ ] [`compact_convertible.glb`](../vehicles/compact_convertible.glb)
