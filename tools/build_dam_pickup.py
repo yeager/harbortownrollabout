@@ -6,7 +6,7 @@ import sys
 import bpy
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from build_vehicles import attach, clear_scene, cube, cylinder, export_vehicle, material, mesh_from_rings, text_obj
+from build_vehicles import attach, clear_scene, cube, cylinder, export_vehicle, material, mesh_from_rings, profile_loft, text_obj
 
 PROJECT = Path(__file__).resolve().parents[1]
 
@@ -116,11 +116,22 @@ def build_pickup():
         panel("Mirror housing", (side*1.17, -.99, 1.57), (.234, .236, .131), trim)
         panel("Mirror glass", (side*1.17, -.862, 1.57), (.184, .022, .084), chrome)
         for y in [-1.78, 1.96]:
-            # Segmented arches follow the tyre instead of filling the wheel opening.
-            for angle_index in range(11):
-                angle = math.radians(10 + 16*angle_index)
-                arch = panel("Wheel arch molding", (side*1.051, y + .54*math.cos(angle), .45 + .54*math.sin(angle)), (.178, .174, .085), trim, .022)
-                arch.rotation_euler.x = angle - math.pi/2
+            # Sweep a rounded lip around the tyre, tapering the ends into the body.
+            arch_sections = []
+            for index in range(33):
+                angle = math.radians(7 + 166 * index / 32)
+                flare = min(1.0, min(index, 32-index) / 4)
+                outer = 1.093 + .049 * flare
+                profile = [
+                    (.965, .503), (outer-.018, .503), (outer-.004, .514),
+                    (outer, .537), (outer-.009, .563), (outer-.033, .581),
+                    (1.052, .589), (.965, .577),
+                ]
+                arch_sections.append([
+                    (side*x, y + radius*math.cos(angle), .433 + radius*math.sin(angle))
+                    for x, radius in profile
+                ])
+            profile_loft("Continuous wheel arch molding", arch_sections, trim, root)
             wheel = cylinder("All terrain tire", (side*1.012, y, .433), .433, .326, rubber, root=root)
             cylinder("Alloy wheel hub", (side*1.179, y, .433), .253, .075, alloy, root=wheel)
             cylinder("Center cap", (side*1.226, y, .433), .082, .027, chrome, root=wheel)
