@@ -57,7 +57,9 @@ for side in (-1,1):
     box("Mirror arm",(s*1.05,-1.77,1.59),(.26,.07,.07),v.DARK)
     box("Door mirror",(s*1.20,-1.75,1.71),(.16,.20,.33),v.DARK)
     box("Door handle",(s*1.012,-.65,1.34),(.05,.19,.055),v.DARK)
-    box("Headlight lens",(s*.77,-2.926,1.09),(.32,.09,.14),v.HEADLAMP)
+    box("Headlight housing",(s*.776,-2.969,1.092),(.365,.18,.177),v.DARK,.027)
+    box("Headlight reflector rim",(s*.776,-3.062,1.092),(.331,.022,.149),v.METAL,.015)
+    box("Headlight lens",(s*.776,-3.076,1.092),(.301,.024,.122),v.HEADLAMP,.015)
     box("Front indicator bezel",(s*.80,-3.038,.928),(.29,.075,.103),v.DARK,.017)
     box("Front amber indicator",(s*.80,-3.079,.928),(.248,.022,.073),signal_glass,.011)
     for y in (-1.96,1.85):
