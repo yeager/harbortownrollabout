@@ -6102,6 +6102,7 @@ func _build_depot() -> void:
 			_fit_rally_coupe_glazing(model)
 		if i == SCHOOL_CAR:
 			_add_school_car_sign(model)
+		if i in [SCHOOL_CAR, DAM_PICKUP]:
 			_fit_rear_plate_lamps(model)
 		_park_at_home(body, i)
 		if i == 2:
@@ -7222,7 +7223,7 @@ func _spawn_traffic(scene_path: String, x: float, lane_z: float, direction: floa
 	if scene_path == VEHICLE_SCENES_ALL[2]:
 		_fit_rear_plate_lamps(model, true)
 		_fit_pumper_glazing(model)
-	elif scene_path in ["res://vehicles/traffic_suv_blue.glb", "res://vehicles/traffic_suv_silver.glb"]:
+	elif scene_path in [VEHICLE_SCENES_ALL[DAM_PICKUP], "res://vehicles/traffic_suv_blue.glb", "res://vehicles/traffic_suv_silver.glb"]:
 		_fit_rear_plate_lamps(model)
 	var is_bus := scene_path == VEHICLE_SCENES_ALL[BUS]
 	if is_bus:
@@ -9810,6 +9811,7 @@ func _load_vehicle_model() -> void:
 		_fit_pumper_glazing(vehicle_model)
 	if vehicle_index == SCHOOL_CAR:
 		_add_school_car_sign(vehicle_model)
+	if vehicle_index in [SCHOOL_CAR, DAM_PICKUP]:
 		_fit_rear_plate_lamps(vehicle_model)
 	muddy_parts.clear()
 	mud_finish = ShaderMaterial.new()

@@ -156,7 +156,7 @@ def build_pickup():
     for end, y, z in [("Front", -3.076, .779), ("Rear", 3.054, .723)]:
         direction = math.copysign(1, y)
         panel(f"{end} plate holder", (0, y, z), (.487, .036, .119), trim, .014)
-        panel(f"{end} number plate", (0, y+direction*.022, z),
+        panel("Front number plate" if end == "Front" else "Registration plate", (0, y+direction*.022, z),
               (.455, .014, .094), plate_white, .004)
         panel(f"{end} plate blue band", (direction*.201, y+direction*.030, z),
               (.043, .004, .083), plate_blue, .002)
@@ -167,6 +167,10 @@ def build_pickup():
         ys = [vertex.co.y for vertex in number.data.vertices]
         number.location.x = direction*((min(xs)+max(xs))*.5-.012)
         number.location.z -= (min(ys)+max(ys))*.5
+
+    for x in [-.154, .154]:
+        panel("Rear plate lamp housing", (x, 3.074, .785), (.078, .046, .027), trim, .008)
+        panel("Rear plate lamp diffuser", (x, 3.085, .773), (.060, .026, .009), white, .003)
 
     curve = bpy.data.curves.new("DAM grille lettering", 'FONT')
     curve.body = "DAM"
