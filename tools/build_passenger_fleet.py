@@ -370,10 +370,20 @@ def build(key, length, width, axles, color, belt, cabin):
                 profile_loft("Box flare shoulder",rings,paint,root)
             box("Twin lamp grille surround",side*.577,-end-.026,belt*.73,.515,.075,.267,DARK,.026)
             for x in [.461,.687]:
-                bezel=cylinder("Headlight retaining ring",(side*x,-end-.067,belt*.73),.110,.018,METAL,False,40,root)
-                bezel.rotation_euler.x=math.pi/2
-                lens=cylinder("Headlight",(side*x,-end-.082,belt*.73),.096,.018,HEADLAMP,False,40,root)
-                lens.rotation_euler.x=math.pi/2
+                lamp_x, lamp_z = side*x, belt*.73
+                gasket = cylinder("Lamp rubber seat",(lamp_x,-end-.061,lamp_z),
+                                  .115,.023,RUBBER,False,40,root)
+                gasket.rotation_euler.x = math.pi/2
+                bezel = cylinder("Headlight retaining ring",(lamp_x,-end-.074,lamp_z),
+                                 .108,.018,METAL,False,40,root)
+                bezel.rotation_euler.x = math.pi/2
+                lens_profile = [(.080,.095),(.087,.096),(.092,.091),
+                                (.096,.072),(.098,.039),(.099,.012)]
+                profile_loft("Headlight",[
+                    [(lamp_x+radius*math.cos(i*math.tau/40),-end-depth,
+                      lamp_z+radius*math.sin(i*math.tau/40)) for i in range(40)]
+                    for depth,radius in lens_profile
+                ],HEADLAMP,root)
         elif key == "classic_fastback":
             x = side*.501
             box("Headlamp pocket",x,-end-.029,.657,.359,.103,.237,RUBBER,.027)
