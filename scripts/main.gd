@@ -10126,6 +10126,7 @@ func _load_vehicle_model() -> void:
 					tractor_beacon = finish.duplicate() as StandardMaterial3D
 					tractor_beacon.emission = Color("#ff9a15")
 					body.set_surface_override_material(surface, tractor_beacon)
+	var headlight_color := Color("#ffe2b5") if vehicle_index == VOVLO_434 else Color("#fff0d9")
 	var beam_origins: Array[Vector3] = []
 	if vehicle_index in [2, SNOWMOBILE, PORSCHE, FARM_TRACTOR, SHOPPER, REFUSE, BUS, DAM_PICKUP, QUATTRO, A_TRACTOR, MULTUM, VOVLO_434]:
 		var lens_pattern: String = {2:"Swept transparent headlamp cover*", PORSCHE:"Headlight lens*", SNOWMOBILE:"Headlight strip*", FARM_TRACTOR:"Projector lens*", SHOPPER:"Headlight lens*", REFUSE:"Headlight lens*", BUS:"Bus headlight lens*", DAM_PICKUP:"Projector lens*", QUATTRO:"Headlight lens*", A_TRACTOR:"Headlight lens*", MULTUM:"Lower headlight lens*", VOVLO_434:"Headlight lens*"}[vehicle_index]
@@ -10146,7 +10147,7 @@ func _load_vehicle_model() -> void:
 					if vehicle_index == SHOPPER:
 						projector_finish.vertex_color_use_as_albedo = true
 					projector_finish.emission_enabled = true
-					projector_finish.emission = Color("#fff0d9")
+					projector_finish.emission = headlight_color
 					projector_finish.emission_energy_multiplier = 3.0*maxf(last_night,0)
 				emitter.set_surface_override_material(0,projector_finish)
 	if vehicle_index == FARM_TRACTOR and projector_finish:
@@ -10163,7 +10164,7 @@ func _load_vehicle_model() -> void:
 		beam.rotation.x = deg_to_rad(-7.0)
 		beam.spot_range = 19 if vehicle_index == SHOPPER else 28
 		beam.spot_angle = 20 if vehicle_index == SHOPPER else 26
-		beam.light_color = Color("#fff0d9")
+		beam.light_color = headlight_color
 		beam.light_energy = 4.5*maxf(last_night,0.0)
 		beam.visible = last_night>.05
 		ambulance.add_child(beam)

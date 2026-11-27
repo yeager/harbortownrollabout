@@ -487,6 +487,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Vindrutetorkarna sveper vid nederbörd och återgår till viloläget. Svepet granskades i Godot och körprovet för 30 vägfordon kontrollerar båda torkarna samt de modellerade blinkersglasen.
   - Två modellerade skyltlyktor och den bakre registreringsskylten lyser i nattläge. Granskat i Godot. Körprovet för 30 vägfordon passerade.
   - Stålfälgarna fick vinklade däckventiler med separata ventilhattar. Körprovet verifierar att fyra hjul rullar med fälgar, navkapslar och ventiler och att bilen har två styrleder fram. Ventilerna granskades i närbild i Godot.
+  - Strålkastarna fick varmare ljus. Körprovet verifierar att båda ljuskäglorna, strålkastarglasen och de två bakre skyltlyktorna slår om vid dag- och nattväxling. Fronten granskades i nattläge i Godot.
 - [ ] [`compact_convertible.glb`](../vehicles/compact_convertible.glb)
   - Mino Kuper S fick ett eget kopparfärgat M-monogram på motorhuven och bakluckan samt nytt namn i fordonsgalleriet. Emblemen granskades i Godot. Fordonsprovet och språkkontrollen passerade.
 - [ ] [`electric_sedan.glb`](../vehicles/electric_sedan.glb)

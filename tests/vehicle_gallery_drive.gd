@@ -217,7 +217,7 @@ func check_gallery() -> void:
 					printerr("Headlight beam offset from lens")
 					quit(1)
 					return
-		if index in [game.SHOPPER, game.MULTUM]:
+		if index in [game.SHOPPER, game.MULTUM, game.VOVLO_434]:
 			for night in [true,false]:
 				game.time_mode = 1 if night else 0
 				game._update_daylight(0)
@@ -225,6 +225,12 @@ func check_gallery() -> void:
 					printerr("Beams and lenses did not follow the day/night setting on ", tile.text)
 					quit(1)
 					return
+				if index == game.VOVLO_434:
+					var diffusers: Array[Node] = game.vehicle_model.find_children("Rear plate lamp diffuser*", "MeshInstance3D", true, false)
+					if diffusers.size() != 2 or not diffusers.all(func(lens: MeshInstance3D): return (lens.material_override.emission_energy_multiplier > 0) == night):
+						printerr("Both Vovlo 434 registration lamps must follow the day/night setting")
+						quit(1)
+						return
 		if index == game.SHOPPER:
 			if tile.text != "Norrsjö Shoppa" or not game.vehicle_model.find_child("Norrsjö Shoppa rear badge", true, false):
 				printerr("The shopping trike needs its fictional name in the gallery and on the body")
