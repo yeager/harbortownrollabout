@@ -1483,7 +1483,7 @@ def make_fire_engine():
                 sections.append([(side*u,depth+dy,z+height*dz) for dy,dz in
                                  ((0,-.45),(-.004,.29),(.004,.5),(.027,.45),(.027,-.5))])
             profile_loft(name, sections, finish, root)
-    badge = text_obj("Raised Skania grille lettering","SKANIA",(0,-3.082,1.585),.19,METAL,root=root)
+    badge = text_obj("Raised Skania grille lettering","SKANIA",(0,-3.082,1.585),.19,METAL,root=root,compact=True)
     badge.location.x = -(min(v.co.x for v in badge.data.vertices) + max(v.co.x for v in badge.data.vertices)) * .5
     badge.rotation_euler = (math.pi/2,0,0)
     for x in [-.56,.56]:
@@ -1647,7 +1647,7 @@ def make_fire_engine():
         for label, value, x, z, size, ink in (
                 ("Fleet registration","SJT 711",center_x-facing*.161,center_z-.030,.078,BLACK),
                 ("Country code","S",strip_x-facing*.008,center_z-.035,.023,PAINT_WHITE)):
-            letters = text_obj(label,value,(x,face_y-facing*.006,z),size,ink,root=root)
+            letters = text_obj(label,value,(x,face_y-facing*.006,z),size,ink,root=root,compact=True)
             letters.rotation_euler = (math.pi/2,0,heading)
         for star in range(12):
             angle = star*math.tau/12
