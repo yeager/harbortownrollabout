@@ -312,6 +312,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Grillmärket och båda registreringsskyltarnas tecken förenklades från sammanlagt 18 720 till 4 620 trianglar. Båda skyltarna och det upphöjda grillmärket är fortsatt läsbara i Godot. Förarprovet passerade.
   - Bakstegens galler och jalusiernas reflexrutor fick enklare fasningar. Tillsammans använder delarna 5 240 trianglar, jämfört med 19 928 tidigare. Gallrets öppningar och reflexmönstret granskades i Godot. Luckprovet passerade.
   - Blåljusrampens optikfästen, reflektorer och lysdioder fick enklare fasningar, från 26 320 till 6 160 trianglar. Båda ljusgrupperna blinkade växelvis i Godot och granskades i närbild. Utryckningsprovet passerade.
+  - De 40 hjulbultarna grupperades till ett nät per hjul och fasningen förenklades från 6 560 till 2 720 trianglar totalt. Alla fyra bultgrupperna följde hjulens rotation i Godot. Bakfälgen granskades i närbild och förarprovet passerade.
 - [ ] [`city_bus.glb`](../vehicles/city_bus.glb)
 - [ ] [`dam_pickup.glb`](../vehicles/dam_pickup.glb)
 - [ ] [`electric_kick_scooter.glb`](../vehicles/electric_kick_scooter.glb)

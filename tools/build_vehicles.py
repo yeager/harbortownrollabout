@@ -101,7 +101,7 @@ def cube(name, loc, dims, mat, bevel=0.06, root=None, *, bevel_segments=3):
         attach(obj, root)
     return obj
 
-def cylinder(name, loc, radius, depth, mat, axis_x=True, vertices=32, root=None):
+def cylinder(name, loc, radius, depth, mat, axis_x=True, vertices=32, root=None, *, bevel_segments=2):
     bpy.ops.mesh.primitive_cylinder_add(vertices=vertices, radius=radius, depth=depth, location=loc)
     obj = bpy.context.object
     obj.name = name
@@ -113,7 +113,7 @@ def cylinder(name, loc, radius, depth, mat, axis_x=True, vertices=32, root=None)
         poly.use_smooth = True
     bevel = obj.modifiers.new("Machined edge", "BEVEL")
     bevel.width = min(depth * 0.12, radius * 0.08)
-    bevel.segments = 2
+    bevel.segments = bevel_segments
     obj.modifiers.new("Weighted highlights", "WEIGHTED_NORMAL")
     bpy.context.view_layer.objects.active = obj
     bpy.ops.object.modifier_apply(modifier=bevel.name)
@@ -283,10 +283,17 @@ def pumper_running_gear(root,chassis):
                     (1.337,.092),(1.345,.066),(1.346,.025)]),wheel_finish,root)
             else:
                 cylinder("Center cap",(side*(1.296-recess),y,.51),.105,.082,DARK,root=root)
+            bolts = []
             for i in range(10):
                 angle=math.tau*i/10
-                cylinder("Wheel bolt",(side*(1.292-recess),y+.139*math.cos(angle),.51+.139*math.sin(angle)),
-                         .018,.034,stud_finish,vertices=6,root=root)
+                bolts.append(cylinder("Wheel bolt",(side*(1.292-recess),y+.139*math.cos(angle),.51+.139*math.sin(angle)),
+                                      .018,.034,stud_finish,vertices=6,root=root,bevel_segments=1))
+            bpy.ops.object.select_all(action="DESELECT")
+            for bolt in bolts:
+                bolt.select_set(True)
+            bpy.context.view_layer.objects.active = bolts[0]
+            bpy.ops.object.join()
+            bolts[0].name = "Wheel bolt set"
             arch=[]
             for i in range(41):
                 angle=.075+(math.pi-.15)*i/40
