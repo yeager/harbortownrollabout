@@ -115,10 +115,16 @@ for side in (-1,1):
     headlight("Lower headlight",side*.655,-2.043,.672,.079)
     lamp("Front amber indicator",side*.816,-1.987,.671,.052,amber)
     lamp("Bumper fog lamp",side*.658,-2.102,.374,.043,v.HEADLAMP)
-    box("Rear lamp housing",(side*.754,1.938,.865),(.179,.115,.297),v.DARK,.036)
-    lamp("Tail lamp",side*.748,2.000,.937,.065,v.TAIL_LAMP)
-    lamp("Rear indicator lens",side*.776,2.006,.835,.052,amber)
-    lamp("Reversing lens",side*.733,2.004,.762,.030,reverse)
+    cluster = [(.706,.716),(.786,.727),(.840,.768),(.842,.828),
+               (.802,.894),(.784,.983),(.743,1.006),(.699,.975),
+               (.680,.910),(.675,.782)]
+    v.profile_loft("Rounded rear lamp housing", [
+        [(side*(.752+(x-.752)*scale),y,.86+(z-.86)*scale) for x,z in cluster]
+        for y,scale in [(1.912,.91),(1.975,1.06),(1.998,1.0)]
+    ],v.RUBBER,root)
+    lamp("Tail lamp",side*.735,2.001,.937,.052,v.TAIL_LAMP)
+    lamp("Rear indicator lens",side*.777,2.011,.835,.054,amber)
+    lamp("Reversing lens",side*.733,2.009,.761,.032,reverse)
     for y in (-1.28,1.30):
         tire(side,y)
         v.cylinder("Wheel hub barrel",(side*.884,y,.318),.209,.045,v.DARK,True,40,root)

@@ -421,6 +421,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - De fyra strålkastarna fick välvda linser med metallringar och separata gummitätningar. Granskade i Godot. Körprovet för 29 vägfordon passerade.
   - Fälgarna fick fyra modellerade hjulbultar och en vinklad däckventil med metallhatt per hjul. Granskade i Godot. Fordonsprovet passerade.
   - Multums däck fick rundade skuldror och tre längsgående spår i slitbanan. Granskade i Godot. Körprovet för 29 vägfordon passerade.
+  - Baklyktorna fick rundade lykthus med separata röda, orange och vita glas. Granskade i Godot. Körprovet bekräftade att de modellerade blinkersglasen och backljusen fungerar.
 - [ ] [`compact_convertible.glb`](../vehicles/compact_convertible.glb)
   - Mino Kuper S fick ett eget kopparfärgat M-monogram på motorhuven och bakluckan samt nytt namn i fordonsgalleriet. Emblemen granskades i Godot. Fordonsprovet och språkkontrollen passerade.
 - [ ] [`electric_sedan.glb`](../vehicles/electric_sedan.glb)
