@@ -9960,22 +9960,26 @@ func _load_vehicle_model() -> void:
 			arm.reparent(pivot)
 			blades[i].reparent(pivot)
 			wiper_pivots.append(pivot)
-	if vehicle_index == MULTUM:
-		var spindles := vehicle_model.find_children("Windscreen wiper spindle*", "MeshInstance3D", true, false)
-		var arms := vehicle_model.find_children("Windscreen wiper arm*", "MeshInstance3D", true, false)
-		var rails := vehicle_model.find_children("Windscreen wiper blade rail*", "MeshInstance3D", true, false)
-		var edges := vehicle_model.find_children("Windscreen wiper rubber edge*", "MeshInstance3D", true, false)
+	if vehicle_index in [MULTUM, VOVLO_434]:
+		var vovlo := vehicle_index == VOVLO_434
+		var spindles := vehicle_model.find_children("Wiper pivot*" if vovlo else "Windscreen wiper spindle*", "MeshInstance3D", true, false)
+		var arms := vehicle_model.find_children("Parked wiper arm*" if vovlo else "Windscreen wiper arm*", "MeshInstance3D", true, false)
+		var rails := vehicle_model.find_children("Wiper blade frame*" if vovlo else "Windscreen wiper blade rail*", "MeshInstance3D", true, false)
+		var edges := vehicle_model.find_children("Parked wiper blade*" if vovlo else "Windscreen wiper rubber edge*", "MeshInstance3D", true, false)
 		if spindles.size() == 2 and arms.size() == 2 and rails.size() == 2 and edges.size() == 2:
 			for i in spindles.size():
 				var spindle := spindles[i] as MeshInstance3D
 				var pivot := Node3D.new()
 				spindle.get_parent().add_child(pivot)
 				pivot.global_position = spindle.to_global(spindle.get_aabb().get_center())
-				pivot.set_meta("sweep_axis", Vector3(0, .67, .74).normalized())
+				pivot.set_meta("sweep_axis", Vector3(0, .539, .460).normalized() if vovlo else Vector3(0, .67, .74).normalized())
+				if vovlo:
+					pivot.set_meta("sweep_scale", .70)
 				arms[i].reparent(pivot)
 				rails[i].reparent(pivot)
 				edges[i].reparent(pivot)
 				wiper_pivots.append(pivot)
+	if vehicle_index == MULTUM:
 		var rear_spindle := vehicle_model.find_child("Rear wiper spindle", true, false) as MeshInstance3D
 		if rear_spindle:
 			var rear_pivot := Node3D.new()

@@ -110,10 +110,16 @@ func check_gallery() -> void:
 			printerr("Menu driving failed for ",tile.text," distance=",travel," turn=",turn)
 			quit(1)
 			return
-		if index in [3, game.MULTUM] and not check_wipers(game, "Windscreen wiper spindle cap*" if index == 3 else "Windscreen wiper spindle*"):
-			printerr("Wipers must swing around their modeled spindles and park after rain on ", tile.text)
-			quit(1)
-			return
+		if index in [3, game.MULTUM, game.VOVLO_434]:
+			var spindle_pattern: String = {
+				3: "Windscreen wiper spindle cap*",
+				game.MULTUM: "Windscreen wiper spindle*",
+				game.VOVLO_434: "Wiper pivot*",
+			}[index]
+			if not check_wipers(game, spindle_pattern):
+				printerr("Wipers must swing around their modeled spindles and park after rain on ", tile.text)
+				quit(1)
+				return
 		game._update_traffic(0.0)
 		var signals = game.driven_turn_signals
 		if signals.left.size() < 2 or signals.right.size() < 2 or signals.direction != 1:

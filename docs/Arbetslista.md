@@ -484,6 +484,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Gummilisterna runt vindrutan, bakrutan och sidorutorna löper nu in mot de lackerade ramarna. Granskat framifrån och bakifrån i Godot. Körprovet för 30 vägfordon passerade.
   - Alla fyra hjulöppningar fick en lackerad, rundad skärmkant som följer plåten. Granskad i närbild i Godot. Körprovet för 30 vägfordon passerade.
   - Bakre hjulhus fick formade stänkskydd i gummi med separata fästen. Granskade i Godot. Körprovet för 30 vägfordon passerade.
+  - Vindrutetorkarna sveper vid nederbörd och återgår till viloläget. Svepet granskades i Godot och körprovet för 30 vägfordon kontrollerar båda torkarna samt de modellerade blinkersglasen.
 - [ ] [`compact_convertible.glb`](../vehicles/compact_convertible.glb)
   - Mino Kuper S fick ett eget kopparfärgat M-monogram på motorhuven och bakluckan samt nytt namn i fordonsgalleriet. Emblemen granskades i Godot. Fordonsprovet och språkkontrollen passerade.
 - [ ] [`electric_sedan.glb`](../vehicles/electric_sedan.glb)
