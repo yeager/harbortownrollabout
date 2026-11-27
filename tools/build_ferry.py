@@ -86,6 +86,14 @@ for end in [-1,1]:
             (1.045,upper_y,3.415),(-1.045,upper_y,3.415)]
     for start,end_point in zip(seal,seal[1:]+seal[:1]):
         tube("Wheelhouse window seal",start,end_point,.014,rubber)
+    # Park one wiper across each pane, just above the lower seal.
+    for pane_x in (-.684,0,.684):
+        pivot = (pane_x-.14,end*1.103-.46,2.797)
+        blade_start = Vector((pane_x-.14,end*1.127-.46,2.883))
+        blade_end = Vector((pane_x+.20,end*1.152-.46,3.029))
+        pole("Pilot wiper spindle",pivot,.018,.027,steel)
+        tube("Pilot wiper arm",pivot,(blade_start+blade_end)/2,.010,steel)
+        tube("Pilot wiper blade",blade_start,blade_end,.014,rubber)
     for x in [-1.09,-.36,.36,1.09]:
         tube("Raked pilot frame",(x*.88,end*1.22*.89-.46,2.76),
              (x,end*1.22-.46,3.44),.03,white)

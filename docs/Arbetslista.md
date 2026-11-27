@@ -407,6 +407,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Båda sprötantennerna fick takpackningar, låsmuttrar, isolatorer och metallhylsor. Granskade i Godot. Färjeprovet passerade med minst 0,75 meters frigång under norra bron.
   - Takdäckets räckesstolpar fick bultade fotplattor och metallkragar. Granskade i Godot. Färjeprovet passerade i båda riktningarna.
   - Styrhyttens rutor i båda färdriktningarna fick mörka gummilister som följer rutornas lutning. Granskade i Godot. Färjeprovet passerade.
+  - Styrhytten fick tre modellerade vindrutetorkare i viloläge per färdriktning. Granskade i Godot. Färjeprovet passerade.
 - [ ] [`sport_sedan.glb`](../vehicles/sport_sedan.glb)
   - BWM M3 E33 fick ett upphöjt modellemblem på bakluckan. Granskat i Godot och fordonsprovet passerade.
 - [ ] [`compact_convertible.glb`](../vehicles/compact_convertible.glb)
