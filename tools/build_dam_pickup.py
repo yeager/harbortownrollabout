@@ -36,11 +36,30 @@ def build_pickup():
         (.95, 1.02, .63, 1.30, 1.35), (1.37, 1.02, .73, 1.27, 1.28),
     ], paint, root)
     panel("Frame rails", (0, .02, .63), (1.50, 5.45, .21), trim)
-    mesh_from_rings("Cab glazing", [
+    glazing = mesh_from_rings("Cab glazing", [
         (-1.44, .97, 1.30, 1.44, 1.44), (-1.00, .91, 1.34, 1.98, 2.00),
         (-.77, .92, 1.34, 2.03, 2.05), (.83, .92, 1.34, 2.03, 2.05),
         (1.08, .95, 1.34, 1.91, 1.96), (1.23, .96, 1.34, 1.39, 1.42),
     ], glass, root, bevel=.018)
+    # Follow the glass surface from the waist to the roof at each outer pillar.
+    for side in [-1, 1]:
+        for label, stations in [
+            ("Front", [(-1.391, 1.475), (-1.306, 1.57), (-1.195, 1.71),
+                       (-1.097, 1.84), (-.990, 1.963)]),
+            ("Rear", [(1.194, 1.475), (1.164, 1.60), (1.127, 1.73),
+                      (1.080, 1.85), (1.008, 1.943)]),
+        ]:
+            pillar = []
+            for y, z in stations:
+                section = []
+                for dy, relief in [(-.024, -.006), (-.022, .006), (.022, .006), (.024, -.006)]:
+                    hit, surface, _, _ = glazing.ray_cast((side*1.4, y+dy, z), (-side, 0, 0))
+                    if not hit:
+                        raise ValueError(f"{label} cab pillar outside glazing")
+                    section.append((surface.x+side*relief, y+dy, z))
+                pillar.append(section)
+            profile_loft(f"{label} cab window pillar seal", pillar, trim, root)
+
     def roof_section(y, width, underside, shoulder, crown):
         # The shallow roof skin has its own cross section. The deeper body
         # profile would fold its lower vertices through the outer surface.
