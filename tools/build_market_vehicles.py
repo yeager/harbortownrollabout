@@ -412,7 +412,19 @@ box("Hatch exterior skin",(1.676,1.19,2.807),(1.12,3.90,.008),charcoal,.003).rot
 for end_y in [-.77,3.15]:
     box("Hatch end trim",(1.67,end_y,2.77),(1.16,.035,.082),v.METAL,.009).rotation_euler.y=.13
 box("Hatch drip edge",(2.239,1.19,2.696),(.038,3.95,.087),v.METAL,.009)
-rod("Hatch hinge",(1.105,-.74,2.84),(1.105,3.12,2.84),.038,v.METAL)
+rod("Hatch hinge pin",(1.178,-.74,2.813),(1.178,3.12,2.813),.015,v.METAL)
+for index in range(20):
+    y = -.707+index*.192
+    rod("Hatch hinge knuckle",(1.178,y,2.813),(1.178,y+.172,2.813),
+        .035,v.METAL,16)
+    if index % 2 == 0:
+        box("Fixed hatch hinge leaf",(1.144,y+.085,2.847),(.026,.147,.064),charcoal,.006)
+    else:
+        leaf = box("Raised hatch hinge leaf",(1.215,y+.085,2.827),(.110,.147,.016),v.METAL,.005)
+        leaf.rotation_euler.y = .13
+for y in (-.752,3.129):
+    rod("Hatch hinge pin collar",(1.178,y-.012,2.813),(1.178,y+.012,2.813),
+        .022,v.DARK,16)
 for y in [-.64,3.02]:
     box("Strut bracket",(1.103,y,2.07),(.055,.085,.10),v.METAL,.009)
     rod("Gas spring barrel",(1.12,y,2.07),(1.64,y,2.43),.032,v.BLACK)
