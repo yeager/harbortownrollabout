@@ -141,7 +141,24 @@ def build_pickup():
               (.019, 2.15, .026), alloy, .007)
         panel("Cab window divider", (side*.894, -.03, 1.65), (.086, .082, .62), trim)
         for y in [-.56, .67]:
-            panel("Door pull", (side*1.015, y, 1.213), (.046, .19, .055), trim)
+            z = 1.213
+            hit, surface, _, _ = body_surface.ray_cast((side*1.4, y, z), (-side, 0, 0))
+            if not hit:
+                raise ValueError("Door handle outside pickup body")
+            x = surface.x
+            panel("Door pull bezel", (x+side*.004, y, z), (.022, .231, .082), trim, .011)
+            panel("Door pull finger pocket", (x+side*.013, y, z-.006),
+                  (.011, .175, .042), liner, .005)
+            for end in [-1, 1]:
+                panel("Door pull end mount", (x+side*.022, y+end*.079, z+.009),
+                      (.029, .036, .034), trim, .009)
+            panel("Door pull bridge", (x+side*.039, y, z+.011),
+                  (.028, .179, .025), alloy, .008)
+            if y < 0:
+                cylinder("Front door lock cylinder", (x+side*.017, y+.095, z-.018),
+                         .008, .006, chrome, vertices=16, root=root)
+                panel("Front door key slot", (x+side*.021, y+.095, z-.018),
+                      (.002, .008, .002), liner, .0008)
         # The outer shut line follows the sills and rises around both doors.
         for label, path in [
             ("Door perimeter", [(-1.32, 1.302), (-1.30, 1.17), (-1.226, .877),
