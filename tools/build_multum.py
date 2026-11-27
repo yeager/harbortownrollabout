@@ -376,15 +376,6 @@ for name, finish, profile in [
         for depth, radius in profile
     ], finish, root)
 
-front_bumper = box("Front bumper", (0, -1.983, .418), (1.68, .225, .315), v.DARK, .071)
-grille_cutter = v.cube("Lower grille opening tool", (0, -2.094, .386),
-                      (.946, .122, .180), None, .034, bevel_segments=5)
-bpy.context.view_layer.objects.active = front_bumper
-grille_cut = front_bumper.modifiers.new("Lower grille opening", "BOOLEAN")
-grille_cut.operation = "DIFFERENCE"
-grille_cut.object = grille_cutter
-bpy.ops.object.modifier_apply(modifier=grille_cut.name)
-bpy.data.objects.remove(grille_cutter, do_unlink=True)
 def bumper_section(y, width, bottom, shoulder, crown):
     half_section = [
         (width * .89, bottom), (width * .97, bottom + .025),
@@ -396,6 +387,23 @@ def bumper_section(y, width, bottom, shoulder, crown):
     ]
 
 
+front_bumper = v.mesh_from_rings("Wraparound front bumper", [
+    (-2.100, .770, .290, .493, .542),
+    (-2.087, .807, .274, .504, .559),
+    (-2.056, .839, .266, .510, .567),
+    (-1.987, .882, .260, .517, .570),
+    (-1.896, .916, .258, .531, .579),
+    (-1.781, .932, .255, .542, .583),
+    (-1.694, .925, .269, .523, .568),
+], v.DARK, root, bevel=.010, section=bumper_section)
+grille_cutter = v.cube("Lower grille opening tool", (0, -2.094, .386),
+                      (.946, .122, .180), None, .034, bevel_segments=5)
+bpy.context.view_layer.objects.active = front_bumper
+grille_cut = front_bumper.modifiers.new("Lower grille opening", "BOOLEAN")
+grille_cut.operation = "DIFFERENCE"
+grille_cut.object = grille_cutter
+bpy.ops.object.modifier_apply(modifier=grille_cut.name)
+bpy.data.objects.remove(grille_cutter, do_unlink=True)
 v.mesh_from_rings("Wraparound rear bumper", [
     (1.665, .894, .315, .458, .475),
     (1.729, .907, .294, .501, .533),
