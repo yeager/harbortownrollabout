@@ -15,7 +15,8 @@ root = bpy.data.objects["Kajens burgare"]
 shutter_finish = bpy.data.materials["Charcoal enamel"]
 for part in list(root.children):
     if part.name.startswith(("Raised red hatch","Hatch exterior skin","Hatch end trim","Hatch drip edge","Gas spring",
-                             "Chrome piston","Upper strut bracket","Strut bracket","Service sill",
+                             "Chrome piston","Upper strut mounting plate","Lower strut mounting plate","Strut ",
+                             "Hatch hinge","Fixed hatch hinge","Raised hatch hinge","Service sill",
                              "Drink can","Rolled can lid","Can pull tab","Can label stripe",
                              "Counter award","Hatch spotlight","Takeaway carton","Squeeze bottle","Tapered sauce spout")):
         bpy.data.objects.remove(part,do_unlink=True)
@@ -47,8 +48,13 @@ for z in (1.69,2.37):
     for y in (.00,2.38):
         box("Printed pinstripe",(1.231,y,z),(.002,1.04,.012),v.PAINT_WHITE,0)
 for y in [-.64,3.02]:
-    box("Recessed shutter catch",(1.233,y,1.30),(.016,.115,.055),v.DARK,.008)
-    box("Catch lever",(1.245,y,1.30),(.015,.074,.017),v.METAL,.004)
+    box("Shutter latch backing plate",(1.233,y,1.30),(.016,.172,.086),v.METAL,.009)
+    box("Recessed shutter catch",(1.242,y-.015,1.30),(.010,.093,.048),v.DARK,.008)
+    box("Catch lever",(1.252,y-.015,1.30),(.015,.066,.017),v.METAL,.004)
+    lock = v.cylinder("Shutter lock cylinder",(1.25,y+.053,1.30),.016,.014,
+                      v.METAL,False,16,root)
+    lock.rotation_euler.y = 1.5707963
+    box("Shutter lock keyway",(1.258,y+.053,1.30),(.002,.005,.016),v.DARK,.001)
 for y in (-.43,.38,1.19,2.0,2.81):
     box("Shutter hinge leaf",(1.234,y,2.771),(.012,.14,.043),v.METAL,.004)
     barrel = v.cylinder("Shutter hinge barrel",(1.25,y,2.803),.018,.15,v.METAL,False,16,root)
