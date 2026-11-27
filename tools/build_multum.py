@@ -485,10 +485,20 @@ for y, sign in [(-2.116, -1), (2.049, 1)]:
 badge = v.text_obj("Multum hatch badge","MULTUM",(.208,2.008,.842),.086,
                    v.METAL,root=root,flat=True)
 badge.rotation_euler = (math.pi/2,0,math.pi)
-box("Fait enamel badge",(0,-1.414,1.049),(.109,.025,.074),v.DARK,.011)
-logo = v.text_obj("Fait badge lettering","FAIT",(-.041,-1.433,1.032),.034,
-                  cream,root=root,flat=True)
-logo.rotation_euler = (math.pi/2,0,0)
+badge_outline = [(-1, -.60), (-.77, -1), (.77, -1), (1, -.60),
+                 (1, .60), (.77, 1), (-.77, 1), (-1, .60)]
+v.profile_loft("Fait badge bezel", [
+    [(x * width, y, 1.044 + z * height) for x, z in badge_outline]
+    for y, width, height in [(-1.407, .063, .043), (-1.429, .063, .043), (-1.435, .057, .037)]
+], v.METAL, root)
+badge_enamel = v.material("Fait midnight blue enamel", (.022, .047, .085), .17, .29)
+v.profile_loft("Fait enamel badge", [
+    [(x * .052, y, 1.044 + z * .032) for x, z in badge_outline]
+    for y in (-1.433, -1.439)
+], badge_enamel, root)
+logo = v.text_obj("Fait badge lettering", "FAIT", (-.040, -1.442, 1.030), .034,
+                  cream, root=root, compact=True)
+logo.rotation_euler = (math.pi / 2, 0, 0)
 rod("Roof antenna",(0,.14,1.805),(0,.31,2.078),.009,v.DARK)
 for x, length in [(-.625, .535), (.055, .540)]:
     spindle = v.cylinder("Windscreen wiper spindle", (x, -1.270, 1.156),

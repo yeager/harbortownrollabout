@@ -462,6 +462,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Multums främre stötfångare följer nu framskärmarna. Formen, gallret och de infällda dimljusen granskades i Godot. Körprovet för 29 vägfordon passerade.
   - Multums bakluckefog löper nu över karossvecket under bakrutan och runt de nedre hörnen. Granskat bakifrån i Godot. Körprovet för 29 vägfordon passerade.
   - Multums hjulhus fick mörka innerytor. Granskat i närbild i Godot och körprovet passerade.
+  - Emblemet under vindrutan fick en formad metallram, blå emalj och upphöjda FAIT-bokstäver. Granskat i närbild i Godot. Körprovet för 30 vägfordon passerade.
 - [ ] [`vovlo_434.glb`](../vehicles/vovlo_434.glb)
   - Vovlo 434 finns som körbar tredörrars halvkombi i fordonsgalleriet. Exteriören granskades framifrån och bakifrån i Godot. Körprovet för 30 vägfordon och kontrollen av språkkatalogerna passerade.
   - Vovlo 434 fick räfflade strålkastar- och blinkersglas fram samt separata reflektorringar. Granskat i närbild i Godot. Körprovet för 30 vägfordon passerade.
