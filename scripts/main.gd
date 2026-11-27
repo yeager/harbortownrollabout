@@ -655,6 +655,7 @@ var ferry_display_locale := ""
 var ferry_passenger := false
 var ferry_exit_requested := false
 var ferry: Node3D
+var ferry_radar: Node3D
 var ferry_hull_bounds: AABB
 var ferry_engine := AudioStreamPlayer3D.new()
 var wave_time := 0.0
@@ -3848,6 +3849,7 @@ func _build_marina(rail_metal: Material) -> void:
 	_pier_section("Motorboat landing",Vector3(LAUNCH_PIER.size.x,.2,LAUNCH_PIER.size.y),Vector3(landing_center.x,-.10,landing_center.y),Color("#ab9071"),landing_finish)
 	ferry = (load("res://vehicles/lotten.glb") as PackedScene).instantiate()
 	add_child(ferry)
+	ferry_radar = ferry.find_child("Radar swivel", true, false)
 	ferry_hull_bounds = _model_bounds(ferry, ferry)
 	var engine_loop := preload("res://audio/loader_diesel.wav").duplicate() as AudioStreamWAV
 	engine_loop.loop_end = roundi(engine_loop.get_length() * engine_loop.mix_rate)
@@ -4547,6 +4549,7 @@ func _update_moorings(delta: float) -> void:
 	ferry.position = Vector3(68,-.97+.024*sin(wave_time*1.1),_ferry_position_z(trip_time))
 	water_finish.set_shader_parameter("ferry_center",ferry.position)
 	ferry.rotation.z = (288.0 / Mass.FERRY_KG)*sin(wave_time*.88)
+	ferry_radar.rotation.y = fposmod(wave_time, 2.5) * TAU / 2.5
 	if ferry_passenger:
 		walker.position = ferry.to_global(Vector3(-.55,.66,5.1))
 		if ferry_exit_requested and _ferry_stop() >= 0:

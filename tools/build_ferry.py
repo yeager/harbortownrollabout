@@ -138,10 +138,16 @@ for x,y in [(-.8,-1.25),(.72,.16)]:
     tube("Whip antenna",(x,y,3.55),(x,y,4.62),.012,steel)
 pole("Radar mounting collar",(0,-.8,4.345),.069,.076,steel)
 box("Radar drive housing",(0,-.8,4.391),(.218,.160,.087),white,.020)
-box("Radar scanner",(0,-.8,4.445),(.8,.121,.070),white,.017)
+radar_pivot = bpy.data.objects.new("Radar swivel", None)
+bpy.context.collection.objects.link(radar_pivot)
+radar_pivot.parent = root
+radar_pivot.location = (0,-.8,4.445)
+scanner_parts = [box("Radar scanner",(0,0,0),(.8,.121,.070),white,.017)]
 for x in (-.372,.372):
-    box("Radar scanner end cap",(x,-.8,4.445),(.054,.125,.073),steel,.012)
-box("Radar antenna face",(0,-.862,4.445),(.673,.013,.042),glass,.005)
+    scanner_parts.append(box("Radar scanner end cap",(x,0,0),(.054,.125,.073),steel,.012))
+scanner_parts.append(box("Radar antenna face",(0,-.062,0),(.673,.013,.042),glass,.005))
+for part in scanner_parts:
+    part.parent = radar_pivot
 gold = material("Signal yellow", (.99,.66,.035))
 red = material("Lifebuoy vermilion", (.82,.045,.022), .04,.46)
 oxide = material("Waterline oxide red", (.39,.065,.043), .13,.50)

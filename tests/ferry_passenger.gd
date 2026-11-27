@@ -23,12 +23,24 @@ func check_crossings() -> void:
 		bridge_parts.append(pier.get_child(0))
 	var ferry: Node3D = game.ferry
 	var ferry_bounds: AABB = game._model_bounds(ferry, ferry)
+	var radar: Node3D = game.ferry_radar
+	if not radar or radar.get_child_count() != 4:
+		printerr("Lotten radar needs a swivel for its scanner, end caps and antenna face")
+		quit(1)
+		return
+	var radar_bounds: AABB = game._model_bounds(radar, radar)
 	for frame in 58:
 		game.wave_time = float(frame)
 		game._update_moorings(0.0)
 		var hull := ferry.global_transform * ferry_bounds
+		if not is_equal_approx(radar.rotation.y, fposmod(float(frame), 2.5) * TAU / 2.5):
+			printerr("Lotten radar did not rotate with game time")
+			quit(1)
+			return
+		var scanner := radar.global_transform * radar_bounds
 		for part: MeshInstance3D in bridge_parts:
-			if hull.intersects(part.global_transform * part.get_aabb()):
+			var obstacle := part.global_transform * part.get_aabb()
+			if hull.intersects(obstacle) or scanner.intersects(obstacle):
 				printerr("Lotten overlaps the northern bridge at ", ferry.position, " on ", part.name)
 				quit(1)
 				return
