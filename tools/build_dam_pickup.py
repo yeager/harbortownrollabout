@@ -308,8 +308,22 @@ def build_pickup():
         panel("Grille slat", (0, -3.03, 1.029+row*.051), (1.23, .019, .012), alloy, .003)
     for side in [-1, 1]:
         panel("Headlight housing", (side*.849, -2.935, 1.241), (.335, .16, .221), trim)
-        panel("LED light signature", (side*.839, -3.023, 1.273), (.261, .038, .049), white)
-        panel("Projector lens", (side*.841, -3.022, 1.205), (.185, .027, .053), white)
+        panel("LED signature channel", (side*.839, -3.019, 1.291),
+              (.267, .024, .032), liner, .007)
+        panel("LED light signature", (side*.839, -3.032, 1.291),
+              (.242, .015, .016), white, .006)
+        panel("Projector pocket", (side*.839, -3.019, 1.211),
+              (.224, .026, .099), liner, .009)
+        for label, offset, radius, depth, finish in [
+            ("Projector rubber seal", -.035, .043, .018, rubber),
+            ("Projector satin reflector", -.045, .036, .012, chrome),
+            ("Projector lens", -.052, .028, .010, white),
+        ]:
+            optic = cylinder(label, (side*.825, -2.995+offset, 1.211),
+                             radius, depth, finish, False, 32, root)
+            optic.rotation_euler.x = math.pi/2
+        panel("Headlamp inner diffuser", (side*.902, -3.036, 1.211),
+              (.039, .020, .055), white, .009)
         panel("Front amber marker", (side*.972, -3.012, 1.227), (.025, .029, .115), amber)
         panel("Fog light", (side*.811, -3.041, .777), (.131, .022, .047), white)
     panel("Raised hood scoop", (0, -1.957, 1.468), (.69, .65, .111), paint, .053)

@@ -342,6 +342,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Fälgarna fick rundade fälgbanor, försänkta bromsskivor bakom ekrarna och sex hjulmuttrar per nav. En framfälg granskades i Godot och fordonsprovet passerade.
   - Fyra däckventiler med hatt och fyra bromsok modellerades. Närbilden av en framfälg granskades i Godot. Ett separat prov verifierade att ventilerna roterar och att bromsoken sitter kvar på hjulspindlarna. Fordonsprovet passerade.
   - Backspeglarna fick avsmalnande hus, plana spegelglas, separata gummitätningar och modellerade fällbara infästningar. Båda speglarna granskades i Godot och fordonsprovet passerade.
+  - Strålkastarhusen fick runda projektorlinser med reflektorer och tätningar, separata diffusorer och smalare LED-lister. Båda husen granskades i Godot och fordonsprovet passerade.
 - [ ] [`electric_kick_scooter.glb`](../vehicles/electric_kick_scooter.glb)
 - [ ] [`farm_tractor.glb`](../vehicles/farm_tractor.glb)
   - Vinterspridaren fick en modellerad trepunktsinfästning med två nedre stag, toppstag och ledtappar. Infästningen granskades i Godot och halkbekämpningsprovet passerade.
