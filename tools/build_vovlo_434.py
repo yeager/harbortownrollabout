@@ -4,6 +4,7 @@ import sys
 from pathlib import Path
 
 import bpy
+from mathutils import Vector
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import build_vehicles as v
 
@@ -72,6 +73,23 @@ edge = shell.modifiers.new("Soft panel edges", "BEVEL")
 edge.width = .015
 edge.segments = 3
 shell.modifiers.new("Panel normals", "WEIGHTED_NORMAL")
+
+# Sample the finished body so the shut line follows the crown without gaps.
+hood_outline = [
+    (-.53, -1.985), (.53, -1.985), (.58, -1.95),
+    (.628, -.898), (-.628, -.898), (-.58, -1.95),
+]
+body_surface = shell.evaluated_get(bpy.context.evaluated_depsgraph_get())
+hood_seam = []
+for start, end in zip(hood_outline, hood_outline[1:] + hood_outline[:1]):
+    steps = max(1, math.ceil(math.dist(start, end) / .035))
+    for index in range(steps):
+        x, y = Vector(start).lerp(Vector(end), index / steps)
+        hit, point, _, _ = body_surface.ray_cast(Vector((x, y, 1.2)), Vector((0, 0, -1)))
+        if not hit:
+            raise RuntimeError(f"Bonnet outline misses the body at {x:.3f}, {y:.3f}")
+        hood_seam.append((x, y, point.z + .0008))
+v.pipe("Bonnet shut line", hood_seam + hood_seam[:1], .0032, v.DARK, root)
 
 def cabin_section(y, width, sill, gutter, roof):
     return [(-width, y, sill), (-width * .88, y, gutter),
