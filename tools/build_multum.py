@@ -218,7 +218,8 @@ v.profile_loft("Raised cowl under the windscreen", [
     ]
 ], paint, root)
 
-for side in (-1,1):
+seal_angles = [step * math.tau / 24 for step in range(24)]
+for side in (-1, 1):
     for base_y, top_y, half_width in [(-.71, -.36, .037), (.23, .24, .034), (1.346, 1.37, .039)]:
         pillar_edges = []
         for offset in (-half_width, half_width):
@@ -246,8 +247,18 @@ for side in (-1,1):
         pillar = bpy.data.objects.new("Matte window pillar", mesh)
         bpy.context.collection.objects.link(pillar)
         pillar.parent = root
-    for a,b in zip(cabin,cabin[1:]):
-        rod("Window lower seal",(side*a[1],a[0],a[2]),(side*b[1],b[0],b[2]),.017,v.DARK)
+    v.profile_loft("Continuous lower window seal", [
+        [(side * (width + .013 * scale * math.cos(angle)), y,
+          base + .019 * scale * math.sin(angle))
+         for angle in seal_angles]
+        for y, width, base, scale in [
+            (-1.285, .79, 1.015, .18),
+            (-1.25, .803, 1.019, .87),
+            *((y, width, base, 1) for y, width, base, _, _ in cabin[1:-1]),
+            (1.851, .755, 1.059, .79),
+            (1.87, .747, 1.055, .18),
+        ]
+    ], v.RUBBER, root)
     for start, end, end_depth in [(-.704, .198, .918), (.259, 1.037, .910)]:
         sections = [
             (start, .918, .18), (start + .026, .918, .72),
