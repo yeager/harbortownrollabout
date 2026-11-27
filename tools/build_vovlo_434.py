@@ -431,6 +431,21 @@ for y, sign, z in [(-2.058, -1, .430), (2.053, 1, .405)]:
     box("Plate mount", (0, y + sign*.126, z+.011), (.448, .025, .109), v.RUBBER)
     box("Rear registration plate" if sign > 0 else "Registration plate", (0, y + sign*.142, z+.011), (.420, .015, .086), ivory, .007)
     text("Registration", "HVK 434", (sign*.150, y + sign*.153, z-.016), .067, sign > 0, v.RUBBER)
+# A shallow lower apron wraps back toward the front wheel openings.
+v.profile_loft("Front lower apron", [
+    [(x, y + setback, z) for y, z in [
+        (-2.074, .366), (-2.092, .286), (-2.103, .258),
+        (-2.073, .233), (-1.957, .246), (-1.952, .374),
+    ]]
+    for x, setback in [
+        (-.746, .110), (-.709, .056), (-.633, .012), (-.520, 0),
+        (.520, 0), (.633, .012), (.709, .056), (.746, .110),
+    ]
+], v.DARK, root)
+tow_eye = [(-.32, -2.071, .248), (-.32, -2.136, .244),
+           (-.32, -2.152, .219), (-.32, -2.127, .200),
+           (-.32, -2.067, .213)]
+v.pipe("Front tow eye", tow_eye + tow_eye[:1], .007, v.METAL, root)
 for x in (-.145, .145):
     box("Rear plate lamp housing", (x, 2.180, .481), (.092, .031, .026), v.DARK, .004)
     box("Rear plate lamp diffuser", (x, 2.193, .471), (.074, .014, .010), ivory, .002)
