@@ -87,8 +87,18 @@ for y, first, last in ((-.48,-1.22,1.29),(.48,-.91,.86)):
 cube("Rear red marker",(0,-.606,.179),(.064,.018,.025),tail,.005,root)
 tube("Deck neck",(0,.28,.13),(0,.448,.34),.047,charcoal)
 tube("Handlebar tube",(0,.46,.25),(0,.387,1.275),.025,charcoal)
-tube("Folding collar",(0,.454,.31),(0,.447,.38),.039,rubber)
-cube("Folding latch",(0,.408,.337),(.045,.06,.069),steel,.010,root)
+tube("Folding collar",(0,.454,.31),(0,.447,.38),.037,charcoal)
+for side in (-1,1):
+    cheek = cube("Folding hinge cheek",(side*.030,.447,.331),
+                 (.015,.079,.081),charcoal,.012,root)
+    cheek.rotation_euler.x = -.12
+    cylinder("Hinge pivot washer",(side*.039,.446,.335),
+             .017,.005,steel,True,24,root)
+    cylinder("Hinge pivot head",(side*.043,.446,.335),
+             .010,.006,steel,True,6,root)
+tube("Folding latch catch",(0,.414,.372),(0,.384,.349),.011,steel)
+cube("Folding latch lever",(0,.377,.328),(.036,.030,.069),steel,.009,root)
+cube("Folding latch safety tab",(0,.359,.315),(.031,.011,.022),red,.004,root)
 tube("Handlebar",( -.287,.387,1.275),(.287,.387,1.275),.016,charcoal)
 for side in (-1,1):
     tube("Handle grip",(side*.158,.387,1.275),(side*.294,.387,1.275),.022,rubber)

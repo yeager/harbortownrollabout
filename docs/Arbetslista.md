@@ -345,6 +345,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Strålkastarhusen fick runda projektorlinser med reflektorer och tätningar, separata diffusorer och smalare LED-lister. Båda husen granskades i Godot och fordonsprovet passerade.
   - Främre stötfångaren fick två röda bogseröglor med öppna centrum och separata fästen. Båda granskades i Godot och fordonsprovet passerade.
 - [ ] [`electric_kick_scooter.glb`](../vehicles/electric_kick_scooter.glb)
+  - Styrstammens fällbeslag fick gångjärnsplattor, ledtappar och en låsspak med röd säkerhetsspärr. Beslaget granskades i Godot och elsparkcykelprovet passerade för Axel, Alma och grannen.
 - [ ] [`farm_tractor.glb`](../vehicles/farm_tractor.glb)
   - Vinterspridaren fick en modellerad trepunktsinfästning med två nedre stag, toppstag och ledtappar. Infästningen granskades i Godot och halkbekämpningsprovet passerade.
   - De bakre reflexerna följer nu spridarens lutande bakvägg och har separata fästplattor och skruvar. Granskat bakifrån i Godot. Halkbekämpningsprovet passerade.
