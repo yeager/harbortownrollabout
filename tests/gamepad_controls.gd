@@ -192,8 +192,24 @@ func run() -> void:
 		printerr("Expected 25% steering from 55% stick input with a 40% dead zone, got ", game.steering)
 		quit(1)
 		return
+	Input.joy_connection_changed.emit(2, false)
+	if game.paused:
+		printerr("Disconnecting a different controller must not pause the game")
+		quit(1)
+		return
+	Input.joy_connection_changed.emit(1, false)
+	if not game.paused:
+		printerr("Disconnecting the active controller must pause the game")
+		quit(1)
+		return
+	button(JOY_BUTTON_START)
+	if game.paused or game._keyboard_pedals_available():
+		printerr("A held trigger must be released after resuming")
+		quit(1)
+		return
 	axis(JOY_AXIS_TRIGGER_RIGHT, 0)
 	axis(JOY_AXIS_LEFT_X, 0)
+	game._keyboard_pedals_available()
 	axis(JOY_AXIS_TRIGGER_LEFT, 1)
 	for frame in 120:
 		game._drive(1.0 / 60)

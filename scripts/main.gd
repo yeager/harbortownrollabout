@@ -148,6 +148,7 @@ const GAMEPAD_STICK_ACTIONS := [
 var gamepad_deadzone := 0.20
 var gamepad_camera_speed := 1.0
 var gamepad_invert_y := false
+var active_gamepad := -1
 
 var radio_keys: Array[int] = [KEY_J, KEY_N]
 var driving_hints := Label.new()
@@ -768,6 +769,7 @@ func _ready() -> void:
 		binding.button_index = int(menu_buttons[action])
 		if not InputMap.action_has_event(action, binding):
 			InputMap.action_add_event(action, binding)
+	Input.joy_connection_changed.connect(_on_gamepad_connection_changed)
 	L10n.load_catalogs()
 	greeting_voice.bus = &"Speech"
 	greeting_voice.volume_db = -4
@@ -1136,7 +1138,22 @@ func _look_around(motion: Vector2) -> void:
 	orbit_angle -= motion.x*.007
 	orbit_height = clampf(orbit_height+motion.y*.022,-1.8,5)
 
+func _on_gamepad_connection_changed(device: int, connected: bool) -> void:
+	if connected or device != active_gamepad:
+		return
+	active_gamepad = -1
+	if _world_controls_available() and not get_tree().paused:
+		_toggle_pause()
+
 func _input(event: InputEvent) -> void:
+	if not event.is_canceled() and (event is InputEventKey or event is InputEventMouseButton) and event.is_pressed():
+		active_gamepad = -1
+	elif event is InputEventJoypadButton and event.pressed:
+		active_gamepad = event.device
+	elif event is InputEventJoypadMotion and event.axis_value != 0.0:
+		var deadzone := 0.20 if event.axis in [JOY_AXIS_TRIGGER_LEFT, JOY_AXIS_TRIGGER_RIGHT] else gamepad_deadzone
+		if absf(event.axis_value) > deadzone:
+			active_gamepad = event.device
 	if event is InputEventJoypadButton and event.pressed:
 		if event.button_index == JOY_BUTTON_START and mode == "playing" and not get_tree().paused:
 			if phone.handset.is_visible_in_tree():
