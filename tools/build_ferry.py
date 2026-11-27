@@ -100,6 +100,13 @@ for end in [-1,1]:
             pole("Mooring bitt head",(bitt_x,bitt_y+offset,.935),.073,.034,steel)
         for offset in (-.19,.19):
             pole("Mooring base fastener",(bitt_x,bitt_y+offset,.706),.018,.014,steel)
+        box("Landing fender backing plate",(side*1.11,end*6.377,.466),
+            (.467,.062,.354),steel,.018)
+        box("Fender upper retaining flange",(side*1.11,end*6.384,.627),
+            (.29,.075,.031),steel,.008)
+        for offset in (-.085,.085):
+            pole("Fender retaining bolt",(side*1.11+offset,end*6.408,.645),
+                 .017,.017,steel)
         box("Landing fender",(side*1.11,end*6.33,.46),(.43,.25,.32),rubber,.095)
         box("Boarding door",(side*.98,end*4.29,1.41),(.84,.075,1.47),white,.04)
         box("Boarding window gasket",(side*.98,end*4.333,1.68),(.674,.026,.744),rubber,.041)
