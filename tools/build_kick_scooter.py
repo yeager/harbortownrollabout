@@ -43,11 +43,15 @@ def curved(name, points, radius, mat):
     shape.materials.append(mat)
 
 # Origin at ground level; the rider stands on the top surface at 0.17 m.
-cube("Die cast battery deck",(0,-.04,.121),(.31,.82,.087),charcoal,.042,root)
+cube("Die cast battery deck",(0,-.04,.137),(.31,.82,.055),charcoal,.024,root)
+cube("Battery tray gasket",(0,-.04,.109),(.298,.801,.008),rubber,.003,root)
+cube("Battery tray cover",(0,-.04,.094),(.304,.809,.032),charcoal,.014,root)
 cube("Textured standing pad",(0,-.052,.166),(.282,.744,.016),rubber,.008,root)
 for side in (-1,1):
-    for lane in (1,2,3):
-        cube("Grip rib",(side*.036*lane,-.068,.175),(.008,.62,.005),charcoal,.002,root)
+    for row in range(12):
+        rib = cube("Chevron grip rib",(side*.064,-.342+row*.052,.175),
+                   (.109,.010,.005),charcoal,.002,root,bevel_segments=1)
+        rib.rotation_euler.z = side*.26
     cube("Deck side reflector",(side*.157,-.30,.126),(.006,.069,.025),orange,.003,root)
 tyre_section = [
     (-.031, .066), (-.032, .087), (-.031, .103), (-.028, .111),
