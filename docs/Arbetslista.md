@@ -315,6 +315,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - De 40 hjulbultarna grupperades till ett nät per hjul och fasningen förenklades från 6 560 till 2 720 trianglar totalt. Alla fyra bultgrupperna följde hjulens rotation i Godot. Bakfälgen granskades i närbild och förarprovet passerade.
   - Brandbilens vindruta fick panoramareflexer som förändras med molntäcke och nattläge. Materialet kontrollerades på spelbilen och den parkerade brandbilen. Vindrutan granskades utifrån i dagsljus och nattläge samt inifrån hytten på natten. Förarprovet passerade.
   - Fram- och bakdörrarnas sidorutor fick separata gummilister längs mittstolpen. Fyra lister verifierades i GLB-filen. Högra sidan granskades i Godot och förarprovet passerade.
+  - Sidorutorna fick även gummilister längs den lutande framkanten och den bakre stolpen. Alla åtta vertikala lister verifierades i GLB-filen. Båda sidor granskades i Godot och förarprovet passerade.
 - [ ] [`city_bus.glb`](../vehicles/city_bus.glb)
 - [ ] [`dam_pickup.glb`](../vehicles/dam_pickup.glb)
 - [ ] [`electric_kick_scooter.glb`](../vehicles/electric_kick_scooter.glb)

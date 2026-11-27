@@ -1187,19 +1187,26 @@ def make_fire_engine():
     cabin=bpy.data.objects.new("Fire crew cab",mesh)
     bpy.context.collection.objects.link(cabin)
     cabin.parent=root
-    # The front and rear door glass meet the centre pillar at separate rubber channels.
-    for side in (-1,1):
-        for y,bottom in ((-1.615,1.914),(-1.542,1.859)):
+    # Fit each vertical rubber channel to the same stations as the glazing.
+    window_edges = ((5, "front"), (6, "pillar"), (7, "pillar"), (8, "rear"))
+    for side in (-1, 1):
+        for station, edge in window_edges:
+            lower = Vector(vertices[4 * n + station])
+            waist = Vector(vertices[5 * n + station])
+            upper = Vector(vertices[6 * n + station])
             channel = []
-            for z in (bottom,2.04,2.19,2.32,2.416):
+            for point in (lower.lerp(waist, .04), lower.lerp(waist, .5), waist,
+                          waist.lerp(upper, .45), waist.lerp(upper, .8),
+                          waist.lerp(upper, .98)):
                 ring = []
-                for dy, rise in ((-.006,-.001),(-.004,.004),(.004,.004),(.006,-.001)):
-                    hit, point, _, _ = cabin.ray_cast((side*1.5,y+dy,z),(-side,0,0))
+                for dy, rise in ((-.006, -.001), (-.004, .004), (.004, .004), (.006, -.001)):
+                    hit, surface, _, _ = cabin.ray_cast(
+                        (side * 1.5, point.y + dy, point.z), (-side, 0, 0))
                     if not hit:
-                        raise ValueError("Window channel outside crew cab")
-                    ring.append((point.x+side*rise,point.y,point.z))
+                        raise ValueError(f"{edge} window channel outside crew cab")
+                    ring.append((surface.x + side * rise, surface.y, surface.z))
                 channel.append(ring)
-            profile_loft("Crew door window pillar seal",channel,RUBBER,root)
+            profile_loft(f"Crew door window {edge} seal", channel, RUBBER, root)
     upholstery=material("Fire crew woven graphite",(.065,.080,.084),.02,.8)
     cube("Crew cab floor",(0,-1.78,1.45),(2.03,1.91,.09),DARK,.035,root)
     for x in [-.57,.57]:
