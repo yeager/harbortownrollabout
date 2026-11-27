@@ -2189,3 +2189,6 @@ msgstr "Die Polizei hat dich angehalten, weil du bei Rot gefahren bist."
 
 msgid "Patient handover"
 msgstr "Patientenübergabe"
+
+msgid "Fait Multum"
+msgstr "Fait Multum"

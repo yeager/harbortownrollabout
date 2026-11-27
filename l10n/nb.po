@@ -2172,3 +2172,6 @@ msgstr "Politiet stoppet deg fordi du kjørte på rødt lys."
 
 msgid "Patient handover"
 msgstr "Pasientoverlevering"
+
+msgid "Fait Multum"
+msgstr "Fait Multum"

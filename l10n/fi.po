@@ -2168,3 +2168,6 @@ msgstr "Poliisi pysäytti sinut, koska ajoit päin punaista."
 
 msgid "Patient handover"
 msgstr "Potilaan luovutus"
+
+msgid "Fait Multum"
+msgstr "Fait Multum"

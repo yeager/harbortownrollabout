@@ -35,9 +35,9 @@ const PRACTICE_START := Vector3(-119, 0, 109)
 const CITY_INTERIOR := Rect2(-520, -92, 690, 172)
 const VEHICLE_NAMES := ["Ambulance", "Police car", "Fire engine"]
 const VEHICLE_SCENES := ["res://vehicles/ambulance.glb", "res://vehicles/polisbil.glb", "res://vehicles/brandbil.glb"]
-const VEHICLE_NAMES_ALL := ["Ambulance", "Police car", "Fire engine", "BWM Y5 N70i", "Taxi", "Recovery truck", "BWM M3 E33", "Volva 241", "Saav 97", "Teslo Model Z", "City bus", "Snowmobile", "Volva HT-6 police SUV", "Porsje GT5RS", "Ice cream van", "Mino Kuper S", "Pusch Dakotta", "Monster truck", "A-tractor", "Classic cruiser", "Volva L91 wheel loader", "Farm tractor", "Food truck", "Ride-on mower", "Garbage truck", "Norrsjö Shoppa", "DAM pickup", "Audo Sport Kvattro"]
-const VEHICLE_SCENES_ALL := ["res://vehicles/ambulance.glb", "res://vehicles/polisbil.glb", "res://vehicles/brandbil.glb", "res://vehicles/luxury_suv.glb", "res://vehicles/taxi.glb", "res://vehicles/bargare.glb", "res://vehicles/sport_sedan.glb", "res://vehicles/classic_estate.glb", "res://vehicles/classic_fastback.glb", "res://vehicles/electric_sedan.glb", "res://vehicles/city_bus.glb", "res://vehicles/snowmobile.glb", "res://vehicles/police_suv.glb", "res://vehicles/track_coupe.glb", "res://vehicles/ice_cream_van.tscn", "res://vehicles/compact_convertible.glb", "res://vehicles/classic_moped.glb", "res://vehicles/monster_truck.glb", "res://vehicles/a_traktor.glb", "res://vehicles/raggarbil.glb", "res://vehicles/wheel_loader.glb", "res://vehicles/farm_tractor.glb", "res://vehicles/food_truck_road.glb", "res://vehicles/ride_on_mower.glb", "res://vehicles/refuse_truck.glb", "res://vehicles/shopping_trike.glb", "res://vehicles/dam_pickup.glb", "res://vehicles/rally_coupe.glb"]
-const SIREN_SOUNDS := ["res://audio/siren_ambulance.wav", "res://audio/siren_police.wav", "res://audio/siren_fire.wav", "res://audio/suv_engine.wav", "res://audio/suv_engine.wav", "res://audio/suv_engine.wav", "res://audio/suv_engine.wav", "res://audio/suv_engine.wav", "res://audio/suv_engine.wav", "res://audio/electric_drive.wav", "res://audio/suv_engine.wav", "res://audio/sled_engine.wav", "res://audio/siren_police.wav", "res://audio/track_coupe_engine.wav", "res://audio/suv_engine.wav", "res://audio/suv_engine.wav", "res://audio/moped_engine.wav", "res://audio/monster_engine.wav", "res://audio/suv_engine.wav", "res://audio/suv_engine.wav", "res://audio/loader_diesel.wav", "res://audio/tractor_diesel.wav", "res://audio/suv_engine.wav", "res://audio/mower_engine.wav", "res://audio/loader_diesel.wav", "res://audio/moped_engine.wav", "res://audio/suv_engine.wav", "res://audio/rally_coupe_engine.wav"]
+const VEHICLE_NAMES_ALL := ["Ambulance", "Police car", "Fire engine", "BWM Y5 N70i", "Taxi", "Recovery truck", "BWM M3 E33", "Volva 241", "Saav 97", "Teslo Model Z", "City bus", "Snowmobile", "Volva HT-6 police SUV", "Porsje GT5RS", "Ice cream van", "Mino Kuper S", "Pusch Dakotta", "Monster truck", "A-tractor", "Classic cruiser", "Volva L91 wheel loader", "Farm tractor", "Food truck", "Ride-on mower", "Garbage truck", "Norrsjö Shoppa", "DAM pickup", "Audo Sport Kvattro", "Fait Multum"]
+const VEHICLE_SCENES_ALL := ["res://vehicles/ambulance.glb", "res://vehicles/polisbil.glb", "res://vehicles/brandbil.glb", "res://vehicles/luxury_suv.glb", "res://vehicles/taxi.glb", "res://vehicles/bargare.glb", "res://vehicles/sport_sedan.glb", "res://vehicles/classic_estate.glb", "res://vehicles/classic_fastback.glb", "res://vehicles/electric_sedan.glb", "res://vehicles/city_bus.glb", "res://vehicles/snowmobile.glb", "res://vehicles/police_suv.glb", "res://vehicles/track_coupe.glb", "res://vehicles/ice_cream_van.tscn", "res://vehicles/compact_convertible.glb", "res://vehicles/classic_moped.glb", "res://vehicles/monster_truck.glb", "res://vehicles/a_traktor.glb", "res://vehicles/raggarbil.glb", "res://vehicles/wheel_loader.glb", "res://vehicles/farm_tractor.glb", "res://vehicles/food_truck_road.glb", "res://vehicles/ride_on_mower.glb", "res://vehicles/refuse_truck.glb", "res://vehicles/shopping_trike.glb", "res://vehicles/dam_pickup.glb", "res://vehicles/rally_coupe.glb", "res://vehicles/multum.glb"]
+const SIREN_SOUNDS := ["res://audio/siren_ambulance.wav", "res://audio/siren_police.wav", "res://audio/siren_fire.wav", "res://audio/suv_engine.wav", "res://audio/suv_engine.wav", "res://audio/suv_engine.wav", "res://audio/suv_engine.wav", "res://audio/suv_engine.wav", "res://audio/suv_engine.wav", "res://audio/electric_drive.wav", "res://audio/suv_engine.wav", "res://audio/sled_engine.wav", "res://audio/siren_police.wav", "res://audio/track_coupe_engine.wav", "res://audio/suv_engine.wav", "res://audio/suv_engine.wav", "res://audio/moped_engine.wav", "res://audio/monster_engine.wav", "res://audio/suv_engine.wav", "res://audio/suv_engine.wav", "res://audio/loader_diesel.wav", "res://audio/tractor_diesel.wav", "res://audio/suv_engine.wav", "res://audio/mower_engine.wav", "res://audio/loader_diesel.wav", "res://audio/moped_engine.wav", "res://audio/suv_engine.wav", "res://audio/rally_coupe_engine.wav", "res://audio/suv_engine.wav"]
 const BUILDING_SCENES := {"Polisstationen":"res://environment/polisstation.glb", "Bageriet":"res://environment/bageri.glb", "Vårdcentralen":"res://environment/vardcentral.glb", "Brandstationen":"res://environment/brandstation.glb", "Biblioteket":"res://environment/bibliotek.glb"}
 const TREE_SCENES := ["res://environment/lovtrad.glb", "res://environment/gran.glb", "res://environment/bredkronigt_lovtrad.glb"]
 
@@ -273,6 +273,7 @@ const REFUSE := 24
 const SHOPPER := 25
 const DAM_PICKUP := 26
 const QUATTRO := 27
+const MULTUM := 28
 var ground_work := preload("res://environment/ground_work.gd").new(CITY_INTERIOR)
 var blade_left: Vector3
 var blade_right: Vector3
@@ -322,7 +323,7 @@ var bus_dashboard_backlight: StandardMaterial3D
 const BUS_STOP_NAMES := ["THE SQUARE","HEALTH CENTRE","MARINA","HARBOR TOWN SCHOOL","VÄSTRA TORGET","SICKLA UDDE"]
 var bus_leg := 0
 const TAXI := 4
-const HORNS := ["ambulance","police","fire","suv","taxi","recovery", "sport_sedan", "classic_estate", "classic_fastback", "electric_sedan", "city_bus","snowmobile", "police", "track_coupe", "icecream", "suv", "classic_fastback", "suv", "classic_estate", "suv", "recovery", "recovery", "suv", "classic_fastback", "recovery", "classic_fastback", "suv", "sport_sedan"]
+const HORNS := ["ambulance","police","fire","suv","taxi","recovery", "sport_sedan", "classic_estate", "classic_fastback", "electric_sedan", "city_bus","snowmobile", "police", "track_coupe", "icecream", "suv", "classic_fastback", "suv", "classic_estate", "suv", "recovery", "recovery", "suv", "classic_fastback", "recovery", "classic_fastback", "suv", "sport_sedan", "classic_estate"]
 var horn := AudioStreamPlayer.new()
 var next_song_button: Button
 var radio_button: Button
@@ -400,7 +401,7 @@ const GALLERY_GROUPS := {
 	"All vehicles": [],
 	"Emergency vehicles": ["Ambulance", "Police car", "Volva HT-6 police SUV", "Fire engine"],
 	"Work vehicles": ["Farm tractor", "Garbage truck", "Recovery truck", "Volva L91 wheel loader", "Volva HT-16 tracked excavator", "Ride-on mower", "Ice cream van", "Food truck", "DAM pickup"],
-	"Cars": ["BWM Y5 N70i", "BWM M3 E33", "Volva 241", "Saav 97", "Teslo Model Z", "Porsje GT5RS", "Mino Kuper S", "Classic cruiser", "A-tractor", "Audo Sport Kvattro"],
+	"Cars": ["BWM Y5 N70i", "BWM M3 E33", "Volva 241", "Saav 97", "Teslo Model Z", "Porsje GT5RS", "Mino Kuper S", "Classic cruiser", "A-tractor", "Audo Sport Kvattro", "Fait Multum"],
 	"Passenger transport": ["City bus", "Tram", "Taxi"],
 	"Leisure vehicles": ["Monster truck", "Pusch Dakotta", "Snowmobile", "Norrsjö Shoppa", "Motorboat"]
 }
@@ -1575,7 +1576,7 @@ func _drive(delta: float) -> void:
 			wheel_angle = atan2(1.61 * tangent, 1.61 - side_offset * tangent)
 		knuckle.rotation.y = -wheel_angle
 	driving_controls.set_controls(steering, throttle > 0, brake_held, throttle < 0 and not brake_held)
-	var wheelbase: float = [3.7, 2.75, 4.1, 2.975, 2.85, 4.0, 2.56, 2.64, 2.46, 2.96, 6.06, 1.65, 2.865, 2.457, 3.81, 2.495, 1.14, 3.37, 2.84, 3.1, 3.2, 2.61, 3.8, 1.01, 4.52, 1.61, 3.74, 2.224][vehicle_index]
+	var wheelbase: float = [3.7, 2.75, 4.1, 2.975, 2.85, 4.0, 2.56, 2.64, 2.46, 2.96, 6.06, 1.65, 2.865, 2.457, 3.81, 2.495, 1.14, 3.37, 2.84, 3.1, 3.2, 2.61, 3.8, 1.01, 4.52, 1.61, 3.74, 2.224, 2.58][vehicle_index]
 	var yaw_rate := speed * tan(steering * deg_to_rad(33.0)) / wheelbase
 	# Limit lateral acceleration at speed while retaining tight parking turns.
 	var lateral_limit := 8.0 + 1.2*road_cover.y - (0.6 if winter_tyres else 1.7)*road_snow
@@ -5698,6 +5699,7 @@ func _depot_bay(i: int) -> Vector2:
 	if i == MOWER: return Vector2(-24,28)
 	if i == DAM_PICKUP: return Vector2(-12,28)
 	if i == QUATTRO: return Vector2(-32,15)
+	if i == MULTUM: return Vector2(-7,28)
 	if i == FARM_TRACTOR: return Vector2(-18,28)
 	if i == RECOVERY: return Vector2(-45,25)
 	if i == BUS: return Vector2(-34,25.4)
@@ -11515,7 +11517,7 @@ func _build_overlay() -> void:
 		tile.add_theme_stylebox_override("hover_pressed",selected_style)
 		var thumbnail := AtlasTexture.new()
 		thumbnail.atlas = preload("res://vehicles/menu_thumbnails.png")
-		var picture_index := index + 3 if index in [DAM_PICKUP, QUATTRO] else index - 2 if index > QUATTRO else index
+		var picture_index := index + 3 if index in [DAM_PICKUP, QUATTRO, MULTUM] else 26 + index - VEHICLE_NAMES_ALL.size() if index >= VEHICLE_NAMES_ALL.size() else index
 		thumbnail.region = Rect2(picture_index % 6 * 256, floori(picture_index / 6.0) * 128,256,128)
 		thumbnail.filter_clip = true
 		tile.icon = thumbnail

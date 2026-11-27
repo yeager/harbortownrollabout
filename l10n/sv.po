@@ -2102,3 +2102,6 @@ msgstr "Polisen stoppade dig för att du körde mot rött."
 
 msgid "Patient handover"
 msgstr "Patientöverlämning"
+
+msgid "Fait Multum"
+msgstr "Fait Multum"

@@ -9,7 +9,7 @@ const KG := {
 	"a_traktor": 1530, "raggarbil": 1930, "wheel_loader": 19800,
 	"farm_tractor": 6800, "food_truck_road": 4650, "ride_on_mower": 295,
 	"shopping_trike": 185, "refuse_truck": 14200, "traffic_suv_blue": 2450, "traffic_suv_silver": 2450,
-	"cyklist": 88, "dam_pickup": 2870, "rally_coupe": 1290,
+	"cyklist": 88, "dam_pickup": 2870, "rally_coupe": 1290, "multum": 1370,
 }
 const EXCAVATOR_KG := 92000.0
 const TRAM_KG := 42000.0

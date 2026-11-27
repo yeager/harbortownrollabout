@@ -2101,3 +2101,6 @@ msgstr ""
 
 msgid "Patient handover"
 msgstr ""
+
+msgid "Fait Multum"
+msgstr ""

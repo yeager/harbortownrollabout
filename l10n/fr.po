@@ -2187,3 +2187,6 @@ msgstr "La police vous a arrêté pour avoir grillé un feu rouge."
 
 msgid "Patient handover"
 msgstr "Remise des patients"
+
+msgid "Fait Multum"
+msgstr "Fait Multum"

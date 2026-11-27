@@ -384,6 +384,10 @@ def build(key, length, width, axles, color, belt, cabin):
                       lamp_z+radius*math.sin(i*math.tau/40)) for i in range(40)]
                     for depth,radius in lens_profile
                 ],HEADLAMP,root)
+            box("Front indicator housing",side*.657,-end-.047,.483,
+                .246,.077,.077,RUBBER,.012)
+            box("Front amber indicator",side*.657,-end-.087,.483,
+                .213,.022,.056,amber,.008)
         elif key == "classic_fastback":
             x = side*.501
             box("Headlamp pocket",x,-end-.029,.657,.359,.103,.237,RUBBER,.027)
@@ -405,7 +409,8 @@ def build(key, length, width, axles, color, belt, cabin):
             box("Rear light cluster seal",side*.57,end+.018,.708,.468,.078,.203,RUBBER,.018)
             clear_lens=material("Reverse lamp coupe",(.77,.80,.74),.15,.18)
             for x,w,finish in [(.399,.105,clear_lens),(.544,.175,RED_LAMP),(.715,.151,amber)]:
-                box("Rear lamp upper lens",side*x,end+.062,.755,w,.032,.075,finish,.007)
+                label = "Rear indicator lens" if finish == amber else "Rear lamp upper lens"
+                box(label,side*x,end+.062,.755,w,.032,.075,finish,.007)
             box("Rear lamp stop lens",side*.57,end+.062,.661,.443,.032,.088,RED_LAMP,.009)
         elif key == "classic_fastback":
             x = side*.538
