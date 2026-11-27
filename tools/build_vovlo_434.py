@@ -363,6 +363,19 @@ for side in (-1, 1):
             v.cylinder("Wheel lug nut", (side*.828, y+.045*math.cos(angle), .287+.045*math.sin(angle)),
                        .008, .007, v.METAL, vertices=6, root=root)
 
+for side in (-1, 1):
+    v.profile_loft("Rear rubber mud flap", [
+        [(side * x, y + depth, z) for x, depth in [
+            (inner, -.007), (outer, -.007), (outer, .007), (inner, .007)
+        ]]
+        for z, y, inner, outer in [
+            (.112, 1.598, .614, .772), (.125, 1.593, .597, .789),
+            (.235, 1.571, .588, .795), (.364, 1.552, .582, .785),
+        ]
+    ], v.RUBBER, root)
+    box("Rear mud flap bracket", (side * .682, 1.564, .347),
+        (.190, .026, .033), v.DARK, .003)
+
 bpy.data.objects.remove(tire_template, do_unlink=True)
 
 box("Grille backing", (0, -2.041, .713), (.842, .065, .179), v.RUBBER)
