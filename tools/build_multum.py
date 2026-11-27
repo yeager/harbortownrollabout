@@ -82,13 +82,28 @@ def alloy_face(side, y):
             ]
         ], v.METAL, root)
 
+def body_section(y, width, bottom, shoulder, crown):
+    half_section = [
+        (width * .88, bottom), (width, bottom + .12),
+        (width, shoulder - .16), (width * .981, shoulder - .065),
+        (width * .93, shoulder), (width * .855, shoulder + .61 * (crown - shoulder)),
+        (width * .72, crown), (width * .46, crown + .022),
+        (width * .23, crown + .032),
+    ]
+    return ([(-x, y, z) for x, z in half_section]
+            + [(0, y, crown + .035)]
+            + [(x, y, z) for x, z in reversed(half_section)])
+
+
 body = v.mesh_from_rings("Rounded body and short bonnet", [
-    (-2.04,.75,.25,.54,.72),(-1.92,.88,.23,.62,.81),
-    (-1.61,.92,.22,.69,.89),(-1.15,.925,.22,.77,.99),
+    (-2.04,.75,.25,.54,.72),(-2.00,.81,.24,.575,.755),
+    (-1.92,.88,.23,.62,.81),(-1.79,.906,.224,.658,.848),
+    (-1.61,.92,.22,.69,.89),(-1.39,.924,.22,.725,.939),
+    (-1.15,.925,.22,.77,.99),
     (-.67,.92,.22,.94,1.04),(.24,.92,.22,.94,1.04),
     (1.25,.91,.23,.95,1.05),(1.82,.88,.27,.94,1.04),
     (1.99,.79,.32,.91,1.00),
-], paint, root, bevel=0)
+], paint, root, bevel=0, section=body_section)
 for side in (-1,1):
     for y in (-1.28,1.30):
         cutter = v.cylinder("Wheel opening tool", (side*.94,y,.33), .383, .68, None, vertices=96)
