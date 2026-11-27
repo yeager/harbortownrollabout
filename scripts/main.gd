@@ -1429,8 +1429,18 @@ func _update_patrol(delta: float) -> void:
 func _drive_launch(delta: float) -> void:
 	var controls_available := _world_controls_available()
 	var pedal_keys := controls_available and _keyboard_pedals_available()
-	var gas := controls_available and (mouse_gas or (pedal_keys and (Input.is_action_pressed("pad_accelerate") or Input.is_action_pressed("ui_up") or _movement_pressed(KEY_W))))
-	var brake := controls_available and (mouse_brake or brake_pedal_held or (pedal_keys and (Input.is_action_pressed("pad_brake") or Input.is_action_pressed("ui_down") or _movement_pressed(KEY_S))))
+	var gas_strength := 0.0
+	var brake_strength := 0.0
+	if pedal_keys:
+		gas_strength = maxf(Input.get_action_strength("pad_accelerate"), Input.get_action_strength("ui_up"))
+		brake_strength = maxf(Input.get_action_strength("pad_brake"), Input.get_action_strength("ui_down"))
+		if _movement_pressed(KEY_W): gas_strength = 1.0
+		if _movement_pressed(KEY_S): brake_strength = 1.0
+	if controls_available:
+		if mouse_gas: gas_strength = 1.0
+		if mouse_brake or brake_pedal_held: brake_strength = 1.0
+	var gas := gas_strength > 0.0
+	var brake := brake_strength > 0.0
 	var turn := 0.0
 	if controls_available:
 		turn = clampf(Input.get_axis("ui_left","ui_right") + Input.get_axis("pad_left", "pad_right"), -1, 1)
@@ -1440,15 +1450,20 @@ func _drive_launch(delta: float) -> void:
 	var reverse_requested := brake and not gas
 	var target := 0.0
 	if reverse_requested:
-		target = -1.6
+		target = -1.6 * brake_strength
 	elif gas and not brake:
-		target = 5.0 if gentle_driving else 9.0
-	launch_speed = move_toward(launch_speed,target,delta*(2890.0 if brake else 1275.0)/Mass.LAUNCH_KG)
-	var steering_flow := clampf(launch_speed,-1,2)
+		target = (5.0 if gentle_driving else 9.0) * gas_strength
+	var thrust := 1275.0
+	if brake:
+		thrust = 2890.0 * brake_strength
+	elif gas:
+		thrust *= gas_strength
+	launch_speed = move_toward(launch_speed, target, delta * thrust / Mass.LAUNCH_KG)
+	var steering_flow := clampf(launch_speed, -1, 2)
 	if gas and not brake and launch_speed >= 0.0:
-		steering_flow = maxf(.8,steering_flow)
+		steering_flow = maxf(.8 * gas_strength, steering_flow)
 	elif reverse_requested and launch_speed <= 0.0:
-		steering_flow = minf(-.8,steering_flow)
+		steering_flow = minf(-.8 * brake_strength, steering_flow)
 	outboard.rotation.y = lerp_angle(outboard.rotation.y,-turn*.52,1-exp(-8*delta))
 	var previous_yaw := launch.rotation.y
 	launch.rotation.y -= turn*steering_flow*delta*.53

@@ -61,6 +61,49 @@ func check_excavator(game) -> bool:
 	axis(JOY_AXIS_TRIGGER_RIGHT, 0)
 	return arm_moved and blocked and hull.origin.distance_to(game.excavator.position) > .3
 
+func check_watercraft_and_tram(game) -> bool:
+	game.mode = "menu"
+	game.vehicle_selector.get_child(game.VEHICLE_NAMES_ALL.size() + 2).pressed.emit()
+	game.start_button.pressed.emit()
+	if not game.boating:
+		return false
+	var berth: Transform3D = game.launch.transform
+	axis(JOY_AXIS_TRIGGER_RIGHT, .6)
+	game._drive_launch(.25)
+	var partial_speed: float = game.launch_speed
+	game.launch.transform = berth
+	game.launch_speed = 0.0
+	axis(JOY_AXIS_TRIGGER_RIGHT, 1)
+	game._drive_launch(.25)
+	var full_speed: float = game.launch_speed
+	axis(JOY_AXIS_TRIGGER_RIGHT, 0)
+	if partial_speed <= 0.0 or not is_equal_approx(partial_speed, full_speed * .5):
+		return false
+	axis(JOY_AXIS_LEFT_X, -.8)
+	axis(JOY_AXIS_TRIGGER_LEFT, 1)
+	game._drive_launch(.5)
+	var backed_and_turned: bool = game.launch_speed < 0.0 and not game.launch.basis.is_equal_approx(berth.basis)
+	axis(JOY_AXIS_LEFT_X, 0)
+	axis(JOY_AXIS_TRIGGER_LEFT, 0)
+	if not backed_and_turned:
+		return false
+	game.mode = "menu"
+	game.vehicle_selector.get_child(game.VEHICLE_NAMES_ALL.size() + 1).pressed.emit()
+	game.start_button.pressed.emit()
+	if game.tram_mode != 2:
+		return false
+	game.tram.dwell = 0.0
+	axis(JOY_AXIS_TRIGGER_RIGHT, 1)
+	for frame in 30:
+		game._process(1.0 / 60)
+	var tram_speed: float = game.tram.velocity
+	axis(JOY_AXIS_TRIGGER_RIGHT, 0)
+	axis(JOY_AXIS_TRIGGER_LEFT, 1)
+	for frame in 30:
+		game._process(1.0 / 60)
+	axis(JOY_AXIS_TRIGGER_LEFT, 0)
+	return tram_speed > .3 and game.tram.velocity < tram_speed * .5
+
 func check_settings(game) -> bool:
 	var dialog := game.find_child("GameSettings", true, false) as AcceptDialog
 	var deadzone := dialog.find_child("GamepadDeadzone", true, false) as HSlider
@@ -282,7 +325,11 @@ func run() -> void:
 		printerr("Gamepad excavator arm, isolation or track control failed")
 		quit(1)
 		return
-	print("Gamepad settings, menu, steering, pedals, pause, camera, phone, map, emergency controls, seat and walking passed.")
+	if not check_watercraft_and_tram(game):
+		printerr("Gamepad launch or tram controls failed")
+		quit(1)
+		return
+	print("Gamepad settings, menu, steering, pedals, pause, camera, phone, map, emergency controls, seat, walking, boat and tram passed.")
 	game.queue_free()
 	await process_frame
 	quit()
