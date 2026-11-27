@@ -452,6 +452,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Multums vindrutetorkare sveper vid nederbörd. Svepet granskades i Godot och körprovet verifierade rotation runt båda fästena samt återgång till viloläget.
   - Multums bakrutetorkare sveper också vid nederbörd. Svepets övre läge granskades i Godot med frigång till mittbromsljuset. Körprovet verifierade att alla tre torkarna återgår till viloläget.
   - Multums dörrfogar följer nu karossens rundning från fönsterlisten till tröskeln. Granskat från sidan i Godot. Körprovet för 29 vägfordon passerade.
+  - Multums matta fönsterstolpar följer glasets rundning. Den främre stolpen lutar bakåt och de andra ansluter vid dörrfogarna. Granskat i Godot. Körprovet för 29 vägfordon passerade.
 - [ ] [`compact_convertible.glb`](../vehicles/compact_convertible.glb)
   - Mino Kuper S fick ett eget kopparfärgat M-monogram på motorhuven och bakluckan samt nytt namn i fordonsgalleriet. Emblemen granskades i Godot. Fordonsprovet och språkkontrollen passerade.
 - [ ] [`electric_sedan.glb`](../vehicles/electric_sedan.glb)

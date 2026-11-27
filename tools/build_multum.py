@@ -219,17 +219,33 @@ v.profile_loft("Raised cowl under the windscreen", [
 ], paint, root)
 
 for side in (-1,1):
-    for y in (-.31,.23,1.35):
-        # Interpolate the same cross sections used by the glasshouse shell.
-        a,b = next((a,b) for a,b in zip(cabin,cabin[1:]) if a[0] <= y <= b[0])
-        t = (y-a[0])/(b[0]-a[0])
-        width,base,shoulder,crown = [a[i]+(b[i]-a[i])*t for i in range(1,5)]
-        outline = [(width+.008,base),(.975*width+.008,shoulder),
-                   (.91*width+.008,crown-.024)]
-        v.profile_loft("Flush window pillar",[
-            [(side*x,y+offset,z) for x,z in outline]
-            for offset in (-.031,.031)
-        ],v.DARK,root,close_ends=False)
+    for base_y, top_y, half_width in [(-.71, -.36, .037), (.23, .24, .034), (1.346, 1.37, .039)]:
+        pillar_edges = []
+        for offset in (-half_width, half_width):
+            edge_points = []
+            for row in range(17):
+                height = row / 16
+                y = base_y + (top_y - base_y) * height + offset
+                a, b = next((a, b) for a, b in zip(cabin, cabin[1:]) if a[0] <= y <= b[0])
+                t = (y - a[0]) / (b[0] - a[0])
+                width, base, shoulder, crown = [a[i] + (b[i] - a[i]) * t for i in range(1, 5)]
+                z = base + (crown - .031 - base) * height
+                if z <= shoulder:
+                    fraction = 1 - .025 * (z - base) / (shoulder - base)
+                else:
+                    fraction = .975 - .065 * (z - shoulder) / (crown - .027 - shoulder)
+                edge_points.append((side * (width * fraction + .008), y, z))
+            pillar_edges.append(edge_points)
+        vertices = pillar_edges[0] + pillar_edges[1]
+        faces = [(i, i + 1, i + 18, i + 17) for i in range(16)]
+        if side > 0:
+            faces = [face[::-1] for face in faces]
+        mesh = bpy.data.meshes.new("Window pillar")
+        mesh.from_pydata(vertices, [], faces)
+        mesh.materials.append(v.RUBBER)
+        pillar = bpy.data.objects.new("Matte window pillar", mesh)
+        bpy.context.collection.objects.link(pillar)
+        pillar.parent = root
     for a,b in zip(cabin,cabin[1:]):
         rod("Window lower seal",(side*a[1],a[0],a[2]),(side*b[1],b[0],b[2]),.017,v.DARK)
     for start, end, end_depth in [(-.704, .198, .918), (.259, 1.037, .910)]:
