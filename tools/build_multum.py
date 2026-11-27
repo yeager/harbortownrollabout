@@ -169,7 +169,6 @@ for side in (-1,1):
     headlight("Upper headlight",side*.694,-1.385,1.087,.062)
     headlight("Lower headlight",side*.655,-2.043,.672,.079)
     lamp("Front amber indicator",side*.816,-1.987,.671,.052,amber)
-    lamp("Bumper fog lamp",side*.658,-2.102,.374,.043,v.HEADLAMP)
     cluster = [(.706,.716),(.786,.727),(.840,.768),(.842,.828),
                (.802,.894),(.784,.983),(.743,1.006),(.699,.975),
                (.680,.910),(.675,.782)]
@@ -201,6 +200,9 @@ for side in (-1,1):
 box("Front bumper", (0,-1.983,.418),(1.68,.225,.315),v.DARK,.071)
 box("Rear bumper", (0,1.929,.433),(1.69,.211,.271),v.DARK,.074)
 for side in (-1, 1):
+    headlight("Bumper fog lamp", side * .656, -2.095, .366, .041)
+    box("Front bumper corner rub strip", (side * .656, -2.093, .478),
+        (.249, .027, .035), v.RUBBER, .014)
     box("Rear bumper corner rub strip", (side * .658, 2.035, .487),
         (.245, .027, .040), v.RUBBER, .016)
     reflector_angles = [step * math.tau / 32 for step in range(32)]
@@ -212,8 +214,10 @@ for side in (-1, 1):
 box("Rear bumper central rub strip", (0, 2.034, .408),
     (.965, .022, .035), v.RUBBER, .013)
 box("Lower grille recess",(0,-2.100,.384),(.91,.031,.169),v.RUBBER,.013)
-for z in (.338,.383,.428):
-    box("Lower grille rail",(0,-2.118,z),(.833,.020,.014),v.DARK,.005)
+for x in (-.33, -.22, -.11, 0, .11, .22, .33):
+    box("Lower grille upright", (x, -2.115, .384), (.015, .011, .134), v.DARK, .004)
+for z in (.329, .373, .417, .449):
+    box("Lower grille rail", (0, -2.124, z), (.833, .023, .015), v.DARK, .005)
 box("Bonnet intake",(0,-2.039,.615),(.78,.028,.065),v.DARK,.012)
 for y, sign in [(-2.116,-1),(2.049,1)]:
     box("Registration plate",(0,y,.525),(.465,.024,.106),cream,.010)
