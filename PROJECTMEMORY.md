@@ -212,7 +212,7 @@ The public yeager/harbortownrollabout repository is the canonical project remote
 
 - The neighbor in turquoise jacket stands at the first aid target in the square with the hand height and lowers the arm after the aid. Both permits were verified by the rescue mission.
 - Assignees can now greet when Axel or Alma arrives on foot. Goodot was checked without graphics.
-- The BMW X5 has a seated driver who follows the game selection. Tested with Alma in Godot when switching between the camera and the driver’s view. The placement remains to be reviewed visually.
+- The BWM Y5 N70i has a seated driver who follows the game selection. Tested with Alma in Godot when switching between the camera and the driver’s view. The placement remains to be reviewed visually.
 - The BMW driver’s hands follow the steering wheel. The hand positions of both figures were checked in Godot in neutral mode and in full steering rash in both directions.
 - Axel and Alma have curved elbows in the BMW. Both poses were examined in rendered close-ups with the body hidden. The hand positions were also tested with a full rash.
 - The driver’s profile and the faces of the pedestrians have modeled nose and ears. Both Axel and Alma were controlled in rendered images through the BMW side surface with the body visible.

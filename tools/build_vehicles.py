@@ -1187,6 +1187,19 @@ def make_fire_engine():
     cabin=bpy.data.objects.new("Fire crew cab",mesh)
     bpy.context.collection.objects.link(cabin)
     cabin.parent=root
+    # The front and rear door glass meet the centre pillar at separate rubber channels.
+    for side in (-1,1):
+        for y,bottom in ((-1.615,1.914),(-1.542,1.859)):
+            channel = []
+            for z in (bottom,2.04,2.19,2.32,2.416):
+                ring = []
+                for dy, rise in ((-.006,-.001),(-.004,.004),(.004,.004),(.006,-.001)):
+                    hit, point, _, _ = cabin.ray_cast((side*1.5,y+dy,z),(-side,0,0))
+                    if not hit:
+                        raise ValueError("Window channel outside crew cab")
+                    ring.append((point.x+side*rise,point.y,point.z))
+                channel.append(ring)
+            profile_loft("Crew door window pillar seal",channel,RUBBER,root)
     upholstery=material("Fire crew woven graphite",(.065,.080,.084),.02,.8)
     cube("Crew cab floor",(0,-1.78,1.45),(2.03,1.91,.09),DARK,.035,root)
     for x in [-.57,.57]:
