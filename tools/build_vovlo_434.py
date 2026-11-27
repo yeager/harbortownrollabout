@@ -71,13 +71,17 @@ pane("Windscreen", [(x, y - .056, z) for x, y, z in [(-.654, -.824, .939), (.654
 pane("Hatch glass", [(-.626, 1.512, 1.054), (-.560, .961, 1.390),
                      (.560, .961, 1.390), (.626, 1.512, 1.054)])
 heater = v.material("Copper heater trace", (.20, .11, .065), .24, .54)
+heater_rows = []
 for row in range(7):
     t = (row + 1) / 9
-    y = 1.512 + (.961 - 1.512) * t
-    z = 1.054 + (1.390 - 1.054) * t
-    width = .60 - .055 * t
-    v.pipe("Rear heater trace", [(-width, y + .004, z + .004), (width, y + .004, z + .004)],
-           .0012, heater, root)
+    y = 1.512 + (.961 - 1.512) * t + .004
+    z = 1.054 + (1.390 - 1.054) * t + .004
+    width = .626 + (.560 - .626) * t - .039
+    heater_rows.append((width, y, z))
+    v.pipe("Rear heater trace", [(-width, y, z), (width, y, z)], .0012, heater, root)
+for side in (-1, 1):
+    v.pipe("Rear heater bus bar", [(side * width, y, z) for width, y, z in heater_rows],
+           .002, heater, root)
 
 for side in (-1, 1):
     def side_pane(name, points):
@@ -102,8 +106,11 @@ for side in (-1, 1):
     box("Door mirror", (side*.835, -.579, 1.062), (.164, .116, .109), v.DARK, .026)
     box("Mirror reflector", (side*.84, -.515, 1.062), (.119, .009, .079), v.METAL)
     for slot in range(5):
-        box("Quarter pillar vent", (side * (.712 - slot * .008), 1.46 - slot * .045,
-                                   1.054 + slot * .031), (.016, .058, .014), v.RUBBER, .004)
+        y = 1.390 - slot * .047
+        z = 1.066 + slot * .032
+        # Follow the taper of the painted quarter pillar.
+        x = .693 - slot * .0085
+        box("Quarter pillar vent", (side * x, y, z), (.009, .041, .012), v.RUBBER, .003)
     box("Front lamp gasket", (side*.584, -2.004, .702), (.345, .060, .187), v.RUBBER)
     box("Front lamp bright frame", (side*.581, -2.035, .707), (.329, .028, .173), v.METAL)
     box("Headlight lens", (side * .545, -2.055, .708), (.239, .035, .151),
