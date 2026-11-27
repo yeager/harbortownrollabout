@@ -4,6 +4,7 @@ from pathlib import Path
 import sys
 
 import bpy
+from mathutils import Vector
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import build_vehicles as v
@@ -47,6 +48,18 @@ for side in (-1,1):
         (0,-2.017,1.568),(side*.708,-2.017,1.534),
         (side*.688,-1.286,2.431),(0,-1.286,2.464),
     ])
+for pivot_x in (-.52,.10):
+    pivot = Vector((pivot_x,-2.079,1.501))
+    blade_start = Vector((pivot_x+.102,-1.958,1.658))
+    blade_end = Vector((pivot_x+.412,-1.903,1.738))
+    blade_midpoint = (blade_start+blade_end)/2
+    v.cylinder("Wiper spindle cap",pivot,.024,.028,v.DARK,False,20,root)
+    arm = box("Wiper arm",(pivot+blade_midpoint)/2,
+              ((blade_midpoint-pivot).length,.017,.016),v.DARK,.004)
+    arm.rotation_euler = (blade_midpoint-pivot).to_track_quat("X","Z").to_euler()
+    blade = box("Wiper blade",blade_midpoint,
+                ((blade_end-blade_start).length,.021,.018),v.RUBBER,.004)
+    blade.rotation_euler = (blade_end-blade_start).to_track_quat("X","Z").to_euler()
 box("Freezer body", (0,1.25,1.72), (2.14,3.43,1.76), blue,.075)
 box("Front bumper", (0,-2.97,.69), (1.91,.17,.30), v.DARK,.08)
 box("Recessed radiator core",(0,-2.983,.997),(1.11,.035,.281),v.BLACK,.018)

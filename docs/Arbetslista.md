@@ -383,6 +383,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - De sex frysluckorna fick infällda handtag med lås och gångjärn med separata fästblad, hylsor och ledtappar. Granskat i Godot. Glassrutten passerade.
   - Kylargrillen fick en separat ram, tre horisontella lameller och 23 lodräta kylflänsar framför den försänkta kylaren. Granskad i Godot. Fordonsprovet passerade.
   - Vindrutan följer nu hyttens välvda front och syns över hela ytan utan att karossen går igenom glaset. Granskad i Godot. Glassrutten passerade.
+  - Vindrutan fick två modellerade torkare i viloläge med separata axelkåpor, armar och gummiblad. Granskade i Godot. Glassrutten passerade.
 - [ ] [`lotten.glb`](../vehicles/lotten.glb)
 - [ ] [`sport_sedan.glb`](../vehicles/sport_sedan.glb)
   - BWM M3 E33 fick ett upphöjt modellemblem på bakluckan. Granskat i Godot och fordonsprovet passerade.
