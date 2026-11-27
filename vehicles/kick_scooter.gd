@@ -33,9 +33,9 @@ func _ready() -> void:
 	headlamp.spot_angle = 25.0
 	add_child(headlamp)
 	update_lights(0.0)
-	turn_signals.fit_anchors(self,
-		[Vector3(-.252, 1.03, -.472), Vector3(-.087, .22, .54)],
-		[Vector3(.252, 1.03, -.472), Vector3(.087, .22, .54)], Vector3(.054, .033, .027))
+	for pattern in ["Scooter front indicator lens*", "Scooter rear indicator lens*"]:
+		for lens: MeshInstance3D in find_children(pattern, "MeshInstance3D", true, false):
+			turn_signals.use_existing_lens(lens, -1 if to_local(lens.global_position).x < 0.0 else 1)
 	for part in ["FrontWheel","RearWheel"]:
 		wheels.append(find_child(part,true,false))
 	grips.assign(find_children("Handle grip*", "MeshInstance3D", true, false))

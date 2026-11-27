@@ -351,6 +351,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Båda däcken fick rundade skuldror och två längsgående spår. Däckradien är fortsatt 118 mm. Båda hjulen granskades i Godot och elsparkcykelprovet passerade.
   - Framlyktan fick två runda linser i ett separat hus med tätning. Baklyktan fick ett eget hus och en nedre röd reflex. Båda lyktorna granskades i Godot och elsparkcykelprovet passerade.
   - Framlyktan kastar nu en ljuskägla på marken i nattläge och båda lyktornas linsmaterial lyser. Dag, natt och återgång till dag verifierades för spelarens och grannens elsparkcyklar. Ljuskäglan granskades i Godot och elsparkcykelprovet passerade.
+  - Blinkersglasen sitter nu i modellerade fästen på styret och vid baklyktan. De använder samma geometri när de blinkar. Fram- och bakblinkers granskades tända i Godot. Elsparkcykelprovet och trafikens blinkersprov passerade.
 - [ ] [`farm_tractor.glb`](../vehicles/farm_tractor.glb)
   - Vinterspridaren fick en modellerad trepunktsinfästning med två nedre stag, toppstag och ledtappar. Infästningen granskades i Godot och halkbekämpningsprovet passerade.
   - De bakre reflexerna följer nu spridarens lutande bakvägg och har separata fästplattor och skruvar. Granskat bakifrån i Godot. Halkbekämpningsprovet passerade.

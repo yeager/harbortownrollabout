@@ -136,6 +136,11 @@ cube("Rear red marker",(0,-.623,.185),(.061,.013,.014),tail,.004,root)
 reflector_red = material("Rear red reflector", (.41,.021,.018), .24,.37)
 cube("Rear light lower reflector",(0,-.621,.173),(.059,.012,.007),
      reflector_red,.002,root)
+for side in (-1, 1):
+    cube("Rear indicator mount",(side*.054,-.606,.187),(.040,.031,.029),
+         charcoal,.006,root)
+    cube("Scooter rear indicator lens",(side*.059,-.624,.189),(.029,.010,.016),
+         orange,.004,root)
 tube("Deck neck",(0,.28,.13),(0,.448,.34),.047,charcoal)
 tube("Handlebar tube",(0,.46,.25),(0,.387,1.275),.025,charcoal)
 tube("Folding collar",(0,.454,.31),(0,.447,.38),.037,charcoal)
@@ -152,6 +157,10 @@ cube("Folding latch lever",(0,.377,.328),(.036,.030,.069),steel,.009,root)
 cube("Folding latch safety tab",(0,.359,.315),(.031,.011,.022),red,.004,root)
 tube("Handlebar",( -.287,.387,1.275),(.287,.387,1.275),.016,charcoal)
 for side in (-1,1):
+    cube("Handlebar indicator mount",(side*.130,.401,1.275),(.045,.047,.031),
+         charcoal,.007,root)
+    cube("Scooter front indicator lens",(side*.130,.428,1.275),(.035,.010,.018),
+         orange,.005,root)
     tube("Handle grip",(side*.158,.387,1.275),(side*.294,.387,1.275),.022,rubber)
     for ring in range(5):
         x = side*(.178+ring*.022)

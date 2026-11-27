@@ -44,11 +44,11 @@ func fit(actor: Node3D, model: Node3D, bounds: AABB) -> void:
 			lens.position = actor.to_local(model.to_global(front))
 			lens.rotation.y = side * .13
 			frame.add_child(lens, true)
-			_use_existing_lens(lens, -side)
+			use_existing_lens(lens, -side)
 		for pattern in ["Amber lens*", "Bus side indicator amber lens*"]:
 			for lens: MeshInstance3D in model.find_children(pattern, "MeshInstance3D", true, false):
 				var side := -1 if model.to_local(lens.global_position).x > 0.0 else 1
-				_use_existing_lens(lens, side)
+				use_existing_lens(lens, side)
 		return
 	var panels: Array[AABB] = []
 	var existing: Array[MeshInstance3D] = [null, null, null, null]
@@ -75,7 +75,7 @@ func fit(actor: Node3D, model: Node3D, bounds: AABB) -> void:
 		for end in [-1, 1]:
 			var slot := (2 if side > 0 else 0) + (1 if end > 0 else 0)
 			if existing[slot]:
-				_use_existing_lens(existing[slot], side)
+				use_existing_lens(existing[slot], side)
 				continue
 			var at := _attachment(panels, bounds, side, end)
 			_add_lamp(frame, at, size, side)
@@ -87,7 +87,7 @@ func _is_indicator_lens(label: String) -> bool:
 			return true
 	return false
 
-func _use_existing_lens(lens: MeshInstance3D, side: int) -> void:
+func use_existing_lens(lens: MeshInstance3D, side: int) -> void:
 	var lit := MeshInstance3D.new()
 	lit.name = "Amber flash"
 	lit.mesh = lens.mesh
