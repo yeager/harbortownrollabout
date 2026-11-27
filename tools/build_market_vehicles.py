@@ -584,6 +584,13 @@ for side in [-1,1]:
         vent_rings.append([(side*width,y,low),(side*(width+.009),y,low+.007),
                            (side*(width+.009),y,high-.007),(side*width,y,high)])
     v.profile_loft("Swept bonnet side insert",vent_rings,v.BLACK,root)
+    # The vent blades follow the taper of the dark insert on the hood.
+    for first, last in zip(vent_sections[1:4], vent_sections[2:5]):
+        for position in (.23, .67):
+            y, width, low, high = [a+(b-a)*position for a,b in zip(first,last)]
+            blade = box("Bonnet cooling louvre", (side*(width+.010), y, (low+high)*.5),
+                        (.016,.024,(high-low)*.68), v.DARK,.005)
+            blade.rotation_euler.x = -.27
     rod("Bright V badge",(0,-2.302,1.31),(side*.066,-2.302,1.394),.012,v.METAL)
     # The blade climbs across the nose, then turns back along the bonnet shoulder.
     lamp_path = [(.115,-2.296,1.239,1.263),(.19,-2.296,1.245,1.280),
