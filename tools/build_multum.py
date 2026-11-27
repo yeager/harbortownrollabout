@@ -502,13 +502,24 @@ for x, length in [(-.625, .535), (.055, .540)]:
     rod("Windscreen wiper rubber edge",
         Vector(blade_start) + Vector((0, .010, -.007)),
         Vector(blade_end) + Vector((0, .010, -.007)), .007, v.RUBBER)
-# The lower hatch panel ends at the bumper and is narrower than the rear glass.
-for side in (-1, 1):
-    rod("Hatch side seam", (side * .627, 1.993, .943),
-        (side * .604, 1.993, .655), .004, v.DARK)
-    rod("Hatch corner seam", (side * .604, 1.993, .655),
-        (side * .564, 1.993, .620), .004, v.DARK)
-rod("Hatch sill seam", (-.564, 1.993, .620), (.564, 1.993, .620), .004, v.DARK)
+# Carry both sides of the hatch gap across the shoulder below the rear glass.
+hatch_right = [
+    (0, .620), (.540, .620), (.567, .623), (.593, .640),
+    (.608, .666), (.624, .835), (.632, .943), (.636, 1.001), (.630, 1.043),
+]
+hatch_outline = [(-x, z) for x, z in reversed(hatch_right[1:])] + hatch_right
+hatch_samples = []
+for start, end in zip(hatch_outline, hatch_outline[1:]):
+    steps = max(1, math.ceil(math.dist(start, end) / .014))
+    hatch_samples.extend(Vector(start).lerp(Vector(end), step / steps) for step in range(steps))
+hatch_samples.append(hatch_outline[-1])
+hatch_points = []
+for x, z in hatch_samples:
+    hit, point, _, _ = body_surface.ray_cast(Vector((x, 2.2, z)), Vector((0, -1, 0)))
+    if not hit:
+        raise ValueError(f"Hatch seam misses body at {x:.3f}, {z:.3f}")
+    hatch_points.append((x, point.y + .001, z))
+v.pipe("Hatch shut line", hatch_points, .003, v.RUBBER, root)
 box("Hatch release recess", (0, 2.003, .722), (.237, .029, .054), v.RUBBER, .013)
 box("Hatch release grip", (0, 2.020, .731), (.190, .015, .025), paint, .007)
 
