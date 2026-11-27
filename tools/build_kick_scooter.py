@@ -53,6 +53,18 @@ for side in (-1,1):
                    (.109,.010,.005),charcoal,.002,root,bevel_segments=1)
         rib.rotation_euler.z = side*.26
     cube("Deck side reflector",(side*.157,-.30,.126),(.006,.069,.025),orange,.003,root)
+# The stand sits against the tray while riding.
+cube("Side stand bracket",(.146,-.067,.089),(.032,.078,.042),
+     charcoal,.009,root)
+cylinder("Side stand pivot",(.165,-.073,.092),.013,.009,steel,True,16,root)
+tube("Folded side stand",(.169,-.079,.087),(.166,-.229,.070),.007,steel)
+cube("Side stand foot",(.168,-.235,.069),(.021,.032,.014),rubber,.004,root)
+cube("Charging socket surround",(.153,.152,.132),(.012,.059,.036),
+     charcoal,.006,root)
+cube("Charging port dust cap",(.160,.152,.132),(.009,.043,.026),
+     rubber,.004,root)
+cube("Charging cap pull tab",(.163,.177,.131),(.009,.016,.013),
+     rubber,.003,root)
 tyre_section = [
     (-.031, .066), (-.032, .087), (-.031, .103), (-.028, .111),
     (-.023, .116), (-.017, .118), (-.013, .118), (-.011, .115),

@@ -354,6 +354,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Blinkersglasen sitter nu i modellerade fästen på styret och vid baklyktan. De använder samma geometri när de blinkar. Fram- och bakblinkers granskades tända i Godot. Elsparkcykelprovet och trafikens blinkersprov passerade.
   - Ståplattan fick snedställda halkribbor och batterihuset fick ett separat lock med synlig tätningsfog. Båda detaljerna granskades i Godot och elsparkcykelprovet passerade.
   - Styret fick ett displayglas med hastighet i km/h. Avläsningen följer tillryggalagd sträcka per bildsteg. Visningen 18 km/h kontrollerades i Godot och elsparkcykelprovet passerade.
+  - Batterihusets sida fick ett ladduttag med dammlock och ett infällt sidostöd med led och gummifot. Båda detaljerna granskades i Godot. Elsparkcykelprovet passerade.
 - [ ] [`farm_tractor.glb`](../vehicles/farm_tractor.glb)
   - Vinterspridaren fick en modellerad trepunktsinfästning med två nedre stag, toppstag och ledtappar. Infästningen granskades i Godot och halkbekämpningsprovet passerade.
   - De bakre reflexerna följer nu spridarens lutande bakvägg och har separata fästplattor och skruvar. Granskat bakifrån i Godot. Halkbekämpningsprovet passerade.
