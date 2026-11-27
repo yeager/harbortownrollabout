@@ -307,7 +307,15 @@ for name, finish, profile in [
         for depth, radius in profile
     ], finish, root)
 
-box("Front bumper", (0,-1.983,.418),(1.68,.225,.315),v.DARK,.071)
+front_bumper = box("Front bumper", (0, -1.983, .418), (1.68, .225, .315), v.DARK, .071)
+grille_cutter = v.cube("Lower grille opening tool", (0, -2.094, .386),
+                      (.946, .122, .180), None, .034, bevel_segments=5)
+bpy.context.view_layer.objects.active = front_bumper
+grille_cut = front_bumper.modifiers.new("Lower grille opening", "BOOLEAN")
+grille_cut.operation = "DIFFERENCE"
+grille_cut.object = grille_cutter
+bpy.ops.object.modifier_apply(modifier=grille_cut.name)
+bpy.data.objects.remove(grille_cutter, do_unlink=True)
 box("Rear bumper", (0,1.929,.433),(1.69,.211,.271),v.DARK,.074)
 for side in (-1, 1):
     headlight("Bumper fog lamp", side * .656, -2.095, .366, .041)
@@ -323,11 +331,11 @@ for side in (-1, 1):
     ], reflector, root)
 box("Rear bumper central rub strip", (0, 2.034, .408),
     (.965, .022, .035), v.RUBBER, .013)
-box("Lower grille recess",(0,-2.100,.384),(.91,.031,.169),v.RUBBER,.013)
+box("Lower grille backing", (0, -2.041, .386), (.940, .013, .176), v.RUBBER, .030)
 for x in (-.33, -.22, -.11, 0, .11, .22, .33):
-    box("Lower grille upright", (x, -2.115, .384), (.015, .011, .134), v.DARK, .004)
-for z in (.329, .373, .417, .449):
-    box("Lower grille rail", (0, -2.124, z), (.833, .023, .015), v.DARK, .005)
+    box("Lower grille upright", (x, -2.056, .386), (.015, .028, .165), v.DARK, .004)
+for z in (.326, .366, .406, .446):
+    box("Lower grille rail", (0, -2.075, z), (.903, .031, .017), v.DARK, .006)
 box("Bonnet intake backing", (0, -1.976, intake_center[2]),
     (.779, .017, .080), v.RUBBER, .015)
 for x in (-.31, -.207, -.103, 0, .103, .207, .31):
