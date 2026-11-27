@@ -335,6 +335,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Den bakre registreringsskylten fick två armaturer som tänds med nattläget. Båda lamporna och skyltens läsbarhet granskades i Godots nattvy. Fordonsprovet passerade.
   - Fyra sammanhängande hjulhuslister ersatte de segmenterade listerna. De följer däckens rundning och smalnar av vid ändarna. Båda sidor granskades i Godot och fordonsprovet passerade.
   - Sidorutorna fick formpassade gummilister längs de främre och bakre stolparna. Båda sidor granskades i Godot och fordonsprovet passerade.
+  - Sidostegen fick två räfflade halkskydd per sida, fästbyglar och en separat ytterlist. Stegytorna granskades på båda sidor i Godot och fordonsprovet passerade.
 - [ ] [`electric_kick_scooter.glb`](../vehicles/electric_kick_scooter.glb)
 - [ ] [`farm_tractor.glb`](../vehicles/farm_tractor.glb)
   - Vinterspridaren fick en modellerad trepunktsinfästning med två nedre stag, toppstag och ledtappar. Infästningen granskades i Godot och halkbekämpningsprovet passerade.

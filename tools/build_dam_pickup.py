@@ -126,7 +126,17 @@ def build_pickup():
             ("Rear indicator lens", 1.263, amber),
         ]:
             panel(label, (side*.965, 2.937, z), (.137, .032, .062), finish, .012)
-        panel("Running board", (side*1.07, -.09, .59), (.21, 2.26, .09), trim)
+        panel("Running board beam", (side*1.07, -.09, .59), (.21, 2.26, .09), trim)
+        for y in [-.667, .475]:
+            panel("Running board bracket", (side*.937, y, .562),
+                  (.28, .104, .050), alloy, .012)
+            panel("Running board grip pad", (side*1.079, y, .635),
+                  (.167, 1.02, .021), liner, .010)
+            for index in range(8):
+                panel("Running board tread", (side*1.079, y + (index-3.5)*.112, .648),
+                      (.137, .032, .013), trim, .004)
+        panel("Running board outer trim", (side*1.174, -.09, .609),
+              (.019, 2.15, .026), alloy, .007)
         panel("Cab window divider", (side*.894, -.03, 1.65), (.086, .082, .62), trim)
         for y in [-.56, .67]:
             panel("Door pull", (side*1.015, y, 1.213), (.046, .19, .055), trim)
