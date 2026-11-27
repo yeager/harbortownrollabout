@@ -540,10 +540,19 @@ v.pipe("Hatch shut line", hatch_points, .003, v.RUBBER, root)
 box("Hatch release recess", (0, 2.003, .722), (.237, .029, .054), v.RUBBER, .013)
 box("Hatch release grip", (0, 2.020, .731), (.190, .015, .025), paint, .007)
 
-box("Centre stop light housing", (0, 1.854, 1.571),
-    (.395, .032, .041), v.DARK, .012)
-box("Centre brake lamp", (0, 1.871, 1.571),
-    (.353, .012, .025), v.TAIL_LAMP, .006)
+box("Centre stop light housing", (0, 1.851, 1.571),
+    (.395, .038, .043), v.DARK, .010)
+stop_lens_sections = [(-.174, 0.0, .67)]
+for rib in range(18):
+    for phase, relief in [(.12, 0.0), (.52, .0012), (.89, 0.0)]:
+        stop_lens_sections.append((.348 * ((rib + phase) / 18 - .5), relief, 1.0))
+stop_lens_sections.append((.174, 0.0, .67))
+v.profile_loft("Centre brake lamp", [
+    [(x, y - .004 * (x / .174) ** 2 + relief, 1.571 + z * height)
+     for y, z in [(1.865, -.010), (1.874, -.012), (1.880, -.008),
+                  (1.880, .008), (1.874, .012), (1.865, .010)]]
+    for x, relief, height in stop_lens_sections
+], v.TAIL_LAMP, root)
 
 heater_trace = v.material("Muted copper rear window traces", (.147, .093, .070), .25, .53)
 rear_glazing = glasshouse.evaluated_get(bpy.context.evaluated_depsgraph_get())

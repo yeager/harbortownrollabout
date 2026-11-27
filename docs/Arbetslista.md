@@ -465,6 +465,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Emblemet under vindrutan fick en formad metallram, blå emalj och upphöjda FAIT-bokstäver. Granskat i närbild i Godot. Körprovet för 30 vägfordon passerade.
   - Bakrutans nio värmetrådar följer nu glasets yta och smalnar av mot hörnen. Anslutningsskenorna och kontaktplattorna granskades i närbild i Godot. Körprovet för 30 vägfordon passerade.
   - Bakrutan fick en profilerad gummitätning runt hela glaset. Passformen mot den lackerade ramen granskades i Godot. Körprovet för 30 vägfordon passerade.
+  - Det tredje bromsljuset fick ett profilerat lykthus och ett välvt glas med 18 gjutna räfflor. Granskat i närbild i Godot. Körprovet för 30 vägfordon passerade.
 - [ ] [`vovlo_434.glb`](../vehicles/vovlo_434.glb)
   - Vovlo 434 finns som körbar tredörrars halvkombi i fordonsgalleriet. Exteriören granskades framifrån och bakifrån i Godot. Körprovet för 30 vägfordon och kontrollen av språkkatalogerna passerade.
   - Vovlo 434 fick räfflade strålkastar- och blinkersglas fram samt separata reflektorringar. Granskat i närbild i Godot. Körprovet för 30 vägfordon passerade.
