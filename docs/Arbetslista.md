@@ -386,6 +386,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Vindrutan fick två modellerade torkare i viloläge med separata axelkåpor, armar och gummiblad. Granskade i Godot. Glassrutten passerade.
   - Sidofönstren fick nya konturer som följer hyttens sidor och lämnar fri karossyta vid spegelfästena. Granskade i Godot. Glassrutten passerade.
   - Sidofönstren fick en sammanhängande gummilist runt varje glas. Granskad i Godot. Glassrutten passerade.
+  - Vindrutan fick en sammanhängande gummilist längs hela ytterkanten. Granskad i Godot. Glassrutten passerade.
 - [ ] [`lotten.glb`](../vehicles/lotten.glb)
 - [ ] [`sport_sedan.glb`](../vehicles/sport_sedan.glb)
   - BWM M3 E33 fick ett upphöjt modellemblem på bakluckan. Granskat i Godot och fordonsprovet passerade.

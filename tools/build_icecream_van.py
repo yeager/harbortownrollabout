@@ -37,17 +37,35 @@ def window(name, vertices):
     obj.parent = root
 
 
+def window_gasket(name, vertices):
+    gasket = bpy.data.curves.new(name, "CURVE")
+    gasket.dimensions = "3D"
+    gasket.bevel_depth = .012
+    gasket.bevel_resolution = 3
+    outline = gasket.splines.new("POLY")
+    outline.points.add(len(vertices)-1)
+    for point, vertex in zip(outline.points, vertices):
+        point.co = (*vertex,1)
+    outline.use_cyclic_u = True
+    rubber_trim = bpy.data.objects.new(gasket.name,gasket)
+    bpy.context.collection.objects.link(rubber_trim)
+    gasket.materials.append(v.RUBBER)
+    rubber_trim.parent = root
+
+
 box("Chassis", (0, 0, .54), (1.45, 5.65, .26), v.DARK)
 v.mesh_from_rings("Pressed steel bonnet and cab", [
     (-2.98,.85,.53,1.03,1.10), (-2.79,.98,.52,1.21,1.33),
     (-2.04,1.0,.57,1.37,1.49), (-1.25,1.0,.63,2.30,2.46),
     (-.46,1.0,.64,2.32,2.48)], blue, root)
 # The windscreen follows both halves of the crowned steel cab surface.
-for side in (-1,1):
-    window("Swept windscreen", [
-        (0,-2.017,1.568),(side*.708,-2.017,1.534),
-        (side*.688,-1.286,2.431),(0,-1.286,2.464),
-    ])
+windscreen = [
+    (0,-2.017,1.568),(.708,-2.017,1.534),(.688,-1.286,2.431),
+    (0,-1.286,2.464),(-.688,-1.286,2.431),(-.708,-2.017,1.534),
+]
+window("Swept windscreen", windscreen[:4])
+window("Swept windscreen", windscreen[3:]+windscreen[:1])
+window_gasket("Windscreen gasket", windscreen)
 for pivot_x in (-.52,.10):
     pivot = Vector((pivot_x,-2.079,1.501))
     blade_start = Vector((pivot_x+.102,-1.958,1.658))
@@ -83,19 +101,7 @@ for side in (-1,1):
         (s*1.012,-.56,2.095),(s*1.012,-1.257,2.095),
     ]
     window("Cab door window", door_window)
-    gasket = bpy.data.curves.new("Cab window gasket", "CURVE")
-    gasket.dimensions = "3D"
-    gasket.bevel_depth = .012
-    gasket.bevel_resolution = 3
-    outline = gasket.splines.new("POLY")
-    outline.points.add(len(door_window)-1)
-    for point, vertex in zip(outline.points, door_window):
-        point.co = (*vertex,1)
-    outline.use_cyclic_u = True
-    rubber_trim = bpy.data.objects.new(gasket.name,gasket)
-    bpy.context.collection.objects.link(rubber_trim)
-    gasket.materials.append(v.RUBBER)
-    rubber_trim.parent = root
+    window_gasket("Cab window gasket", door_window)
     box("Mirror mounting plate",(s*1.008,-1.77,1.566),(.047,.157,.145),v.DARK,.017)
     box("Mirror arm",(s*1.113,-1.77,1.581),(.224,.071,.070),v.DARK,.016)
     v.cylinder("Mirror folding pivot",(s*1.205,-1.77,1.619),.051,.102,
