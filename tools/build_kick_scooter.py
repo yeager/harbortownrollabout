@@ -131,7 +131,11 @@ for y, first, last in ((-.48,-1.22,1.29),(.48,-.91,.86)):
                             (support_x, attachment_y, attachment_z+.004),
                             .006, .005, steel, False, 12, root)
         fastener.rotation_euler.x = -angle
-cube("Rear red marker",(0,-.606,.179),(.064,.018,.025),tail,.005,root)
+cube("Rear light housing",(0,-.602,.181),(.077,.033,.036),charcoal,.008,root)
+cube("Rear red marker",(0,-.623,.185),(.061,.013,.014),tail,.004,root)
+reflector_red = material("Rear red reflector", (.41,.021,.018), .24,.37)
+cube("Rear light lower reflector",(0,-.621,.173),(.059,.012,.007),
+     reflector_red,.002,root)
 tube("Deck neck",(0,.28,.13),(0,.448,.34),.047,charcoal)
 tube("Handlebar tube",(0,.46,.25),(0,.387,1.275),.025,charcoal)
 tube("Folding collar",(0,.454,.31),(0,.447,.38),.037,charcoal)
@@ -153,7 +157,11 @@ for side in (-1,1):
         x = side*(.178+ring*.022)
         tube("Grip groove",(x-.002,.387,1.275),(x+.002,.387,1.275),.0229,charcoal)
 cube("Display housing",(0,.385,1.286),(.072,.093,.033),rubber,.014,root)
-cube("Lamp lens",(0,.435,1.27),(.044,.016,.026),white,.006,root)
+cube("Headlamp housing",(0,.427,1.273),(.060,.030,.036),charcoal,.009,root)
+cube("Headlamp sealing frame",(0,.443,1.273),(.050,.008,.028),rubber,.006,root)
+for x in (-.010,.010):
+    optic = cylinder("Headlamp optic",(x,.448,1.273),.008,.007,white,False,20,root)
+    optic.rotation_euler.x = math.pi/2
 tube("Brake lever",(-.159,.394,1.265),(-.266,.444,1.245),.008,steel)
 curved("Red brake cable",[(-.15,.397,1.26),(-.08,.494,1.17),(.032,.50,.91),
                          (.032,.453,.54),(.038,.433,.35)],.0065,red)

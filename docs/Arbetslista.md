@@ -349,6 +349,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Bakhjulet fick en vågformad bromsskiva, ett fast bromsok och ett stag. Skivan och oket granskades i Godot och deras infästning verifierades i exporten. Elsparkcykelprovet passerade.
   - Båda stänkskärmarna fick modellerad tjocklek och stag med synliga skruvhuvuden. Fram- och bakskärmen granskades i Godot. Elsparkcykelprovet passerade.
   - Båda däcken fick rundade skuldror och två längsgående spår. Däckradien är fortsatt 118 mm. Båda hjulen granskades i Godot och elsparkcykelprovet passerade.
+  - Framlyktan fick två runda linser i ett separat hus med tätning. Baklyktan fick ett eget hus och en nedre röd reflex. Båda lyktorna granskades i Godot och elsparkcykelprovet passerade.
 - [ ] [`farm_tractor.glb`](../vehicles/farm_tractor.glb)
   - Vinterspridaren fick en modellerad trepunktsinfästning med två nedre stag, toppstag och ledtappar. Infästningen granskades i Godot och halkbekämpningsprovet passerade.
   - De bakre reflexerna följer nu spridarens lutande bakvägg och har separata fästplattor och skruvar. Granskat bakifrån i Godot. Halkbekämpningsprovet passerade.
