@@ -78,12 +78,28 @@ edge.width = .015
 edge.segments = 3
 shell.modifiers.new("Panel normals", "WEIGHTED_NORMAL")
 
+# The raised lip follows the painted sheet immediately above each wheel opening.
+body_surface = shell.evaluated_get(bpy.context.evaluated_depsgraph_get())
+for side in (-1, 1):
+    for axle in (-1.215, 1.215):
+        lip = []
+        for step in range(45):
+            angle = math.pi * step / 44
+            y = axle + .345 * math.cos(angle)
+            z = .286 + .345 * math.sin(angle)
+            hit, point, _, _ = body_surface.ray_cast(
+                Vector((side * 1.1, y, z)), Vector((-side, 0, 0))
+            )
+            if not hit:
+                raise RuntimeError(f"Wheel arch lip misses the panel at {y:.3f}, {z:.3f}")
+            lip.append(point + Vector((side * .001, 0, 0)))
+        v.pipe("Rolled wheel arch lip", lip, .004, paint, root)
+
 # Sample the finished body so the shut line follows the crown without gaps.
 hood_outline = [
     (-.53, -1.985), (.53, -1.985), (.58, -1.95),
     (.628, -.898), (-.628, -.898), (-.58, -1.95),
 ]
-body_surface = shell.evaluated_get(bpy.context.evaluated_depsgraph_get())
 hood_seam = []
 for start, end in zip(hood_outline, hood_outline[1:] + hood_outline[:1]):
     steps = max(1, math.ceil(math.dist(start, end) / .035))
