@@ -318,7 +318,20 @@ bpy.ops.object.modifier_apply(modifier=grille_cut.name)
 bpy.data.objects.remove(grille_cutter, do_unlink=True)
 box("Rear bumper", (0,1.929,.433),(1.69,.211,.271),v.DARK,.074)
 for side in (-1, 1):
-    headlight("Bumper fog lamp", side * .656, -2.095, .366, .041)
+    fog_x = side * .656
+    fog_opening = v.cylinder("Fog lamp opening tool", (fog_x, -2.078, .366),
+                             .078, .116, None, False, 48)
+    fog_opening.rotation_euler.x = math.pi / 2
+    bpy.context.view_layer.objects.active = front_bumper
+    fog_cut = front_bumper.modifiers.new("Recessed fog lamp", "BOOLEAN")
+    fog_cut.operation = "DIFFERENCE"
+    fog_cut.object = fog_opening
+    bpy.ops.object.modifier_apply(modifier=fog_cut.name)
+    bpy.data.objects.remove(fog_opening, do_unlink=True)
+    backing = v.cylinder("Fog lamp recess backing", (fog_x, -2.043, .366),
+                         .077, .014, v.RUBBER, False, 48, root)
+    backing.rotation_euler.x = math.pi / 2
+    headlight("Bumper fog lamp", fog_x, -2.051, .366, .041)
     box("Front bumper corner rub strip", (side * .656, -2.093, .478),
         (.249, .027, .035), v.RUBBER, .014)
     box("Rear bumper corner rub strip", (side * .658, 2.035, .487),

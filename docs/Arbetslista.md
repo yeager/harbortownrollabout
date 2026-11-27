@@ -442,6 +442,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Multums främre blinkers fick välvda glas och gummitätningar som följer framskärmarna. Båda granskades framifrån i Godot. Körprovet verifierade att de modellerade blinkersen används.
   - Multums övre luftintag är infällt i karossen och har sju stående lameller. Granskat framifrån i Godot. Körprovet för 29 vägfordon passerade.
   - Multums nedre galler fälldes in i stötfångaren med rundade hörn och ribbor på två djup. Granskat i Godot. Körprovet för 29 vägfordon passerade.
+  - Multums dimljus fälldes in i runda försänkningar med mörka insatser. Granskade i Godot. Körprovet för 29 vägfordon passerade.
 - [ ] [`compact_convertible.glb`](../vehicles/compact_convertible.glb)
   - Mino Kuper S fick ett eget kopparfärgat M-monogram på motorhuven och bakluckan samt nytt namn i fordonsgalleriet. Emblemen granskades i Godot. Fordonsprovet och språkkontrollen passerade.
 - [ ] [`electric_sedan.glb`](../vehicles/electric_sedan.glb)
