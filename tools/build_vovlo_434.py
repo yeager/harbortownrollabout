@@ -90,6 +90,18 @@ for start, end in zip(hood_outline, hood_outline[1:] + hood_outline[:1]):
         hood_seam.append((x, y, point.z + .0008))
 v.pipe("Bonnet shut line", hood_seam + hood_seam[:1], .0032, v.DARK, root)
 
+# Seat the cowl slots on the bonnet's slope below the parked wipers.
+for slot in range(-12, 13):
+    x = slot * .023
+    hit, point, normal, _ = body_surface.ray_cast(
+        Vector((x, -.977, 1.2)), Vector((0, 0, -1))
+    )
+    if not hit:
+        raise RuntimeError("Cowl vent misses the bonnet")
+    vent = box("Cowl air slot", point + normal * .0006,
+               (.010, .051, .003), v.RUBBER, .001)
+    vent.rotation_euler = normal.to_track_quat('Z', 'Y').to_euler()
+
 # Project the lower hatch perimeter onto the tail panel and the sloped deck.
 hatch_outline = [
     (-.622, .728), (.622, .728), (.650, .752), (.650, .816),
