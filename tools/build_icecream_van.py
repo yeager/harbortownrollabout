@@ -128,7 +128,15 @@ for side in (-1,1):
         for n in range(8):
             a = n*math.tau/8
             disc("Fälghål", (s*1.087,y+.184*math.sin(a),.405+.184*math.cos(a)), .026,.01,v.DARK)
-    box("Continuous side step",(s*1.07,1.13,.76),(.15,3.41,.065),v.METAL)
+    box("Continuous side step",(s*1.158,1.13,.76),(.225,3.41,.065),v.METAL)
+    for centre_y in (.12,1.25,2.38):
+        box("Step grip insert",(s*1.169,centre_y,.794),(.183,.93,.015),v.RUBBER,.007)
+        for rib_index in range(9):
+            box("Step grip rib",(s*1.169,centre_y+(rib_index-4)*.102,.803),
+                (.147,.022,.012),v.DARK,.004)
+    for mount_y in (.68,1.25,2.75):
+        box("Step support web",(s*1.094,mount_y,.716),(.207,.061,.045),v.DARK,.009)
+        box("Step bracket riser",(s*1.030,mount_y,.780),(.079,.061,.156),v.DARK,.009)
     for y in (.12,1.25,2.38):
         box("Hatch gasket",(s*1.07,y,1.56),(.018,1.07,1.15),ink)
         box("Freezer hatch",(s*1.088,y,1.56),(.025,1.055,1.13),blue)

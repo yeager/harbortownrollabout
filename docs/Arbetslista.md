@@ -388,6 +388,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Sidofönstren fick en sammanhängande gummilist runt varje glas. Granskad i Godot. Glassrutten passerade.
   - Vindrutan fick en sammanhängande gummilist längs hela ytterkanten. Granskad i Godot. Glassrutten passerade.
   - Hyttdörrarna fick separata metallgrepp, gummitätningar och låscylindrar med nyckelspår. Granskade i Godot. Glassrutten passerade.
+  - Sidostegen breddades och fick räfflade gummiplattor under frysluckorna samt synliga fästen mot karossen. Granskade i Godot. Glassrutten passerade.
 - [ ] [`lotten.glb`](../vehicles/lotten.glb)
 - [ ] [`sport_sedan.glb`](../vehicles/sport_sedan.glb)
   - BWM M3 E33 fick ett upphöjt modellemblem på bakluckan. Granskat i Godot och fordonsprovet passerade.
