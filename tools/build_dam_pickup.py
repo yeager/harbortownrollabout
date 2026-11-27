@@ -302,6 +302,21 @@ def build_pickup():
     panel("Front bumper", (0, -2.85, .76), (2.10, .39, .32), trim, .11)
     panel("Lower intake", (0, -3.044, .80), (1.26, .052, .127), liner)
     panel("Skid plate", (0, -3.006, .647), (.84, .14, .12), alloy)
+    tow_finish = material("Tow eye red enamel", (.43, .038, .021), .39, .39)
+    for side in [-1, 1]:
+        x = side*.558
+        panel("Tow eye bumper pocket", (x, -3.041, .708), (.143, .032, .089), liner, .016)
+        panel("Tow eye anchor lug", (x, -3.051, .734), (.041, .062, .021), tow_finish, .006)
+        loop_sections = []
+        for index in range(25):
+            angle = index*math.tau/24
+            loop_sections.append([
+                (x + (.043 + .008*math.cos(tube))*math.cos(angle),
+                 -3.075 + .008*math.sin(tube),
+                 .709 + (.024 + .008*math.cos(tube))*math.sin(angle))
+                for tube in (step*math.tau/8 for step in range(8))
+            ])
+        profile_loft("Forged tow eye", loop_sections, tow_finish, root, close_ends=False)
     panel("Grille surround", (0, -2.916, 1.155), (1.46, .17, .44), trim, .10)
     panel("Recessed grille", (0, -3.011, 1.158), (1.28, .025, .31), liner)
     for row in range(6):
