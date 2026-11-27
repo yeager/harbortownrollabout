@@ -85,8 +85,12 @@ for part in list(root.children):
         part.matrix_world = world
 reverse_glass = v.material("Reverse lamp clear lens",(.80,.86,.89),.12,.2)
 for side in (-1,1):
-    housing_x = side*.91
-    box("Backlight bezel",(housing_x-side*.17,3.185,.94),(.12,.068,.12),v.DARK,.014)
-    box("Reversing lens",(housing_x-side*.17,3.225,.94),(.093,.024,.09),reverse_glass,.012)
+    lamp_x = side*.74
+    box("Backlight bezel",(lamp_x,3.185,.94),(.12,.068,.12),v.DARK,.014)
+    box("Backlight chrome surround",(lamp_x,3.218,.94),(.106,.016,.104),v.METAL,.008)
+    box("Reversing lens",(lamp_x,3.227,.94),(.092,.018,.09),reverse_glass,.009)
+    for offset in (-.030,-.015,0,.015,.030):
+        box("Backlight lens prism",(lamp_x+offset,3.237,.94),(.009,.006,.068),
+            reverse_glass,.002)
 v.export_vehicle(root,"food_truck_road.glb")
 

@@ -372,6 +372,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Takventilens infästning fick tätning, sex sexkantsskruvar med tätbrickor och vikta droppkanter på regnhuven. Importen granskades visuellt i Godot. Kiosk- och butiksprovet passerade.
 - [ ] [`food_truck_road.glb`](../vehicles/food_truck_road.glb)
   - Den stängda serveringsluckan fick två modellerade lås med handtag, låscylindrar och nyckelspår. Den körbara modellen använder luckans stängda gångjärn. Låset granskades i Godot och fordonsradioprovet passerade.
+  - Backljusen fick kromramar och fem lodräta prismor per lins. Formen granskades i Godot. Fordonsprovet verifierade att båda backljusen tänds när matbilen backar och är släckta vid inbromsning framåt.
 - [ ] [`ice_cream_van.glb`](../vehicles/ice_cream_van.glb)
 - [ ] [`lotten.glb`](../vehicles/lotten.glb)
 - [ ] [`sport_sedan.glb`](../vehicles/sport_sedan.glb)
