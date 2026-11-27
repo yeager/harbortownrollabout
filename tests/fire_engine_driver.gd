@@ -12,13 +12,22 @@ func check_driver() -> void:
 	for model in [game.vehicle_model, game.parked_cars[2]]:
 		var lenses: Array[Node] = model.find_children("Pumper rear plate lamp lens*", "MeshInstance3D", true, false)
 		var plate := model.find_child("Rear registration plate", true, false) as MeshInstance3D
+		var glazed_cab := model.find_child("Fire crew cab", true, false) as MeshInstance3D
 		if lenses.size() != 2 or not plate:
 			printerr("The fire engine needs a rear plate and two plate lamps")
+			quit(1)
+			return
+		if not glazed_cab or not game.pumper_glazing or glazed_cab.get_surface_override_material(1) != game.pumper_glazing:
+			printerr("The fire engine windshield is missing its reflective glazing")
 			quit(1)
 			return
 		for mode in [1, 0]:
 			game.time_mode = mode
 			game._update_daylight(0)
+			if not is_equal_approx(float(game.pumper_glazing.get_shader_parameter("night")), float(mode)):
+				printerr("Windshield reflections did not follow the day-night cycle")
+				quit(1)
+				return
 			for part: MeshInstance3D in lenses + [plate]:
 				var finish := part.material_override as StandardMaterial3D
 				if not finish or (finish.emission_energy_multiplier > 0.0) != (mode == 1):

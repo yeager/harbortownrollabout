@@ -89,6 +89,7 @@ var quay_stair_light: StandardMaterial3D
 var city_env: Environment
 var rally_coupe_glazing: ShaderMaterial
 var bus_glazing: ShaderMaterial
+var pumper_glazing: ShaderMaterial
 var quattro_gauge_marks: StandardMaterial3D
 var quattro_gauge_needle: StandardMaterial3D
 var chimney_beacon: StandardMaterial3D
@@ -891,6 +892,7 @@ func _process(delta: float) -> void:
 	city_env.sky.sky_material.set_shader_parameter("overcast",weather.cloud_cover)
 	rally_coupe_glazing.set_shader_parameter("overcast",weather.cloud_cover)
 	if bus_glazing: bus_glazing.set_shader_parameter("overcast",weather.cloud_cover)
+	if pumper_glazing: pumper_glazing.set_shader_parameter("overcast",weather.cloud_cover)
 	_update_daylight(delta)
 	if radio.playing:
 		var target_gain := _radio_target_gain()
@@ -5265,6 +5267,7 @@ func _update_daylight(delta: float) -> void:
 	city_env.sky.sky_material.set_shader_parameter("night",night)
 	rally_coupe_glazing.set_shader_parameter("night",night)
 	if bus_glazing: bus_glazing.set_shader_parameter("night",night)
+	if pumper_glazing: pumper_glazing.set_shader_parameter("night",night)
 	_update_quattro_gauge_light(night)
 	city_env.ambient_light_energy = lerpf(.38,.28,night)
 	city_env.ambient_light_color = Color("#c4d5d1").lerp(Color("#9cb1d3"),night)
@@ -6103,6 +6106,7 @@ func _build_depot() -> void:
 		_park_at_home(body, i)
 		if i == 2:
 			_fit_rear_plate_lamps(model, true)
+			_fit_pumper_glazing(model)
 			parked_fire_locker = FireLocker.new()
 			parked_fire_locker.fit(model)
 		for lamp in model.find_children("Flash*", "MeshInstance3D", true, false):
@@ -7217,6 +7221,7 @@ func _spawn_traffic(scene_path: String, x: float, lane_z: float, direction: floa
 	actor.add_child(model)
 	if scene_path == VEHICLE_SCENES_ALL[2]:
 		_fit_rear_plate_lamps(model, true)
+		_fit_pumper_glazing(model)
 	elif scene_path in ["res://vehicles/traffic_suv_blue.glb", "res://vehicles/traffic_suv_silver.glb"]:
 		_fit_rear_plate_lamps(model)
 	var is_bus := scene_path == VEHICLE_SCENES_ALL[BUS]
@@ -9242,6 +9247,23 @@ func _fit_rally_coupe_glazing(model: Node3D) -> void:
 			if finish != null and finish.resource_name == "Blue-green laminated glazing":
 				pane.set_surface_override_material(surface,rally_coupe_glazing)
 
+func _fit_pumper_glazing(model: Node3D) -> void:
+	var cabin := model.find_child("Fire crew cab", true, false) as MeshInstance3D
+	if not cabin:
+		return
+	if not pumper_glazing:
+		pumper_glazing = ShaderMaterial.new()
+		pumper_glazing.shader = preload("res://environment/rally_coupe_glazing.gdshader")
+		pumper_glazing.set_shader_parameter("skyline", preload("res://environment/portland_landing_pad.exr"))
+		pumper_glazing.set_shader_parameter("glass_tint", Color(.09, .19, .23))
+		pumper_glazing.set_shader_parameter("glass_opacity", Vector2(.28, .46))
+		pumper_glazing.set_shader_parameter("night", maxf(last_night, 0.0))
+		pumper_glazing.set_shader_parameter("overcast", weather.cloud_cover)
+	for surface in cabin.mesh.get_surface_count():
+		var finish := cabin.mesh.surface_get_material(surface)
+		if finish and finish.resource_name.begins_with("Laminated panoramic truck glass"):
+			cabin.set_surface_override_material(surface, pumper_glazing)
+
 func _fit_quattro_gauges(model: Node3D) -> void:
 	if quattro_gauge_marks == null:
 		quattro_gauge_marks = _material(Color("#d7d4b7"),.56,true)
@@ -9662,6 +9684,7 @@ func _load_vehicle_model() -> void:
 	ambulance.add_child(vehicle_model)
 	if vehicle_index == 2:
 		_fit_rear_plate_lamps(vehicle_model, true)
+		_fit_pumper_glazing(vehicle_model)
 	if vehicle_index == SCHOOL_CAR:
 		_add_school_car_sign(vehicle_model)
 		_fit_rear_plate_lamps(vehicle_model)
