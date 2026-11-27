@@ -656,6 +656,7 @@ var ferry_passenger := false
 var ferry_exit_requested := false
 var ferry: Node3D
 var ferry_radar: Node3D
+var ferry_deck_lights: Array[SpotLight3D] = []
 var ferry_sidelights: Array[StandardMaterial3D] = []
 var ferry_hull_bounds: AABB
 var ferry_engine := AudioStreamPlayer3D.new()
@@ -3865,6 +3866,20 @@ func _build_marina(rail_metal: Material) -> void:
 		side_lens.material_override = finish
 		ferry_sidelights.append(finish)
 		navigation_lenses.append(finish)
+	for lens: MeshInstance3D in ferry.find_children("Boarding deck lamp lens*", "MeshInstance3D", true, false):
+		var finish := lens.get_active_material(0).duplicate() as StandardMaterial3D
+		finish.emission_enabled = true
+		finish.emission = Color("#ffdfaf")
+		lens.material_override = finish
+		navigation_lenses.append(finish)
+		var light := SpotLight3D.new()
+		light.position.y = -.017
+		light.rotation.x = -PI / 2.0
+		light.light_color = finish.emission
+		light.spot_range = 3.5
+		light.spot_angle = 48.0
+		lens.add_child(light)
+		ferry_deck_lights.append(light)
 	ferry_hull_bounds = _model_bounds(ferry, ferry)
 	var engine_loop := preload("res://audio/loader_diesel.wav").duplicate() as AudioStreamWAV
 	engine_loop.loop_end = roundi(engine_loop.get_length() * engine_loop.mix_rate)
@@ -5281,6 +5296,9 @@ func _update_daylight(delta: float) -> void:
 	for lens in navigation_lenses:
 		lens.emission_energy_multiplier = night*3.2
 	water_finish.set_shader_parameter("dusk",night)
+	for light in ferry_deck_lights:
+		light.visible = night > .01
+		light.light_energy = night * 1.3
 	if saloon_glazing:
 		saloon_glazing.emission_energy_multiplier = night*.85
 	if player_brake_lens:

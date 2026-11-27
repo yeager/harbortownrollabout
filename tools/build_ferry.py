@@ -125,6 +125,10 @@ for end in [-1,1]:
         box("Boarding door",(side*.98,end*4.29,1.41),(.84,.075,1.47),white,.04)
         box("Boarding window gasket",(side*.98,end*4.333,1.68),(.674,.026,.744),rubber,.041)
         box("Boarding door window",(side*.98,end*4.336,1.68),(.63,.027,.70),glass,.035)
+        box("Boarding deck lamp housing",(side*.98,end*4.386,2.173),
+            (.30,.135,.063),steel,.016)
+        box("Boarding deck lamp lens",(side*.98,end*4.411,2.140),
+            (.241,.083,.012),white,.005)
         handle_x = side*.67
         for z in (1.098,1.272):
             box("Door handle mounting pad",(handle_x,end*4.340,z),

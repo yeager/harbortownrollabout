@@ -36,9 +36,18 @@ func check_crossings() -> void:
 		printerr("Both Lotten sidelights must light at night")
 		quit(1)
 		return
+	if game.ferry_deck_lights.size() != 4 or not game.ferry_deck_lights.all(
+			func(light: SpotLight3D): return light.visible and light.light_energy > 0):
+		printerr("Lotten must light both boarding decks at night")
+		quit(1)
+		return
 	var lit_at_night := lantern.emission_enabled and lantern.emission_energy_multiplier > 0
 	game.time_mode = 0
 	game._update_daylight(0)
+	if game.ferry_deck_lights.any(func(light: SpotLight3D): return light.visible):
+		printerr("Lotten boarding deck lights must turn off in daylight")
+		quit(1)
+		return
 	if not lit_at_night or not is_zero_approx(lantern.emission_energy_multiplier):
 		printerr("Lotten mast lantern must light only at night")
 		quit(1)
