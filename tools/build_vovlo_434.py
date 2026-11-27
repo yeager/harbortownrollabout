@@ -17,7 +17,6 @@ amber = v.material("Amber lens", (.91, .29, .015))
 headlamp_glass = v.material("Pale fluted headlamp glass", (.66, .72, .69), .12, .29)
 headlamp_flute = v.material("Headlamp glass flute", (.44, .53, .51), .20, .29)
 headlamp_optic = v.material("Bright headlamp reflector", (.79, .81, .74), .46, .24)
-amber_flute = v.material("Amber glass flute", (.68, .17, .012), .10, .31)
 reverse = v.material("Reverse lamp clear", (.75, .81, .78))
 ivory = v.material("Ivory plate", (.9, .87, .78))
 
@@ -186,8 +185,8 @@ for side in (-1, 1):
         # Follow the taper of the painted quarter pillar.
         x = .693 - slot * .0085
         box("Quarter pillar vent", (side * x, y, z), (.009, .041, .012), v.RUBBER, .003)
-    box("Front lamp gasket", (side*.584, -2.004, .702), (.345, .060, .187), v.RUBBER)
-    box("Front lamp bright frame", (side*.581, -2.035, .707), (.329, .028, .173), v.METAL)
+    box("Front lamp gasket", (side*.545, -2.004, .702), (.270, .060, .187), v.RUBBER)
+    box("Front lamp bright frame", (side*.545, -2.035, .707), (.254, .028, .173), v.METAL)
     box("Headlight lens", (side * .545, -2.055, .708), (.239, .035, .151),
         headlamp_glass, .011)
     optic_angles = [step * math.tau / 48 for step in range(48)]
@@ -200,10 +199,20 @@ for side in (-1, 1):
     for flute in range(-9, 10):
         box("Vertical headlamp flute", (side * (.545 + flute * .0114), -2.075, .708),
             (.0018, .004, .135), headlamp_flute, .0008)
-    box("Front amber indicator", (side * .709, -2.051, .702), (.074, .031, .144), amber)
-    for flute in range(-3, 4):
-        box("Amber lens rib", (side * (.709 + flute * .0085), -2.067, .702),
-            (.0017, .0035, .123), amber_flute, .0007)
+    # The amber lens starts alongside the headlamp and tapers into the fender.
+    indicator_stations = [(.674, -2.060, .061)]
+    for rib in range(9):
+        for phase, relief in [(.15, 0), (.52, .0024), (.84, 0)]:
+            t = (rib + phase) / 9
+            indicator_stations.append((.674 + .104 * t, -2.077 + .156 * t**2 - relief,
+                                       .069 - .013 * t))
+    indicator_stations.append((.778, -1.917, .041))
+    v.profile_loft("Front amber indicator", [
+        [(side * x, y + inset, .703 + half_height * level)
+         for inset, level in [(0, -.82), (0, .82), (.008, 1),
+                              (.038, 1), (.038, -1), (.008, -1)]]
+        for x, y, half_height in indicator_stations
+    ], amber, root)
     v.profile_loft("Rear lamp carrier", [
         [(side * x, y - tail_corner_recess(x), z)
          for y, z in [(1.976, .552), (2.037, .552), (2.053, .567),
