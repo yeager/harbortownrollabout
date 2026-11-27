@@ -9395,7 +9395,7 @@ func _fit_bus_exterior(model: Node3D) -> void:
 		repeater.x *= side
 		_make_box("Bus side indicator housing", Vector3(.028, .072, .15), repeater, window_seal.albedo_color, false, model)
 		repeater.x += side * .016
-		_make_box("Bus side indicator amber lens", Vector3(.014, .048, .124), repeater, Color("#9b581b"), false, model)
+		_make_box("Bus side indicator amber lens " + str(int(side)), Vector3(.014, .048, .124), repeater, Color("#9b581b"), false, model)
 		var housing := _make_box("Bus rear upper marker housing", Vector3(.15,.074,.058), Vector3(side*1.02,2.955,-5.083), window_seal.albedo_color, false, model)
 		var lens := _make_box("Bus rear upper marker lens", Vector3(.115,.042,.012), Vector3(0,0,-.033), Color.WHITE, false, housing)
 		lens.material_override = bus_rear_marker_finish

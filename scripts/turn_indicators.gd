@@ -37,11 +37,10 @@ func fit(actor: Node3D, model: Node3D, bounds: AABB) -> void:
 			var front := Vector3(side * 1.015, .892, 5.363)
 			_add_lamp(frame, actor.to_local(model.to_global(front)),
 				Vector3(.155, .041, .016), -side, side * .13)
-			for contact in [
-				[Vector3(side * 1.01, 1.11, -5.302), Vector3(.19, .085, .027)],
-				[Vector3(side * 1.298, 1.16, 3.91), Vector3(.009, .043, .115)],
-			]:
-				_add_lamp(frame, actor.to_local(model.to_global(contact[0])), contact[1], -side)
+		for pattern in ["Amber lens*", "Bus side indicator amber lens*"]:
+			for lens: MeshInstance3D in model.find_children(pattern, "MeshInstance3D", true, false):
+				var side := -1 if model.to_local(lens.global_position).x > 0.0 else 1
+				_use_existing_lens(lens, side)
 		return
 	var panels: Array[AABB] = []
 	var existing: Array[MeshInstance3D] = [null, null, null, null]
