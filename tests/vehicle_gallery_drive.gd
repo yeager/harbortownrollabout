@@ -124,7 +124,7 @@ func check_gallery() -> void:
 			printerr("Turning right did not light only the right side of ", tile.text)
 			quit(1)
 			return
-		if tile.text in ["Saav 97", "BWM M3 E33"] or index in [0, game.SHOPPER, game.A_TRACTOR, game.ICE_CREAM, game.MULTUM]:
+		if tile.text in ["Saav 97", "BWM M3 E33"] or index in [0, game.SHOPPER, game.A_TRACTOR, game.ICE_CREAM, game.MULTUM, game.VOVLO_434]:
 			for lamps in [signals.left, signals.right]:
 				var names: Array = lamps.map(func(lamp: MeshInstance3D): return String(lamp.get_parent().name))
 				for prefix in ["Front amber indicator", "Rear indicator lens"]:
@@ -183,7 +183,7 @@ func check_gallery() -> void:
 				printerr("Quattro speedometer did not follow forward motion")
 				quit(1)
 				return
-		if index in [2, game.SHOPPER, game.REFUSE, game.QUATTRO, game.A_TRACTOR, game.MULTUM]:
+		if index in [2, game.SHOPPER, game.REFUSE, game.QUATTRO, game.A_TRACTOR, game.MULTUM, game.VOVLO_434]:
 			var lens_pattern: String = {2: "Swept transparent headlamp cover*", game.MULTUM: "Lower headlight lens*"}.get(index, "Headlight lens*")
 			var lenses: Array = game.vehicle_model.find_children(lens_pattern, "MeshInstance3D", true, false)
 			if lenses.size() != (1 if index == game.SHOPPER else 2) or lenses.size() != game.headlights.size():
@@ -276,7 +276,7 @@ func check_gallery() -> void:
 				printerr("Both mower rear lenses must light when braking")
 				quit(1)
 				return
-		var has_paired_reverse_lenses: bool = index in [game.REFUSE, game.MOWER, game.A_TRACTOR, game.FOOD_TRUCK, game.ICE_CREAM, game.MULTUM] or tile.text == "Saav 97"
+		var has_paired_reverse_lenses: bool = index in [game.REFUSE, game.MOWER, game.A_TRACTOR, game.FOOD_TRUCK, game.ICE_CREAM, game.MULTUM, game.VOVLO_434] or tile.text == "Saav 97"
 		if has_paired_reverse_lenses:
 			var lenses: Array = game.vehicle_model.find_children("Reversing lens*", "MeshInstance3D", true, false)
 			if lenses.size() != 2 or not game.reverse_lens or game.reverse_lens.emission_energy_multiplier > 0.0 or not lenses.all(func(lens: MeshInstance3D): return lens.get_active_material(0) == game.reverse_lens):

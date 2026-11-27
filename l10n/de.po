@@ -2192,3 +2192,6 @@ msgstr "Patientenübergabe"
 
 msgid "Fait Multum"
 msgstr "Fait Multum"
+
+msgid "Vovlo 434"
+msgstr "Vovlo 434"

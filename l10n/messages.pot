@@ -2104,3 +2104,6 @@ msgstr ""
 
 msgid "Fait Multum"
 msgstr ""
+
+msgid "Vovlo 434"
+msgstr ""
