@@ -155,6 +155,13 @@ for x in (-.12,.12):
 pole("Signal mast",(0,-.8,3.94),.046,1.0,steel)
 for height, width in [(4.02,.74),(4.25,.45)]:
     tube("Signal yardarm",(-width,-.8,height),(width,-.8,height),.018,steel)
+for side, label in [(-1,"Left"),(1,"Right")]:
+    box(label+" ferry sidelight bracket",(side*1.107,-.46,3.387),
+        (.141,.24,.047),steel,.009)
+    box(label+" ferry sidelight housing",(side*1.158,-.46,3.436),
+        (.119,.202,.101),rubber,.017)
+    box(label+" ferry sidelight lens",(side*1.222,-.46,3.436),
+        (.021,.156,.067),glass,.010)
 pole("Mast lantern mounting foot",(.56,-.8,4.038),.051,.030,steel)
 pole("Mast lantern lower housing",(.56,-.8,4.064),.055,.030,rubber)
 pole("Mast lantern lens",(.56,-.8,4.113),.047,.073,white)

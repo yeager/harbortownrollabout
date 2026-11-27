@@ -31,6 +31,11 @@ func check_crossings() -> void:
 	var lantern := mast_lens.get_active_material(0) as StandardMaterial3D
 	game.time_mode = 1
 	game._update_daylight(0)
+	if game.ferry_sidelights.size() != 2 or not game.ferry_sidelights.all(
+			func(lens: StandardMaterial3D): return lens.emission_enabled and lens.emission_energy_multiplier > 0):
+		printerr("Both Lotten sidelights must light at night")
+		quit(1)
+		return
 	var lit_at_night := lantern.emission_enabled and lantern.emission_energy_multiplier > 0
 	game.time_mode = 0
 	game._update_daylight(0)
@@ -53,6 +58,11 @@ func check_crossings() -> void:
 		var hull := ferry.global_transform * ferry_bounds
 		if not is_equal_approx(radar.rotation.y, fposmod(float(frame), 2.5) * TAU / 2.5):
 			printerr("Lotten radar did not rotate with game time")
+			quit(1)
+			return
+		var port: int = 1 if frame < 29 else 0
+		if game.ferry_sidelights[port].emission != Color("#dc3936") or game.ferry_sidelights[1-port].emission != Color("#359e64"):
+			printerr("Lotten sidelights did not follow the direction of travel")
 			quit(1)
 			return
 		var scanner := radar.global_transform * radar_bounds

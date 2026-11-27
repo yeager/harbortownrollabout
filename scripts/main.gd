@@ -656,6 +656,7 @@ var ferry_passenger := false
 var ferry_exit_requested := false
 var ferry: Node3D
 var ferry_radar: Node3D
+var ferry_sidelights: Array[StandardMaterial3D] = []
 var ferry_hull_bounds: AABB
 var ferry_engine := AudioStreamPlayer3D.new()
 var wave_time := 0.0
@@ -3857,6 +3858,13 @@ func _build_marina(rail_metal: Material) -> void:
 		finish.emission = Color("#fff0d2")
 		mast_lens.material_override = finish
 		navigation_lenses.append(finish)
+	for label in ["Left", "Right"]:
+		var side_lens := ferry.find_child(label + " ferry sidelight lens", true, false) as MeshInstance3D
+		var finish := side_lens.get_active_material(0).duplicate() as StandardMaterial3D
+		finish.emission_enabled = true
+		side_lens.material_override = finish
+		ferry_sidelights.append(finish)
+		navigation_lenses.append(finish)
 	ferry_hull_bounds = _model_bounds(ferry, ferry)
 	var engine_loop := preload("res://audio/loader_diesel.wav").duplicate() as AudioStreamWAV
 	engine_loop.loop_end = roundi(engine_loop.get_length() * engine_loop.mix_rate)
@@ -4545,6 +4553,11 @@ func _update_moorings(delta: float) -> void:
 	# A double-ended ferry can reverse away from either landing without turning.
 	# Each crossing includes a five-second stop and gentle acceleration.
 	var half_trip := fmod(trip_time,58.0)
+	# Facing +Z swaps port and starboard compared with facing -Z.
+	for side in ferry_sidelights.size():
+		var tint := Color("#dc3936") if (side == 1) == (half_trip < 29.0) else Color("#359e64")
+		ferry_sidelights[side].albedo_color = tint.darkened(.34)
+		ferry_sidelights[side].emission = tint
 	var progress := clampf((fmod(half_trip,29.0)-5.0)/24.0,0,1)
 	# Normalized speed of the smoothstep crossing, signed toward the current landing.
 	var motion := 4.0 * progress * (1.0 - progress) * ferry_speed_factor
