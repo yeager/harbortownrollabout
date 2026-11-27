@@ -530,7 +530,18 @@ v.pipe("Rear wiper blade frame", rear_frame, .004, v.DARK, root)
 v.pipe("Rear wiper arm", [rear_wiper_base + rear_wiper_axis * .009,
                          (.057, 1.495, 1.085), rear_frame[1].lerp(rear_frame[2], .5)],
        .006, v.DARK, root)
-v.pipe("Roof aerial", [(0, -.13, 1.449), (0, .125, 1.755)], .006, v.DARK, root)
+box("Roof aerial gasket", (0, -.130, 1.446), (.038, .054, .018), v.RUBBER, .008)
+aerial_stations = [
+    (-.132, 1.452, .014), (-.124, 1.465, .013), (-.115, 1.477, .009),
+    (-.108, 1.485, .006), (.118, 1.748, .003), (.125, 1.755, .0015),
+]
+v.profile_loft("Tapered roof aerial", [
+    [(radius * math.cos(angle), y + radius * .76 * math.sin(angle),
+      z - radius * .65 * math.sin(angle))
+     for angle in (math.tau * segment / 20 for segment in range(20))]
+    for y, z, radius in aerial_stations
+], v.DARK, root)
+box("Roof aerial collar", (0, -.121, 1.459), (.027, .026, .008), v.METAL, .003)
 
 v.export_vehicle(root, "vovlo_434.glb")
 bpy.context.preferences.filepaths.save_version = 0
