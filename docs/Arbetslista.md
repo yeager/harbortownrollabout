@@ -327,6 +327,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Främre blinkers fick rundade glas anpassade till strålkastarhusen. Båda granskades tända i Godot. Bussprovet kontrollerar nu även att framblinkers använder linsens nät, och trafikens blinkersprov passerade.
   - Bakre blinkers och sidoblinkers använder nu sina modellerade linser även när de blinkar. Båda bakljusen granskades tända i Godot. Bussens avgångsblinkning och trafikens blinkersprov passerade. Bussprovet kontrollerar att båda sidor har tre blinkers var, att bak- och sidoblinkers använder samma nät som linserna och att bara höger sida lyser vid högersignal.
   - Alla fyra fälgar fick däckventiler med metallstam och mörk hatt. En framfälg granskades i närbild i Godot och en kontroll verifierade att varje ventil följer sin fälg vid rotation. Bussprovet passerade.
+  - Bussens stänkskydd fick fastspänningslister med tre sexkantsbultar per skydd. En bakre list granskades i en isolerad Godot-vy eftersom sidokjolen skymmer infästningen. Bussprovet passerade.
 - [ ] [`dam_pickup.glb`](../vehicles/dam_pickup.glb)
 - [ ] [`electric_kick_scooter.glb`](../vehicles/electric_kick_scooter.glb)
 - [ ] [`farm_tractor.glb`](../vehicles/farm_tractor.glb)

@@ -9601,12 +9601,23 @@ func _fit_bus_exterior(model: Node3D) -> void:
 		shell.hide()
 	var mirror_glass := _material(Color("#9bacb3"), .17)
 	mirror_glass.metallic = .78
-	var mirror_fastener := CylinderMesh.new()
-	mirror_fastener.top_radius = .008
-	mirror_fastener.bottom_radius = .008
-	mirror_fastener.height = .004
-	mirror_fastener.radial_segments = 6
-	mirror_fastener.material = hinge_finish
+	var body_fastener := CylinderMesh.new()
+	body_fastener.top_radius = .008
+	body_fastener.bottom_radius = .008
+	body_fastener.height = .004
+	body_fastener.radial_segments = 6
+	body_fastener.material = hinge_finish
+	for flap: MeshInstance3D in model.find_children("Wheel spray flap*", "MeshInstance3D", true, false):
+		var clamp_bar := _make_box("Spray flap retaining bar", Vector3(.239, .038, .015),
+			Vector3(0, .055, -.033), Color.WHITE, false, flap)
+		clamp_bar.material_override = hinge_finish
+		for x in [-.085, 0.0, .085]:
+			var bolt := MeshInstance3D.new()
+			bolt.name = "Spray flap clamp bolt"
+			bolt.mesh = body_fastener
+			bolt.rotation.x = PI * .5
+			bolt.position = Vector3(x, 0, -.009)
+			clamp_bar.add_child(bolt)
 	for side in [-1.0,1.0]:
 		var mirror_center := Vector3(side * 1.39, 1.91, 5.07)
 		var side_name := "left" if side > 0 else "right"
@@ -9618,7 +9629,7 @@ func _fit_bus_exterior(model: Node3D) -> void:
 			for offset in [-.047, .047]:
 				var bolt := MeshInstance3D.new()
 				bolt.name = "Bus mirror mounting bolt"
-				bolt.mesh = mirror_fastener
+				bolt.mesh = body_fastener
 				bolt.rotation.z = PI * .5
 				bolt.position = Vector3(side * .031, 0, offset)
 				foot.add_child(bolt)
