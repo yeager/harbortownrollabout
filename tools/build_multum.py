@@ -113,6 +113,15 @@ for side in (-1,1):
         cut.operation = "DIFFERENCE"
         bpy.ops.object.modifier_apply(modifier=cut.name)
         bpy.data.objects.remove(cutter, do_unlink=True)
+intake_center = (0, -2.045, .627)
+intake_cutter = v.cube("Bonnet intake tool", intake_center, (.790, .160, .087),
+                       None, .023, bevel_segments=5)
+bpy.context.view_layer.objects.active = body
+intake_cut = body.modifiers.new("Recessed bonnet intake", "BOOLEAN")
+intake_cut.operation = "DIFFERENCE"
+intake_cut.object = intake_cutter
+bpy.ops.object.modifier_apply(modifier=intake_cut.name)
+bpy.data.objects.remove(intake_cutter, do_unlink=True)
 edge = body.modifiers.new("Soft body highlights","BEVEL")
 edge.width = .013
 edge.segments = 3
@@ -319,7 +328,11 @@ for x in (-.33, -.22, -.11, 0, .11, .22, .33):
     box("Lower grille upright", (x, -2.115, .384), (.015, .011, .134), v.DARK, .004)
 for z in (.329, .373, .417, .449):
     box("Lower grille rail", (0, -2.124, z), (.833, .023, .015), v.DARK, .005)
-box("Bonnet intake",(0,-2.039,.615),(.78,.028,.065),v.DARK,.012)
+box("Bonnet intake backing", (0, -1.976, intake_center[2]),
+    (.779, .017, .080), v.RUBBER, .015)
+for x in (-.31, -.207, -.103, 0, .103, .207, .31):
+    box("Bonnet intake vane", (x, -2.015, intake_center[2]),
+        (.013, .048, .082), v.DARK, .004)
 for y, sign in [(-2.116, -1), (2.049, 1)]:
     rotation = (math.pi / 2, 0, 0 if sign < 0 else math.pi)
     box("Registration plate holder", (0, y - sign * .007, .525),
