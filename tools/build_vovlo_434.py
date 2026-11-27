@@ -171,9 +171,28 @@ for side in (-1, 1):
         (.825, -.656, .303), (.822, .345, .303), (.83, .411, .375),
         (.832, .449, .742), (.771, .425, .929)
     ]], .004, v.RUBBER, root)
-    for y, length in [(-1.67, .42), (-.12, 1.04), (.65, .40), (1.72, .26)]:
-        box("Door rubbing strip", (side*.825, y, .60), (.028, length, .030), v.DARK, .007)
-        box("Bright side molding", (side*.842, y, .608), (.008, length - .018, .009), v.METAL, .003)
+    for center, length in [(-1.67, .42), (-.12, 1.04), (.65, .40), (1.72, .26)]:
+        molding_rings = []
+        bright_edge = []
+        steps = math.ceil(length / .035)
+        for index in range(steps + 1):
+            y = center + length * (index / steps - .5)
+            hit, point, _, _ = body_surface.ray_cast(
+                Vector((side * 1.1, y, .600)), Vector((-side, 0, 0))
+            )
+            if not hit:
+                raise RuntimeError(f"Side molding misses the body at {y:.3f}")
+            projection = .008 if index in (0, steps) else .016
+            molding_rings.append([
+                (point.x + side * depth, y, .600 + height)
+                for depth, height in [(-.012, -.014), (projection - .004, -.014),
+                                      (projection, -.008), (projection, .008),
+                                      (projection - .004, .014), (-.012, .014)]
+            ])
+            if 0 < index < steps:
+                bright_edge.append((point.x + side * (projection + .001), y, .608))
+        v.profile_loft("Side rubbing strip", molding_rings, v.DARK, root)
+        v.pipe("Bright side molding", bright_edge, .0035, v.METAL, root)
     box("Door handle surround", (side*.824, .274, .805), (.031, .153, .060), v.DARK)
     box("Door release", (side*.844, .274, .808), (.016, .115, .019), v.METAL, .005)
     box("Mirror base", (side*.752, -.582, .994), (.055, .105, .072), v.RUBBER)
