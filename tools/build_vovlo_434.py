@@ -40,10 +40,10 @@ def pane(name, outline, seating_offset):
 # Axial section from the inner sidewall to the outer sidewall.
 tire_section = [
     (-.0905, .188), (-.0905, .236), (-.086, .260), (-.077, .276),
-    (-.060, .284), (-.039, .287), (-.036, .282), (-.032, .282),
+    (-.060, .284), (-.047, .286), (-.039, .287), (-.036, .282), (-.032, .282),
     (-.029, .287), (-.005, .287), (-.002, .281), (.002, .281),
     (.005, .287), (.029, .287), (.032, .282), (.036, .282),
-    (.039, .287), (.060, .284), (.077, .276), (.086, .260),
+    (.039, .287), (.047, .286), (.060, .284), (.077, .276), (.086, .260),
     (.0905, .236), (.0905, .188),
 ]
 tire_rings = []
@@ -52,7 +52,14 @@ for x, radius in tire_section:
     for segment in range(144):
         angle = math.tau * segment / 144
         groove_offset = .003 * math.sin(24 * angle) if abs(x) < .045 else 0
-        ring.append((x + groove_offset, radius * math.cos(angle), radius * math.sin(angle)))
+        tread_radius = radius
+        if .039 <= abs(x) <= .077:
+            # Clock the shoulder grooves progressively across the tread.
+            phase = angle - 1.7 * (abs(x) - .039)
+            channel = max(0.0, math.cos(24 * phase)) ** 9
+            depth = .0038 * (1.0 - .65 * (abs(x) - .039) / .038)
+            tread_radius -= depth * channel
+        ring.append((x + groove_offset, tread_radius * math.cos(angle), tread_radius * math.sin(angle)))
     tire_rings.append(ring)
 tire_template = v.profile_loft("Däck med slitbanespår", tire_rings, v.RUBBER, root)
 

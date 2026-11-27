@@ -496,6 +496,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Frontens nederdel fick en formad frontkjol och en separat bogserögla under stötfångaren. Granskad i Godot från låg kameravinkel. Körprovet för 30 vägfordon passerade.
   - Emblemen VOVLO och 434 fick ljusare metall och flyttades in från panelfogen. Låset fick ram, cylinder med nyckelspår och öppningsgrepp. Granskat i Godot. Körprovet för 30 vägfordon passerade.
   - Alla fyra hjulhus fick formade, matta innerskärmar som sitter fast i karossen. Granskade i närbild i Godot. Körprovet för 30 vägfordon passerade.
+  - Däcken fick sneda tvärspår i slitbanans skuldror. Granskade med framhjulet vridet i Godot. Körprovet för 30 vägfordon passerade.
 - [ ] [`compact_convertible.glb`](../vehicles/compact_convertible.glb)
   - Mino Kuper S fick ett eget kopparfärgat M-monogram på motorhuven och bakluckan samt nytt namn i fordonsgalleriet. Emblemen granskades i Godot. Fordonsprovet och språkkontrollen passerade.
 - [ ] [`electric_sedan.glb`](../vehicles/electric_sedan.glb)
