@@ -133,11 +133,26 @@ v.mesh_from_rings("Panoramic glasshouse", cabin, glazing, root,.014,cabin_sectio
 v.mesh_from_rings("Rounded roof skin", [
     (y,w*.92,c-.037,c-.014,c+.012) for y,w,b,s,c in cabin[2:-1]
 ], paint, root,.015,cabin_section)
-v.mesh_from_rings("Raised cowl under the windscreen", [
-    (-1.41,.68,.901,.978,1.055),(-1.35,.785,.916,1.021,1.100),
-    (-1.28,.849,.932,1.050,1.124),(-1.14,.863,.963,1.068,1.151),
-    (-1.02,.854,.985,1.091,1.174),
-], paint, root, bevel=0)
+# Shape the raised lip across the car so both ends roll into the wings.
+cowl_sections = [
+    (0, -1.251, 1.033, .168, .115),
+    (.38, -1.247, 1.029, .165, .115),
+    (.61, -1.233, 1.022, .160, .113),
+    (.70, -1.219, 1.016, .154, .109),
+    (.76, -1.195, 1.010, .132, .098),
+    (.80, -1.168, 1.003, .091, .072),
+    (.823, -1.145, .995, .045, .038),
+    (.831, -1.132, .991, .009, .008),
+]
+cowl_angles = [step * math.tau / 48 for step in range(48)]
+v.profile_loft("Raised cowl under the windscreen", [
+    [(x, y + depth * math.cos(angle), z + height * math.sin(angle))
+     for angle in cowl_angles]
+    for x, y, z, depth, height in [
+        *((-x, y, z, depth, height) for x, y, z, depth, height in reversed(cowl_sections[1:])),
+        *cowl_sections,
+    ]
+], paint, root)
 
 for side in (-1,1):
     for y in (-.31,.23,1.35):
