@@ -361,6 +361,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Spridarens utlopp fick öppning med täckplåt, gavlar och synlig doseringsrulle. Gruspartiklarna startar strax under öppningen. Granskat underifrån i Godot och halkbekämpningsprovet passerade.
   - Motorhuvens båda sidoventiler fick sex snedställda kylflänsar var som följer den avsmalnande formen. Båda sidor granskades i Godot och halkbekämpningsprovet passerade.
   - Främre blinkers fick egna hus bredvid projektorlinserna. Bakre blinkers använder de yttersta glasen i bakskärmarna. Alla fyra modellerade linser verifierades i Godot och halkbekämpningsprovet passerade.
+  - Det främre lyftet fick två hydraulcylindrar med kolvstänger, ledtappar och slanganslutningar. Båda infästningarna granskades i Godot med och utan plog. Halkbekämpningsprovet passerade.
 - [ ] [`food_truck.glb`](../vehicles/food_truck.glb)
 - [ ] [`food_truck_road.glb`](../vehicles/food_truck_road.glb)
 - [ ] [`ice_cream_van.glb`](../vehicles/ice_cream_van.glb)

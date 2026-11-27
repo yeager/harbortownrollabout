@@ -632,6 +632,19 @@ for side in [-1,1]:
     rod("Front lift hook",elbow,tip,.055,v.DARK)
     rod("Front hook tip",tip,(side*.32,-2.55,.65),.044,v.DARK)
     disc("Linkage pivot pin",(side*.244,-2.15,.85),.069,.075,v.METAL)
+    cylinder_top = Vector((side*.303, -2.058, 1.012))
+    cylinder_foot = Vector((side*.303, -2.365, .623))
+    gland = cylinder_top.lerp(cylinder_foot, .62)
+    rod("Front lift cylinder barrel", cylinder_top, gland, .047, v.DARK, 24)
+    rod("Front lift cylinder gland", gland.lerp(cylinder_top, .10), gland,
+        .051, v.BLACK, 24)
+    rod("Front lift piston rod", gland, cylinder_foot, .026, v.METAL, 24)
+    box("Front lift cylinder upper clevis", cylinder_top, (.086,.095,.094),v.DARK,.018)
+    disc("Front lift cylinder upper pin", cylinder_top, .026, .105, v.METAL)
+    disc("Front lift piston foot pin", cylinder_foot, .025, .092, v.METAL)
+    hose_port = cylinder_top.lerp(gland, .24)
+    rod("Front lift hydraulic port", hose_port, hose_port + Vector((side*.066, 0, 0)),
+        .018, v.METAL, 12)
 rod("Front linkage crossbar",(-.27,-2.34,.60),(.27,-2.34,.60),.038,v.BLACK)
 glazing = v.material("Blue-green laminated cab glass", (.070,.19,.18), .08,.17)
 next(node for node in glazing.node_tree.nodes if node.type == "BSDF_PRINCIPLED").inputs["Alpha"].default_value = .43
