@@ -131,6 +131,13 @@ for side in [-1,1]:
             box("Raft buckle frame",(side*1.30,strap_y,2.697),(.103,.073,.022),steel,.006)
             box("Raft buckle webbing",(side*1.30,strap_y,2.710),(.075,.039,.010),rubber,.003)
             box("Raft buckle crossbar",(side*1.30,strap_y,2.718),(.018,.066,.012),steel,.003)
+box("Mast roof backing plate",(0,-.8,3.56),(.36,.30,.027),steel,.010)
+pole("Mast foot collar",(0,-.8,3.609),.085,.085,steel)
+for x in (-.122,.122):
+    for y in (-.887,-.713):
+        cylinder("Mast foot bolt",(x,y,3.582),.018,.019,steel,False,6,root)
+for x in (-.12,.12):
+    tube("Mast foot brace",(x,-.8,3.580),(x*.29,-.8,3.743),.019,steel)
 pole("Signal mast",(0,-.8,3.94),.046,1.0,steel)
 for height, width in [(4.02,.74),(4.25,.45)]:
     tube("Signal yardarm",(-width,-.8,height),(width,-.8,height),.018,steel)
