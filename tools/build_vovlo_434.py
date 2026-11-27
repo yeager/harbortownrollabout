@@ -363,6 +363,20 @@ for side in (-1, 1):
             v.cylinder("Wheel lug nut", (side*.828, y+.045*math.cos(angle), .287+.045*math.sin(angle)),
                        .008, .007, v.METAL, vertices=6, root=root)
 
+        # Place the valve between two vents on the outer rim shoulder.
+        valve_angle = math.tau / 20
+        valve_base = Vector((side * .807, y + .161 * math.cos(valve_angle),
+                             .287 + .161 * math.sin(valve_angle)))
+        valve_axis = Vector((side, -.26 * math.cos(valve_angle),
+                             -.26 * math.sin(valve_angle))).normalized()
+        for name, offset, radius, depth, finish in [
+            ("Tire valve stem", .011, .005, .022, v.RUBBER),
+            ("Tire valve cap", .025, .0055, .010, v.DARK),
+        ]:
+            valve = v.cylinder(name, valve_base + valve_axis * offset, radius, depth,
+                               finish, axis_x=False, vertices=16, root=root)
+            valve.rotation_euler = valve_axis.to_track_quat('Z', 'Y').to_euler()
+
 for side in (-1, 1):
     v.profile_loft("Rear rubber mud flap", [
         [(side * x, y + depth, z) for x, depth in [

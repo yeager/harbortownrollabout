@@ -148,6 +148,21 @@ func check_gallery() -> void:
 					printerr("Each Multum wheel must roll with its rim lip and seven spokes")
 					quit(1)
 					return
+		if index == game.VOVLO_434:
+			if game.player_wheels.size() != 4 or game.front_knuckles.size() != 2:
+				printerr("Vovlo 434 must have four rolling wheels and two steering knuckles")
+				quit(1)
+				return
+			for wheel: Node3D in game.player_wheels:
+				if is_zero_approx(wheel.rotation.x):
+					printerr("A Vovlo 434 wheel did not roll")
+					quit(1)
+					return
+				for pattern in ["Pressed steel wheel rim*", "Wheel hub cap*", "Tire valve stem*", "Tire valve cap*"]:
+					if wheel.find_children(pattern, "MeshInstance3D", true, false).size() != 1:
+						printerr("A Vovlo 434 wheel did not carry its ", pattern)
+						quit(1)
+						return
 		if index == game.DAM_PICKUP:
 			if game.player_wheels.size() != 4 or game.front_knuckles.size() != 2 or game.rear_tire_contacts.size() != 2:
 				printerr("DAM pickup axle layout is incomplete")
