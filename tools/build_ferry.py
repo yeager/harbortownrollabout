@@ -103,7 +103,14 @@ for end in [-1,1]:
         box("Landing fender",(side*1.11,end*6.33,.46),(.43,.25,.32),rubber,.095)
         box("Boarding door",(side*.98,end*4.29,1.41),(.84,.075,1.47),white,.04)
         box("Boarding door window",(side*.98,end*4.336,1.68),(.63,.027,.70),glass,.035)
-        box("Door grab handle",(side*.67,end*4.36,1.25),(.035,.055,.18),steel,.01)
+        handle_x = side*.67
+        for z in (1.163,1.337):
+            box("Door handle mounting pad",(handle_x,end*4.340,z),
+                (.078,.028,.049),steel,.008)
+            tube("Door handle return",(handle_x,end*4.349,z),
+                 (handle_x,end*4.398,z),.017,steel)
+        tube("Door grab handle",(handle_x,end*4.398,1.163),
+             (handle_x,end*4.398,1.337),.017,steel)
 box("White wheelhouse roof",(0,-.46,3.49),(2.34,2.58,.12),white,.06)
 for side in [-1,1]:
     for y in [1.32,2.57]:
