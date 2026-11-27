@@ -471,6 +471,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Motorhuven fick en sammanhängande panelfog som följer karossens välvning. Granskad i Godot. Körprovet för 30 vägfordon passerade.
   - Högra bakskärmen fick ett runt tanklock med separat gummiring och grepp. Granskat i närbild i Godot. Körprovet för 30 vägfordon passerade.
   - Den nedre bakluckan fick en sammanhängande panelfog som följer bakpartiets form. Granskad bakifrån i Godot. Körprovet för 30 vägfordon passerade.
+  - Baklyktornas hus och yttre blinkersglas följer nu karossens hörn. Granskat i Godot. Körprovet för 30 vägfordon och blinkersprovet passerade.
 - [ ] [`compact_convertible.glb`](../vehicles/compact_convertible.glb)
   - Mino Kuper S fick ett eget kopparfärgat M-monogram på motorhuven och bakluckan samt nytt namn i fordonsgalleriet. Emblemen granskades i Godot. Fordonsprovet och språkkontrollen passerade.
 - [ ] [`electric_sedan.glb`](../vehicles/electric_sedan.glb)

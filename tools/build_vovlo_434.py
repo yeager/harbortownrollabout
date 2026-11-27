@@ -154,6 +154,10 @@ lock = box("Fuel cap grip", filler_surface + filler_normal * .018,
            (.055, .013, .009), v.RUBBER, .003)
 lock.rotation_euler = filler.rotation_euler
 
+def tail_corner_recess(x):
+    # Keep the inner lenses square to the back and sweep the outer lens toward the side.
+    return .55 * max(0, x - .65) + .45 * max(0, x - .72)
+
 for side in (-1, 1):
     def side_pane(name, points):
         pane(name, [(side * x, y, z) for x, y, z in points])
@@ -200,7 +204,12 @@ for side in (-1, 1):
     for flute in range(-3, 4):
         box("Amber lens rib", (side * (.709 + flute * .0085), -2.067, .702),
             (.0017, .0035, .123), amber_flute, .0007)
-    box("Rear lamp carrier", (side * .548, 2.005, .627), (.436, .087, .158), v.RUBBER)
+    v.profile_loft("Rear lamp carrier", [
+        [(side * x, y - tail_corner_recess(x), z)
+         for y, z in [(1.976, .552), (2.037, .552), (2.053, .567),
+                      (2.053, .687), (2.037, .702), (1.976, .702)]]
+        for x in (.337, .355, .65, .72, .756)
+    ], v.RUBBER, root)
     for name, x, width, ribs, finish in [
         ("Tail lamp", .555, .231, 16, v.TAIL_LAMP),
         ("Rear indicator lens", .715, .069, 6, amber),
@@ -213,7 +222,8 @@ for side in (-1, 1):
                 sections.append(((rib + offset) / ribs - .5, relief, 1))
         sections.append((.5, 0, .83))
         v.profile_loft(name, [
-            [(side * (x + width * offset), y, .627 + z * height)
+            [(side * (x + width * offset), y - tail_corner_recess(x + width * offset),
+              .627 + z * height)
              for y, z in [
                  (2.043, -.060), (2.060 + relief, -.065),
                  (2.069 + relief, -.052), (2.069 + relief, .052),
