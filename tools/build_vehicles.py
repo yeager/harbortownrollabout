@@ -80,7 +80,7 @@ def pipe(name, points, radius, finish, parent):
     node.parent = parent
     curve.materials.append(finish)
 
-def cube(name, loc, dims, mat, bevel=0.06, root=None):
+def cube(name, loc, dims, mat, bevel=0.06, root=None, *, bevel_segments=3):
     bpy.ops.mesh.primitive_cube_add(size=1, location=loc)
     obj = bpy.context.object
     obj.name = name
@@ -91,7 +91,7 @@ def cube(name, loc, dims, mat, bevel=0.06, root=None):
     if bevel:
         mod = obj.modifiers.new("Soft manufactured edges", "BEVEL")
         mod.width = bevel
-        mod.segments = 3
+        mod.segments = bevel_segments
         mod.limit_method = "ANGLE"
         normal = obj.modifiers.new("Weighted highlights", "WEIGHTED_NORMAL")
         bpy.context.view_layer.objects.active = obj
@@ -1228,7 +1228,7 @@ def make_fire_engine():
                 for col in range(4):
                     finish = PAINT_YELLOW if (row+col)%2 else cab_red
                     cube("Locker reflective check",(side*1.171,y+(col-1.5)*.274,1.63+row*.155),
-                         (.007,.274,.155),finish,.001,root)
+                         (.007,.274,.155),finish,.001,root,bevel_segments=1)
             for rib in range(1,int((high-low)/.081)):
                 cube("Shutter seam",(side*1.176,y,low+rib*.081),(.006,1.10,.006),DARK,0,root)
             shutter_hardware((side*1.168,y,low+.023),(side,0),1.11,high-low-.046)
@@ -1667,9 +1667,9 @@ def make_fire_engine():
             bars.append(cube("Step channel",(x,3.30+edge*.148,.681),(.92,.020,.045),METAL,.007,root))
         for i in range(23):
             bars.append(cube("Step bearing bar",(x+(i-11)*.041,3.30,.683),
-                 (.012,.286,.038),METAL,.003,root))
+                 (.012,.286,.038),METAL,.003,root,bevel_segments=1))
         for i in range(4):
-            bars.append(cube("Step cross rod",(x,3.20+i*.066,.693),(.91,.009,.012),METAL,.003,root))
+            bars.append(cube("Step cross rod",(x,3.20+i*.066,.693),(.91,.009,.012),METAL,.003,root,bevel_segments=1))
         bpy.ops.object.select_all(action="DESELECT")
         for bar in bars:
             bar.select_set(True)

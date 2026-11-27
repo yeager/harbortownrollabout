@@ -310,6 +310,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Däcksidorna fick två gjutna ringar och en skyddskant vid fälgen. Alla fyra däckens yttermått jämfördes före och efter export. Bakdäcket granskades i Godot och förarprovet passerade.
   - Brandbilen fick tre bärnstensfärgade reflexer med separata gummifästen på varje sida. De sitter på den fasta karossen under jalusierna. Placeringen granskades i Godot och luckprovet passerade.
   - Grillmärket och båda registreringsskyltarnas tecken förenklades från sammanlagt 18 720 till 4 620 trianglar. Båda skyltarna och det upphöjda grillmärket är fortsatt läsbara i Godot. Förarprovet passerade.
+  - Bakstegens galler och jalusiernas reflexrutor fick enklare fasningar. Tillsammans använder delarna 5 240 trianglar, jämfört med 19 928 tidigare. Gallrets öppningar och reflexmönstret granskades i Godot. Luckprovet passerade.
 - [ ] [`city_bus.glb`](../vehicles/city_bus.glb)
 - [ ] [`dam_pickup.glb`](../vehicles/dam_pickup.glb)
 - [ ] [`electric_kick_scooter.glb`](../vehicles/electric_kick_scooter.glb)
