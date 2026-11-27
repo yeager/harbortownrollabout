@@ -100,8 +100,13 @@ def build_pickup():
         for y in [1.51, 2.54]:
             panel("Cargo tie-down", (side*.812, y, 1.18), (.034, .079, .052), alloy, .012)
         panel("Tail lamp housing", (side*.965, 2.852, 1.13), (.194, .16, .40), trim)
-        for z in [.99, 1.11, 1.24]:
-            panel("Rear lamp lens", (side*.965, 2.941, z), (.137, .032, .073), reverse if z == 1.11 else red)
+        for label, z, finish in [
+            ("Rear tail lamp lens", .981, red),
+            ("Rear reversing lens", 1.074, reverse),
+            ("Rear brake lamp lens", 1.172, red),
+            ("Rear indicator lens", 1.263, amber),
+        ]:
+            panel(label, (side*.965, 2.937, z), (.137, .032, .062), finish, .012)
         panel("Running board", (side*1.07, -.09, .59), (.21, 2.26, .09), trim)
         panel("Cab window divider", (side*.894, -.03, 1.65), (.086, .082, .62), trim)
         for y in [-.56, .67]:

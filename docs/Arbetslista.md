@@ -330,6 +330,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Bussens stänkskydd fick fastspänningslister med tre sexkantsbultar per skydd. En bakre list granskades i en isolerad Godot-vy eftersom sidokjolen skymmer infästningen. Bussprovet passerade.
 - [ ] [`dam_pickup.glb`](../vehicles/dam_pickup.glb)
   - Bakluckan fick ett bygelhandtag med fingerurtag och ändfästen. Den bakre stötfångaren fick två räfflade insteg. Båda detaljerna granskades i Godot och fordonsprovet passerade.
+  - Bakljushusen fick fyra separata glas vardera, med blinkersen överst. Båda blinkersglasen granskades tända i Godot. Fordonsprovet och trafikens blinkersprov passerade.
 - [ ] [`electric_kick_scooter.glb`](../vehicles/electric_kick_scooter.glb)
 - [ ] [`farm_tractor.glb`](../vehicles/farm_tractor.glb)
   - Vinterspridaren fick en modellerad trepunktsinfästning med två nedre stag, toppstag och ledtappar. Infästningen granskades i Godot och halkbekämpningsprovet passerade.
