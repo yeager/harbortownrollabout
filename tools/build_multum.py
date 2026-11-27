@@ -56,6 +56,31 @@ def tire(side, y):
         for offset,radius in profile
     ],v.RUBBER,root)
 
+def alloy_face(side, y):
+    rim_profile = [
+        (.879, .210), (.896, .214), (.912, .213), (.919, .207),
+        (.919, .199), (.914, .194), (.899, .192), (.879, .195),
+    ]
+    angles = [step * math.tau / 64 for step in range(64)]
+    v.profile_loft("Alloy rim lip", [
+        [(side * depth, y + radius * math.cos(angle), .318 + radius * math.sin(angle))
+         for angle in angles]
+        for depth, radius in rim_profile
+    ], v.METAL, root, close_ends=False)
+    for spoke in range(7):
+        angle = spoke * math.tau / 7
+        v.profile_loft("Swept alloy spoke", [
+            [(side * (depth + .011 * math.cos(section)),
+              y + radius * math.cos(angle + sweep) - width * math.sin(section) * math.sin(angle + sweep),
+              .318 + radius * math.sin(angle + sweep) + width * math.sin(section) * math.cos(angle + sweep))
+             for section in angles[::4]]
+            for radius, depth, width, sweep in [
+                (.063, .907, .028, 0), (.085, .912, .028, .02),
+                (.145, .906, .018, .08), (.183, .904, .016, .13),
+                (.202, .902, .022, .15),
+            ]
+        ], v.METAL, root)
+
 body = v.mesh_from_rings("Rounded body and short bonnet", [
     (-2.04,.75,.25,.54,.72),(-1.92,.88,.23,.62,.81),
     (-1.61,.92,.22,.69,.89),(-1.15,.925,.22,.77,.99),
@@ -158,10 +183,7 @@ for side in (-1,1):
         tire(side,y)
         v.cylinder("Wheel hub barrel",(side*.884,y,.318),.209,.045,v.DARK,True,40,root)
         v.cylinder("Wheel hub cap",(side*.913,y,.318),.077,.028,v.METAL,True,32,root)
-        for i in range(8):
-            angle = i*math.tau/8
-            rod("Wheel hub spoke",(side*.915,y+.062*math.cos(angle),.318+.062*math.sin(angle)),
-                (side*.908,y+.195*math.cos(angle+.10),.318+.195*math.sin(angle+.10)),.022,v.METAL)
+        alloy_face(side, y)
         for i in range(4):
             angle = (i+.5)*math.tau/4
             bolt_y = y+.049*math.cos(angle)
