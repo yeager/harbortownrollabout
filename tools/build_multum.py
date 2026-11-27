@@ -63,14 +63,14 @@ def alloy_face(side, y):
         (.919, .199), (.914, .194), (.899, .192), (.879, .195),
     ]
     angles = [step * math.tau / 64 for step in range(64)]
-    v.profile_loft("Alloy rim lip", [
+    v.profile_loft("Alloy wheel rim lip", [
         [(side * depth, y + radius * math.cos(angle), .318 + radius * math.sin(angle))
          for angle in angles]
         for depth, radius in rim_profile
     ], v.METAL, root, close_ends=False)
     for spoke in range(7):
         angle = spoke * math.tau / 7
-        v.profile_loft("Swept alloy spoke", [
+        v.profile_loft("Alloy wheel swept spoke", [
             [(side * (depth + .011 * math.cos(section)),
               y + radius * math.cos(angle + sweep) - width * math.sin(section) * math.sin(angle + sweep),
               .318 + radius * math.sin(angle + sweep) + width * math.sin(section) * math.cos(angle + sweep))

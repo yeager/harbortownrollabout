@@ -128,6 +128,16 @@ func check_gallery() -> void:
 						printerr("An indicator is missing its modeled lens on ", tile.text)
 						quit(1)
 						return
+		if index == game.MULTUM:
+			if game.player_wheels.size() != 4 or game.front_knuckles.size() != 2:
+				printerr("Multum must have four wheel pivots and two steering knuckles")
+				quit(1)
+				return
+			for wheel: Node3D in game.player_wheels:
+				if is_zero_approx(wheel.rotation.x) or wheel.find_children("Alloy wheel rim lip*", "MeshInstance3D", true, false).size() != 1 or wheel.find_children("Alloy wheel swept spoke*", "MeshInstance3D", true, false).size() != 7:
+					printerr("Each Multum wheel must roll with its rim lip and seven spokes")
+					quit(1)
+					return
 		if index == game.DAM_PICKUP:
 			if game.player_wheels.size() != 4 or game.front_knuckles.size() != 2 or game.rear_tire_contacts.size() != 2:
 				printerr("DAM pickup axle layout is incomplete")
