@@ -105,12 +105,29 @@ for side in (-1,1):
         rod("Window lower seal",(side*a[1],a[0],a[2]),(side*b[1],b[0],b[2]),.017,v.DARK)
     for y in (-.17,.91):
         box("Door rubbing strip",(side*.919,y,.645),(.038,.85,.057),v.DARK,.019)
-        box("Oval door handle",(side*.924,y+.30,.918),(.043,.139,.056),v.DARK,.021)
+        handle_y = y+.30
+        box("Door handle gasket",(side*.919,handle_y,.918),(.026,.163,.068),v.RUBBER,.021)
+        box("Recessed door handle pocket",(side*.933,handle_y,.918),
+            (.018,.143,.053),v.DARK,.015)
+        for offset in (-.042,.042):
+            box("Door pull support",(side*.949,handle_y+offset,.918),
+                (.032,.025,.031),v.DARK,.008)
+        box("Oval door pull",(side*.966,handle_y,.918),(.026,.117,.026),v.DARK,.010)
+        if y < 0:
+            v.cylinder("Front door lock",(side*.931,handle_y,.852),
+                       .012,.013,v.METAL,True,20,root)
+            box("Door lock keyway",(side*.938,handle_y,.852),
+                (.003,.004,.012),v.RUBBER,.001)
     for y in (.23,1.35):
         rod("Door shut line",(side*.922,y,.44),(side*.924,y,.945),.005,v.DARK)
-    box("Mirror mount",(side*.869,-.78,1.141),(.139,.114,.085),v.DARK)
+    box("Mirror mounting pad",(side*.873,-.78,1.141),(.047,.130,.108),v.RUBBER,.016)
+    rod("Mirror support arm",(side*.885,-.78,1.125),(side*.952,-.77,1.154),
+        .032,v.DARK)
+    v.cylinder("Mirror folding joint",(side*.950,-.77,1.159),
+               .039,.055,v.DARK,False,24,root)
     box("Rounded mirror housing",(side*.970,-.755,1.193),(.167,.146,.155),v.DARK,.042)
-    box("Mirror glass",(side*.970,-.674,1.193),(.114,.014,.104),v.METAL,.007)
+    box("Mirror glass gasket",(side*.970,-.679,1.193),(.140,.024,.127),v.RUBBER,.011)
+    box("Mirror glass",(side*.970,-.665,1.193),(.117,.012,.104),v.METAL,.007)
     headlight("Upper headlight",side*.694,-1.385,1.087,.062)
     headlight("Lower headlight",side*.655,-2.043,.672,.079)
     lamp("Front amber indicator",side*.816,-1.987,.671,.052,amber)
