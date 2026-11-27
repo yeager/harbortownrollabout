@@ -141,8 +141,19 @@ for side in (-1,1):
     for a,b in zip(cabin[2:],cabin[3:]):
         rod("Window roof seal",(side*a[1]*.91,a[0],a[4]-.022),
             (side*b[1]*.91,b[0],b[4]-.022),.015,v.DARK)
+    for start, end, end_depth in [(-.704, .198, .918), (.259, 1.037, .910)]:
+        sections = [
+            (start, .918, .18), (start + .026, .918, .72),
+            (start + .067, .918, 1), (end - .067, end_depth, 1),
+            (end - .026, end_depth, .70), (end, end_depth, .18),
+        ]
+        v.profile_loft("Tapered door rubbing strip", [
+            [(side * (depth + .020 * scale * math.cos(angle)), y,
+              .645 + .029 * scale * math.sin(angle))
+             for angle in (step * math.tau / 24 for step in range(24))]
+            for y, depth, scale in sections
+        ], v.DARK, root)
     for y in (-.17,.91):
-        box("Door rubbing strip",(side*.919,y,.645),(.038,.85,.057),v.DARK,.019)
         handle_y = y+.30
         box("Door handle gasket",(side*.919,handle_y,.918),(.026,.163,.068),v.RUBBER,.021)
         box("Recessed door handle pocket",(side*.933,handle_y,.918),
