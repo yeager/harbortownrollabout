@@ -426,10 +426,23 @@ for y in (-.752,3.129):
     rod("Hatch hinge pin collar",(1.178,y-.012,2.813),(1.178,y+.012,2.813),
         .022,v.DARK,16)
 for y in [-.64,3.02]:
-    box("Strut bracket",(1.103,y,2.07),(.055,.085,.10),v.METAL,.009)
-    rod("Gas spring barrel",(1.12,y,2.07),(1.64,y,2.43),.032,v.BLACK)
-    rod("Chrome piston",(1.64,y,2.43),(2.04,y,2.695),.014,v.METAL)
-    box("Upper strut bracket",(2.04,y,2.703),(.083,.065,.048),v.METAL,.009)
+    lower = Vector((1.141,y,2.079))
+    upper = Vector((2.04,y,2.678))
+    barrel_end = lower.lerp(upper,.58)
+    box("Lower strut mounting plate",(1.106,y,2.079),(.026,.102,.115),v.METAL,.008)
+    box("Upper strut mounting plate",(2.04,y,2.714),(.101,.102,.022),v.METAL,.006)
+    for joint in [lower, upper]:
+        for offset in [-.031,.031]:
+            box("Strut clevis cheek",joint+Vector((0,offset,.009)),
+                (.064,.014,.061),v.DARK,.008)
+        rod("Strut pivot pin",joint-Vector((0,.045,0)),joint+Vector((0,.045,0)),
+            .013,v.METAL,16)
+        for offset in [-.048,.048]:
+            rod("Strut pin retaining head",joint+Vector((0,offset-.003,0)),
+                joint+Vector((0,offset+.003,0)),.017,v.METAL,8)
+    rod("Gas spring barrel",lower,barrel_end,.032,v.BLACK)
+    rod("Gas spring end collar",barrel_end.lerp(lower,.07),barrel_end,.035,v.DARK,20)
+    rod("Chrome piston",barrel_end,upper,.014,v.METAL)
 box("Griddle cabinet",(-.60,1.26,1.26),(.77,2.66,.70),v.METAL)
 box("Cast iron griddle",(-.59,1.25,1.63),(.80,1.53,.065),v.BLACK)
 box("Extractor canopy",(-.62,1.25,2.50),(.87,2.42,.22),v.METAL)
