@@ -9334,6 +9334,12 @@ func _fit_bus_exterior(model: Node3D) -> void:
 	button_cap.height = .012
 	button_cap.radial_segments = 16
 	button_cap.material = _material(Color("#9bce52"), .48)
+	var button_ring := TorusMesh.new()
+	button_ring.inner_radius = .026
+	button_ring.outer_radius = .031
+	button_ring.rings = 24
+	button_ring.ring_segments = 8
+	button_ring.material = _material(Color("#d5ddd9"), .40)
 	for door_center in [4.4, -.30, -4.11]:
 		var seal := _make_box("Passenger door centre gasket", Vector3(.024, 2.25, .043),
 			Vector3(-1.272, 1.58, door_center), door_jamb.albedo_color, false, model)
@@ -9358,6 +9364,19 @@ func _fit_bus_exterior(model: Node3D) -> void:
 			button.position.x = -.018
 			button.rotation.z = PI * .5
 			housing.add_child(button)
+			var rim := MeshInstance3D.new()
+			rim.name = "Passenger door button rim"
+			rim.mesh = button_ring
+			rim.position.x = -.018
+			rim.rotation.z = PI * .5
+			housing.add_child(rim)
+			# Two outward chevrons identify the button without a text label.
+			for direction in [-1.0, 1.0]:
+				for row in [-1.0, 1.0]:
+					var stroke := _make_box("Passenger door open icon stroke", Vector3(.002, .012, .003),
+						Vector3(-.025, row * .0035, direction * .010), door_jamb.albedo_color, false, housing)
+					stroke.material_override = door_jamb
+					stroke.rotation.x = -row * direction * PI * .25
 	if not bus_side_marker_finish:
 		bus_side_marker_finish = _material(Color("#a6561d"),.32,true)
 		bus_side_marker_finish.emission = Color("#ffaa43")

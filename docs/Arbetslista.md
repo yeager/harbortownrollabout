@@ -320,6 +320,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
 - [ ] [`city_bus.glb`](../vehicles/city_bus.glb)
   - Bakre motorluckan fick ett handtag under ventilationsgallret och en låscylinder med nyckelspår. Granskat i Godot 4.7 dev5. Bussprovet passerade alla sex hållplatser.
   - Motorluckans ventilationsgaller fick tre lodräta stöd bakom lamellerna och fyra fästskruvar i ramen. Granskat i Godot. Bussprovet passerade alla sex hållplatser.
+  - Öppningsknapparna vid mitt- och bakdörren fick ljusa ringar och en modellerad symbol med två utåtriktade pilar. Mittdörrens knapp granskades i närbild i Godot. Bussprovet passerade.
 - [ ] [`dam_pickup.glb`](../vehicles/dam_pickup.glb)
 - [ ] [`electric_kick_scooter.glb`](../vehicles/electric_kick_scooter.glb)
 - [ ] [`farm_tractor.glb`](../vehicles/farm_tractor.glb)
