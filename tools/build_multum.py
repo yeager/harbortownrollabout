@@ -127,6 +127,31 @@ edge.width = .013
 edge.segments = 3
 body.modifiers.new("Body normals","WEIGHTED_NORMAL")
 
+# Trace the shut lines on the evaluated shell, including its rounded shoulder.
+bpy.context.view_layer.update()
+door_surface = body.evaluated_get(bpy.context.evaluated_depsgraph_get())
+door_seams = [
+    [(-.71, 1.023), (-.752, .939), (-.773, .822), (-.773, .431),
+     (-.747, .382), (-.696, .366), (.205, .366), (.230, .366),
+     (.230, 1.034)],
+    [(.230, .366), (.905, .366)],
+    [(1.343, .716), (1.350, .869), (1.346, 1.041)],
+]
+for side in (-1, 1):
+    for seam in door_seams:
+        samples = []
+        for start, end in zip(seam, seam[1:]):
+            steps = max(1, math.ceil(math.dist(start, end) / .022))
+            samples.extend(Vector(start).lerp(Vector(end), step / steps) for step in range(steps))
+        samples.append(seam[-1])
+        surface_points = []
+        for y, z in samples:
+            hit, point, _, _ = door_surface.ray_cast(Vector((side * 1.5, y, z)), Vector((-side, 0, 0)))
+            if not hit:
+                raise ValueError(f"Door seam misses body at {y:.3f}, {z:.3f}")
+            surface_points.append((point.x + side * .001, y, z))
+        v.pipe("Door shut line", surface_points, .003, v.RUBBER, root)
+
 def cabin_section(y,w,base,shoulder,crown):
     return [(-w,y,base),(-w*.975,y,shoulder),(-w*.91,y,crown-.027),
             (0,y,crown),(w*.91,y,crown-.027),(w*.975,y,shoulder),(w,y,base)]
@@ -233,8 +258,6 @@ for side in (-1,1):
                        .012,.013,v.METAL,True,20,root)
             box("Door lock keyway",(side*.938,handle_y,.852),
                 (.003,.004,.012),v.RUBBER,.001)
-    for y, bottom in ((.23, .44), (1.35, .715)):
-        rod("Door shut line",(side*.922,y,bottom),(side*.924,y,.945),.005,v.DARK)
     box("Mirror mounting pad",(side*.873,-.78,1.141),(.047,.130,.108),v.RUBBER,.016)
     rod("Mirror support arm",(side*.885,-.78,1.125),(side*.952,-.77,1.154),
         .032,v.DARK)
