@@ -120,6 +120,23 @@ for side in (-1, 1):
     v.pipe("Rear heater bus bar", [(side * width, y, z) for width, y, z in heater_rows],
            .002, heater, root)
 
+# Seat the fuel filler on the right rear quarter at the local panel angle.
+hit, filler_surface, filler_normal, _ = body_surface.ray_cast(
+    Vector((1.1, 1.69, .762)), Vector((-1, 0, 0))
+)
+if not hit:
+    raise RuntimeError("Fuel filler misses the rear quarter panel")
+for name, radius, depth, offset, finish in [
+    ("Fuel filler surround", .055, .030, -.008, v.RUBBER),
+    ("Fuel cap", .044, .015, .009, v.DARK),
+]:
+    filler = v.cylinder(name, filler_surface + filler_normal * offset, radius, depth,
+                        finish, axis_x=False, vertices=40, root=root)
+    filler.rotation_euler = filler_normal.to_track_quat('Z', 'Y').to_euler()
+lock = box("Fuel cap grip", filler_surface + filler_normal * .018,
+           (.055, .013, .009), v.RUBBER, .003)
+lock.rotation_euler = filler.rotation_euler
+
 for side in (-1, 1):
     def side_pane(name, points):
         pane(name, [(side * x, y, z) for x, y, z in points])

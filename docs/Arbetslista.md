@@ -469,6 +469,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Karossen fick enfärgad bränd orange lack och däcken fick modellerade slitbanespår. Galleribilden uppdaterades. Modellen granskades i Godot och körprovet för 30 vägfordon passerade.
   - Främre och bakre stötfångaren följer nu skärmarnas hörn, inklusive de smala metallisterna. Granskat från båda håll i Godot. Körprovet för 30 vägfordon passerade.
   - Motorhuven fick en sammanhängande panelfog som följer karossens välvning. Granskad i Godot. Körprovet för 30 vägfordon passerade.
+  - Högra bakskärmen fick ett runt tanklock med separat gummiring och grepp. Granskat i närbild i Godot. Körprovet för 30 vägfordon passerade.
 - [ ] [`compact_convertible.glb`](../vehicles/compact_convertible.glb)
   - Mino Kuper S fick ett eget kopparfärgat M-monogram på motorhuven och bakluckan samt nytt namn i fordonsgalleriet. Emblemen granskades i Godot. Fordonsprovet och språkkontrollen passerade.
 - [ ] [`electric_sedan.glb`](../vehicles/electric_sedan.glb)
