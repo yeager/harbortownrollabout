@@ -314,7 +314,8 @@ for side in (-1, 1):
         for x in (.337, .355, .65, .72, .756)
     ], v.RUBBER, root)
     for name, x, width, ribs, finish in [
-        ("Tail lamp", .555, .231, 16, v.TAIL_LAMP),
+        ("Tail lamp position lens", .491, .102, 7, v.TAIL_LAMP),
+        ("Tail lamp brake lens", .607, .124, 9, v.TAIL_LAMP),
         ("Rear indicator lens", .715, .069, 6, amber),
         ("Reversing lens", .400, .068, 6, reverse),
     ]:

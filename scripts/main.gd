@@ -9310,6 +9310,10 @@ func _brake_lens(model: Node3D, reversing := false) -> StandardMaterial3D:
 					var centre := lens.duplicate() as StandardMaterial3D
 					lens.set_meta("centre_lamp", centre)
 					part.set_surface_override_material(index, centre)
+				elif not reversing and part.name.begins_with("Tail lamp position lens"):
+					if not lens.has_meta("position_lamp"):
+						lens.set_meta("position_lamp", lens.duplicate())
+					part.set_surface_override_material(index, lens.get_meta("position_lamp"))
 				else:
 					part.set_surface_override_material(index, lens)
 	if lens and not reversing:
@@ -9317,7 +9321,14 @@ func _brake_lens(model: Node3D, reversing := false) -> StandardMaterial3D:
 	return lens
 
 func _set_rear_lights(lens: StandardMaterial3D, braking: bool) -> void:
-	var energy := 2.4 if braking else lerpf(.18, .75, clampf(last_night, 0, 1))
+	var running_energy := lerpf(.18, .75, clampf(last_night, 0, 1))
+	var energy := 2.4 if braking else running_energy
+	if lens.has_meta("position_lamp"):
+		var running: StandardMaterial3D = lens.get_meta("position_lamp")
+		if not is_equal_approx(running.emission_energy_multiplier, running_energy):
+			running.emission_energy_multiplier = running_energy
+		if not braking:
+			energy = 0.0
 	if not is_equal_approx(lens.emission_energy_multiplier, energy):
 		lens.emission_energy_multiplier = energy
 	if lens.has_meta("centre_lamp"):

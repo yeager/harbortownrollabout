@@ -303,6 +303,19 @@ func check_gallery() -> void:
 				printerr("Both mower rear lenses must light when braking")
 				quit(1)
 				return
+		if index == game.VOVLO_434:
+			var brake: StandardMaterial3D = game.player_brake_lens
+			var positions: Array[Node] = game.vehicle_model.find_children("Tail lamp position lens*", "MeshInstance3D", true, false)
+			var stops: Array[Node] = game.vehicle_model.find_children("Tail lamp brake lens*", "MeshInstance3D", true, false)
+			if not brake or not brake.has_meta("position_lamp") or positions.size() != 2 or stops.size() != 2:
+				printerr("Vovlo 434 must have separate position and brake lenses")
+				quit(1)
+				return
+			var running: StandardMaterial3D = brake.get_meta("position_lamp")
+			if brake.emission_energy_multiplier < 2.39 or running.emission_energy_multiplier >= 1.0 or not positions.all(func(lens: MeshInstance3D): return lens.get_active_material(0) == running) or not stops.all(func(lens: MeshInstance3D): return lens.get_active_material(0) == brake):
+				printerr("Only the Vovlo 434 brake lenses should brighten while braking")
+				quit(1)
+				return
 		var has_paired_reverse_lenses: bool = index in [game.REFUSE, game.MOWER, game.A_TRACTOR, game.FOOD_TRUCK, game.ICE_CREAM, game.MULTUM, game.VOVLO_434] or tile.text == "Saav 97"
 		if has_paired_reverse_lenses:
 			var lenses: Array = game.vehicle_model.find_children("Reversing lens*", "MeshInstance3D", true, false)
