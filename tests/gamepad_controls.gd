@@ -85,11 +85,15 @@ func run() -> void:
 		quit(1)
 		return
 	button(JOY_BUTTON_BACK)
-	if not game.phone.handset.is_visible_in_tree():
+	if not game.phone.handset.is_visible_in_tree() or not game.phone.handset.is_ancestor_of(root.gui_get_focus_owner()):
 		printerr("Gamepad phone control failed")
 		quit(1)
 		return
 	button(JOY_BUTTON_BACK)
+	if root.gui_get_focus_owner() != null:
+		printerr("Closing the phone left menu focus behind")
+		quit(1)
+		return
 	game.speed = 0
 	button(JOY_BUTTON_X)
 	if not game.walker.visible:
@@ -105,7 +109,34 @@ func run() -> void:
 		printerr("Gamepad walk failed")
 		quit(1)
 		return
-	print("Gamepad menu, steering, pedals, pause, camera, phone, seat and walking passed.")
+	game.walker.position = Vector3(71, game._foot_height(71, 0), 0)
+	game.walker.rotation.y = PI
+	button(JOY_BUTTON_LEFT_STICK)
+	if not game.scooter.visible:
+		printerr("The gamepad could not unfold the scooter")
+		quit(1)
+		return
+	button(JOY_BUTTON_LEFT_STICK)
+	if game.scooter.visible:
+		printerr("The gamepad could not put away the scooter")
+		quit(1)
+		return
+	game.free_drive = true
+	game._refresh_ui()
+	button(JOY_BUTTON_RIGHT_STICK)
+	await process_frame
+	var map := game.find_child("TownMap", true, false) as Window
+	if not map or not map.visible or not game.paused or not map.gui_get_focus_owner():
+		printerr("The gamepad could not open and focus the town map")
+		quit(1)
+		return
+	button(JOY_BUTTON_B)
+	await process_frame
+	if map.visible or game.paused:
+		printerr("The gamepad could not close the town map")
+		quit(1)
+		return
+	print("Gamepad menu, steering, pedals, pause, camera, phone, map, seat and walking passed.")
 	game.queue_free()
 	await process_frame
 	quit()

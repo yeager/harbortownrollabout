@@ -258,6 +258,17 @@ func toggle() -> void:
 	if handset.visible: unread=0
 	refresh()
 
+func toggle_with_focus() -> void:
+	var focused := get_viewport().gui_get_focus_owner()
+	if focused and handset.is_ancestor_of(focused):
+		focused.release_focus()
+	toggle()
+	if handset.is_visible_in_tree():
+		for button in [take_job, repeat_job, receipt_menu]:
+			if button.is_visible_in_tree() and not button.disabled:
+				button.grab_focus()
+				break
+
 func _show_action_rows(jobs: PackedStringArray) -> void:
 	if jobs == pictured_jobs: return
 	pictured_jobs = jobs.duplicate()

@@ -1118,13 +1118,13 @@ func _input(event: InputEvent) -> void:
 	if event is InputEventJoypadButton and event.pressed:
 		if event.button_index == JOY_BUTTON_START and mode == "playing" and not get_tree().paused:
 			if phone.handset.is_visible_in_tree():
-				phone.toggle()
+				phone.toggle_with_focus()
 			else:
 				_toggle_pause()
 			get_viewport().set_input_as_handled()
 			return
 		if event.button_index == JOY_BUTTON_BACK and mode == "playing" and not paused and not get_tree().paused and phone.visible:
-			phone.toggle()
+			phone.toggle_with_focus()
 			get_viewport().set_input_as_handled()
 			return
 		if _world_controls_available() and not get_viewport().gui_get_focus_owner():
@@ -1137,6 +1137,10 @@ func _input(event: InputEvent) -> void:
 						walk_jump_left = WALK_JUMP_TIME
 				JOY_BUTTON_X: _change_seat()
 				JOY_BUTTON_Y: _toggle_camera_view()
+				JOY_BUTTON_LEFT_STICK: _toggle_scooter()
+				JOY_BUTTON_RIGHT_STICK:
+					if map_button.is_visible_in_tree():
+						map_button.pressed.emit()
 				JOY_BUTTON_RIGHT_SHOULDER: _honk()
 				_: return
 			get_viewport().set_input_as_handled()
@@ -11414,6 +11418,10 @@ func _build_town_map() -> void:
 	chart.water_bounds = CANAL_BOUNDS
 	chart.configure(navigator,PackedVector3Array([TARGETS[0],TARGETS[1],TARGETS[2],SCHOOL_CURB,STATION_DROP,counter,FLOUR_CURB,BOULE_BENCH_APPROACH,shops.pizzeria_entrance(),shops.storefront_entrance("Sweet shop"),shops.storefront_entrance("Momo & Bori"),FOUNTAIN_APPROACH,LAUNCH_MAP_STOP,shops.storefront_entrance("Toy Harbour"),suburban_villas.MAP_STOP,dax.MAP_STOP]),MAP_NAMES)
 	dialog.window_input.connect(func(event: InputEvent):
+		if event is InputEventJoypadButton and event.pressed and event.button_index in [JOY_BUTTON_B, JOY_BUTTON_RIGHT_STICK]:
+			dialog.set_input_as_handled()
+			dialog.hide()
+			return
 		if not event is InputEventKey or not event.pressed or event.echo or event.ctrl_pressed or event.alt_pressed or event.meta_pressed:
 			return
 		if event.keycode == map_key:
