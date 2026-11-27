@@ -236,8 +236,27 @@ def build_pickup():
                 ])
             profile_loft("Continuous wheel arch molding", arch_sections, trim, root)
             wheel = cylinder("All terrain tire", (side*1.012, y, .433), .433, .326, rubber, root=root)
-            cylinder("Alloy wheel hub", (side*1.179, y, .433), .253, .075, alloy, root=wheel)
-            cylinder("Center cap", (side*1.226, y, .433), .082, .027, chrome, root=wheel)
+            barrel_profile = [(1.152, .229), (1.218, .229), (1.234, .234),
+                              (1.237, .246), (1.230, .254), (1.152, .254)]
+            barrel_sections = []
+            for index in range(49):
+                angle = index*math.tau/48
+                barrel_sections.append([
+                    (side*x, y+radius*math.cos(angle), .433+radius*math.sin(angle))
+                    for x, radius in barrel_profile
+                ])
+            barrel = profile_loft("Alloy wheel barrel", barrel_sections, alloy, None, close_ends=False)
+            attach(barrel, wheel)
+            cylinder("Brake rotor behind spokes", (side*1.179, y, .433),
+                     .183, .016, trim, root=wheel)
+            cylinder("Wheel hub mounting face", (side*1.212, y, .433),
+                     .096, .032, alloy, root=wheel)
+            cylinder("Center cap", (side*1.233, y, .433), .053, .022, chrome, root=wheel)
+            for index in range(6):
+                angle = index*math.tau/6
+                cylinder("Wheel lug fastener",
+                         (side*1.233, y+.071*math.cos(angle), .433+.071*math.sin(angle)),
+                         .010, .012, chrome, vertices=6, root=wheel)
             for index in range(8):
                 angle = index * math.tau/8
                 spoke = panel("Wheel spoke", (side*1.222, y+.15*math.cos(angle), .433+.15*math.sin(angle)), (.034, .18, .038), alloy, .014, wheel)
