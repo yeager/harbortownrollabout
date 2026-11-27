@@ -364,6 +364,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Det främre lyftet fick två hydraulcylindrar med kolvstänger, ledtappar och slanganslutningar. Båda infästningarna granskades i Godot med och utan plog. Halkbekämpningsprovet passerade.
   - Båda främre hydraulcylindrarna fick böjda slangar till ventilblock med metallkopplingar. Slangdragningen granskades från båda sidor i Godot och halkbekämpningsprovet passerade.
   - Traktorns sex insteg fick öppna metallgaller med åtta lameller och ett underliggande stag per steg. Båda sidor granskades i Godot och halkbekämpningsprovet passerade.
+  - Hyttdörrarnas handtag fick välvda grepp, separata fästplattor och låscylindrar med nyckelspår. Båda handtagen granskades i Godot och halkbekämpningsprovet passerade.
 - [ ] [`food_truck.glb`](../vehicles/food_truck.glb)
 - [ ] [`food_truck_road.glb`](../vehicles/food_truck_road.glb)
 - [ ] [`ice_cream_van.glb`](../vehicles/ice_cream_van.glb)

@@ -886,9 +886,16 @@ for s in [-1,1]:
                     (.85,2.14),(.86,3.04),(.78,3.09),(-.16,3.08),(-.18,1.59)]
     for (y1,z1),(y2,z2) in zip(door_outline,door_outline[1:]):
         rod("Moulded door seal",(s*.767,y1,z1),(s*.767,y2,z2),.024,v.BLACK)
-    for handle_y in (.55,.72):
-        box("Latch stand-off",(s*.788,handle_y,2.17),(.044,.035,.050),v.DARK,.008)
-    box("Cab door pull",(s*.813,.635,2.17),(.033,.207,.039),v.BLACK,.013)
+    box("Cab latch backing plate",(s*.775,.637,2.170),(.028,.225,.079),v.BLACK,.015)
+    pull_sections = []
+    for y, x, thickness in [(.535,.791,.011),(.556,.811,.017),(.581,.828,.018),
+                             (.691,.831,.018),(.719,.812,.016),(.737,.791,.010)]:
+        pull_sections.append([(s*(x+dx*thickness),y,2.179+dz*.016)
+                              for dx,dz in [(-1,-.5),(-.6,-1),(.6,-1),(1,-.5),
+                                            (1,.5),(.6,1),(-.6,1),(-1,.5)]])
+    v.profile_loft("Arched cab door pull",pull_sections,v.DARK,root)
+    disc("Cab door lock cylinder",(s*.795,.708,2.142),.012,.010,v.METAL)
+    box("Cab door key slot",(s*.801,.708,2.142),(.004,.011,.004),v.BLACK,.001)
     for rail_y in [-.39,.03]:
         rod("Entry ladder side rail",(s*.64,rail_y,1.48),(s*.91,rail_y,.75),.032,v.BLACK)
     for i in range(3):
