@@ -49,13 +49,28 @@ for side in (-1,1):
     for lane in (1,2,3):
         cube("Grip rib",(side*.036*lane,-.068,.175),(.008,.62,.005),charcoal,.002,root)
     cube("Deck side reflector",(side*.157,-.30,.126),(.006,.069,.025),orange,.003,root)
+tyre_section = [
+    (-.031, .066), (-.032, .087), (-.031, .103), (-.028, .111),
+    (-.023, .116), (-.017, .118), (-.013, .118), (-.011, .115),
+    (-.008, .115), (-.006, .118), (.006, .118), (.008, .115),
+    (.011, .115), (.013, .118), (.017, .118), (.023, .116),
+    (.028, .111), (.031, .103), (.032, .087), (.031, .066),
+]
 for i, y in enumerate((.48,-.48)):
     axle = bpy.data.objects.new(("FrontWheel","RearWheel")[i],None)
     bpy.context.collection.objects.link(axle)
     axle.parent = root
     axle.location = (0,y,.118)
     bpy.context.view_layer.update()
-    cylinder("Road tyre",(0,y,.118),.118,.064,rubber,True,48,axle)
+    tyre_sections = []
+    for index in range(65):
+        angle = index*math.tau/64
+        tyre_sections.append([
+            (x, y+radius*math.cos(angle), .118+radius*math.sin(angle))
+            for x, radius in tyre_section
+        ])
+    tyre = profile_loft("Road tyre", tyre_sections, rubber, None, close_ends=False)
+    attach(tyre, axle)
     cylinder("Hub motor case",(0,y,.118),.079,.073,charcoal,True,36,axle)
     cylinder("Axle cover",(0,y,.118),.027,.087,steel,True,24,axle)
     for side in (-1,1):
