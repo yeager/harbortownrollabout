@@ -451,7 +451,15 @@ box("Roof vent flashing",(-.62,1.25,2.948),(.71,.86,.035),v.METAL,.014)
 box("Vent throat",(-.62,1.25,3.045),(.54,.69,.18),v.DARK,.018)
 for level in [2.995,3.055,3.115]:
     box("Vent louvre",(-.62,1.25,level),(.63,.78,.024),v.METAL,.011)
+# Seal the flashing against the roof and fasten it around the duct opening.
+box("Roof vent gasket",(-.62,1.25,2.929),(.70,.85,.016),v.BLACK,.007)
+for x in [-.93,-.31]:
+    for y in [.89,1.25,1.61]:
+        v.cylinder("Roof vent sealing washer",(x,y,2.968),.019,.008,v.BLACK,False,16,root)
+        v.cylinder("Roof vent hex screw",(x,y,2.976),.013,.010,v.METAL,False,6,root)
 box("Vent rain cap",(-.62,1.25,3.158),(.72,.87,.055),v.METAL,.023)
+for x in [-.966,-.274]:
+    box("Rain cap folded drip edge",(x,1.25,3.131),(.018,.824,.036),v.METAL,.006)
 box("Brushed steel splashback",(-.991,1.24,2.01),(.035,2.58,.81),v.METAL)
 box("Pass shelf",(.90,1.26,1.39),(.34,2.10,.045),v.METAL)
 mustard = v.material("Mustard yellow",(.91,.49,.019),0,.46)

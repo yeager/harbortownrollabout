@@ -369,6 +369,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
 - [ ] [`food_truck.glb`](../vehicles/food_truck.glb)
   - Serveringsluckan fick ett gångjärn med genomgående tapp och växlande gångjärnsdelar. Gångjärnet granskades underifrån i Godot. Kiosk- och butiksprovet passerade.
   - Serveringsluckans gasfjädrar fick fästplattor, gaffelfästen med ledtappar och kragar vid kolvstängerna. Infästningarna granskades i Godot. Kiosk- och butiksprovet passerade.
+  - Takventilens infästning fick tätning, sex sexkantsskruvar med tätbrickor och vikta droppkanter på regnhuven. Importen granskades visuellt i Godot. Kiosk- och butiksprovet passerade.
 - [ ] [`food_truck_road.glb`](../vehicles/food_truck_road.glb)
 - [ ] [`ice_cream_van.glb`](../vehicles/ice_cream_van.glb)
 - [ ] [`lotten.glb`](../vehicles/lotten.glb)
