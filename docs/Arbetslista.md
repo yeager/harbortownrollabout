@@ -400,6 +400,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Gummiavbärarna vid landgångarna fick synliga stålplattor och bultade fästbleck. Granskade i Godot. Färjeprovet passerade båda överfarterna.
   - Skorstenen fick ett försänkt avgasutlopp med rundad kant och en bultad takfläns. Granskad i Godot. Färjeprovet passerade båda överfarterna.
   - Båda livbojarna fick stålhållare med fästplatta, stödarmar och en nedre hake. Granskade i Godot. Färjeprovet passerade.
+  - Takflottarna fick stålskenor under staplarna och synliga spännen på surrningsbanden. Granskade i Godot. Färjeprovet passerade.
 - [ ] [`sport_sedan.glb`](../vehicles/sport_sedan.glb)
   - BWM M3 E33 fick ett upphöjt modellemblem på bakluckan. Granskat i Godot och fordonsprovet passerade.
 - [ ] [`compact_convertible.glb`](../vehicles/compact_convertible.glb)

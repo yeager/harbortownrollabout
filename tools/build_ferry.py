@@ -125,7 +125,12 @@ for side in [-1,1]:
         for tier in range(3):
             box("Stacked flotation platform",(side*1.12,y,2.45+tier*.09),(.76,1.19,.078),orange,.036)
         for offset in [-.34,.34]:
-            box("Raft strap",(side*1.12,y+offset,2.58),(.78,.040,.29),rubber)
+            strap_y = y+offset
+            box("Raft cradle rail",(side*1.12,strap_y,2.399),(.84,.079,.031),steel,.006)
+            box("Raft strap",(side*1.12,strap_y,2.55),(.78,.040,.277),rubber,.009)
+            box("Raft buckle frame",(side*1.30,strap_y,2.697),(.103,.073,.022),steel,.006)
+            box("Raft buckle webbing",(side*1.30,strap_y,2.710),(.075,.039,.010),rubber,.003)
+            box("Raft buckle crossbar",(side*1.30,strap_y,2.718),(.018,.066,.012),steel,.003)
 pole("Signal mast",(0,-.8,3.94),.046,1.0,steel)
 for height, width in [(4.02,.74),(4.25,.45)]:
     tube("Signal yardarm",(-width,-.8,height),(width,-.8,height),.018,steel)
