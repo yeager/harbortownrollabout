@@ -375,6 +375,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Backljusen fick kromramar och fem lodräta prismor per lins. Formen granskades i Godot. Fordonsprovet verifierade att båda backljusen tänds när matbilen backar och är släckta vid inbromsning framåt.
   - Den stängda luckans fem gångjärn fick separata fästblad, tre hylsor och genomgående tapp. Granskat i Godot. Fordonsprovet passerade.
 - [ ] [`ice_cream_van.glb`](../vehicles/ice_cream_van.glb)
+  - Glassbilen fick baklyktor med gemensamma hus för röda bakljus och räfflade vita backljus. Glasen granskades i Godot. Fordonsprovet verifierade att båda backljusen tänds vid backning och förblir släckta vid inbromsning framåt. Glassrutten passerade.
 - [ ] [`lotten.glb`](../vehicles/lotten.glb)
 - [ ] [`sport_sedan.glb`](../vehicles/sport_sedan.glb)
   - BWM M3 E33 fick ett upphöjt modellemblem på bakluckan. Granskat i Godot och fordonsprovet passerade.

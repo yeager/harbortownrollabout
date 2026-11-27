@@ -48,6 +48,7 @@ box("Front bumper", (0,-2.97,.69), (1.91,.17,.30), v.DARK,.08)
 box("Radiator", (0,-2.95,.99), (1.16,.10,.28), v.BLACK)
 for h in (.91,1,1.09):
     box("Grille louvre", (0,-3.007,h), (1.08,.025,.018), v.METAL)
+reverse_glass = v.material("Reverse lamp ice van lens", (.79,.87,.93), .12,.23)
 for side in (-1,1):
     s = side
     window("Cab door window", [(s*1.012,-1.93,1.47),(s*1.012,-.55,1.47),
@@ -74,7 +75,12 @@ for side in (-1,1):
     speaker.rotation_euler = (math.pi/2,0,0)
     cap = disc("Speaker grille", (s*.61,-1.047,2.65),.112,.018,v.BLACK)
     cap.rotation_euler = speaker.rotation_euler
-    box("Tail lamp",(s*.80,2.99,.96),(.35,.06,.13),v.TAIL_LAMP)
+    box("Rear combination lamp housing",(s*.75,2.973,.96),(.50,.074,.167),v.DARK,.018)
+    box("Tail lamp",(s*.806,3.012,.96),(.343,.032,.124),v.TAIL_LAMP,.012)
+    box("Reversing lens",(s*.562,3.012,.96),(.118,.032,.124),reverse_glass,.010)
+    for offset in (-.034,0,.034):
+        box("Backlight lens rib",(s*.562+offset,3.029,.96),(.009,.006,.092),
+            reverse_glass,.002)
 box("Roof lightbox",(0,-.91,2.67),(1.03,.23,.28),v.PAINT_WHITE)
 box("Rear menu surround",(0,2.979,1.81),(1.78,.05,1.33),v.METAL)
 box("Illustrated menu",(0,3.01,1.81),(1.69,.025,1.24),v.PAINT_WHITE)
