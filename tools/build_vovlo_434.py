@@ -401,8 +401,11 @@ for y, sign, z in [(-2.058, -1, .430), (2.053, 1, .405)]:
            [(x, y + sign * (reach + .004), z + .031)
             for x, reach in bumper_stations], .005, v.METAL, root)
     box("Plate mount", (0, y + sign*.126, z+.011), (.448, .025, .109), v.RUBBER)
-    box("Registration plate", (0, y + sign*.142, z+.011), (.420, .015, .086), ivory, .007)
+    box("Rear registration plate" if sign > 0 else "Registration plate", (0, y + sign*.142, z+.011), (.420, .015, .086), ivory, .007)
     text("Registration", "HVK 434", (sign*.150, y + sign*.153, z-.016), .067, sign > 0, v.RUBBER)
+for x in (-.145, .145):
+    box("Rear plate lamp housing", (x, 2.180, .481), (.092, .031, .026), v.DARK, .004)
+    box("Rear plate lamp diffuser", (x, 2.193, .471), (.074, .014, .010), ivory, .002)
 # Turn the rolled end back into the tube so the outlet remains open.
 exhaust_stations = [
     (1.79, -.46, .282, .025), (1.98, -.46, .253, .025),

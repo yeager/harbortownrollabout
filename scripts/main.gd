@@ -9351,8 +9351,8 @@ func _fit_refuse_plate_lamps(model: Node3D) -> void:
 		refuse_plate_finish.emission_energy_multiplier = .32 * maxf(last_night,0.0)
 	plate.material_override = refuse_plate_finish
 
-func _fit_rear_plate_lamps(model: Node3D, fire := false) -> void:
-	var plate := model.find_child("Rear registration plate" if fire else "Registration plate", true, false) as MeshInstance3D
+func _fit_rear_plate_lamps(model: Node3D, fire := false, plate_name := "Registration plate") -> void:
+	var plate := model.find_child("Rear registration plate" if fire else plate_name, true, false) as MeshInstance3D
 	if not plate:
 		return
 	if not rear_plate_lamp_finish:
@@ -9879,6 +9879,8 @@ func _load_vehicle_model() -> void:
 		_add_school_car_sign(vehicle_model)
 	if vehicle_index in [SCHOOL_CAR, DAM_PICKUP]:
 		_fit_rear_plate_lamps(vehicle_model)
+	if vehicle_index == VOVLO_434:
+		_fit_rear_plate_lamps(vehicle_model, false, "Rear registration plate")
 	muddy_parts.clear()
 	mud_finish = ShaderMaterial.new()
 	mud_finish.shader = preload("res://environment/road_mud.gdshader")
