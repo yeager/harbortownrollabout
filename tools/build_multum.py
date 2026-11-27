@@ -219,7 +219,22 @@ rod("Roof antenna",(0,.14,1.805),(0,.31,2.078),.009,v.DARK)
 for x in (-.48,.22):
     rod("Windscreen wiper arm",(x,-1.208,1.203),(x+.18,-1.055,1.345),.011,v.DARK)
     rod("Windscreen wiper blade",(x+.035,-1.104,1.305),(x+.33,-.997,1.393),.013,v.DARK)
-rod("Rear window wiper",(-.30,1.873,1.31),(.20,1.894,1.24),.012,v.DARK)
+# The lower hatch panel ends at the bumper and is narrower than the rear glass.
+for side in (-1, 1):
+    rod("Hatch side seam", (side * .627, 1.993, .943),
+        (side * .604, 1.993, .655), .004, v.DARK)
+    rod("Hatch corner seam", (side * .604, 1.993, .655),
+        (side * .564, 1.993, .620), .004, v.DARK)
+rod("Hatch sill seam", (-.564, 1.993, .620), (.564, 1.993, .620), .004, v.DARK)
+box("Hatch release recess", (0, 2.003, .722), (.237, .029, .054), v.RUBBER, .013)
+box("Hatch release grip", (0, 2.020, .731), (.190, .015, .025), paint, .007)
+
+pivot = v.cylinder("Rear wiper spindle", (.253, 1.881, 1.140),
+                   .031, .029, v.RUBBER, False, 24, root)
+pivot.rotation_euler.x = math.pi / 2
+rod("Rear wiper arm", (.253, 1.903, 1.140), (-.041, 1.905, 1.235), .013, v.DARK)
+rod("Rear wiper blade rail", (-.322, 1.899, 1.255), (.176, 1.899, 1.220), .012, v.DARK)
+rod("Rear wiper rubber edge", (-.322, 1.885, 1.249), (.176, 1.885, 1.214), .009, v.RUBBER)
 v.export_vehicle(root,"multum.glb")
 bpy.context.preferences.filepaths.save_version = 0
 bpy.ops.wm.save_as_mainfile(filepath=str(Path(v.SOURCE_DIR)/"Multum.blend"))
