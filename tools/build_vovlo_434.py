@@ -467,9 +467,17 @@ v.profile_loft("Dark exhaust bore", [
 ], v.RUBBER, root, close_ends=False)
 v.cylinder("Exhaust bore shadow", (-.48, 2.103, .248), .020, .005,
            v.RUBBER, axis_x=False, vertices=32, root=root).rotation_euler.x = math.pi / 2
-text("Vovlo hatch badge", "VOVLO", (.654, 2.027, .808), .057, True)
-text("434 hatch badge", "434", (-.463, 2.027, .808), .057, True)
-box("Hatch latch", (0, 2.024, .778), (.070, .027, .066), v.DARK)
+badge_finish = v.material("Satin hatch lettering", (.64, .66, .65), .35, .38)
+text("Vovlo hatch badge", "VOVLO", (.575, 2.025, .805), .051, True, badge_finish)
+text("434 hatch badge", "434", (-.421, 2.025, .805), .051, True, badge_finish)
+box("Hatch latch gasket", (0, 2.018, .782), (.072, .015, .078), v.RUBBER, .006)
+box("Hatch latch surround", (0, 2.029, .782), (.058, .013, .067), badge_finish, .004)
+box("Hatch latch insert", (0, 2.036, .782), (.045, .009, .055), v.DARK, .003)
+latch_cylinder = v.cylinder("Hatch lock cylinder", (0, 2.042, .793), .011, .009,
+                            badge_finish, axis_x=False, vertices=24, root=root)
+latch_cylinder.rotation_euler.x = math.pi / 2
+box("Hatch lock key slot", (0, 2.047, .793), (.011, .003, .003), v.RUBBER, .001)
+box("Hatch release paddle", (0, 2.043, .766), (.031, .010, .014), v.RUBBER, .002)
 for x in (-.49, .17):
     mount = Vector((x, -.913, .932))
     v.cylinder("Wiper pivot", mount, .023, .020, v.RUBBER,
