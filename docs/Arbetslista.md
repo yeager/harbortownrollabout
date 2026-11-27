@@ -346,6 +346,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Främre stötfångaren fick två röda bogseröglor med öppna centrum och separata fästen. Båda granskades i Godot och fordonsprovet passerade.
 - [ ] [`electric_kick_scooter.glb`](../vehicles/electric_kick_scooter.glb)
   - Styrstammens fällbeslag fick gångjärnsplattor, ledtappar och en låsspak med röd säkerhetsspärr. Beslaget granskades i Godot och elsparkcykelprovet passerade för Axel, Alma och grannen.
+  - Bakhjulet fick en vågformad bromsskiva, ett fast bromsok och ett stag. Skivan och oket granskades i Godot och deras infästning verifierades i exporten. Elsparkcykelprovet passerade.
 - [ ] [`farm_tractor.glb`](../vehicles/farm_tractor.glb)
   - Vinterspridaren fick en modellerad trepunktsinfästning med två nedre stag, toppstag och ledtappar. Infästningen granskades i Godot och halkbekämpningsprovet passerade.
   - De bakre reflexerna följer nu spridarens lutande bakvägg och har separata fästplattor och skruvar. Granskat bakifrån i Godot. Halkbekämpningsprovet passerade.

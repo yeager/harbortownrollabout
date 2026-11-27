@@ -7,7 +7,7 @@ import bpy
 from mathutils import Vector
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from build_vehicles import clear_scene, cube, cylinder, material, export_vehicle, SOURCE_DIR
+from build_vehicles import attach, clear_scene, cube, cylinder, material, export_vehicle, profile_loft, SOURCE_DIR
 
 clear_scene()
 root = bpy.data.objects.new("ElectricKickScooter", None)
@@ -65,6 +65,24 @@ for i, y in enumerate((.48,-.48)):
                  (.007,.012,.028),steel,.003,axle).rotation_euler.x = -angle
         tube("Fork blade",(side*.049,y,.123),(side*.049,y-.032 if i==0 else -.33,.26 if i==0 else .132),.018,charcoal)
         cube("Axle reflector",(side*.062,y,.145),(.015,.071,.034),orange,.007,root)
+# The rear rotor spins with the hub and the caliper sits on the trailing arm.
+rotor_sections = []
+for index in range(73):
+    angle = index*math.tau/72
+    outside = .092 + .003*math.cos(6*angle)
+    rotor_sections.append([
+        (x, -.48 + radius*math.cos(angle), .118 + radius*math.sin(angle))
+        for x, radius in [(.044, .070), (.044, outside), (.049, outside), (.049, .070)]
+    ])
+rotor = profile_loft("Rear brake rotor", rotor_sections, steel, None, close_ends=False)
+attach(rotor, axle)
+caliper = cube("Rear brake caliper", (.056,-.425,.189), (.032,.045,.035),
+               charcoal,.008,root)
+caliper.rotation_euler.x = -.62
+tube("Rear caliper stay",(.055,-.404,.181),(.049,-.365,.135),.009,charcoal)
+cylinder("Rear caliper mounting bolt",(.074,-.425,.191),
+         .006,.005,steel,True,6,root)
+
 # Form one curved guard over each wheel from a strip of quads.
 for y, first, last in ((-.48,-1.22,1.29),(.48,-.91,.86)):
     verts, faces = [], []
