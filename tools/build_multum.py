@@ -183,7 +183,7 @@ cabin = [
     (1.65,.819,1.066,1.68,1.748),(1.83,.765,1.063,1.575,1.654),
     (1.87,.747,1.055,1.40,1.52),
 ]
-v.mesh_from_rings("Panoramic glasshouse", cabin, glazing, root,.014,cabin_section)
+glasshouse = v.mesh_from_rings("Panoramic glasshouse", cabin, glazing, root, .014, cabin_section)
 # The roof edge overlaps the top of the glazing and rounds over the pillars.
 roof_sections = [
     (-.425, .768, 1.733, .003),
@@ -540,13 +540,23 @@ box("Centre brake lamp", (0, 1.871, 1.571),
     (.353, .012, .025), v.TAIL_LAMP, .006)
 
 heater_trace = v.material("Muted copper rear window traces", (.147, .093, .070), .25, .53)
-for row in range(9):
+rear_glazing = glasshouse.evaluated_get(bpy.context.evaluated_depsgraph_get())
+heater_terminals = [[], []]
+for row, half_width in enumerate((.604, .626, .642, .651, .652, .649, .640, .623, .592)):
     z = 1.137 + row * .045
-    box("Rear window heater trace", (0, 1.872, z),
-        (1.276, .003, .0025), heater_trace, .0005)
-for side in (-1, 1):
-    box("Rear window heater bus bar", (side * .638, 1.872, 1.317),
-        (.006, .003, .365), heater_trace, .0005)
+    trace = []
+    for step in range(25):
+        x = half_width * (step / 12 - 1)
+        hit, point, _, _ = rear_glazing.ray_cast(Vector((x, 2.1, z)), Vector((0, -1, 0)))
+        if not hit:
+            raise ValueError(f"Rear defroster trace misses glass at {x:.3f}, {z:.3f}")
+        trace.append(point + Vector((0, .0016, 0)))
+    v.pipe("Rear window heater trace", trace, .00125, heater_trace, root)
+    heater_terminals[0].append(trace[0])
+    heater_terminals[1].append(trace[-1])
+for terminals in heater_terminals:
+    v.pipe("Rear window heater bus bar", terminals, .0027, heater_trace, root)
+    box("Rear defroster terminal", terminals[2], (.015, .005, .014), heater_trace, .002)
 
 pivot = v.cylinder("Rear wiper spindle", (.253, 1.881, 1.140),
                    .031, .029, v.RUBBER, False, 24, root)
