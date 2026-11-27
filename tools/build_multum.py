@@ -150,6 +150,19 @@ v.profile_loft("Rounded roof skin", [
      ]]
     for y, width, crown, rise in roof_sections
 ], paint, root)
+# The rear glass bends forward where it meets the roof.
+rear_window_outline = [
+    (0, 1.063), (.53, 1.070), (.667, 1.079), (.711, 1.105),
+    (.735, 1.156), (.737, 1.316), (.729, 1.450), (.703, 1.540),
+    (.668, 1.588), (.596, 1.615), (.41, 1.630), (0, 1.635),
+]
+rear_window_outline += [(-x, z) for x, z in reversed(rear_window_outline[1:-1])]
+v.profile_loft("Painted rear window surround", [
+    [(x * scale, 1.87 - max(z - 1.51, 0) * .30 + depth, z)
+     for original_x, original_z in rear_window_outline
+     for x, z in [(original_x, 1.35 + (original_z - 1.35) * scale)]]
+    for scale, depth in [(1.014, -.014), (1, .011), (.985, .017), (.937, .017), (.922, -.009)]
+], paint, root, close_ends=False)
 # Shape the raised lip across the car so both ends roll into the wings.
 cowl_sections = [
     (0, -1.251, 1.033, .168, .115),
