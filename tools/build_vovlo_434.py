@@ -166,11 +166,22 @@ for side in (-1, 1):
     side_pane("Rear quarter window", [(.718, .448, .970), (.747, 1.334, .988),
                                      (.710, 1.370, 1.060), (.621, .857, 1.384),
                                      (.628, .435, 1.413)])
-    v.pipe("Door shut line", [(side*x, y, z) for x, y, z in [
-        (.778, -.731, .916), (.825, -.700, .769), (.834, -.698, .35),
-        (.825, -.656, .303), (.822, .345, .303), (.83, .411, .375),
-        (.832, .449, .742), (.771, .425, .929)
-    ]], .004, v.RUBBER, root)
+    door_outline = [
+        (-.731, .896), (-.700, .769), (-.698, .35), (-.656, .303),
+        (.345, .303), (.411, .375), (.449, .742), (.425, .914),
+    ]
+    door_seam = []
+    for segment, (start, end) in enumerate(zip(door_outline, door_outline[1:])):
+        steps = math.ceil(math.dist(start, end) / .022)
+        for index in range(1 if segment else 0, steps + 1):
+            y, z = Vector(start).lerp(Vector(end), index / steps)
+            hit, point, normal, _ = body_surface.ray_cast(
+                Vector((side * 1.1, y, z)), Vector((-side, 0, 0))
+            )
+            if not hit:
+                raise RuntimeError(f"Door edge misses the body at {y:.3f}, {z:.3f}")
+            door_seam.append(point + normal * .0008)
+    v.pipe("Door shut line", door_seam, .003, v.RUBBER, root)
     for center, length in [(-1.67, .42), (-.12, 1.04), (.65, .40), (1.72, .26)]:
         molding_rings = []
         bright_edge = []
