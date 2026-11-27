@@ -322,6 +322,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Motorluckans ventilationsgaller fick tre lodräta stöd bakom lamellerna och fyra fästskruvar i ramen. Granskat i Godot. Bussprovet passerade alla sex hållplatser.
   - Öppningsknapparna vid mitt- och bakdörren fick ljusa ringar och en modellerad symbol med två utåtriktade pilar. Mittdörrens knapp granskades i närbild i Godot. Bussprovet passerade.
   - Backspeglarna fick separata gummilister runt de fyra spegelglasen och sexkantsbultar på monteringsfötterna. Båda spegelhusen granskades i Godot och bussprovet passerade alla sex hållplatser.
+  - De fyra runda strålkastaroptikerna fick mörka gummitätningar runt metallringarna. Båda strålkastarhusen granskades i Godot. Bussprovet verifierade även att halvljusets ljuskäglor sitter vid linserna.
 - [ ] [`dam_pickup.glb`](../vehicles/dam_pickup.glb)
 - [ ] [`electric_kick_scooter.glb`](../vehicles/electric_kick_scooter.glb)
 - [ ] [`farm_tractor.glb`](../vehicles/farm_tractor.glb)

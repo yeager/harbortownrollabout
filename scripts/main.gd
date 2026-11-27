@@ -9552,6 +9552,12 @@ func _fit_bus_exterior(model: Node3D) -> void:
 	var optic_finish := _material(Color("#858f93"), .27)
 	optic_finish.metallic = .72
 	optic_ring.material = optic_finish
+	var optic_gasket := TorusMesh.new()
+	optic_gasket.inner_radius = .037
+	optic_gasket.outer_radius = .047
+	optic_gasket.rings = 24
+	optic_gasket.ring_segments = 8
+	optic_gasket.material = window_seal
 	for lens: MeshInstance3D in model.find_children("Bus headlight lens*", "MeshInstance3D", true, false):
 		lens.position.z -= .036
 		var surround := MeshInstance3D.new()
@@ -9560,6 +9566,12 @@ func _fit_bus_exterior(model: Node3D) -> void:
 		surround.rotation.x = PI / 2
 		surround.position.z = lens.get_aabb().end.z
 		lens.add_child(surround)
+		var gasket := MeshInstance3D.new()
+		gasket.name = "Bus headlamp optic gasket"
+		gasket.mesh = optic_gasket
+		gasket.rotation.x = PI * .5
+		gasket.position.z = surround.position.z - .002
+		lens.add_child(gasket)
 	# The imported shells sit below the replacement mirror assemblies.
 	for shell: MeshInstance3D in model.find_children("Mirror*", "MeshInstance3D", true, false):
 		shell.hide()
