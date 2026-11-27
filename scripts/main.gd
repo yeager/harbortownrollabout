@@ -745,6 +745,17 @@ func _reset_parked_controls() -> void:
 		parked_sound_settings[i] = i >= 3
 
 func _ready() -> void:
+	var menu_buttons := {
+		"ui_accept": JOY_BUTTON_A, "ui_cancel": JOY_BUTTON_B,
+		"ui_left": JOY_BUTTON_DPAD_LEFT, "ui_right": JOY_BUTTON_DPAD_RIGHT,
+		"ui_up": JOY_BUTTON_DPAD_UP, "ui_down": JOY_BUTTON_DPAD_DOWN,
+	}
+	for action in menu_buttons:
+		var binding := InputEventJoypadButton.new()
+		binding.device = -1
+		binding.button_index = int(menu_buttons[action])
+		if not InputMap.action_has_event(action, binding):
+			InputMap.action_add_event(action, binding)
 	L10n.load_catalogs()
 	greeting_voice.bus = &"Speech"
 	greeting_voice.volume_db = -4
@@ -920,10 +931,14 @@ func _process(delta: float) -> void:
 		street_signals.advance(delta)
 		shops.advance_grill_sign(delta, calm_mode)
 		_update_fire_station_door(delta)
+		if _world_controls_available():
+			var pad_look := Input.get_vector("pad_look_left", "pad_look_right", "pad_look_up", "pad_look_down")
+			if not pad_look.is_zero_approx():
+				_look_around(pad_look * 130.0 * delta)
 		var tram_controls := tram_mode == 2 and _world_controls_available()
 		var tram_keys := tram_controls and _keyboard_pedals_available()
-		var tram_gas := tram_controls and (mouse_gas or (tram_keys and (Input.is_action_pressed("ui_up") or _movement_pressed(KEY_W))))
-		var tram_brake := tram_controls and (mouse_brake or brake_pedal_held or (tram_keys and (Input.is_action_pressed("ui_down") or _movement_pressed(KEY_S))))
+		var tram_gas := tram_controls and (mouse_gas or (tram_keys and (Input.is_action_pressed("pad_accelerate") or Input.is_action_pressed("ui_up") or _movement_pressed(KEY_W))))
+		var tram_brake := tram_controls and (mouse_brake or brake_pedal_held or (tram_keys and (Input.is_action_pressed("pad_brake") or Input.is_action_pressed("ui_down") or _movement_pressed(KEY_S))))
 		tram.advance(delta, tram_mode == 2, tram_gas, tram_brake)
 		if tram_mode == 2 and tram_driver_exit_requested and tram.open_station() >= 0:
 			_change_seat()
@@ -1084,7 +1099,49 @@ func _request_quit(parent_window: Window = null) -> void:
 	quit_dialog.popup_centered()
 	quit_dialog.get_cancel_button().grab_focus()
 
+func _look_around(motion: Vector2) -> void:
+	if tram_mode == 1:
+		passenger_look.x = wrapf(passenger_look.x - motion.x * .007, -PI, PI)
+		passenger_look.y = clampf(passenger_look.y - motion.y * .006, -1.1, 1.1)
+		return
+	if cockpit_view and not walker.visible and not boating and tram_mode==0:
+		cockpit_look.x = clampf(cockpit_look.x-motion.x*.007,-1.4,1.4)
+		cockpit_look.y = clampf(cockpit_look.y-motion.y*.006,-.45,.52)
+		return
+	if walker.visible and tram_mode == 0 and not (boating or ferry_passenger or operating_excavator):
+		walk_camera_height = clampf(walk_camera_height + motion.y*.022,-1.5,3.5)
+		return
+	orbit_angle -= motion.x*.007
+	orbit_height = clampf(orbit_height+motion.y*.022,-1.8,5)
+
 func _input(event: InputEvent) -> void:
+	if event is InputEventJoypadButton and event.pressed:
+		if event.button_index == JOY_BUTTON_START and mode == "playing" and not get_tree().paused:
+			if phone.handset.is_visible_in_tree():
+				phone.toggle()
+			else:
+				_toggle_pause()
+			get_viewport().set_input_as_handled()
+			return
+		if event.button_index == JOY_BUTTON_BACK and mode == "playing" and not paused and not get_tree().paused and phone.visible:
+			phone.toggle()
+			get_viewport().set_input_as_handled()
+			return
+		if _world_controls_available() and not get_viewport().gui_get_focus_owner():
+			match event.button_index:
+				JOY_BUTTON_A:
+					if not _serve_dax():
+						_help_at_target()
+				JOY_BUTTON_B:
+					if walker.visible and not boule_seated and not scooter.visible and not ferry_passenger and tram_mode == 0 and not operating_excavator and not boating and walk_jump_left <= 0:
+						walk_jump_left = WALK_JUMP_TIME
+				JOY_BUTTON_X: _change_seat()
+				JOY_BUTTON_Y: _toggle_camera_view()
+				JOY_BUTTON_RIGHT_SHOULDER: _honk()
+				_: return
+			get_viewport().set_input_as_handled()
+			return
+
 	if event is InputEventKey and event.keycode == quit_key and event.pressed and not event.echo and not (event.ctrl_pressed or event.alt_pressed or event.meta_pressed):
 		get_viewport().set_input_as_handled()
 		_request_quit()
@@ -1098,19 +1155,7 @@ func _input(event: InputEvent) -> void:
 		mouse_steering = clampf(mouse_steering + event.screen_relative.x / 150.0, -1.0, 1.0)
 		return
 	if event is InputEventMouseMotion and _world_controls_available() and (Input.mouse_mode == Input.MOUSE_MODE_CAPTURED or event.button_mask & MOUSE_BUTTON_MASK_MIDDLE):
-		if tram_mode == 1:
-			passenger_look.x = wrapf(passenger_look.x - event.relative.x * .007, -PI, PI)
-			passenger_look.y = clampf(passenger_look.y - event.relative.y * .006, -1.1, 1.1)
-			return
-		if cockpit_view and not walker.visible and not boating and tram_mode==0:
-			cockpit_look.x = clampf(cockpit_look.x-event.relative.x*.007,-1.4,1.4)
-			cockpit_look.y = clampf(cockpit_look.y-event.relative.y*.006,-.45,.52)
-			return
-		if walker.visible and tram_mode == 0 and not (boating or ferry_passenger or operating_excavator):
-			walk_camera_height = clampf(walk_camera_height + event.relative.y*.022,-1.5,3.5)
-			return
-		orbit_angle -= event.relative.x*.007
-		orbit_height = clampf(orbit_height+event.relative.y*.022,-1.8,5)
+		_look_around(event.relative)
 	if event is InputEventMouseButton and event.pressed and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED and _world_controls_available():
 		if tram_mode == 2 or (tram_mode == 0 and (boating or not walker.visible)):
 			if event.button_index == MOUSE_BUTTON_LEFT:
@@ -1356,11 +1401,11 @@ func _update_patrol(delta: float) -> void:
 func _drive_launch(delta: float) -> void:
 	var controls_available := _world_controls_available()
 	var pedal_keys := controls_available and _keyboard_pedals_available()
-	var gas := controls_available and (mouse_gas or (pedal_keys and (Input.is_action_pressed("ui_up") or _movement_pressed(KEY_W))))
-	var brake := controls_available and (mouse_brake or brake_pedal_held or (pedal_keys and (Input.is_action_pressed("ui_down") or _movement_pressed(KEY_S))))
+	var gas := controls_available and (mouse_gas or (pedal_keys and (Input.is_action_pressed("pad_accelerate") or Input.is_action_pressed("ui_up") or _movement_pressed(KEY_W))))
+	var brake := controls_available and (mouse_brake or brake_pedal_held or (pedal_keys and (Input.is_action_pressed("pad_brake") or Input.is_action_pressed("ui_down") or _movement_pressed(KEY_S))))
 	var turn := 0.0
 	if controls_available:
-		turn = Input.get_axis("ui_left","ui_right")
+		turn = clampf(Input.get_axis("ui_left","ui_right") + Input.get_axis("pad_left", "pad_right"), -1, 1)
 		if is_zero_approx(turn): turn = mouse_steering
 		if _movement_pressed(KEY_A): turn = -1
 		if _movement_pressed(KEY_D): turn = 1
@@ -1436,7 +1481,7 @@ func _keyboard_pedals_available() -> bool:
 	return false
 
 func _keyboard_pedal_pressed() -> bool:
-	return Input.is_action_pressed("ui_up") or Input.is_action_pressed("ui_down") or _movement_pressed(KEY_W) or _movement_pressed(KEY_S)
+	return Input.is_action_pressed("pad_accelerate") or Input.is_action_pressed("pad_brake") or Input.is_action_pressed("ui_up") or Input.is_action_pressed("ui_down") or _movement_pressed(KEY_W) or _movement_pressed(KEY_S)
 
 func _parcel_load() -> Vector2:
 	# Total mass and its lateral first moment about the vehicle centreline.
@@ -1496,8 +1541,8 @@ func _drive(delta: float) -> void:
 			if player_brake_lens: _set_rear_lights(player_brake_lens, true)
 			return
 		police_stop_left = 0.0
-	var throttle := Input.get_axis("ui_down", "ui_up")
-	var steer_input := Input.get_axis("ui_left", "ui_right")
+	var throttle := clampf(Input.get_axis("ui_down", "ui_up") + Input.get_axis("pad_brake", "pad_accelerate"), -1, 1)
+	var steer_input := clampf(Input.get_axis("ui_left", "ui_right") + Input.get_axis("pad_left", "pad_right"), -1, 1)
 	if is_zero_approx(steer_input): steer_input = mouse_steering
 	if _movement_pressed(KEY_W): throttle = 1.0
 	if _movement_pressed(KEY_S): throttle = -1.0
@@ -6523,10 +6568,10 @@ func _drive_excavator(delta: float) -> void:
 	var steer := 0.0
 	var drive := 0.0
 	if controls_available:
-		steer = Input.get_axis("ui_left","ui_right") + int(_movement_pressed(KEY_D))-int(_movement_pressed(KEY_A))
+		steer = clampf(Input.get_axis("ui_left","ui_right") + Input.get_axis("pad_left", "pad_right"), -1, 1) + int(_movement_pressed(KEY_D))-int(_movement_pressed(KEY_A))
 		if is_zero_approx(steer): steer = mouse_steering
 		if _keyboard_pedals_available():
-			drive = Input.get_axis("ui_down","ui_up") + int(_movement_pressed(KEY_W))-int(_movement_pressed(KEY_S))
+			drive = clampf(Input.get_axis("ui_down","ui_up") + Input.get_axis("pad_brake", "pad_accelerate"), -1, 1) + int(_movement_pressed(KEY_W))-int(_movement_pressed(KEY_S))
 		if mouse_gas: drive = 1
 		if mouse_brake or brake_pedal_held: drive = -1
 	driving_controls.set_controls(steer, drive > 0, drive < 0, drive < 0)
@@ -6861,7 +6906,7 @@ func _walking_hint() -> String:
 func _walk(delta: float) -> void:
 	if boule_guest_turn or boule_seated: return
 	if shopper_boarding: return
-	var keys := Input.get_vector("ui_left","ui_right","ui_up","ui_down")
+	var keys := Input.get_vector("ui_left","ui_right","ui_up","ui_down") + Input.get_vector("pad_left", "pad_right", "pad_forward", "pad_back")
 	keys += Vector2(int(_movement_pressed(KEY_D))-int(_movement_pressed(KEY_A)),int(_movement_pressed(KEY_S))-int(_movement_pressed(KEY_W)))
 	if phone.handset.is_visible_in_tree():
 		keys = Vector2.ZERO
@@ -6879,7 +6924,7 @@ func _walk(delta: float) -> void:
 		walk_camera_height = clampf(walk_camera_height + height_input*delta*2.0,-1.5,3.5)
 	walker.rotate_y(-clampf(keys.x,-1,1)*2.5*delta)
 	walk_basis = Basis(Vector3.UP,walker.rotation.y)
-	var running := Input.is_key_pressed(KEY_CTRL if ctrl_run else KEY_SHIFT) and not winded and keys.y < 0
+	var running := (Input.is_key_pressed(KEY_CTRL if ctrl_run else KEY_SHIFT) or Input.is_action_pressed("pad_run")) and not winded and keys.y < 0
 	var desired := walk_basis.z * clampf(keys.y,-1,1) * (Gait.RUN_SPEED if running else Gait.WALK_SPEED)
 	desired.y = 0
 	var horizontal := Vector3(walking_velocity.x,0,walking_velocity.z)

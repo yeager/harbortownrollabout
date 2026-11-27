@@ -19,6 +19,12 @@ Choose the download for your computer.
 
 On a Mac, open **Apple menu → About This Mac** if you’re unsure which download to choose. If you see an M-series chip, choose Apple Silicon. These are preview builds. The Windows installer and both Mac downloads pass an automated start check on their respective systems.
 
+## Gamepad
+
+Connect a gamepad recognized by your system. Use the **D-pad** and the **bottom face button** (A on Xbox, Cross on PlayStation) to navigate and confirm in menus. Use the **left stick** to walk or steer and the **right stick** to adjust the camera. In a vehicle, the **right trigger** accelerates and the **left trigger** brakes. Release the left trigger after stopping, then press it again to reverse a road vehicle.
+
+The **left face button** (X / Square) enters or exits a vehicle, the **top face button** (Y / Triangle) switches camera view, and the **right shoulder button** sounds the horn. On foot, press the **right face button** (B / Circle) to jump or the **bottom face button** for the current mission action. **Start / Options** pauses or resumes. **Back / Share** opens or closes the phone, and holding the **left shoulder button** while walking forward makes the character run.
+
 ## Your first drive
 
 Click a vehicle picture, choose Axel or Alma, then select **Start driving**. Hold **W** to move, steer with **A** and **D**, and press **S** to brake. The arrow keys work too. If you prefer the mouse, hold the left button to drive and move the mouse sideways to steer. **R** brings you back to a safe spot if you get stuck.

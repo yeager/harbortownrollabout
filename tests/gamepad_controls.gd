@@ -1,0 +1,111 @@
+extends SceneTree
+
+func _initialize() -> void:
+	call_deferred("run")
+
+func axis(which: int, value: float) -> void:
+	var event := InputEventJoypadMotion.new()
+	event.device = 1
+	event.axis = which
+	event.axis_value = value
+	Input.parse_input_event(event)
+	Input.flush_buffered_events()
+
+func button(which: int) -> void:
+	var event := InputEventJoypadButton.new()
+	event.device = 1
+	event.button_index = which
+	event.pressed = true
+	Input.parse_input_event(event)
+	event = event.duplicate()
+	event.pressed = false
+	Input.parse_input_event(event)
+	Input.flush_buffered_events()
+
+func run() -> void:
+	var game = load("res://main.tscn").instantiate()
+	root.add_child(game)
+	await process_frame
+	var start_focus := root.gui_get_focus_owner()
+	button(JOY_BUTTON_DPAD_UP)
+	if root.gui_get_focus_owner() == start_focus:
+		printerr("The D-pad did not move menu focus")
+		quit(1)
+		return
+	game.start_button.grab_focus()
+	button(JOY_BUTTON_A)
+	await process_frame
+	if game.mode != "playing":
+		printerr("The gamepad could not start from the menu")
+		quit(1)
+		return
+	axis(JOY_AXIS_TRIGGER_RIGHT, 1)
+	axis(JOY_AXIS_LEFT_X, .55)
+	for frame in 45:
+		game._drive(1.0 / 60)
+	if game.speed <= .5 or game.steering <= .15:
+		printerr("Gamepad throttle or steering failed")
+		quit(1)
+		return
+	axis(JOY_AXIS_TRIGGER_RIGHT, 0)
+	axis(JOY_AXIS_LEFT_X, 0)
+	axis(JOY_AXIS_TRIGGER_LEFT, 1)
+	for frame in 120:
+		game._drive(1.0 / 60)
+	if absf(game.speed) > .05:
+		printerr("Gamepad braking failed")
+		quit(1)
+		return
+	axis(JOY_AXIS_TRIGGER_LEFT, 0)
+	game._drive(1.0 / 60)
+	axis(JOY_AXIS_TRIGGER_LEFT, 1)
+	for frame in 60:
+		game._drive(1.0 / 60)
+	if game.speed >= -.3:
+		printerr("Gamepad brake/reverse failed")
+		quit(1)
+		return
+	axis(JOY_AXIS_TRIGGER_LEFT, 0)
+	button(JOY_BUTTON_START)
+	if not game.paused:
+		printerr("Gamepad pause failed")
+		quit(1)
+		return
+	button(JOY_BUTTON_START)
+	if game.paused:
+		printerr("Gamepad resume failed")
+		quit(1)
+		return
+	var old_orbit: float = game.orbit_angle
+	axis(JOY_AXIS_RIGHT_X, .8)
+	game._process(1.0 / 60)
+	axis(JOY_AXIS_RIGHT_X, 0)
+	if is_equal_approx(old_orbit, game.orbit_angle):
+		printerr("Gamepad camera control failed")
+		quit(1)
+		return
+	button(JOY_BUTTON_BACK)
+	if not game.phone.handset.is_visible_in_tree():
+		printerr("Gamepad phone control failed")
+		quit(1)
+		return
+	button(JOY_BUTTON_BACK)
+	game.speed = 0
+	button(JOY_BUTTON_X)
+	if not game.walker.visible:
+		printerr("Gamepad exit failed")
+		quit(1)
+		return
+	var before: Vector3 = game.walker.position
+	axis(JOY_AXIS_LEFT_Y, -1)
+	for frame in 45:
+		game._walk(1.0 / 60)
+	axis(JOY_AXIS_LEFT_Y, 0)
+	if before.distance_to(game.walker.position) < .3:
+		printerr("Gamepad walk failed")
+		quit(1)
+		return
+	print("Gamepad menu, steering, pedals, pause, camera, phone, seat and walking passed.")
+	game.queue_free()
+	await process_frame
+	quit()
