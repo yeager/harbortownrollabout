@@ -30,11 +30,13 @@ def build_pickup():
     def panel(name, position, dimensions, finish, bevel=.035, parent=root):
         return cube(name, position, dimensions, finish, bevel, parent)
 
-    mesh_from_rings("Pickup body", [
+    body = mesh_from_rings("Pickup body", [
         (-2.91, .94, .75, 1.32, 1.36), (-2.53, 1.03, .69, 1.40, 1.47),
         (-1.52, 1.05, .78, 1.39, 1.43), (-.86, 1.01, .63, 1.32, 1.36),
         (.95, 1.02, .63, 1.30, 1.35), (1.37, 1.02, .73, 1.27, 1.28),
     ], paint, root)
+    bpy.context.view_layer.update()
+    body_surface = body.evaluated_get(bpy.context.evaluated_depsgraph_get())
     panel("Frame rails", (0, .02, .63), (1.50, 5.45, .21), trim)
     glazing = mesh_from_rings("Cab glazing", [
         (-1.44, .97, 1.30, 1.44, 1.44), (-1.00, .91, 1.34, 1.98, 2.00),
@@ -140,7 +142,39 @@ def build_pickup():
         panel("Cab window divider", (side*.894, -.03, 1.65), (.086, .082, .62), trim)
         for y in [-.56, .67]:
             panel("Door pull", (side*1.015, y, 1.213), (.046, .19, .055), trim)
-        panel("Door seam", (side*1.023, -.035, .98), (.012, .014, .50), trim, .004)
+        # The outer shut line follows the sills and rises around both doors.
+        for label, path in [
+            ("Door perimeter", [(-1.32, 1.302), (-1.30, 1.17), (-1.226, .877),
+                                (-1.184, .818), (-1.098, .792), (-.74, .767),
+                                (-.035, .767), (.69, .767), (.895, .791),
+                                (.992, .860), (1.078, 1.04), (1.114, 1.293)]),
+            ("Door centre", [(-.035, .771), (-.035, 1.014), (-.035, 1.19), (-.035, 1.309)]),
+        ]:
+            samples = []
+            for start, end in zip(path, path[1:]):
+                count = math.ceil(math.dist(start, end) / .025)
+                samples.extend(
+                    (start[0] + (end[0]-start[0])*i/count,
+                     start[1] + (end[1]-start[1])*i/count)
+                    for i in range(count)
+                )
+            samples.append(path[-1])
+            sections = []
+            for index, (y, z) in enumerate(samples):
+                before = samples[max(0, index-1)]
+                after = samples[min(len(samples)-1, index+1)]
+                dy, dz = after[0]-before[0], after[1]-before[1]
+                length = math.hypot(dy, dz)
+                section = []
+                for width, relief in [(-.004, -.002), (-.0035, .003),
+                                      (.0035, .003), (.004, -.002)]:
+                    yy, zz = y - width*dz/length, z + width*dy/length
+                    hit, surface, _, _ = body_surface.ray_cast((side*1.4, yy, zz), (-side, 0, 0))
+                    if not hit:
+                        raise ValueError(f"{label} outside pickup body")
+                    section.append((surface.x+side*relief, yy, zz))
+                sections.append(section)
+            profile_loft(f"{label} shut line", sections, trim, root)
         panel("Mirror stem", (side*1.02, -.99, 1.52), (.31, .107, .08), trim)
         panel("Mirror housing", (side*1.17, -.99, 1.57), (.234, .236, .131), trim)
         panel("Mirror glass", (side*1.17, -.862, 1.57), (.184, .022, .084), chrome)
