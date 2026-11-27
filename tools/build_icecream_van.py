@@ -50,12 +50,18 @@ for h in (.91,1,1.09):
     box("Grille louvre", (0,-3.007,h), (1.08,.025,.018), v.METAL)
 reverse_glass = v.material("Reverse lamp ice van lens", (.79,.87,.93), .12,.23)
 signal_glass = v.material("Amber indicator glass", (.96,.34,.018), .12,.26)
+mirror_glass = v.material("Door mirror glass", (.45,.55,.62), .88,.13)
 for side in (-1,1):
     s = side
     window("Cab door window", [(s*1.012,-1.93,1.47),(s*1.012,-.55,1.47),
                                (s*.958,-.55,2.23),(s*.958,-1.25,2.23)])
-    box("Mirror arm",(s*1.05,-1.77,1.59),(.26,.07,.07),v.DARK)
-    box("Door mirror",(s*1.20,-1.75,1.71),(.16,.20,.33),v.DARK)
+    box("Mirror mounting plate",(s*1.008,-1.77,1.566),(.047,.157,.145),v.DARK,.017)
+    box("Mirror arm",(s*1.113,-1.77,1.581),(.224,.071,.070),v.DARK,.016)
+    v.cylinder("Mirror folding pivot",(s*1.205,-1.77,1.619),.051,.102,
+               v.DARK,False,24,root)
+    box("Door mirror housing",(s*1.221,-1.766,1.754),(.190,.164,.300),v.DARK,.038)
+    box("Mirror glass gasket",(s*1.221,-1.683,1.754),(.164,.020,.267),v.RUBBER,.009)
+    box("Door mirror glass",(s*1.221,-1.670,1.754),(.146,.010,.247),mirror_glass,.004)
     box("Door handle",(s*1.012,-.65,1.34),(.05,.19,.055),v.DARK)
     box("Headlight housing",(s*.776,-2.969,1.092),(.365,.18,.177),v.DARK,.027)
     box("Headlight reflector rim",(s*.776,-3.062,1.092),(.331,.022,.149),v.METAL,.015)
