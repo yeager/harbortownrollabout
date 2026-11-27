@@ -6949,7 +6949,15 @@ func _walking_hint() -> String:
 func _walk(delta: float) -> void:
 	if boule_guest_turn or boule_seated: return
 	if shopper_boarding: return
-	var keys := Input.get_vector("ui_left","ui_right","ui_up","ui_down") + Input.get_vector("pad_left", "pad_right", "pad_forward", "pad_back")
+	var keys := Input.get_vector("pad_left", "pad_right", "pad_forward", "pad_back")
+	if shops.shop_card.is_visible_in_tree():
+		# The D-pad navigates the shop while the stick and keyboard can still walk out.
+		keys += Vector2(
+			int(Input.is_key_pressed(KEY_RIGHT)) - int(Input.is_key_pressed(KEY_LEFT)),
+			int(Input.is_key_pressed(KEY_DOWN)) - int(Input.is_key_pressed(KEY_UP))
+		).limit_length()
+	else:
+		keys += Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
 	keys += Vector2(int(_movement_pressed(KEY_D))-int(_movement_pressed(KEY_A)),int(_movement_pressed(KEY_S))-int(_movement_pressed(KEY_W)))
 	if phone.handset.is_visible_in_tree():
 		keys = Vector2.ZERO

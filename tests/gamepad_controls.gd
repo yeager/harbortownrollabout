@@ -241,6 +241,43 @@ func run() -> void:
 		printerr("The gamepad could not close the town map")
 		quit(1)
 		return
+	button(JOY_BUTTON_BACK)
+	var phone_pose: Transform3D = game.walker.transform
+	set_button(JOY_BUTTON_DPAD_RIGHT, true)
+	axis(JOY_AXIS_LEFT_Y, -1)
+	game._walk(.1)
+	axis(JOY_AXIS_LEFT_Y, 0)
+	set_button(JOY_BUTTON_DPAD_RIGHT, false)
+	button(JOY_BUTTON_BACK)
+	if not game.walker.transform.is_equal_approx(phone_pose):
+		printerr("The phone must block gamepad walking and turning")
+		quit(1)
+		return
+	game.walker.position = Vector3(game.shops.storefront_x(3), 0, 44)
+	game.shops.update_customer(true, game.walker.position, true)
+	await process_frame
+	var first_product := root.gui_get_focus_owner()
+	button(JOY_BUTTON_DPAD_DOWN)
+	if root.gui_get_focus_owner() == first_product:
+		printerr("The D-pad did not move focus in the shop")
+		quit(1)
+		return
+	var shop_heading: float = game.walker.rotation.y
+	set_button(JOY_BUTTON_DPAD_RIGHT, true)
+	game._walk(.1)
+	set_button(JOY_BUTTON_DPAD_RIGHT, false)
+	if not game.shops.shop_card.visible or not is_equal_approx(shop_heading, game.walker.rotation.y):
+		printerr("D-pad shop navigation must not turn the player")
+		quit(1)
+		return
+	axis(JOY_AXIS_LEFT_X, .8)
+	game._walk(.1)
+	axis(JOY_AXIS_LEFT_X, 0)
+	if is_equal_approx(shop_heading, game.walker.rotation.y):
+		printerr("The left stick must still turn the player in the shop")
+		quit(1)
+		return
+	game.shops.update_customer(false, game.walker.position, true)
 	if not check_excavator(game):
 		printerr("Gamepad excavator arm, isolation or track control failed")
 		quit(1)
