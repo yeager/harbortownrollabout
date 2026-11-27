@@ -32,11 +32,19 @@ func fit(actor: Node3D, model: Node3D, bounds: AABB) -> void:
 	model.add_child(frame)
 	frame.global_transform = actor.global_transform
 	if model.scene_file_path.ends_with("/city_bus.glb"):
+		var rear_lens := model.find_child("Amber lens", true, false) as MeshInstance3D
+		var front_size := Vector3(.155, .041, .016)
 		for side in [-1, 1]:
 			# The imported bus faces +Z, opposite the driving actor.
 			var front := Vector3(side * 1.015, .892, 5.363)
-			_add_lamp(frame, actor.to_local(model.to_global(front)),
-				Vector3(.155, .041, .016), -side, side * .13)
+			var lens := MeshInstance3D.new()
+			lens.name = "Bus front indicator lens"
+			lens.mesh = rear_lens.mesh
+			lens.scale = front_size / lens.mesh.get_aabb().size
+			lens.position = actor.to_local(model.to_global(front))
+			lens.rotation.y = side * .13
+			frame.add_child(lens, true)
+			_use_existing_lens(lens, -side)
 		for pattern in ["Amber lens*", "Bus side indicator amber lens*"]:
 			for lens: MeshInstance3D in model.find_children(pattern, "MeshInstance3D", true, false):
 				var side := -1 if model.to_local(lens.global_position).x > 0.0 else 1
@@ -111,7 +119,7 @@ func _attachment(panels: Array[AABB], bounds: AABB, side: int, end: int) -> Vect
 	at.z += end * .006
 	return at
 
-func _add_lamp(frame: Node3D, at: Vector3, size: Vector3, side: int, yaw := 0.0) -> void:
+func _add_lamp(frame: Node3D, at: Vector3, size: Vector3, side: int) -> void:
 	var lens := MeshInstance3D.new()
 	var mesh := BoxMesh.new()
 	mesh.size = size
@@ -119,7 +127,6 @@ func _add_lamp(frame: Node3D, at: Vector3, size: Vector3, side: int, yaw := 0.0)
 	lens.mesh = mesh
 	lens.name = "Left indicator lens" if side < 0 else "Right indicator lens"
 	lens.position = at
-	lens.rotation.y = yaw
 	frame.add_child(lens, true)
 	var lit := MeshInstance3D.new()
 	var glow := BoxMesh.new()

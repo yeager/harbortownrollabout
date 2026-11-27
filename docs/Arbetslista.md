@@ -324,6 +324,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Backspeglarna fick separata gummilister runt de fyra spegelglasen och sexkantsbultar på monteringsfötterna. Båda spegelhusen granskades i Godot och bussprovet passerade alla sex hållplatser.
   - De fyra runda strålkastaroptikerna fick mörka gummitätningar runt metallringarna. Båda strålkastarhusen granskades i Godot. Bussprovet verifierade även att halvljusets ljuskäglor sitter vid linserna.
   - Främre blinkers gjordes smalare och vinklades efter strålkastarhusen. Båda sidor granskades tända och släckta i Godot. Bussprovet verifierade avgångsblinkningen.
+  - Främre blinkers fick rundade glas anpassade till strålkastarhusen. Båda granskades tända i Godot. Bussprovet kontrollerar nu även att framblinkers använder linsens nät, och trafikens blinkersprov passerade.
   - Bakre blinkers och sidoblinkers använder nu sina modellerade linser även när de blinkar. Båda bakljusen granskades tända i Godot. Bussens avgångsblinkning och trafikens blinkersprov passerade. Bussprovet kontrollerar att båda sidor har tre blinkers var, att bak- och sidoblinkers använder samma nät som linserna och att bara höger sida lyser vid högersignal.
 - [ ] [`dam_pickup.glb`](../vehicles/dam_pickup.glb)
 - [ ] [`electric_kick_scooter.glb`](../vehicles/electric_kick_scooter.glb)

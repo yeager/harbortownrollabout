@@ -485,6 +485,7 @@ func check_departure_indicator(game: Node) -> bool:
 	return true
 
 func check_bus_indicator_mounts(body: Node3D, lamps: Array[MeshInstance3D], expected_side: float) -> bool:
+	var front_attached := false
 	var rear_attached := false
 	var side_attached := false
 	for lamp in lamps:
@@ -494,10 +495,11 @@ func check_bus_indicator_mounts(body: Node3D, lamps: Array[MeshInstance3D], expe
 			return false
 		if lamp.mesh != lens.mesh:
 			continue
+		front_attached = front_attached or lens.name.begins_with("Bus front indicator lens")
 		rear_attached = rear_attached or lens.name.begins_with("Amber lens")
 		side_attached = side_attached or lens.name.begins_with("Bus side indicator amber lens")
-	if lamps.size() != 3 or not rear_attached or not side_attached:
-		printerr("Expected three bus indicators with shared rear and side lens meshes")
+	if lamps.size() != 3 or not (front_attached and rear_attached and side_attached):
+		printerr("Expected three bus indicators using their lens meshes")
 		return false
 	return true
 
