@@ -28,10 +28,14 @@ def text(name, value, position, size, facing_rear=False, material=v.METAL):
     label = v.text_obj(name, value, position, size, material, root=root, flat=True)
     label.rotation_euler = (math.pi / 2, 0, math.pi if facing_rear else 0)
 
-def pane(name, outline):
+def pane(name, outline, seating_offset):
     v.profile_loft(name, [outline, [(x * .997, y * .997, z - .006) for x, y, z in outline]], glass, root)
     v.pipe(name + " rubber seal", outline + outline[:1], .015, v.RUBBER, root)
-    v.pipe(name + " bright trim", outline + outline[:1], .007, v.METAL, root)
+    # Return the gasket to the painted frame behind the glass.
+    outer = [Vector(point) for point in outline]
+    v.profile_loft(name + " gasket return", [outer, [
+        point + Vector(seating_offset) for point in outer
+    ]], v.RUBBER, root, close_ends=False)
 
 # Axial section from the inner sidewall to the outer sidewall.
 tire_section = [
@@ -133,9 +137,9 @@ v.mesh_from_rings("Painted hatchback cabin", [
 ], paint, root, .015, cabin_section)
 pane("Windscreen", [(x, y - .056, z) for x, y, z in [(-.654, -.824, .939), (.654, -.824, .939),
                     (.601, -.285, 1.399), (.522, -.243, 1.425),
-                    (-.522, -.243, 1.425), (-.601, -.285, 1.399)]])
+                    (-.522, -.243, 1.425), (-.601, -.285, 1.399)]], (0, .078, 0))
 pane("Hatch glass", [(-.626, 1.512, 1.054), (-.560, .961, 1.390),
-                     (.560, .961, 1.390), (.626, 1.512, 1.054)])
+                     (.560, .961, 1.390), (.626, 1.512, 1.054)], (0, -.086, 0))
 heater = v.material("Copper heater trace", (.20, .11, .065), .24, .54)
 heater_rows = []
 for row in range(7):
@@ -172,7 +176,7 @@ def tail_corner_recess(x):
 
 for side in (-1, 1):
     def side_pane(name, points):
-        pane(name, [(side * x, y, z) for x, y, z in points])
+        pane(name, [(side * x, y, z) for x, y, z in points], (-side * .075, 0, 0))
     side_pane("Door window", [(.754, -.744, .957), (.720, .377, .969),
                              (.634, .359, 1.413), (.631, -.172, 1.410),
                              (.663, -.270, 1.356)])
