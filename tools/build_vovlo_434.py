@@ -10,7 +10,7 @@ import build_vehicles as v
 v.clear_scene()
 root = bpy.data.objects.new("Vovlo 434", None)
 bpy.context.collection.objects.link(root)
-paint = v.material("Juniper green enamel", (.035, .255, .163), .22, .36)
+paint = v.material("Burnt orange enamel", (.54, .125, .030), .22, .36)
 glass = v.material("Blue gray window glass", (.055, .119, .143), 0, .27)
 amber = v.material("Amber lens", (.91, .29, .015))
 headlamp_glass = v.material("Pale fluted headlamp glass", (.66, .72, .69), .12, .29)
@@ -31,6 +31,25 @@ def pane(name, outline):
     v.profile_loft(name, [outline, [(x * .997, y * .997, z - .006) for x, y, z in outline]], glass, root)
     v.pipe(name + " rubber seal", outline + outline[:1], .015, v.RUBBER, root)
     v.pipe(name + " bright trim", outline + outline[:1], .007, v.METAL, root)
+
+# Axial section from the inner sidewall to the outer sidewall.
+tire_section = [
+    (-.0905, .188), (-.0905, .236), (-.086, .260), (-.077, .276),
+    (-.060, .284), (-.039, .287), (-.036, .282), (-.032, .282),
+    (-.029, .287), (-.005, .287), (-.002, .281), (.002, .281),
+    (.005, .287), (.029, .287), (.032, .282), (.036, .282),
+    (.039, .287), (.060, .284), (.077, .276), (.086, .260),
+    (.0905, .236), (.0905, .188),
+]
+tire_rings = []
+for x, radius in tire_section:
+    ring = []
+    for segment in range(144):
+        angle = math.tau * segment / 144
+        groove_offset = .003 * math.sin(24 * angle) if abs(x) < .045 else 0
+        ring.append((x + groove_offset, radius * math.cos(angle), radius * math.sin(angle)))
+    tire_rings.append(ring)
+tire_template = v.profile_loft("Däck med slitbanespår", tire_rings, v.RUBBER, root)
 
 shell = v.mesh_from_rings("Pressed steel body", [
     (-2.04, .705, .28, .65, .781), (-1.97, .787, .25, .714, .823),
@@ -151,7 +170,9 @@ for side in (-1, 1):
             for offset, relief, height in sections
         ], finish, root)
     for y in (-1.215, 1.215):
-        v.cylinder("Däck", (side*.699, y, .287), .287, .181, v.RUBBER, vertices=64, root=root)
+        tire = tire_template.copy()
+        bpy.context.collection.objects.link(tire)
+        tire.location = (side * .699, y, .287)
         rim = v.cylinder("Pressed steel wheel rim", (side * .790, y, .287),
                          .183, .040, v.METAL, vertices=64, root=root)
         for n in range(10):
@@ -176,6 +197,8 @@ for side in (-1, 1):
             angle = math.tau * n / 4
             v.cylinder("Wheel lug nut", (side*.828, y+.045*math.cos(angle), .287+.045*math.sin(angle)),
                        .008, .007, v.METAL, vertices=6, root=root)
+
+bpy.data.objects.remove(tire_template, do_unlink=True)
 
 box("Grille backing", (0, -2.041, .713), (.842, .065, .179), v.RUBBER)
 for z in (.646, .670, .694, .718, .742, .766):

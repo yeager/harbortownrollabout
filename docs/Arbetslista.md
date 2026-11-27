@@ -466,6 +466,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Baklyktorna fick separata formgjutna glas för bromsljus, blinkers och backljus. Räfflorna granskades i närbild i Godot. Körprovet för 30 vägfordon passerade.
   - Bakrutans värmetrådar ligger innanför tätningen och har anslutningar i båda ändarna. Ventilerna sitter tätare mot bakstolparna. Granskat bakifrån i Godot. Körprovet för 30 vägfordon passerade.
   - Stålfälgarna fick tio genombrutna ventilationshål per hjul. Granskat i närbild i Godot 4.7 dev5. Körprovet för 30 vägfordon passerade.
+  - Karossen fick enfärgad bränd orange lack och däcken fick modellerade slitbanespår. Galleribilden uppdaterades. Modellen granskades i Godot och körprovet för 30 vägfordon passerade.
 - [ ] [`compact_convertible.glb`](../vehicles/compact_convertible.glb)
   - Mino Kuper S fick ett eget kopparfärgat M-monogram på motorhuven och bakluckan samt nytt namn i fordonsgalleriet. Emblemen granskades i Godot. Fordonsprovet och språkkontrollen passerade.
 - [ ] [`electric_sedan.glb`](../vehicles/electric_sedan.glb)
