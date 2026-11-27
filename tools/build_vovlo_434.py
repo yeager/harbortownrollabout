@@ -152,13 +152,26 @@ for side in (-1, 1):
         ], finish, root)
     for y in (-1.215, 1.215):
         v.cylinder("Däck", (side*.699, y, .287), .287, .181, v.RUBBER, vertices=64, root=root)
-        v.cylinder("Pressed steel wheel rim", (side*.786, y, .287), .183, .037, v.METAL, vertices=56, root=root)
-        v.cylinder("Wheel hub cap", (side*.813, y, .287), .067, .026, v.DARK, vertices=40, root=root)
+        rim = v.cylinder("Pressed steel wheel rim", (side * .790, y, .287),
+                         .183, .040, v.METAL, vertices=64, root=root)
         for n in range(10):
             angle = math.tau * n / 10
-            recess = box("Wheel hub vent", (side*.808, y+.133*math.cos(angle), .287+.133*math.sin(angle)),
-                         (.009, .044, .027), v.RUBBER, .006)
-            recess.rotation_euler.x = angle + math.pi / 2
+            cutter = v.cube("Rim ventilation tool",
+                            (side * .790, y + .133 * math.cos(angle), .287 + .133 * math.sin(angle)),
+                            (.065, .028, .042), None, .008)
+            cutter.rotation_euler.x = angle
+            bpy.context.view_layer.objects.active = rim
+            opening = rim.modifiers.new("Pressed ventilation opening", "BOOLEAN")
+            opening.operation = "DIFFERENCE"
+            opening.object = cutter
+            bpy.ops.object.modifier_apply(modifier=opening.name)
+            bpy.data.objects.remove(cutter, do_unlink=True)
+        rim_edge = rim.modifiers.new("Rounded ventilation edges", "BEVEL")
+        rim_edge.width = .0013
+        rim_edge.segments = 2
+        rim.modifiers.new("Rim face normals", "WEIGHTED_NORMAL")
+        v.cylinder("Wheel hub cap", (side * .814, y, .287),
+                   .067, .026, v.DARK, vertices=40, root=root)
         for n in range(4):
             angle = math.tau * n / 4
             v.cylinder("Wheel lug nut", (side*.828, y+.045*math.cos(angle), .287+.045*math.sin(angle)),
