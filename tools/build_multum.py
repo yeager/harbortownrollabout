@@ -385,7 +385,26 @@ grille_cut.operation = "DIFFERENCE"
 grille_cut.object = grille_cutter
 bpy.ops.object.modifier_apply(modifier=grille_cut.name)
 bpy.data.objects.remove(grille_cutter, do_unlink=True)
-box("Rear bumper", (0,1.929,.433),(1.69,.211,.271),v.DARK,.074)
+def bumper_section(y, width, bottom, shoulder, crown):
+    half_section = [
+        (width * .89, bottom), (width * .97, bottom + .025),
+        (width, bottom + .062), (width, shoulder),
+        (width * .975, crown - .018), (width * .93, crown),
+    ]
+    return [(-x, y, z) for x, z in half_section] + [
+        (x, y, z) for x, z in reversed(half_section)
+    ]
+
+
+v.mesh_from_rings("Wraparound rear bumper", [
+    (1.665, .894, .315, .458, .475),
+    (1.729, .907, .294, .501, .533),
+    (1.836, .899, .275, .523, .552),
+    (1.940, .873, .270, .527, .566),
+    (2.004, .840, .277, .520, .563),
+    (2.032, .798, .295, .505, .548),
+    (2.040, .763, .314, .481, .528),
+], v.DARK, root, bevel=.010, section=bumper_section)
 for side in (-1, 1):
     fog_x = side * .656
     fog_opening = v.cylinder("Fog lamp opening tool", (fog_x, -2.078, .366),
