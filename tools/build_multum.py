@@ -217,6 +217,12 @@ v.profile_loft("Painted rear window surround", [
      for x, z in [(original_x, 1.35 + (original_z - 1.35) * scale)]]
     for scale, depth in [(1.014, -.014), (1, .011), (.985, .017), (.937, .017), (.922, -.009)]
 ], paint, root, close_ends=False)
+v.profile_loft("Rear window rubber gasket", [
+    [(x * scale, 1.87 - max(z - 1.51, 0) * .30 + depth, z)
+     for x, height in rear_window_outline
+     for z in [1.35 + (height - 1.35) * scale]]
+    for scale, depth in [(.942, .010), (.932, .016), (.916, .014), (.902, .006), (.902, -.008)]
+], v.RUBBER, root, close_ends=False)
 # Shape the raised lip across the car so both ends roll into the wings.
 cowl_sections = [
     (0, -1.251, 1.033, .168, .115),
