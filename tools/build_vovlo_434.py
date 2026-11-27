@@ -169,6 +169,18 @@ v.mesh_from_rings("Painted hatchback cabin", [
     (.90, .696, .939, 1.384, 1.410), (1.46, .730, .958, 1.045, 1.082),
     (1.58, .714, .934, .976, 1.012),
 ], paint, root, .015, cabin_section)
+for side in (-1, 1):
+    # Taper the gutter where the roof starts to slope into the pillars.
+    v.profile_loft("Roof drip rail", [
+        [(side * (x + offset * width), y, z + height * depth)
+         for offset, height in [(-2, 0), (.68, 0), (1, .34),
+                                (.86, 1), (.43, 1), (.28, .48), (-2, .48)]]
+        for y, x, z, width, depth in [
+            (-.255, .628, 1.390, .011, .004), (-.182, .626, 1.415, .027, .009),
+            (.120, .622, 1.423, .030, .009), (.539, .613, 1.428, .029, .009),
+            (.736, .611, 1.409, .026, .008), (.866, .609, 1.389, .015, .005),
+        ]
+    ], paint, root)
 pane("Windscreen", [(x, y - .056, z) for x, y, z in [(-.654, -.824, .939), (.654, -.824, .939),
                     (.601, -.285, 1.399), (.522, -.243, 1.425),
                     (-.522, -.243, 1.425), (-.601, -.285, 1.399)]], (0, .078, 0))
