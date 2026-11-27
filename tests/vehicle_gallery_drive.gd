@@ -228,10 +228,10 @@ func check_gallery() -> void:
 					printerr("Beams and lenses did not follow the day/night setting on ", tile.text)
 					quit(1)
 					return
-				if index == game.VOVLO_434:
+				if index in [game.MULTUM, game.VOVLO_434]:
 					var diffusers: Array[Node] = game.vehicle_model.find_children("Rear plate lamp diffuser*", "MeshInstance3D", true, false)
 					if diffusers.size() != 2 or not diffusers.all(func(lens: MeshInstance3D): return (lens.material_override.emission_energy_multiplier > 0) == night):
-						printerr("Both Vovlo 434 registration lamps must follow the day/night setting")
+						printerr("Both registration lamps must follow the day/night setting on ", tile.text)
 						quit(1)
 						return
 		if index == game.SHOPPER:

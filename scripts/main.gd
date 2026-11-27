@@ -10026,7 +10026,7 @@ func _load_vehicle_model() -> void:
 		_add_school_car_sign(vehicle_model)
 	if vehicle_index in [SCHOOL_CAR, DAM_PICKUP]:
 		_fit_rear_plate_lamps(vehicle_model)
-	if vehicle_index == VOVLO_434:
+	if vehicle_index in [MULTUM, VOVLO_434]:
 		_fit_rear_plate_lamps(vehicle_model, false, "Rear registration plate")
 	muddy_parts.clear()
 	mud_finish = ShaderMaterial.new()

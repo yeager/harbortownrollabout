@@ -467,6 +467,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Bakrutan fick en profilerad gummitätning runt hela glaset. Passformen mot den lackerade ramen granskades i Godot. Körprovet för 30 vägfordon passerade.
   - Det tredje bromsljuset fick ett profilerat lykthus och ett välvt glas med 18 gjutna räfflor. Granskat i närbild i Godot. Körprovet för 30 vägfordon passerade.
   - De runda bakre reflexerna fick separata gummiringar som tätar mot stötfångaren. Granskade från låg kameravinkel i Godot. Körprovet för 30 vägfordon passerade.
+  - Två modellerade skyltlyktor gör bakre registreringsskylten läsbar i nattläge. Granskade tända i Godot. Körprovet verifierade att båda följer dag- och nattväxlingen.
 - [ ] [`vovlo_434.glb`](../vehicles/vovlo_434.glb)
   - Vovlo 434 finns som körbar tredörrars halvkombi i fordonsgalleriet. Exteriören granskades framifrån och bakifrån i Godot. Körprovet för 30 vägfordon och kontrollen av språkkatalogerna passerade.
   - Vovlo 434 fick räfflade strålkastar- och blinkersglas fram samt separata reflektorringar. Granskat i närbild i Godot. Körprovet för 30 vägfordon passerade.

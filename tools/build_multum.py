@@ -479,7 +479,7 @@ for y, sign in [(-2.116, -1), (2.049, 1)]:
     rotation = (math.pi / 2, 0, 0 if sign < 0 else math.pi)
     box("Registration plate holder", (0, y - sign * .007, .525),
         (.508, .023, .122), v.RUBBER, .009)
-    box("Registration plate", (0, y, .525), (.488, .024, .108), cream, .007)
+    box("Rear registration plate" if sign > 0 else "Registration plate", (0, y, .525), (.488, .024, .108), cream, .007)
     box("Registration country band", (sign * .219, y + sign * .012, .525),
         (.043, .005, .101), v.POLICE_BLUE, .003)
     for label, lettering, x, z, size, finish in [
@@ -494,6 +494,11 @@ for y, sign in [(-2.116, -1), (2.049, 1)]:
                               (-sign * x, y + sign * .013, .563),
                               .004, .003, v.METAL, False, 12, root)
         fastener.rotation_euler.x = math.pi / 2
+for x in (-.154, .154):
+    box("Rear plate lamp housing", (x, 2.047, .597),
+        (.084, .036, .025), v.DARK, .005)
+    box("Rear plate lamp diffuser", (x, 2.060, .589),
+        (.069, .019, .010), cream, .002)
 badge = v.text_obj("Multum hatch badge","MULTUM",(.208,2.008,.842),.086,
                    v.METAL,root=root,flat=True)
 badge.rotation_euler = (math.pi/2,0,math.pi)
