@@ -207,8 +207,21 @@ box("Vovlo grille medallion", (0, -2.096, .709), (.101, .017, .081), v.METAL)
 box("Vovlo grille enamel", (0, -2.107, .709), (.081, .010, .064), v.POLICE_BLUE)
 text("Vovlo emblem", "V", (-.021, -2.115, .687), .052, material=ivory)
 for y, sign, z in [(-2.058, -1, .430), (2.053, 1, .405)]:
-    box("Wraparound bumper", (0, y + sign*.012, z), (1.61, .209, .191), v.DARK, .045)
-    box("Bumper bright line", (0, y + sign*.120, z+.032), (1.47, .013, .012), v.METAL, .004)
+    # The centre projects beyond the body, while the ends follow the fenders.
+    bumper_stations = [(-.810, -.150), (-.808, -.058), (-.792, .030),
+                       (-.757, .083), (-.692, .112), (-.530, .119),
+                       (.530, .119), (.692, .112), (.757, .083),
+                       (.792, .030), (.808, -.058), (.810, -.150)]
+    v.profile_loft("Wraparound bumper", [
+        [(x, y + sign * (reach - inset), z + height)
+         for inset, height in [(0, -.059), (0, .051), (.020, .083),
+                               (.055, .094), (.174, .082), (.174, -.071),
+                               (.059, -.092), (.021, -.082)]]
+        for x, reach in bumper_stations
+    ], v.DARK, root)
+    v.pipe("Bumper bright line",
+           [(x, y + sign * (reach + .004), z + .031)
+            for x, reach in bumper_stations], .005, v.METAL, root)
     box("Plate mount", (0, y + sign*.126, z+.011), (.448, .025, .109), v.RUBBER)
     box("Registration plate", (0, y + sign*.142, z+.011), (.420, .015, .086), ivory, .007)
     text("Registration", "HVK 434", (sign*.150, y + sign*.153, z-.016), .067, sign > 0, v.RUBBER)
