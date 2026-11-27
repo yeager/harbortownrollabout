@@ -11,16 +11,55 @@ func axis(which: int, value: float) -> void:
 	Input.parse_input_event(event)
 	Input.flush_buffered_events()
 
-func button(which: int) -> void:
+func set_button(which: int, pressed: bool) -> void:
 	var event := InputEventJoypadButton.new()
 	event.device = 1
 	event.button_index = which
-	event.pressed = true
-	Input.parse_input_event(event)
-	event = event.duplicate()
-	event.pressed = false
+	event.pressed = pressed
 	Input.parse_input_event(event)
 	Input.flush_buffered_events()
+
+func button(which: int) -> void:
+	set_button(which, true)
+	set_button(which, false)
+
+func check_excavator(game) -> bool:
+	game.mode = "menu"
+	game.vehicle_selector.get_child(game.VEHICLE_NAMES_ALL.size()).pressed.emit()
+	game.start_button.pressed.emit()
+	if not game.operating_excavator:
+		return false
+	game.boom_joint.rotation.x = -.40
+	game.stick_joint.rotation.x = 0
+	game.bucket_joint.rotation.x = 0
+	var hull: Transform3D = game.excavator.transform
+	var slew: float = game.cab_turntable.rotation.y
+	var orbit: float = game.orbit_angle
+	set_button(JOY_BUTTON_LEFT_SHOULDER, true)
+	axis(JOY_AXIS_LEFT_X, .8)
+	axis(JOY_AXIS_LEFT_Y, -.8)
+	axis(JOY_AXIS_RIGHT_X, .8)
+	axis(JOY_AXIS_RIGHT_Y, -.8)
+	axis(JOY_AXIS_TRIGGER_RIGHT, 1)
+	game._process(.15)
+	var arm_moved: bool = (
+		game.cab_turntable.rotation.y < slew - .03
+		and game.boom_joint.rotation.x < -.42
+		and game.stick_joint.rotation.x > .03
+		and game.bucket_joint.rotation.x > .03
+	)
+	set_button(JOY_BUTTON_LEFT_SHOULDER, false)
+	for stick_axis in [JOY_AXIS_LEFT_X, JOY_AXIS_LEFT_Y, JOY_AXIS_RIGHT_X, JOY_AXIS_RIGHT_Y]:
+		axis(stick_axis, 0)
+	game._drive_excavator(.15)
+	var blocked: bool = game.excavator.transform.is_equal_approx(hull) and is_equal_approx(game.orbit_angle, orbit)
+	axis(JOY_AXIS_TRIGGER_RIGHT, 0)
+	game._drive_excavator(.05)
+	axis(JOY_AXIS_TRIGGER_RIGHT, 1)
+	for frame in 45:
+		game._drive_excavator(1.0 / 60)
+	axis(JOY_AXIS_TRIGGER_RIGHT, 0)
+	return arm_moved and blocked and hull.origin.distance_to(game.excavator.position) > .3
 
 func check_settings(game) -> bool:
 	var dialog := game.find_child("GameSettings", true, false) as AcceptDialog
@@ -200,6 +239,10 @@ func run() -> void:
 	await process_frame
 	if map.visible or game.paused:
 		printerr("The gamepad could not close the town map")
+		quit(1)
+		return
+	if not check_excavator(game):
+		printerr("Gamepad excavator arm, isolation or track control failed")
 		quit(1)
 		return
 	print("Gamepad settings, menu, steering, pedals, pause, camera, phone, map, emergency controls, seat and walking passed.")

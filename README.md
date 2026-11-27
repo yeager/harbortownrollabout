@@ -27,6 +27,8 @@ The **left face button** (X / Square) enters or exits a vehicle, the **top face 
 
 Open **Settings → Gamepad** to adjust the stick dead zone, camera speed and vertical camera direction. In Settings, use the **shoulder buttons** to switch tabs and the **D-pad** to change sliders.
 
+In the excavator, hold the **left shoulder button** to control the arm. Move the **right stick** sideways to turn the cab and vertically to raise or lower the boom. Move the **left stick** vertically to move the outer arm and sideways to tilt the bucket. Release the shoulder button to return to track and camera controls. Release and press the trigger again if you held it while operating the arm.
+
 ## Your first drive
 
 Click a vehicle picture, choose Axel or Alma, then select **Start driving**. Hold **W** to move, steer with **A** and **D**, and press **S** to brake. The arrow keys work too. If you prefer the mouse, hold the left button to drive and move the mouse sideways to steer. **R** brings you back to a safe spot if you get stuck.

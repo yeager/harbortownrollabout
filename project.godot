@@ -80,7 +80,7 @@ pad_brake={
 "deadzone": 0.2,
 "events": [Object(InputEventJoypadMotion,"device":-1,"axis":4,"axis_value":1.0)]
 }
-pad_run={
+pad_left_shoulder={
 "deadzone": 0.2,
 "events": [Object(InputEventJoypadButton,"device":-1,"button_index":9)]
 }

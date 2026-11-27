@@ -939,7 +939,7 @@ func _process(delta: float) -> void:
 		street_signals.advance(delta)
 		shops.advance_grill_sign(delta, calm_mode)
 		_update_fire_station_door(delta)
-		if _world_controls_available():
+		if _world_controls_available() and not (operating_excavator and Input.is_action_pressed("pad_left_shoulder")):
 			var pad_look := Input.get_vector("pad_look_left", "pad_look_right", "pad_look_up", "pad_look_down")
 			if not pad_look.is_zero_approx():
 				if gamepad_invert_y:
@@ -6589,13 +6589,17 @@ func _crawler_clear() -> bool:
 func _drive_excavator(delta: float) -> void:
 	var old := excavator.transform
 	var controls_available := _world_controls_available()
+	var pad_arm := controls_available and Input.is_action_pressed("pad_left_shoulder")
 	var steer := 0.0
 	var drive := 0.0
-	if controls_available:
-		steer = clampf(Input.get_axis("ui_left","ui_right") + Input.get_axis("pad_left", "pad_right"), -1, 1) + int(_movement_pressed(KEY_D))-int(_movement_pressed(KEY_A))
+	if pad_arm:
+		if _keyboard_pedal_pressed():
+			release_pedal_keys = true
+	elif controls_available:
+		steer = clampf(Input.get_axis("ui_left", "ui_right") + Input.get_axis("pad_left", "pad_right"), -1, 1) + int(_movement_pressed(KEY_D)) - int(_movement_pressed(KEY_A))
 		if is_zero_approx(steer): steer = mouse_steering
 		if _keyboard_pedals_available():
-			drive = clampf(Input.get_axis("ui_down","ui_up") + Input.get_axis("pad_brake", "pad_accelerate"), -1, 1) + int(_movement_pressed(KEY_W))-int(_movement_pressed(KEY_S))
+			drive = clampf(Input.get_axis("ui_down", "ui_up") + Input.get_axis("pad_brake", "pad_accelerate"), -1, 1) + int(_movement_pressed(KEY_W)) - int(_movement_pressed(KEY_S))
 		if mouse_gas: drive = 1
 		if mouse_brake or brake_pedal_held: drive = -1
 	driving_controls.set_controls(steer, drive > 0, drive < 0, drive < 0)
@@ -6623,10 +6627,21 @@ func _drive_excavator(delta: float) -> void:
 	var previous_slew := cab_turntable.rotation.y
 	var previous_arm := Vector3(boom_joint.rotation.x, stick_joint.rotation.x, bucket_joint.rotation.x)
 	if controls_available:
-		cab_turntable.rotate_y((int(Input.is_key_pressed(KEY_Q))-int(Input.is_key_pressed(KEY_E)))*delta)
-		boom_joint.rotation.x = clampf(boom_joint.rotation.x + (int(Input.is_key_pressed(KEY_K))-int(Input.is_key_pressed(KEY_I)))*delta*.50,-.82,0)
-		stick_joint.rotation.x = clampf(stick_joint.rotation.x + (int(Input.is_key_pressed(KEY_Y))-int(Input.is_key_pressed(KEY_G)))*delta*.65,-.62,.65)
-		bucket_joint.rotation.x = clampf(bucket_joint.rotation.x + (int(Input.is_key_pressed(KEY_O))-int(Input.is_key_pressed(KEY_L)))*delta*.85,-.95,.95)
+		var slew := float(int(Input.is_key_pressed(KEY_Q)) - int(Input.is_key_pressed(KEY_E)))
+		var boom := float(int(Input.is_key_pressed(KEY_K)) - int(Input.is_key_pressed(KEY_I)))
+		var stick := float(int(Input.is_key_pressed(KEY_Y)) - int(Input.is_key_pressed(KEY_G)))
+		var bucket := float(int(Input.is_key_pressed(KEY_O)) - int(Input.is_key_pressed(KEY_L)))
+		if pad_arm:
+			var cab_stick := Input.get_vector("pad_look_left", "pad_look_right", "pad_look_up", "pad_look_down")
+			var arm_stick := Input.get_vector("pad_left", "pad_right", "pad_forward", "pad_back")
+			slew -= cab_stick.x
+			boom += cab_stick.y
+			stick -= arm_stick.y
+			bucket += arm_stick.x
+		cab_turntable.rotate_y(clampf(slew, -1, 1) * delta)
+		boom_joint.rotation.x = clampf(boom_joint.rotation.x + clampf(boom, -1, 1) * delta * .50, -.82, 0)
+		stick_joint.rotation.x = clampf(stick_joint.rotation.x + clampf(stick, -1, 1) * delta * .65, -.62, .65)
+		bucket_joint.rotation.x = clampf(bucket_joint.rotation.x + clampf(bucket, -1, 1) * delta * .85, -.95, .95)
 	_support_bucket()
 	excavation_sand.move_bucket(bucket_joint, bucket_joint.rotation.x - previous_arm.z)
 	var arm_pose := Vector3(boom_joint.rotation.x, stick_joint.rotation.x, bucket_joint.rotation.x)
@@ -6948,7 +6963,7 @@ func _walk(delta: float) -> void:
 		walk_camera_height = clampf(walk_camera_height + height_input*delta*2.0,-1.5,3.5)
 	walker.rotate_y(-clampf(keys.x,-1,1)*2.5*delta)
 	walk_basis = Basis(Vector3.UP,walker.rotation.y)
-	var running := (Input.is_key_pressed(KEY_CTRL if ctrl_run else KEY_SHIFT) or Input.is_action_pressed("pad_run")) and not winded and keys.y < 0
+	var running := (Input.is_key_pressed(KEY_CTRL if ctrl_run else KEY_SHIFT) or Input.is_action_pressed("pad_left_shoulder")) and not winded and keys.y < 0
 	var desired := walk_basis.z * clampf(keys.y,-1,1) * (Gait.RUN_SPEED if running else Gait.WALK_SPEED)
 	desired.y = 0
 	var horizontal := Vector3(walking_velocity.x,0,walking_velocity.z)
