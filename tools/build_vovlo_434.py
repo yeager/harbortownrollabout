@@ -19,6 +19,7 @@ headlamp_flute = v.material("Headlamp glass flute", (.44, .53, .51), .20, .29)
 headlamp_optic = v.material("Bright headlamp reflector", (.79, .81, .74), .46, .24)
 reverse = v.material("Reverse lamp clear", (.75, .81, .78))
 ivory = v.material("Ivory plate", (.9, .87, .78))
+mirror_glass = v.material("Mirror glass", (.48, .56, .59), .9, .12)
 
 def box(name, location, dimensions, material, bevel=.012):
     return v.cube(name, location, dimensions, material, bevel, root)
@@ -218,9 +219,22 @@ for side in (-1, 1):
         v.pipe("Bright side molding", bright_edge, .0035, v.METAL, root)
     box("Door handle surround", (side*.824, .274, .805), (.031, .153, .060), v.DARK)
     box("Door release", (side*.844, .274, .808), (.016, .115, .019), v.METAL, .005)
-    box("Mirror base", (side*.752, -.582, .994), (.055, .105, .072), v.RUBBER)
-    box("Door mirror", (side*.835, -.579, 1.062), (.164, .116, .109), v.DARK, .026)
-    box("Mirror reflector", (side*.84, -.515, 1.062), (.119, .009, .079), v.METAL)
+    box("Mirror mounting gasket", (side * .743, -.593, .982), (.029, .091, .053), v.RUBBER)
+    v.pipe("Mirror pedestal", [(side * .747, -.596, .985), (side * .806, -.586, 1.021)],
+           .022, v.DARK, root)
+    mirror_outline = [(-.82, -1), (.76, -1), (1, -.68), (1, .64),
+                      (.74, 1), (-.76, 1), (-1, .66), (-1, -.70)]
+    v.profile_loft("Door mirror shell", [
+        [(side * (.843 + x * width), y, 1.062 + z * height) for x, z in mirror_outline]
+        for y, width, height in [
+            (-.644, .056, .035), (-.618, .080, .049), (-.546, .087, .052),
+            (-.518, .083, .049), (-.517, .071, .039), (-.531, .070, .038),
+        ]
+    ], v.DARK, root)
+    v.profile_loft("Mirror glass insert", [
+        [(side * (.843 + x * .070), y, 1.062 + z * .038) for x, z in mirror_outline]
+        for y in (-.534, -.527)
+    ], mirror_glass, root)
     for slot in range(5):
         y = 1.390 - slot * .047
         z = 1.066 + slot * .032
