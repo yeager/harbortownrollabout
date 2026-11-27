@@ -179,8 +179,9 @@ func check_gallery() -> void:
 				printerr("Quattro speedometer did not follow forward motion")
 				quit(1)
 				return
-		if index in [2, game.SHOPPER, game.REFUSE, game.QUATTRO, game.A_TRACTOR]:
-			var lenses: Array = game.vehicle_model.find_children("Swept transparent headlamp cover*" if index == 2 else "Headlight lens*", "MeshInstance3D", true, false)
+		if index in [2, game.SHOPPER, game.REFUSE, game.QUATTRO, game.A_TRACTOR, game.MULTUM]:
+			var lens_pattern: String = {2: "Swept transparent headlamp cover*", game.MULTUM: "Lower headlight lens*"}.get(index, "Headlight lens*")
+			var lenses: Array = game.vehicle_model.find_children(lens_pattern, "MeshInstance3D", true, false)
 			if lenses.size() != (1 if index == game.SHOPPER else 2) or lenses.size() != game.headlights.size():
 				printerr("Headlight count differs from vehicle body")
 				quit(1)
@@ -191,19 +192,19 @@ func check_gallery() -> void:
 					printerr("Headlight beam offset from lens")
 					quit(1)
 					return
+		if index in [game.SHOPPER, game.MULTUM]:
+			for night in [true,false]:
+				game.time_mode = 1 if night else 0
+				game._update_daylight(0)
+				if not game.headlights.all(func(beam: SpotLight3D): return beam.visible == night and (beam.light_energy > 0) == night) or (game.projector_finish.emission_energy_multiplier > 0) != night:
+					printerr("Beams and lenses did not follow the day/night setting on ", tile.text)
+					quit(1)
+					return
 		if index == game.SHOPPER:
 			if tile.text != "Norrsjö Shoppa" or not game.vehicle_model.find_child("Norrsjö Shoppa rear badge", true, false):
 				printerr("The shopping trike needs its fictional name in the gallery and on the body")
 				quit(1)
 				return
-			var beam: SpotLight3D = game.headlights[0]
-			for night in [true,false]:
-				game.time_mode = 1 if night else 0
-				game._update_daylight(0)
-				if beam.visible != night or (beam.light_energy > 0) != night or (game.projector_finish.emission_energy_multiplier > 0) != night:
-					printerr("The Shoppa beam and lens did not follow the day/night setting")
-					quit(1)
-					return
 			var mat := game.vehicle_model.find_child("Rubber foot mat*",true,false) as MeshInstance3D
 			if mat == null:
 				printerr("Shopping trike has no foot mat")
