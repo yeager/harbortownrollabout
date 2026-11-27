@@ -434,6 +434,10 @@ func check_departure_indicator(game: Node) -> bool:
 		game._update_traffic(.4)
 	game._update_traffic(.1)
 	var lamps: Array[MeshInstance3D] = game.bus_departure_lamps
+	var right_lamps: Array[MeshInstance3D] = game.driven_turn_signals.right
+	if not check_bus_indicator_mounts(game.vehicle_model, lamps, 1.0) \
+			or not check_bus_indicator_mounts(game.vehicle_model, right_lamps, -1.0):
+		return false
 	var arrow: Label3D = game.vehicle_model.find_child("Dashboard left indicator", true, false)
 	var right_arrow: Label3D = game.vehicle_model.find_child("Dashboard right indicator", true, false)
 	if not arrow.visible or right_arrow.visible:
@@ -472,8 +476,29 @@ func check_departure_indicator(game: Node) -> bool:
 	if arrow.visible or not right_arrow.visible:
 		printerr("Dashboard did not indicate the right turn")
 		return false
+	if not right_lamps.all(func(lamp: MeshInstance3D): return lamp.visible) \
+			or lamps.any(func(lamp: MeshInstance3D): return lamp.visible):
+		printerr("The right turn did not light just the three right-side indicators")
+		return false
 	game.driven_turn_signals.advance(0.0, 0.0, false)
 	print("All three departure indicators blinked through the wait and switched off after moving.")
+	return true
+
+func check_bus_indicator_mounts(body: Node3D, lamps: Array[MeshInstance3D], expected_side: float) -> bool:
+	var rear_attached := false
+	var side_attached := false
+	for lamp in lamps:
+		var lens := lamp.get_parent() as MeshInstance3D
+		if lens == null or signf(body.to_local(lens.global_position).x) != expected_side:
+			printerr("A bus turn indicator is on the wrong side")
+			return false
+		if lamp.mesh != lens.mesh:
+			continue
+		rear_attached = rear_attached or lens.name.begins_with("Amber lens")
+		side_attached = side_attached or lens.name.begins_with("Bus side indicator amber lens")
+	if lamps.size() != 3 or not rear_attached or not side_attached:
+		printerr("Expected three bus indicators with shared rear and side lens meshes")
+		return false
 	return true
 
 func check_registration(body: Node3D) -> bool:
