@@ -232,9 +232,19 @@ logo = v.text_obj("Fait badge lettering","FAIT",(-.041,-1.433,1.032),.034,
                   cream,root=root,flat=True)
 logo.rotation_euler = (math.pi/2,0,0)
 rod("Roof antenna",(0,.14,1.805),(0,.31,2.078),.009,v.DARK)
-for x in (-.48,.22):
-    rod("Windscreen wiper arm",(x,-1.208,1.203),(x+.18,-1.055,1.345),.011,v.DARK)
-    rod("Windscreen wiper blade",(x+.035,-1.104,1.305),(x+.33,-.997,1.393),.013,v.DARK)
+for x, length in [(-.625, .535), (.055, .540)]:
+    spindle = v.cylinder("Windscreen wiper spindle", (x, -1.270, 1.156),
+                         .022, .024, v.RUBBER, False, 24, root)
+    spindle.rotation_euler.x = .62
+    blade_start = (x + .045, -1.216, 1.193)
+    blade_end = (x + length, -1.185, 1.227)
+    blade_center = Vector(blade_start).lerp(Vector(blade_end), .47)
+    rod("Windscreen wiper arm", (x, -1.283, 1.164), blade_center,
+        .009, v.DARK)
+    rod("Windscreen wiper blade rail", blade_start, blade_end, .010, v.DARK)
+    rod("Windscreen wiper rubber edge",
+        Vector(blade_start) + Vector((0, .010, -.007)),
+        Vector(blade_end) + Vector((0, .010, -.007)), .007, v.RUBBER)
 # The lower hatch panel ends at the bumper and is narrower than the rear glass.
 for side in (-1, 1):
     rod("Hatch side seam", (side * .627, 1.993, .943),
