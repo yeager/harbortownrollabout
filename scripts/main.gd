@@ -759,6 +759,10 @@ func _ready() -> void:
 		"ui_up": JOY_BUTTON_DPAD_UP, "ui_down": JOY_BUTTON_DPAD_DOWN,
 	}
 	for action in menu_buttons:
+		# Stick axes use the configurable gameplay actions. Keep UI arrows digital.
+		for existing in InputMap.action_get_events(action):
+			if existing is InputEventJoypadMotion:
+				InputMap.action_erase_event(action, existing)
 		var binding := InputEventJoypadButton.new()
 		binding.device = -1
 		binding.button_index = int(menu_buttons[action])

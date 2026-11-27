@@ -96,7 +96,7 @@ func check_settings(game) -> bool:
 	game.gamepad_invert_y = false
 	game._load_preferences()
 	axis(JOY_AXIS_LEFT_X, .30)
-	var ignores_drift := is_zero_approx(Input.get_action_strength("pad_right"))
+	var ignores_drift := is_zero_approx(Input.get_action_strength("pad_right")) and is_zero_approx(Input.get_action_strength("ui_right"))
 	axis(JOY_AXIS_LEFT_X, 0)
 	return ignores_drift and is_equal_approx(game.gamepad_deadzone, .40) and is_equal_approx(game.gamepad_camera_speed, 1.5) and game.gamepad_invert_y
 
@@ -134,8 +134,8 @@ func run() -> void:
 	axis(JOY_AXIS_LEFT_X, .55)
 	for frame in 45:
 		game._drive(1.0 / 60)
-	if game.speed <= .5 or game.steering <= .15:
-		printerr("Gamepad throttle or steering failed")
+	if game.speed <= .5 or not is_equal_approx(float(game.steering), .25):
+		printerr("Expected 25% steering from 55% stick input with a 40% dead zone, got ", game.steering)
 		quit(1)
 		return
 	axis(JOY_AXIS_TRIGGER_RIGHT, 0)
