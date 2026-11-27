@@ -6,7 +6,7 @@ import sys
 import bpy
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from build_vehicles import attach, clear_scene, cube, cylinder, export_vehicle, material, mesh_from_rings
+from build_vehicles import attach, clear_scene, cube, cylinder, export_vehicle, material, mesh_from_rings, text_obj
 
 PROJECT = Path(__file__).resolve().parents[1]
 
@@ -150,6 +150,23 @@ def build_pickup():
     panel("Scoop opening", (0, -2.234, 1.497), (.55, .147, .055), liner, .025)
     for x in [-.16, 0, .16]:
         panel("Scoop marker", (x, -2.304, 1.499), (.042, .018, .015), amber, .005)
+
+    plate_white = material("Reflective plate enamel", (.84, .86, .82), .02, .44)
+    plate_blue = material("Blue registration band", (.023, .089, .39), .02, .48)
+    for end, y, z in [("Front", -3.076, .779), ("Rear", 3.054, .723)]:
+        direction = math.copysign(1, y)
+        panel(f"{end} plate holder", (0, y, z), (.487, .036, .119), trim, .014)
+        panel(f"{end} number plate", (0, y+direction*.022, z),
+              (.455, .014, .094), plate_white, .004)
+        panel(f"{end} plate blue band", (direction*.201, y+direction*.030, z),
+              (.043, .004, .083), plate_blue, .002)
+        number = text_obj(f"{end} registration", "HBR 264", (0, y+direction*.032, z),
+                          .067, liner, root=root, flat=True)
+        number.rotation_euler = (math.pi/2, 0, math.pi if direction > 0 else 0)
+        xs = [vertex.co.x for vertex in number.data.vertices]
+        ys = [vertex.co.y for vertex in number.data.vertices]
+        number.location.x = direction*((min(xs)+max(xs))*.5-.012)
+        number.location.z -= (min(ys)+max(ys))*.5
 
     curve = bpy.data.curves.new("DAM grille lettering", 'FONT')
     curve.body = "DAM"
