@@ -9197,7 +9197,7 @@ func _advance_wipers(delta: float) -> void:
 	var sweep := .64*(1.0-cos(wiper_phase))
 	for pivot in wiper_pivots:
 		var axis: Vector3 = pivot.get_meta("sweep_axis")
-		pivot.basis = Basis(axis,sweep)
+		pivot.basis = Basis(axis, sweep * float(pivot.get_meta("sweep_scale", 1.0)))
 
 	# Follow the Shopper's curved acrylic in the opening shell's local space.
 	if not shopper_wiper_parts.is_empty():
@@ -9974,6 +9974,18 @@ func _load_vehicle_model() -> void:
 				rails[i].reparent(pivot)
 				edges[i].reparent(pivot)
 				wiper_pivots.append(pivot)
+		var rear_spindle := vehicle_model.find_child("Rear wiper spindle", true, false) as MeshInstance3D
+		if rear_spindle:
+			var rear_pivot := Node3D.new()
+			rear_spindle.get_parent().add_child(rear_pivot)
+			rear_pivot.global_position = rear_spindle.to_global(rear_spindle.get_aabb().get_center())
+			rear_pivot.set_meta("sweep_axis", Vector3.FORWARD)
+			# The long rear blade has less clearance above its spindle.
+			rear_pivot.set_meta("sweep_scale", .40)
+			for part: MeshInstance3D in vehicle_model.find_children("Rear wiper *", "MeshInstance3D", true, false):
+				if part != rear_spindle:
+					part.reparent(rear_pivot)
+			wiper_pivots.append(rear_pivot)
 	if vehicle_index == BUS:
 		var arms := vehicle_model.find_children("Windscreen wiper arm*","MeshInstance3D",true,false)
 		var blades := vehicle_model.find_children("Windscreen wiper blade*","MeshInstance3D",true,false)

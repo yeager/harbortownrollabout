@@ -49,7 +49,11 @@ func check_y5_wheels(game) -> bool:
 func check_wipers(game, spindle_pattern: String) -> bool:
 	var spindles: Array[Node] = game.vehicle_model.find_children(spindle_pattern, "MeshInstance3D", true, false)
 	var pivots: Array[Node3D] = game.wiper_pivots
-	if spindles.size() != 2 or pivots.size() != 2:
+	var expected_count := 2
+	if game.vehicle_index == game.MULTUM:
+		spindles.append_array(game.vehicle_model.find_children("Rear wiper spindle", "MeshInstance3D", true, false))
+		expected_count = 3
+	if spindles.size() != expected_count or pivots.size() != expected_count:
 		return false
 	for i in pivots.size():
 		var spindle := spindles[i] as MeshInstance3D
