@@ -88,6 +88,10 @@ for end in [-1,1]:
              (side*1.09,end*.40-.46,3.44),.025,white)
     box("Lower landing ramp",(0,end*6.23,.70),(1.95,.46,.11),deck)
     box("Ramp nosing",(0,end*6.40,.74),(1.95,.10,.07),rubber)
+    for row_y in (6.07,6.16,6.25):
+        box("Ramp anti-slip strip",(0,end*row_y,.760),(1.77,.031,.016),rubber,.004)
+    for side in (-1,1):
+        box("Ramp edge strip",(side*.927,end*6.20,.761),(.048,.32,.017),steel,.004)
     for side in [-1,1]:
         bitt_x, bitt_y = side*1.39, end*5.43
         box("Mooring bitt base",(bitt_x,bitt_y,.684),(.22,.47,.034),steel,.010)
