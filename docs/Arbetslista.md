@@ -423,6 +423,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Multums däck fick rundade skuldror och tre längsgående spår i slitbanan. Granskade i Godot. Körprovet för 29 vägfordon passerade.
   - Baklyktorna fick rundade lykthus med separata röda, orange och vita glas. Granskade i Godot. Körprovet bekräftade att de modellerade blinkersglasen och backljusen fungerar.
   - Dörrhandtagen fick separata grepp och gummitätningar. Framdörrarna fick låscylindrar med nyckelspår och sidospeglarna fick separata fästen, fällgångjärn och glaslister. Granskat i Godot. Fordonsprovet passerade.
+  - Multums fönsterstolpar följer sidoglasets profil och möter nya tätningslister vid taket. Granskat i Godot. Körprovet för 29 vägfordon passerade.
 - [ ] [`compact_convertible.glb`](../vehicles/compact_convertible.glb)
   - Mino Kuper S fick ett eget kopparfärgat M-monogram på motorhuven och bakluckan samt nytt namn i fordonsgalleriet. Emblemen granskades i Godot. Fordonsprovet och språkkontrollen passerade.
 - [ ] [`electric_sedan.glb`](../vehicles/electric_sedan.glb)

@@ -99,10 +99,22 @@ v.mesh_from_rings("Raised cowl under the windscreen", [
 ], paint, root, bevel=0)
 
 for side in (-1,1):
-    for y,width,top in [(-.31,.87,1.741),(.57,.856,1.768),(1.42,.84,1.73)]:
-        rod("Window pillar",(side*width,y,1.052),(side*width*.928,y,top),.024,v.DARK)
+    for y in (-.31,.23,1.35):
+        # Interpolate the same cross sections used by the glasshouse shell.
+        a,b = next((a,b) for a,b in zip(cabin,cabin[1:]) if a[0] <= y <= b[0])
+        t = (y-a[0])/(b[0]-a[0])
+        width,base,shoulder,crown = [a[i]+(b[i]-a[i])*t for i in range(1,5)]
+        outline = [(width+.008,base),(.975*width+.008,shoulder),
+                   (.91*width+.008,crown-.024)]
+        v.profile_loft("Flush window pillar",[
+            [(side*x,y+offset,z) for x,z in outline]
+            for offset in (-.031,.031)
+        ],v.DARK,root,close_ends=False)
     for a,b in zip(cabin,cabin[1:]):
         rod("Window lower seal",(side*a[1],a[0],a[2]),(side*b[1],b[0],b[2]),.017,v.DARK)
+    for a,b in zip(cabin[2:],cabin[3:]):
+        rod("Window roof seal",(side*a[1]*.91,a[0],a[4]-.022),
+            (side*b[1]*.91,b[0],b[4]-.022),.015,v.DARK)
     for y in (-.17,.91):
         box("Door rubbing strip",(side*.919,y,.645),(.038,.85,.057),v.DARK,.019)
         handle_y = y+.30
