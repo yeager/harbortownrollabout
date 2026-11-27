@@ -337,6 +337,18 @@ for side in (-1, 1):
                               (.038, 1), (.038, -1), (.008, -1)]]
         for x, y, half_height in indicator_stations
     ], amber, root)
+    hit, repeater_seat, repeater_normal, _ = body_surface.ray_cast(
+        Vector((side * 1.1, -1.58, .754)), Vector((-side, 0, 0))
+    )
+    if not hit:
+        raise RuntimeError("Side indicator misses the front fender")
+    repeater_rotation = Vector((side, 0, 0)).rotation_difference(repeater_normal).to_euler()
+    for name, projection, size, finish in [
+        ("Side indicator gasket", .004, (.018, .071, .035), v.RUBBER),
+        ("Side indicator lens", .014, (.013, .059, .026), amber),
+    ]:
+        repeater = box(name, repeater_seat + repeater_normal * projection, size, finish, .004)
+        repeater.rotation_euler = repeater_rotation
     v.profile_loft("Rear lamp carrier", [
         [(side * x, y - tail_corner_recess(x), z)
          for y, z in [(1.976, .552), (2.037, .552), (2.053, .567),

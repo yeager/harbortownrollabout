@@ -131,9 +131,12 @@ func check_gallery() -> void:
 			quit(1)
 			return
 		if tile.text in ["Saav 97", "BWM M3 E33"] or index in [0, game.SHOPPER, game.A_TRACTOR, game.ICE_CREAM, game.MULTUM, game.VOVLO_434]:
+			var prefixes := ["Front amber indicator", "Rear indicator lens"]
+			if index == game.VOVLO_434:
+				prefixes.append("Side indicator lens")
 			for lamps in [signals.left, signals.right]:
 				var names: Array = lamps.map(func(lamp: MeshInstance3D): return String(lamp.get_parent().name))
-				for prefix in ["Front amber indicator", "Rear indicator lens"]:
+				for prefix in prefixes:
 					if not names.any(func(lens_name: String): return lens_name.begins_with(prefix)):
 						printerr("An indicator is missing its modeled lens on ", tile.text)
 						quit(1)

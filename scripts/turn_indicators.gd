@@ -60,6 +60,9 @@ func fit(actor: Node3D, model: Node3D, bounds: AABB) -> void:
 		if "wheel" in label or "tyre" in label or "tire" in label or "bucket" in label or "blade" in label or "mirror" in label:
 			continue
 		var panel := (to_actor * part.global_transform) * part.get_aabb()
+		if label.begins_with("side indicator lens"):
+			use_existing_lens(part, -1 if panel.get_center().x < bounds.get_center().x else 1)
+			continue
 		if _is_indicator_lens(label):
 			var offset := panel.get_center() - bounds.get_center()
 			if absf(offset.x) > bounds.size.x * .13 and absf(offset.z) > bounds.size.z * .2:
