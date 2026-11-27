@@ -413,6 +413,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - De fyra passagerardörrarna fick modellerade lampor som lyser ned på landgångsdäcken. Armaturerna granskades i Godot. Färjeprovet bekräftade att lamporna tänds på natten och släcks på dagen.
 - [ ] [`sport_sedan.glb`](../vehicles/sport_sedan.glb)
   - BWM M3 E33 fick ett upphöjt modellemblem på bakluckan. Granskat i Godot och fordonsprovet passerade.
+  - Den dubbla frontgrillen fick metallramar, försänkta insatser och fem lodräta lameller per öppning. Granskad i Godot. Fordonsprovet passerade.
 - [ ] [`compact_convertible.glb`](../vehicles/compact_convertible.glb)
   - Mino Kuper S fick ett eget kopparfärgat M-monogram på motorhuven och bakluckan samt nytt namn i fordonsgalleriet. Emblemen granskades i Godot. Fordonsprovet och språkkontrollen passerade.
 - [ ] [`electric_sedan.glb`](../vehicles/electric_sedan.glb)

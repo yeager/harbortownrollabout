@@ -531,8 +531,13 @@ def build(key, length, width, axles, color, belt, cabin):
                 bar("Volva grille chevron",(side*.062,grille_y-.018,.775),
                     (0,grille_y-.018,.698),.017,METAL)
         elif key=="sport_sedan":
-            for x in [-.09,.09]: box("Kidney surround",x,-end-.074,belt*.74,.15,.035,.20,METAL)
-            for x in [-.09,.09]: box("Kidney opening",x,-end-.097,belt*.74,.115,.025,.17,DARK)
+            for centre_x in (-.09,.09):
+                box("Twin grille surround",centre_x,-end-.074,belt*.74,.15,.035,.20,METAL,.016)
+                box("Twin grille recessed insert",centre_x,-end-.090,belt*.74,
+                    .119,.009,.164,RUBBER,.010)
+                for offset in (-.041,-.021,0,.021,.041):
+                    box("Twin grille upright",centre_x+offset,-end-.099,belt*.74,
+                        .008,.014,.142,DARK,.002)
         if key == "classic_fastback":
             box("Saav grille backing",0,-end-.063,.657,.669,.075,.225,DARK,.020)
             for z in (.554,.761):
