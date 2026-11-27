@@ -156,8 +156,8 @@ for side in (-1,1):
                        .012,.013,v.METAL,True,20,root)
             box("Door lock keyway",(side*.938,handle_y,.852),
                 (.003,.004,.012),v.RUBBER,.001)
-    for y in (.23,1.35):
-        rod("Door shut line",(side*.922,y,.44),(side*.924,y,.945),.005,v.DARK)
+    for y, bottom in ((.23, .44), (1.35, .715)):
+        rod("Door shut line",(side*.922,y,bottom),(side*.924,y,.945),.005,v.DARK)
     box("Mirror mounting pad",(side*.873,-.78,1.141),(.047,.130,.108),v.RUBBER,.016)
     rod("Mirror support arm",(side*.885,-.78,1.125),(side*.952,-.77,1.154),
         .032,v.DARK)
@@ -196,6 +196,19 @@ for side in (-1,1):
         valve_end = (side*.930,y+.211,.383)
         rod("Tire valve stem",valve_base,valve_end,.008,v.DARK)
         rod("Tire valve cap",valve_end,(side*.938,y+.217,.385),.009,v.METAL)
+
+# Follow the taper of the rear quarter panel above and behind the wheel.
+fuel_door_angles = [step * math.tau / 48 for step in range(48)]
+for name, finish, profile in [
+    ("Fuel door perimeter", v.DARK, [(.896, .071), (.903, .071), (.905, .068)]),
+    ("Painted fuel door", paint, [(.903, .065), (.908, .065), (.911, .060)]),
+]:
+    v.profile_loft(name, [
+        [(depth - .053 * radius * math.cos(angle) - .22 * radius * math.sin(angle),
+          1.53 + radius * math.cos(angle), .855 + radius * math.sin(angle))
+         for angle in fuel_door_angles]
+        for depth, radius in profile
+    ], finish, root)
 
 box("Front bumper", (0,-1.983,.418),(1.68,.225,.315),v.DARK,.071)
 box("Rear bumper", (0,1.929,.433),(1.69,.211,.271),v.DARK,.074)
