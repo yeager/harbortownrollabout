@@ -79,8 +79,18 @@ def build_pickup():
     panel("Cargo bed floor", (0, 2.02, .91), (1.91, 1.69, .12), liner)
     panel("Bed front bulkhead", (0, 1.26, 1.09), (1.86, .13, .40), liner)
     panel("Tailgate", (0, 2.84, 1.10), (1.93, .14, .49), paint)
-    panel("Tailgate handle", (0, 2.922, 1.22), (.28, .045, .074), trim)
+    panel("Tailgate handle bezel", (0, 2.919, 1.22), (.295, .028, .089), trim, .019)
+    panel("Tailgate finger pocket", (0, 2.935, 1.21), (.243, .012, .043), liner, .011)
+    for x in [-.104, .104]:
+        panel("Tailgate handle pivot", (x, 2.946, 1.235), (.027, .029, .030), trim, .008)
+    panel("Tailgate bridge grip", (0, 2.961, 1.235), (.229, .025, .026), alloy, .009)
     panel("Rear step bumper", (0, 2.89, .72), (2.03, .34, .23), trim, .085)
+    for side in [-1, 1]:
+        panel("Rear bumper step insert", (side*.59, 2.923, .835),
+              (.54, .205, .023), liner, .018)
+        for row in range(4):
+            panel("Rear bumper step tread", (side*.59, 2.855+row*.044, .847),
+                  (.464, .014, .012), trim, .005)
     for index in range(-6, 7):
         panel("Cargo floor rib", (index*.125, 2.04, .976), (.040, 1.48, .017), liner, .006)
     for side in [-1, 1]:
