@@ -41,6 +41,21 @@ def headlight(label, x, y, z, radius):
         for depth,scale in section
     ],v.HEADLAMP,root)
 
+def tire(side, y):
+    profile = [
+        (-.098,.211),(-.098,.270),(-.092,.292),(-.080,.309),
+        (-.062,.318),(-.046,.318),(-.043,.309),(-.033,.309),(-.030,.318),
+        (-.007,.318),(-.004,.309),(.004,.309),(.007,.318),
+        (.030,.318),(.033,.309),(.043,.309),(.046,.318),(.062,.318),
+        (.080,.309),(.092,.292),(.098,.270),(.098,.211),
+    ]
+    angles = [step*math.tau/64 for step in range(64)]
+    v.profile_loft("Däck", [
+        [(side*.797+offset,y+radius*math.sin(angle),.318+radius*math.cos(angle))
+         for angle in angles]
+        for offset,radius in profile
+    ],v.RUBBER,root)
+
 body = v.mesh_from_rings("Rounded body and short bonnet", [
     (-2.04,.75,.25,.54,.72),(-1.92,.88,.23,.62,.81),
     (-1.61,.92,.22,.69,.89),(-1.15,.925,.22,.77,.99),
@@ -105,7 +120,7 @@ for side in (-1,1):
     lamp("Rear indicator lens",side*.776,2.006,.835,.052,amber)
     lamp("Reversing lens",side*.733,2.004,.762,.030,reverse)
     for y in (-1.28,1.30):
-        v.cylinder("Däck",(side*.797,y,.318),.318,.197,v.RUBBER,True,48,root)
+        tire(side,y)
         v.cylinder("Wheel hub barrel",(side*.884,y,.318),.209,.045,v.DARK,True,40,root)
         v.cylinder("Wheel hub cap",(side*.913,y,.318),.077,.028,v.METAL,True,32,root)
         for i in range(8):
