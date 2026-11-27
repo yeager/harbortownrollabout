@@ -45,9 +45,16 @@ window("Swept windscreen", [(-.84,-2.04,1.47),(.84,-2.04,1.47),
                             (.79,-1.28,2.43),(-.79,-1.28,2.43)])
 box("Freezer body", (0,1.25,1.72), (2.14,3.43,1.76), blue,.075)
 box("Front bumper", (0,-2.97,.69), (1.91,.17,.30), v.DARK,.08)
-box("Radiator", (0,-2.95,.99), (1.16,.10,.28), v.BLACK)
-for h in (.91,1,1.09):
-    box("Grille louvre", (0,-3.007,h), (1.08,.025,.018), v.METAL)
+box("Recessed radiator core",(0,-2.983,.997),(1.11,.035,.281),v.BLACK,.018)
+for x in (-.566,.566):
+    box("Grille side frame",(x,-3.036,.997),(.053,.116,.308),v.DARK,.016)
+for z in (.857,1.137):
+    box("Grille horizontal frame",(0,-3.036,z),(1.10,.116,.041),v.DARK,.011)
+for index in range(23):
+    x = (index-11)*.046
+    box("Radiator cooling fin",(x,-3.006,.997),(.015,.018,.235),v.DARK,.003)
+for z in (.921,.997,1.073):
+    box("Grille louvre",(0,-3.054,z),(1.083,.062,.025),v.METAL,.006)
 reverse_glass = v.material("Reverse lamp ice van lens", (.79,.87,.93), .12,.23)
 signal_glass = v.material("Amber indicator glass", (.96,.34,.018), .12,.26)
 mirror_glass = v.material("Door mirror glass", (.45,.55,.62), .88,.13)

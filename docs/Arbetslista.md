@@ -381,6 +381,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Dörrspeglarna fick separata monteringsplattor, armar, fällgångjärn och spegelglas med gummilist. Modellen granskades i Godot och fordonsprovet passerade.
   - Takhögtalarna fick utsvängda trattar med rundad kant, synliga element och skruvade takfästen. Granskade i Godot. Glassrutten och glassbilens melodi verifierades.
   - De sex frysluckorna fick infällda handtag med lås och gångjärn med separata fästblad, hylsor och ledtappar. Granskat i Godot. Glassrutten passerade.
+  - Kylargrillen fick en separat ram, tre horisontella lameller och 23 lodräta kylflänsar framför den försänkta kylaren. Granskad i Godot. Fordonsprovet passerade.
 - [ ] [`lotten.glb`](../vehicles/lotten.glb)
 - [ ] [`sport_sedan.glb`](../vehicles/sport_sedan.glb)
   - BWM M3 E33 fick ett upphöjt modellemblem på bakluckan. Granskat i Godot och fordonsprovet passerade.
