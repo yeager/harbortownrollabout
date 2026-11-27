@@ -124,7 +124,15 @@ for side in (-1,1):
     for y in (-1.96,1.85):
         disc("Däck", (s*.91,y,.405), .405,.26,v.RUBBER)
         disc("Wheel hub steel", (s*1.05,y,.405), .255,.065,v.METAL)
-        disc("Center cap", (s*1.088,y,.405), .115,.035,v.DARK)
+        disc("Wheel centre dish",(s*1.085,y,.405),.128,.026,v.METAL)
+        disc("Center cap",(s*1.104,y,.405),.049,.028,v.DARK)
+        for index in range(5):
+            angle = (index+.5)*math.tau/5
+            nut_y = y+.086*math.sin(angle)
+            nut_z = .405+.086*math.cos(angle)
+            disc("Wheel bolt seat",(s*1.100,nut_y,nut_z),.023,.012,v.DARK)
+            v.cylinder("Wheel lug nut",(s*1.114,nut_y,nut_z),.015,.025,
+                       v.METAL,True,6,root)
         for n in range(8):
             a = n*math.tau/8
             disc("Fälghål", (s*1.087,y+.184*math.sin(a),.405+.184*math.cos(a)), .026,.01,v.DARK)
