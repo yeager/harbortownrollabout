@@ -413,6 +413,18 @@ for side in (-1, 1):
     ], reflector, root)
 box("Rear bumper central rub strip", (0, 2.034, .408),
     (.965, .022, .035), v.RUBBER, .013)
+exhaust_angles = [step * math.tau / 40 for step in range(40)]
+v.profile_loft("Rolled exhaust outlet", [
+    [(-.532 + width * math.cos(angle), depth, .238 + height * math.sin(angle))
+     for angle in exhaust_angles]
+    for depth, width, height in [
+        (1.756, .038, .028), (1.950, .047, .029), (2.036, .048, .030),
+        (2.049, .045, .028), (2.051, .038, .021), (2.041, .035, .020),
+        (1.958, .035, .020),
+    ]
+], v.METAL, root, close_ends=False)
+box("Dark exhaust interior", (-.532, 1.968, .238), (.074, .018, .043), v.RUBBER, .012)
+
 box("Lower grille backing", (0, -2.041, .386), (.940, .013, .176), v.RUBBER, .030)
 for x in (-.33, -.22, -.11, 0, .11, .22, .33):
     box("Lower grille upright", (x, -2.056, .386), (.015, .028, .165), v.DARK, .004)
