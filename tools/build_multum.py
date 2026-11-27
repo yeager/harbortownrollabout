@@ -130,9 +130,26 @@ cabin = [
     (1.87,.747,1.055,1.40,1.52),
 ]
 v.mesh_from_rings("Panoramic glasshouse", cabin, glazing, root,.014,cabin_section)
-v.mesh_from_rings("Rounded roof skin", [
-    (y,w*.92,c-.037,c-.014,c+.012) for y,w,b,s,c in cabin[2:-1]
-], paint, root,.015,cabin_section)
+# The roof edge overlaps the top of the glazing and rounds over the pillars.
+roof_sections = [
+    (-.425, .768, 1.733, .003),
+    (-.37, .798, 1.752, .012),
+    (-.31, .813, 1.770, .020),
+    (.40, .798, 1.795, .024),
+    (1.17, .789, 1.784, .024),
+    (1.65, .764, 1.748, .020),
+    (1.77, .738, 1.685, .013),
+    (1.823, .703, 1.657, .004),
+]
+v.profile_loft("Rounded roof skin", [
+    [(width * fraction, y, crown + rise - drop)
+     for fraction, drop in [
+         (-.985, .044), (-1, .026), (-.965, .012), (-.78, .005),
+         (-.40, .001), (0, 0), (.40, .001), (.78, .005),
+         (.965, .012), (1, .026), (.985, .044),
+     ]]
+    for y, width, crown, rise in roof_sections
+], paint, root)
 # Shape the raised lip across the car so both ends roll into the wings.
 cowl_sections = [
     (0, -1.251, 1.033, .168, .115),
@@ -168,9 +185,6 @@ for side in (-1,1):
         ],v.DARK,root,close_ends=False)
     for a,b in zip(cabin,cabin[1:]):
         rod("Window lower seal",(side*a[1],a[0],a[2]),(side*b[1],b[0],b[2]),.017,v.DARK)
-    for a,b in zip(cabin[2:],cabin[3:]):
-        rod("Window roof seal",(side*a[1]*.91,a[0],a[4]-.022),
-            (side*b[1]*.91,b[0],b[4]-.022),.015,v.DARK)
     for start, end, end_depth in [(-.704, .198, .918), (.259, 1.037, .910)]:
         sections = [
             (start, .918, .18), (start + .026, .918, .72),
