@@ -5235,6 +5235,10 @@ func _update_daylight(delta: float) -> void:
 	if night == last_night or (night > 0.0 and night < 1.0 and absf(night-last_night) < .006):
 		return
 	last_night = night
+	scooter.update_lights(night)
+	for person in walker_data:
+		if person.has("scooter"):
+			person.scooter.update_lights(night)
 	if bus_plate_finish:
 		bus_plate_finish.emission_energy_multiplier = .28 * night
 		bus_plate_lamp_finish.emission_energy_multiplier = 1.1 * night
@@ -6159,6 +6163,7 @@ func _build_depot() -> void:
 	_place_umbrella()
 	_place_thermos()
 	walker.add_child(scooter)
+	scooter.update_lights(maxf(last_night, 0.0))
 	shops.show_carried_toy()
 	_make_walker("SUV driver",0,0,1,Color("#648faa"),Color("#30414d"))
 	road_driver = walker_data.pop_back().actor
@@ -7754,6 +7759,7 @@ func _build_pedestrians() -> void:
 	var neighbour: Dictionary = walker_data.back()
 	var local_scooter := Scooter.new()
 	neighbour.actor.add_child(local_scooter)
+	local_scooter.update_lights(maxf(last_night, 0.0))
 	_animate_steps(neighbour.actor,0.0,1.0)
 	local_scooter.mount(neighbour.actor)
 	neighbour.scooter = local_scooter

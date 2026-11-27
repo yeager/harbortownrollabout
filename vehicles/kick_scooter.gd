@@ -12,8 +12,27 @@ var elbow_stance: Array[Quaternion] = []
 var stance: Array[Transform3D] = []
 var turn_signals := preload("res://scripts/turn_indicators.gd").new()
 
+var headlamp := SpotLight3D.new()
+var lamp_finishes: Array[StandardMaterial3D] = []
+
 func _ready() -> void:
 	add_child(preload("res://vehicles/electric_kick_scooter.glb").instantiate())
+	for pattern in ["Headlamp optic*", "Rear red marker"]:
+		var lenses := find_children(pattern, "MeshInstance3D", true, false)
+		var lens := lenses[0] as MeshInstance3D
+		var finish := lens.get_active_material(0).duplicate() as StandardMaterial3D
+		finish.emission_enabled = true
+		lamp_finishes.append(finish)
+		for part: MeshInstance3D in lenses:
+			part.material_override = finish
+	headlamp.name = "Scooter headlight beam"
+	headlamp.position = Vector3(0, 1.273, -.457)
+	headlamp.rotation.x = -.19
+	headlamp.light_color = Color("#eef6ff")
+	headlamp.spot_range = 11.0
+	headlamp.spot_angle = 25.0
+	add_child(headlamp)
+	update_lights(0.0)
 	turn_signals.fit_anchors(self,
 		[Vector3(-.252, 1.03, -.472), Vector3(-.087, .22, .54)],
 		[Vector3(.252, 1.03, -.472), Vector3(.087, .22, .54)], Vector3(.054, .033, .027))
@@ -23,6 +42,12 @@ func _ready() -> void:
 	grips.sort_custom(func(a: Node3D,b: Node3D): return to_local(a.global_position).x < to_local(b.global_position).x)
 	position.y = -DECK_HEIGHT
 	hide()
+
+func update_lights(night: float) -> void:
+	headlamp.visible = night > .02
+	headlamp.light_energy = 2.3 * night
+	for finish in lamp_finishes:
+		finish.emission_energy_multiplier = 1.2 * night
 
 func mount(rider: Node3D) -> void:
 	if visible: return
