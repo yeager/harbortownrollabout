@@ -2193,3 +2193,15 @@ msgstr "Fait Multum"
 
 msgid "Vovlo 434"
 msgstr "Vovlo 434"
+
+msgid "Gamepad"
+msgstr "Manette"
+
+msgid "Stick dead zone"
+msgstr "Zone morte des sticks"
+
+msgid "Gamepad camera speed"
+msgstr "Vitesse de la caméra à la manette"
+
+msgid "Invert gamepad camera vertically"
+msgstr "Inverser l’axe vertical de la caméra à la manette"

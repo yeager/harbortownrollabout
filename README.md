@@ -25,6 +25,8 @@ Connect a gamepad recognized by your system. Use the **D-pad** and the **bottom 
 
 The **left face button** (X / Square) enters or exits a vehicle, the **top face button** (Y / Triangle) switches camera view, and the **right shoulder button** sounds the horn. On foot, press the **right face button** (B / Circle) to jump or the **bottom face button** for the current mission action. While driving, **B / Circle** toggles the siren or engine sound, and the **left shoulder button** toggles emergency lights on equipped vehicles. **Start / Options** pauses or resumes. **Back / Share** opens or closes the phone. Click the **left stick** to unfold or put away the scooter, and click the **right stick** to open the town map in free drive. Close it with B / Circle or by clicking the right stick again. Holding the **left shoulder button** while walking forward makes the character run.
 
+Open **Settings → Gamepad** to adjust the stick dead zone, camera speed and vertical camera direction. In Settings, use the **shoulder buttons** to switch tabs and the **D-pad** to change sliders.
+
 ## Your first drive
 
 Click a vehicle picture, choose Axel or Alma, then select **Start driving**. Hold **W** to move, steer with **A** and **D**, and press **S** to brake. The arrow keys work too. If you prefer the mouse, hold the left button to drive and move the mouse sideways to steer. **R** brings you back to a safe spot if you get stuck.

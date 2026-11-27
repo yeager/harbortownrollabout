@@ -2178,3 +2178,15 @@ msgstr "Fait Multum"
 
 msgid "Vovlo 434"
 msgstr "Vovlo 434"
+
+msgid "Gamepad"
+msgstr "Håndkontroll"
+
+msgid "Stick dead zone"
+msgstr "Dødsone for styrespakene"
+
+msgid "Gamepad camera speed"
+msgstr "Kamerahastighet med håndkontroll"
+
+msgid "Invert gamepad camera vertically"
+msgstr "Inverter vertikal kamerastyring på håndkontrollen"

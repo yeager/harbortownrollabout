@@ -2107,3 +2107,15 @@ msgstr ""
 
 msgid "Vovlo 434"
 msgstr ""
+
+msgid "Gamepad"
+msgstr ""
+
+msgid "Stick dead zone"
+msgstr ""
+
+msgid "Gamepad camera speed"
+msgstr ""
+
+msgid "Invert gamepad camera vertically"
+msgstr ""

@@ -141,6 +141,14 @@ var number_vehicle_switches := false
 var number_camera := false
 var insert_help := false
 var ctrl_run := false
+const GAMEPAD_STICK_ACTIONS := [
+	"pad_left", "pad_right", "pad_forward", "pad_back",
+	"pad_look_left", "pad_look_right", "pad_look_up", "pad_look_down",
+]
+var gamepad_deadzone := 0.20
+var gamepad_camera_speed := 1.0
+var gamepad_invert_y := false
+
 var radio_keys: Array[int] = [KEY_J, KEY_N]
 var driving_hints := Label.new()
 var driving_footer_margin := MarginContainer.new()
@@ -934,7 +942,9 @@ func _process(delta: float) -> void:
 		if _world_controls_available():
 			var pad_look := Input.get_vector("pad_look_left", "pad_look_right", "pad_look_up", "pad_look_down")
 			if not pad_look.is_zero_approx():
-				_look_around(pad_look * 130.0 * delta)
+				if gamepad_invert_y:
+					pad_look.y = -pad_look.y
+				_look_around(pad_look * 130.0 * gamepad_camera_speed * delta)
 		var tram_controls := tram_mode == 2 and _world_controls_available()
 		var tram_keys := tram_controls and _keyboard_pedals_available()
 		var tram_gas := tram_controls and (mouse_gas or (tram_keys and (Input.is_action_pressed("pad_accelerate") or Input.is_action_pressed("ui_up") or _movement_pressed(KEY_W))))
@@ -1208,6 +1218,11 @@ func _notification(what: int) -> void:
 		_translate_boule_controls()
 		renderer_choices.accessibility_name = tr("Graphics mode")
 		game_volume_slider.accessibility_name = tr("Game volume")
+		var pad_sliders := {"GamepadDeadzone": "Stick dead zone", "GamepadCameraSpeed": "Gamepad camera speed"}
+		for slider_name in pad_sliders:
+			var slider := find_child(slider_name, true, false) as HSlider
+			if slider:
+				slider.accessibility_name = tr(pad_sliders[slider_name])
 		traffic_volume_slider.accessibility_name = tr("Traffic sirens")
 		for tile: Button in vehicle_selector.get_children():
 			tile.accessibility_name = tr(tile.text)
@@ -11724,6 +11739,7 @@ func _build_overlay() -> void:
 	profile_toggle.toggled.connect(func(enabled: bool): _select_player_profile(play_as_alma, enabled))
 	header.add_child(profile_toggle)
 	var settings_toggle := _button("Settings", 220)
+	settings_toggle.name = "SettingsButton"
 	settings_toggle.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	var menu_actions := HBoxContainer.new()
 	menu_actions.alignment = BoxContainer.ALIGNMENT_CENTER
@@ -11763,7 +11779,7 @@ func _build_overlay() -> void:
 	var tabs := TabContainer.new()
 	dialog.add_child(tabs)
 	var pages: Array[VBoxContainer] = []
-	for title in ["Graphics", "Sound", "Driving", "World", "Language"]:
+	for title in ["Graphics", "Sound", "Driving", "World", "Language", "Gamepad"]:
 		var page := VBoxContainer.new()
 		page.alignment = BoxContainer.ALIGNMENT_CENTER
 		page.add_theme_constant_override("separation",12)
@@ -11777,6 +11793,23 @@ func _build_overlay() -> void:
 		if title == "Language":
 			tabs.set_tab_icon(scroll.get_index(), preload("res://branding/language-globe.svg"))
 		pages.append(page)
+	var gamepad_tab := pages.size() - 1
+	var gamepad_first_control := _build_gamepad_settings(pages[gamepad_tab])
+	dialog.window_input.connect(func(event: InputEvent):
+		if not event is InputEventJoypadButton or not event.pressed:
+			return
+		match event.button_index:
+			JOY_BUTTON_B: dialog.hide()
+			JOY_BUTTON_LEFT_SHOULDER, JOY_BUTTON_RIGHT_SHOULDER:
+				var direction := 1 if event.button_index == JOY_BUTTON_RIGHT_SHOULDER else -1
+				tabs.current_tab = posmod(tabs.current_tab + direction, tabs.get_tab_count())
+				if tabs.current_tab == gamepad_tab:
+					gamepad_first_control.grab_focus()
+				else:
+					tabs.get_tab_bar().grab_focus()
+			_: return
+		dialog.set_input_as_handled()
+	)
 	var calm_toggle := CheckButton.new()
 	calm_toggle.name = "CalmMode"
 	calm_toggle.text = "Calm mode"
@@ -13563,12 +13596,78 @@ func _store_player_progress(config: ConfigFile, section: String) -> void:
 	config.set_value(section,"carried_toy",shops.carried_toy)
 	config.set_value(section,"pizza_order",shops.order_recipe)
 
+func _apply_gamepad_deadzone() -> void:
+	for action in GAMEPAD_STICK_ACTIONS:
+		InputMap.action_set_deadzone(action, gamepad_deadzone)
+
+func _build_gamepad_settings(page: VBoxContainer) -> HSlider:
+	var deadzone := HSlider.new()
+	deadzone.name = "GamepadDeadzone"
+	deadzone.min_value = 5
+	deadzone.max_value = 50
+	deadzone.step = 5
+	deadzone.value = 100.0 * gamepad_deadzone
+	deadzone.value_changed.connect(func(value: float):
+		gamepad_deadzone = value / 100.0
+		_apply_gamepad_deadzone()
+		_save_preferences()
+	)
+	var camera_speed := HSlider.new()
+	camera_speed.name = "GamepadCameraSpeed"
+	camera_speed.min_value = 50
+	camera_speed.max_value = 200
+	camera_speed.step = 10
+	camera_speed.value = 100.0 * gamepad_camera_speed
+	camera_speed.value_changed.connect(func(value: float):
+		gamepad_camera_speed = value / 100.0
+		_save_preferences()
+	)
+	var grid := GridContainer.new()
+	grid.columns = 3
+	grid.add_theme_constant_override("h_separation", 12)
+	grid.add_theme_constant_override("v_separation", 12)
+	page.add_child(grid)
+	var sliders := {"Stick dead zone": deadzone, "Gamepad camera speed": camera_speed}
+	for caption: String in sliders:
+		var label := Label.new()
+		label.text = caption
+		var slider: HSlider = sliders[caption]
+		var value_label := Label.new()
+		value_label.text = "%d%%" % slider.value
+		value_label.custom_minimum_size.x = 58
+		slider.value_changed.connect(func(value: float): value_label.text = "%d%%" % value)
+		slider.accessibility_name = tr(caption)
+		slider.focus_mode = Control.FOCUS_ALL
+		slider.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		slider.custom_minimum_size.x = 140
+		grid.add_child(label)
+		grid.add_child(slider)
+		grid.add_child(value_label)
+	var invert := CheckButton.new()
+	invert.name = "GamepadInvertY"
+	invert.text = "Invert gamepad camera vertically"
+	invert.button_pressed = gamepad_invert_y
+	invert.toggled.connect(func(enabled: bool):
+		gamepad_invert_y = enabled
+		_save_preferences()
+	)
+	page.add_child(invert)
+	deadzone.focus_neighbor_bottom = deadzone.get_path_to(camera_speed)
+	camera_speed.focus_neighbor_top = camera_speed.get_path_to(deadzone)
+	camera_speed.focus_neighbor_bottom = camera_speed.get_path_to(invert)
+	invert.focus_neighbor_top = invert.get_path_to(camera_speed)
+	return deadzone
+
 func _load_preferences() -> void:
 	var config := ConfigFile.new()
 	var loaded := config.load(SETTINGS_PATH) == OK
 	var saved_language = config.get_value("language", "locale", "")
 	language_preference = saved_language.strip_edges() if saved_language is String else ""
 	L10n.apply_language(language_preference)
+	gamepad_deadzone = clampf(float(config.get_value("gamepad", "deadzone", 0.20)), 0.05, 0.50)
+	gamepad_camera_speed = clampf(float(config.get_value("gamepad", "camera_speed", 1.0)), 0.50, 2.0)
+	gamepad_invert_y = config.get_value("gamepad", "invert_y", false) == true
+	_apply_gamepad_deadzone()
 	if not loaded:
 		return
 	for i in RADIO_KEYS.size():
@@ -13636,6 +13735,9 @@ func _save_preferences() -> void:
 	config.set_value("player","separate_profiles",separate_profiles)
 	_store_player_progress(config, _profile_section())
 	config.set_value("language", "locale", language_preference)
+	config.set_value("gamepad", "deadzone", gamepad_deadzone)
+	config.set_value("gamepad", "camera_speed", gamepad_camera_speed)
+	config.set_value("gamepad", "invert_y", gamepad_invert_y)
 	for channel: String in MIX_CHANNELS:
 		config.set_value("audio", channel.to_lower(), roundi(_channel_volume(channel)))
 	config.set_value("audio","volume",roundi(volume))

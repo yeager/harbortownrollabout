@@ -22,10 +22,54 @@ func button(which: int) -> void:
 	Input.parse_input_event(event)
 	Input.flush_buffered_events()
 
+func check_settings(game) -> bool:
+	var dialog := game.find_child("GameSettings", true, false) as AcceptDialog
+	var deadzone := dialog.find_child("GamepadDeadzone", true, false) as HSlider
+	var camera_speed := dialog.find_child("GamepadCameraSpeed", true, false) as HSlider
+	var invert := dialog.find_child("GamepadInvertY", true, false) as CheckButton
+	var tabs := deadzone.get_parent().get_parent().get_parent().get_parent() as TabContainer
+	var settings := game.find_child("SettingsButton", true, false) as Button
+	settings.grab_focus()
+	button(JOY_BUTTON_A)
+	await process_frame
+	button(JOY_BUTTON_LEFT_SHOULDER)
+	if tabs.current_tab != tabs.get_tab_count() - 1:
+		return false
+	if dialog.gui_get_focus_owner() != deadzone:
+		return false
+	button(JOY_BUTTON_DPAD_RIGHT)
+	if not is_equal_approx(deadzone.value, 25.0):
+		return false
+	deadzone.value = 40.0
+	button(JOY_BUTTON_DPAD_DOWN)
+	if dialog.gui_get_focus_owner() != camera_speed:
+		return false
+	camera_speed.value = 150.0
+	button(JOY_BUTTON_DPAD_DOWN)
+	if dialog.gui_get_focus_owner() != invert:
+		return false
+	button(JOY_BUTTON_A)
+	button(JOY_BUTTON_B)
+	if dialog.visible:
+		return false
+	game.gamepad_deadzone = .20
+	game.gamepad_camera_speed = 1.0
+	game.gamepad_invert_y = false
+	game._load_preferences()
+	axis(JOY_AXIS_LEFT_X, .30)
+	var ignores_drift := is_zero_approx(Input.get_action_strength("pad_right"))
+	axis(JOY_AXIS_LEFT_X, 0)
+	return ignores_drift and is_equal_approx(game.gamepad_deadzone, .40) and is_equal_approx(game.gamepad_camera_speed, 1.5) and game.gamepad_invert_y
+
 func run() -> void:
 	var game = load("res://main.tscn").instantiate()
 	root.add_child(game)
 	await process_frame
+	if not await check_settings(game):
+		printerr("Gamepad settings navigation, saving or deadzone failed")
+		quit(1)
+		return
+	game.start_button.grab_focus()
 	var start_focus := root.gui_get_focus_owner()
 	button(JOY_BUTTON_DPAD_UP)
 	if root.gui_get_focus_owner() == start_focus:
@@ -92,6 +136,14 @@ func run() -> void:
 		printerr("Gamepad camera control failed")
 		quit(1)
 		return
+	var old_height: float = game.orbit_height
+	axis(JOY_AXIS_RIGHT_Y, .8)
+	game._process(1.0 / 60)
+	axis(JOY_AXIS_RIGHT_Y, 0)
+	if game.orbit_height >= old_height:
+		printerr("Gamepad vertical camera inversion failed")
+		quit(1)
+		return
 	button(JOY_BUTTON_BACK)
 	if not game.phone.handset.is_visible_in_tree() or not game.phone.handset.is_ancestor_of(root.gui_get_focus_owner()):
 		printerr("Gamepad phone control failed")
@@ -150,7 +202,7 @@ func run() -> void:
 		printerr("The gamepad could not close the town map")
 		quit(1)
 		return
-	print("Gamepad menu, steering, pedals, pause, camera, phone, map, emergency controls, seat and walking passed.")
+	print("Gamepad settings, menu, steering, pedals, pause, camera, phone, map, emergency controls, seat and walking passed.")
 	game.queue_free()
 	await process_frame
 	quit()

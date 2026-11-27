@@ -2174,3 +2174,15 @@ msgstr "Fait Multum"
 
 msgid "Vovlo 434"
 msgstr "Vovlo 434"
+
+msgid "Gamepad"
+msgstr "Peliohjain"
+
+msgid "Stick dead zone"
+msgstr "Sauvojen kuollut alue"
+
+msgid "Gamepad camera speed"
+msgstr "Kameran nopeus peliohjaimella"
+
+msgid "Invert gamepad camera vertically"
+msgstr "Käännä peliohjaimen kameran pystysuunta"
