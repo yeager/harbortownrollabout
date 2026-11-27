@@ -1135,6 +1135,11 @@ func _input(event: InputEvent) -> void:
 				JOY_BUTTON_B:
 					if walker.visible and not boule_seated and not scooter.visible and not ferry_passenger and tram_mode == 0 and not operating_excavator and not boating and walk_jump_left <= 0:
 						walk_jump_left = WALK_JUMP_TIME
+					elif siren_button.is_visible_in_tree() and not siren_button.disabled:
+						siren_button.pressed.emit()
+				JOY_BUTTON_LEFT_SHOULDER:
+					if light_button.is_visible_in_tree() and not light_button.disabled:
+						light_button.pressed.emit()
 				JOY_BUTTON_X: _change_seat()
 				JOY_BUTTON_Y: _toggle_camera_view()
 				JOY_BUTTON_LEFT_STICK: _toggle_scooter()

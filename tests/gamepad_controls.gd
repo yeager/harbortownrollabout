@@ -39,6 +39,14 @@ func run() -> void:
 		printerr("The gamepad could not start from the menu")
 		quit(1)
 		return
+	var old_lights: bool = game.lights_on
+	var old_sound: bool = game.sound_on
+	button(JOY_BUTTON_LEFT_SHOULDER)
+	button(JOY_BUTTON_B)
+	if game.lights_on == old_lights or game.sound_on == old_sound:
+		printerr("Gamepad emergency light or siren control failed")
+		quit(1)
+		return
 	axis(JOY_AXIS_TRIGGER_RIGHT, 1)
 	axis(JOY_AXIS_LEFT_X, .55)
 	for frame in 45:
@@ -89,6 +97,12 @@ func run() -> void:
 		printerr("Gamepad phone control failed")
 		quit(1)
 		return
+	button(JOY_BUTTON_LEFT_SHOULDER)
+	button(JOY_BUTTON_B)
+	if game.lights_on == old_lights or game.sound_on == old_sound:
+		printerr("Gamepad emergency controls must stay inactive while the phone is open")
+		quit(1)
+		return
 	button(JOY_BUTTON_BACK)
 	if root.gui_get_focus_owner() != null:
 		printerr("Closing the phone left menu focus behind")
@@ -136,7 +150,7 @@ func run() -> void:
 		printerr("The gamepad could not close the town map")
 		quit(1)
 		return
-	print("Gamepad menu, steering, pedals, pause, camera, phone, map, seat and walking passed.")
+	print("Gamepad menu, steering, pedals, pause, camera, phone, map, emergency controls, seat and walking passed.")
 	game.queue_free()
 	await process_frame
 	quit()
