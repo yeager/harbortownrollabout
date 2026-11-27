@@ -9457,6 +9457,26 @@ func _fit_bus_exterior(model: Node3D) -> void:
 		hinge.material_override = hinge_finish
 		var pin := _make_box("Engine hatch hinge pin", Vector3(.15,.016,.018), Vector3(0,.012,-.017), Color.WHITE, false, hinge)
 		pin.material_override = hinge_finish
+	var grille := model.find_child("Engine cooling grille", true, false) as MeshInstance3D
+	if grille:
+		for x in [-.36, 0.0, .36]:
+			var rib := _make_box("Engine grille louvre support", Vector3(.016, .194, .011),
+				Vector3(x, -.007, -.019), window_seal.albedo_color, false, grille)
+			rib.material_override = hinge_finish
+		var screw_mesh := CylinderMesh.new()
+		screw_mesh.top_radius = .006
+		screw_mesh.bottom_radius = .006
+		screw_mesh.height = .004
+		screw_mesh.radial_segments = 12
+		screw_mesh.material = hinge_finish
+		for x in [-.549, .549]:
+			for y in [-.089, .089]:
+				var screw := MeshInstance3D.new()
+				screw.name = "Engine grille mounting screw"
+				screw.mesh = screw_mesh
+				screw.rotation.x = PI * .5
+				screw.position = Vector3(x, y, -.016)
+				grille.add_child(screw)
 	var latch := _make_box("Engine hatch latch housing", Vector3(.23,.086,.024),
 		Vector3(0,.95,-5.269), window_seal.albedo_color, false, model)
 	latch.material_override = window_seal
