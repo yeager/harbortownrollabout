@@ -9958,6 +9958,22 @@ func _load_vehicle_model() -> void:
 			arm.reparent(pivot)
 			blades[i].reparent(pivot)
 			wiper_pivots.append(pivot)
+	if vehicle_index == MULTUM:
+		var spindles := vehicle_model.find_children("Windscreen wiper spindle*", "MeshInstance3D", true, false)
+		var arms := vehicle_model.find_children("Windscreen wiper arm*", "MeshInstance3D", true, false)
+		var rails := vehicle_model.find_children("Windscreen wiper blade rail*", "MeshInstance3D", true, false)
+		var edges := vehicle_model.find_children("Windscreen wiper rubber edge*", "MeshInstance3D", true, false)
+		if spindles.size() == 2 and arms.size() == 2 and rails.size() == 2 and edges.size() == 2:
+			for i in spindles.size():
+				var spindle := spindles[i] as MeshInstance3D
+				var pivot := Node3D.new()
+				spindle.get_parent().add_child(pivot)
+				pivot.global_position = spindle.to_global(spindle.get_aabb().get_center())
+				pivot.set_meta("sweep_axis", Vector3(0, .67, .74).normalized())
+				arms[i].reparent(pivot)
+				rails[i].reparent(pivot)
+				edges[i].reparent(pivot)
+				wiper_pivots.append(pivot)
 	if vehicle_index == BUS:
 		var arms := vehicle_model.find_children("Windscreen wiper arm*","MeshInstance3D",true,false)
 		var blades := vehicle_model.find_children("Windscreen wiper blade*","MeshInstance3D",true,false)

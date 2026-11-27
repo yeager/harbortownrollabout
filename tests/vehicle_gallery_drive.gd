@@ -46,8 +46,8 @@ func check_y5_wheels(game) -> bool:
 		model.free()
 	return true
 
-func check_y5_wipers(game) -> bool:
-	var spindles: Array[Node] = game.vehicle_model.find_children("Windscreen wiper spindle cap*", "MeshInstance3D", true, false)
+func check_wipers(game, spindle_pattern: String) -> bool:
+	var spindles: Array[Node] = game.vehicle_model.find_children(spindle_pattern, "MeshInstance3D", true, false)
 	var pivots: Array[Node3D] = game.wiper_pivots
 	if spindles.size() != 2 or pivots.size() != 2:
 		return false
@@ -106,8 +106,8 @@ func check_gallery() -> void:
 			printerr("Menu driving failed for ",tile.text," distance=",travel," turn=",turn)
 			quit(1)
 			return
-		if index == 3 and not check_y5_wipers(game):
-			printerr("Y5 wipers must swing around their modeled spindles and park after rain")
+		if index in [3, game.MULTUM] and not check_wipers(game, "Windscreen wiper spindle cap*" if index == 3 else "Windscreen wiper spindle*"):
+			printerr("Wipers must swing around their modeled spindles and park after rain on ", tile.text)
 			quit(1)
 			return
 		game._update_traffic(0.0)

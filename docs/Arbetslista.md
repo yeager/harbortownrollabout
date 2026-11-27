@@ -449,6 +449,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Multums turkosa lack fick lägre metallandel och högre ytråhet. En jämförelse i samma stadsvy i Godot visade mjukare reflexer på motorhuven och framskärmarna. Körprovet för 29 vägfordon passerade.
   - Multums rutor fick dämpade panoramareflexer som följer spelets ljus och molnighet. Vindrutan granskades i stadens dagsljus i Godot. Körprovet för 29 vägfordon passerade.
   - Multums två ljuskäglor utgår från de nedre strålkastarna. Glasreflexerna granskades i stadens nattläge. Körprovet verifierade strålkastarnas placering och växling mellan dag och natt.
+  - Multums vindrutetorkare sveper vid nederbörd. Svepet granskades i Godot och körprovet verifierade rotation runt båda fästena samt återgång till viloläget.
 - [ ] [`compact_convertible.glb`](../vehicles/compact_convertible.glb)
   - Mino Kuper S fick ett eget kopparfärgat M-monogram på motorhuven och bakluckan samt nytt namn i fordonsgalleriet. Emblemen granskades i Godot. Fordonsprovet och språkkontrollen passerade.
 - [ ] [`electric_sedan.glb`](../vehicles/electric_sedan.glb)
