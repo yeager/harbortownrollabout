@@ -102,6 +102,20 @@ for y, first, last in ((-.48,-1.22,1.29),(.48,-.91,.86)):
     obj.parent = root
     for poly in mesh.polygons:
         poly.use_smooth = True
+    shell = obj.modifiers.new("Moulded guard thickness", "SOLIDIFY")
+    shell.thickness = .004
+    shell.offset = 0
+    angle = .60 if y > 0 else -.79
+    attachment_y = y + .14*math.sin(angle)
+    attachment_z = .118 + .141*math.cos(angle)
+    for side in (-1, 1):
+        support_x = side*.046
+        tube("Mudguard support stay", (side*.053, y, .149),
+             (support_x, attachment_y, attachment_z), .006, charcoal)
+        fastener = cylinder("Mudguard stay fastener",
+                            (support_x, attachment_y, attachment_z+.004),
+                            .006, .005, steel, False, 12, root)
+        fastener.rotation_euler.x = -angle
 cube("Rear red marker",(0,-.606,.179),(.064,.018,.025),tail,.005,root)
 tube("Deck neck",(0,.28,.13),(0,.448,.34),.047,charcoal)
 tube("Handlebar tube",(0,.46,.25),(0,.387,1.275),.025,charcoal)
