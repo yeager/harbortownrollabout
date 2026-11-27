@@ -136,7 +136,12 @@ for height, width in [(4.02,.74),(4.25,.45)]:
     tube("Signal yardarm",(-width,-.8,height),(width,-.8,height),.018,steel)
 for x,y in [(-.8,-1.25),(.72,.16)]:
     tube("Whip antenna",(x,y,3.55),(x,y,4.62),.012,steel)
-box("Radar scanner",(0,-.8,4.43),(.8,.12,.1),white)
+pole("Radar mounting collar",(0,-.8,4.345),.069,.076,steel)
+box("Radar drive housing",(0,-.8,4.391),(.218,.160,.087),white,.020)
+box("Radar scanner",(0,-.8,4.445),(.8,.121,.070),white,.017)
+for x in (-.372,.372):
+    box("Radar scanner end cap",(x,-.8,4.445),(.054,.125,.073),steel,.012)
+box("Radar antenna face",(0,-.862,4.445),(.673,.013,.042),glass,.005)
 gold = material("Signal yellow", (.99,.66,.035))
 red = material("Lifebuoy vermilion", (.82,.045,.022), .04,.46)
 oxide = material("Waterline oxide red", (.39,.065,.043), .13,.50)
