@@ -91,6 +91,23 @@ for start, end in zip(hood_outline, hood_outline[1:] + hood_outline[:1]):
         hood_seam.append((x, y, point.z + .0008))
 v.pipe("Bonnet shut line", hood_seam + hood_seam[:1], .0032, v.DARK, root)
 
+# Project the lower hatch perimeter onto the tail panel and the sloped deck.
+hatch_outline = [
+    (-.622, .728), (.622, .728), (.650, .752), (.650, .816),
+    (.610, .881), (.530, .925), (0, .959), (-.530, .925),
+    (-.610, .881), (-.650, .816), (-.650, .752),
+]
+hatch_seam = []
+for start, end in zip(hatch_outline, hatch_outline[1:] + hatch_outline[:1]):
+    steps = max(1, math.ceil(math.dist(start, end) / .020))
+    for index in range(steps):
+        x, z = Vector(start).lerp(Vector(end), index / steps)
+        hit, point, normal, _ = body_surface.ray_cast(Vector((x, 2.3, z)), Vector((0, -1, 0)))
+        if not hit:
+            raise RuntimeError(f"Hatch edge misses the body at {x:.3f}, {z:.3f}")
+        hatch_seam.append(point + normal * .001)
+v.pipe("Lower hatch shut line", hatch_seam + hatch_seam[:1], .0032, v.DARK, root)
+
 def cabin_section(y, width, sill, gutter, roof):
     return [(-width, y, sill), (-width * .88, y, gutter),
             (-width * .72, y, roof - .012), (0, y, roof),
