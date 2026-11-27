@@ -17,6 +17,7 @@ glazing = v.material("Smoked blue glass", (.045, .102, .126), .28, .18)
 amber = v.material("Amber signal glass", (.91, .29, .015))
 reverse = v.material("Reverse lamp clear glass", (.72, .84, .89))
 cream = v.material("Warm ivory plate", (.91, .90, .82))
+reflector = v.material("Passive ruby reflector", (.43, .013, .021), .12, .32)
 
 def box(name, point, dimensions, finish, radius=.024):
     return v.cube(name, point, dimensions, finish, radius, root)
@@ -199,6 +200,17 @@ for side in (-1,1):
 
 box("Front bumper", (0,-1.983,.418),(1.68,.225,.315),v.DARK,.071)
 box("Rear bumper", (0,1.929,.433),(1.69,.211,.271),v.DARK,.074)
+for side in (-1, 1):
+    box("Rear bumper corner rub strip", (side * .658, 2.035, .487),
+        (.245, .027, .040), v.RUBBER, .016)
+    reflector_angles = [step * math.tau / 32 for step in range(32)]
+    v.profile_loft("Rear bumper reflector", [
+        [(side * .729 + radius * math.cos(angle), depth, .394 + radius * math.sin(angle))
+         for angle in reflector_angles]
+        for depth, radius in [(2.029, .040), (2.038, .040), (2.043, .035)]
+    ], reflector, root)
+box("Rear bumper central rub strip", (0, 2.034, .408),
+    (.965, .022, .035), v.RUBBER, .013)
 box("Lower grille recess",(0,-2.100,.384),(.91,.031,.169),v.RUBBER,.013)
 for z in (.338,.383,.428):
     box("Lower grille rail",(0,-2.118,z),(.833,.020,.014),v.DARK,.005)
