@@ -430,6 +430,8 @@ for z in (.650, .674, .698, .722, .746, .770):
 box("Vovlo grille medallion", (0, -2.096, .709), (.101, .017, .081), v.METAL)
 box("Vovlo grille enamel", (0, -2.107, .709), (.081, .010, .064), v.POLICE_BLUE)
 text("Vovlo emblem", "V", (-.021, -2.115, .687), .052, material=ivory)
+plate_face = v.material("Reflective registration enamel", (.93, .92, .88), .06, .42)
+plate_ink = v.material("Pressed black registration", (.016, .018, .019), 0, .65)
 for y, sign, z in [(-2.058, -1, .430), (2.053, 1, .405)]:
     # The centre projects beyond the body, while the ends follow the fenders.
     bumper_stations = [(-.810, -.150), (-.808, -.058), (-.792, .030),
@@ -446,9 +448,17 @@ for y, sign, z in [(-2.058, -1, .430), (2.053, 1, .405)]:
     v.pipe("Bumper bright line",
            [(x, y + sign * (reach + .004), z + .031)
             for x, reach in bumper_stations], .005, v.METAL, root)
-    box("Plate mount", (0, y + sign*.126, z+.011), (.448, .025, .109), v.RUBBER)
-    box("Rear registration plate" if sign > 0 else "Registration plate", (0, y + sign*.142, z+.011), (.420, .015, .086), ivory, .007)
-    text("Registration", "HVK 434", (sign*.150, y + sign*.153, z-.016), .067, sign > 0, v.RUBBER)
+    box("Plate mount", (0, y + sign * .126, z + .011), (.474, .025, .112), v.RUBBER)
+    box("Rear registration plate" if sign > 0 else "Registration plate",
+        (0, y + sign * .142, z + .011), (.451, .015, .092), plate_face, .006)
+    plate_letters = v.text_obj("Registration", "HVK 434",
+                               (sign * .173, y + sign * .151, z - .017),
+                               .075, plate_ink, root=root, compact=True)
+    plate_letters.rotation_euler = (math.pi / 2, 0, math.pi if sign > 0 else 0)
+    for x in (-.207, .207):
+        screw = v.cylinder("Number plate fastener", (x, y + sign * .151, z + .011),
+                          .005, .004, v.METAL, axis_x=False, vertices=16, root=root)
+        screw.rotation_euler.x = math.pi / 2
 # A shallow lower apron wraps back toward the front wheel openings.
 v.profile_loft("Front lower apron", [
     [(x, y + setback, z) for y, z in [

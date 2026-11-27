@@ -498,6 +498,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Alla fyra hjulhus fick formade, matta innerskärmar som sitter fast i karossen. Granskade i närbild i Godot. Körprovet för 30 vägfordon passerade.
   - Däcken fick sneda tvärspår i slitbanans skuldror. Granskade med framhjulet vridet i Godot. Körprovet för 30 vägfordon passerade.
   - Takantennen fick avsmalnande spröt, metallkrage och gummifäste mot takplåten. Granskad i närbild i Godot. Körprovet för 30 vägfordon passerade.
+  - Registreringsskyltarna fick ljus emalj, större upphöjda svarta tecken och synliga fästen. Granskade framifrån och bakifrån i Godot. Körprovet för 30 vägfordon passerade.
 - [ ] [`compact_convertible.glb`](../vehicles/compact_convertible.glb)
   - Mino Kuper S fick ett eget kopparfärgat M-monogram på motorhuven och bakluckan samt nytt namn i fordonsgalleriet. Emblemen granskades i Godot. Fordonsprovet och språkkontrollen passerade.
 - [ ] [`electric_sedan.glb`](../vehicles/electric_sedan.glb)
