@@ -1302,6 +1302,15 @@ def make_fire_engine():
             for end in (-1,1):
                 cube("Latch pivot",(side*1.117,handle_y+end*.069,1.67),(.017,.022,.023),DARK,.004,root)
             cube("Recessed latch grip",(side*1.123,handle_y,1.67),(.013,.150,.023),DARK,.006,root)
+            cube("Door pull satin insert", (side*1.130, handle_y, 1.674),
+                 (.004, .122, .009), METAL, .002, root)
+            if front < -2:
+                lock_y = handle_y + .054
+                lock = cylinder("Front door key cylinder", (side*1.113, lock_y, 1.635),
+                                .010, .005, METAL, False, 16, root)
+                lock.rotation_euler.y = math.pi / 2
+                cube("Front door key slot", (side*1.116, lock_y, 1.635),
+                     (.002, .009, .003), BLACK, .0008, root)
         # Recess the entry behind the front wheel and expose the step treads.
         recess=cube("Entry recess tool",(side*1.175,-1.088,.792),(.337,.650,.600),None,.044)
         cut=chassis.modifiers.new("Crew entry recess","BOOLEAN")

@@ -316,6 +316,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Brandbilens vindruta fick panoramareflexer som förändras med molntäcke och nattläge. Materialet kontrollerades på spelbilen och den parkerade brandbilen. Vindrutan granskades utifrån i dagsljus och nattläge samt inifrån hytten på natten. Förarprovet passerade.
   - Fram- och bakdörrarnas sidorutor fick separata gummilister längs mittstolpen. Fyra lister verifierades i GLB-filen. Högra sidan granskades i Godot och förarprovet passerade.
   - Sidorutorna fick även gummilister längs den lutande framkanten och den bakre stolpen. Alla åtta vertikala lister verifierades i GLB-filen. Båda sidor granskades i Godot och förarprovet passerade.
+  - Hyttens fyra infällda dörrhandtag fick metallinlägg. Framdörrarna fick låscylindrar med nyckelspår. Alla fyra handtag granskades i närbild i Godot. Förarprovet passerade.
 - [ ] [`city_bus.glb`](../vehicles/city_bus.glb)
 - [ ] [`dam_pickup.glb`](../vehicles/dam_pickup.glb)
 - [ ] [`electric_kick_scooter.glb`](../vehicles/electric_kick_scooter.glb)
