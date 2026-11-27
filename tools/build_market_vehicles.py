@@ -894,10 +894,16 @@ for s in [-1,1]:
     for i in range(3):
         step_x = .77+i*.08
         step_z = 1.23-i*.22
-        box("Access tread",(s*step_x,-.18,step_z),(.34,.49,.056),v.METAL)
-        for offset in [-.09,0,.09]:
-            box("Grip ridge",(s*(step_x+offset),-.18,step_z+.031),
-                (.022,.44,.014),v.DARK,.004)
+        for offset in [-.155,.155]:
+            box("Entry grate side frame",(s*(step_x+offset),-.18,step_z),
+                (.030,.49,.054),v.DARK,.006)
+        for y in [-.411,.051]:
+            box("Entry grate end frame",(s*step_x,y,step_z),(.30,.028,.054),v.DARK,.006)
+        for row in range(8):
+            box("Entry grate tread slat",(s*step_x,-.377+row*.056,step_z+.005),
+                (.300,.026,.044),v.METAL,.004)
+        box("Entry grate centre brace",(s*step_x,-.18,step_z-.018),
+            (.020,.444,.030),v.DARK,.004)
     rod("Lower hitch arm",(s*.34,1.47,.92),(s*.55,2.26,.52),.076,v.DARK)
     for y,r,w in [(-1.58,front_radius,.46),(1.03,.93,.58)]:
         x=s*1.02
