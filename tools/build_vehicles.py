@@ -1512,12 +1512,12 @@ def make_fire_engine():
             x=side*(.224+.125*i)
             for face in [-1,1]:
                 y=-2.32+face*(.119-.010*(abs(x)/.8)**4)
-                cube("Blue optic bezel",(x,y,2.749),(.118,.025,.065),smoked_blue,.010,root)
+                cube("Blue optic bezel",(x,y,2.749),(.118,.025,.065),smoked_blue,.010,root,bevel_segments=1)
                 for offset in (-.036,0,.036):
                     loc=(x+offset,y+face*.014,2.750)
-                    cube("LED reflector",loc,(.027,.008,.036),METAL,.004,root)
+                    cube("LED reflector",loc,(.027,.008,.036),METAL,.004,root,bevel_segments=1)
                     lit_dies.append(cube("LED emitter",(loc[0],loc[1]+face*.005,loc[2]),
-                                         (.021,.004,.028),BLUE_LAMP,.002,root))
+                                         (.021,.004,.028),BLUE_LAMP,.002,root,bevel_segments=1))
         # Switch all thirty dies on this half together in the game.
         bpy.ops.object.select_all(action="DESELECT")
         for die in lit_dies:
