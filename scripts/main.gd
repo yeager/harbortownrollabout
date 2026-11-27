@@ -9565,18 +9565,35 @@ func _fit_bus_exterior(model: Node3D) -> void:
 		shell.hide()
 	var mirror_glass := _material(Color("#9bacb3"), .17)
 	mirror_glass.metallic = .78
+	var mirror_fastener := CylinderMesh.new()
+	mirror_fastener.top_radius = .008
+	mirror_fastener.bottom_radius = .008
+	mirror_fastener.height = .004
+	mirror_fastener.radial_segments = 6
+	mirror_fastener.material = hinge_finish
 	for side in [-1.0,1.0]:
 		var mirror_center := Vector3(side * 1.39, 1.91, 5.07)
 		var side_name := "left" if side > 0 else "right"
 		var housing_finish := Color("#202629")
 		for height in [-.19,.15]:
 			var mount := mirror_center + Vector3(-side * .19,height,0)
-			_make_box("Bus mirror mounting foot",Vector3(.06,.11,.13),mount - Vector3(side * .071,0,0),housing_finish,false,model)
+			var foot := _make_box("Bus mirror mounting foot", Vector3(.06,.11,.13),
+				mount - Vector3(side * .071,0,0), housing_finish, false, model)
+			for offset in [-.047, .047]:
+				var bolt := MeshInstance3D.new()
+				bolt.name = "Bus mirror mounting bolt"
+				bolt.mesh = mirror_fastener
+				bolt.rotation.z = PI * .5
+				bolt.position = Vector3(side * .031, 0, offset)
+				foot.add_child(bolt)
 			_make_box("Bus mirror support arm",Vector3(.24,.045,.07),mount,housing_finish,false,model)
 		_make_box("Bus mirror housing " + side_name,Vector3(.19,.46,.15),mirror_center,housing_finish,false,model)
 		for pane in [Vector2(.064,.286),Vector2(-.148,.104)]:
 			var pane_name := "upper" if pane.x > 0 else "lower"
-			var glass := _make_box("Bus mirror glass " + side_name + " " + pane_name,Vector3(.145,pane.y,.012),mirror_center + Vector3(0,pane.x,-.077),Color.WHITE,false,model)
+			var gasket := _make_box("Bus mirror pane gasket", Vector3(.161, pane.y + .014, .010),
+				mirror_center + Vector3(0, pane.x, -.079), window_seal.albedo_color, false, model)
+			gasket.material_override = window_seal
+			var glass := _make_box("Bus mirror glass " + side_name + " " + pane_name,Vector3(.145,pane.y,.012),mirror_center + Vector3(0,pane.x,-.083),Color.WHITE,false,model)
 			glass.material_override = mirror_glass
 
 	if bus_glazing == null:
