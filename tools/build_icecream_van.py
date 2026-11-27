@@ -79,9 +79,25 @@ for side in (-1,1):
     for y in (.12,1.25,2.38):
         box("Hatch gasket",(s*1.07,y,1.56),(.018,1.07,1.15),ink)
         box("Freezer hatch",(s*1.088,y,1.56),(.025,1.055,1.13),blue)
-        box("Flush latch",(s*1.111,y+.40,1.56),(.035,.055,.14),v.METAL)
-        for off in (-.34,.34):
-            box("Insulated hinge",(s*1.11,y+off,2.12),(.03,.13,.046),v.METAL)
+        latch_y = y+.37
+        box("Freezer latch surround",(s*1.107,latch_y,1.56),(.019,.123,.181),v.METAL,.010)
+        box("Freezer latch recess",(s*1.118,latch_y,1.577),(.010,.083,.112),v.DARK,.008)
+        box("Freezer latch handle",(s*1.127,latch_y,1.59),(.016,.067,.027),v.METAL,.006)
+        disc("Freezer latch lock",(s*1.120,latch_y,1.500),.016,.012,v.METAL)
+        box("Freezer latch keyway",(s*1.127,latch_y,1.500),(.002,.004,.014),v.BLACK,.001)
+        for offset in (-.34,.34):
+            hinge_y = y+offset
+            box("Freezer hinge body leaf",(s*1.077,hinge_y,2.158),
+                (.019,.127,.050),v.METAL,.005)
+            box("Freezer hinge hatch leaf",(s*1.108,hinge_y,2.108),
+                (.017,.127,.052),v.METAL,.005)
+            for name, shift, radius, length in (
+                ("Pin",0,.007,.133),("Centre knuckle",0,.017,.044),
+                ("End knuckle",-.044,.017,.034),("End knuckle",.044,.017,.034),
+            ):
+                hinge = v.cylinder("Freezer hinge "+name,(s*1.106,hinge_y+shift,2.134),
+                                   radius,length,v.METAL,False,16,root)
+                hinge.rotation_euler.x = math.pi/2
     speaker_x = s*.665
     box("Speaker roof mounting plate",(speaker_x,-.91,2.465),(.204,.226,.029),v.DARK,.009)
     for offset in (-.08,.08):
