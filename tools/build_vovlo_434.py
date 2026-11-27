@@ -217,8 +217,26 @@ for side in (-1, 1):
                 bright_edge.append((point.x + side * (projection + .001), y, .608))
         v.profile_loft("Side rubbing strip", molding_rings, v.DARK, root)
         v.pipe("Bright side molding", bright_edge, .0035, v.METAL, root)
-    box("Door handle surround", (side*.824, .274, .805), (.031, .153, .060), v.DARK)
-    box("Door release", (side*.844, .274, .808), (.016, .115, .019), v.METAL, .005)
+    hit, handle_seat, panel_normal, _ = body_surface.ray_cast(
+        Vector((side * 1.1, .274, .805)), Vector((-side, 0, 0))
+    )
+    if not hit:
+        raise RuntimeError("Door handle misses the side panel")
+    handle_rotation = Vector((side, 0, 0)).rotation_difference(panel_normal)
+    for name, offset, size, finish, bevel in [
+        ("Door handle gasket", (.004, 0, 0), (.024, .151, .060), v.RUBBER, .008),
+        ("Door handle bezel", (.016, 0, 0), (.010, .135, .048), v.METAL, .004),
+        ("Door handle recess", (.021, 0, 0), (.006, .118, .035), v.RUBBER, .003),
+        ("Door release lever", (.027, -.014, .004), (.009, .078, .015), v.METAL, .003),
+        ("Door key slot", (.031, .039, 0), (.003, .003, .009), v.RUBBER, .001),
+    ]:
+        position = handle_seat + handle_rotation @ Vector((side * offset[0], offset[1], offset[2]))
+        handle_part = box(name, position, size, finish, bevel)
+        handle_part.rotation_euler = handle_rotation.to_euler()
+    cylinder_position = handle_seat + handle_rotation @ Vector((side * .026, .039, 0))
+    key_cylinder = v.cylinder("Door lock cylinder", cylinder_position, .008, .008,
+                              v.METAL, axis_x=False, vertices=24, root=root)
+    key_cylinder.rotation_euler = panel_normal.to_track_quat('Z', 'Y').to_euler()
     box("Mirror mounting gasket", (side * .743, -.593, .982), (.029, .091, .053), v.RUBBER)
     v.pipe("Mirror pedestal", [(side * .747, -.596, .985), (side * .806, -.586, 1.021)],
            .022, v.DARK, root)
