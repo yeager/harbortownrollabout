@@ -22,6 +22,7 @@ def build_pickup():
     rubber = material("Off-road black rubber", (.012, .015, .017), .01, .89)
     alloy = material("Gunmetal alloy", (.105, .128, .14), .73, .31)
     chrome = material("Brushed silver", (.64, .67, .69), .74, .25)
+    brake_enamel = material("Cast brake caliper enamel", (.27, .045, .030), .32, .48)
     white = material("Headlight lens", (.81, .91, 1), .1, .21, .5)
     reverse = material("Reverse lamp clear", (.81, .91, 1), .1, .21)
     red = material("Tail lamp ruby", (.57, .018, .022), .06, .25, .22)
@@ -249,6 +250,16 @@ def build_pickup():
             attach(barrel, wheel)
             cylinder("Brake rotor behind spokes", (side*1.179, y, .433),
                      .183, .016, trim, root=wheel)
+            caliper = panel("Red brake caliper", (side*1.188, y+.148, .562),
+                            (.039, .083, .095), brake_enamel, .014)
+            caliper.rotation_euler.x = -.66
+            valve_angle = math.pi/8
+            valve_y = y + .244*math.cos(valve_angle)
+            valve_z = .433 + .244*math.sin(valve_angle)
+            cylinder("Tire valve stem", (side*1.244, valve_y, valve_z),
+                     .0047, .028, chrome, vertices=12, root=wheel)
+            cylinder("Tire valve cap", (side*1.259, valve_y, valve_z),
+                     .006, .010, trim, vertices=10, root=wheel)
             cylinder("Wheel hub mounting face", (side*1.212, y, .433),
                      .096, .032, alloy, root=wheel)
             cylinder("Center cap", (side*1.233, y, .433), .053, .022, chrome, root=wheel)
