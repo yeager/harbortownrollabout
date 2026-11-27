@@ -404,6 +404,11 @@ rod("Hatch sill seam", (-.564, 1.993, .620), (.564, 1.993, .620), .004, v.DARK)
 box("Hatch release recess", (0, 2.003, .722), (.237, .029, .054), v.RUBBER, .013)
 box("Hatch release grip", (0, 2.020, .731), (.190, .015, .025), paint, .007)
 
+box("Centre stop light housing", (0, 1.854, 1.571),
+    (.395, .032, .041), v.DARK, .012)
+box("Centre brake lamp", (0, 1.871, 1.571),
+    (.353, .012, .025), v.TAIL_LAMP, .006)
+
 heater_trace = v.material("Muted copper rear window traces", (.147, .093, .070), .25, .53)
 for row in range(9):
     z = 1.137 + row * .045

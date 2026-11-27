@@ -247,11 +247,11 @@ func check_gallery() -> void:
 			printerr("Holding the brake did not stop ", tile.text, " speed=", game.speed)
 			quit(1)
 			return
-		if index == game.DAM_PICKUP:
+		if index in [game.DAM_PICKUP, game.MULTUM]:
 			var brake: StandardMaterial3D = game.player_brake_lens
 			var reverse: StandardMaterial3D = game.reverse_lens
 			if brake == null or reverse == null or not brake.has_meta("centre_lamp") or not brake.get_meta("centre_lamp").emission_enabled or brake.emission_energy_multiplier < 2.39 or reverse.emission_energy_multiplier > 0:
-				printerr("Pickup braking did not light the red lenses only")
+				printerr("Braking did not light the red lenses only on ", tile.text)
 				quit(1)
 				return
 		if index == game.QUATTRO:
@@ -293,9 +293,9 @@ func check_gallery() -> void:
 			printerr("Reverse lenses did not light on ", tile.text)
 			quit(1)
 			return
-		if index == game.DAM_PICKUP:
+		if index in [game.DAM_PICKUP, game.MULTUM]:
 			if game.reverse_lens.emission_energy_multiplier < 1.99 or game.player_brake_lens.get_meta("centre_lamp").emission_enabled:
-				printerr("Pickup reversing did not light the white lenses independently")
+				printerr("Reversing did not light the white lenses independently on ", tile.text)
 				quit(1)
 				return
 		if index == game.QUATTRO:
