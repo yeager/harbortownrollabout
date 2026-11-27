@@ -342,8 +342,23 @@ text("Vovlo hatch badge", "VOVLO", (.654, 2.027, .808), .057, True)
 text("434 hatch badge", "434", (-.463, 2.027, .808), .057, True)
 box("Hatch latch", (0, 2.024, .778), (.070, .027, .066), v.DARK)
 for x in (-.49, .17):
-    v.pipe("Parked wiper arm", [(x, -.869, .946), (x+.16, -.809, .991)], .009, v.RUBBER, root)
-    v.pipe("Parked wiper blade", [(x+.045, -.828, .981), (x+.35, -.783, 1.013)], .009, v.DARK, root)
+    mount = Vector((x, -.913, .932))
+    v.cylinder("Wiper pivot", mount, .023, .020, v.RUBBER,
+               axis_x=False, vertices=20, root=root)
+    # Use the windscreen rake for the rubber edge and its supporting frame.
+    blade_points = []
+    for offset, height in [(.015, .978), (.105, .988), (.215, 1.002), (.340, 1.018)]:
+        glass_y = -.880 + (.539 / .460) * (height - .939)
+        blade_points.append(Vector((x + offset, glass_y - .008, height)))
+    v.pipe("Parked wiper blade", blade_points, .005, v.RUBBER, root)
+    frame_points = [
+        blade_points[0], blade_points[1] + Vector((0, -.011, 0)),
+        blade_points[2] + Vector((0, -.011, 0)), blade_points[3],
+    ]
+    v.pipe("Wiper blade frame", frame_points, .0045, v.DARK, root)
+    v.pipe("Parked wiper arm", [mount, mount + Vector((.037, .022, .035)),
+                              frame_points[1].lerp(frame_points[2], .5)],
+           .007, v.DARK, root)
 v.pipe("Roof aerial", [(0, -.13, 1.449), (0, .125, 1.755)], .006, v.DARK, root)
 
 v.export_vehicle(root, "vovlo_434.glb")
