@@ -56,9 +56,17 @@ for y in [-.64,3.02]:
     lock.rotation_euler.y = 1.5707963
     box("Shutter lock keyway",(1.258,y+.053,1.30),(.002,.005,.016),v.DARK,.001)
 for y in (-.43,.38,1.19,2.0,2.81):
-    box("Shutter hinge leaf",(1.234,y,2.771),(.012,.14,.043),v.METAL,.004)
-    barrel = v.cylinder("Shutter hinge barrel",(1.25,y,2.803),.018,.15,v.METAL,False,16,root)
-    barrel.rotation_euler.x = 1.5707963
+    box("Shutter hinge lower leaf",(1.234,y,2.776),(.014,.151,.046),v.METAL,.004)
+    box("Shutter hinge upper leaf",(1.220,y,2.827),(.056,.151,.025),v.METAL,.004)
+    for name, offset, length, radius in (
+        ("Hinge pin", 0,.169,.009),
+        ("Barrel end",-.057,.046,.018),
+        ("Barrel centre",0,.057,.018),
+        ("Barrel end",.057,.046,.018),
+    ):
+        pin = v.cylinder("Shutter " + name,(1.250,y+offset,2.803),radius,length,
+                         v.METAL,False,16,root)
+        pin.rotation_euler.x = 1.5707963
 wheel_parts = [part for part in root.children if part.name.startswith(
     ("Tyre","Pressed steel rim","Hub cap","Rim vent","Hex wheel bolt"))]
 bpy.context.view_layer.update()
