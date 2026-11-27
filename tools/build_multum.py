@@ -440,6 +440,12 @@ for side in (-1, 1):
     box("Rear bumper corner rub strip", (side * .658, 2.035, .487),
         (.245, .027, .040), v.RUBBER, .016)
     reflector_angles = [step * math.tau / 32 for step in range(32)]
+    v.profile_loft("Rear bumper reflector gasket", [
+        [(side * .729 + radius * math.cos(angle), depth, .394 + radius * math.sin(angle))
+         for angle in reflector_angles]
+        for depth, radius in [(2.013, .048), (2.036, .048), (2.042, .044),
+                              (2.042, .037), (2.032, .037)]
+    ], v.RUBBER, root, close_ends=False)
     v.profile_loft("Rear bumper reflector", [
         [(side * .729 + radius * math.cos(angle), depth, .394 + radius * math.sin(angle))
          for angle in reflector_angles]
