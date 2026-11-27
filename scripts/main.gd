@@ -90,6 +90,7 @@ var city_env: Environment
 var rally_coupe_glazing: ShaderMaterial
 var bus_glazing: ShaderMaterial
 var pumper_glazing: ShaderMaterial
+var multum_glazing: ShaderMaterial
 var quattro_gauge_marks: StandardMaterial3D
 var quattro_gauge_needle: StandardMaterial3D
 var chimney_beacon: StandardMaterial3D
@@ -897,6 +898,7 @@ func _process(delta: float) -> void:
 	rally_coupe_glazing.set_shader_parameter("overcast",weather.cloud_cover)
 	if bus_glazing: bus_glazing.set_shader_parameter("overcast",weather.cloud_cover)
 	if pumper_glazing: pumper_glazing.set_shader_parameter("overcast",weather.cloud_cover)
+	if multum_glazing: multum_glazing.set_shader_parameter("overcast", weather.cloud_cover)
 	_update_daylight(delta)
 	if radio.playing:
 		var target_gain := _radio_target_gain()
@@ -5314,6 +5316,7 @@ func _update_daylight(delta: float) -> void:
 	rally_coupe_glazing.set_shader_parameter("night",night)
 	if bus_glazing: bus_glazing.set_shader_parameter("night",night)
 	if pumper_glazing: pumper_glazing.set_shader_parameter("night",night)
+	if multum_glazing: multum_glazing.set_shader_parameter("night", night)
 	_update_quattro_gauge_light(night)
 	city_env.ambient_light_energy = lerpf(.38,.28,night)
 	city_env.ambient_light_color = Color("#c4d5d1").lerp(Color("#9cb1d3"),night)
@@ -9855,6 +9858,18 @@ func _load_vehicle_model() -> void:
 	vehicle_model.name = VEHICLE_NAMES_ALL[vehicle_index] + "_BlenderModel"
 	vehicle_model.rotation.y = PI
 	ambulance.add_child(vehicle_model)
+	if vehicle_index == MULTUM:
+		var glasshouse := vehicle_model.find_child("Panoramic glasshouse", true, false) as MeshInstance3D
+		if glasshouse:
+			if multum_glazing == null:
+				multum_glazing = ShaderMaterial.new()
+				multum_glazing.shader = preload("res://environment/rally_coupe_glazing.gdshader")
+				multum_glazing.set_shader_parameter("skyline", preload("res://environment/portland_landing_pad.exr"))
+				multum_glazing.set_shader_parameter("glass_tint", Color(.12, .24, .28))
+				multum_glazing.set_shader_parameter("glass_opacity", Vector2(1, 0))
+			multum_glazing.set_shader_parameter("night", maxf(last_night, 0.0))
+			multum_glazing.set_shader_parameter("overcast", weather.cloud_cover)
+			glasshouse.set_surface_override_material(0, multum_glazing)
 	if vehicle_index == 2:
 		_fit_rear_plate_lamps(vehicle_model, true)
 		_fit_pumper_glazing(vehicle_model)
