@@ -392,6 +392,7 @@ Resursnamnen identifierar även delar som ska bedömas i den sammansatta modelle
   - Stålfälgarna fick separata navskålar, centrumkåpor och fem sexkantiga hjulmuttrar per hjul. Granskade i Godot. Fordonsprovet passerade.
   - Glassbilens däck fick rundade skuldror och tre längsgående spår i slitbanan. Granskade i Godot. Fordonsprovet passerade.
 - [ ] [`lotten.glb`](../vehicles/lotten.glb)
+  - Lotten fick fyra dubbla förtöjningspollare med bultade fotplattor på landgångsdäcken. Granskat i Godot. Färjeprovet passerade båda överfarterna och kontrollerade småbåtarnas linor mot den modellerade fästpunkten i fören.
 - [ ] [`sport_sedan.glb`](../vehicles/sport_sedan.glb)
   - BWM M3 E33 fick ett upphöjt modellemblem på bakluckan. Granskat i Godot och fordonsprovet passerade.
 - [ ] [`compact_convertible.glb`](../vehicles/compact_convertible.glb)

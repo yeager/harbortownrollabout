@@ -183,7 +183,7 @@ func check_mooring_lines(game: Node) -> bool:
 	for berth in game.moorings:
 		var buoy: Node3D = berth.buoy
 		var boat: Node3D = berth.boat
-		var bow := boat.to_global(Vector3(-2.71,.53,0))
+		var bow: Vector3 = berth.bow_line.global_position
 		var offset: float = game.EAST_QUAY_WATER_EDGE - buoy.position.x
 		if offset < 7.0 or offset > 8.0 or buoy.position.x >= bow.x:
 			printerr("Mooring buoy is not 7–8 metres out from the quay, beyond the bow")

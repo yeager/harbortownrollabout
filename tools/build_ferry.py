@@ -89,6 +89,13 @@ for end in [-1,1]:
     box("Lower landing ramp",(0,end*6.23,.70),(1.95,.46,.11),deck)
     box("Ramp nosing",(0,end*6.40,.74),(1.95,.10,.07),rubber)
     for side in [-1,1]:
+        bitt_x, bitt_y = side*1.39, end*5.43
+        box("Mooring bitt base",(bitt_x,bitt_y,.684),(.22,.47,.034),steel,.010)
+        for offset in (-.124,.124):
+            pole("Mooring bitt post",(bitt_x,bitt_y+offset,.811),.049,.238,steel)
+            pole("Mooring bitt head",(bitt_x,bitt_y+offset,.935),.073,.034,steel)
+        for offset in (-.19,.19):
+            pole("Mooring base fastener",(bitt_x,bitt_y+offset,.706),.018,.014,steel)
         box("Landing fender",(side*1.11,end*6.33,.46),(.43,.25,.32),rubber,.095)
         box("Boarding door",(side*.98,end*4.29,1.41),(.84,.075,1.47),white,.04)
         box("Boarding door window",(side*.98,end*4.336,1.68),(.63,.027,.70),glass,.035)
